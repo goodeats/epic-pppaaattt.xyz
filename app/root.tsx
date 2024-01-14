@@ -248,7 +248,8 @@ function App() {
 								<UserDropdown />
 							) : (
 								<Button asChild variant="default" size="lg">
-									<Link to="/login">Log In</Link>
+									<Link to="/login">Coming Soon</Link>
+									{/* <Link to="/login">Log In</Link> */}
 								</Button>
 							)}
 						</div>
