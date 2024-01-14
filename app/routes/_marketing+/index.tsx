@@ -5,7 +5,7 @@ import {
 	ContentHeader,
 	ContentLogo,
 } from './components/content.tsx'
-import { Logos } from './components/logos.tsx'
+import { ImagesGrid } from './components/images-grid.tsx'
 
 export const meta: MetaFunction = () => [{ title: 'PPPAAATTT' }]
 
@@ -19,7 +19,7 @@ export default function Index() {
 					<ContentBody />
 					<ContentContact />
 				</div>
-				<Logos />
+				<ImagesGrid />
 			</div>
 		</main>
 	)
