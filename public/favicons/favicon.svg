@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" fill="none" viewBox="0 0 65 65">
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 65 65">
   <style>
-    path {
-      fill: #000;
-    }
-    @media (prefers-color-scheme: dark) {
-      path {
-        fill: #FFF;
-      }
+    polygon {
+      fill: #FFF;
     }
   </style>
-  <path d="M39.445 25.555 37 17.163 65 0 47.821 28l-8.376-2.445Zm-13.89 0L28 17.163 0 0l17.179 28 8.376-2.445Zm13.89 13.89L37 47.837 65 65 47.821 37l-8.376 2.445Zm-13.89 0L28 47.837 0 65l17.179-28 8.376 2.445Z"></path>
+  <!-- Top triangle (upside down) -->
+  <polygon points="32.5,20.33 22.5,2.66 42.5,2.66"/>
+  <!-- Bottom-left triangle -->
+  <polygon points="12.5,44.66 2.5,62.33 22.5,62.33"/>
+  <!-- Bottom-right triangle (upside down) -->
+  <polygon points="52.5,62.33 42.5,44.66 62.5,44.66"/>
 </svg>
