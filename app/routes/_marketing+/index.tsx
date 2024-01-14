@@ -7,7 +7,7 @@ import {
 } from './components/content.tsx'
 import { Logos } from './components/logos.tsx'
 
-export const meta: MetaFunction = () => [{ title: 'Epic Notes' }]
+export const meta: MetaFunction = () => [{ title: 'PPPAAATTT' }]
 
 export default function Index() {
 	return (
