@@ -50,7 +50,7 @@ export const ContentBody = () => {
 
 export const ContentContact = () => {
 	return (
-		<ul className="mt-6 flex animate-slide-top space-x-4 [animation-fill-mode:backwards] [animation-delay:1.2s] xl:mt-8 xl:animate-slide-left xl:[animation-fill-mode:backwards] xl:[animation-delay:1.2s]">
+		<ul className="mt-6 flex animate-slide-top space-x-6 [animation-fill-mode:backwards] [animation-delay:1.2s] xl:mt-8 xl:animate-slide-left xl:[animation-fill-mode:backwards] xl:[animation-delay:1.2s]">
 			<li>
 				<a
 					href="https://www.instagram.com/pppaaattt.xyz"
