@@ -6,7 +6,6 @@ import {
 	redirect,
 	type ActionFunctionArgs,
 	type MetaFunction,
-	type LoaderFunctionArgs,
 } from '@remix-run/node'
 import { Form, useActionData, useSearchParams } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
@@ -15,7 +14,6 @@ import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { ErrorList, Field } from '#app/components/forms.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
-import { requireAnonymous } from '#app/utils/auth.server.ts'
 import {
 	ProviderConnectionForm,
 	providerNames,
@@ -112,12 +110,6 @@ export function SignupEmail({
 
 export const meta: MetaFunction = () => {
 	return [{ title: 'Sign Up | Epic Notes' }]
-}
-
-export async function loader({ request }: LoaderFunctionArgs) {
-	await requireAnonymous(request)
-	return redirect('/')
-	return json({})
 }
 
 export default function SignupRoute() {
