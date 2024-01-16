@@ -86,8 +86,11 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
 	return [
-		{ title: data ? 'Epic Notes' : 'Error | Epic Notes' },
-		{ name: 'description', content: `Your own captain's log` },
+		{ title: data ? 'PPPAAATTT' : 'Error | PPPAAATTT' },
+		{
+			name: 'description',
+			content: `Welcome to my digital gallery of generative art built with triangles and algorithms.`,
+		},
 	]
 }
 
