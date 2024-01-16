@@ -191,6 +191,7 @@ const LoginFormSchema = z.object({
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	await requireAnonymous(request)
+	return redirect('/')
 	return json({})
 }
 
