@@ -1,4 +1,5 @@
 import { floatingToolbarClassName } from '../floating-toolbar'
+import { Icon } from '../ui/icon'
 
 const FormContainer = ({ children }: { children: React.ReactNode }) => {
 	return <div className="absolute inset-0">{children}</div>
@@ -15,9 +16,22 @@ const FormActionsContainer = ({ children }: { children: React.ReactNode }) => {
 	return <div className={floatingToolbarClassName}>{children}</div>
 }
 
+const FormDeleteIcon = () => {
+	return (
+		<Icon name="trash" className="scale-125 max-md:scale-150">
+			<span className="max-md:hidden">Delete</span>
+		</Icon>
+	)
+}
+
+const formDeleteButtonDefaultClassName =
+	'w-full max-md:aspect-square max-md:px-0'
+
 export {
 	FormContainer,
 	FormFieldsContainer,
 	FormActionsContainer,
+	FormDeleteIcon,
 	formDefaultClassName,
+	formDeleteButtonDefaultClassName,
 }
