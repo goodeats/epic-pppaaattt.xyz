@@ -5,8 +5,13 @@ import { Form, useActionData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
-import { floatingToolbarClassName } from '#app/components/floating-toolbar.tsx'
 import { ErrorList, Field, TextareaField } from '#app/components/forms.tsx'
+import {
+	FormActionsContainer,
+	FormContainer,
+	FormFieldsContainer,
+	formDefaultClassName,
+} from '#app/components/shared'
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
@@ -74,10 +79,10 @@ export function NewProjectForm() {
 	})
 
 	return (
-		<div className="absolute inset-0">
+		<FormContainer>
 			<Form
 				method="POST"
-				className="flex h-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden px-10 pb-28 pt-12"
+				className={formDefaultClassName}
 				{...form.props}
 				encType="multipart/form-data"
 			>
@@ -88,7 +93,7 @@ export function NewProjectForm() {
 					rather than the first button in the form (which is delete/add image).
 				*/}
 				<button type="submit" className="hidden" />
-				<div className="flex flex-col gap-1">
+				<FormFieldsContainer>
 					<Field
 						labelProps={{ children: 'Name' }}
 						inputProps={{
@@ -104,10 +109,10 @@ export function NewProjectForm() {
 						}}
 						errors={fields.description.errors}
 					/>
-				</div>
+				</FormFieldsContainer>
 				<ErrorList id={form.errorId} errors={form.errors} />
 			</Form>
-			<div className={floatingToolbarClassName}>
+			<FormActionsContainer>
 				<Button form={form.id} variant="destructive" type="reset">
 					Reset
 				</Button>
@@ -119,8 +124,8 @@ export function NewProjectForm() {
 				>
 					Submit
 				</StatusButton>
-			</div>
-		</div>
+			</FormActionsContainer>
+		</FormContainer>
 	)
 }
 
