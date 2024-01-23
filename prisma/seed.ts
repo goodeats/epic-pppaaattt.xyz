@@ -147,6 +147,17 @@ async function seed() {
 				create: { providerName: 'github', providerId: githubUser.profile.id },
 			},
 			roles: { connect: [{ name: 'admin' }, { name: 'user' }] },
+			projects: {
+				create: [
+					{
+						id: '1zxo9f8e',
+						name: 'My First Project',
+						description:
+							'This is my first project. I am so excited to get started!',
+						slug: 'my-first-project',
+					},
+				],
+			},
 			notes: {
 				create: [
 					{
