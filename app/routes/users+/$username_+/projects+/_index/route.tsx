@@ -1,12 +1,9 @@
 import { type MetaFunction } from '@remix-run/react'
 import { type loader as projectsLoader } from '../route.tsx'
+import { Container } from './components.tsx'
 
 export default function ProjectsIndexRoute() {
-	return (
-		<div className="container pt-12">
-			<p className="text-body-md">Select a project</p>
-		</div>
-	)
+	return <Container />
 }
 
 export const meta: MetaFunction<

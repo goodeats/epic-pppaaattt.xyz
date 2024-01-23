@@ -1,3 +1,4 @@
+export { ContainerIndex } from './container'
 export { MainContainer, ContentWrapper, MainContent } from './page-layout'
 export {
 	SideNavWrapper,
