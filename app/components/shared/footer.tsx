@@ -31,7 +31,7 @@ const FooterLinkButton = ({
 	children,
 }: {
 	to: string
-	icon: 'pencil-1' | 'trash'
+	icon: 'pencil-1' | 'trash' | 'arrow-left'
 	children: React.ReactNode
 }) => {
 	return (

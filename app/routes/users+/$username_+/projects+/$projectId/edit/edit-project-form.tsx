@@ -11,13 +11,19 @@ import { Form, useActionData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
-import { floatingToolbarClassName } from '#app/components/floating-toolbar.tsx'
 import {
 	CheckboxField,
 	ErrorList,
 	Field,
 	TextareaField,
 } from '#app/components/forms.tsx'
+import {
+	FooterLinkButton,
+	FormActionsContainer,
+	FormContainer,
+	FormFieldsContainer,
+	formDefaultClassName,
+} from '#app/components/shared'
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
@@ -73,16 +79,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	const { id: projectId, name, description, isVisible } = submission.value
 
-	const updatedProject = await prisma.project.upsert({
+	const updatedProject = await prisma.project.update({
 		select: { id: true, owner: { select: { username: true } } },
-		where: { id: projectId ?? '__new_project__' },
-		create: {
-			ownerId: userId,
-			name,
-			description,
-			isVisible: isVisible ?? false,
-		},
-		update: {
+		where: { id: projectId },
+		data: {
 			name,
 			description,
 			isVisible: isVisible ?? false,
@@ -120,10 +120,10 @@ export function EditProjectForm({
 	})
 
 	return (
-		<div className="absolute inset-0">
+		<FormContainer>
 			<Form
 				method="POST"
-				className="flex h-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden px-10 pb-28 pt-12"
+				className={formDefaultClassName}
 				{...form.props}
 				encType="multipart/form-data"
 			>
@@ -135,7 +135,7 @@ export function EditProjectForm({
 				*/}
 				<button type="submit" className="hidden" />
 				{project ? <input type="hidden" name="id" value={project.id} /> : null}
-				<div className="flex flex-col gap-1">
+				<FormFieldsContainer>
 					<Field
 						labelProps={{ children: 'Name' }}
 						inputProps={{
@@ -162,10 +162,13 @@ export function EditProjectForm({
 						defaultChecked={!!fields.isVisible.defaultValue}
 						errors={fields.isVisible.errors}
 					/>
-				</div>
+				</FormFieldsContainer>
 				<ErrorList id={form.errorId} errors={form.errors} />
 			</Form>
-			<div className={floatingToolbarClassName}>
+			<FormActionsContainer>
+				<FooterLinkButton to=".." icon="arrow-left">
+					Cancel
+				</FooterLinkButton>
 				<Button form={form.id} variant="destructive" type="reset">
 					Reset
 				</Button>
@@ -177,8 +180,8 @@ export function EditProjectForm({
 				>
 					Submit
 				</StatusButton>
-			</div>
-		</div>
+			</FormActionsContainer>
+		</FormContainer>
 	)
 }
 
