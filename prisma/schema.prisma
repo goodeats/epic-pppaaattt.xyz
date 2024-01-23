@@ -181,6 +181,7 @@ model Project {
   name        String
   description String
   isVisible   Boolean @default(true)
+  slug       String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -194,6 +195,8 @@ model Project {
   @@index([ownerId])
   // This helps our order by in the user search a LOT
   @@index([ownerId, updatedAt])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
 }
 
 model Artboard {
@@ -201,6 +204,7 @@ model Artboard {
   name        String
   description String
   isVisible   Boolean @default(true)
+  slug       String
   width       Int
   height      Int
   backgroundColor String
@@ -222,12 +226,15 @@ model Artboard {
   // This helps our order by in the user search a LOT
   @@index([projectId, updatedAt])
   @@index([ownerId, updatedAt])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
 }
 
 model Layer {
   id          String @id @default(cuid())
   name        String
   description String
+  slug       String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -248,12 +255,15 @@ model Layer {
   @@index([parentId])
   // This helps our order by in the user search a LOT
   @@index([ownerId, updatedAt])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
 }
 
 model Appearance {
   id          String @id @default(cuid())
   name        String
   description String
+  slug       String
   type        String // e.g. fill, stroke, etc. also layoutType, palette, size, etc.
   value       String // string or stringify json
 
@@ -269,6 +279,8 @@ model Appearance {
   @@index([ownerId])
   // This helps our order by in the user search a LOT
   @@index([ownerId, updatedAt])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
 }
 
 model AppearancesOnLayers {
@@ -322,6 +334,7 @@ model LayersOnArtboards {
 model AssetImage {
   id          String @id @default(cuid())
   name        String
+  slug       String
   altText     String?
   contentType String
   blob        Bytes
@@ -338,6 +351,8 @@ model AssetImage {
   @@index([ownerId])
   // This helps our order by in the user search a LOT
   @@index([ownerId, updatedAt])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
 }
 
 model AssetImagesOnLayers {
