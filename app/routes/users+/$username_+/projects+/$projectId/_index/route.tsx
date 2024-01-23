@@ -22,9 +22,10 @@ import { useOptionalUser } from '#app/utils/user'
 import { type loader as projectsLoader } from '../../route.tsx'
 import { Content, Footer, Header } from './components.tsx'
 
-export async function loader({ params }: LoaderFunctionArgs) {
-	const project = await prisma.project.findUnique({
-		where: { slug: params.projectId },
+export async function loader({ params, request }: LoaderFunctionArgs) {
+	const userId = await requireUserId(request)
+	const project = await prisma.project.findFirst({
+		where: { slug: params.projectId, ownerId: userId },
 		select: {
 			id: true,
 			name: true,

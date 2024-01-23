@@ -67,9 +67,9 @@ export async function action({ request }: ActionFunctionArgs) {
 			}
 
 			const slug = stringToSlug(data.name)
-			const projectWithSlug = await prisma.project.findUnique({
+			const projectWithSlug = await prisma.project.findFirst({
 				select: { id: true },
-				where: { slug },
+				where: { slug, ownerId: userId },
 			})
 			if (projectWithSlug && projectWithSlug.id !== data.id) {
 				ctx.addIssue({

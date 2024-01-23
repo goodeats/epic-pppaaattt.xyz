@@ -39,9 +39,9 @@ export async function action({ request }: ActionFunctionArgs) {
 	const submission = await parse(formData, {
 		schema: ProjectEditorSchema.superRefine(async (data, ctx) => {
 			const slug = stringToSlug(data.name)
-			const projectWithSlug = await prisma.project.findUnique({
+			const projectWithSlug = await prisma.project.findFirst({
 				select: { id: true },
-				where: { slug },
+				where: { slug, ownerId: userId },
 			})
 			if (projectWithSlug) {
 				ctx.addIssue({
