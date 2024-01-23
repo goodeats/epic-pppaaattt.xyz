@@ -37,7 +37,19 @@ export async function action({ request }: ActionFunctionArgs) {
 	await validateCSRF(formData, request.headers)
 
 	const submission = await parse(formData, {
-		schema: ProjectEditorSchema,
+		schema: ProjectEditorSchema.superRefine(async (data, ctx) => {
+			const slug = stringToSlug(data.name)
+			const projectWithSlug = await prisma.project.findUnique({
+				select: { id: true },
+				where: { slug },
+			})
+			if (projectWithSlug) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Project with that name already exists',
+				})
+			}
+		}),
 		async: true,
 	})
 

@@ -65,6 +65,18 @@ export async function action({ request }: ActionFunctionArgs) {
 					message: 'Project not found',
 				})
 			}
+
+			const slug = stringToSlug(data.name)
+			const projectWithSlug = await prisma.project.findUnique({
+				select: { id: true },
+				where: { slug },
+			})
+			if (projectWithSlug && projectWithSlug.id !== data.id) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Project with that name already exists',
+				})
+			}
 		}),
 		async: true,
 	})
