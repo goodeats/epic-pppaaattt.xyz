@@ -1,12 +1,6 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
-import { type Project } from '@prisma/client'
-import {
-	json,
-	redirect,
-	type ActionFunctionArgs,
-	type SerializeFrom,
-} from '@remix-run/node'
+import { json, redirect, type ActionFunctionArgs } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
@@ -38,20 +32,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	await validateCSRF(formData, request.headers)
 
 	const submission = await parse(formData, {
-		schema: ProjectEditorSchema.superRefine(async (data, ctx) => {
-			if (!data.id) return
-
-			const project = await prisma.project.findUnique({
-				select: { id: true },
-				where: { id: data.id, ownerId: userId },
-			})
-			if (!project) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: 'Project not found',
-				})
-			}
-		}),
+		schema: ProjectEditorSchema,
 		async: true,
 	})
 
@@ -63,45 +44,32 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { id: projectId, name, description } = submission.value
+	const { name, description } = submission.value
 
-	const updatedProject = await prisma.project.upsert({
+	const createdProject = await prisma.project.create({
 		select: { id: true, owner: { select: { username: true } } },
-		where: { id: projectId ?? '__new_project__' },
-		create: {
+		data: {
 			ownerId: userId,
-			name,
-			description,
-		},
-		update: {
 			name,
 			description,
 		},
 	})
 
 	return redirect(
-		`/users/${updatedProject.owner.username}/projects/${updatedProject.id}`,
+		`/users/${createdProject.owner.username}/projects/${createdProject.id}`,
 	)
 }
 
-export function ProjectEditor({
-	project,
-}: {
-	project?: SerializeFrom<Pick<Project, 'id' | 'name' | 'description'>>
-}) {
+export function NewProjectForm() {
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: 'project-editor',
+		id: 'new-project-form',
 		constraint: getFieldsetConstraint(ProjectEditorSchema),
 		lastSubmission: actionData?.submission,
 		onValidate({ formData }) {
 			return parse(formData, { schema: ProjectEditorSchema })
-		},
-		defaultValue: {
-			name: project?.name ?? '',
-			description: project?.description ?? '',
 		},
 	})
 
@@ -120,7 +88,6 @@ export function ProjectEditor({
 					rather than the first button in the form (which is delete/add image).
 				*/}
 				<button type="submit" className="hidden" />
-				{project ? <input type="hidden" name="id" value={project.id} /> : null}
 				<div className="flex flex-col gap-1">
 					<Field
 						labelProps={{ children: 'Name' }}
