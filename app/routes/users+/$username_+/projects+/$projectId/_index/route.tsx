@@ -33,6 +33,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 			isVisible: true,
 			ownerId: true,
 			updatedAt: true,
+			artboards: {
+				select: {
+					name: true,
+					description: true,
+					isVisible: true,
+					slug: true,
+					width: true,
+					height: true,
+					backgroundColor: true,
+					updatedAt: true,
+				},
+			},
 		},
 	})
 
