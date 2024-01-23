@@ -24,7 +24,7 @@ import { Content, Footer, Header } from './components.tsx'
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const project = await prisma.project.findUnique({
-		where: { id: params.projectId },
+		where: { slug: params.projectId },
 		select: {
 			id: true,
 			name: true,

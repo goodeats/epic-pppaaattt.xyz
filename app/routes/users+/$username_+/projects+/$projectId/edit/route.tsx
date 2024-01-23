@@ -19,7 +19,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 			isVisible: true,
 		},
 		where: {
-			id: params.projectId,
+			slug: params.projectId,
 			ownerId: userId,
 		},
 	})

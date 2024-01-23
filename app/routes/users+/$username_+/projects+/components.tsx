@@ -52,11 +52,11 @@ export const List = () => {
 	}
 
 	const ListItem = ({ project }: { project: Project }) => {
-		const { id, name } = project
+		const { slug, name } = project
 		return (
-			<SideNavListItem key={id}>
+			<SideNavListItem key={slug}>
 				<NavLink
-					to={id}
+					to={slug}
 					preventScrollReset
 					prefetch="intent"
 					className={({ isActive }) =>
@@ -73,7 +73,7 @@ export const List = () => {
 		<SideNavList>
 			{isOwner ? <NewListItem /> : null}
 			{owner.projects.map(project => (
-				<ListItem key={project.id} project={project as Project} />
+				<ListItem key={project.slug} project={project as Project} />
 			))}
 		</SideNavList>
 	)

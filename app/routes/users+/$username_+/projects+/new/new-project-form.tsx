@@ -17,7 +17,7 @@ import { StatusButton } from '#app/components/ui/status-button.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { validateCSRF } from '#app/utils/csrf.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
-import { useIsPending } from '#app/utils/misc.tsx'
+import { stringToSlug, useIsPending } from '#app/utils/misc.tsx'
 
 const titleMinLength = 1
 const titleMaxLength = 100
@@ -50,18 +50,20 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	const { name, description } = submission.value
+	const slug = stringToSlug(name)
 
 	const createdProject = await prisma.project.create({
-		select: { id: true, owner: { select: { username: true } } },
+		select: { slug: true, owner: { select: { username: true } } },
 		data: {
 			ownerId: userId,
 			name,
 			description,
+			slug,
 		},
 	})
 
 	return redirect(
-		`/users/${createdProject.owner.username}/projects/${createdProject.id}`,
+		`/users/${createdProject.owner.username}/projects/${createdProject.slug}`,
 	)
 }
 
