@@ -12,7 +12,12 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { floatingToolbarClassName } from '#app/components/floating-toolbar.tsx'
-import { ErrorList, Field, TextareaField } from '#app/components/forms.tsx'
+import {
+	CheckboxField,
+	ErrorList,
+	Field,
+	TextareaField,
+} from '#app/components/forms.tsx'
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
@@ -29,6 +34,9 @@ const ProjectEditorSchema = z.object({
 	id: z.string().optional(),
 	name: z.string().min(titleMinLength).max(titleMaxLength),
 	description: z.string().min(descriptionMinLength).max(descriptionMaxLength),
+	// if unchecked isVisble will not be included in the submission
+	// so set to false if so
+	isVisible: z.boolean().optional(),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -63,7 +71,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { id: projectId, name, description } = submission.value
+	const { id: projectId, name, description, isVisible } = submission.value
 
 	const updatedProject = await prisma.project.upsert({
 		select: { id: true, owner: { select: { username: true } } },
@@ -72,10 +80,12 @@ export async function action({ request }: ActionFunctionArgs) {
 			ownerId: userId,
 			name,
 			description,
+			isVisible: isVisible ?? false,
 		},
 		update: {
 			name,
 			description,
+			isVisible: isVisible ?? false,
 		},
 	})
 
@@ -84,16 +94,18 @@ export async function action({ request }: ActionFunctionArgs) {
 	)
 }
 
-export function ProjectEditor({
+export function EditProjectForm({
 	project,
 }: {
-	project: SerializeFrom<Pick<Project, 'id' | 'name' | 'description'>>
+	project: SerializeFrom<
+		Pick<Project, 'id' | 'name' | 'description' | 'isVisible'>
+	>
 }) {
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: 'project-editor',
+		id: 'edit-project-form',
 		constraint: getFieldsetConstraint(ProjectEditorSchema),
 		lastSubmission: actionData?.submission,
 		onValidate({ formData }) {
@@ -102,6 +114,8 @@ export function ProjectEditor({
 		defaultValue: {
 			name: project?.name ?? '',
 			description: project?.description ?? '',
+			isVisible: project?.isVisible ?? false,
+			isPat: true,
 		},
 	})
 
@@ -136,6 +150,17 @@ export function ProjectEditor({
 							...conform.textarea(fields.description, { ariaAttributes: true }),
 						}}
 						errors={fields.description.errors}
+					/>
+					<CheckboxField
+						labelProps={{
+							htmlFor: fields.isVisible.id,
+							children: 'Visible',
+						}}
+						buttonProps={conform.input(fields.isVisible, {
+							type: 'checkbox',
+						})}
+						defaultChecked={!!fields.isVisible.defaultValue}
+						errors={fields.isVisible.errors}
 					/>
 				</div>
 				<ErrorList id={form.errorId} errors={form.errors} />

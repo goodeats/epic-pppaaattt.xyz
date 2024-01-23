@@ -103,8 +103,6 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function ProjectDetailsRoute() {
 	const data = useLoaderData<typeof loader>()
 	const user = useOptionalUser()
-	console.log('data', data)
-	console.log('user', user)
 	const isOwner = user?.id === data.project.ownerId
 	const canDelete = userHasPermission(
 		user,

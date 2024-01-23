@@ -4,12 +4,11 @@ import { useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
-import { ProjectEditor, action } from './edit-project-form.tsx'
+import { EditProjectForm, action } from './edit-project-form.tsx'
 
 export { action }
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	console.log('params', params)
 	const userId = await requireUserId(request)
 	const project = await prisma.project.findFirst({
 		select: {
@@ -29,9 +28,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 export default function ProjectEdit() {
 	const data = useLoaderData<typeof loader>()
-	console.log('data', data)
 
-	return <ProjectEditor project={data.project} />
+	return <EditProjectForm project={data.project} />
 }
 
 export function ErrorBoundary() {
