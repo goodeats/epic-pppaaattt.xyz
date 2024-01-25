@@ -16,7 +16,7 @@ const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
 
 const MainContent = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<div className="relative col-span-3 bg-accent md:rounded-r-3xl">
+		<div className="relative col-span-3 flex flex-col bg-accent md:rounded-r-3xl">
 			{children}
 		</div>
 	)

@@ -5,7 +5,11 @@ import {
 	json,
 	type ActionFunctionArgs,
 } from '@remix-run/node'
-import { type MetaFunction, useLoaderData } from '@remix-run/react'
+import {
+	type MetaFunction,
+	useLoaderData,
+	type UIMatch,
+} from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
@@ -21,6 +25,13 @@ import { redirectWithToast } from '#app/utils/toast.server'
 import { useOptionalUser } from '#app/utils/user'
 import { type loader as projectsLoader } from '../../route.tsx'
 import { Content, Footer, Header } from './components.tsx'
+
+export const handle = {
+	breadcrumb: (match: UIMatch) => {
+		const { params } = match
+		return params.projectId
+	},
+}
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)

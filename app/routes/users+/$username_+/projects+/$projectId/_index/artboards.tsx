@@ -42,7 +42,6 @@ export const Artboards = () => {
 const ArtboardsTable = () => {
 	const data = useLoaderData<typeof loader>()
 	const artboards = data.project.artboards
-	console.log('artboards', artboards[0])
 
 	return (
 		<Table>

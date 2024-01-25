@@ -1,6 +1,7 @@
 import { type Project } from '@prisma/client'
-import { NavLink, useLoaderData } from '@remix-run/react'
+import { Link, NavLink, useLoaderData } from '@remix-run/react'
 import {
+	BreadcrumbsContainer,
 	SideNavHeaderImage,
 	SideNavHeaderLink,
 	SideNavHeaderTitle,
@@ -9,8 +10,9 @@ import {
 	sideNavLinkDefaultClassName,
 } from '#app/components/shared'
 import { Icon } from '#app/components/ui/icon'
+import { useBreadcrumbs } from '#app/utils/breadcrumbs'
 import { cn, getUserImgSrc } from '#app/utils/misc'
-import { useOptionalUser } from '#app/utils/user'
+import { useOptionalUser, useUser } from '#app/utils/user'
 import { type loader } from './route'
 
 export const Header = () => {
@@ -76,5 +78,35 @@ export const List = () => {
 				<ListItem key={project.slug} project={project as Project} />
 			))}
 		</SideNavList>
+	)
+}
+
+export const Breadcrumbs = () => {
+	const user = useUser()
+	const breadcrumbs = useBreadcrumbs()
+
+	return (
+		<BreadcrumbsContainer>
+			<ul className="flex gap-3">
+				<li>
+					<Link
+						className="text-muted-foreground"
+						to={`/users/${user.username}`}
+					>
+						Profile
+					</Link>
+				</li>
+				{breadcrumbs.map((breadcrumb, i, arr) => (
+					<li
+						key={i}
+						className={cn('flex items-center gap-3', {
+							'text-muted-foreground': i < arr.length - 1,
+						})}
+					>
+						▶️ {breadcrumb}
+					</li>
+				))}
+			</ul>
+		</BreadcrumbsContainer>
 	)
 }

@@ -9,8 +9,14 @@ import {
 	SideNavContainer,
 	SideNavWrapper,
 } from '#app/components/shared'
+import { Separator } from '#app/components/ui/separator'
+import { type BreadcrumbHandle } from '#app/utils/breadcrumbs'
 import { prisma } from '#app/utils/db.server.ts'
-import { Header, List } from './components'
+import { Breadcrumbs, Header, List } from './components'
+
+export const handle: BreadcrumbHandle = {
+	breadcrumb: () => 'Projects',
+}
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const owner = await prisma.user.findFirst({
@@ -40,6 +46,8 @@ export default function ProjectsRoute() {
 					</SideNavContainer>
 				</SideNavWrapper>
 				<MainContent>
+					<Breadcrumbs />
+					<Separator className="my-4" />
 					<Outlet />
 				</MainContent>
 			</ContentWrapper>

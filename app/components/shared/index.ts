@@ -1,4 +1,9 @@
 export {
+	BreadcrumbsContainer,
+	BreadcrumbsList,
+	BreadcrumbListItem,
+} from './breadcrumbs'
+export {
 	ContainerIndex,
 	ContainerDetails,
 	ContainerHeader,
