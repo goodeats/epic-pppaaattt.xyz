@@ -88,7 +88,7 @@ export const List = () => {
 		return (
 			<SideNavListItem key={slug}>
 				<NavLink
-					to={slug}
+					to={type ? `${type}/${slug}` : slug}
 					preventScrollReset
 					prefetch="intent"
 					className={({ isActive }) =>
@@ -122,8 +122,6 @@ export const List = () => {
 				{isOwner ? <ParentListItem /> : null}
 				{isOwner ? <NewListItem /> : null}
 				{owner.appearances.map(appearance => {
-					if (type && appearance.slug !== type) return null
-
 					return (
 						<ListItem
 							key={appearance.slug}
