@@ -19,30 +19,37 @@ import {
 } from '#app/utils/permissions'
 import { redirectWithToast } from '#app/utils/toast.server'
 import { useOptionalUser } from '#app/utils/user'
-import { type loader as artboardsLoader } from '../../route.tsx'
+import { type loader as layersLoader } from '../../route.tsx'
 import { Content, Footer, Header } from './components.tsx'
-import { getArtboard } from './queries.ts'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	const artboard = await getArtboard(userId, params.artboardId as string)
+	const layer = await prisma.layer.findFirst({
+		where: { slug: params.layerId, ownerId: userId },
+		select: {
+			id: true,
+			name: true,
+			description: true,
+			ownerId: true,
+			updatedAt: true,
+		},
+	})
 
-	invariantResponse(artboard, 'Not found', { status: 404 })
+	invariantResponse(layer, 'Not found', { status: 404 })
 
-	const date = new Date(artboard.updatedAt)
+	const date = new Date(layer.updatedAt)
 	const timeAgo = formatDistanceToNow(date)
 
 	return json({
-		artboard,
+		layer,
 		timeAgo,
-		breadcrumb: artboard.name,
-		project: artboard.project,
+		breadcrumb: layer.name,
 	})
 }
 
 const DeleteFormSchema = z.object({
-	intent: z.literal('delete-artboard'),
-	artboardId: z.string(),
+	intent: z.literal('delete-layer'),
+	layerId: z.string(),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -59,54 +66,42 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ status: 'error', submission } as const, { status: 400 })
 	}
 
-	const { artboardId } = submission.value
+	const { layerId } = submission.value
 
-	const artboard = await prisma.artboard.findFirst({
+	const layer = await prisma.layer.findFirst({
 		select: {
 			id: true,
 			name: true,
 			ownerId: true,
-			owner: {
-				select: { username: true },
-			},
-			project: {
-				select: {
-					slug: true,
-				},
-			},
+			owner: { select: { username: true } },
 		},
-		where: { id: artboardId },
+		where: { id: layerId },
 	})
-	invariantResponse(artboard, 'Not found', { status: 404 })
+	invariantResponse(layer, 'Not found', { status: 404 })
 
-	const { id, name, owner, ownerId, project } = artboard
-
-	const isOwner = ownerId === userId
+	const isOwner = layer.ownerId === userId
 	await requireUserWithPermission(
 		request,
-		isOwner ? `delete:artboard:own` : `delete:artboard:any`,
+		isOwner ? `delete:layer:own` : `delete:layer:any`,
 	)
 
-	await prisma.artboard.delete({ where: { id: id } })
+	await prisma.layer.delete({ where: { id: layer.id } })
 
-	return redirectWithToast(
-		`/users/${owner.username}/projects/${project.slug}`,
-		{
-			type: 'success',
-			title: 'Success',
-			// description: 'Your artboard has been deleted.',
-			description: `Deleted artboard: "${name}"`,
-		},
-	)
+	return redirectWithToast(`/users/${layer.owner.username}/layers`, {
+		type: 'success',
+		title: 'Success',
+		// description: 'Your layer has been deleted.',
+		description: `Deleted layer: ${layer.name}`,
+	})
 }
 
-export default function ArtboardDetailsRoute() {
+export default function LayerDetailsRoute() {
 	const data = useLoaderData<typeof loader>()
 	const user = useOptionalUser()
-	const isOwner = user?.id === data.artboard.ownerId
+	const isOwner = user?.id === data.layer.ownerId
 	const canDelete = userHasPermission(
 		user,
-		isOwner ? `delete:artboard:own` : `delete:artboard:any`,
+		isOwner ? `delete:layer:own` : `delete:layer:any`,
 	)
 	const displayBar = canDelete || isOwner
 
@@ -121,22 +116,22 @@ export default function ArtboardDetailsRoute() {
 
 export const meta: MetaFunction<
 	typeof loader,
-	{ 'routes/users+/$username_+/artboards': typeof artboardsLoader }
+	{ 'routes/users+/$username_+/layers': typeof layersLoader }
 > = ({ data, params, matches }) => {
-	const artboardssMatch = matches.find(
-		m => m.id === 'routes/users+/$username_+/artboards',
+	const entitiesMatch = matches.find(
+		m => m.id === 'routes/users+/$username_+/layers',
 	)
-	const displayName = artboardssMatch?.data?.owner.name ?? params.username
-	const artboardTitle = data?.artboard.name ?? 'Artboard'
-	const artboardDescriptionSummary =
-		data && data.artboard.description.length > 100
-			? data?.artboard.description.slice(0, 97) + '...'
+	const displayName = entitiesMatch?.data?.owner.name ?? params.username
+	const entityTitle = data?.layer.name ?? 'Layer'
+	const entityDescriptionSummary =
+		data && data.layer.description.length > 100
+			? data?.layer.description.slice(0, 97) + '...'
 			: 'No description'
 	return [
-		{ title: `${artboardTitle} | ${displayName}'s Artboards | XYZ` },
+		{ title: `${entityTitle} | ${displayName}'s Layer | XYZ` },
 		{
 			name: 'description',
-			content: artboardDescriptionSummary,
+			content: entityDescriptionSummary,
 		},
 	]
 }
@@ -147,7 +142,7 @@ export function ErrorBoundary() {
 			statusHandlers={{
 				403: () => <p>You are not allowed to do that</p>,
 				404: ({ params }) => (
-					<p>No artboard with the name "{params.artboardId}" exists</p>
+					<p>No layer with the name "{params.layerId}" exists</p>
 				),
 			}}
 		/>
