@@ -1,24 +1,12 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
-import { type Project } from '@prisma/client'
-import {
-	json,
-	redirect,
-	type ActionFunctionArgs,
-	type SerializeFrom,
-} from '@remix-run/node'
-import { Form, useActionData } from '@remix-run/react'
+import { json, redirect, type ActionFunctionArgs } from '@remix-run/node'
+import { Form, useActionData, useLoaderData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
+import { ErrorList, Field, TextareaField } from '#app/components/forms.tsx'
 import {
-	CheckboxField,
-	ErrorList,
-	Field,
-	TextareaField,
-} from '#app/components/forms.tsx'
-import {
-	FooterLinkButton,
 	FormActionsContainer,
 	FormContainer,
 	FormFieldsContainer,
@@ -27,22 +15,46 @@ import {
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
+import {
+	formatSringsToHex,
+	validateStringsAreHexcodes,
+} from '#app/utils/colors'
 import { validateCSRF } from '#app/utils/csrf.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { stringToSlug, useIsPending } from '#app/utils/misc.tsx'
+import {
+	capitalize,
+	removeWhitespace,
+	trimSpacesInBetween,
+} from '#app/utils/string-formatting'
+import { type loader } from './route'
 
 const titleMinLength = 1
 const titleMaxLength = 100
 const descriptionMinLength = 1
 const descriptionMaxLength = 10000
+const widthMinLength = 1
+const widthMaxLength = 10000
+const heightMinLength = 1
+const heightMaxLength = 10000
 
-const ProjectEditorSchema = z.object({
-	id: z.string().optional(),
+const ArtboardEditorSchema = z.object({
+	projectId: z.string(),
 	name: z.string().min(titleMinLength).max(titleMaxLength),
 	description: z.string().min(descriptionMinLength).max(descriptionMaxLength),
-	// if unchecked isVisble will not be included in the submission
-	// so set to false if so
-	isVisible: z.boolean().optional(),
+	width: z.number().min(widthMinLength).max(widthMaxLength),
+	height: z.number().min(heightMinLength).max(heightMaxLength),
+	// backgroundColor: z.string(),
+	// HexcodeStringSchema,
+	backgroundColor: z
+		.string()
+		.transform(val => removeWhitespace(val))
+		.transform(val => capitalize(val))
+		.transform(val => trimSpacesInBetween(val))
+		.transform(val => formatSringsToHex(val.split(',')))
+		.refine(validateStringsAreHexcodes, {
+			message: 'Values must be valid hexcodes',
+		}),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -52,12 +64,10 @@ export async function action({ request }: ActionFunctionArgs) {
 	await validateCSRF(formData, request.headers)
 
 	const submission = await parse(formData, {
-		schema: ProjectEditorSchema.superRefine(async (data, ctx) => {
-			if (!data.id) return
-
+		schema: ArtboardEditorSchema.superRefine(async (data, ctx) => {
 			const project = await prisma.project.findUnique({
 				select: { id: true },
-				where: { id: data.id, ownerId: userId },
+				where: { id: data.projectId, ownerId: userId },
 			})
 			if (!project) {
 				ctx.addIssue({
@@ -67,14 +77,14 @@ export async function action({ request }: ActionFunctionArgs) {
 			}
 
 			const slug = stringToSlug(data.name)
-			const projectWithSlug = await prisma.project.findFirst({
+			const artboardWithSlug = await prisma.artboard.findFirst({
 				select: { id: true },
 				where: { slug, ownerId: userId },
 			})
-			if (projectWithSlug && projectWithSlug.id !== data.id) {
+			if (artboardWithSlug) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					message: 'Project with that name already exists',
+					message: 'Artboard with that name already exists',
 				})
 			}
 		}),
@@ -89,46 +99,50 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { id: projectId, name, description, isVisible } = submission.value
+	const { projectId, name, description, width, height, backgroundColor } =
+		submission.value
 	const slug = stringToSlug(name)
 
-	const updatedProject = await prisma.project.update({
-		select: { slug: true, owner: { select: { username: true } } },
-		where: { id: projectId },
+	const createdArtboard = await prisma.artboard.create({
+		select: {
+			slug: true,
+			owner: { select: { username: true } },
+			project: { select: { slug: true } },
+		},
 		data: {
+			ownerId: userId,
+			projectId,
 			name,
 			description,
-			isVisible: isVisible ?? false,
 			slug,
+			width,
+			height,
+			backgroundColor: backgroundColor[0],
 		},
 	})
 
-	return redirect(
-		`/users/${updatedProject.owner.username}/projects/${updatedProject.slug}`,
-	)
+	const { owner } = createdArtboard
+	return redirect(`/users/${owner.username}/artboards/${createdArtboard.slug}`)
 }
 
-export function EditProjectForm({
-	project,
-}: {
-	project: SerializeFrom<
-		Pick<Project, 'id' | 'name' | 'description' | 'isVisible'>
-	>
-}) {
+export function NewArtboardForm() {
+	const data = useLoaderData<typeof loader>()
+	const project = data.project
+
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: 'edit-project-form',
-		constraint: getFieldsetConstraint(ProjectEditorSchema),
+		id: 'new-artboard-form',
+		constraint: getFieldsetConstraint(ArtboardEditorSchema),
 		lastSubmission: actionData?.submission,
 		onValidate({ formData }) {
-			return parse(formData, { schema: ProjectEditorSchema })
+			return parse(formData, { schema: ArtboardEditorSchema })
 		},
 		defaultValue: {
-			name: project.name ?? '',
-			description: project.description ?? '',
-			isVisible: project.isVisible ?? false,
+			width: 1080, // 9:16
+			height: 1920,
+			backgroundColor: '#FFFFFF',
 		},
 	})
 
@@ -157,18 +171,46 @@ export function EditProjectForm({
 		)
 	}
 
-	const FormIsVisible = () => {
+	const FormWidth = () => {
 		return (
-			<CheckboxField
-				labelProps={{
-					htmlFor: fields.isVisible.id,
-					children: 'Visible',
+			<Field
+				labelProps={{ children: 'Width' }}
+				inputProps={{
+					...conform.input(fields.width, {
+						ariaAttributes: true,
+						type: 'number',
+					}),
 				}}
-				buttonProps={conform.input(fields.isVisible, {
-					type: 'checkbox',
-				})}
-				defaultChecked={!!fields.isVisible.defaultValue}
-				errors={fields.isVisible.errors}
+				errors={fields.width.errors}
+			/>
+		)
+	}
+
+	const FormHeight = () => {
+		return (
+			<Field
+				labelProps={{ children: 'Height' }}
+				inputProps={{
+					...conform.input(fields.height, {
+						ariaAttributes: true,
+						type: 'number',
+					}),
+				}}
+				errors={fields.height.errors}
+			/>
+		)
+	}
+
+	const FormBackgroundColor = () => {
+		return (
+			<Field
+				labelProps={{ children: 'Background Color' }}
+				inputProps={{
+					...conform.input(fields.backgroundColor, {
+						ariaAttributes: true,
+					}),
+				}}
+				errors={fields.backgroundColor.errors}
 			/>
 		)
 	}
@@ -176,9 +218,6 @@ export function EditProjectForm({
 	const FormActions = () => {
 		return (
 			<FormActionsContainer>
-				<FooterLinkButton to=".." icon="arrow-left" variant="outline">
-					Cancel
-				</FooterLinkButton>
 				<Button form={form.id} variant="destructive" type="reset">
 					Reset
 				</Button>
@@ -209,11 +248,13 @@ export function EditProjectForm({
 					rather than the first button in the form (which is delete/add image).
 				*/}
 				<button type="submit" className="hidden" />
-				<input type="hidden" name="id" value={project.id} />
+				<input type="hidden" name="projectId" value={project.id} />
 				<FormFieldsContainer>
 					<FormName />
 					<FormDescription />
-					<FormIsVisible />
+					<FormWidth />
+					<FormHeight />
+					<FormBackgroundColor />
 				</FormFieldsContainer>
 				<ErrorList id={form.errorId} errors={form.errors} />
 			</Form>
@@ -227,7 +268,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => (
-					<p>No project with the id "{params.projectId}" exists</p>
+					<p>No artboard with the id "{params.artboardId}" exists</p>
 				),
 			}}
 		/>

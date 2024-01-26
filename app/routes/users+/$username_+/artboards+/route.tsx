@@ -15,7 +15,7 @@ import { prisma } from '#app/utils/db.server.ts'
 import { Breadcrumbs, Header, List } from './components'
 
 export const handle: BreadcrumbHandle = {
-	breadcrumb: () => 'Projects',
+	breadcrumb: () => 'Artboards',
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -25,7 +25,30 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			name: true,
 			username: true,
 			image: { select: { id: true } },
-			projects: { select: { slug: true, name: true } },
+			projects: {
+				select: {
+					slug: true,
+					name: true,
+					artboards: {
+						select: {
+							slug: true,
+							name: true,
+						},
+					},
+				},
+			},
+			artboards: {
+				select: {
+					slug: true,
+					name: true,
+					project: {
+						select: {
+							slug: true,
+							name: true,
+						},
+					},
+				},
+			},
 		},
 		where: { username: params.username },
 	})
@@ -35,7 +58,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	return json({ owner })
 }
 
-export default function ProjectsRoute() {
+export default function ArtboardsRoute() {
 	return (
 		<MainContainer>
 			<ContentWrapper>
@@ -60,7 +83,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => (
-					<p>No user with the username "{params.username}" exists</p>
+					<p>No artboard with the name "{params.artboardId}" exists</p>
 				),
 			}}
 		/>

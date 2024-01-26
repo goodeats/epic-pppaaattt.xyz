@@ -19,50 +19,52 @@ import {
 } from '#app/utils/permissions'
 import { redirectWithToast } from '#app/utils/toast.server'
 import { useOptionalUser } from '#app/utils/user'
-import { type loader as projectsLoader } from '../../route.tsx'
+import { type loader as artboardsLoader } from '../../route.tsx'
 import { Content, Footer, Header } from './components.tsx'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	const project = await prisma.project.findFirst({
-		where: { slug: params.projectId, ownerId: userId },
+	const artboard = await prisma.artboard.findFirst({
+		where: { slug: params.artboardId, ownerId: userId },
 		select: {
 			id: true,
 			name: true,
 			description: true,
 			isVisible: true,
+			slug: true,
+			width: true,
+			height: true,
+			backgroundColor: true,
 			ownerId: true,
 			updatedAt: true,
-			artboards: {
+			project: {
 				select: {
 					name: true,
 					description: true,
 					isVisible: true,
 					slug: true,
-					width: true,
-					height: true,
-					backgroundColor: true,
 					updatedAt: true,
 				},
 			},
 		},
 	})
 
-	invariantResponse(project, 'Not found', { status: 404 })
+	invariantResponse(artboard, 'Not found', { status: 404 })
 
-	const date = new Date(project.updatedAt)
+	const date = new Date(artboard.updatedAt)
 	const timeAgo = formatDistanceToNow(date)
 
 	return json({
-		project,
+		artboard,
 		timeAgo,
-		breadcrumb: project.name,
+		breadcrumb: artboard.name,
+		project: artboard.project,
 	})
 }
 
 const DeleteFormSchema = z.object({
-	intent: z.literal('delete-project'),
-	projectId: z.string(),
+	intent: z.literal('delete-artboard'),
+	artboardId: z.string(),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -79,36 +81,54 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ status: 'error', submission } as const, { status: 400 })
 	}
 
-	const { projectId } = submission.value
+	const { artboardId } = submission.value
 
-	const project = await prisma.project.findFirst({
-		select: { id: true, ownerId: true, owner: { select: { username: true } } },
-		where: { id: projectId },
+	const artboard = await prisma.artboard.findFirst({
+		select: {
+			id: true,
+			name: true,
+			ownerId: true,
+			owner: {
+				select: { username: true },
+			},
+			project: {
+				select: {
+					slug: true,
+				},
+			},
+		},
+		where: { id: artboardId },
 	})
-	invariantResponse(project, 'Not found', { status: 404 })
+	invariantResponse(artboard, 'Not found', { status: 404 })
 
-	const isOwner = project.ownerId === userId
+	const { id, name, owner, ownerId, project } = artboard
+
+	const isOwner = ownerId === userId
 	await requireUserWithPermission(
 		request,
-		isOwner ? `delete:project:own` : `delete:project:any`,
+		isOwner ? `delete:artboard:own` : `delete:artboard:any`,
 	)
 
-	await prisma.project.delete({ where: { id: project.id } })
+	await prisma.artboard.delete({ where: { id: id } })
 
-	return redirectWithToast(`/users/${project.owner.username}/projects`, {
-		type: 'success',
-		title: 'Success',
-		description: 'Your project has been deleted.',
-	})
+	return redirectWithToast(
+		`/users/${owner.username}/projects/${project.slug}`,
+		{
+			type: 'success',
+			title: 'Success',
+			// description: 'Your artboard has been deleted.',
+			description: `Deleted artboard: "${name}"`,
+		},
+	)
 }
 
-export default function ProjectDetailsRoute() {
+export default function ArtboardDetailsRoute() {
 	const data = useLoaderData<typeof loader>()
 	const user = useOptionalUser()
-	const isOwner = user?.id === data.project.ownerId
+	const isOwner = user?.id === data.artboard.ownerId
 	const canDelete = userHasPermission(
 		user,
-		isOwner ? `delete:project:own` : `delete:project:any`,
+		isOwner ? `delete:artboard:own` : `delete:artboard:any`,
 	)
 	const displayBar = canDelete || isOwner
 
@@ -123,22 +143,22 @@ export default function ProjectDetailsRoute() {
 
 export const meta: MetaFunction<
 	typeof loader,
-	{ 'routes/users+/$username_+/projects': typeof projectsLoader }
+	{ 'routes/users+/$username_+/artboards': typeof artboardsLoader }
 > = ({ data, params, matches }) => {
-	const projectsMatch = matches.find(
-		m => m.id === 'routes/users+/$username_+/projects',
+	const artboardssMatch = matches.find(
+		m => m.id === 'routes/users+/$username_+/artboards',
 	)
-	const displayName = projectsMatch?.data?.owner.name ?? params.username
-	const projectTitle = data?.project.name ?? 'Project'
-	const projectDescriptionSummary =
-		data && data.project.description.length > 100
-			? data?.project.description.slice(0, 97) + '...'
+	const displayName = artboardssMatch?.data?.owner.name ?? params.username
+	const artboardTitle = data?.artboard.name ?? 'Artboard'
+	const artboardDescriptionSummary =
+		data && data.artboard.description.length > 100
+			? data?.artboard.description.slice(0, 97) + '...'
 			: 'No description'
 	return [
-		{ title: `${projectTitle} | ${displayName}'s Projects | XYZ` },
+		{ title: `${artboardTitle} | ${displayName}'s Artboards | XYZ` },
 		{
 			name: 'description',
-			content: projectDescriptionSummary,
+			content: artboardDescriptionSummary,
 		},
 	]
 }
@@ -149,7 +169,7 @@ export function ErrorBoundary() {
 			statusHandlers={{
 				403: () => <p>You are not allowed to do that</p>,
 				404: ({ params }) => (
-					<p>No project with the name "{params.projectId}" exists</p>
+					<p>No artboard with the name "{params.artboardId}" exists</p>
 				),
 			}}
 		/>

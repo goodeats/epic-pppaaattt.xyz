@@ -1,5 +1,11 @@
-import { type Project } from '@prisma/client'
-import { Link, NavLink, useLoaderData } from '@remix-run/react'
+import { type Artboard } from '@prisma/client'
+import {
+	Link,
+	NavLink,
+	type UIMatch,
+	useLoaderData,
+	useMatches,
+} from '@remix-run/react'
 import {
 	BreadcrumbsContainer,
 	SideNavHeaderImage,
@@ -11,15 +17,23 @@ import {
 } from '#app/components/shared'
 import { Icon } from '#app/components/ui/icon'
 import { useBreadcrumbs } from '#app/utils/breadcrumbs'
+import { type IArtboard } from '#app/utils/db.server'
 import { cn, getUserImgSrc } from '#app/utils/misc'
 import { useOptionalUser, useUser } from '#app/utils/user'
 import { type loader } from './route'
+
+interface MatchData {
+	project?: {
+		name: string
+		slug: string
+	}
+}
 
 export const Header = () => {
 	const data = useLoaderData<typeof loader>()
 	const { owner } = data
 	const ownerDisplayName = owner.name ?? owner.username
-	const title = `${ownerDisplayName}'s Projects`
+	const title = `${ownerDisplayName}'s Artboards`
 
 	return (
 		<SideNavHeaderLink to={`/users/${owner.username}`}>
@@ -32,17 +46,32 @@ export const Header = () => {
 	)
 }
 
+// checks for current artboard's project slug
+// then filters artboards by that project slug
+// link to artboard's project at the top of the list
 export const List = () => {
 	const data = useLoaderData<typeof loader>()
+	const matches = useMatches()
 	const { owner } = data
+
+	const matchWithProjects = matches.find((match: UIMatch<unknown, unknown>) => {
+		const matchData = match.data as MatchData
+		return matchData && matchData.project
+	})
+
+	const project = (matchWithProjects?.data as MatchData)?.project
+	const projectSlug = project?.slug
+
 	const user = useOptionalUser()
 	const isOwner = user?.id === owner.id
 
-	const NewListItem = () => {
+	const ParentListItem = () => {
+		if (!project) return null
+
 		return (
 			<SideNavListItem>
 				<NavLink
-					to="new"
+					to={`/users/${owner.username}/projects/${project.slug}`}
 					className={({ isActive }) =>
 						cn(
 							sideNavLinkDefaultClassName,
@@ -50,14 +79,14 @@ export const List = () => {
 						)
 					}
 				>
-					<Icon name="plus">New Project</Icon>
+					<Icon name="arrow-left">{project.name}</Icon>
 				</NavLink>
 			</SideNavListItem>
 		)
 	}
 
-	const ListItem = ({ project }: { project: Project }) => {
-		const { slug, name } = project
+	const ListItem = ({ artboard }: { artboard: Artboard }) => {
+		const { slug, name } = artboard
 		return (
 			<SideNavListItem key={slug}>
 				<NavLink
@@ -76,10 +105,13 @@ export const List = () => {
 
 	return (
 		<SideNavList>
-			{isOwner ? <NewListItem /> : null}
-			{owner.projects.map(project => (
-				<ListItem key={project.slug} project={project as Project} />
-			))}
+			{isOwner ? <ParentListItem /> : null}
+			{owner.artboards.map(artboard => {
+				const artboardProject = artboard.project.slug
+
+				if (artboardProject !== projectSlug) return null
+				return <ListItem key={artboard.slug} artboard={artboard as IArtboard} />
+			})}
 		</SideNavList>
 	)
 }

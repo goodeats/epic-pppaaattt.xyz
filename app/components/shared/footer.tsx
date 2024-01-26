@@ -29,15 +29,24 @@ const FooterLinkButton = ({
 	to,
 	icon,
 	children,
+	variant,
 }: {
 	to: string
 	icon: 'pencil-1' | 'trash' | 'arrow-left'
 	children: React.ReactNode
+	variant?:
+		| 'default'
+		| 'destructive'
+		| 'outline'
+		| 'secondary'
+		| 'ghost'
+		| 'link'
 }) => {
 	return (
 		<Button
 			asChild
 			className="min-[525px]:max-md:aspect-square min-[525px]:max-md:px-0"
+			variant={variant}
 		>
 			<Link to={to}>
 				<Icon name={icon} className="scale-125 max-md:scale-150">

@@ -7,11 +7,11 @@ const ContainerIndex = ({ children }: { children: React.ReactNode }) => {
 }
 
 const ContainerDetails = ({ children }: { children: React.ReactNode }) => {
-	return <div className="absolute inset-0 flex flex-col px-10">{children}</div>
+	return <div className="inset-0 flex flex-1 flex-col px-10">{children}</div>
 }
 
 const ContainerHeader = ({ children }: { children: React.ReactNode }) => {
-	return <h2 className="mb-2 pt-12 text-h2 lg:mb-6">{children}</h2>
+	return <h2 className="mb-2 pt-4 text-h2 lg:mb-6">{children}</h2>
 }
 
 const ContainerContent = ({

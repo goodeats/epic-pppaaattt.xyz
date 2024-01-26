@@ -21,7 +21,7 @@ async function seed() {
 
 	console.time('🔑 Created permissions...')
 	// don't forget to update permissions.ts when adding entities
-	const entities = ['user', 'note', 'project']
+	const entities = ['user', 'note', 'project', 'artboard']
 	const actions = ['create', 'read', 'update', 'delete']
 	const accesses = ['own', 'any'] as const
 	for (const entity of entities) {
@@ -101,7 +101,7 @@ async function seed() {
 	console.time(`🐨 Created admin user "pat"`)
 
 	const patImages = await promiseHash({
-		patUser: img({ filepath: './tests/fixtures/images/user/pat.png' }),
+		patUser: img({ filepath: './tests/fixtures/images/user/pppaaattt.png' }),
 		cuteKoala: img({
 			altText: 'an adorable koala cartoon illustration',
 			filepath: './tests/fixtures/images/pat-notes/cute-koala.png',
@@ -135,7 +135,7 @@ async function seed() {
 
 	const githubUser = await insertGitHubUser('MOCK_CODE_GITHUB_PAT')
 
-	await prisma.user.create({
+	const adminUser = await prisma.user.create({
 		select: { id: true },
 		data: {
 			email: 'pat@patn.xyz',
@@ -147,6 +147,17 @@ async function seed() {
 				create: { providerName: 'github', providerId: githubUser.profile.id },
 			},
 			roles: { connect: [{ name: 'admin' }, { name: 'user' }] },
+			projects: {
+				create: [
+					{
+						id: '1zxo9f8e',
+						name: 'My First Project',
+						description:
+							'This is my first project. I am so excited to get started!',
+						slug: 'my-first-project',
+					},
+				],
+			},
 			notes: {
 				create: [
 					{
@@ -249,6 +260,21 @@ async function seed() {
 		},
 	})
 	console.timeEnd(`🐨 Created admin user "pat"`)
+
+	console.time(`🐨 Created artboard`)
+	await prisma.artboard.create({
+		data: {
+			name: 'My First Artboard',
+			description: 'This is my first artboard. I am so excited to get started!',
+			slug: 'my-first-artboard',
+			width: 1080,
+			height: 1920,
+			backgroundColor: '#FFFFFF',
+			ownerId: adminUser.id,
+			projectId: '1zxo9f8e', // Associate with the first project by hard-coded id
+		},
+	})
+	console.timeEnd(`🐨 Created artboard`)
 
 	console.timeEnd(`🌱 Database has been seeded`)
 }

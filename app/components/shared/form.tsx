@@ -2,11 +2,11 @@ import { floatingToolbarClassName } from '../floating-toolbar'
 import { Icon } from '../ui/icon'
 
 const FormContainer = ({ children }: { children: React.ReactNode }) => {
-	return <div className="absolute inset-0">{children}</div>
+	return <div className="inset-0 flex-1">{children}</div>
 }
 
 const formDefaultClassName =
-	'flex h-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden px-10 pb-28 pt-12'
+	'flex h-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden px-10 pb-28 pt-5'
 
 const FormFieldsContainer = ({ children }: { children: React.ReactNode }) => {
 	return <div className="flex flex-col gap-1">{children}</div>
