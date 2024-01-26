@@ -1,7 +1,7 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
 import { json, redirect, type ActionFunctionArgs } from '@remix-run/node'
-import { Form, useActionData } from '@remix-run/react'
+import { Form, useActionData, useParams } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
@@ -85,11 +85,13 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export function NewForm() {
+	const params = useParams()
+	const { type } = params
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: 'new-appearance-form',
+		id: `new-appearance-${type}-form`,
 		constraint: getFieldsetConstraint(LayerEditorSchema),
 		lastSubmission: actionData?.submission,
 		onValidate({ formData }) {

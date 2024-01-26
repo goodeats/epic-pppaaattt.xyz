@@ -1,17 +1,17 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { Outlet, type UIMatch } from '@remix-run/react'
+import { findAppearanceTypeBySlug } from '#app/utils/appearances'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { prisma } from '#app/utils/db.server'
 import { transformSlugToTitle } from '#app/utils/string-formatting'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	await requireUserId(request)
-	const userId = await requireUserId(request)
-	const paramsType = params.type
 
-	if (!paramsType) {
-		return redirect(`/users/${userId}/appearances/`)
+	const { type, username } = params
+	if (!type || !findAppearanceTypeBySlug(type)) {
+		return redirect(`/users/${username}/appearances/`)
 	}
 
 	const owner = await prisma.user.findFirst({
@@ -22,9 +22,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 			image: { select: { id: true } },
 			appearances: {
 				select: { slug: true, name: true },
-				where: {
-					type: paramsType,
-				},
+				where: { type },
 			},
 		},
 		where: { username: params.username },
@@ -32,7 +30,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
-	const breadcrumb = transformSlugToTitle(paramsType) || 'Appearance'
+	const breadcrumb = transformSlugToTitle(type) || 'Appearance'
 
 	return json({ breadcrumb, owner })
 }
