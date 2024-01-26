@@ -10,6 +10,7 @@ import {
 	SideNavWrapper,
 } from '#app/components/shared'
 import { Separator } from '#app/components/ui/separator'
+import { appearanceNavigation } from '#app/utils/appearances'
 import { type BreadcrumbHandle } from '#app/utils/breadcrumbs'
 import { prisma } from '#app/utils/db.server.ts'
 import { Breadcrumbs, Header, List } from './components'
@@ -30,10 +31,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		where: { username: params.username },
 	})
 
-	const appearances = [
-		{ slug: 'size', name: 'Size', type: 'size' },
-		{ slug: 'line-width', name: 'Line Width', type: 'line-width' },
-	]
+	const appearances = appearanceNavigation
 
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
