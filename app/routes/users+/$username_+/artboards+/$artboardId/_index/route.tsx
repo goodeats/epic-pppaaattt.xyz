@@ -21,33 +21,11 @@ import { redirectWithToast } from '#app/utils/toast.server'
 import { useOptionalUser } from '#app/utils/user'
 import { type loader as artboardsLoader } from '../../route.tsx'
 import { Content, Footer, Header } from './components.tsx'
+import { getArtboard } from './queries.ts'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	const artboard = await prisma.artboard.findFirst({
-		where: { slug: params.artboardId, ownerId: userId },
-		select: {
-			id: true,
-			name: true,
-			description: true,
-			isVisible: true,
-			slug: true,
-			width: true,
-			height: true,
-			backgroundColor: true,
-			ownerId: true,
-			updatedAt: true,
-			project: {
-				select: {
-					name: true,
-					description: true,
-					isVisible: true,
-					slug: true,
-					updatedAt: true,
-				},
-			},
-		},
-	})
+	const artboard = await getArtboard(userId, params.artboardId as string)
 
 	invariantResponse(artboard, 'Not found', { status: 404 })
 
