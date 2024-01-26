@@ -29,7 +29,9 @@ import { Content, Footer, Header } from './components.tsx'
 export const handle = {
 	breadcrumb: (match: UIMatch) => {
 		const { params } = match
-		return params.projectId
+		// I don't like using the slug as a breadcrumb, but I am not able to get the name from a loader just yet
+		// https://github.com/triggerdotdev/trigger.dev/blob/main/apps/webapp/app/routes/_app.orgs.%24organizationSlug/route.tsx#L65
+		return params.projectId || 'Project'
 	},
 }
 
@@ -67,6 +69,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	return json({
 		project,
 		timeAgo,
+		breadcrumb: project.name,
 	})
 }
 

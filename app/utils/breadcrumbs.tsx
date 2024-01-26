@@ -2,6 +2,10 @@ import { Link, useMatches } from '@remix-run/react'
 import React from 'react'
 import { z } from 'zod'
 
+type MatchData = {
+	breadcrumb?: string // or whatever the type of breadcrumb is
+}
+
 const UIMatchSchema = z.object({
 	params: z.record(z.string().optional()),
 })
@@ -39,9 +43,13 @@ export function useBreadcrumbs() {
 
 			if (!breadcrumbElement) return null
 
+			// in the loader set breadcrumb to the name of the data you want to use
+			// if there is an id/slug/title/name this is where you want to set it
+			const matchDataBreadcrumb = (match.data as MatchData)?.breadcrumb
+
 			return (
 				<Link key={match.id} to={match.pathname} className="flex items-center">
-					{breadcrumbElement}
+					{matchDataBreadcrumb || breadcrumbElement}
 				</Link>
 			)
 		})
