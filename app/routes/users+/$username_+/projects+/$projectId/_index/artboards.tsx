@@ -1,6 +1,7 @@
 import { Link, useLoaderData } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
 import { Button } from '#app/components/ui/button'
+import { Icon } from '#app/components/ui/icon'
 import { Separator } from '#app/components/ui/separator'
 import {
 	Table,
@@ -26,7 +27,7 @@ export const Artboards = () => {
 				<div className="ml-auto mr-4">
 					<Button asChild>
 						<Link to="artboards/new" prefetch="intent">
-							New Artboard
+							<Icon name="plus">New Artboard</Icon>
 						</Link>
 					</Button>
 				</div>
