@@ -25,6 +25,12 @@ model User {
   roles       Role[]
   sessions    Session[]
   connections Connection[]
+  // added after epic-stack created
+  projects    Project[]
+  artboards   Artboard[]
+  layers      Layer[]
+  appearances Appearance[]
+  assetImages AssetImage[]
 }
 
 model Note {
@@ -166,4 +172,208 @@ model Connection {
   userId String
 
   @@unique([providerName, providerId])
+}
+
+// added after epic-stack created
+
+model Project {
+  id         String @id @default(cuid())
+  name        String
+  description String
+  isVisible   Boolean @default(true)
+  slug       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  artboards Artboard[]
+
+  // non-unique foreign key
+  @@index([ownerId])
+  // This helps our order by in the user search a LOT
+  @@index([ownerId, updatedAt])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
+}
+
+model Artboard {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  isVisible   Boolean @default(true)
+  slug       String
+  width       Int
+  height      Int
+  backgroundColor String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  projectId String
+
+  layers LayersOnArtboards[]
+
+  // non-unique foreign key
+  @@index([projectId])
+  @@index([ownerId])
+  // This helps our order by in the user search a LOT
+  @@index([projectId, updatedAt])
+  @@index([ownerId, updatedAt])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
+}
+
+model Layer {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  slug       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  parentId String?
+  parent   Layer? @relation("LayerToLayer", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  children Layer[] @relation("LayerToLayer")
+
+  artboards LayersOnArtboards[]
+  appearances AppearancesOnLayers[]
+  assetImages AssetImagesOnLayers[]
+
+  // non-unique foreign key
+  @@index([ownerId])
+  @@index([parentId])
+  // This helps our order by in the user search a LOT
+  @@index([ownerId, updatedAt])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
+}
+
+model Appearance {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  slug       String
+  type        String // e.g. fill, stroke, etc. also layoutType, palette, size, etc.
+  value       String // string or stringify json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  layers AppearancesOnLayers[]
+
+  // non-unique foreign key
+  @@index([ownerId])
+  // This helps our order by in the user search a LOT
+  @@index([ownerId, updatedAt])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
+}
+
+model AppearancesOnLayers {
+  id          String @id @default(cuid())
+  isVisible   Boolean @default(true)
+  // order of appearance in the layer... by type?
+  // considered linked lists, but not worth complexity unless I'm adding many appearances to a layer
+  order       Int
+  // I may want to override the appearance value when on a layer
+  overrideValue String? // string or stringify json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appearance Appearance @relation(fields: [appearanceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  appearanceId String
+
+  layer Layer @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  layerId String
+
+  // non-unique foreign key
+  @@index([appearanceId])
+  @@index([layerId])
+  // This helps our order by in the user search a LOT
+  @@index([appearanceId, layerId])
+}
+
+model LayersOnArtboards {
+  id          String @id @default(cuid())
+  isVisible   Boolean @default(true)
+  // order of layers in the artboard
+  // considered linked lists, but not worth complexity unless I'm adding many layers to an artboard
+  order       Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  layer Layer @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  layerId String
+
+  artboard Artboard @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artboardId String
+
+  // non-unique foreign key
+  @@index([layerId])
+  @@index([artboardId])
+  // This helps our order by in the user search a LOT
+  @@index([layerId, artboardId])
+}
+
+model AssetImage {
+  id          String @id @default(cuid())
+  name        String
+  slug       String
+  altText     String?
+  contentType String
+  blob        Bytes
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  layers AssetImagesOnLayers[]
+
+  // non-unique foreign key
+  @@index([ownerId])
+  // This helps our order by in the user search a LOT
+  @@index([ownerId, updatedAt])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
+}
+
+model AssetImagesOnLayers {
+  id          String @id @default(cuid())
+  isVisible   Boolean @default(true)
+  // order of asset images in the layer
+  // considered linked lists, but not worth complexity unless I'm adding many asset images to a layer
+  order       Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assetImage AssetImage @relation(fields: [assetImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assetImageId String
+
+  layer Layer @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  layerId String
+
+  // non-unique foreign key
+  @@index([assetImageId])
+  @@index([layerId])
+  // This helps our order by in the user search a LOT
+  @@index([assetImageId, layerId])
 }

@@ -1,5 +1,5 @@
 import { remember } from '@epic-web/remember'
-import { PrismaClient } from '@prisma/client'
+import { type Artboard, PrismaClient, type Project } from '@prisma/client'
 import chalk from 'chalk'
 
 export const prisma = remember('prisma', () => {
@@ -34,3 +34,11 @@ export const prisma = remember('prisma', () => {
 	client.$connect()
 	return client
 })
+
+export interface IProject extends Project {
+	artboards?: Artboard[]
+}
+
+export interface IArtboard extends Artboard {
+	project?: Project
+}

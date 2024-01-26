@@ -86,8 +86,11 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
 	return [
-		{ title: data ? 'Epic Notes' : 'Error | Epic Notes' },
-		{ name: 'description', content: `Your own captain's log` },
+		{ title: data ? 'PPPAAATTT' : 'Error | PPPAAATTT' },
+		{
+			name: 'description',
+			content: `Welcome to my digital gallery of generative art built with triangles and algorithms.`,
+		},
 	]
 }
 
@@ -320,9 +323,16 @@ function UserDropdown() {
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
-						<Link prefetch="intent" to={`/users/${user.username}/notes`}>
-							<Icon className="text-body-md" name="pencil-2">
-								Notes
+						<Link prefetch="intent" to={`/users/${user.username}/projects`}>
+							<Icon className="text-body-md" name="arrow-left">
+								Projects
+							</Icon>
+						</Link>
+					</DropdownMenuItem>
+					<DropdownMenuItem asChild>
+						<Link prefetch="intent" to={`/users/${user.username}/layers`}>
+							<Icon className="text-body-md" name="arrow-left">
+								Layers
 							</Icon>
 						</Link>
 					</DropdownMenuItem>

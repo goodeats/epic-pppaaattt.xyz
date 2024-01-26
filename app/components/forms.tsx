@@ -90,11 +90,13 @@ export function TextareaField({
 export function CheckboxField({
 	labelProps,
 	buttonProps,
+	defaultChecked,
 	errors,
 	className,
 }: {
 	labelProps: JSX.IntrinsicElements['label']
 	buttonProps: CheckboxProps
+	defaultChecked?: boolean
 	errors?: ListOfErrors
 	className?: string
 }) {
@@ -111,6 +113,8 @@ export function CheckboxField({
 	})
 	const id = buttonProps.id ?? buttonProps.name ?? fallbackId
 	const errorId = errors?.length ? `${id}-error` : undefined
+	// manual intervention to set defaultChecked based on current value
+	buttonProps.defaultChecked = defaultChecked
 	return (
 		<div className={className}>
 			<div className="flex gap-2">

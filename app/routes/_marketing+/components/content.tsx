@@ -36,21 +36,31 @@ export const ContentHeader = () => {
 
 export const ContentBody = () => {
 	return (
-		<p
-			data-paragraph
-			className="mt-6 animate-slide-top text-xl/7 text-muted-foreground [animation-fill-mode:backwards] [animation-delay:0.8s] xl:mt-8 xl:animate-slide-left xl:text-xl/6 xl:leading-10 xl:[animation-fill-mode:backwards] xl:[animation-delay:1s]"
-		>
-			I am a software engineer from Maine, now living in New York City. My art
-			consists of printing equilateral triangles in different ways on a canvas
-			using JavaScript. I have worked mostly used my coding skills in various
-			startups and now I am excited to pursue the lengths of my creativity.
-		</p>
+		<div>
+			<p
+				data-paragraph
+				className="mt-6 animate-slide-top text-xl/7 text-muted-foreground [animation-fill-mode:backwards] [animation-delay:0.8s] xl:mt-8 xl:animate-slide-left xl:text-xl/6 xl:leading-10 xl:[animation-fill-mode:backwards] xl:[animation-delay:1s]"
+			>
+				Welcome to my digital gallery. My name is Pat and I am a software
+				engineer turned generative artist from Maine, now living in New York
+				City.
+			</p>
+			<p
+				data-paragraph
+				className="mt-6 animate-slide-top text-xl/7 text-muted-foreground [animation-fill-mode:backwards] [animation-delay:0.8s] xl:mt-8 xl:animate-slide-left xl:text-xl/6 xl:leading-10 xl:[animation-fill-mode:backwards] xl:[animation-delay:1s]"
+			>
+				My art consists of bridging the gap between the precision of programming
+				and the boundless world of art. It is a celebration of simplicity and
+				complexity, where equilateral triangles become the building blocks for a
+				series of algorithms that produce mesmerizing visual displays.
+			</p>
+		</div>
 	)
 }
 
 export const ContentContact = () => {
 	return (
-		<ul className="mt-6 flex animate-slide-top space-x-4 [animation-fill-mode:backwards] [animation-delay:1.2s] xl:mt-8 xl:animate-slide-left xl:[animation-fill-mode:backwards] xl:[animation-delay:1.2s]">
+		<ul className="mt-6 flex animate-slide-top space-x-6 [animation-fill-mode:backwards] [animation-delay:1.2s] xl:mt-8 xl:animate-slide-left xl:[animation-fill-mode:backwards] xl:[animation-delay:1.2s]">
 			<li>
 				<a
 					href="https://www.instagram.com/pppaaattt.xyz"
