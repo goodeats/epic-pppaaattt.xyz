@@ -5,7 +5,7 @@ import { Form, useActionData, useLoaderData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
-import { ErrorList, Field } from '#app/components/forms.tsx'
+import { CheckboxField, ErrorList } from '#app/components/forms.tsx'
 import {
 	FormActionsContainer,
 	FormContainer,
@@ -15,46 +15,15 @@ import {
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
-import {
-	formatSringsToHex,
-	validateStringsAreHexcodes,
-} from '#app/utils/colors'
 import { validateCSRF } from '#app/utils/csrf.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
-import { stringToSlug, useIsPending } from '#app/utils/misc.tsx'
-import {
-	capitalize,
-	removeWhitespace,
-	trimSpacesInBetween,
-} from '#app/utils/string-formatting'
+import { useIsPending } from '#app/utils/misc.tsx'
+import { addLayersToArtboard } from './mutations'
 import { type loader } from './route'
 
-const titleMinLength = 1
-const titleMaxLength = 100
-const descriptionMinLength = 1
-const descriptionMaxLength = 10000
-const widthMinLength = 1
-const widthMaxLength = 10000
-const heightMinLength = 1
-const heightMaxLength = 10000
-
 const ArtboardEditorSchema = z.object({
-	projectId: z.string(),
-	name: z.string().min(titleMinLength).max(titleMaxLength),
-	description: z.string().min(descriptionMinLength).max(descriptionMaxLength),
-	width: z.number().min(widthMinLength).max(widthMaxLength),
-	height: z.number().min(heightMinLength).max(heightMaxLength),
-	// backgroundColor: z.string(),
-	// HexcodeStringSchema,
-	backgroundColor: z
-		.string()
-		.transform(val => removeWhitespace(val))
-		.transform(val => capitalize(val))
-		.transform(val => trimSpacesInBetween(val))
-		.transform(val => formatSringsToHex(val.split(',')))
-		.refine(validateStringsAreHexcodes, {
-			message: 'Values must be valid hexcodes',
-		}),
+	artboardId: z.string(),
+	layerIds: z.string().array(),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -65,26 +34,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	const submission = await parse(formData, {
 		schema: ArtboardEditorSchema.superRefine(async (data, ctx) => {
-			const project = await prisma.project.findUnique({
+			const artboard = await prisma.artboard.findUnique({
 				select: { id: true },
-				where: { id: data.projectId, ownerId: userId },
+				where: { id: data.artboardId, ownerId: userId },
 			})
-			if (!project) {
+			if (!artboard) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					message: 'Project not found',
-				})
-			}
-
-			const slug = stringToSlug(data.name)
-			const artboardWithSlug = await prisma.artboard.findFirst({
-				select: { id: true },
-				where: { slug, ownerId: userId },
-			})
-			if (artboardWithSlug) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: 'Artboard with that name already exists',
+					message: 'Artboard not found',
 				})
 			}
 		}),
@@ -99,58 +56,71 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { projectId, name, description, width, height, backgroundColor } =
-		submission.value
-	const slug = stringToSlug(name)
+	const { artboardId, layerIds } = submission.value
 
-	const createdArtboard = await prisma.artboard.create({
-		select: {
-			slug: true,
-			owner: { select: { username: true } },
-			project: { select: { slug: true } },
-		},
-		data: {
-			ownerId: userId,
-			projectId,
-			name,
-			description,
-			slug,
-			width,
-			height,
-			backgroundColor: backgroundColor[0],
-		},
-	})
+	const updatedArtboard = await addLayersToArtboard(
+		userId,
+		artboardId,
+		layerIds,
+	)
 
-	const { owner } = createdArtboard
-	return redirect(`/users/${owner.username}/artboards/${createdArtboard.slug}`)
+	if (!updatedArtboard) {
+		return json({ submission } as const, { status: 400 })
+	}
+
+	const { owner } = updatedArtboard
+	return redirect(`/users/${owner.username}/artboards/${updatedArtboard.slug}`)
 }
 
 export function AddLayerForm() {
 	const data = useLoaderData<typeof loader>()
-	const artboard = data.artboard
+	const { artboard, layers } = data
+	const artboardLayerIds = artboard.layers.map(layer => layer.layerId)
 
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: 'add-layer-form',
+		id: 'choose-layers-form',
 		constraint: getFieldsetConstraint(ArtboardEditorSchema),
 		lastSubmission: actionData?.submission,
 		onValidate({ formData }) {
 			return parse(formData, { schema: ArtboardEditorSchema })
 		},
+		defaultValue: {
+			layerIds: artboardLayerIds ?? [],
+		},
 	})
 
-	const FormName = () => {
+	const Layers = () => {
 		return (
-			<Field
-				labelProps={{ children: 'Name' }}
-				inputProps={{
-					autoFocus: true,
-					...conform.input(fields.name, { ariaAttributes: true }),
-				}}
-				errors={fields.name.errors}
-			/>
+			<div className="flex items-center justify-between space-x-2">
+				<fieldset>
+					<legend className="mb-4 text-lg">Layers</legend>
+					{layers.map((layer, i) => {
+						const checkboxProps = conform.input(fields.layerIds, {
+							type: 'checkbox',
+							value: layer.id,
+						})
+
+						// mutliple bug since checkbox is a button actually
+						const { multiple, ...rest } = checkboxProps
+
+						return (
+							<CheckboxField
+								key={layer.id}
+								labelProps={{
+									htmlFor: checkboxProps.id,
+									children: layer.name,
+								}}
+								buttonProps={rest}
+								defaultChecked={artboardLayerIds.includes(layer.id)}
+								errors={fields.layerIds.errors}
+							/>
+						)
+					})}
+				</fieldset>
+			</div>
 		)
 	}
 
@@ -189,7 +159,7 @@ export function AddLayerForm() {
 				<button type="submit" className="hidden" />
 				<input type="hidden" name="artboardId" value={artboard.id} />
 				<FormFieldsContainer>
-					<FormName />
+					<Layers />
 				</FormFieldsContainer>
 				<ErrorList id={form.errorId} errors={form.errors} />
 			</Form>
@@ -203,7 +173,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => (
-					<p>No layer with the id "{params.layerId}" exists</p>
+					<p>No artboard with the id "{params.artboardId}" exists</p>
 				),
 			}}
 		/>
