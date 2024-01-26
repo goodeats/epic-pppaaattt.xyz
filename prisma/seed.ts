@@ -159,8 +159,7 @@ async function seed() {
 					{
 						id: '1zxo9f8e',
 						name: 'My First Project',
-						description:
-							'This is my first project. I am so excited to get started!',
+						description: 'This is my first project.',
 						slug: 'my-first-project',
 					},
 				],
@@ -170,9 +169,72 @@ async function seed() {
 					{
 						id: '86qna11a',
 						name: 'My First Layer',
-						description:
-							'This is my first layer. I am so excited to get started!',
+						description: 'This is my first layer.',
 						slug: 'my-first-layer',
+					},
+				],
+			},
+			appearances: {
+				create: [
+					{
+						id: '7hwl8g5x',
+						name: 'My First Palette',
+						description: 'This is my first palette.',
+						slug: 'my-first-palette',
+						type: 'palette',
+						value: JSON.stringify({
+							colors: ['#FF0000', '#00FF00', '#0000FF'],
+						}),
+					},
+					{
+						id: '7kz8dazt',
+						name: 'My First Size',
+						description: 'This is my first size.',
+						slug: 'my-first-size',
+						type: 'size',
+						value: JSON.stringify({
+							size: 10,
+						}),
+					},
+					{
+						id: '3yfb1k66',
+						name: 'My First Rotate',
+						description: 'This is my first rotate.',
+						slug: 'my-first-rotate',
+						type: 'rotate',
+						value: JSON.stringify({
+							rotate: 45,
+						}),
+					},
+					{
+						id: '4jkl6m7n',
+						name: 'My First Fill Style',
+						description: 'This is my first fill style.',
+						slug: 'my-first-fill-style',
+						type: 'fill-style',
+						value: JSON.stringify({
+							fill: '#AABBCC',
+						}),
+					},
+					{
+						id: '8pqr9s0t',
+						name: 'My First Stroke Style',
+						description: 'This is my first stroke style.',
+						slug: 'my-first-stroke-style',
+						type: 'stroke-style',
+						value: JSON.stringify({
+							stroke: '#DDEEFF',
+						}),
+					},
+					{
+						id: '1uvwx2yz',
+						name: 'My First Line Width',
+						description: 'This is my first line width.',
+						slug: 'my-first-line-width',
+						type: 'line-width',
+						value: JSON.stringify({
+							width: 5,
+						}),
 					},
 				],
 			},
