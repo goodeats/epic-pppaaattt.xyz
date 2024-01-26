@@ -2,6 +2,7 @@ import { Link, useLoaderData } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
+import { LinkButton } from '#app/components/ui/link-button'
 import { Separator } from '#app/components/ui/separator'
 import {
 	Table,
@@ -12,6 +13,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '#app/components/ui/table'
+import { useUser } from '#app/utils/user'
 import { type loader } from './route'
 
 export const Artboards = () => {
@@ -42,6 +44,7 @@ export const Artboards = () => {
 
 const ArtboardsTable = () => {
 	const data = useLoaderData<typeof loader>()
+	const user = useUser()
 	const artboards = data.project.artboards
 
 	return (
@@ -54,6 +57,7 @@ const ArtboardsTable = () => {
 					<TableHead>Visible</TableHead>
 					<TableHead>Dimensions</TableHead>
 					<TableHead className="text-right">Last Updated</TableHead>
+					<TableHead></TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
@@ -79,6 +83,11 @@ const ArtboardsTable = () => {
 								{width}x{height}
 							</TableCell>
 							<TableCell className="text-right">{timeAgo} ago</TableCell>
+							<TableCell className="text-right">
+								<LinkButton to={`/users/${user.username}/artboards/${slug}`}>
+									<Icon name="arrow-right"></Icon>
+								</LinkButton>
+							</TableCell>
 						</TableRow>
 					)
 				})}

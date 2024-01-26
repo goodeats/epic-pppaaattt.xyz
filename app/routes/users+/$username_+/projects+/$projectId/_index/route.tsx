@@ -149,7 +149,7 @@ export function ErrorBoundary() {
 			statusHandlers={{
 				403: () => <p>You are not allowed to do that</p>,
 				404: ({ params }) => (
-					<p>No project with the id "{params.projectId}" exists</p>
+					<p>No project with the name "{params.projectId}" exists</p>
 				),
 			}}
 		/>
