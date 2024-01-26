@@ -126,9 +126,9 @@ export function EditProjectForm({
 			return parse(formData, { schema: ProjectEditorSchema })
 		},
 		defaultValue: {
-			name: project?.name ?? '',
-			description: project?.description ?? '',
-			isVisible: project?.isVisible ?? false,
+			name: project.name ?? '',
+			description: project.description ?? '',
+			isVisible: project.isVisible ?? false,
 		},
 	})
 

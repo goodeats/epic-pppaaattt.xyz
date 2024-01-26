@@ -1,12 +1,24 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
-import { json, redirect, type ActionFunctionArgs } from '@remix-run/node'
-import { Form, useActionData, useLoaderData } from '@remix-run/react'
+import { type Artboard } from '@prisma/client'
+import {
+	json,
+	redirect,
+	type ActionFunctionArgs,
+	type SerializeFrom,
+} from '@remix-run/node'
+import { Form, useActionData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
-import { ErrorList, Field, TextareaField } from '#app/components/forms.tsx'
 import {
+	CheckboxField,
+	ErrorList,
+	Field,
+	TextareaField,
+} from '#app/components/forms.tsx'
+import {
+	FooterLinkButton,
 	FormActionsContainer,
 	FormContainer,
 	FormFieldsContainer,
@@ -27,8 +39,8 @@ import {
 	removeWhitespace,
 	trimSpacesInBetween,
 } from '#app/utils/string-formatting'
-import { type loader } from './route'
 
+const entityName = 'Artboard'
 const titleMinLength = 1
 const titleMaxLength = 100
 const descriptionMinLength = 1
@@ -39,9 +51,12 @@ const heightMinLength = 1
 const heightMaxLength = 10000
 
 const ArtboardEditorSchema = z.object({
-	projectId: z.string(),
+	id: z.string().optional(),
 	name: z.string().min(titleMinLength).max(titleMaxLength),
 	description: z.string().min(descriptionMinLength).max(descriptionMaxLength),
+	// if unchecked isVisble will not be included in the submission
+	// so set to false if so
+	isVisible: z.boolean().optional(),
 	width: z.number().min(widthMinLength).max(widthMaxLength),
 	height: z.number().min(heightMinLength).max(heightMaxLength),
 	// backgroundColor: z.string(),
@@ -65,26 +80,28 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	const submission = await parse(formData, {
 		schema: ArtboardEditorSchema.superRefine(async (data, ctx) => {
-			const project = await prisma.project.findUnique({
+			if (!data.id) return
+
+			const artboard = await prisma.artboard.findUnique({
 				select: { id: true },
-				where: { id: data.projectId, ownerId: userId },
+				where: { id: data.id, ownerId: userId },
 			})
-			if (!project) {
+			if (!artboard) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					message: 'Project not found',
+					message: `${entityName} not found`,
 				})
 			}
 
 			const slug = stringToSlug(data.name)
-			const artboardWithSlug = await prisma.artboard.findFirst({
+			const entityWithSlug = await prisma.artboard.findFirst({
 				select: { id: true },
 				where: { slug, ownerId: userId },
 			})
-			if (artboardWithSlug) {
+			if (entityWithSlug && entityWithSlug.id !== data.id) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					message: 'Artboard with that name already exists',
+					message: `${entityName} with that name already exists`,
 				})
 			}
 		}),
@@ -99,21 +116,24 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { projectId, name, description, width, height, backgroundColor } =
-		submission.value
+	const {
+		id: artboardId,
+		name,
+		description,
+		isVisible,
+		width,
+		height,
+		backgroundColor,
+	} = submission.value
 	const slug = stringToSlug(name)
 
-	const createdArtboard = await prisma.artboard.create({
-		select: {
-			slug: true,
-			owner: { select: { username: true } },
-			project: { select: { slug: true } },
-		},
+	const updatedArtboard = await prisma.artboard.update({
+		select: { slug: true, owner: { select: { username: true } } },
+		where: { id: artboardId },
 		data: {
-			ownerId: userId,
-			projectId,
 			name,
 			description,
+			isVisible: isVisible ?? false,
 			slug,
 			width,
 			height,
@@ -121,28 +141,44 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 	})
 
-	const { owner } = createdArtboard
-	return redirect(`/users/${owner.username}/artboards/${createdArtboard.slug}`)
+	return redirect(
+		`/users/${updatedArtboard.owner.username}/artboards/${updatedArtboard.slug}`,
+	)
 }
 
-export function NewArtboardForm() {
-	const data = useLoaderData<typeof loader>()
-	const project = data.project
-
+export function EditForm({
+	artboard,
+}: {
+	artboard: SerializeFrom<
+		Pick<
+			Artboard,
+			| 'id'
+			| 'name'
+			| 'description'
+			| 'isVisible'
+			| 'width'
+			| 'height'
+			| 'backgroundColor'
+		>
+	>
+}) {
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: 'new-artboard-form',
+		id: 'edit-artboard-form',
 		constraint: getFieldsetConstraint(ArtboardEditorSchema),
 		lastSubmission: actionData?.submission,
 		onValidate({ formData }) {
 			return parse(formData, { schema: ArtboardEditorSchema })
 		},
 		defaultValue: {
-			width: 1080, // 9:16
-			height: 1920,
-			backgroundColor: '#FFFFFF',
+			name: artboard.name ?? '',
+			description: artboard.description ?? '',
+			isVisible: artboard.isVisible ?? false,
+			width: artboard.width ?? 1080, // 9:16
+			height: artboard.height ?? 1920,
+			backgroundColor: artboard.backgroundColor ?? '#FFFFFF',
 		},
 	})
 
@@ -167,6 +203,22 @@ export function NewArtboardForm() {
 					...conform.textarea(fields.description, { ariaAttributes: true }),
 				}}
 				errors={fields.description.errors}
+			/>
+		)
+	}
+
+	const FormIsVisible = () => {
+		return (
+			<CheckboxField
+				labelProps={{
+					htmlFor: fields.isVisible.id,
+					children: 'Visible',
+				}}
+				buttonProps={conform.input(fields.isVisible, {
+					type: 'checkbox',
+				})}
+				defaultChecked={!!fields.isVisible.defaultValue}
+				errors={fields.isVisible.errors}
 			/>
 		)
 	}
@@ -218,6 +270,9 @@ export function NewArtboardForm() {
 	const FormActions = () => {
 		return (
 			<FormActionsContainer>
+				<FooterLinkButton to=".." icon="arrow-left" variant="outline">
+					Cancel
+				</FooterLinkButton>
 				<Button form={form.id} variant="destructive" type="reset">
 					Reset
 				</Button>
@@ -248,10 +303,11 @@ export function NewArtboardForm() {
 					rather than the first button in the form (which is delete/add image).
 				*/}
 				<button type="submit" className="hidden" />
-				<input type="hidden" name="projectId" value={project.id} />
+				<input type="hidden" name="id" value={artboard.id} />
 				<FormFieldsContainer>
 					<FormName />
 					<FormDescription />
+					<FormIsVisible />
 					<FormWidth />
 					<FormHeight />
 					<FormBackgroundColor />

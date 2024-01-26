@@ -36,6 +36,7 @@ export const Content = () => {
 			<ContainerP>
 				{artboard.width}x{artboard.height}
 			</ContainerP>
+			<ContainerP>{artboard.backgroundColor}</ContainerP>
 			<Separator className="my-4" />
 		</ContainerContent>
 	)
