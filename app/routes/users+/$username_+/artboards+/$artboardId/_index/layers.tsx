@@ -13,6 +13,12 @@ import {
 	TableHeader,
 	TableRow,
 } from '#app/components/ui/table'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '#app/components/ui/tooltip'
 import { useUser } from '#app/utils/user'
 import { type loader } from './route'
 
@@ -54,7 +60,6 @@ const LayersTable = () => {
 			<TableHeader>
 				<TableRow>
 					<TableHead>Name</TableHead>
-					<TableHead>Description</TableHead>
 					<TableHead>Visible</TableHead>
 					<TableHead className="text-right">Last Updated</TableHead>
 					<TableHead></TableHead>
@@ -67,14 +72,26 @@ const LayersTable = () => {
 
 					const date = new Date(updatedAt)
 					const timeAgo = formatDistanceToNow(date)
+
+					const LayerToolTip = () => {
+						return (
+							<TooltipProvider>
+								<Tooltip>
+									<TooltipTrigger>{name}</TooltipTrigger>
+									<TooltipContent>{description}</TooltipContent>
+								</Tooltip>
+							</TooltipProvider>
+						)
+					}
 					return (
 						<TableRow key={slug}>
-							<TableCell>{name}</TableCell>
-							<TableCell>{description}</TableCell>
+							<TableCell>
+								<LayerToolTip />
+							</TableCell>
 							<TableCell>{isVisible ? 'visible' : 'not visible'}</TableCell>
 							<TableCell className="text-right">{timeAgo} ago</TableCell>
 							<TableCell className="text-right">
-								<LinkButton to={`/users/${user.username}/artboards/${slug}`}>
+								<LinkButton to={`/users/${user.username}/layers/${slug}`}>
 									<Icon name="arrow-right"></Icon>
 								</LinkButton>
 							</TableCell>

@@ -13,6 +13,12 @@ import {
 	TableHeader,
 	TableRow,
 } from '#app/components/ui/table'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '#app/components/ui/tooltip'
 import { useUser } from '#app/utils/user'
 import { type loader } from './route'
 
@@ -53,7 +59,6 @@ const ArtboardsTable = () => {
 			<TableHeader>
 				<TableRow>
 					<TableHead>Name</TableHead>
-					<TableHead>Description</TableHead>
 					<TableHead>Visible</TableHead>
 					<TableHead>Dimensions</TableHead>
 					<TableHead className="text-right">Last Updated</TableHead>
@@ -74,10 +79,23 @@ const ArtboardsTable = () => {
 
 					const date = new Date(updatedAt)
 					const timeAgo = formatDistanceToNow(date)
+
+					const ArtboardToolTip = () => {
+						return (
+							<TooltipProvider>
+								<Tooltip>
+									<TooltipTrigger>{name}</TooltipTrigger>
+									<TooltipContent>{description}</TooltipContent>
+								</Tooltip>
+							</TooltipProvider>
+						)
+					}
+
 					return (
 						<TableRow key={slug}>
-							<TableCell>{name}</TableCell>
-							<TableCell>{description}</TableCell>
+							<TableCell>
+								<ArtboardToolTip />
+							</TableCell>
 							<TableCell>{isVisible ? 'visible' : 'not visible'}</TableCell>
 							<TableCell>
 								{width}x{height}
