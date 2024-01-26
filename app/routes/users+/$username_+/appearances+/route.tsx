@@ -10,12 +10,13 @@ import {
 	SideNavWrapper,
 } from '#app/components/shared'
 import { Separator } from '#app/components/ui/separator'
+import { appearanceNavigation } from '#app/utils/appearances'
 import { type BreadcrumbHandle } from '#app/utils/breadcrumbs'
 import { prisma } from '#app/utils/db.server.ts'
 import { Breadcrumbs, Header, List } from './components'
 
 export const handle: BreadcrumbHandle = {
-	breadcrumb: () => 'Layers',
+	breadcrumb: () => 'Appearances',
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -25,17 +26,19 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			name: true,
 			username: true,
 			image: { select: { id: true } },
-			layers: { select: { slug: true, name: true } },
+			appearances: { select: { slug: true, name: true, type: true } },
 		},
 		where: { username: params.username },
 	})
 
+	const appearances = appearanceNavigation
+
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
-	return json({ owner })
+	return json({ owner, appearances })
 }
 
-export default function LayersRoute() {
+export default function AppearancesRoute() {
 	return (
 		<MainContainer>
 			<ContentWrapper>

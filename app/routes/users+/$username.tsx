@@ -84,6 +84,11 @@ export default function ProfileRoute() {
 									</Link>
 								</Button>
 								<Button asChild>
+									<Link to="appearances" prefetch="intent">
+										My appearances
+									</Link>
+								</Button>
+								<Button asChild>
 									<Link to="/settings/profile" prefetch="intent">
 										Edit profile
 									</Link>
