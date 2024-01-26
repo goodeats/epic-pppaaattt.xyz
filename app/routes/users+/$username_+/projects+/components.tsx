@@ -44,7 +44,10 @@ export const List = () => {
 				<NavLink
 					to="new"
 					className={({ isActive }) =>
-						cn(sideNavLinkDefaultClassName, isActive && 'bg-accent')
+						cn(
+							sideNavLinkDefaultClassName,
+							isActive ? 'bg-accent' : 'bg-primary text-primary-foreground',
+						)
 					}
 				>
 					<Icon name="plus">New Project</Icon>
