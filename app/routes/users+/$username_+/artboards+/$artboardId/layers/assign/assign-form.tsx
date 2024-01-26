@@ -72,7 +72,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	return redirect(`/users/${owner.username}/artboards/${updatedArtboard.slug}`)
 }
 
-export function AddLayerForm() {
+export function AssignLayersForm() {
 	const data = useLoaderData<typeof loader>()
 	const { artboard, layers } = data
 	const artboardLayerIds = artboard.layers.map(layer => layer.layerId)

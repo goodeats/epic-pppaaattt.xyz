@@ -28,8 +28,8 @@ export const Layers = () => {
 				</div>
 				<div className="ml-auto mr-4">
 					<Button asChild>
-						<Link to="layers/add" prefetch="intent">
-							<Icon name="plus">Add Layer</Icon>
+						<Link to="layers/assign" prefetch="intent">
+							<Icon name="plus">Assign Layers</Icon>
 						</Link>
 					</Button>
 				</div>

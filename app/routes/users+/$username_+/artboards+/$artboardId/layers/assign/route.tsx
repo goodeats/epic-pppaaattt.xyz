@@ -2,11 +2,11 @@ import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { type BreadcrumbHandle } from '#app/utils/breadcrumbs.tsx'
-import { AddLayerForm, action } from './add-form.tsx'
+import { AssignLayersForm, action } from './assign-form.jsx'
 import { getArtboard, getLayers } from './queries.ts'
 
 export const handle: BreadcrumbHandle = {
-	breadcrumb: () => 'New',
+	breadcrumb: () => 'Assign',
 }
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -19,4 +19,4 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export { action }
-export default AddLayerForm
+export default AssignLayersForm
