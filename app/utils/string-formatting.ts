@@ -13,3 +13,10 @@ export function capitalizeFirstLetter(input: string): string {
 export function trimSpacesInBetween(input: string): string {
 	return input.replace(/\s+/g, ' ')
 }
+
+export function transformSlugToTitle(input: string): string {
+	return input
+		.split('-')
+		.map(word => capitalize(word))
+		.join(' ')
+}
