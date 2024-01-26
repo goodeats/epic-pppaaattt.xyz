@@ -31,8 +31,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	})
 
 	const appearances = [
-		{ slug: 'size', name: 'Size' },
-		{ slug: 'line-width', name: 'Line Width' },
+		{ slug: 'size', name: 'Size', type: 'size' },
+		{ slug: 'line-width', name: 'Line Width', type: 'lineWidth' },
 	]
 
 	invariantResponse(owner, 'Owner not found', { status: 404 })

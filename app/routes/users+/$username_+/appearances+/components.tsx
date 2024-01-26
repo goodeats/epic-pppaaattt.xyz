@@ -1,5 +1,5 @@
 import { type Appearance } from '@prisma/client'
-import { Link, NavLink, useLoaderData } from '@remix-run/react'
+import { Link, NavLink, useLoaderData, useParams } from '@remix-run/react'
 import {
 	BreadcrumbsContainer,
 	SideNavHeaderImage,
@@ -9,9 +9,10 @@ import {
 	SideNavListItem,
 	sideNavLinkDefaultClassName,
 } from '#app/components/shared'
+import { Icon } from '#app/components/ui/icon'
 import { useBreadcrumbs } from '#app/utils/breadcrumbs'
 import { cn, getUserImgSrc } from '#app/utils/misc'
-import { useUser } from '#app/utils/user'
+import { useOptionalUser, useUser } from '#app/utils/user'
 import { type loader } from './route'
 
 export const Header = () => {
@@ -33,7 +34,29 @@ export const Header = () => {
 
 export const List = () => {
 	const data = useLoaderData<typeof loader>()
-	const { appearances } = data
+	const params = useParams()
+	const { type } = params
+	const { owner, appearances } = data
+	const user = useOptionalUser()
+	const isOwner = user?.id === owner.id
+
+	const ParentListItem = () => {
+		return (
+			<SideNavListItem>
+				<NavLink
+					to={`/users/${owner.username}/appearances`}
+					className={({ isActive }) =>
+						cn(
+							sideNavLinkDefaultClassName,
+							isActive ? 'bg-accent' : 'bg-primary text-primary-foreground',
+						)
+					}
+				>
+					<Icon name="arrow-left">Appearances</Icon>
+				</NavLink>
+			</SideNavListItem>
+		)
+	}
 
 	const ListItem = ({ appearance }: { appearance: Appearance }) => {
 		const { slug, name } = appearance
@@ -53,13 +76,40 @@ export const List = () => {
 		)
 	}
 
-	return (
-		<SideNavList>
-			{appearances.map(appearance => (
-				<ListItem key={appearance.slug} appearance={appearance as Appearance} />
-			))}
-		</SideNavList>
-	)
+	const AppearanceList = () => {
+		return (
+			<SideNavList>
+				{appearances.map(appearance => {
+					return (
+						<ListItem
+							key={appearance.slug}
+							appearance={appearance as Appearance}
+						/>
+					)
+				})}
+			</SideNavList>
+		)
+	}
+
+	const AppearanceTypeList = () => {
+		return (
+			<SideNavList>
+				{isOwner ? <ParentListItem /> : null}
+				{appearances.map(appearance => {
+					if (type && appearance.slug !== type) return null
+
+					return (
+						<ListItem
+							key={appearance.slug}
+							appearance={appearance as Appearance}
+						/>
+					)
+				})}
+			</SideNavList>
+		)
+	}
+
+	return type ? <AppearanceTypeList /> : <AppearanceList />
 }
 
 export const Breadcrumbs = () => {
