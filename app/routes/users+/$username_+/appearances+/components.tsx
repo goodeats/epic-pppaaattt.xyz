@@ -9,10 +9,9 @@ import {
 	SideNavListItem,
 	sideNavLinkDefaultClassName,
 } from '#app/components/shared'
-import { Icon } from '#app/components/ui/icon'
 import { useBreadcrumbs } from '#app/utils/breadcrumbs'
 import { cn, getUserImgSrc } from '#app/utils/misc'
-import { useOptionalUser, useUser } from '#app/utils/user'
+import { useUser } from '#app/utils/user'
 import { type loader } from './route'
 
 export const Header = () => {
@@ -34,27 +33,7 @@ export const Header = () => {
 
 export const List = () => {
 	const data = useLoaderData<typeof loader>()
-	const { owner } = data
-	const user = useOptionalUser()
-	const isOwner = user?.id === owner.id
-
-	const NewListItem = () => {
-		return (
-			<SideNavListItem>
-				<NavLink
-					to="new"
-					className={({ isActive }) =>
-						cn(
-							sideNavLinkDefaultClassName,
-							isActive ? 'bg-accent' : 'bg-primary text-primary-foreground',
-						)
-					}
-				>
-					<Icon name="plus">New Appearances</Icon>
-				</NavLink>
-			</SideNavListItem>
-		)
-	}
+	const { appearances } = data
 
 	const ListItem = ({ appearance }: { appearance: Appearance }) => {
 		const { slug, name } = appearance
@@ -76,8 +55,7 @@ export const List = () => {
 
 	return (
 		<SideNavList>
-			{isOwner ? <NewListItem /> : null}
-			{owner.appearances.map(appearance => (
+			{appearances.map(appearance => (
 				<ListItem key={appearance.slug} appearance={appearance as Appearance} />
 			))}
 		</SideNavList>

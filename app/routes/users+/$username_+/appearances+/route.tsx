@@ -30,9 +30,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		where: { username: params.username },
 	})
 
+	const appearances = [
+		{ slug: 'size', name: 'Size' },
+		{ slug: 'line-width', name: 'Line Width' },
+	]
+
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
-	return json({ owner })
+	return json({ owner, appearances })
 }
 
 export default function AppearancesRoute() {
