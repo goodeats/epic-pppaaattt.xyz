@@ -51,6 +51,8 @@
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-scroll-area": "^1.0.5",
+    "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
@@ -141,6 +143,7 @@
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "fs-extra": "^11.2.0",
+    "husky": "^8.0.0",
     "jsdom": "^22.1.0",
     "msw": "2.0.9",
     "node-html-parser": "^6.1.11",
@@ -148,12 +151,12 @@
     "prettier": "^3.1.0",
     "prettier-plugin-sql": "^0.17.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
+    "remix-development-tools": "^3.7.4",
     "remix-flat-routes": "^0.6.2",
     "tsx": "^4.6.0",
     "typescript": "^5.3.2",
     "vite": "^5.0.4",
-    "vitest": "^0.34.6",
-    "husky": "^8.0.0"
+    "vitest": "^0.34.6"
   },
   "engines": {
     "node": "20"
