@@ -11,6 +11,7 @@ import {
 import { Separator } from '#app/components/ui/separator'
 import { userHasPermission } from '#app/utils/permissions'
 import { useOptionalUser } from '#app/utils/user'
+import { DeletePermission } from './delete-artboard-form'
 import { type loader } from './route'
 
 export const Header = () => {
@@ -20,8 +21,9 @@ export const Header = () => {
 
 export const Content = () => {
 	const data = useLoaderData<typeof loader>()
+	const artboard = data.artboard
 	const user = useOptionalUser()
-	const isOwner = user?.id === data.artboard.ownerId
+	const isOwner = user?.id === artboard.ownerId
 	const canDelete = userHasPermission(
 		user,
 		isOwner ? `delete:artboard:own` : `delete:artboard:any`,
@@ -29,21 +31,11 @@ export const Content = () => {
 	const displayBar = canDelete || isOwner
 	return (
 		<ContainerContent displayBar={displayBar}>
-			{/* <ul className="flex flex-wrap gap-5 py-5">
-					{data.artboard.images.map(image => (
-						<li key={image.id}>
-							<a href={getNoteImgSrc(image.id)}>
-								<img
-									src={getNoteImgSrc(image.id)}
-									alt={image.altText ?? ''}
-									className="h-32 w-32 rounded-lg object-cover"
-								/>
-							</a>
-						</li>
-					))}
-				</ul> */}
-			<ContainerP>Visible: {data.artboard.isVisible ? 'Yes' : 'No'}</ContainerP>
-			<ContainerP>{data.artboard.description}</ContainerP>
+			<ContainerP>Visible: {artboard.isVisible ? 'Yes' : 'No'}</ContainerP>
+			<ContainerP>{artboard.description}</ContainerP>
+			<ContainerP>
+				{artboard.width}x{artboard.height}
+			</ContainerP>
 			<Separator className="my-4" />
 		</ContainerContent>
 	)
@@ -51,18 +43,19 @@ export const Content = () => {
 
 export const Footer = () => {
 	const data = useLoaderData<typeof loader>()
-	// const user = useOptionalUser()
-	// const isOwner = user?.id === data.artboard.ownerId
-	// const canDelete = userHasPermission(
-	// 	user,
-	// 	isOwner ? `delete:artboard:own` : `delete:artboard:any`,
-	// )
+	const artboard = data.artboard
+	const user = useOptionalUser()
+	const isOwner = user?.id === artboard.ownerId
+	const canDelete = userHasPermission(
+		user,
+		isOwner ? `delete:artboard:own` : `delete:artboard:any`,
+	)
 
 	return (
 		<FooterContainer>
 			<FooterTimestamp>{data.timeAgo} ago</FooterTimestamp>
 			<FooterActions>
-				{/* {canDelete ? <DeletePermission id={data.artboard.id} /> : null} */}
+				{canDelete ? <DeletePermission id={artboard.id} /> : null}
 				<FooterLinkButton to="edit" icon="pencil-1">
 					Edit
 				</FooterLinkButton>

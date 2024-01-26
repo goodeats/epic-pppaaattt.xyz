@@ -121,10 +121,8 @@ export async function action({ request }: ActionFunctionArgs) {
 		},
 	})
 
-	const { owner, project } = createdArtboard
-	return redirect(
-		`/users/${owner.username}/projects/${project.slug}/artboards/${createdArtboard.slug}`,
-	)
+	const { owner } = createdArtboard
+	return redirect(`/users/${owner.username}/artboards/${createdArtboard.slug}`)
 }
 
 export function NewArtboardForm() {

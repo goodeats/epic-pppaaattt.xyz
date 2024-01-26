@@ -84,24 +84,42 @@ export async function action({ request }: ActionFunctionArgs) {
 	const { artboardId } = submission.value
 
 	const artboard = await prisma.artboard.findFirst({
-		select: { id: true, ownerId: true, owner: { select: { username: true } } },
+		select: {
+			id: true,
+			name: true,
+			ownerId: true,
+			owner: {
+				select: { username: true },
+			},
+			project: {
+				select: {
+					slug: true,
+				},
+			},
+		},
 		where: { id: artboardId },
 	})
 	invariantResponse(artboard, 'Not found', { status: 404 })
 
-	const isOwner = artboard.ownerId === userId
+	const { id, name, owner, ownerId, project } = artboard
+
+	const isOwner = ownerId === userId
 	await requireUserWithPermission(
 		request,
 		isOwner ? `delete:artboard:own` : `delete:artboard:any`,
 	)
 
-	await prisma.artboard.delete({ where: { id: artboard.id } })
+	await prisma.artboard.delete({ where: { id: id } })
 
-	return redirectWithToast(`/users/${artboard.owner.username}/artboards`, {
-		type: 'success',
-		title: 'Success',
-		description: 'Your artboard has been deleted.',
-	})
+	return redirectWithToast(
+		`/users/${owner.username}/projects/${project.slug}`,
+		{
+			type: 'success',
+			title: 'Success',
+			// description: 'Your artboard has been deleted.',
+			description: `Deleted artboard: "${name}"`,
+		},
+	)
 }
 
 export default function ArtboardDetailsRoute() {
