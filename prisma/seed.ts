@@ -101,7 +101,7 @@ async function seed() {
 	console.time(`🐨 Created admin user "pat"`)
 
 	const patImages = await promiseHash({
-		patUser: img({ filepath: './tests/fixtures/images/user/pat.png' }),
+		patUser: img({ filepath: './tests/fixtures/images/user/pppaaattt.png' }),
 		cuteKoala: img({
 			altText: 'an adorable koala cartoon illustration',
 			filepath: './tests/fixtures/images/pat-notes/cute-koala.png',

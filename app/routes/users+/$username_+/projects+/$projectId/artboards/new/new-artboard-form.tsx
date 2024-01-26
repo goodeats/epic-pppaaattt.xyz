@@ -193,7 +193,6 @@ export function NewArtboardForm() {
 					<Field
 						labelProps={{ children: 'Height' }}
 						inputProps={{
-							autoFocus: true,
 							...conform.input(fields.height, {
 								ariaAttributes: true,
 								type: 'number',
