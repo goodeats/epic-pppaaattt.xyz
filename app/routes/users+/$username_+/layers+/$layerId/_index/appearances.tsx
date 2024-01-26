@@ -60,6 +60,7 @@ const LayersTable = () => {
 			<TableHeader>
 				<TableRow>
 					<TableHead>Name</TableHead>
+					<TableHead>Type</TableHead>
 					<TableHead>Order</TableHead>
 					<TableHead>Visible</TableHead>
 					<TableHead className="text-right">Last Updated</TableHead>
@@ -69,7 +70,8 @@ const LayersTable = () => {
 			<TableBody>
 				{appearances.map(appearance => {
 					const { order, isVisible } = appearance
-					const { name, description, slug, updatedAt } = appearance.appearance
+					const { name, description, slug, type, updatedAt } =
+						appearance.appearance
 
 					const date = new Date(updatedAt)
 					const timeAgo = formatDistanceToNow(date)
@@ -89,6 +91,7 @@ const LayersTable = () => {
 							<TableCell>
 								<LayerToolTip />
 							</TableCell>
+							<TableCell>{type}</TableCell>
 							<TableCell>{order}</TableCell>
 							<TableCell>{isVisible ? 'visible' : 'not visible'}</TableCell>
 							<TableCell className="text-right">{timeAgo} ago</TableCell>
