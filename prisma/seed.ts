@@ -158,6 +158,17 @@ async function seed() {
 					},
 				],
 			},
+			layers: {
+				create: [
+					{
+						id: '86qna11a',
+						name: 'My First Layer',
+						description:
+							'This is my first layer. I am so excited to get started!',
+						slug: 'my-first-layer',
+					},
+				],
+			},
 			notes: {
 				create: [
 					{
