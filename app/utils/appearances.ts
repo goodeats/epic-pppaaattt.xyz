@@ -1,7 +1,7 @@
 // Define an enum for appearance types
 export enum AppearanceType {
-	LineWidth = 'LineWidth',
-	Size = 'Size',
+	LineWidth = 'line-width',
+	Size = 'size',
 	// Add other appearance types here
 }
 
@@ -27,10 +27,7 @@ export const appearanceMapping: AppearanceMapping = {
 }
 
 export function findAppearanceTypeBySlug(slug: string): AppearanceType | null {
-	for (const [type, mapping] of Object.entries(appearanceMapping)) {
-		if (mapping.slug === slug) {
-			return AppearanceType[type as keyof typeof AppearanceType]
-		}
-	}
-	return null
+	return Object.values(AppearanceType).includes(slug as AppearanceType)
+		? (slug as AppearanceType)
+		: null
 }

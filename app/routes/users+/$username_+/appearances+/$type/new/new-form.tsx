@@ -14,6 +14,7 @@ import {
 } from '#app/components/shared'
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
+import { AppearanceType } from '#app/utils/appearances.ts'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { validateCSRF } from '#app/utils/csrf.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
@@ -25,10 +26,11 @@ const titleMaxLength = 100
 const descriptionMinLength = 1
 const descriptionMaxLength = 10000
 
-const LayerEditorSchema = z.object({
+const AppearanceTypeEditorSchema = z.object({
 	id: z.string().optional(),
 	name: z.string().min(titleMinLength).max(titleMaxLength),
 	description: z.string().min(descriptionMinLength).max(descriptionMaxLength),
+	type: z.nativeEnum(AppearanceType),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -38,7 +40,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	await validateCSRF(formData, request.headers)
 
 	const submission = await parse(formData, {
-		schema: LayerEditorSchema.superRefine(async (data, ctx) => {
+		schema: AppearanceTypeEditorSchema.superRefine(async (data, ctx) => {
 			const slug = stringToSlug(data.name)
 			const entityWithSlug = await prisma.appearance.findFirst({
 				select: { id: true },
@@ -62,7 +64,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { name, description } = submission.value
+	const { name, description, type } = submission.value
 	const slug = stringToSlug(name)
 
 	const createdEntity = await prisma.appearance.create({
@@ -72,15 +74,15 @@ export async function action({ request }: ActionFunctionArgs) {
 			name,
 			description,
 			slug,
-			type: 'size',
+			type,
 			value: '{}',
 		},
 	})
 
 	return redirect(
-		`/users/${createdEntity.owner.username}/${entityName.toLowerCase()}/${
-			createdEntity.slug
-		}`,
+		`/users/${
+			createdEntity.owner.username
+		}/${entityName.toLowerCase()}/${type}/${createdEntity.slug}`,
 	)
 }
 
@@ -92,10 +94,11 @@ export function NewForm() {
 
 	const [form, fields] = useForm({
 		id: `new-appearance-${type}-form`,
-		constraint: getFieldsetConstraint(LayerEditorSchema),
+		constraint: getFieldsetConstraint(AppearanceTypeEditorSchema),
 		lastSubmission: actionData?.submission,
 		onValidate({ formData }) {
-			return parse(formData, { schema: LayerEditorSchema })
+			const submission = parse(formData, { schema: AppearanceTypeEditorSchema })
+			return submission
 		},
 	})
 
@@ -157,6 +160,7 @@ export function NewForm() {
 					rather than the first button in the form (which is delete/add image).
 				*/}
 				<button type="submit" className="hidden" />
+				<input type="hidden" name="type" value={type} />
 				<FormFieldsContainer>
 					<FormName />
 					<FormDescription />
