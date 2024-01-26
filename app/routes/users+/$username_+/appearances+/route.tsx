@@ -25,14 +25,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			name: true,
 			username: true,
 			image: { select: { id: true } },
-			appearances: { select: { slug: true, name: true } },
+			appearances: { select: { slug: true, name: true, type: true } },
 		},
 		where: { username: params.username },
 	})
 
 	const appearances = [
 		{ slug: 'size', name: 'Size', type: 'size' },
-		{ slug: 'line-width', name: 'Line Width', type: 'lineWidth' },
+		{ slug: 'line-width', name: 'Line Width', type: 'line-width' },
 	]
 
 	invariantResponse(owner, 'Owner not found', { status: 404 })

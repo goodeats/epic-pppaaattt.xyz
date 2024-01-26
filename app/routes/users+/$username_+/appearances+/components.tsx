@@ -122,6 +122,8 @@ export const List = () => {
 				{isOwner ? <ParentListItem /> : null}
 				{isOwner ? <NewListItem /> : null}
 				{owner.appearances.map(appearance => {
+					if (type && appearance.type !== type) return null
+
 					return (
 						<ListItem
 							key={appearance.slug}

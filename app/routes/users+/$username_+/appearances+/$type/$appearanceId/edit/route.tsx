@@ -5,7 +5,7 @@ import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { type BreadcrumbHandle } from '#app/utils/breadcrumbs.tsx'
 import { prisma } from '#app/utils/db.server.ts'
-import { type loader as layersLoader } from '../../route.tsx'
+import { type loader as appearancesLoader } from '../../route.tsx'
 import { EditForm, action } from './edit-form.tsx'
 
 export { action }
@@ -16,42 +16,42 @@ export const handle: BreadcrumbHandle = {
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	const layer = await prisma.layer.findFirst({
+	const appearance = await prisma.appearance.findFirst({
 		select: {
 			id: true,
 			name: true,
 			description: true,
 		},
 		where: {
-			slug: params.layerId,
+			slug: params.appearanceId,
 			ownerId: userId,
 		},
 	})
-	invariantResponse(layer, 'Not found', { status: 404 })
-	return json({ layer: layer })
+	invariantResponse(appearance, 'Not found', { status: 404 })
+	return json({ appearance: appearance })
 }
 
-export default function LayerEdit() {
+export default function AppearanceEdit() {
 	const data = useLoaderData<typeof loader>()
 
-	return <EditForm layer={data.layer} />
+	return <EditForm appearance={data.appearance} />
 }
 
 export const meta: MetaFunction<
 	typeof loader,
-	{ 'routes/users+/$username_+/layers': typeof layersLoader }
+	{ 'routes/users+/$username_+/appearances': typeof appearancesLoader }
 > = ({ data, params, matches }) => {
-	const entitiessMatch = matches.find(
-		m => m.id === 'routes/users+/$username_+/layers',
+	const appearancesMatch = matches.find(
+		m => m.id === 'routes/users+/$username_+/appearances',
 	)
-	const displayName = entitiessMatch?.data?.owner.name ?? params.username
-	const entityTitle = data?.layer.name ?? 'Layer'
+	const displayName = appearancesMatch?.data?.owner.name ?? params.username
+	const entityTitle = data?.appearance.name ?? 'Appearance'
 	const entityDescriptionSummary =
-		data && data.layer.description.length > 100
-			? data?.layer.description.slice(0, 97) + '...'
+		data && data.appearance.description.length > 100
+			? data?.appearance.description.slice(0, 97) + '...'
 			: 'No description'
 	return [
-		{ title: `Edit ${entityTitle} | ${displayName}'s Layers | XYZ` },
+		{ title: `Edit ${entityTitle} | ${displayName}'s Appearances | XYZ` },
 		{
 			name: 'description',
 			content: entityDescriptionSummary,
@@ -64,7 +64,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => (
-					<p>No layer with the id "{params.layerId}" exists</p>
+					<p>No appearance with the id "{params.appearanceId}" exists</p>
 				),
 			}}
 		/>
