@@ -25,7 +25,30 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			name: true,
 			username: true,
 			image: { select: { id: true } },
-			projects: { select: { slug: true, name: true } },
+			projects: {
+				select: {
+					slug: true,
+					name: true,
+					artboards: {
+						select: {
+							slug: true,
+							name: true,
+						},
+					},
+				},
+			},
+			artboards: {
+				select: {
+					slug: true,
+					name: true,
+					project: {
+						select: {
+							slug: true,
+							name: true,
+						},
+					},
+				},
+			},
 		},
 		where: { username: params.username },
 	})

@@ -21,7 +21,7 @@ async function seed() {
 
 	console.time('🔑 Created permissions...')
 	// don't forget to update permissions.ts when adding entities
-	const entities = ['user', 'note', 'project']
+	const entities = ['user', 'note', 'project', 'artboard']
 	const actions = ['create', 'read', 'update', 'delete']
 	const accesses = ['own', 'any'] as const
 	for (const entity of entities) {
