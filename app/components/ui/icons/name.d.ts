@@ -18,6 +18,8 @@ export type IconName =
 	| 'eye-closed'
 	| 'eye-none'
 	| 'eye-open'
+	| 'file-minus'
+	| 'file-plus'
 	| 'file-text'
 	| 'github-logo'
 	| 'instagram-logo'
