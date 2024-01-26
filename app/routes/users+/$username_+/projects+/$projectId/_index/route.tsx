@@ -5,11 +5,7 @@ import {
 	json,
 	type ActionFunctionArgs,
 } from '@remix-run/node'
-import {
-	type MetaFunction,
-	useLoaderData,
-	type UIMatch,
-} from '@remix-run/react'
+import { type MetaFunction, useLoaderData } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
@@ -25,15 +21,6 @@ import { redirectWithToast } from '#app/utils/toast.server'
 import { useOptionalUser } from '#app/utils/user'
 import { type loader as projectsLoader } from '../../route.tsx'
 import { Content, Footer, Header } from './components.tsx'
-
-export const handle = {
-	breadcrumb: (match: UIMatch) => {
-		const { params } = match
-		// I don't like using the slug as a breadcrumb, but I am not able to get the name from a loader just yet
-		// https://github.com/triggerdotdev/trigger.dev/blob/main/apps/webapp/app/routes/_app.orgs.%24organizationSlug/route.tsx#L65
-		return params.projectId || 'Project'
-	},
-}
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
