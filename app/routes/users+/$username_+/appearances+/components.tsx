@@ -12,6 +12,7 @@ import {
 import { Icon } from '#app/components/ui/icon'
 import { useBreadcrumbs } from '#app/utils/breadcrumbs'
 import { cn, getUserImgSrc } from '#app/utils/misc'
+import { transformSlugToTitle } from '#app/utils/string-formatting'
 import { useOptionalUser, useUser } from '#app/utils/user'
 import { type loader } from './route'
 
@@ -19,7 +20,11 @@ export const Header = () => {
 	const data = useLoaderData<typeof loader>()
 	const { owner } = data
 	const ownerDisplayName = owner.name ?? owner.username
-	const title = `${ownerDisplayName}'s Appearances`
+	const params = useParams()
+	const { type } = params
+	const title = type
+		? `${ownerDisplayName}'s ${transformSlugToTitle(type)} Appearances`
+		: `${ownerDisplayName}'s Appearances`
 
 	return (
 		<SideNavHeaderLink to={`/users/${owner.username}`}>
@@ -53,6 +58,26 @@ export const List = () => {
 					}
 				>
 					<Icon name="arrow-left">Appearances</Icon>
+				</NavLink>
+			</SideNavListItem>
+		)
+	}
+
+	const NewListItem = () => {
+		if (!type) return null
+
+		return (
+			<SideNavListItem>
+				<NavLink
+					to={`${type}/new`}
+					className={({ isActive }) =>
+						cn(
+							sideNavLinkDefaultClassName,
+							isActive ? 'bg-accent' : 'bg-primary text-primary-foreground',
+						)
+					}
+				>
+					<Icon name="plus">{`New ${transformSlugToTitle(type)}`}</Icon>
 				</NavLink>
 			</SideNavListItem>
 		)
@@ -95,7 +120,8 @@ export const List = () => {
 		return (
 			<SideNavList>
 				{isOwner ? <ParentListItem /> : null}
-				{appearances.map(appearance => {
+				{isOwner ? <NewListItem /> : null}
+				{owner.appearances.map(appearance => {
 					if (type && appearance.slug !== type) return null
 
 					return (
