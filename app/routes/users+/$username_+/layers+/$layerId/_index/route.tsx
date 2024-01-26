@@ -21,19 +21,11 @@ import { redirectWithToast } from '#app/utils/toast.server'
 import { useOptionalUser } from '#app/utils/user'
 import { type loader as layersLoader } from '../../route.tsx'
 import { Content, Footer, Header } from './components.tsx'
+import { getLayer } from './queries.ts'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	const layer = await prisma.layer.findFirst({
-		where: { slug: params.layerId, ownerId: userId },
-		select: {
-			id: true,
-			name: true,
-			description: true,
-			ownerId: true,
-			updatedAt: true,
-		},
-	})
+	const layer = await getLayer(userId, params.layerId as string)
 
 	invariantResponse(layer, 'Not found', { status: 404 })
 
