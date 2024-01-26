@@ -5,101 +5,89 @@ export const addLayersToArtboard = async (
 	artboardId: string,
 	layerIds: string[],
 ) => {
-	console.log('hererere')
-	console.log('userId', userId)
-	console.log('artboardId', artboardId)
-	console.log('layerIds', layerIds)
-	// get artboard
-	const artboard = await getArtboard(userId, artboardId)
-	if (!artboard) {
-		return null
-	}
-	console.log('theere')
+	// Start a transaction
+	return await prisma.$transaction(async prisma => {
+		// get artboard
+		const artboard = await await prisma.artboard.findFirst({
+			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+		if (!artboard) {
+			throw new Error('Artboard not found')
+		}
 
-	// get layers, make sure they all exist and belong to the user
-	const layers = await getLayers(userId, layerIds)
-	// take their ids
-	const verifiedLayerIds = layers.map(({ id }) => id)
-	console.log('verifiedLayerIds: ', verifiedLayerIds)
+		// Verify layers exist and belong to the user
+		const verifiedLayers = await prisma.layer.findMany({
+			where: { ownerId: userId, id: { in: layerIds } },
+			select: {
+				id: true,
+				name: true,
+				slug: true,
+				owner: { select: { username: true } },
+			},
+		})
+		const verifiedLayerIds = verifiedLayers.map(layer => layer.id)
 
-	// find layers that already exist on the artboard
-	const artboardLayerIds = await getCurrentLayersOnArtboard(artboard.id)
-	// take their ids
-	const existingLayerIds = artboardLayerIds.map(({ layerId }) => layerId)
-	console.log('existingLayerIds: ', existingLayerIds)
+		// Get existing layers on the artboard
+		const existingArtboardLayers = await prisma.layersOnArtboards.findMany({
+			where: { artboardId },
+			select: { layerId: true, order: true },
+			orderBy: { order: 'asc' },
+		})
+		const existingArtboardLayerIds = existingArtboardLayers.map(
+			({ layerId }) => layerId,
+		)
 
-	// find new layers by their ids
-	const newLayerIds = verifiedLayerIds.filter(
-		layerId => !existingLayerIds.includes(layerId),
-	)
-	console.log('newLayerIds: ', newLayerIds)
+		// Determine new and layers to remove
+		const layersToAdd = verifiedLayerIds.filter(
+			id => !existingArtboardLayerIds.includes(id),
+		)
+		const layersToRemove = existingArtboardLayerIds.filter(
+			id => !verifiedLayerIds.includes(id),
+		)
 
-	// create new artboard layers
-	await createNewLayersOnArtboard(artboard.id, newLayerIds)
-	console.log('created new layers on artboard')
+		// Calculate the starting index for new layers
+		const maxOrder =
+			existingArtboardLayers.length > 0
+				? existingArtboardLayers[existingArtboardLayers.length - 1].order
+				: -1
+		let newLayerOrderStart = maxOrder + 1 - layersToRemove.length
 
-	// and remove unchecked layers
-	const layersToRemove = existingLayerIds.filter(
-		existingLayerId => !verifiedLayerIds.includes(existingLayerId),
-	)
-	console.log('layersToRemove: ', layersToRemove)
-	await removeLayersFromArtboard(artboard.id, layersToRemove)
-	console.log('removed layers from artboard')
+		// Add new layers to the artboard
+		const addLayersPromises = layersToAdd.map(layerId => {
+			return prisma.layersOnArtboards.create({
+				data: { artboardId, layerId, order: newLayerOrderStart++ },
+			})
+		})
 
-	// then get the updated artboard layers
-	const updatedArtboard = await getArtboard(userId, artboardId)
-	return updatedArtboard
-}
+		// Remove unchecked layers from the artboard
+		const removeLayersPromise = layersToRemove.map(layerId => {
+			return prisma.layersOnArtboards.deleteMany({
+				where: { artboardId, layerId },
+			})
+		})
 
-const getArtboard = async (userId: string, artboardId: string) => {
-	console.log('getting artboard')
-	return await prisma.artboard.findFirst({
-		where: { id: artboardId, ownerId: userId },
-		select: { id: true, slug: true, owner: { select: { username: true } } },
-	})
-}
+		// Update order for remaining layers
+		const updateOrderPromises = existingArtboardLayers
+			.filter(({ layerId }) => !layersToRemove.includes(layerId))
+			.map((layer, index) => {
+				return prisma.layersOnArtboards.updateMany({
+					where: { artboardId, layerId: layer.layerId },
+					data: { order: index },
+				})
+			})
 
-const getLayers = async (userId: string, layerIds: string[]) => {
-	return await prisma.layer.findMany({
-		where: { ownerId: userId, id: { in: layerIds } },
-		select: {
-			id: true,
-			name: true,
-			slug: true,
-			owner: { select: { username: true } },
-		},
-	})
-}
+		// Execute all operations
+		await Promise.all([
+			...addLayersPromises,
+			...removeLayersPromise,
+			...updateOrderPromises,
+		])
 
-const getCurrentLayersOnArtboard = async (artboardId: string) => {
-	return await prisma.layersOnArtboards.findMany({
-		where: { artboardId },
-		select: { layerId: true },
-	})
-}
-
-const createNewLayersOnArtboard = async (
-	artboardId: string,
-	layerIds: string[],
-) => {
-	const layerOnArtboardPromises = layerIds.map((layerId, i) => {
-		return prisma.layersOnArtboards.create({
-			data: { artboardId, layerId, order: i },
+		// Return the updated artboard
+		return await prisma.artboard.findFirst({
+			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
 		})
 	})
-
-	return await Promise.all(layerOnArtboardPromises)
-}
-
-const removeLayersFromArtboard = async (
-	artboardId: string,
-	layerIds: string[],
-) => {
-	const removalPromises = layerIds.map(layerId => {
-		return prisma.layersOnArtboards.deleteMany({
-			where: { artboardId, layerId },
-		})
-	})
-
-	return await Promise.all(removalPromises)
 }

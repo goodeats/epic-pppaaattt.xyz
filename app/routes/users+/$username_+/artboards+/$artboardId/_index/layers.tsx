@@ -60,6 +60,7 @@ const LayersTable = () => {
 			<TableHeader>
 				<TableRow>
 					<TableHead>Name</TableHead>
+					<TableHead>Order</TableHead>
 					<TableHead>Visible</TableHead>
 					<TableHead className="text-right">Last Updated</TableHead>
 					<TableHead></TableHead>
@@ -67,7 +68,7 @@ const LayersTable = () => {
 			</TableHeader>
 			<TableBody>
 				{layers.map(layer => {
-					const { isVisible } = layer
+					const { order, isVisible } = layer
 					const { name, description, slug, updatedAt } = layer.layer
 
 					const date = new Date(updatedAt)
@@ -88,6 +89,7 @@ const LayersTable = () => {
 							<TableCell>
 								<LayerToolTip />
 							</TableCell>
+							<TableCell>{order}</TableCell>
 							<TableCell>{isVisible ? 'visible' : 'not visible'}</TableCell>
 							<TableCell className="text-right">{timeAgo} ago</TableCell>
 							<TableCell className="text-right">
