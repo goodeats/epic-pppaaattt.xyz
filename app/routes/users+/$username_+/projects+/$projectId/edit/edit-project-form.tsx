@@ -132,6 +132,68 @@ export function EditProjectForm({
 		},
 	})
 
+	const FormName = () => {
+		return (
+			<Field
+				labelProps={{ children: 'Name' }}
+				inputProps={{
+					autoFocus: true,
+					...conform.input(fields.name, { ariaAttributes: true }),
+				}}
+				errors={fields.name.errors}
+			/>
+		)
+	}
+
+	const FormDescription = () => {
+		return (
+			<TextareaField
+				labelProps={{ children: 'Description' }}
+				textareaProps={{
+					...conform.textarea(fields.description, { ariaAttributes: true }),
+				}}
+				errors={fields.description.errors}
+			/>
+		)
+	}
+
+	const FormIsVisible = () => {
+		return (
+			<CheckboxField
+				labelProps={{
+					htmlFor: fields.isVisible.id,
+					children: 'Visible',
+				}}
+				buttonProps={conform.input(fields.isVisible, {
+					type: 'checkbox',
+				})}
+				defaultChecked={!!fields.isVisible.defaultValue}
+				errors={fields.isVisible.errors}
+			/>
+		)
+	}
+
+	const FormActions = () => {
+		return (
+			<FormActionsContainer>
+				<FooterLinkButton to=".." icon="arrow-left" variant="outline">
+					Cancel
+				</FooterLinkButton>
+				<Button form={form.id} variant="destructive" type="reset">
+					Reset
+				</Button>
+				<StatusButton
+					form={form.id}
+					type="submit"
+					disabled={isPending}
+					status={isPending ? 'pending' : 'idle'}
+				>
+					Submit
+				</StatusButton>
+			</FormActionsContainer>
+		)
+	}
+
 	return (
 		<FormContainer>
 			<Form
@@ -149,51 +211,13 @@ export function EditProjectForm({
 				<button type="submit" className="hidden" />
 				<input type="hidden" name="id" value={project.id} />
 				<FormFieldsContainer>
-					<Field
-						labelProps={{ children: 'Name' }}
-						inputProps={{
-							autoFocus: true,
-							...conform.input(fields.name, { ariaAttributes: true }),
-						}}
-						errors={fields.name.errors}
-					/>
-					<TextareaField
-						labelProps={{ children: 'Description' }}
-						textareaProps={{
-							...conform.textarea(fields.description, { ariaAttributes: true }),
-						}}
-						errors={fields.description.errors}
-					/>
-					<CheckboxField
-						labelProps={{
-							htmlFor: fields.isVisible.id,
-							children: 'Visible',
-						}}
-						buttonProps={conform.input(fields.isVisible, {
-							type: 'checkbox',
-						})}
-						defaultChecked={!!fields.isVisible.defaultValue}
-						errors={fields.isVisible.errors}
-					/>
+					<FormName />
+					<FormDescription />
+					<FormIsVisible />
 				</FormFieldsContainer>
 				<ErrorList id={form.errorId} errors={form.errors} />
 			</Form>
-			<FormActionsContainer>
-				<FooterLinkButton to=".." icon="arrow-left">
-					Cancel
-				</FooterLinkButton>
-				<Button form={form.id} variant="destructive" type="reset">
-					Reset
-				</Button>
-				<StatusButton
-					form={form.id}
-					type="submit"
-					disabled={isPending}
-					status={isPending ? 'pending' : 'idle'}
-				>
-					Submit
-				</StatusButton>
-			</FormActionsContainer>
+			<FormActions />
 		</FormContainer>
 	)
 }
