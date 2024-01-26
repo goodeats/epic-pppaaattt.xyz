@@ -30,6 +30,7 @@ const AppearanceTypeEditorSchema = z.object({
 	id: z.string().optional(),
 	name: z.string().min(titleMinLength).max(titleMaxLength),
 	description: z.string().min(descriptionMinLength).max(descriptionMaxLength),
+	value: z.string().min(descriptionMinLength).max(descriptionMaxLength),
 	type: z.nativeEnum(AppearanceType),
 })
 
@@ -64,7 +65,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { name, description, type } = submission.value
+	const { name, description, type, value } = submission.value
 	const slug = stringToSlug(name)
 
 	const createdEntity = await prisma.appearance.create({
@@ -75,7 +76,7 @@ export async function action({ request }: ActionFunctionArgs) {
 			description,
 			slug,
 			type,
-			value: '{}',
+			value,
 		},
 	})
 
@@ -100,6 +101,9 @@ export function NewForm() {
 			const submission = parse(formData, { schema: AppearanceTypeEditorSchema })
 			return submission
 		},
+		defaultValue: {
+			value: '{}',
+		},
 	})
 
 	const FormName = () => {
@@ -123,6 +127,18 @@ export function NewForm() {
 					...conform.textarea(fields.description, { ariaAttributes: true }),
 				}}
 				errors={fields.description.errors}
+			/>
+		)
+	}
+
+	const FormValue = () => {
+		return (
+			<TextareaField
+				labelProps={{ children: 'Value' }}
+				textareaProps={{
+					...conform.textarea(fields.value, { ariaAttributes: true }),
+				}}
+				errors={fields.value.errors}
 			/>
 		)
 	}
@@ -164,6 +180,7 @@ export function NewForm() {
 				<FormFieldsContainer>
 					<FormName />
 					<FormDescription />
+					<FormValue />
 				</FormFieldsContainer>
 				<ErrorList id={form.errorId} errors={form.errors} />
 			</Form>

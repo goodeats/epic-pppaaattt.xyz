@@ -44,6 +44,7 @@ export const Content = () => {
 					))}
 				</ul> */}
 			<ContainerP>{data.appearance.description}</ContainerP>
+			<ContainerP>{data.appearance.value}</ContainerP>
 			<Separator className="my-4" />
 		</ContainerContent>
 	)

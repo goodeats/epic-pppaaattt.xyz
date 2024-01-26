@@ -37,6 +37,7 @@ const AppearanceEditorSchema = z.object({
 	id: z.string().optional(),
 	name: z.string().min(titleMinLength).max(titleMaxLength),
 	description: z.string().min(descriptionMinLength).max(descriptionMaxLength),
+	value: z.string().min(descriptionMinLength).max(descriptionMaxLength),
 })
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -85,7 +86,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { id: appearanceId, name, description } = submission.value
+	const { id: appearanceId, name, description, value } = submission.value
 	const slug = stringToSlug(name)
 
 	const updatedEntity = await prisma.appearance.update({
@@ -95,6 +96,7 @@ export async function action({ request }: ActionFunctionArgs) {
 			name,
 			description,
 			slug,
+			value,
 		},
 	})
 
@@ -107,7 +109,9 @@ export async function action({ request }: ActionFunctionArgs) {
 export function EditForm({
 	appearance,
 }: {
-	appearance: SerializeFrom<Pick<Appearance, 'id' | 'name' | 'description'>>
+	appearance: SerializeFrom<
+		Pick<Appearance, 'id' | 'name' | 'description' | 'value'>
+	>
 }) {
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
@@ -122,6 +126,7 @@ export function EditForm({
 		defaultValue: {
 			name: appearance.name ?? '',
 			description: appearance.description ?? '',
+			value: appearance.value ?? '{}',
 		},
 	})
 
@@ -146,6 +151,18 @@ export function EditForm({
 					...conform.textarea(fields.description, { ariaAttributes: true }),
 				}}
 				errors={fields.description.errors}
+			/>
+		)
+	}
+
+	const FormValue = () => {
+		return (
+			<TextareaField
+				labelProps={{ children: 'Value' }}
+				textareaProps={{
+					...conform.textarea(fields.value, { ariaAttributes: true }),
+				}}
+				errors={fields.value.errors}
 			/>
 		)
 	}
@@ -190,6 +207,7 @@ export function EditForm({
 				<FormFieldsContainer>
 					<FormName />
 					<FormDescription />
+					<FormValue />
 				</FormFieldsContainer>
 				<ErrorList id={form.errorId} errors={form.errors} />
 			</Form>

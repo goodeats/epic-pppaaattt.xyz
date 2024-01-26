@@ -21,6 +21,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 			id: true,
 			name: true,
 			description: true,
+			value: true,
 		},
 		where: {
 			slug: params.appearanceId,
