@@ -15,7 +15,7 @@ import { prisma } from '#app/utils/db.server.ts'
 import { Breadcrumbs, Header, List } from './components'
 
 export const handle: BreadcrumbHandle = {
-	breadcrumb: () => 'Layers',
+	breadcrumb: () => 'Appearances',
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -25,7 +25,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			name: true,
 			username: true,
 			image: { select: { id: true } },
-			layers: { select: { slug: true, name: true } },
+			appearances: { select: { slug: true, name: true } },
 		},
 		where: { username: params.username },
 	})
@@ -35,7 +35,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	return json({ owner })
 }
 
-export default function LayersRoute() {
+export default function AppearancesRoute() {
 	return (
 		<MainContainer>
 			<ContentWrapper>
