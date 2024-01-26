@@ -135,7 +135,7 @@ async function seed() {
 
 	const githubUser = await insertGitHubUser('MOCK_CODE_GITHUB_PAT')
 
-	await prisma.user.create({
+	const adminUser = await prisma.user.create({
 		select: { id: true },
 		data: {
 			email: 'pat@patn.xyz',
@@ -260,6 +260,21 @@ async function seed() {
 		},
 	})
 	console.timeEnd(`🐨 Created admin user "pat"`)
+
+	console.time(`🐨 Created artboard`)
+	await prisma.artboard.create({
+		data: {
+			name: 'My First Artboard',
+			description: 'This is my first artboard. I am so excited to get started!',
+			slug: 'my-first-artboard',
+			width: 1080,
+			height: 1920,
+			backgroundColor: '#FFFFFF',
+			ownerId: adminUser.id,
+			projectId: '1zxo9f8e', // Associate with the first project by hard-coded id
+		},
+	})
+	console.timeEnd(`🐨 Created artboard`)
 
 	console.timeEnd(`🌱 Database has been seeded`)
 }
