@@ -82,7 +82,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	return redirect(
 		`/users/${
 			createdEntity.owner.username
-		}/${entityName.toLowerCase()}/${type}/${createdEntity.slug}`,
+		}/${entityName.toLowerCase()}s/${type}/${createdEntity.slug}`,
 	)
 }
 
