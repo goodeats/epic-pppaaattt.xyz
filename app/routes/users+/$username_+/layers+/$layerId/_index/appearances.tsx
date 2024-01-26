@@ -96,7 +96,9 @@ const LayersTable = () => {
 							<TableCell>{isVisible ? 'visible' : 'not visible'}</TableCell>
 							<TableCell className="text-right">{timeAgo} ago</TableCell>
 							<TableCell className="text-right">
-								<LinkButton to={`/users/${user.username}/layers/${slug}`}>
+								<LinkButton
+									to={`/users/${user.username}/appearances/${type}/${slug}`}
+								>
 									<Icon name="arrow-right"></Icon>
 								</LinkButton>
 							</TableCell>
