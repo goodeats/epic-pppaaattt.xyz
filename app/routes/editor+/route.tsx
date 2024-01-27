@@ -9,9 +9,10 @@ import {
 	SideNavContainer,
 	SideNavWrapper,
 } from '#app/components/shared'
+import { Separator } from '#app/components/ui/separator'
 import { requireUserId } from '#app/utils/auth.server'
 import { prisma } from '#app/utils/db.server.ts'
-import { Header, List } from './components'
+import { SideNavHeader, List, Header } from './components'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -35,11 +36,14 @@ export default function EditorRoute() {
 		<MainContainer>
 			<ContentWrapper className="md:pl-0">
 				<MainContent className="md:rounded-l-3xl md:rounded-r-none">
+					<Header />
+					<Separator />
 					<Outlet />
 				</MainContent>
+				{/* side nav on the right since it is not for navigation */}
 				<SideNavWrapper>
 					<SideNavContainer>
-						<Header />
+						<SideNavHeader />
 						<List />
 					</SideNavContainer>
 				</SideNavWrapper>

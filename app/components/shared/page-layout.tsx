@@ -46,4 +46,56 @@ const MainContent = ({
 	)
 }
 
-export { MainContainer, ContentWrapper, MainContent }
+const ContentHeader = ({
+	children,
+	title,
+	className,
+}: {
+	children: React.ReactNode
+	title?: string | React.ReactNode
+	className?: string
+}) => {
+	const ContentHeaderTitle = () => {
+		if (typeof title === 'string') {
+			return <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
+		}
+
+		return title
+	}
+
+	return (
+		<div
+			className={cn(
+				'container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16',
+				className,
+			)}
+		>
+			{title && <ContentHeaderTitle />}
+			{children}
+		</div>
+	)
+}
+
+const ContentHeaderActions = ({
+	children,
+	className,
+}: {
+	children: React.ReactNode
+	className?: string
+}) => {
+	return (
+		<div
+			className={cn('ml-auto flex w-full space-x-2 sm:justify-end', className)}
+		>
+			{children}
+		</div>
+	)
+}
+
+export {
+	MainContainer,
+	ContentWrapper,
+	MainContent,
+	ContentHeader,
+	ContentHeaderActions,
+}

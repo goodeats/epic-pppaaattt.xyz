@@ -24,7 +24,12 @@ export {
 	formDefaultClassName,
 	formDeleteButtonDefaultClassName,
 } from './form'
-export { MainContainer, ContentWrapper, MainContent } from './page-layout'
+export {
+	MainContainer,
+	ContentWrapper,
+	MainContent,
+	ContentHeader,
+} from './page-layout'
 export {
 	SideNavWrapper,
 	SideNavContainer,
