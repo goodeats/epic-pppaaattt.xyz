@@ -6,13 +6,19 @@ import {
 	SideNavHeaderTitle,
 	SideNavList,
 } from '#app/components/shared'
+import { ContentHeaderActions } from '#app/components/shared/page-layout'
 import { getUserImgSrc } from '#app/utils/misc'
+import { ArtboardSelector } from './artboard-selector'
 import { type loader } from './route'
 
 export const Header = () => {
+	const data = useLoaderData<typeof loader>()
+	const { owner } = data
 	return (
 		<ContentHeader title="Editor">
-			<></>
+			<ContentHeaderActions>
+				<ArtboardSelector artboards={owner.artboards} />
+			</ContentHeaderActions>
 		</ContentHeader>
 	)
 }

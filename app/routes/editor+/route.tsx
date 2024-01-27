@@ -22,6 +22,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 			name: true,
 			username: true,
 			image: { select: { id: true } },
+			artboards: { select: { id: true, slug: true, name: true } },
 		},
 		where: { id: userId },
 	})
