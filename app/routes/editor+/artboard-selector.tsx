@@ -1,5 +1,6 @@
 import { type Artboard } from '@prisma/client'
 import { type PopoverProps } from '@radix-ui/react-popover'
+import { useNavigate } from '@remix-run/react'
 import { useState } from 'react'
 import { Button } from '#app/components/ui/button'
 import {
@@ -30,6 +31,7 @@ export function ArtboardSelector({
 	const [open, setOpen] = useState(false)
 	const [selectedArtboard, setSelectedArtboard] = useState<ArtboardPickedType>()
 	// const router = useRouter()
+	const navigate = useNavigate()
 
 	return (
 		<Popover open={open} onOpenChange={setOpen} {...props}>
@@ -59,6 +61,7 @@ export function ArtboardSelector({
 								onSelect={() => {
 									setSelectedArtboard(artboard)
 									setOpen(false)
+									navigate('?artboardId=' + artboard.id)
 								}}
 							>
 								{artboard.name}

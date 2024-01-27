@@ -11,25 +11,23 @@ import {
 } from '#app/components/shared'
 import { Separator } from '#app/components/ui/separator'
 import { requireUserId } from '#app/utils/auth.server'
-import { prisma } from '#app/utils/db.server.ts'
 import { SideNavHeader, List, Header } from './components'
+import { getArtboard, getOwner } from './queries'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	const owner = await prisma.user.findFirst({
-		select: {
-			id: true,
-			name: true,
-			username: true,
-			image: { select: { id: true } },
-			artboards: { select: { id: true, slug: true, name: true } },
-		},
-		where: { id: userId },
-	})
+	const owner = await getOwner(userId)
 
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
-	return json({ owner })
+	let url = new URL(request.url)
+	let artboard
+	const artboardId = url.searchParams.get('artboardId')
+	if (artboardId) {
+		artboard = await getArtboard(userId, artboardId)
+	}
+
+	return json({ owner, artboard })
 }
 
 export default function EditorRoute() {
