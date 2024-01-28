@@ -12,6 +12,7 @@ import {
 import { Separator } from '#app/components/ui/separator'
 import { requireUserId } from '#app/utils/auth.server'
 import { SideNavHeader, List, Header } from './components'
+import { NavTabs } from './nav-tabs'
 import { getArtboard, getOwner } from './queries'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -43,6 +44,7 @@ export default function EditorRoute() {
 				<SideNavWrapper>
 					<SideNavContainer>
 						<SideNavHeader />
+						<NavTabs />
 						<List />
 					</SideNavContainer>
 				</SideNavWrapper>
