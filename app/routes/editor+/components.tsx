@@ -4,7 +4,6 @@ import {
 	SideNavHeaderImage,
 	SideNavHeaderLink,
 	SideNavHeaderTitle,
-	SideNavList,
 } from '#app/components/shared'
 import { ContentHeaderActions } from '#app/components/shared/page-layout'
 import { getUserImgSrc } from '#app/utils/misc'
@@ -37,13 +36,5 @@ export const SideNavHeader = () => {
 			/>
 			<SideNavHeaderTitle>{title}</SideNavHeaderTitle>
 		</SideNavHeaderLink>
-	)
-}
-
-export const List = () => {
-	return (
-		<SideNavList>
-			<></>
-		</SideNavList>
 	)
 }

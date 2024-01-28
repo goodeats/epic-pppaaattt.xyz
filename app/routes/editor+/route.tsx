@@ -11,7 +11,7 @@ import {
 } from '#app/components/shared'
 import { Separator } from '#app/components/ui/separator'
 import { requireUserId } from '#app/utils/auth.server'
-import { SideNavHeader, List, Header } from './components'
+import { SideNavHeader, Header } from './components'
 import { NavTabs } from './nav-tabs'
 import { getArtboard, getOwner } from './queries'
 
@@ -44,8 +44,8 @@ export default function EditorRoute() {
 				<SideNavWrapper>
 					<SideNavContainer>
 						<SideNavHeader />
+						<Separator />
 						<NavTabs />
-						<List />
 					</SideNavContainer>
 				</SideNavWrapper>
 			</ContentWrapper>

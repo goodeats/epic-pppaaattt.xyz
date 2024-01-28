@@ -38,5 +38,6 @@ export {
 	SideNavHeaderTitle,
 	SideNavList,
 	SideNavListItem,
+	SideNavTabs,
 	sideNavLinkDefaultClassName,
 } from './side-nav'
