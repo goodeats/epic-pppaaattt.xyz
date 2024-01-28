@@ -19,6 +19,8 @@ export const getArtboard = async (userId: string, artboardId: string) => {
 		select: {
 			id: true,
 			name: true,
+			description: true,
+			slug: true,
 			width: true,
 			height: true,
 			backgroundColor: true,

@@ -1,6 +1,6 @@
 import { type Artboard } from '@prisma/client'
 import { type PopoverProps } from '@radix-ui/react-popover'
-import { useNavigate } from '@remix-run/react'
+import { useLoaderData, useNavigate } from '@remix-run/react'
 import { useState } from 'react'
 import { Button } from '#app/components/ui/button'
 import {
@@ -17,6 +17,7 @@ import {
 	PopoverTrigger,
 } from '#app/components/ui/popover'
 import { cn } from '#app/utils/misc'
+import { type loader } from './route'
 
 type ArtboardPickedType = Pick<Artboard, 'id' | 'name' | 'slug'>
 
@@ -28,9 +29,13 @@ export function ArtboardSelector({
 	artboards,
 	...props
 }: ArtboardSelectorProps) {
+	const data = useLoaderData<typeof loader>()
+	const { artboard } = data
+
 	const [open, setOpen] = useState(false)
-	const [selectedArtboard, setSelectedArtboard] = useState<ArtboardPickedType>()
-	// const router = useRouter()
+	const [selectedArtboard, setSelectedArtboard] = useState<ArtboardPickedType>(
+		artboard || { id: '', name: '', slug: '' },
+	)
 	const navigate = useNavigate()
 
 	return (
@@ -43,7 +48,9 @@ export function ArtboardSelector({
 					aria-expanded={open}
 					className="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]"
 				>
-					{selectedArtboard ? selectedArtboard.name : 'Load an artboard...'}
+					{selectedArtboard?.name
+						? selectedArtboard.name
+						: 'Load an artboard...'}
 					<Icon
 						name="caret-sort"
 						className="ml-2 h-4 w-4 shrink-0 opacity-50"
