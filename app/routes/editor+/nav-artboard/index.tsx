@@ -12,7 +12,18 @@ export const NavContentArtboard = () => {
 	const WithArtboard = () => {
 		if (!artboard) return null
 
-		return <p>Artboard: {artboard.name}</p>
+		const { name, description, width, height, backgroundColor } = artboard
+
+		return (
+			<div>
+				<p>Artboard: {name}</p>
+				<p>{description}</p>
+				<p>
+					{width} x {height}
+				</p>
+				<p>{backgroundColor}</p>
+			</div>
+		)
 	}
 
 	return (
