@@ -1,4 +1,5 @@
 import { SideNavTabs } from '#app/components/shared'
+import { NavContentArtboard } from './nav-artboard'
 
 export const NavTabs = () => {
 	return (
@@ -8,7 +9,7 @@ export const NavTabs = () => {
 				{
 					id: 'artboard',
 					name: 'Artboard',
-					content: 'Make changes to your artboard here.',
+					content: <NavContentArtboard />,
 				},
 				{
 					id: 'layers',
