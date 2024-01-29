@@ -1,6 +1,7 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Outlet } from '@remix-run/react'
+import { formatDistanceToNow } from 'date-fns'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import {
 	ContentWrapper,
@@ -22,13 +23,17 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
 	let url = new URL(request.url)
-	let artboard
+	let artboard, artboardTimeAgo
 	const artboardId = url.searchParams.get('artboardId')
 	if (artboardId) {
 		artboard = await getArtboard(userId, artboardId)
+		if (artboard) {
+			const date = new Date(artboard.updatedAt)
+			artboardTimeAgo = formatDistanceToNow(date)
+		}
 	}
 
-	return json({ owner, artboard })
+	return json({ owner, artboard, artboardTimeAgo })
 }
 
 export default function EditorRoute() {

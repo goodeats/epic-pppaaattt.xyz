@@ -1,3 +1,5 @@
+import { cn } from '#app/utils/misc'
+
 const ContainerIndex = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div className="container pt-12">
@@ -6,12 +8,33 @@ const ContainerIndex = ({ children }: { children: React.ReactNode }) => {
 	)
 }
 
-const ContainerDetails = ({ children }: { children: React.ReactNode }) => {
-	return <div className="inset-0 flex flex-1 flex-col px-10">{children}</div>
+const ContainerDetails = ({
+	children,
+	className,
+}: {
+	children: React.ReactNode
+	className?: string
+}) => {
+	return (
+		<div
+			id="container-details"
+			className={cn('absolute inset-0 flex flex-1 flex-col px-10', className)}
+		>
+			{children}
+		</div>
+	)
 }
 
-const ContainerHeader = ({ children }: { children: React.ReactNode }) => {
-	return <h2 className="mb-2 pt-4 text-h2 lg:mb-6">{children}</h2>
+const ContainerHeader = ({
+	children,
+	className,
+}: {
+	children: React.ReactNode
+	className?: string
+}) => {
+	return (
+		<h2 className={cn('mb-2 pt-4 text-h2 lg:mb-6', className)}>{children}</h2>
+	)
 }
 
 const ContainerContent = ({

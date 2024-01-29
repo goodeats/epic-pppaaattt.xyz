@@ -24,6 +24,7 @@ export const getArtboard = async (userId: string, artboardId: string) => {
 			width: true,
 			height: true,
 			backgroundColor: true,
+			updatedAt: true,
 		},
 	})
 }
