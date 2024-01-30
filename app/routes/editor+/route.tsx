@@ -31,7 +31,7 @@ import {
 	NavTabsNoArtboard,
 } from './components'
 import { NavTabs } from './nav-tabs'
-import { getArtboard, getOwner } from './queries'
+import { getAppearances, getArtboard, getOwner } from './queries'
 
 export async function action({ request }: DataFunctionArgs) {
 	console.log('EDITOR ACTION')
@@ -73,7 +73,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 		}
 	}
 
-	return json({ owner, artboard, artboardTimeAgo })
+	const appearances = await getAppearances(userId)
+
+	return json({ owner, artboard, artboardTimeAgo, appearances })
 }
 
 export default function EditorRoute() {
