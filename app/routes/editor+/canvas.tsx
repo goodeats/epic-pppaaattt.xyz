@@ -1,18 +1,18 @@
-import { useRouteLoaderData } from '@remix-run/react'
+import { useLoaderData } from '@remix-run/react'
 import { useRef } from 'react'
 import {
 	ContainerContent,
 	ContainerDetails,
 	FooterActions,
 	FooterContainer,
-	FooterLinkButton,
 	FooterTimestamp,
 } from '#app/components/shared'
-import { type loader as routeLoader } from '../route'
+import { DownloadForm } from './download-form'
+import { type loader } from './route'
 
 export const CanvasContent = () => {
-	const data = useRouteLoaderData<typeof routeLoader>('routes/editor+/route')
-	const artboard = data?.artboard
+	const data = useLoaderData<typeof loader>()
+	const { artboard } = data
 	if (!artboard) return null
 
 	const { width, height, backgroundColor } = artboard
@@ -37,8 +37,7 @@ export const CanvasContent = () => {
 	}
 
 	return (
-		<ContainerDetails className="mt-16">
-			{/* mt-16 moves content below header */}
+		<ContainerDetails>
 			<ContainerContent displayBar={true}>
 				<CanvasContainer>
 					<Canvas />
@@ -61,17 +60,18 @@ const CanvasContainer = ({ children }: { children?: React.ReactNode }) => {
 }
 
 export const Footer = () => {
-	const data = useRouteLoaderData<typeof routeLoader>('routes/editor+/route')
-	const artboardTimeAgo = data?.artboardTimeAgo
-	if (!artboardTimeAgo) return null
+	const data = useLoaderData<typeof loader>()
+	const { artboard, artboardTimeAgo } = data
+	if (!artboard || !artboardTimeAgo) return null
 
 	return (
 		<FooterContainer>
 			<FooterTimestamp>{data?.artboardTimeAgo} ago</FooterTimestamp>
 			<FooterActions>
-				<FooterLinkButton to="fullscreen" icon="eye-open">
+				<DownloadForm />
+				{/* <FooterLinkButton to="fullscreen" icon="eye-open">
 					Fullscreen
-				</FooterLinkButton>
+				</FooterLinkButton> */}
 			</FooterActions>
 		</FooterContainer>
 	)

@@ -16,14 +16,7 @@ export {
 	FooterActions,
 	FooterLinkButton,
 } from './footer'
-export {
-	FormContainer,
-	FormFieldsContainer,
-	FormActionsContainer,
-	FormDeleteIcon,
-	formDefaultClassName,
-	formDeleteButtonDefaultClassName,
-} from './form'
+export * from './form'
 export {
 	MainContainer,
 	ContentWrapper,

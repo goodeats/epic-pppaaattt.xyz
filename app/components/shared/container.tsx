@@ -18,7 +18,10 @@ const ContainerDetails = ({
 	return (
 		<div
 			id="container-details"
-			className={cn('absolute inset-0 flex flex-1 flex-col px-10', className)}
+			className={cn(
+				'absolute inset-0 mt-16 flex flex-1 flex-col px-10',
+				className,
+			)}
 		>
 			{children}
 		</div>

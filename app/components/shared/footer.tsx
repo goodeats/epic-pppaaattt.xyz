@@ -30,7 +30,6 @@ const FooterLinkButton = ({
 	icon,
 	children,
 	variant,
-	disabled,
 }: {
 	to: string
 	icon: IconName
@@ -42,14 +41,12 @@ const FooterLinkButton = ({
 		| 'secondary'
 		| 'ghost'
 		| 'link'
-	disabled?: boolean
 }) => {
 	return (
 		<Button
 			asChild
 			className="min-[525px]:max-md:aspect-square min-[525px]:max-md:px-0"
 			variant={variant}
-			disabled={disabled}
 		>
 			<Link to={to}>
 				<Icon name={icon} className="scale-125 max-md:scale-150">
