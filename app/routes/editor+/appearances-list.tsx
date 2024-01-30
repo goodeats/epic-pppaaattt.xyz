@@ -9,6 +9,8 @@ import {
 	DropdownMenuTrigger,
 } from '#app/components/ui/dropdown-menu'
 import { Icon } from '#app/components/ui/icon'
+import { AppearanceType } from '#app/utils/appearances'
+import { AddArtboardAppearanceForm } from './add-artboard-appearance-form'
 import { type loader } from './route'
 
 export const AppearancesList = () => {
@@ -48,10 +50,28 @@ const AppearanceListContainer = ({
 }: {
 	children?: React.ReactNode
 }) => {
+	const data = useLoaderData<typeof loader>()
+	const { artboard } = data
+	if (!artboard) return null
+
+	const artboardAppearances = artboard.appearances
+	const paletteAppearances = artboardAppearances.filter(appearance => {
+		return appearance.appearance.type === 'palette'
+	})
+
+	const artboardAppearancesAppearances = paletteAppearances.map(
+		appearance => appearance.appearance,
+	)
+
 	return (
 		<div className="mt-2 space-y-4 px-4">
 			<h4 className="text-sm font-medium">Palette</h4>
 			<div className="grid gap-6">{children}</div>
+			<AddArtboardAppearanceForm
+				artboard={artboard}
+				artboardAppearances={artboardAppearancesAppearances}
+				appearanceType={AppearanceType.Palette}
+			/>
 		</div>
 	)
 }

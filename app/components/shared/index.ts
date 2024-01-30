@@ -1,5 +1,6 @@
 export * from './breadcrumbs'
 export * from './container'
+export * from './dialog-form'
 export * from './footer'
 export * from './form'
 export * from './page-layout'

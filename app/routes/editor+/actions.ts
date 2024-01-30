@@ -20,6 +20,7 @@ export const INTENT = {
 	downloadArtboardCanvas: 'download-artboard-canvas' as const,
 	updateArtboardDimensions: 'update-artboard-dimensions' as const,
 	updateArtboardBackgroundColor: 'update-artboard-background-color' as const,
+	updateArtboardAppearancesAdd: 'update-artboard-appearances-add' as const,
 }
 
 type EditorActionArgs = {
@@ -160,3 +161,8 @@ export async function updateArtboardBackgroundColorAction({
 
 	return json({ status: 'success', submission } as const)
 }
+
+export const ArtboardAppearancesAddEditorSchema = z.object({
+	artboardId: z.string(),
+	appearanceIds: z.string().array(),
+})

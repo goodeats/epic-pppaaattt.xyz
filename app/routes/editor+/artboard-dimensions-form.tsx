@@ -96,10 +96,10 @@ export const ArtboardDimensionsForm = ({
 						<fetcher.Form method="POST" {...form.props}>
 							<AuthenticityTokenInput />
 							{/*
-                    This hidden submit button is here to ensure that when the user hits
-                    "enter" on an input field, the primary form function is submitted
-                    rather than the first button in the form (which is delete/add image).
-                  */}
+                This hidden submit button is here to ensure that when the user hits
+                "enter" on an input field, the primary form function is submitted
+                rather than the first button in the form (which is delete/add image).
+              */}
 							<button type="submit" className="hidden" />
 							<input type="hidden" name="id" value={artboard.id} />
 							<input
