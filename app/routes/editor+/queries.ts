@@ -25,6 +25,13 @@ export const getArtboard = async (userId: string, artboardId: string) => {
 			height: true,
 			backgroundColor: true,
 			updatedAt: true,
+			project: {
+				select: {
+					id: true,
+					name: true,
+					slug: true,
+				},
+			},
 		},
 	})
 }

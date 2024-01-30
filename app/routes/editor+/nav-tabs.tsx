@@ -38,12 +38,14 @@ const NavContentArtboard = () => {
 	const { artboard } = data
 	if (!artboard) return null
 
-	const { description } = artboard
+	const { project, description } = artboard
 
 	return (
 		<div className="grid h-full items-stretch gap-6">
 			<div className="hidden flex-col space-y-4 sm:flex md:order-2">
 				<div>
+					<div className="text-sm text-muted-foreground">{project.name}</div>
+
 					<span className="w-12 rounded-md border border-transparent py-4 text-right text-sm text-muted-foreground hover:border-border">
 						{description}
 					</span>

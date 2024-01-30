@@ -62,6 +62,12 @@ export const Footer = () => {
 				<FooterLinkButton to="edit" icon="pencil-1">
 					Edit
 				</FooterLinkButton>
+				<FooterLinkButton
+					to={`/editor?artboardId=${artboard.id}`}
+					icon="pencil-1"
+				>
+					Editor
+				</FooterLinkButton>
 			</FooterActions>
 		</FooterContainer>
 	)

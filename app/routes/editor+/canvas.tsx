@@ -6,6 +6,7 @@ import {
 	FooterActions,
 	FooterContainer,
 	FooterIconIndicator,
+	FooterLinkButton,
 	FooterTimestamp,
 } from '#app/components/shared'
 import { DownloadForm } from './download-form'
@@ -67,10 +68,10 @@ const CanvasContainer = ({ children }: { children?: React.ReactNode }) => {
 
 export const Footer = () => {
 	const data = useLoaderData<typeof loader>()
-	const { artboard, artboardTimeAgo } = data
+	const { artboard, artboardTimeAgo, owner } = data
 	if (!artboard || !artboardTimeAgo) return null
 
-	const { width, height, backgroundColor } = artboard
+	const { width, height, backgroundColor, slug } = artboard
 
 	return (
 		<FooterContainer>
@@ -83,10 +84,13 @@ export const Footer = () => {
 			</FooterIconIndicator>
 			{/* <div className={`w-f h-5 flex-1 bg-[${backgroundColor}]`}></div> */}
 			<FooterActions>
+				<FooterLinkButton
+					to={`/users/${owner.username}/artboards/${slug}`}
+					icon="eye-open"
+				>
+					View
+				</FooterLinkButton>
 				<DownloadForm />
-				{/* <FooterLinkButton to="fullscreen" icon="eye-open">
-					Fullscreen
-				</FooterLinkButton> */}
 			</FooterActions>
 		</FooterContainer>
 	)
