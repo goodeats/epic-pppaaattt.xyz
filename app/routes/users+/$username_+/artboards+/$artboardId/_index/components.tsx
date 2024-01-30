@@ -67,7 +67,7 @@ export const Footer = () => {
 				</FooterLinkButton>
 				<FooterLinkButton
 					to={`/editor?artboardId=${artboard.id}`}
-					icon="pencil-1"
+					icon="magic-wand"
 				>
 					Editor
 				</FooterLinkButton>
