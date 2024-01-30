@@ -37,20 +37,18 @@ const NavContentArtboard = () => {
 	const { artboard } = data
 	if (!artboard) return null
 
-	const { description, width, height, backgroundColor } = artboard
+	const { description } = artboard
 
 	return (
 		<div className="grid h-full items-stretch gap-6">
 			<div className="hidden flex-col space-y-4 sm:flex md:order-2">
 				<div>
-					<p>{description}</p>
-					<Separator className="my-4" />
-					<p>
-						{width} x {height}
-					</p>
-					<p>{backgroundColor}</p>
+					<span className="w-12 rounded-md border border-transparent py-4 text-right text-sm text-muted-foreground hover:border-border">
+						{description}
+					</span>
 					<Separator className="my-4" />
 					<ArtboardDimensionsForm artboard={artboard} />
+					<Separator className="my-4" />
 				</div>
 			</div>
 		</div>

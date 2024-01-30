@@ -26,7 +26,7 @@ export const CanvasContent = () => {
 			if (!canvas) return
 			const ctx = canvas.getContext('2d')
 			if (!ctx) return
-			ctx.fillStyle = '#0F0FF0'
+			ctx.fillStyle = backgroundColor
 			ctx.fillRect(0, 0, width, height)
 			// canvas && CanvasDraw({ canvas, buildAttributes });
 		}, [canvasRef])
@@ -70,13 +70,17 @@ export const Footer = () => {
 	const { artboard, artboardTimeAgo } = data
 	if (!artboard || !artboardTimeAgo) return null
 
-	const { width, height } = artboard
+	const { width, height, backgroundColor } = artboard
 
 	return (
 		<FooterContainer>
 			<FooterTimestamp>{data?.artboardTimeAgo} ago</FooterTimestamp>
 			<FooterIconIndicator icon="dimensions">
 				{width} x {height}
+			</FooterIconIndicator>
+			<FooterIconIndicator icon="color-wheel">
+				{backgroundColor}
+				{/* <div className={`w-f h-5 bg-[${backgroundColor}]`}></div> */}
 			</FooterIconIndicator>
 			<FooterActions>
 				<DownloadForm />

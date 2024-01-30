@@ -111,7 +111,7 @@ export const ArtboardDimensionsForm = ({
 
 									<div
 										id="dimensions-form"
-										className="grid w-full grid-cols-2 gap-2"
+										className="grid w-full grid-cols-2 gap-4"
 									>
 										<FormWidth />
 										<FormHeight />
