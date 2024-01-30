@@ -9,7 +9,6 @@ import {
 import { ContentHeaderActions } from '#app/components/shared/page-layout'
 import { getUserImgSrc } from '#app/utils/misc'
 import { ArtboardSelector } from './artboard-selector'
-import { CanvasContent } from './canvas'
 import { type loader } from './route'
 
 export const Header = () => {
@@ -41,16 +40,6 @@ export const SideNavHeader = () => {
 	)
 }
 
-export const Content = () => {
-	const data = useLoaderData<typeof loader>()
-
-	const NoArtboard = () => {
-		return <ContainerIndex>Select an Artboard</ContainerIndex>
-	}
-
-	const WithArtboard = () => {
-		return <CanvasContent />
-	}
-
-	return data?.artboard ? <WithArtboard /> : <NoArtboard />
+export const NoArtboard = () => {
+	return <ContainerIndex>Select an Artboard</ContainerIndex>
 }

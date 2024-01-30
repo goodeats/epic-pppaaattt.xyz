@@ -1,5 +1,5 @@
 import { useLoaderData } from '@remix-run/react'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import {
 	ContainerContent,
 	ContainerDetails,
@@ -20,10 +20,15 @@ export const CanvasContent = () => {
 	const Canvas = () => {
 		const canvasRef = useRef<HTMLCanvasElement>(null)
 
-		// useEffect(() => {
-		//   const canvas = canvasRef.current;
-		//   canvas && CanvasDraw({ canvas, buildAttributes });
-		// }, []);
+		useEffect(() => {
+			const canvas = canvasRef.current
+			if (!canvas) return
+			const ctx = canvas.getContext('2d')
+			if (!ctx) return
+			ctx.fillStyle = '#0F0FF0'
+			ctx.fillRect(0, 0, width, height)
+			// canvas && CanvasDraw({ canvas, buildAttributes });
+		}, [canvasRef])
 
 		return (
 			<canvas
@@ -37,7 +42,7 @@ export const CanvasContent = () => {
 	}
 
 	return (
-		<ContainerDetails>
+		<ContainerDetails className="mt-32">
 			<ContainerContent displayBar={true}>
 				<CanvasContainer>
 					<Canvas />

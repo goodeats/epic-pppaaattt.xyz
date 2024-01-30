@@ -4,7 +4,7 @@ import {
 	json,
 	type LoaderFunctionArgs,
 } from '@remix-run/node'
-import { type MetaFunction } from '@remix-run/react'
+import { useLoaderData, type MetaFunction } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import {
@@ -18,7 +18,8 @@ import { Separator } from '#app/components/ui/separator'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import { INTENT, downloadArtboardCanvasAction } from './actions'
-import { SideNavHeader, Header, Content } from './components'
+import { CanvasContent } from './canvas'
+import { SideNavHeader, Header, NoArtboard } from './components'
 import { NavTabs } from './nav-tabs'
 import { getArtboard, getOwner } from './queries'
 
@@ -60,13 +61,16 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export default function EditorRoute() {
+	const data = useLoaderData<typeof loader>()
+	const { artboard } = data
+
 	return (
 		<MainContainer>
 			<ContentWrapper className="md:pl-0">
 				<MainContent className="md:rounded-l-3xl md:rounded-r-none">
 					<Header />
 					<Separator />
-					<Content />
+					{artboard ? <CanvasContent /> : <NoArtboard />}
 				</MainContent>
 				{/* side nav on the right since it is not for navigation */}
 				<SideNavWrapper>

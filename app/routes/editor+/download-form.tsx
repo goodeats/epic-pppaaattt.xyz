@@ -1,4 +1,5 @@
 import { useForm } from '@conform-to/react'
+import { parse } from '@conform-to/zod'
 import { useActionData, useFetcher, useLoaderData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { ErrorList } from '#app/components/forms'
@@ -7,8 +8,9 @@ import {
 	formDeleteButtonDefaultClassName,
 } from '#app/components/shared'
 import { StatusButton } from '#app/components/ui/status-button'
+import { downloadCanvasAsPNG } from '#app/utils/download'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from './actions'
+import { DownloadArtboardCanvasSchema, INTENT } from './actions'
 import { type loader, type action } from './route'
 
 export function DownloadForm() {
@@ -22,6 +24,23 @@ export function DownloadForm() {
 	const [form] = useForm({
 		id: 'download-artboard-canvas',
 		lastSubmission: actionData?.submission,
+		onSubmit: (event, { formData }) => {
+			event.preventDefault()
+
+			const submission = parse(formData, {
+				schema: DownloadArtboardCanvasSchema,
+			})
+			if (!submission.value) {
+				console.warn('no submission', submission)
+				return
+			}
+
+			downloadCanvasAsPNG()
+
+			fetcher.submit(formData, {
+				method: 'POST',
+			})
+		},
 	})
 
 	if (!artboard) return null

@@ -12,12 +12,11 @@ type EditorActionArgs = {
 	formData: FormData
 }
 
-const DownloadArtboardCanvasSchema = z.object({
+export const DownloadArtboardCanvasSchema = z.object({
 	artboardId: z.string(),
 })
 
 export async function downloadArtboardCanvasAction({
-	userId,
 	formData,
 }: EditorActionArgs) {
 	console.log('DOWNLOAD ACTION')
