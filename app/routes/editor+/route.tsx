@@ -1,4 +1,3 @@
-import { parse } from '@conform-to/zod'
 import { invariantResponse } from '@epic-web/invariant'
 import {
 	type DataFunctionArgs,
@@ -7,7 +6,6 @@ import {
 } from '@remix-run/node'
 import { type MetaFunction } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
-import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import {
 	ContentWrapper,
@@ -19,36 +17,26 @@ import {
 import { Separator } from '#app/components/ui/separator'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
+import { INTENT, downloadArtboardCanvasAction } from './actions'
 import { SideNavHeader, Header, Content } from './components'
 import { NavTabs } from './nav-tabs'
 import { getArtboard, getOwner } from './queries'
 
-const ArtboardSchema = z.object({
-	artboardId: z.string(),
-})
-
 export async function action({ request }: DataFunctionArgs) {
 	console.log('EDITOR ACTION')
-	await requireUserId(request)
+	const userId = await requireUserId(request)
 	const formData = await request.formData()
 	await validateCSRF(formData, request.headers)
-	const submission = await parse(formData, {
-		schema: ArtboardSchema,
-	})
-	console.log('submission downloading...', submission)
+	const intent = formData.get('intent')
 
-	if (submission.intent !== 'submit') {
-		return json({ status: 'idle', submission } as const)
+	switch (intent) {
+		case INTENT.downloadArtboardCanvas: {
+			return downloadArtboardCanvasAction({ request, userId, formData })
+		}
+		default: {
+			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
+		}
 	}
-	if (!submission.value) {
-		return json({ status: 'error', submission } as const, { status: 400 })
-	}
-
-	console.log('downloaded artboard canvas')
-
-	const result = { status: 'success', submission } as const
-	console.log('RESULT:', result)
-	return result
 }
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
