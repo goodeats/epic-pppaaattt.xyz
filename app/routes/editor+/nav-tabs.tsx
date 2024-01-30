@@ -6,6 +6,7 @@ import {
 	TabsList,
 	TabsTrigger,
 } from '#app/components/ui/tabs'
+import { ArtboardBackgroundColorForm } from './artboard-background-color-form'
 import { ArtboardDimensionsForm } from './artboard-dimensions-form'
 import { type loader } from './route'
 
@@ -49,6 +50,7 @@ const NavContentArtboard = () => {
 					<Separator className="my-4" />
 					<ArtboardDimensionsForm artboard={artboard} />
 					<Separator className="my-4" />
+					<ArtboardBackgroundColorForm artboard={artboard} />
 				</div>
 			</div>
 		</div>

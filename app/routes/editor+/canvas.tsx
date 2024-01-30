@@ -80,8 +80,8 @@ export const Footer = () => {
 			</FooterIconIndicator>
 			<FooterIconIndicator icon="color-wheel">
 				{backgroundColor}
-				{/* <div className={`w-f h-5 bg-[${backgroundColor}]`}></div> */}
 			</FooterIconIndicator>
+			{/* <div className={`w-f h-5 flex-1 bg-[${backgroundColor}]`}></div> */}
 			<FooterActions>
 				<DownloadForm />
 				{/* <FooterLinkButton to="fullscreen" icon="eye-open">

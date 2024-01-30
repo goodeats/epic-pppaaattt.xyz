@@ -14,13 +14,13 @@ import {
 } from '#app/components/shared'
 import { HoverCard } from '#app/components/ui/hover-card'
 import { useIsPending } from '#app/utils/misc'
-import { ArtboardDimensionsEditorSchema, INTENT } from './actions'
+import { ArtboardBackgroundColorEditorSchema, INTENT } from './actions'
 import { type action } from './route'
 
-export const ArtboardDimensionsForm = ({
+export const ArtboardBackgroundColorForm = ({
 	artboard,
 }: {
-	artboard: SerializeFrom<Pick<Artboard, 'id' | 'width' | 'height'>>
+	artboard: SerializeFrom<Pick<Artboard, 'id' | 'backgroundColor'>>
 }) => {
 	const fetcher = useFetcher()
 
@@ -28,34 +28,27 @@ export const ArtboardDimensionsForm = ({
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: 'edit-artboard-dimensions-form',
-		constraint: getFieldsetConstraint(ArtboardDimensionsEditorSchema),
+		id: 'edit-artboard-background-color-form',
+		constraint: getFieldsetConstraint(ArtboardBackgroundColorEditorSchema),
 		lastSubmission: actionData?.submission,
 		defaultValue: {
-			width: artboard.width ?? 1,
-			height: artboard.height ?? 1,
+			backgroundColor: artboard.backgroundColor ?? '#FFFFFF',
 		},
 	})
 
 	const handleSubmit = (event: FocusEvent<HTMLInputElement>) => {
-		const relatedTarget = event.relatedTarget as HTMLInputElement | null
-
-		if (relatedTarget?.name === 'width' || relatedTarget?.name === 'height')
-			return
-
 		fetcher.submit(event.currentTarget.form, {
 			method: 'POST',
 		})
 	}
 
-	const FormWidth = () => {
+	const FormBackgroundColor = () => {
 		return (
 			<Field
-				labelProps={{ children: 'Width' }}
+				labelProps={{ children: 'Background Color' }}
 				inputProps={{
-					...conform.input(fields.width, {
+					...conform.input(fields.backgroundColor, {
 						ariaAttributes: true,
-						type: 'number',
 					}),
 					autoComplete: 'off',
 					onBlur: e => {
@@ -63,27 +56,7 @@ export const ArtboardDimensionsForm = ({
 					},
 					disabled: isPending,
 				}}
-				errors={fields.width.errors}
-			/>
-		)
-	}
-
-	const FormHeight = () => {
-		return (
-			<Field
-				labelProps={{ children: 'Height' }}
-				inputProps={{
-					...conform.input(fields.height, {
-						ariaAttributes: true,
-						type: 'number',
-					}),
-					autoComplete: 'off',
-					onBlur: e => {
-						handleSubmit(e)
-					},
-					disabled: isPending,
-				}}
-				errors={fields.height.errors}
+				errors={fields.backgroundColor.errors}
 			/>
 		)
 	}
@@ -96,33 +69,26 @@ export const ArtboardDimensionsForm = ({
 						<fetcher.Form method="POST" {...form.props}>
 							<AuthenticityTokenInput />
 							{/*
-                    This hidden submit button is here to ensure that when the user hits
-                    "enter" on an input field, the primary form function is submitted
-                    rather than the first button in the form (which is delete/add image).
-                  */}
+                This hidden submit button is here to ensure that when the user hits
+                "enter" on an input field, the primary form function is submitted
+                rather than the first button in the form (which is delete/add image).
+              */}
 							<button type="submit" className="hidden" />
 							<input type="hidden" name="id" value={artboard.id} />
 							<input
 								type="hidden"
 								name="intent"
-								value={INTENT.updateArtboardDimensions}
+								value={INTENT.updateArtboardBackgroundColor}
 							/>
 
-							<div
-								id="dimensions-form"
-								className="grid w-full grid-cols-2 gap-4"
-							>
-								<FormWidth />
-								<FormHeight />
-							</div>
+							<FormBackgroundColor />
 							<ErrorList id={form.errorId} errors={form.errors} />
 						</fetcher.Form>
 					</FormContainer>
 				</SideNavFormHoverTrigger>
 				<SideNavFormHoverContent>
-					Controls dimensions: set height and width of the artboard canvas. Note
-					that the canvas to the left is to scale and will download at full
-					size.
+					Controls background color: set background color of the artboard
+					canvas. Note to self: make this a palette.
 				</SideNavFormHoverContent>
 			</HoverCard>
 		</SideNavFormWrapper>

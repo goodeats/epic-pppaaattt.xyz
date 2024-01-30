@@ -20,6 +20,7 @@ import { validateCSRF } from '#app/utils/csrf.server'
 import {
 	INTENT,
 	downloadArtboardCanvasAction,
+	updateArtboardBackgroundColorAction,
 	updateArtboardDimensionsAction,
 } from './actions'
 import { CanvasContent } from './canvas'
@@ -45,6 +46,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.updateArtboardDimensions: {
 			return updateArtboardDimensionsAction({ request, userId, formData })
+		}
+		case INTENT.updateArtboardBackgroundColor: {
+			return updateArtboardBackgroundColorAction({ request, userId, formData })
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

@@ -15,3 +15,17 @@ export const updateArtboardDimensions = async (
 		},
 	})
 }
+
+export const updateArtboardBackgroundColor = async (
+	userId: string,
+	artboardId: string | undefined,
+	backgroundColor: string,
+) => {
+	return await prisma.artboard.update({
+		select: { id: true },
+		where: { id: artboardId, ownerId: userId },
+		data: {
+			backgroundColor,
+		},
+	})
+}
