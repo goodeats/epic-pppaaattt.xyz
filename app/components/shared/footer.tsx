@@ -17,6 +17,22 @@ const FooterTimestamp = ({ children }: { children: React.ReactNode }) => {
 	)
 }
 
+const FooterIconIndicator = ({
+	icon,
+	children,
+}: {
+	icon: IconName
+	children: React.ReactNode
+}) => {
+	return (
+		<span className="text-sm text-foreground/90 max-[524px]:hidden">
+			<Icon name={icon} className="scale-125">
+				{children}
+			</Icon>
+		</span>
+	)
+}
+
 const FooterActions = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div className="grid flex-1 grid-cols-2 justify-end gap-2 min-[525px]:flex md:gap-4">
@@ -57,4 +73,10 @@ const FooterLinkButton = ({
 	)
 }
 
-export { FooterContainer, FooterTimestamp, FooterActions, FooterLinkButton }
+export {
+	FooterContainer,
+	FooterTimestamp,
+	FooterIconIndicator,
+	FooterActions,
+	FooterLinkButton,
+}

@@ -5,6 +5,7 @@ import {
 	ContainerDetails,
 	FooterActions,
 	FooterContainer,
+	FooterIconIndicator,
 	FooterTimestamp,
 } from '#app/components/shared'
 import { DownloadForm } from './download-form'
@@ -69,9 +70,14 @@ export const Footer = () => {
 	const { artboard, artboardTimeAgo } = data
 	if (!artboard || !artboardTimeAgo) return null
 
+	const { width, height } = artboard
+
 	return (
 		<FooterContainer>
 			<FooterTimestamp>{data?.artboardTimeAgo} ago</FooterTimestamp>
+			<FooterIconIndicator icon="dimensions">
+				{width} x {height}
+			</FooterIconIndicator>
 			<FooterActions>
 				<DownloadForm />
 				{/* <FooterLinkButton to="fullscreen" icon="eye-open">
