@@ -18,11 +18,11 @@ import { requireUserId } from '#app/utils/auth.server.ts'
 import { validateCSRF } from '#app/utils/csrf.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { useIsPending } from '#app/utils/misc.tsx'
-import { assignAppearancesToLayer } from './mutations'
+import { assignAppearancesToArtboard } from './mutations'
 import { type loader } from './route'
 
-const LayerAppearancesEditorSchema = z.object({
-	layerId: z.string(),
+const ArtboardAppearancesEditorSchema = z.object({
+	artboardId: z.string(),
 	appearanceIds: z.string().array(),
 })
 
@@ -33,15 +33,15 @@ export async function action({ request }: ActionFunctionArgs) {
 	await validateCSRF(formData, request.headers)
 
 	const submission = await parse(formData, {
-		schema: LayerAppearancesEditorSchema.superRefine(async (data, ctx) => {
-			const layer = await prisma.layer.findUnique({
+		schema: ArtboardAppearancesEditorSchema.superRefine(async (data, ctx) => {
+			const artboard = await prisma.artboard.findUnique({
 				select: { id: true },
-				where: { id: data.layerId, ownerId: userId },
+				where: { id: data.artboardId, ownerId: userId },
 			})
-			if (!layer) {
+			if (!artboard) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					message: 'Layer not found',
+					message: 'Artboard not found',
 				})
 			}
 		}),
@@ -56,39 +56,41 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { layerId, appearanceIds } = submission.value
+	const { artboardId, appearanceIds } = submission.value
 
-	const updatedLayer = await assignAppearancesToLayer(
+	const updatedArtboard = await assignAppearancesToArtboard(
 		userId,
-		layerId,
+		artboardId,
 		appearanceIds,
 	)
 
-	if (!updatedLayer) {
+	if (!updatedArtboard) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { owner } = updatedLayer
-	return redirect(`/users/${owner.username}/layers/${updatedLayer.slug}`)
+	const { owner } = updatedArtboard
+	return redirect(`/users/${owner.username}/artboards/${updatedArtboard.slug}`)
 }
 
 export function AssignAppearancesForm() {
 	const data = useLoaderData<typeof loader>()
-	const { layer, appearances } = data
-	const layerAppearanceIds = layer.appearances.map(layer => layer.appearanceId)
+	const { artboard, appearances } = data
+	const artboardAppearanceIds = artboard.appearances.map(
+		artboard => artboard.appearanceId,
+	)
 
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
 		id: 'choose-appearances-form',
-		constraint: getFieldsetConstraint(LayerAppearancesEditorSchema),
+		constraint: getFieldsetConstraint(ArtboardAppearancesEditorSchema),
 		lastSubmission: actionData?.submission,
 		onValidate({ formData }) {
-			return parse(formData, { schema: LayerAppearancesEditorSchema })
+			return parse(formData, { schema: ArtboardAppearancesEditorSchema })
 		},
 		defaultValue: {
-			appearanceIds: layerAppearanceIds ?? [],
+			appearanceIds: artboardAppearanceIds ?? [],
 		},
 	})
 
@@ -114,7 +116,7 @@ export function AssignAppearancesForm() {
 									children: `${appearance.name} (${appearance.type})`,
 								}}
 								buttonProps={rest}
-								defaultChecked={layerAppearanceIds.includes(appearance.id)}
+								defaultChecked={artboardAppearanceIds.includes(appearance.id)}
 								errors={fields.appearanceIds.errors}
 							/>
 						)
@@ -157,7 +159,7 @@ export function AssignAppearancesForm() {
 					rather than the first button in the form (which is delete/add image).
 				*/}
 				<button type="submit" className="hidden" />
-				<input type="hidden" name="layerId" value={layer.id} />
+				<input type="hidden" name="artboardId" value={artboard.id} />
 				<FormFieldsContainer>
 					<Appearances />
 				</FormFieldsContainer>
@@ -173,7 +175,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => (
-					<p>No layer with the id "{params.layerId}" exists</p>
+					<p>No artboard with the id "{params.artboardId}" exists</p>
 				),
 			}}
 		/>

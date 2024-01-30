@@ -55,6 +55,7 @@ const SideNavListItem = ({ children }: { children: React.ReactNode }) => {
 const sideNavLinkDefaultClassName =
 	'line-clamp-2 block rounded-l-full py-2 pl-8 pr-6 text-base lg:text-xl'
 
+// careful about using fetchers with looped data
 const SideNavTabs = ({
 	defaultValue,
 	values,

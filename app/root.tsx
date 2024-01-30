@@ -324,28 +324,28 @@ function UserDropdown() {
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
 						<Link prefetch="intent" to={`/editor`}>
-							<Icon className="text-body-md" name="pencil-1">
+							<Icon className="text-body-md" name="magic-wand">
 								Editor
 							</Icon>
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
 						<Link prefetch="intent" to={`/users/${user.username}/projects`}>
-							<Icon className="text-body-md" name="arrow-left">
+							<Icon className="text-body-md" name="stack">
 								Projects
 							</Icon>
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
 						<Link prefetch="intent" to={`/users/${user.username}/layers`}>
-							<Icon className="text-body-md" name="arrow-left">
+							<Icon className="text-body-md" name="layers">
 								Layers
 							</Icon>
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
 						<Link prefetch="intent" to={`/users/${user.username}/appearances`}>
-							<Icon className="text-body-md" name="arrow-left">
+							<Icon className="text-body-md" name="pencil-2">
 								Appearances
 							</Icon>
 						</Link>

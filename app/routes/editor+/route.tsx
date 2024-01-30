@@ -17,9 +17,19 @@ import {
 import { Separator } from '#app/components/ui/separator'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
-import { INTENT, downloadArtboardCanvasAction } from './actions'
+import {
+	INTENT,
+	downloadArtboardCanvasAction,
+	updateArtboardBackgroundColorAction,
+	updateArtboardDimensionsAction,
+} from './actions'
 import { CanvasContent } from './canvas'
-import { SideNavHeader, Header, NoArtboard } from './components'
+import {
+	SideNavHeader,
+	Header,
+	NoArtboardContent,
+	NavTabsNoArtboard,
+} from './components'
 import { NavTabs } from './nav-tabs'
 import { getArtboard, getOwner } from './queries'
 
@@ -33,6 +43,12 @@ export async function action({ request }: DataFunctionArgs) {
 	switch (intent) {
 		case INTENT.downloadArtboardCanvas: {
 			return downloadArtboardCanvasAction({ request, userId, formData })
+		}
+		case INTENT.updateArtboardDimensions: {
+			return updateArtboardDimensionsAction({ request, userId, formData })
+		}
+		case INTENT.updateArtboardBackgroundColor: {
+			return updateArtboardBackgroundColorAction({ request, userId, formData })
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
@@ -70,14 +86,14 @@ export default function EditorRoute() {
 				<MainContent className="md:rounded-l-3xl md:rounded-r-none">
 					<Header />
 					<Separator />
-					{artboard ? <CanvasContent /> : <NoArtboard />}
+					{artboard ? <CanvasContent /> : <NoArtboardContent />}
 				</MainContent>
 				{/* side nav on the right since it is not for navigation */}
 				<SideNavWrapper>
 					<SideNavContainer>
 						<SideNavHeader />
 						<Separator />
-						<NavTabs />
+						{artboard ? <NavTabs /> : <NavTabsNoArtboard />}
 					</SideNavContainer>
 				</SideNavWrapper>
 			</ContentWrapper>

@@ -5,6 +5,7 @@ import {
 	SideNavHeaderImage,
 	SideNavHeaderLink,
 	SideNavHeaderTitle,
+	SideNavTabs,
 } from '#app/components/shared'
 import { ContentHeaderActions } from '#app/components/shared/page-layout'
 import { getUserImgSrc } from '#app/utils/misc'
@@ -40,6 +41,30 @@ export const SideNavHeader = () => {
 	)
 }
 
-export const NoArtboard = () => {
+export const NoArtboardContent = () => {
 	return <ContainerIndex>Select an Artboard</ContainerIndex>
+}
+
+export const NavTabsNoArtboard = () => {
+	const NoArtboard = () => {
+		return <p>Select an artboard to edit.</p>
+	}
+
+	return (
+		<SideNavTabs
+			defaultValue="artboard"
+			values={[
+				{
+					id: 'artboard',
+					name: 'Artboard',
+					content: <NoArtboard />,
+				},
+				{
+					id: 'layers',
+					name: 'Layers',
+					content: 'Make changes to your artboard layers here.',
+				},
+			]}
+		/>
+	)
 }

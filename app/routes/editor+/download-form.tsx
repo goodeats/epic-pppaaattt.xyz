@@ -53,6 +53,7 @@ export function DownloadForm() {
 				type="submit"
 				name="intent"
 				value={INTENT.downloadArtboardCanvas}
+				variant="secondary"
 				status={isPending ? 'pending' : actionData?.status ?? 'idle'}
 				disabled={isPending}
 				className={formDeleteButtonDefaultClassName}
