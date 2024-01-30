@@ -11,6 +11,7 @@ import {
 import { Separator } from '#app/components/ui/separator'
 import { userHasPermission } from '#app/utils/permissions'
 import { useOptionalUser } from '#app/utils/user'
+import { Appearances } from './appearances'
 import { DeletePermission } from './delete-artboard-form'
 import { Layers } from './layers'
 import { type loader } from './route'
@@ -40,6 +41,8 @@ export const Content = () => {
 			<ContainerP>{artboard.backgroundColor}</ContainerP>
 			<Separator className="my-4" />
 			<Layers />
+			<Separator className="my-4" />
+			<Appearances />
 		</ContainerContent>
 	)
 }
