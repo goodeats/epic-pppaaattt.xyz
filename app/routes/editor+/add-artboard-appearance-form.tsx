@@ -3,7 +3,6 @@ import { parse } from '@conform-to/zod'
 import { type Appearance, type Artboard } from '@prisma/client'
 import { type SerializeFrom } from '@remix-run/node'
 import { useActionData, useFetcher, useLoaderData } from '@remix-run/react'
-import { useEffect } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { CheckboxField } from '#app/components/forms'
 import {
@@ -20,9 +19,12 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '#app/components/ui/dialog'
+import { HiddenSubmitButton } from '#app/components/ui/hidden-submit-button'
 import { Icon } from '#app/components/ui/icon'
+import { StatusButton } from '#app/components/ui/status-button'
 import { type AppearanceType } from '#app/utils/appearances'
 import { downloadCanvasAsPNG } from '#app/utils/download'
+import { useIsPending } from '#app/utils/misc'
 import { ArtboardAppearancesAddEditorSchema, INTENT } from './actions'
 import { type loader, type action } from './route'
 
@@ -31,7 +33,7 @@ export function AddArtboardAppearanceForm({
 	artboardAppearances,
 	appearanceType,
 }: {
-	artboard: SerializeFrom<Pick<Artboard, 'id' | 'width' | 'height'>>
+	artboard: SerializeFrom<Pick<Artboard, 'id'>>
 	artboardAppearances: Array<
 		Pick<Appearance, 'id' | 'name' | 'description' | 'type' | 'value'>
 	>
@@ -46,12 +48,8 @@ export function AddArtboardAppearanceForm({
 
 	const fetcher = useFetcher()
 
-	useEffect(() => {
-		console.log('AddArtboardAppearanceForm')
-	}, [])
-
 	const actionData = useActionData<typeof action>()
-	// const isPending = useIsPending()
+	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
 		id: 'add-artboard-appearance',
@@ -132,12 +130,7 @@ export function AddArtboardAppearanceForm({
 					<FormContainer>
 						<fetcher.Form method="POST" {...form.props}>
 							<AuthenticityTokenInput />
-							{/*
-                This hidden submit button is here to ensure that when the user hits
-                "enter" on an input field, the primary form function is submitted
-                rather than the first button in the form (which is delete/add image).
-              */}
-							<button type="submit" className="hidden" />
+							<HiddenSubmitButton />
 							<input type="hidden" name="artboardId" value={artboard.id} />
 							<input
 								type="hidden"
@@ -149,10 +142,20 @@ export function AddArtboardAppearanceForm({
 							</DialogFormFieldsContainer>
 						</fetcher.Form>
 					</FormContainer>
+					<DialogFooter>
+						<Button form={form.id} variant="destructive" type="reset">
+							Reset
+						</Button>
+						<StatusButton
+							form={form.id}
+							type="submit"
+							disabled={isPending}
+							status={isPending ? 'pending' : 'idle'}
+						>
+							Save Changes
+						</StatusButton>
+					</DialogFooter>
 				</div>
-				<DialogFooter>
-					<Button type="submit">Save changes</Button>
-				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	)

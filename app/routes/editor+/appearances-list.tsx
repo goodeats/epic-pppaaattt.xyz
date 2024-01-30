@@ -89,7 +89,6 @@ const AppearanceListItem = ({
 		order: number
 	}
 }) => {
-	console.log('appearance', appearance)
 	const { name, isVisible } = appearance
 
 	const Actions = () => {

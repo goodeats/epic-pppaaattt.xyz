@@ -12,6 +12,7 @@ import {
 	trimSpacesInBetween,
 } from '#app/utils/string-formatting'
 import {
+	updateArtboardAppearancesAdd,
 	updateArtboardBackgroundColor,
 	updateArtboardDimensions,
 } from './mutations'
@@ -166,3 +167,39 @@ export const ArtboardAppearancesAddEditorSchema = z.object({
 	artboardId: z.string(),
 	appearanceIds: z.string().array(),
 })
+
+export async function updateArtboardAppearancesAddAction({
+	userId,
+	formData,
+}: EditorActionArgs) {
+	console.log('UPDATE APPEARANCES ADD ACTION')
+	const submission = await parse(formData, {
+		schema: ArtboardAppearancesAddEditorSchema.superRefine(
+			async (data, ctx) => {
+				const artboard = await prisma.artboard.findUnique({
+					select: { id: true },
+					where: { id: data.artboardId, ownerId: userId },
+				})
+				if (!artboard) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Artboard not found',
+					})
+				}
+			},
+		),
+		async: true,
+	})
+	if (submission.intent !== 'submit') {
+		return json({ status: 'idle', submission } as const)
+	}
+	if (!submission.value) {
+		return json({ status: 'error', submission } as const, { status: 400 })
+	}
+
+	const { artboardId, appearanceIds } = submission.value
+
+	await updateArtboardAppearancesAdd(userId, artboardId, appearanceIds)
+
+	return json({ status: 'success', submission } as const)
+}
