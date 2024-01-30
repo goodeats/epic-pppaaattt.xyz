@@ -23,7 +23,6 @@ import { HiddenSubmitButton } from '#app/components/ui/hidden-submit-button'
 import { Icon } from '#app/components/ui/icon'
 import { StatusButton } from '#app/components/ui/status-button'
 import { type AppearanceType } from '#app/utils/appearances'
-import { downloadCanvasAsPNG } from '#app/utils/download'
 import { useIsPending } from '#app/utils/misc'
 import { ArtboardAppearancesAddEditorSchema, INTENT } from './actions'
 import { type loader, type action } from './route'
@@ -64,8 +63,6 @@ export function AddArtboardAppearanceForm({
 				console.warn('no submission', submission)
 				return
 			}
-
-			downloadCanvasAsPNG()
 
 			fetcher.submit(formData, {
 				method: 'POST',
