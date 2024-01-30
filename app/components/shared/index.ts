@@ -16,15 +16,13 @@ export {
 	FooterActions,
 	FooterLinkButton,
 } from './footer'
+export * from './form'
 export {
-	FormContainer,
-	FormFieldsContainer,
-	FormActionsContainer,
-	FormDeleteIcon,
-	formDefaultClassName,
-	formDeleteButtonDefaultClassName,
-} from './form'
-export { MainContainer, ContentWrapper, MainContent } from './page-layout'
+	MainContainer,
+	ContentWrapper,
+	MainContent,
+	ContentHeader,
+} from './page-layout'
 export {
 	SideNavWrapper,
 	SideNavContainer,
@@ -33,5 +31,6 @@ export {
 	SideNavHeaderTitle,
 	SideNavList,
 	SideNavListItem,
+	SideNavTabs,
 	sideNavLinkDefaultClassName,
 } from './side-nav'

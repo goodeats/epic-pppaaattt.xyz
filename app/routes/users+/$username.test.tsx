@@ -93,5 +93,6 @@ test('The user profile when logged in as self', async () => {
 	await screen.findByRole('link', { name: /my projects/i })
 	await screen.findByRole('link', { name: /my layers/i })
 	await screen.findByRole('link', { name: /my appearances/i })
+	await screen.findByRole('link', { name: /editor/i })
 	await screen.findByRole('link', { name: /edit profile/i })
 })

@@ -1,7 +1,7 @@
 import { Link } from '@remix-run/react'
 import { floatingToolbarClassName } from '../floating-toolbar'
 import { Button } from '../ui/button'
-import { Icon } from '../ui/icon'
+import { Icon, type IconName } from '../ui/icon'
 
 const FooterContainer = ({ children }: { children: React.ReactNode }) => {
 	return <div className={floatingToolbarClassName}>{children}</div>
@@ -32,7 +32,7 @@ const FooterLinkButton = ({
 	variant,
 }: {
 	to: string
-	icon: 'pencil-1' | 'trash' | 'arrow-left'
+	icon: IconName
 	children: React.ReactNode
 	variant?:
 		| 'default'

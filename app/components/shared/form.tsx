@@ -24,6 +24,14 @@ const FormDeleteIcon = () => {
 	)
 }
 
+const FormDownloadIcon = () => {
+	return (
+		<Icon name="download" className="scale-125 max-md:scale-150">
+			<span className="max-md:hidden">Download</span>
+		</Icon>
+	)
+}
+
 const formDeleteButtonDefaultClassName =
 	'w-full max-md:aspect-square max-md:px-0'
 
@@ -32,6 +40,7 @@ export {
 	FormFieldsContainer,
 	FormActionsContainer,
 	FormDeleteIcon,
+	FormDownloadIcon,
 	formDefaultClassName,
 	formDeleteButtonDefaultClassName,
 }

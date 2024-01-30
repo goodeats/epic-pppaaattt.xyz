@@ -323,6 +323,13 @@ function UserDropdown() {
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
+						<Link prefetch="intent" to={`/editor`}>
+							<Icon className="text-body-md" name="pencil-1">
+								Editor
+							</Icon>
+						</Link>
+					</DropdownMenuItem>
+					<DropdownMenuItem asChild>
 						<Link prefetch="intent" to={`/users/${user.username}/projects`}>
 							<Icon className="text-body-md" name="arrow-left">
 								Projects
