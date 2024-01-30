@@ -42,7 +42,7 @@ export const CanvasContent = () => {
 	}
 
 	return (
-		<ContainerDetails className="mt-32">
+		<ContainerDetails>
 			<ContainerContent displayBar={true}>
 				<CanvasContainer>
 					<Canvas />
