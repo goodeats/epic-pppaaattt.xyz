@@ -45,13 +45,9 @@ const NavContentArtboard = () => {
 			<div className="hidden flex-col space-y-4 sm:flex md:order-2">
 				<div>
 					<div className="text-sm text-muted-foreground">{project.name}</div>
-
-					<span className="w-12 rounded-md border border-transparent py-4 text-right text-sm text-muted-foreground hover:border-border">
-						{description}
-					</span>
+					<div className="text-sm text-muted-foreground">{description}</div>
 					<Separator className="my-4" />
 					<ArtboardDimensionsForm artboard={artboard} />
-					<Separator className="my-4" />
 					<ArtboardBackgroundColorForm artboard={artboard} />
 				</div>
 			</div>
