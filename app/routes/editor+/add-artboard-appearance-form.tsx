@@ -6,6 +6,7 @@ import { useActionData, useFetcher, useLoaderData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { CheckboxField } from '#app/components/forms'
 import {
+	ContainerP,
 	DialogFormFieldsContainer,
 	FormContainer,
 } from '#app/components/shared'
@@ -39,11 +40,18 @@ export function AddArtboardAppearanceForm({
 	appearanceType: AppearanceType
 }) {
 	const data = useLoaderData<typeof loader>()
-	const { appearances } = data
-	const appearancesByType = appearances.filter(
-		appearance => appearance.type === appearanceType,
-	)
 	const artboardAppearanceIds = artboardAppearances.map(artboard => artboard.id)
+
+	const { appearances } = data
+	const appearancesByTypeNotAlreadyOnArtboard = appearances.filter(
+		appearance => {
+			return (
+				appearance.type === appearanceType &&
+				!artboardAppearanceIds.includes(appearance.id)
+			)
+		},
+	)
+	const noAppearancesToAdd = appearancesByTypeNotAlreadyOnArtboard.length === 0
 
 	const appearanceTypeName = appearanceMapping[appearanceType].typeName
 
@@ -82,7 +90,10 @@ export function AddArtboardAppearanceForm({
 			<div className="flex items-center justify-between space-x-2">
 				<fieldset>
 					<legend className="mb-4 text-lg">{appearanceTypeName}s</legend>
-					{appearancesByType.map((appearance, i) => {
+					{appearancesByTypeNotAlreadyOnArtboard.length === 0 && (
+						<ContainerP>All {appearanceTypeName}s have been added</ContainerP>
+					)}
+					{appearancesByTypeNotAlreadyOnArtboard.map((appearance, i) => {
 						const checkboxProps = conform.input(fields.appearanceIds, {
 							type: 'checkbox',
 							value: appearance.id,
@@ -149,7 +160,7 @@ export function AddArtboardAppearanceForm({
 						<StatusButton
 							form={form.id}
 							type="submit"
-							disabled={isPending}
+							disabled={isPending || noAppearancesToAdd}
 							status={isPending ? 'pending' : 'idle'}
 						>
 							Save Changes
