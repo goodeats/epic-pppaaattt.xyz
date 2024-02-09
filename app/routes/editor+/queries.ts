@@ -37,6 +37,7 @@ export const getArtboard = async (userId: string, artboardId: string) => {
 					order: true,
 					isVisible: true,
 					overrideValue: true,
+					artboardId: true,
 					appearance: {
 						select: {
 							id: true,

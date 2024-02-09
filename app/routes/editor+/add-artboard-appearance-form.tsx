@@ -22,7 +22,7 @@ import {
 import { HiddenSubmitButton } from '#app/components/ui/hidden-submit-button'
 import { Icon } from '#app/components/ui/icon'
 import { StatusButton } from '#app/components/ui/status-button'
-import { type AppearanceType } from '#app/utils/appearances'
+import { appearanceMapping, type AppearanceType } from '#app/utils/appearances'
 import { useIsPending } from '#app/utils/misc'
 import { ArtboardAppearancesAddEditorSchema, INTENT } from './actions'
 import { type loader, type action } from './route'
@@ -34,7 +34,7 @@ export function AddArtboardAppearanceForm({
 }: {
 	artboard: SerializeFrom<Pick<Artboard, 'id'>>
 	artboardAppearances: Array<
-		Pick<Appearance, 'id' | 'name' | 'description' | 'type' | 'value'>
+		Pick<Appearance, 'id' | 'name' | 'description' | 'value'>
 	>
 	appearanceType: AppearanceType
 }) {
@@ -45,13 +45,15 @@ export function AddArtboardAppearanceForm({
 	)
 	const artboardAppearanceIds = artboardAppearances.map(artboard => artboard.id)
 
+	const appearanceTypeName = appearanceMapping[appearanceType].typeName
+
 	const fetcher = useFetcher()
 
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: 'add-artboard-appearance',
+		id: `add-artboard-appearance-${appearanceType}`,
 		lastSubmission: actionData?.submission,
 		onSubmit: (event, { formData }) => {
 			event.preventDefault()
@@ -79,7 +81,7 @@ export function AddArtboardAppearanceForm({
 		return (
 			<div className="flex items-center justify-between space-x-2">
 				<fieldset>
-					<legend className="mb-4 text-lg">Appearances</legend>
+					<legend className="mb-4 text-lg">{appearanceTypeName}s</legend>
 					{appearancesByType.map((appearance, i) => {
 						const checkboxProps = conform.input(fields.appearanceIds, {
 							type: 'checkbox',
@@ -112,15 +114,16 @@ export function AddArtboardAppearanceForm({
 			<DialogTrigger asChild>
 				<Button variant="outline">
 					<Icon name="plus" className="scale-125">
-						Add Palette
+						Add {appearanceTypeName}
 					</Icon>
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Add palette</DialogTitle>
+					<DialogTitle>Add {appearanceTypeName}</DialogTitle>
 					<DialogDescription>
-						Assign a palette to your artboard here. Click save when you're done.
+						Assign a {appearanceTypeName} to your artboard here. Click save when
+						you're done.
 					</DialogDescription>
 				</DialogHeader>
 				<div className="grid gap-4 py-4">

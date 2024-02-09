@@ -15,6 +15,10 @@ import {
 	SideNavWrapper,
 } from '#app/components/shared'
 import { Separator } from '#app/components/ui/separator'
+import {
+	type AppearanceType,
+	createEmptyAppearanceGroups,
+} from '#app/utils/appearances'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import {
@@ -68,18 +72,36 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	let url = new URL(request.url)
 	let artboard, artboardTimeAgo
+	const artboardAppearances = createEmptyAppearanceGroups()
+
 	const artboardId = url.searchParams.get('artboardId')
 	if (artboardId) {
 		artboard = await getArtboard(userId, artboardId)
 		if (artboard) {
 			const date = new Date(artboard.updatedAt)
 			artboardTimeAgo = formatDistanceToNow(date)
+
+			// group appearances on artboard by type
+			for (const appearance of artboard.appearances) {
+				const appType = appearance.appearance.type as AppearanceType
+				if (!artboardAppearances[appType]) {
+					artboardAppearances[appType] = []
+				}
+				artboardAppearances[appType].push(appearance)
+			}
 		}
 	}
 
+	// all appearances
 	const appearances = await getAppearances(userId)
 
-	return json({ owner, artboard, artboardTimeAgo, appearances })
+	return json({
+		owner,
+		artboard,
+		artboardTimeAgo,
+		artboardAppearances,
+		appearances,
+	})
 }
 
 export default function EditorRoute() {

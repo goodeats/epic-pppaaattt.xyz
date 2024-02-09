@@ -12,7 +12,8 @@ import {
 } from '#app/components/ui/accordion'
 import { Separator } from '#app/components/ui/separator'
 import { TabsContent, TabsList, TabsTrigger } from '#app/components/ui/tabs'
-import { AppearancesList } from './appearances-list'
+import { AppearanceType } from '#app/utils/appearances'
+import { AppearanceList } from './appearance-list'
 import { ArtboardBackgroundColorForm } from './artboard-background-color-form'
 import { ArtboardDimensionsForm } from './artboard-dimensions-form'
 import { type loader } from './route'
@@ -36,7 +37,7 @@ export const NavTabs = () => {
 
 const NavContentArtboard = () => {
 	const data = useLoaderData<typeof loader>()
-	const { artboard } = data
+	const { artboard, artboardAppearances } = data
 	if (!artboard) return null
 
 	const { project, description } = artboard
@@ -46,27 +47,70 @@ const NavContentArtboard = () => {
 			<SideNavTabText>{project.name}</SideNavTabText>
 			<SideNavTabText>{description}</SideNavTabText>
 			<Separator className="my-4" />
-			<Accordion
-				type="single"
-				collapsible
-				className="w-full"
-				defaultValue="appearances"
-			>
-				<AccordionItem value="attributes">
+
+			<SideNavTabText>Attributes</SideNavTabText>
+			<Accordion type="multiple" className="w-full">
+				<AccordionItem value="dimensions">
 					<AccordionTrigger className="bg-secondary px-4">
-						Attributes
+						Dimensions
 					</AccordionTrigger>
 					<AccordionContent>
 						<ArtboardDimensionsForm artboard={artboard} />
+					</AccordionContent>
+				</AccordionItem>
+				<AccordionItem value="background-color">
+					<AccordionTrigger className="bg-secondary px-4">
+						Background Color
+					</AccordionTrigger>
+					<AccordionContent>
 						<ArtboardBackgroundColorForm artboard={artboard} />
 					</AccordionContent>
 				</AccordionItem>
-				<AccordionItem value="appearances">
+			</Accordion>
+			<Separator className="my-4" />
+
+			<SideNavTabText>Appearances</SideNavTabText>
+			<Accordion
+				type="multiple"
+				className="w-full"
+				defaultValue={['palette', 'stroke-style']}
+			>
+				<AccordionItem value="palette">
 					<AccordionTrigger className="bg-secondary px-4">
-						Appearances
+						Palette
 					</AccordionTrigger>
 					<AccordionContent>
-						<AppearancesList />
+						<AppearanceList
+							artboard={artboard}
+							artboardAppearanceTypes={artboardAppearances.palette}
+							appearanceType={AppearanceType.Palette}
+						/>
+					</AccordionContent>
+				</AccordionItem>
+				<AccordionItem value="size">
+					<AccordionTrigger className="bg-secondary px-4">
+						Size
+					</AccordionTrigger>
+					<AccordionContent>
+						<AppearanceList
+							artboard={artboard}
+							artboardAppearanceTypes={artboardAppearances.size}
+							appearanceType={AppearanceType.Size}
+						/>
+					</AccordionContent>
+				</AccordionItem>
+				<AccordionItem value="stroke-style">
+					<AccordionTrigger className="bg-secondary px-4">
+						Stroke Style
+					</AccordionTrigger>
+					<AccordionContent>
+						<AppearanceList
+							artboard={artboard}
+							artboardAppearanceTypes={
+								artboardAppearances[AppearanceType.StrokeStyle]
+							}
+							appearanceType={AppearanceType.StrokeStyle}
+						/>
 					</AccordionContent>
 				</AccordionItem>
 			</Accordion>

@@ -6,7 +6,11 @@ const SideNavWrapper = ({ children }: { children: React.ReactNode }) => {
 }
 
 const SideNavContainer = ({ children }: { children: React.ReactNode }) => {
-	return <div className="absolute inset-0 flex flex-col">{children}</div>
+	return (
+		<div className="absolute inset-0 flex flex-col overflow-y-auto overflow-x-hidden">
+			{children}
+		</div>
+	)
 }
 
 const SideNavHeaderLink = ({

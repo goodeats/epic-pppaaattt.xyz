@@ -1,3 +1,5 @@
+import { type IAppearancesOnArtboard } from './db.server'
+
 // Define an enum for appearance types
 export enum AppearanceType {
 	Palette = 'palette',
@@ -7,6 +9,20 @@ export enum AppearanceType {
 	StrokeStyle = 'stroke-style',
 	LineWidth = 'line-width',
 	// Add other appearance types here
+}
+
+export const createEmptyAppearanceGroups = (): {
+	[key in AppearanceType]: any[]
+} => {
+	const groups: { [key in AppearanceType]: any[] } = {} as {
+		[key in AppearanceType]: any[]
+	}
+
+	for (const typeKey of Object.values(AppearanceType)) {
+		groups[typeKey] = []
+	}
+
+	return groups
 }
 
 // Define a type for mapping each appearance type to its slug, type name, and HTML canvas attribute
@@ -86,3 +102,8 @@ export const appearanceNavigation = [
 
 	// Add other appearances here
 ]
+
+// Defines a type for grouping appearances by their type, where each group contains an array of appearances on an artboard.
+export type GroupedAppearances = {
+	[K in AppearanceType]?: IAppearancesOnArtboard[]
+}

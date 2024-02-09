@@ -1,6 +1,14 @@
 import { remember } from '@epic-web/remember'
-import { type Artboard, PrismaClient, type Project } from '@prisma/client'
+import {
+	type Artboard,
+	PrismaClient,
+	type Project,
+	type Appearance,
+	type Layer,
+	type AppearancesOnArtboards,
+} from '@prisma/client'
 import chalk from 'chalk'
+import { type AppearanceType } from './appearances'
 
 export const prisma = remember('prisma', () => {
 	// NOTE: if you change anything in this function you'll need to restart
@@ -41,4 +49,15 @@ export interface IProject extends Project {
 
 export interface IArtboard extends Artboard {
 	project?: Project
+}
+
+export interface IAppearance extends Appearance {
+	type: AppearanceType
+	artboards?: IArtboard[]
+	layers?: Layer[]
+}
+
+export interface IAppearancesOnArtboard extends AppearancesOnArtboards {
+	appearance?: IAppearance
+	artboard?: IArtboard
 }
