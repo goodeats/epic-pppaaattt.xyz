@@ -1,4 +1,8 @@
-import { type AppearanceType, appearanceMapping } from '#app/utils/appearances'
+import {
+	type AppearanceType,
+	appearanceMapping,
+	type AppearanceValuesMap,
+} from '#app/utils/appearances'
 import { prisma } from '#app/utils/db.server'
 import { stringToSlug } from '#app/utils/misc'
 
@@ -414,6 +418,52 @@ export const toggleArtboardAppearanceVisibility = async (
 		// Return the updated artboard
 		return await prisma.artboard.findFirst({
 			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+	})
+}
+
+export const updateArtboardAppearanceValue = async (
+	userId: string,
+	appearanceId: string,
+	value: string,
+) => {
+	// Start a transaction
+	return await prisma.$transaction(async prisma => {
+		// get appearance
+		const appearance = await await prisma.appearance.findFirst({
+			where: { id: appearanceId, ownerId: userId },
+			select: {
+				id: true,
+				value: true,
+				slug: true,
+				type: true,
+				owner: { select: { username: true } },
+			},
+		})
+		if (!appearance) {
+			throw new Error('Appearance not found')
+		}
+
+		// get current appearance value
+		const appearanceType = appearance.type as AppearanceType
+		const currentValue = JSON.parse(
+			appearance.value,
+		) as AppearanceValuesMap[typeof appearanceType]
+
+		const newValue = {
+			...currentValue,
+			value,
+		}
+		// update appearance value
+		await prisma.appearance.updateMany({
+			where: { id: appearanceId, ownerId: userId },
+			data: { value: JSON.stringify(newValue) },
+		})
+
+		// Return the updated appearance
+		return await prisma.appearance.findFirst({
+			where: { id: appearanceId, ownerId: userId },
 			select: { id: true, slug: true, owner: { select: { username: true } } },
 		})
 	})

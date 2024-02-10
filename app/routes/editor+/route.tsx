@@ -29,6 +29,7 @@ import {
 	downloadArtboardCanvasAction,
 	removeArtboardAppearanceAction,
 	toggleArtboardAppearanceVisibilityAction,
+	updateArtboardAppearanceValueAction,
 	updateArtboardBackgroundColorAction,
 	updateArtboardDimensionsAction,
 } from './actions'
@@ -68,6 +69,9 @@ export async function action({ request }: DataFunctionArgs) {
 		// panel forms
 		case INTENT.createArtboardAppearance: {
 			return createArtboardAppearanceAction({ request, userId, formData })
+		}
+		case INTENT.updateArtboardAppearanceValue: {
+			return updateArtboardAppearanceValueAction({ request, userId, formData })
 		}
 		case INTENT.deleteArtboardAppearance: {
 			return deleteArtboardAppearanceAction({ request, userId, formData })

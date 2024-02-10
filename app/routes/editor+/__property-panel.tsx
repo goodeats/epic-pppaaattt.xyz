@@ -8,15 +8,13 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
-import {
-	type AppearanceType,
-	type AppearanceValuesMap,
-} from '#app/utils/appearances'
+import { type AppearanceType } from '#app/utils/appearances'
 import {
 	type IAppearance,
 	type IAppearancesOnArtboard,
 } from '#app/utils/db.server'
 import { DeleteAppearancePanelForm } from './__property-panel-delete-form'
+import { EditAppearanceValuePanelForm } from './__property-panel-edit-value'
 import { NewAppearancePanelForm } from './__property-panel-new-form'
 import { ToggleAppearanceVisibilityPanelForm } from './__property-panel-toggle-visibility-form'
 
@@ -57,15 +55,17 @@ export const PropertyPanel = ({
 				</div>
 			</PanelHeader>
 			{artboardAppearanceTypes.map(artboardAppearance => {
-				// console.log(artboardAppearance)
 				const { isVisible, appearance } = artboardAppearance
-				const value = JSON.parse(
-					appearance.value,
-				) as AppearanceValuesMap[typeof appearanceType]
 				return (
 					<PanelRow key={appearance.id}>
 						<PanelRowContainer>
-							<PanelRowValueContainer>{value.value}</PanelRowValueContainer>
+							<PanelRowValueContainer>
+								<EditAppearanceValuePanelForm
+									appearance={appearance}
+									appearanceType={appearanceType}
+									tooltipContent="Edit Value"
+								/>
+							</PanelRowValueContainer>
 							<PanelRowIconContainer>
 								<ToggleAppearanceVisibilityPanelForm
 									artboardId={artboard.id}

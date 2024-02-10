@@ -18,6 +18,7 @@ import {
 	deleteArtboardAppearance,
 	removeArtboardAppearance,
 	toggleArtboardAppearanceVisibility,
+	updateArtboardAppearanceValue,
 	updateArtboardAppearancesAdd,
 	updateArtboardBackgroundColor,
 	updateArtboardDimensions,
@@ -32,6 +33,7 @@ export const INTENT = {
 	removeArtboardAppearance: 'remove-artboard-appearance' as const,
 	// panel
 	createArtboardAppearance: 'create-artboard-appearance' as const,
+	updateArtboardAppearanceValue: 'update-artboard-appearance-value' as const,
 	deleteArtboardAppearance: 'delete-artboard-appearance' as const,
 	toggleArtboardAppearanceVisibility:
 		'toggle-artboard-appearance-visibility' as const,
@@ -447,6 +449,47 @@ export async function toggleArtboardAppearanceVisibilityAction({
 	const { artboardId, appearanceId } = submission.value
 
 	await toggleArtboardAppearanceVisibility(userId, artboardId, appearanceId)
+
+	return json({ status: 'success', submission } as const)
+}
+
+export const UpdateArtboardAppearanceValueSchema = z.object({
+	appearanceId: z.string(),
+	value: z.string(),
+})
+
+export async function updateArtboardAppearanceValueAction({
+	userId,
+	formData,
+}: EditorActionArgs) {
+	console.log('UPDATE ARTBOARD APPEARANCE VALUE ACTION')
+	const submission = await parse(formData, {
+		schema: UpdateArtboardAppearanceValueSchema.superRefine(
+			async (data, ctx) => {
+				const appearance = await prisma.appearance.findUnique({
+					select: { id: true },
+					where: { id: data.appearanceId, ownerId: userId },
+				})
+				if (!appearance) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Appearance not found',
+					})
+				}
+			},
+		),
+		async: true,
+	})
+	if (submission.intent !== 'submit') {
+		return json({ status: 'idle', submission } as const)
+	}
+	if (!submission.value) {
+		return json({ status: 'error', submission } as const, { status: 400 })
+	}
+
+	const { appearanceId, value } = submission.value
+
+	await updateArtboardAppearanceValue(userId, appearanceId, value)
 
 	return json({ status: 'success', submission } as const)
 }

@@ -39,11 +39,7 @@ const PanelRowValueContainer = ({
 }: {
 	children: React.ReactNode
 }) => {
-	return (
-		<div className="col-end-8 flex max-w-36 items-center bg-red-500">
-			{children}
-		</div>
-	)
+	return <div className="col-end-8 flex max-w-36 items-center">{children}</div>
 }
 
 const PanelRowIconContainer = ({ children }: { children: React.ReactNode }) => {

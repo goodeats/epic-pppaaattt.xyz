@@ -11,9 +11,9 @@ import {
 	TooltipContent,
 	TooltipProvider,
 } from '#app/components/ui/tooltip'
-import { type action } from '#app/root'
 import { useIsPending } from '#app/utils/misc'
 import { INTENT, ToggleArtboardAppearanceVisibilitySchema } from './actions'
+import { type action } from './route'
 
 export const ToggleAppearanceVisibilityPanelForm = ({
 	artboardId,
