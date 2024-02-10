@@ -13,6 +13,7 @@ import {
 	SideNavFormWrapper,
 } from '#app/components/shared'
 import { HoverCard } from '#app/components/ui/hover-card'
+import { Icon } from '#app/components/ui/icon'
 import { useIsPending } from '#app/utils/misc'
 import { ArtboardDimensionsEditorSchema, INTENT } from './actions'
 import { type action } from './route'
@@ -51,7 +52,13 @@ export const ArtboardDimensionsForm = ({
 	const FormWidth = () => {
 		return (
 			<Field
-				labelProps={{ children: 'Width' }}
+				labelProps={{
+					children: (
+						<Icon name="width" className="h-5 w-5">
+							W
+						</Icon>
+					),
+				}}
 				inputProps={{
 					...conform.input(fields.width, {
 						ariaAttributes: true,
@@ -71,7 +78,13 @@ export const ArtboardDimensionsForm = ({
 	const FormHeight = () => {
 		return (
 			<Field
-				labelProps={{ children: 'Height' }}
+				labelProps={{
+					children: (
+						<Icon name="height" className="h-5 w-5">
+							H
+						</Icon>
+					),
+				}}
 				inputProps={{
 					...conform.input(fields.height, {
 						ariaAttributes: true,

@@ -48,25 +48,10 @@ const NavContentArtboard = () => {
 			<SideNavTabText>{description}</SideNavTabText>
 			<Separator className="my-4" />
 
-			<SideNavTabText>Attributes</SideNavTabText>
-			<Accordion type="multiple" className="w-full">
-				<AccordionItem value="dimensions">
-					<AccordionTrigger className="bg-secondary px-4">
-						Dimensions
-					</AccordionTrigger>
-					<AccordionContent>
-						<ArtboardDimensionsForm artboard={artboard} />
-					</AccordionContent>
-				</AccordionItem>
-				<AccordionItem value="background-color">
-					<AccordionTrigger className="bg-secondary px-4">
-						Background Color
-					</AccordionTrigger>
-					<AccordionContent>
-						<ArtboardBackgroundColorForm artboard={artboard} />
-					</AccordionContent>
-				</AccordionItem>
-			</Accordion>
+			<SideNavTabText>Frame</SideNavTabText>
+			<ArtboardDimensionsForm artboard={artboard} />
+			<ArtboardBackgroundColorForm artboard={artboard} />
+
 			<Separator className="my-4" />
 
 			<SideNavTabText>Appearances</SideNavTabText>

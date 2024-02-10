@@ -30,6 +30,7 @@ export type IconName =
 	| 'file-plus'
 	| 'file-text'
 	| 'github-logo'
+	| 'height'
 	| 'instagram-logo'
 	| 'laptop'
 	| 'layers'
@@ -54,3 +55,4 @@ export type IconName =
 	| 'view-horizontal'
 	| 'view-none'
 	| 'view-vertical'
+	| 'width'
