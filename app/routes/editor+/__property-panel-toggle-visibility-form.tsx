@@ -30,7 +30,7 @@ export const ToggleAppearanceVisibilityPanelForm = ({
 	const isPending = useIsPending()
 
 	const [form] = useForm({
-		id: 'panel-toggle-artboard-appearance-visibility',
+		id: `panel-toggle-artboard-appearance-${appearanceId}-visibility`,
 		constraint: getFieldsetConstraint(ToggleArtboardAppearanceVisibilitySchema),
 	})
 

@@ -36,7 +36,6 @@ export const EditAppearanceValuePanelForm = ({
 	const value = JSON.parse(
 		appearance.value,
 	) as AppearanceValuesMap[typeof appearanceType]
-	console.log('value', value)
 
 	const [form, fields] = useForm({
 		id: `panel-update-artboard-appearance-${appearance.id}-value`,

@@ -28,7 +28,7 @@ export const DeleteAppearancePanelForm = ({
 	const isPending = useIsPending()
 
 	const [form] = useForm({
-		id: 'panel-delete-artboard-appearance',
+		id: `panel-delete-artboard-appearance-${appearanceId}`,
 		constraint: getFieldsetConstraint(DeleteArtboardAppearanceSchema),
 	})
 
