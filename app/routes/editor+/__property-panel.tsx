@@ -1,5 +1,10 @@
 import { type Artboard } from '@prisma/client'
-import { Panel, PanelHeader, PanelTitle } from '#app/components/shared'
+import {
+	Panel,
+	PanelHeader,
+	PanelRow,
+	PanelTitle,
+} from '#app/components/shared'
 import { type AppearanceType } from '#app/utils/appearances'
 import {
 	type IAppearance,
@@ -24,6 +29,7 @@ type PaletteListProps = {
 	appearanceType: AppearanceType
 }
 
+// Figma calls these property panels
 export const PropertyPanel = ({
 	title,
 	artboard,
@@ -39,9 +45,15 @@ export const PropertyPanel = ({
 					<NewAppearancePanelForm
 						artboardId={artboard.id}
 						appearanceType={appearanceType}
+						tooltipContent={`Add New ${title}`}
 					/>
 				</div>
 			</PanelHeader>
+			{artboardAppearanceTypes.map(appearance => {
+				return (
+					<PanelRow key={appearance.id}>{appearance.appearance.name}</PanelRow>
+				)
+			})}
 		</Panel>
 	)
 }
