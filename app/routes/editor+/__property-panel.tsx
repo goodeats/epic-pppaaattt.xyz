@@ -18,6 +18,7 @@ import {
 } from '#app/utils/db.server'
 import { DeleteAppearancePanelForm } from './__property-panel-delete-form'
 import { NewAppearancePanelForm } from './__property-panel-new-form'
+import { ToggleAppearanceVisibilityPanelForm } from './__property-panel-toggle-visibility-form'
 
 type PropertyPanelProps = {
 	title: string
@@ -57,7 +58,7 @@ export const PropertyPanel = ({
 			</PanelHeader>
 			{artboardAppearanceTypes.map(artboardAppearance => {
 				// console.log(artboardAppearance)
-				const { appearance } = artboardAppearance
+				const { isVisible, appearance } = artboardAppearance
 				const value = JSON.parse(
 					appearance.value,
 				) as AppearanceValuesMap[typeof appearanceType]
@@ -66,6 +67,12 @@ export const PropertyPanel = ({
 						<PanelRowContainer>
 							<PanelRowValueContainer>{value.value}</PanelRowValueContainer>
 							<PanelRowIconContainer>
+								<ToggleAppearanceVisibilityPanelForm
+									artboardId={artboard.id}
+									appearanceId={appearance.id}
+									isVisible={isVisible}
+									tooltipContent={isVisible ? 'Hide' : 'Show'}
+								/>
 								<DeleteAppearancePanelForm
 									artboardId={artboard.id}
 									appearanceId={appearance.id}

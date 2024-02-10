@@ -13,23 +13,25 @@ import {
 } from '#app/components/ui/tooltip'
 import { type action } from '#app/root'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT, DeleteArtboardAppearanceSchema } from './actions'
+import { INTENT, ToggleArtboardAppearanceVisibilitySchema } from './actions'
 
-export const DeleteAppearancePanelForm = ({
+export const ToggleAppearanceVisibilityPanelForm = ({
 	artboardId,
 	appearanceId,
+	isVisible,
 	tooltipContent,
 }: {
 	artboardId: Artboard['id']
 	appearanceId: Appearance['id']
+	isVisible: boolean
 	tooltipContent: string
 }) => {
 	const fetcher = useFetcher<typeof action>()
 	const isPending = useIsPending()
 
 	const [form] = useForm({
-		id: 'panel-delete-artboard-appearance',
-		constraint: getFieldsetConstraint(DeleteArtboardAppearanceSchema),
+		id: 'panel-toggle-artboard-appearance-visibility',
+		constraint: getFieldsetConstraint(ToggleArtboardAppearanceVisibilitySchema),
 	})
 
 	return (
@@ -41,7 +43,7 @@ export const DeleteAppearancePanelForm = ({
 			<input
 				type="hidden"
 				name="intent"
-				value={INTENT.deleteArtboardAppearance}
+				value={INTENT.toggleArtboardAppearanceVisibility}
 			/>
 			<div>
 				<TooltipProvider>
@@ -53,9 +55,15 @@ export const DeleteAppearancePanelForm = ({
 								className="flex h-8 w-8 cursor-pointer items-center justify-center"
 								disabled={isPending}
 							>
-								<Icon name="minus">
-									<span className="sr-only">Remove</span>
-								</Icon>
+								{isVisible ? (
+									<Icon name="eye-open">
+										<span className="sr-only">Hide</span>
+									</Icon>
+								) : (
+									<Icon name="eye-closed">
+										<span className="sr-only">Show</span>
+									</Icon>
+								)}
 							</Button>
 						</TooltipTrigger>
 						<TooltipContent>{tooltipContent}</TooltipContent>

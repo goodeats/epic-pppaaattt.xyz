@@ -17,6 +17,7 @@ import {
 	createArtboardAppearance,
 	deleteArtboardAppearance,
 	removeArtboardAppearance,
+	toggleArtboardAppearanceVisibility,
 	updateArtboardAppearancesAdd,
 	updateArtboardBackgroundColor,
 	updateArtboardDimensions,
@@ -32,6 +33,8 @@ export const INTENT = {
 	// panel
 	createArtboardAppearance: 'create-artboard-appearance' as const,
 	deleteArtboardAppearance: 'delete-artboard-appearance' as const,
+	toggleArtboardAppearanceVisibility:
+		'toggle-artboard-appearance-visibility' as const,
 }
 
 type EditorActionArgs = {
@@ -392,6 +395,58 @@ export async function removeArtboardAppearanceAction({
 	const { artboardId, appearanceId } = submission.value
 
 	await removeArtboardAppearance(userId, artboardId, appearanceId)
+
+	return json({ status: 'success', submission } as const)
+}
+
+export const ToggleArtboardAppearanceVisibilitySchema = z.object({
+	artboardId: z.string(),
+	appearanceId: z.string(),
+})
+
+export async function toggleArtboardAppearanceVisibilityAction({
+	userId,
+	formData,
+}: EditorActionArgs) {
+	console.log('TOGGLE ARTBOARD APPEARANCE VISIBILITY ACTION')
+	const submission = await parse(formData, {
+		schema: ToggleArtboardAppearanceVisibilitySchema.superRefine(
+			async (data, ctx) => {
+				const artboard = await prisma.artboard.findUnique({
+					select: { id: true },
+					where: { id: data.artboardId, ownerId: userId },
+				})
+				if (!artboard) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Artboard not found',
+					})
+				}
+
+				const appearance = await prisma.appearance.findUnique({
+					select: { id: true },
+					where: { id: data.appearanceId, ownerId: userId },
+				})
+				if (!appearance) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Appearance not found',
+					})
+				}
+			},
+		),
+		async: true,
+	})
+	if (submission.intent !== 'submit') {
+		return json({ status: 'idle', submission } as const)
+	}
+	if (!submission.value) {
+		return json({ status: 'error', submission } as const, { status: 400 })
+	}
+
+	const { artboardId, appearanceId } = submission.value
+
+	await toggleArtboardAppearanceVisibility(userId, artboardId, appearanceId)
 
 	return json({ status: 'success', submission } as const)
 }

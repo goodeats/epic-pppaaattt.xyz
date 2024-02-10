@@ -28,6 +28,7 @@ import {
 	deleteArtboardAppearanceAction,
 	downloadArtboardCanvasAction,
 	removeArtboardAppearanceAction,
+	toggleArtboardAppearanceVisibilityAction,
 	updateArtboardBackgroundColorAction,
 	updateArtboardDimensionsAction,
 } from './actions'
@@ -70,6 +71,13 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.deleteArtboardAppearance: {
 			return deleteArtboardAppearanceAction({ request, userId, formData })
+		}
+		case INTENT.toggleArtboardAppearanceVisibility: {
+			return toggleArtboardAppearanceVisibilityAction({
+				request,
+				userId,
+				formData,
+			})
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

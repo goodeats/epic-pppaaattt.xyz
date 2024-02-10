@@ -4,7 +4,7 @@ const Panel = ({ children }: { children: React.ReactNode }) => {
 
 const PanelRow = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<div className="relative  grid h-8 w-full grid-cols-12 grid-rows-1 items-center px-4">
+		<div className="relative grid h-8 w-full grid-cols-12 grid-rows-1 items-center px-4">
 			{children}
 		</div>
 	)
@@ -47,7 +47,7 @@ const PanelRowValueContainer = ({
 }
 
 const PanelRowIconContainer = ({ children }: { children: React.ReactNode }) => {
-	return <div className="flex flex-shrink items-center">{children}</div>
+	return <div className="flex flex-shrink-0 items-center">{children}</div>
 }
 
 export {

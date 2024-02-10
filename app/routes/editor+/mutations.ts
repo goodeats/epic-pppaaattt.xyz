@@ -379,3 +379,42 @@ export const deleteArtboardAppearance = async (
 		})
 	})
 }
+
+export const toggleArtboardAppearanceVisibility = async (
+	userId: string,
+	artboardId: string,
+	appearanceId: string,
+) => {
+	// Start a transaction
+	return await prisma.$transaction(async prisma => {
+		// get artboard
+		const artboard = await await prisma.artboard.findFirst({
+			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+		if (!artboard) {
+			throw new Error('Artboard not found')
+		}
+
+		// get artboard appearance
+		const artboardAppearance = await prisma.appearancesOnArtboards.findFirst({
+			where: { artboardId, appearanceId },
+			select: { isVisible: true },
+		})
+		if (!artboardAppearance) {
+			throw new Error('Appearance not found on artboard')
+		}
+
+		// toggle appearance visibility
+		await prisma.appearancesOnArtboards.updateMany({
+			where: { artboardId, appearanceId },
+			data: { isVisible: !artboardAppearance.isVisible },
+		})
+
+		// Return the updated artboard
+		return await prisma.artboard.findFirst({
+			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+	})
+}
