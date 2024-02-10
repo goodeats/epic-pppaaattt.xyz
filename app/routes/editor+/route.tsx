@@ -25,6 +25,7 @@ import {
 	INTENT,
 	addArtboardAppearancesAction,
 	createArtboardAppearanceAction,
+	deleteArtboardAppearanceAction,
 	downloadArtboardCanvasAction,
 	removeArtboardAppearanceAction,
 	updateArtboardBackgroundColorAction,
@@ -60,12 +61,15 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.addArtboardAppearances: {
 			return addArtboardAppearancesAction({ request, userId, formData })
 		}
+		case INTENT.removeArtboardAppearance: {
+			return removeArtboardAppearanceAction({ request, userId, formData })
+		}
+		// panel forms
 		case INTENT.createArtboardAppearance: {
 			return createArtboardAppearanceAction({ request, userId, formData })
 		}
-		case INTENT.removeArtboardAppearance: {
-			console.log('intent here')
-			return removeArtboardAppearanceAction({ request, userId, formData })
+		case INTENT.deleteArtboardAppearance: {
+			return deleteArtboardAppearanceAction({ request, userId, formData })
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

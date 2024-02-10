@@ -128,74 +128,6 @@ export const updateArtboardAppearancesAdd = async (
 	})
 }
 
-export const createArtboardAppearance = async (
-	userId: string,
-	artboardId: string,
-	appearanceType: string,
-) => {
-	// Start a transaction
-	return await prisma.$transaction(async prisma => {
-		// get artboard
-		const artboard = await await prisma.artboard.findFirst({
-			where: { id: artboardId, ownerId: userId },
-			select: { id: true, slug: true, owner: { select: { username: true } } },
-		})
-		if (!artboard) {
-			throw new Error('Artboard not found')
-		}
-
-		// get appearance default values by type
-		const appearanceTypeDefaultValues =
-			appearanceMapping[appearanceType as AppearanceType].defaultValues
-
-		// Get existing appearances on the artboard
-		const existingArtboardAppearances =
-			await prisma.appearancesOnArtboards.findMany({
-				where: { artboardId },
-				select: { appearanceId: true, order: true },
-				orderBy: { order: 'asc' },
-			})
-
-		// Calculate the starting index for new appearance
-		const newAppearanceOrderStart = existingArtboardAppearances.length
-
-		// create new appearance
-		const name = `${appearanceType}-${new Date().getTime()}`
-		const slug = stringToSlug(name)
-		const newAppearance = await prisma.appearance.create({
-			data: {
-				name,
-				slug,
-				type: appearanceType,
-				value: JSON.stringify(appearanceTypeDefaultValues),
-				ownerId: userId,
-			},
-		})
-		if (!newAppearance) {
-			throw new Error('Failed to create appearance')
-		}
-
-		// add new appearance to the artboard
-		await prisma.appearancesOnArtboards.create({
-			data: {
-				artboardId,
-				appearanceId: newAppearance.id,
-				order: newAppearanceOrderStart,
-			},
-		})
-
-		// Return the new appearance
-		return await prisma.appearance.findFirst({
-			where: { id: newAppearance.id },
-			select: {
-				id: true,
-				type: true,
-				value: true,
-			},
-		})
-	})
-}
-
 export const addArtboardAppearances = async (
 	userId: string,
 	artboardId: string,
@@ -305,6 +237,126 @@ export const removeArtboardAppearance = async (
 		// remove appearance from the artboard
 		await prisma.appearancesOnArtboards.deleteMany({
 			where: { artboardId, appearanceId },
+		})
+
+		// Update order for remaining appearances
+		const updateOrderPromises = existingArtboardAppearances.map(
+			(appearance, index) => {
+				return prisma.appearancesOnArtboards.updateMany({
+					where: { artboardId, appearanceId: appearance.appearanceId },
+					data: { order: index },
+				})
+			},
+		)
+
+		// Execute all operations
+		await Promise.all([...updateOrderPromises])
+
+		// Return the updated artboard
+		return await prisma.artboard.findFirst({
+			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+	})
+}
+
+// panel form mutations
+
+export const createArtboardAppearance = async (
+	userId: string,
+	artboardId: string,
+	appearanceType: string,
+) => {
+	// Start a transaction
+	return await prisma.$transaction(async prisma => {
+		// get artboard
+		const artboard = await await prisma.artboard.findFirst({
+			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+		if (!artboard) {
+			throw new Error('Artboard not found')
+		}
+
+		// get appearance default values by type
+		const appearanceTypeDefaultValues =
+			appearanceMapping[appearanceType as AppearanceType].defaultValues
+
+		// Get existing appearances on the artboard
+		const existingArtboardAppearances =
+			await prisma.appearancesOnArtboards.findMany({
+				where: { artboardId },
+				select: { appearanceId: true, order: true },
+				orderBy: { order: 'asc' },
+			})
+
+		// Calculate the starting index for new appearance
+		const newAppearanceOrderStart = existingArtboardAppearances.length
+
+		// create new appearance
+		const name = `${appearanceType}-${new Date().getTime()}`
+		const slug = stringToSlug(name)
+		const newAppearance = await prisma.appearance.create({
+			data: {
+				name,
+				slug,
+				type: appearanceType,
+				value: JSON.stringify(appearanceTypeDefaultValues),
+				ownerId: userId,
+			},
+		})
+		if (!newAppearance) {
+			throw new Error('Failed to create appearance')
+		}
+
+		// add new appearance to the artboard
+		await prisma.appearancesOnArtboards.create({
+			data: {
+				artboardId,
+				appearanceId: newAppearance.id,
+				order: newAppearanceOrderStart,
+			},
+		})
+
+		// Return the new appearance
+		return await prisma.appearance.findFirst({
+			where: { id: newAppearance.id },
+			select: {
+				id: true,
+				type: true,
+				value: true,
+			},
+		})
+	})
+}
+
+export const deleteArtboardAppearance = async (
+	userId: string,
+	artboardId: string,
+	appearanceId: string,
+) => {
+	// Start a transaction
+	return await prisma.$transaction(async prisma => {
+		// get artboard
+		const artboard = await await prisma.artboard.findFirst({
+			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+		if (!artboard) {
+			throw new Error('Artboard not found')
+		}
+
+		// Get existing appearances on the artboard
+		const existingArtboardAppearances =
+			await prisma.appearancesOnArtboards.findMany({
+				where: { artboardId },
+				select: { appearanceId: true, order: true },
+				orderBy: { order: 'asc' },
+			})
+
+		// remove appearance that only belonged to the artboard
+		await prisma.appearance.deleteMany({
+			where: { id: appearanceId, ownerId: userId },
 		})
 
 		// Update order for remaining appearances

@@ -10,12 +10,18 @@ const PanelRow = ({ children }: { children: React.ReactNode }) => {
 	)
 }
 
+const PanelRowContainer = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<div className="col-start-1 col-end-13 flex items-center justify-between">
+			{children}
+		</div>
+	)
+}
+
 const PanelHeader = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<PanelRow>
-			<div className="col-start-1 col-end-13 flex items-center justify-between">
-				{children}
-			</div>
+			<PanelRowContainer>{children}</PanelRowContainer>
 		</PanelRow>
 	)
 }
@@ -28,4 +34,28 @@ const PanelTitle = ({ children }: { children: React.ReactNode }) => {
 	)
 }
 
-export { Panel, PanelRow, PanelHeader, PanelTitle }
+const PanelRowValueContainer = ({
+	children,
+}: {
+	children: React.ReactNode
+}) => {
+	return (
+		<div className="col-end-8 flex max-w-36 items-center bg-red-500">
+			{children}
+		</div>
+	)
+}
+
+const PanelRowIconContainer = ({ children }: { children: React.ReactNode }) => {
+	return <div className="flex flex-shrink items-center">{children}</div>
+}
+
+export {
+	Panel,
+	PanelRow,
+	PanelRowContainer,
+	PanelHeader,
+	PanelTitle,
+	PanelRowValueContainer,
+	PanelRowIconContainer,
+}

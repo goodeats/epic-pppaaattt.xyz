@@ -15,6 +15,7 @@ import {
 import {
 	addArtboardAppearances,
 	createArtboardAppearance,
+	deleteArtboardAppearance,
 	removeArtboardAppearance,
 	updateArtboardAppearancesAdd,
 	updateArtboardBackgroundColor,
@@ -30,6 +31,7 @@ export const INTENT = {
 	removeArtboardAppearance: 'remove-artboard-appearance' as const,
 	// panel
 	createArtboardAppearance: 'create-artboard-appearance' as const,
+	deleteArtboardAppearance: 'delete-artboard-appearance' as const,
 }
 
 type EditorActionArgs = {
@@ -247,6 +249,56 @@ export async function createArtboardAppearanceAction({
 	const { artboardId, appearanceType } = submission.value
 
 	await createArtboardAppearance(userId, artboardId, appearanceType)
+
+	return json({ status: 'success', submission } as const)
+}
+
+export const DeleteArtboardAppearanceSchema = z.object({
+	artboardId: z.string(),
+	appearanceId: z.string(),
+})
+
+export async function deleteArtboardAppearanceAction({
+	userId,
+	formData,
+}: EditorActionArgs) {
+	console.log('DELETE ARTBOARD APPEARANCE ACTION')
+	const submission = await parse(formData, {
+		schema: DeleteArtboardAppearanceSchema.superRefine(async (data, ctx) => {
+			const artboard = await prisma.artboard.findUnique({
+				select: { id: true },
+				where: { id: data.artboardId, ownerId: userId },
+			})
+			if (!artboard) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Artboard not found',
+				})
+			}
+
+			const appearance = await prisma.appearance.findUnique({
+				select: { id: true },
+				where: { id: data.appearanceId, ownerId: userId },
+			})
+			if (!appearance) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Appearance not found',
+				})
+			}
+		}),
+		async: true,
+	})
+	if (submission.intent !== 'submit') {
+		return json({ status: 'idle', submission } as const)
+	}
+	if (!submission.value) {
+		return json({ status: 'error', submission } as const, { status: 400 })
+	}
+
+	const { artboardId, appearanceId } = submission.value
+
+	await deleteArtboardAppearance(userId, artboardId, appearanceId)
 
 	return json({ status: 'success', submission } as const)
 }

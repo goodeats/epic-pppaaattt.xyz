@@ -3,6 +3,9 @@ import {
 	Panel,
 	PanelHeader,
 	PanelRow,
+	PanelRowContainer,
+	PanelRowIconContainer,
+	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
 import {
@@ -13,7 +16,8 @@ import {
 	type IAppearance,
 	type IAppearancesOnArtboard,
 } from '#app/utils/db.server'
-import { NewAppearancePanelForm } from './__property-panel-add-new'
+import { DeleteAppearancePanelForm } from './__property-panel-delete-form'
+import { NewAppearancePanelForm } from './__property-panel-new-form'
 
 type PropertyPanelProps = {
 	title: string
@@ -52,12 +56,25 @@ export const PropertyPanel = ({
 				</div>
 			</PanelHeader>
 			{artboardAppearanceTypes.map(artboardAppearance => {
+				// console.log(artboardAppearance)
 				const { appearance } = artboardAppearance
 				const value = JSON.parse(
 					appearance.value,
 				) as AppearanceValuesMap[typeof appearanceType]
-
-				return <PanelRow key={artboardAppearance.id}>{value.value}</PanelRow>
+				return (
+					<PanelRow key={appearance.id}>
+						<PanelRowContainer>
+							<PanelRowValueContainer>{value.value}</PanelRowValueContainer>
+							<PanelRowIconContainer>
+								<DeleteAppearancePanelForm
+									artboardId={artboard.id}
+									appearanceId={appearance.id}
+									tooltipContent="Delete"
+								/>
+							</PanelRowIconContainer>
+						</PanelRowContainer>
+					</PanelRow>
+				)
 			})}
 		</Panel>
 	)
