@@ -1,4 +1,6 @@
+import { type AppearanceType, appearanceMapping } from '#app/utils/appearances'
 import { prisma } from '#app/utils/db.server'
+import { stringToSlug } from '#app/utils/misc'
 
 export const updateArtboardDimensions = async (
 	userId: string,
@@ -122,6 +124,74 @@ export const updateArtboardAppearancesAdd = async (
 		return await prisma.artboard.findFirst({
 			where: { id: artboardId, ownerId: userId },
 			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+	})
+}
+
+export const createArtboardAppearance = async (
+	userId: string,
+	artboardId: string,
+	appearanceType: string,
+) => {
+	// Start a transaction
+	return await prisma.$transaction(async prisma => {
+		// get artboard
+		const artboard = await await prisma.artboard.findFirst({
+			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+		if (!artboard) {
+			throw new Error('Artboard not found')
+		}
+
+		// get appearance default values by type
+		const appearanceTypeDefaultValues =
+			appearanceMapping[appearanceType as AppearanceType].defaultValues
+
+		// Get existing appearances on the artboard
+		const existingArtboardAppearances =
+			await prisma.appearancesOnArtboards.findMany({
+				where: { artboardId },
+				select: { appearanceId: true, order: true },
+				orderBy: { order: 'asc' },
+			})
+
+		// Calculate the starting index for new appearance
+		const newAppearanceOrderStart = existingArtboardAppearances.length
+
+		// create new appearance
+		const name = `${appearanceType}-${new Date().getTime()}`
+		const slug = stringToSlug(name)
+		const newAppearance = await prisma.appearance.create({
+			data: {
+				name,
+				slug,
+				type: appearanceType,
+				value: JSON.stringify(appearanceTypeDefaultValues),
+				ownerId: userId,
+			},
+		})
+		if (!newAppearance) {
+			throw new Error('Failed to create appearance')
+		}
+
+		// add new appearance to the artboard
+		await prisma.appearancesOnArtboards.create({
+			data: {
+				artboardId,
+				appearanceId: newAppearance.id,
+				order: newAppearanceOrderStart,
+			},
+		})
+
+		// Return the new appearance
+		return await prisma.appearance.findFirst({
+			where: { id: newAppearance.id },
+			select: {
+				id: true,
+				type: true,
+				value: true,
+			},
 		})
 	})
 }

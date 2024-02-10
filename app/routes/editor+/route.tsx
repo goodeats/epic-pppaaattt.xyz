@@ -24,6 +24,7 @@ import { validateCSRF } from '#app/utils/csrf.server'
 import {
 	INTENT,
 	addArtboardAppearancesAction,
+	createArtboardAppearanceAction,
 	downloadArtboardCanvasAction,
 	removeArtboardAppearanceAction,
 	updateArtboardBackgroundColorAction,
@@ -58,6 +59,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.addArtboardAppearances: {
 			return addArtboardAppearancesAction({ request, userId, formData })
+		}
+		case INTENT.createArtboardAppearance: {
+			return createArtboardAppearanceAction({ request, userId, formData })
 		}
 		case INTENT.removeArtboardAppearance: {
 			console.log('intent here')

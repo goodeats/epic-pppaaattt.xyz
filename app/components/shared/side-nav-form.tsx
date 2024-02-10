@@ -1,7 +1,7 @@
 import { HoverCardContent, HoverCardTrigger } from '../ui/hover-card'
 
 const SideNavFormWrapper = ({ children }: { children: React.ReactNode }) => {
-	return <div className="grid gap-2 pt-2">{children}</div>
+	return <div className="grid gap-2">{children}</div>
 }
 
 const SideNavFormHoverTrigger = ({

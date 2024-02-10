@@ -4,16 +4,10 @@ import {
 	SideNavTabText,
 	SideNavTabsWrapper,
 } from '#app/components/shared'
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from '#app/components/ui/accordion'
 import { Separator } from '#app/components/ui/separator'
 import { TabsContent, TabsList, TabsTrigger } from '#app/components/ui/tabs'
-import { AppearanceType } from '#app/utils/appearances'
-import { AppearanceList } from './appearance-list'
+import { AppearanceType, appearanceMapping } from '#app/utils/appearances'
+import { PropertyPanel } from './__property-panel'
 import { ArtboardBackgroundColorForm } from './artboard-background-color-form'
 import { ArtboardDimensionsForm } from './artboard-dimensions-form'
 import { type loader } from './route'
@@ -53,8 +47,16 @@ const NavContentArtboard = () => {
 			<ArtboardBackgroundColorForm artboard={artboard} />
 
 			<Separator className="my-4" />
+			<div className="flex-dir-col flex">
+				<PropertyPanel
+					title={appearanceMapping[AppearanceType.Palette].typeName}
+					artboard={artboard}
+					artboardAppearanceTypes={artboardAppearances.palette}
+					appearanceType={AppearanceType.Palette}
+				/>
+			</div>
 
-			<SideNavTabText>Appearances</SideNavTabText>
+			{/* <SideNavTabText>Appearances</SideNavTabText>
 			<Accordion
 				type="multiple"
 				className="w-full"
@@ -98,7 +100,7 @@ const NavContentArtboard = () => {
 						/>
 					</AccordionContent>
 				</AccordionItem>
-			</Accordion>
+			</Accordion> */}
 		</SideNavTabContent>
 	)
 }

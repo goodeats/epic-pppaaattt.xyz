@@ -1,6 +1,7 @@
 import { parse } from '@conform-to/zod'
 import { json } from '@remix-run/node'
 import { z } from 'zod'
+import { AppearanceType } from '#app/utils/appearances'
 import {
 	formatSringsToHex,
 	validateStringsAreHexcodes,
@@ -13,6 +14,7 @@ import {
 } from '#app/utils/string-formatting'
 import {
 	addArtboardAppearances,
+	createArtboardAppearance,
 	removeArtboardAppearance,
 	updateArtboardAppearancesAdd,
 	updateArtboardBackgroundColor,
@@ -26,6 +28,8 @@ export const INTENT = {
 	updateArtboardAppearancesAdd: 'update-artboard-appearances-add' as const, // deprecated
 	addArtboardAppearances: 'add-artboard-appearances' as const,
 	removeArtboardAppearance: 'remove-artboard-appearance' as const,
+	// panel
+	createArtboardAppearance: 'create-artboard-appearance' as const,
 }
 
 type EditorActionArgs = {
@@ -204,6 +208,45 @@ export async function updateArtboardAppearancesAddAction({
 	const { artboardId, appearanceIds } = submission.value
 
 	await updateArtboardAppearancesAdd(userId, artboardId, appearanceIds)
+
+	return json({ status: 'success', submission } as const)
+}
+
+export const NewArtboardAppearanceSchema = z.object({
+	artboardId: z.string(),
+	appearanceType: z.nativeEnum(AppearanceType),
+})
+
+export async function createArtboardAppearanceAction({
+	userId,
+	formData,
+}: EditorActionArgs) {
+	console.log('CREATE ARTBOARD APPEARANCE ACTION')
+	const submission = await parse(formData, {
+		schema: NewArtboardAppearanceSchema.superRefine(async (data, ctx) => {
+			const artboard = await prisma.artboard.findUnique({
+				select: { id: true },
+				where: { id: data.artboardId, ownerId: userId },
+			})
+			if (!artboard) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Artboard not found',
+				})
+			}
+		}),
+		async: true,
+	})
+	if (submission.intent !== 'submit') {
+		return json({ status: 'idle', submission } as const)
+	}
+	if (!submission.value) {
+		return json({ status: 'error', submission } as const, { status: 400 })
+	}
+
+	const { artboardId, appearanceType } = submission.value
+
+	await createArtboardAppearance(userId, artboardId, appearanceType)
 
 	return json({ status: 'success', submission } as const)
 }

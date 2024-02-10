@@ -9,7 +9,7 @@ const SideNavTabsWrapper = ({
 }) => {
 	return (
 		<Tabs defaultValue={defaultValue} className="flex-1">
-			<div className="container h-full py-6">
+			<div className="container h-full px-2 py-6">
 				<div className="grid h-full items-stretch gap-6">
 					<div className="hidden flex-col space-y-4 sm:flex md:order-2">
 						{children}

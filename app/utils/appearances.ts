@@ -30,6 +30,7 @@ export type AppearanceMapping = {
 	[key in AppearanceType]: {
 		slug: string
 		typeName: string
+		defaultValues: any
 	}
 }
 
@@ -38,26 +39,32 @@ export const appearanceMapping: AppearanceMapping = {
 	[AppearanceType.Palette]: {
 		slug: 'palette',
 		typeName: 'Palette',
+		defaultValues: { format: 'hex', value: '#000000', opacity: 1 },
 	},
 	[AppearanceType.Size]: {
 		slug: 'size',
 		typeName: 'Size',
+		defaultValues: { unit: '%', value: 10, basis: 'width' },
 	},
 	[AppearanceType.Rotate]: {
 		slug: 'rotate',
 		typeName: 'Rotate',
+		defaultValues: { unit: 'deg', value: 0 },
 	},
 	[AppearanceType.FillStyle]: {
 		slug: 'fill-style',
 		typeName: 'FillStyle',
+		defaultValues: { style: 'solid', value: '#000000', opacity: 1 },
 	},
 	[AppearanceType.StrokeStyle]: {
 		slug: 'stroke-style',
 		typeName: 'StrokeStyle',
+		defaultValues: { style: 'solid', value: '#000000', opacity: 1 },
 	},
 	[AppearanceType.LineWidth]: {
 		slug: 'line-width',
 		typeName: 'LineWidth',
+		defaultValues: { value: '3' },
 	},
 	// Add other mappings here
 }
