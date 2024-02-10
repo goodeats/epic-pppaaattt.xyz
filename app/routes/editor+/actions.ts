@@ -12,6 +12,8 @@ import {
 	trimSpacesInBetween,
 } from '#app/utils/string-formatting'
 import {
+	addArtboardAppearances,
+	removeArtboardAppearance,
 	updateArtboardAppearancesAdd,
 	updateArtboardBackgroundColor,
 	updateArtboardDimensions,
@@ -21,7 +23,9 @@ export const INTENT = {
 	downloadArtboardCanvas: 'download-artboard-canvas' as const,
 	updateArtboardDimensions: 'update-artboard-dimensions' as const,
 	updateArtboardBackgroundColor: 'update-artboard-background-color' as const,
-	updateArtboardAppearancesAdd: 'update-artboard-appearances-add' as const,
+	updateArtboardAppearancesAdd: 'update-artboard-appearances-add' as const, // deprecated
+	addArtboardAppearances: 'add-artboard-appearances' as const,
+	removeArtboardAppearance: 'remove-artboard-appearance' as const,
 }
 
 type EditorActionArgs = {
@@ -200,6 +204,99 @@ export async function updateArtboardAppearancesAddAction({
 	const { artboardId, appearanceIds } = submission.value
 
 	await updateArtboardAppearancesAdd(userId, artboardId, appearanceIds)
+
+	return json({ status: 'success', submission } as const)
+}
+
+export const AddArtboardAppearancesEditorSchema = z.object({
+	artboardId: z.string(),
+	appearanceIds: z.string().array(),
+})
+
+export async function addArtboardAppearancesAction({
+	userId,
+	formData,
+}: EditorActionArgs) {
+	console.log('ADD ARTBOARD APPEARANCES ACTION')
+	const submission = await parse(formData, {
+		schema: AddArtboardAppearancesEditorSchema.superRefine(
+			async (data, ctx) => {
+				const artboard = await prisma.artboard.findUnique({
+					select: { id: true },
+					where: { id: data.artboardId, ownerId: userId },
+				})
+				if (!artboard) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Artboard not found',
+					})
+				}
+			},
+		),
+		async: true,
+	})
+	if (submission.intent !== 'submit') {
+		return json({ status: 'idle', submission } as const)
+	}
+	if (!submission.value) {
+		return json({ status: 'error', submission } as const, { status: 400 })
+	}
+
+	const { artboardId, appearanceIds } = submission.value
+
+	await addArtboardAppearances(userId, artboardId, appearanceIds)
+
+	return json({ status: 'success', submission } as const)
+}
+
+export const RemoveArtboardAppearanceEditorSchema = z.object({
+	artboardId: z.string(),
+	appearanceId: z.string(),
+})
+
+export async function removeArtboardAppearanceAction({
+	userId,
+	formData,
+}: EditorActionArgs) {
+	console.log('REMOVE ARTBOARD APPEARANCES ACTION')
+	const submission = await parse(formData, {
+		schema: RemoveArtboardAppearanceEditorSchema.superRefine(
+			async (data, ctx) => {
+				const artboard = await prisma.artboard.findUnique({
+					select: { id: true },
+					where: { id: data.artboardId, ownerId: userId },
+				})
+				if (!artboard) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Artboard not found',
+					})
+				}
+
+				const appearance = await prisma.appearance.findUnique({
+					select: { id: true },
+					where: { id: data.appearanceId, ownerId: userId },
+				})
+				if (!appearance) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Appearance not found',
+					})
+				}
+			},
+		),
+		async: true,
+	})
+	if (submission.intent !== 'submit') {
+		return json({ status: 'idle', submission } as const)
+	}
+	if (!submission.value) {
+		return json({ status: 'error', submission } as const, { status: 400 })
+	}
+
+	const { artboardId, appearanceId } = submission.value
+
+	await removeArtboardAppearance(userId, artboardId, appearanceId)
 
 	return json({ status: 'success', submission } as const)
 }

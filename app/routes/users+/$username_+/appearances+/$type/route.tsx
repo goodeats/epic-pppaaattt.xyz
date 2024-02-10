@@ -22,7 +22,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 			image: { select: { id: true } },
 			appearances: {
 				select: { slug: true, name: true },
-				where: { type },
+				where: { type, global: true },
 			},
 		},
 		where: { username: params.username },

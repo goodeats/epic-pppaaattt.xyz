@@ -23,8 +23,9 @@ import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import {
 	INTENT,
+	addArtboardAppearancesAction,
 	downloadArtboardCanvasAction,
-	updateArtboardAppearancesAddAction,
+	removeArtboardAppearanceAction,
 	updateArtboardBackgroundColorAction,
 	updateArtboardDimensionsAction,
 } from './actions'
@@ -55,8 +56,12 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.updateArtboardBackgroundColor: {
 			return updateArtboardBackgroundColorAction({ request, userId, formData })
 		}
-		case INTENT.updateArtboardAppearancesAdd: {
-			return updateArtboardAppearancesAddAction({ request, userId, formData })
+		case INTENT.addArtboardAppearances: {
+			return addArtboardAppearancesAction({ request, userId, formData })
+		}
+		case INTENT.removeArtboardAppearance: {
+			console.log('intent here')
+			return removeArtboardAppearanceAction({ request, userId, formData })
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

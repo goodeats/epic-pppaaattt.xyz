@@ -58,16 +58,16 @@ export const meta: MetaFunction<
 		m => m.id === 'routes/users+/$username_+/artboards',
 	)
 	const displayName = metaMatch?.data?.owner.name ?? params.username
-	const metaTitle = data?.artboard.name ?? 'Artboard'
-	const metaDescriptionSummary =
-		data && data.artboard.description.length > 100
-			? data?.artboard.description.slice(0, 97) + '...'
-			: 'No description'
+	const entityTitle = data?.artboard.name ?? 'Artboard'
+	const entityDescriptionSummary =
+		data?.artboard.description && data.artboard.description.length > 100
+			? data.artboard.description.slice(0, 97) + '...'
+			: data?.artboard.description || 'No description'
 	return [
-		{ title: `Edit ${metaTitle} | ${displayName}'s Artboards | XYZ` },
+		{ title: `Edit ${entityTitle} | ${displayName}'s Artboards | XYZ` },
 		{
 			name: 'description',
-			content: metaDescriptionSummary,
+			content: entityDescriptionSummary,
 		},
 	]
 }

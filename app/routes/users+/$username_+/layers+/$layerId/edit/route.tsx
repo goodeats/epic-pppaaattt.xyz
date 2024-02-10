@@ -47,9 +47,9 @@ export const meta: MetaFunction<
 	const displayName = entitiessMatch?.data?.owner.name ?? params.username
 	const entityTitle = data?.layer.name ?? 'Layer'
 	const entityDescriptionSummary =
-		data && data.layer.description.length > 100
-			? data?.layer.description.slice(0, 97) + '...'
-			: 'No description'
+		data?.layer.description && data.layer.description.length > 100
+			? data.layer.description.slice(0, 97) + '...'
+			: data?.layer.description || 'No description'
 	return [
 		{ title: `Edit ${entityTitle} | ${displayName}'s Layers | XYZ` },
 		{

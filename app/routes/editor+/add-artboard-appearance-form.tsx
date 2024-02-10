@@ -25,7 +25,7 @@ import { Icon } from '#app/components/ui/icon'
 import { StatusButton } from '#app/components/ui/status-button'
 import { appearanceMapping, type AppearanceType } from '#app/utils/appearances'
 import { useIsPending } from '#app/utils/misc'
-import { ArtboardAppearancesAddEditorSchema, INTENT } from './actions'
+import { AddArtboardAppearancesEditorSchema, INTENT } from './actions'
 import { type loader, type action } from './route'
 
 export function AddArtboardAppearanceForm({
@@ -67,7 +67,7 @@ export function AddArtboardAppearanceForm({
 			event.preventDefault()
 
 			const submission = parse(formData, {
-				schema: ArtboardAppearancesAddEditorSchema,
+				schema: AddArtboardAppearancesEditorSchema,
 			})
 			if (!submission.value) {
 				console.warn('no submission', submission)
@@ -146,7 +146,7 @@ export function AddArtboardAppearanceForm({
 							<input
 								type="hidden"
 								name="intent"
-								value={INTENT.updateArtboardAppearancesAdd}
+								value={INTENT.addArtboardAppearances}
 							/>
 							<DialogFormFieldsContainer className="grid-cols-1">
 								<Appearances />

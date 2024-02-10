@@ -77,6 +77,8 @@ export async function action({ request }: ActionFunctionArgs) {
 			slug,
 			type,
 			value,
+			// this is a global appearance
+			global: true,
 		},
 	})
 
