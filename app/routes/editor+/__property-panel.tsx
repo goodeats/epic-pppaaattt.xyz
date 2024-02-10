@@ -5,14 +5,17 @@ import {
 	PanelRow,
 	PanelTitle,
 } from '#app/components/shared'
-import { type AppearanceType } from '#app/utils/appearances'
+import {
+	type AppearanceType,
+	type AppearanceValuesMap,
+} from '#app/utils/appearances'
 import {
 	type IAppearance,
 	type IAppearancesOnArtboard,
 } from '#app/utils/db.server'
 import { NewAppearancePanelForm } from './__property-panel-add-new'
 
-type PaletteListProps = {
+type PropertyPanelProps = {
 	title: string
 	artboard: Pick<Artboard, 'id' | 'name'>
 	artboardAppearanceTypes: Array<
@@ -35,8 +38,7 @@ export const PropertyPanel = ({
 	artboard,
 	artboardAppearanceTypes,
 	appearanceType,
-}: PaletteListProps) => {
-	console.log('artboardAppearanceTypes', artboardAppearanceTypes)
+}: PropertyPanelProps) => {
 	return (
 		<Panel>
 			<PanelHeader>
@@ -49,10 +51,13 @@ export const PropertyPanel = ({
 					/>
 				</div>
 			</PanelHeader>
-			{artboardAppearanceTypes.map(appearance => {
-				return (
-					<PanelRow key={appearance.id}>{appearance.appearance.name}</PanelRow>
-				)
+			{artboardAppearanceTypes.map(artboardAppearance => {
+				const { appearance } = artboardAppearance
+				const value = JSON.parse(
+					appearance.value,
+				) as AppearanceValuesMap[typeof appearanceType]
+
+				return <PanelRow key={artboardAppearance.id}>{value.value}</PanelRow>
 			})}
 		</Panel>
 	)

@@ -1,5 +1,3 @@
-import { type IAppearancesOnArtboard } from './db.server'
-
 // Define an enum for appearance types
 export enum AppearanceType {
 	Palette = 'palette',
@@ -39,32 +37,53 @@ export const appearanceMapping: AppearanceMapping = {
 	[AppearanceType.Palette]: {
 		slug: 'palette',
 		typeName: 'Palette',
-		defaultValues: { format: 'hex', value: '#000000', opacity: 1 },
+		defaultValues: validateAppearanceTypeValues(AppearanceType.Palette, {
+			format: 'hex',
+			value: '#000000',
+			opacity: 1,
+		}),
 	},
 	[AppearanceType.Size]: {
 		slug: 'size',
 		typeName: 'Size',
-		defaultValues: { unit: '%', value: 10, basis: 'width' },
+		defaultValues: validateAppearanceTypeValues(AppearanceType.Size, {
+			unit: '%',
+			value: 10,
+			basis: 'width',
+		}),
 	},
 	[AppearanceType.Rotate]: {
 		slug: 'rotate',
 		typeName: 'Rotate',
-		defaultValues: { unit: 'deg', value: 0 },
+		defaultValues: validateAppearanceTypeValues(AppearanceType.Rotate, {
+			unit: 'deg',
+			value: 0,
+		}),
 	},
 	[AppearanceType.FillStyle]: {
 		slug: 'fill-style',
 		typeName: 'FillStyle',
-		defaultValues: { style: 'solid', value: '#000000', opacity: 1 },
+		defaultValues: validateAppearanceTypeValues(AppearanceType.FillStyle, {
+			style: 'solid',
+			value: '#000000',
+			opacity: 1,
+		}),
 	},
 	[AppearanceType.StrokeStyle]: {
 		slug: 'stroke-style',
 		typeName: 'StrokeStyle',
-		defaultValues: { style: 'solid', value: '#000000', opacity: 1 },
+		defaultValues: validateAppearanceTypeValues(AppearanceType.StrokeStyle, {
+			style: 'solid',
+			value: '#000000',
+			opacity: 1,
+		}),
 	},
 	[AppearanceType.LineWidth]: {
 		slug: 'line-width',
 		typeName: 'LineWidth',
-		defaultValues: { value: '3' },
+		defaultValues: validateAppearanceTypeValues(AppearanceType.LineWidth, {
+			value: '3',
+		}),
 	},
 	// Add other mappings here
 }
@@ -110,7 +129,53 @@ export const appearanceNavigation = [
 	// Add other appearances here
 ]
 
-// Defines a type for grouping appearances by their type, where each group contains an array of appearances on an artboard.
-export type GroupedAppearances = {
-	[K in AppearanceType]?: IAppearancesOnArtboard[]
+export interface PaletteValues {
+	format: 'hex'
+	value: string
+	opacity: number
+}
+
+export interface SizeValues {
+	unit: '%' | 'px'
+	value: number
+	basis: 'width' | 'height'
+}
+
+export interface RotateValues {
+	unit: 'deg'
+	value: number
+}
+
+export interface FillStyleValues {
+	style: 'solid' | 'gradient'
+	value: string
+	opacity: number
+}
+
+export interface StrokeStyleValues {
+	style: 'solid' | 'gradient'
+	value: string
+	opacity: number
+}
+
+export interface LineWidthValues {
+	value: string
+}
+
+// Map appearance types to their values interfaces
+export type AppearanceValuesMap = {
+	[AppearanceType.Palette]: PaletteValues
+	[AppearanceType.Size]: SizeValues
+	[AppearanceType.Rotate]: RotateValues
+	[AppearanceType.FillStyle]: FillStyleValues
+	[AppearanceType.StrokeStyle]: StrokeStyleValues
+	[AppearanceType.LineWidth]: LineWidthValues
+	// Extend this map as you add more appearance types and values interfaces
+}
+
+// Define a generic function to enforce default value conformity
+export function validateAppearanceTypeValues<
+	T extends keyof AppearanceValuesMap,
+>(type: T, values: AppearanceValuesMap[T]): AppearanceValuesMap[T] {
+	return values
 }
