@@ -1,7 +1,10 @@
 import { parse } from '@conform-to/zod'
 import { json } from '@remix-run/node'
 import { z } from 'zod'
-import { AppearanceType } from '#app/utils/appearances'
+import {
+	AppearanceType,
+	appearanceTypeValueSchema,
+} from '#app/utils/appearances'
 import {
 	formatSringsToHex,
 	validateStringsAreHexcodes,
@@ -455,6 +458,7 @@ export async function toggleArtboardAppearanceVisibilityAction({
 
 export const UpdateArtboardAppearanceValueSchema = z.object({
 	appearanceId: z.string(),
+	appearanceType: z.nativeEnum(AppearanceType),
 	value: z.string(),
 })
 
@@ -463,21 +467,26 @@ export async function updateArtboardAppearanceValueAction({
 	formData,
 }: EditorActionArgs) {
 	console.log('UPDATE ARTBOARD APPEARANCE VALUE ACTION')
+	const appearanceType = formData.get('appearanceType')
+	const AppearanceTypeValueSchema = appearanceTypeValueSchema(
+		appearanceType as AppearanceType,
+	)
+	const Schema =
+		AppearanceTypeValueSchema || UpdateArtboardAppearanceValueSchema
+
 	const submission = await parse(formData, {
-		schema: UpdateArtboardAppearanceValueSchema.superRefine(
-			async (data, ctx) => {
-				const appearance = await prisma.appearance.findUnique({
-					select: { id: true },
-					where: { id: data.appearanceId, ownerId: userId },
+		schema: Schema.superRefine(async (data, ctx) => {
+			const appearance = await prisma.appearance.findUnique({
+				select: { id: true },
+				where: { id: data.appearanceId, ownerId: userId },
+			})
+			if (!appearance) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Appearance not found',
 				})
-				if (!appearance) {
-					ctx.addIssue({
-						code: z.ZodIssueCode.custom,
-						message: 'Appearance not found',
-					})
-				}
-			},
-		),
+			}
+		}),
 		async: true,
 	})
 	if (submission.intent !== 'submit') {

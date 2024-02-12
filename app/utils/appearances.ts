@@ -1,3 +1,6 @@
+import { z } from 'zod'
+import { stringToHexcode, validateStringIsHexcode } from './colors'
+
 // Define an enum for appearance types
 export enum AppearanceType {
 	Palette = 'palette',
@@ -29,8 +32,21 @@ export type AppearanceMapping = {
 		slug: string
 		typeName: string
 		defaultValues: any
+		valueSchema?: z.ZodSchema<any>
 	}
 }
+
+export const appearanceTypeValueSchema = (type: AppearanceType) => {
+	return appearanceMapping[type].valueSchema
+}
+
+export const PaletteValueSchema = z.object({
+	appearanceId: z.string(),
+	appearanceType: z.nativeEnum(AppearanceType),
+	value: stringToHexcode.refine(validateStringIsHexcode, {
+		message: 'Value must be valid hexcode',
+	}),
+})
 
 // Define and export the mapping
 export const appearanceMapping: AppearanceMapping = {
@@ -39,9 +55,10 @@ export const appearanceMapping: AppearanceMapping = {
 		typeName: 'Palette',
 		defaultValues: validateAppearanceTypeValues(AppearanceType.Palette, {
 			format: 'hex',
-			value: '#000000',
+			value: '000000',
 			opacity: 1,
 		}),
+		valueSchema: PaletteValueSchema,
 	},
 	[AppearanceType.Size]: {
 		slug: 'size',
@@ -65,7 +82,7 @@ export const appearanceMapping: AppearanceMapping = {
 		typeName: 'FillStyle',
 		defaultValues: validateAppearanceTypeValues(AppearanceType.FillStyle, {
 			style: 'solid',
-			value: '#000000',
+			value: '000000',
 			opacity: 1,
 		}),
 	},
@@ -74,7 +91,7 @@ export const appearanceMapping: AppearanceMapping = {
 		typeName: 'StrokeStyle',
 		defaultValues: validateAppearanceTypeValues(AppearanceType.StrokeStyle, {
 			style: 'solid',
-			value: '#000000',
+			value: '000000',
 			opacity: 1,
 		}),
 	},
