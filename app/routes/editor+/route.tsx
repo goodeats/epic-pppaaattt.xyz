@@ -29,6 +29,7 @@ import {
 	downloadArtboardCanvasAction,
 	removeArtboardAppearanceAction,
 	toggleArtboardAppearanceVisibilityAction,
+	updateArtboardAppearanceOrderAction,
 	updateArtboardAppearanceValueAction,
 	updateArtboardBackgroundColorAction,
 	updateArtboardDimensionsAction,
@@ -48,40 +49,40 @@ export async function action({ request }: DataFunctionArgs) {
 	const userId = await requireUserId(request)
 	const formData = await request.formData()
 	await validateCSRF(formData, request.headers)
-	const intent = formData.get('intent')
 
+	const actionArgs = { request, userId, formData }
+	const intent = formData.get('intent')
 	switch (intent) {
 		case INTENT.downloadArtboardCanvas: {
-			return downloadArtboardCanvasAction({ request, userId, formData })
+			return downloadArtboardCanvasAction(actionArgs)
 		}
 		case INTENT.updateArtboardDimensions: {
-			return updateArtboardDimensionsAction({ request, userId, formData })
+			return updateArtboardDimensionsAction(actionArgs)
 		}
 		case INTENT.updateArtboardBackgroundColor: {
-			return updateArtboardBackgroundColorAction({ request, userId, formData })
+			return updateArtboardBackgroundColorAction(actionArgs)
 		}
 		case INTENT.addArtboardAppearances: {
-			return addArtboardAppearancesAction({ request, userId, formData })
+			return addArtboardAppearancesAction(actionArgs)
 		}
 		case INTENT.removeArtboardAppearance: {
-			return removeArtboardAppearanceAction({ request, userId, formData })
+			return removeArtboardAppearanceAction(actionArgs)
 		}
 		// panel forms
 		case INTENT.createArtboardAppearance: {
-			return createArtboardAppearanceAction({ request, userId, formData })
+			return createArtboardAppearanceAction(actionArgs)
+		}
+		case INTENT.updateArtboardAppearanceOrder: {
+			return updateArtboardAppearanceOrderAction(actionArgs)
 		}
 		case INTENT.updateArtboardAppearanceValue: {
-			return updateArtboardAppearanceValueAction({ request, userId, formData })
-		}
-		case INTENT.deleteArtboardAppearance: {
-			return deleteArtboardAppearanceAction({ request, userId, formData })
+			return updateArtboardAppearanceValueAction(actionArgs)
 		}
 		case INTENT.toggleArtboardAppearanceVisibility: {
-			return toggleArtboardAppearanceVisibilityAction({
-				request,
-				userId,
-				formData,
-			})
+			return toggleArtboardAppearanceVisibilityAction(actionArgs)
+		}
+		case INTENT.deleteArtboardAppearance: {
+			return deleteArtboardAppearanceAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

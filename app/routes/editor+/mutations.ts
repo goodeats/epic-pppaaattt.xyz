@@ -468,3 +468,89 @@ export const updateArtboardAppearanceValue = async (
 		})
 	})
 }
+
+export const updateArtboardAppearanceOrder = async (
+	userId: string,
+	artboardId: string,
+	appearanceId: string,
+	appearanceType: AppearanceType,
+	direction: 'up' | 'down',
+) => {
+	// Start a transaction
+	return await prisma.$transaction(async prisma => {
+		// get artboard
+		const artboard = await await prisma.artboard.findFirst({
+			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+		if (!artboard) {
+			throw new Error('Artboard not found')
+		}
+
+		// get appearance on artboard
+		const artboardAppearance =
+			await await prisma.appearancesOnArtboards.findFirst({
+				where: { appearanceId: appearanceId },
+				select: {
+					id: true,
+					order: true,
+					appearance: { select: { value: true } },
+				},
+			})
+		if (!artboardAppearance) {
+			throw new Error('Appearance not found on artboard')
+		}
+
+		console.log(
+			'artboardAppearance',
+			artboardAppearance.order,
+			artboardAppearance.appearance.value,
+		)
+
+		// get other appearance on the artboard
+		const otherArtboardAppearance =
+			await prisma.appearancesOnArtboards.findFirst({
+				where: {
+					artboardId,
+					appearance: { type: appearanceType },
+					order:
+						direction === 'up'
+							? { lt: artboardAppearance.order }
+							: { gt: artboardAppearance.order },
+				},
+				select: {
+					id: true,
+					order: true,
+					appearance: { select: { value: true } },
+				},
+				orderBy: { order: direction === 'up' ? 'desc' : 'asc' },
+			})
+		if (!otherArtboardAppearance) {
+			return
+		}
+
+		console.log(
+			'otherArtboardAppearance',
+			otherArtboardAppearance.order,
+			otherArtboardAppearance.appearance.value,
+		)
+
+		// update appearance order
+		await prisma.appearancesOnArtboards.updateMany({
+			where: { id: artboardAppearance.id },
+			data: { order: otherArtboardAppearance.order },
+		})
+
+		// update other appearance order
+		await prisma.appearancesOnArtboards.updateMany({
+			where: { id: otherArtboardAppearance.id },
+			data: { order: artboardAppearance.order },
+		})
+
+		// Return the updated artboard
+		return await prisma.artboard.findFirst({
+			where: { id: artboardId, ownerId: userId },
+			select: { id: true, slug: true, owner: { select: { username: true } } },
+		})
+	})
+}

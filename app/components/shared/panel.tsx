@@ -34,6 +34,18 @@ const PanelTitle = ({ children }: { children: React.ReactNode }) => {
 	)
 }
 
+const PanelRowOrderContainer = ({
+	children,
+}: {
+	children: React.ReactNode
+}) => {
+	return (
+		<div className="l-0 t-0 absolute flex h-8 w-4 flex-col items-center justify-center">
+			{children}
+		</div>
+	)
+}
+
 const PanelRowValueContainer = ({
 	children,
 }: {
@@ -52,6 +64,7 @@ export {
 	PanelRowContainer,
 	PanelHeader,
 	PanelTitle,
+	PanelRowOrderContainer,
 	PanelRowValueContainer,
 	PanelRowIconContainer,
 }

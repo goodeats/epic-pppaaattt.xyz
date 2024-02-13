@@ -21,11 +21,13 @@ import {
 	deleteArtboardAppearance,
 	removeArtboardAppearance,
 	toggleArtboardAppearanceVisibility,
+	updateArtboardAppearanceOrder,
 	updateArtboardAppearanceValue,
 	updateArtboardAppearancesAdd,
 	updateArtboardBackgroundColor,
 	updateArtboardDimensions,
 } from './mutations'
+import { EditArtboardAppearanceOrderSchema } from './zod-schema'
 
 export const INTENT = {
 	downloadArtboardCanvas: 'download-artboard-canvas' as const,
@@ -40,6 +42,7 @@ export const INTENT = {
 	deleteArtboardAppearance: 'delete-artboard-appearance' as const,
 	toggleArtboardAppearanceVisibility:
 		'toggle-artboard-appearance-visibility' as const,
+	updateArtboardAppearanceOrder: 'update-artboard-appearance-order' as const,
 }
 
 type EditorActionArgs = {
@@ -499,6 +502,58 @@ export async function updateArtboardAppearanceValueAction({
 	const { appearanceId, value } = submission.value
 
 	await updateArtboardAppearanceValue(userId, appearanceId, value)
+
+	return json({ status: 'success', submission } as const)
+}
+
+export async function updateArtboardAppearanceOrderAction({
+	userId,
+	formData,
+}: EditorActionArgs) {
+	console.log('UPDATE ARTBOARD APPEARANCE ORDER ACTION')
+	const submission = await parse(formData, {
+		schema: EditArtboardAppearanceOrderSchema.superRefine(async (data, ctx) => {
+			const artboard = await prisma.artboard.findUnique({
+				select: { id: true },
+				where: { id: data.artboardId, ownerId: userId },
+			})
+			if (!artboard) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Artboard not found',
+				})
+			}
+
+			const appearance = await prisma.appearance.findUnique({
+				select: { id: true },
+				where: { id: data.appearanceId, ownerId: userId },
+			})
+			if (!appearance) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Appearance not found',
+				})
+			}
+		}),
+		async: true,
+	})
+	if (submission.intent !== 'submit') {
+		return json({ status: 'idle', submission } as const)
+	}
+	if (!submission.value) {
+		return json({ status: 'error', submission } as const, { status: 400 })
+	}
+
+	const { artboardId, appearanceId, appearanceType, direction } =
+		submission.value
+
+	await updateArtboardAppearanceOrder(
+		userId,
+		artboardId,
+		appearanceId,
+		appearanceType,
+		direction,
+	)
 
 	return json({ status: 'success', submission } as const)
 }

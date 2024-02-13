@@ -5,6 +5,7 @@ import {
 	PanelRow,
 	PanelRowContainer,
 	PanelRowIconContainer,
+	PanelRowOrderContainer,
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
@@ -13,6 +14,7 @@ import {
 	type IAppearance,
 	type IAppearancesOnArtboard,
 } from '#app/utils/db.server'
+import { EditAppearanceOrderPanelForm } from './__property-panel-arrange-form'
 import { DeleteAppearancePanelForm } from './__property-panel-delete-form'
 import { EditAppearanceValuePanelForm } from './__property-panel-edit-value'
 import { PanelRowIndicator } from './__property-panel-indicator'
@@ -43,6 +45,7 @@ export const PropertyPanel = ({
 	artboardAppearanceTypes,
 	appearanceType,
 }: PropertyPanelProps) => {
+	const panelCount = artboardAppearanceTypes.length
 	return (
 		<Panel>
 			<PanelHeader>
@@ -55,10 +58,30 @@ export const PropertyPanel = ({
 					/>
 				</div>
 			</PanelHeader>
-			{artboardAppearanceTypes.map(artboardAppearance => {
+			{artboardAppearanceTypes.map((artboardAppearance, index) => {
 				const { isVisible, appearance } = artboardAppearance
 				return (
 					<PanelRow key={appearance.id}>
+						<PanelRowOrderContainer>
+							<EditAppearanceOrderPanelForm
+								artboardId={artboard.id}
+								appearanceId={appearance.id}
+								appearanceType={appearanceType}
+								panelCount={panelCount}
+								panelIndex={index}
+								direction="up"
+								tooltipContent="Move Up"
+							/>
+							<EditAppearanceOrderPanelForm
+								artboardId={artboard.id}
+								appearanceId={appearance.id}
+								appearanceType={appearanceType}
+								panelCount={panelCount}
+								panelIndex={index}
+								direction="down"
+								tooltipContent="Move down"
+							/>
+						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
 								<PanelRowIndicator
