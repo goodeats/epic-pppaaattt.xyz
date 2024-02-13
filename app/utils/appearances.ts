@@ -1,6 +1,5 @@
 import { type z } from 'zod'
 import { PaletteValueSchema } from './appearances-schema'
-import { stringToHexcode, validateStringIsHexcode } from './colors'
 
 // Define an enum for appearance types
 export enum AppearanceType {
