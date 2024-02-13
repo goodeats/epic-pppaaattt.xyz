@@ -1,56 +1,29 @@
 # [Epic PPPAAATTT](https://github.com/goodeats/epic-pppaaattt)
 
-<div align="center">
-  <h1 align="center"><a href="https://www.epicweb.dev/epic-stack">The Epic Stack 🚀</a></h1>
-  <strong align="center">
-    Ditch analysis paralysis and start shipping Epic Web apps.
-  </strong>
-  <p>
-    This is an opinionated project starter and reference that allows teams to
-    ship their ideas to production faster and on a more stable foundation based
-    on the experience of <a href="https://kentcdodds.com">Kent C. Dodds</a> and
-    <a href="https://github.com/epicweb-dev/epic-stack/graphs/contributors">contributors</a>.
-  </p>
-</div>
+Drawing generative geometric shapes on a canvas
 
-```sh
-npx create-epic-app@latest
-```
+Progress: 🚧 Constructing MVP... 🚧
 
-[![The Epic Stack](https://github-production-user-asset-6210df.s3.amazonaws.com/1500684/246885449-1b00286c-aa3d-44b2-9ef2-04f694eb3592.png)](https://www.epicweb.dev/epic-stack)
+## GETTING STARTED
 
-[The Epic Stack](https://www.epicweb.dev/epic-stack)
+To get started with this project, follow these steps:
 
-<hr />
+1. Clone the repository to your local machine.
+2. Navigate to the project directory.
+3. Run `npm install` to install the necessary dependencies.
+4. Run `npm run setup`
+5. Start the development server by running `npm run dev`.
 
-## Watch Kent's Introduction to The Epic Stack
+## TECH STACK
 
-[![Epic Stack Talk slide showing Flynn Rider with knives, the text "I've been around and I've got opinions" and Kent speaking in the corner](https://github-production-user-asset-6210df.s3.amazonaws.com/1500684/277818553-47158e68-4efc-43ae-a477-9d1670d4217d.png)](https://www.epicweb.dev/talks/the-epic-stack)
+- Framework (full-stack): [Remix Run](https://remix.run/) | [Epic Stack](https://github.com/epicweb-dev/epic-stack)
+- DB: [SQLite](https://www.sqlite.org/index.html)
+- ORM: [Prisma](https://www.prisma.io/)
+- UI: [tailwindcss](https://tailwindcss.com/) | [Radix](https://www.radix-ui.com/) | [shadcn/ui](https://ui.shadcn.com/)
+- Forms: [Zod](https://zod.dev/) | [Conform](https://conform.guide/)
 
-["The Epic Stack" by Kent C. Dodds](https://www.epicweb.dev/talks/the-epic-stack)
+## NOTES
 
-## Docs
-
-[Read the docs](https://github.com/epicweb-dev/epic-stack/blob/main/docs)
-(please 🙏).
-
-## Support
-
-- 🆘 Join the
-  [discussion on GitHub](https://github.com/epicweb-dev/epic-stack/discussions)
-  and the [KCD Community on Discord](https://kcd.im/discord).
-- 💡 Create an
-  [idea discussion](https://github.com/epicweb-dev/epic-stack/discussions/new?category=ideas)
-  for suggestions.
-- 🐛 Open a [GitHub issue](https://github.com/epicweb-dev/epic-stack/issues) to
-  report a bug.
-
-## Branding
-
-Want to talk about the Epic Stack in a blog post or talk? Great! Here are some
-assets you can use in your material:
-[EpicWeb.dev/brand](https://epicweb.dev/brand)
-
-## Thanks
-
-You rock 🪨
+- this is a project built for personal use in developing a project to achieve my artistic goals: rapid development and deployment of unique artistic projects in the marketplace
+- foregoing tests a bit to get the MVP out
+- I recently discovered the Figma UI and feel that dashboard is a good representation of how I want to build this
