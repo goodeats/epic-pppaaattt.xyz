@@ -15,6 +15,7 @@ import {
 } from '#app/utils/db.server'
 import { DeleteAppearancePanelForm } from './__property-panel-delete-form'
 import { EditAppearanceValuePanelForm } from './__property-panel-edit-value'
+import { PanelRowIndicator } from './__property-panel-indicator'
 import { NewAppearancePanelForm } from './__property-panel-new-form'
 import { ToggleAppearanceVisibilityPanelForm } from './__property-panel-toggle-visibility-form'
 
@@ -60,6 +61,10 @@ export const PropertyPanel = ({
 					<PanelRow key={appearance.id}>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
+								<PanelRowIndicator
+									appearance={appearance}
+									appearanceType={appearanceType}
+								/>
 								<EditAppearanceValuePanelForm
 									appearance={appearance}
 									appearanceType={appearanceType}
