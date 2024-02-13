@@ -1,4 +1,5 @@
-import { z } from 'zod'
+import { type z } from 'zod'
+import { PaletteValueSchema } from './appearances-schema'
 import { stringToHexcode, validateStringIsHexcode } from './colors'
 
 // Define an enum for appearance types
@@ -39,14 +40,6 @@ export type AppearanceMapping = {
 export const appearanceTypeValueSchema = (type: AppearanceType) => {
 	return appearanceMapping[type].valueSchema
 }
-
-export const PaletteValueSchema = z.object({
-	appearanceId: z.string(),
-	appearanceType: z.nativeEnum(AppearanceType),
-	value: stringToHexcode.refine(validateStringIsHexcode, {
-		message: 'Value must be valid hexcode',
-	}),
-})
 
 // Define and export the mapping
 export const appearanceMapping: AppearanceMapping = {
