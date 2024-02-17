@@ -1,3 +1,11 @@
+const PanelContainer = ({ children }: { children?: React.ReactNode }) => {
+	return (
+		<div className="relative w-64 border-l-2 bg-muted py-2 md:rounded-br-3xl">
+			{children}
+		</div>
+	)
+}
+
 const Panel = ({ children }: { children: React.ReactNode }) => {
 	return <div className="grid w-full border-b-2 py-2">{children}</div>
 }
@@ -59,6 +67,7 @@ const PanelRowIconContainer = ({ children }: { children: React.ReactNode }) => {
 }
 
 export {
+	PanelContainer,
 	Panel,
 	PanelRow,
 	PanelRowContainer,

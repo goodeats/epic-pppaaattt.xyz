@@ -71,6 +71,12 @@ export const Footer = () => {
 				>
 					Editor
 				</FooterLinkButton>
+				<FooterLinkButton
+					to={`/sketch/artboards/${artboard.slug}`}
+					icon="magic-wand"
+				>
+					Sketch
+				</FooterLinkButton>
 			</FooterActions>
 		</FooterContainer>
 	)
