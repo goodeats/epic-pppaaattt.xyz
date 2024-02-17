@@ -129,9 +129,9 @@ export const meta: MetaFunction<
 	const displayName = entitiesMatch?.data?.owner.name ?? params.username
 	const entityTitle = data?.appearance.name ?? 'Appearance'
 	const entityDescriptionSummary =
-		data && data.appearance.description.length > 100
-			? data?.appearance.description.slice(0, 97) + '...'
-			: 'No description'
+		data?.appearance.description && data.appearance.description.length > 100
+			? data.appearance.description.slice(0, 97) + '...'
+			: data?.appearance.description || 'No description'
 	return [
 		{ title: `${entityTitle} | ${displayName}'s Appearance | XYZ` },
 		{

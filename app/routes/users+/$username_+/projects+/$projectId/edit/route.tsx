@@ -46,16 +46,16 @@ export const meta: MetaFunction<
 		m => m.id === 'routes/users+/$username_+/projects',
 	)
 	const displayName = projectsMatch?.data?.owner.name ?? params.username
-	const projectTitle = data?.project.name ?? 'Project'
-	const projectDescriptionSummary =
-		data && data.project.description.length > 100
-			? data?.project.description.slice(0, 97) + '...'
-			: 'No description'
+	const entityTitle = data?.project.name ?? 'Project'
+	const entityDescriptionSummary =
+		data?.project.description && data.project.description.length > 100
+			? data.project.description.slice(0, 97) + '...'
+			: data?.project.description || 'No description'
 	return [
-		{ title: `Edit ${projectTitle} | ${displayName}'s Projects | XYZ` },
+		{ title: `Edit ${entityTitle} | ${displayName}'s Projects | XYZ` },
 		{
 			name: 'description',
-			content: projectDescriptionSummary,
+			content: entityDescriptionSummary,
 		},
 	]
 }

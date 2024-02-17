@@ -30,6 +30,6 @@ export const handle = {
 	},
 }
 
-export default function ProjectRoute() {
+export default function LayerRoute() {
 	return <Outlet />
 }

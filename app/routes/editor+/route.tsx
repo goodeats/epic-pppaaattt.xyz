@@ -15,11 +15,22 @@ import {
 	SideNavWrapper,
 } from '#app/components/shared'
 import { Separator } from '#app/components/ui/separator'
+import {
+	type AppearanceType,
+	createEmptyAppearanceGroups,
+} from '#app/utils/appearances'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import {
 	INTENT,
+	addArtboardAppearancesAction,
+	createArtboardAppearanceAction,
+	deleteArtboardAppearanceAction,
 	downloadArtboardCanvasAction,
+	removeArtboardAppearanceAction,
+	toggleArtboardAppearanceVisibilityAction,
+	updateArtboardAppearanceOrderAction,
+	updateArtboardAppearanceValueAction,
 	updateArtboardBackgroundColorAction,
 	updateArtboardDimensionsAction,
 } from './actions'
@@ -31,24 +42,47 @@ import {
 	NavTabsNoArtboard,
 } from './components'
 import { NavTabs } from './nav-tabs'
-import { getArtboard, getOwner } from './queries'
+import { getAppearances, getArtboard, getOwner } from './queries'
 
 export async function action({ request }: DataFunctionArgs) {
 	console.log('EDITOR ACTION')
 	const userId = await requireUserId(request)
 	const formData = await request.formData()
 	await validateCSRF(formData, request.headers)
-	const intent = formData.get('intent')
 
+	const actionArgs = { request, userId, formData }
+	const intent = formData.get('intent')
 	switch (intent) {
 		case INTENT.downloadArtboardCanvas: {
-			return downloadArtboardCanvasAction({ request, userId, formData })
+			return downloadArtboardCanvasAction(actionArgs)
 		}
 		case INTENT.updateArtboardDimensions: {
-			return updateArtboardDimensionsAction({ request, userId, formData })
+			return updateArtboardDimensionsAction(actionArgs)
 		}
 		case INTENT.updateArtboardBackgroundColor: {
-			return updateArtboardBackgroundColorAction({ request, userId, formData })
+			return updateArtboardBackgroundColorAction(actionArgs)
+		}
+		case INTENT.addArtboardAppearances: {
+			return addArtboardAppearancesAction(actionArgs)
+		}
+		case INTENT.removeArtboardAppearance: {
+			return removeArtboardAppearanceAction(actionArgs)
+		}
+		// panel forms
+		case INTENT.createArtboardAppearance: {
+			return createArtboardAppearanceAction(actionArgs)
+		}
+		case INTENT.updateArtboardAppearanceOrder: {
+			return updateArtboardAppearanceOrderAction(actionArgs)
+		}
+		case INTENT.updateArtboardAppearanceValue: {
+			return updateArtboardAppearanceValueAction(actionArgs)
+		}
+		case INTENT.toggleArtboardAppearanceVisibility: {
+			return toggleArtboardAppearanceVisibilityAction(actionArgs)
+		}
+		case INTENT.deleteArtboardAppearance: {
+			return deleteArtboardAppearanceAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
@@ -64,16 +98,36 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	let url = new URL(request.url)
 	let artboard, artboardTimeAgo
+	const artboardAppearances = createEmptyAppearanceGroups()
+
 	const artboardId = url.searchParams.get('artboardId')
 	if (artboardId) {
 		artboard = await getArtboard(userId, artboardId)
 		if (artboard) {
 			const date = new Date(artboard.updatedAt)
 			artboardTimeAgo = formatDistanceToNow(date)
+
+			// group appearances on artboard by type
+			for (const appearance of artboard.appearances) {
+				const appType = appearance.appearance.type as AppearanceType
+				if (!artboardAppearances[appType]) {
+					artboardAppearances[appType] = []
+				}
+				artboardAppearances[appType].push(appearance)
+			}
 		}
 	}
 
-	return json({ owner, artboard, artboardTimeAgo })
+	// all appearances
+	const appearances = await getAppearances(userId)
+
+	return json({
+		owner,
+		artboard,
+		artboardTimeAgo,
+		artboardAppearances,
+		appearances,
+	})
 }
 
 export default function EditorRoute() {

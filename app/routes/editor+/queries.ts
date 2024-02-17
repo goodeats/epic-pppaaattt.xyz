@@ -32,6 +32,43 @@ export const getArtboard = async (userId: string, artboardId: string) => {
 					slug: true,
 				},
 			},
+			appearances: {
+				select: {
+					order: true,
+					isVisible: true,
+					overrideValue: true,
+					artboardId: true,
+					appearance: {
+						select: {
+							id: true,
+							name: true,
+							description: true,
+							slug: true,
+							type: true,
+							value: true,
+							updatedAt: true,
+						},
+					},
+				},
+				orderBy: {
+					order: 'asc',
+				},
+			},
 		},
 	})
+}
+
+export const getAppearances = async (userId: string) => {
+	const appearances = await prisma.appearance.findMany({
+		where: { ownerId: userId },
+		select: {
+			id: true,
+			name: true,
+			slug: true,
+			type: true,
+			owner: { select: { username: true } },
+		},
+		orderBy: { updatedAt: 'asc' },
+	})
+	return appearances
 }

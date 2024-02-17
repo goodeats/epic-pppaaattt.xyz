@@ -185,6 +185,7 @@ async function seed() {
 						value: JSON.stringify({
 							colors: ['#FF0000', '#00FF00', '#0000FF'],
 						}),
+						global: true,
 					},
 					{
 						id: '7kz8dazt',
@@ -195,6 +196,7 @@ async function seed() {
 						value: JSON.stringify({
 							size: 10,
 						}),
+						global: true,
 					},
 					{
 						id: '3yfb1k66',
@@ -205,6 +207,7 @@ async function seed() {
 						value: JSON.stringify({
 							rotate: 45,
 						}),
+						global: true,
 					},
 					{
 						id: '4jkl6m7n',
@@ -215,6 +218,7 @@ async function seed() {
 						value: JSON.stringify({
 							fill: '#AABBCC',
 						}),
+						global: true,
 					},
 					{
 						id: '8pqr9s0t',
@@ -225,6 +229,7 @@ async function seed() {
 						value: JSON.stringify({
 							stroke: '#DDEEFF',
 						}),
+						global: true,
 					},
 					{
 						id: '1uvwx2yz',
@@ -235,6 +240,7 @@ async function seed() {
 						value: JSON.stringify({
 							width: 5,
 						}),
+						global: true,
 					},
 				],
 			},

@@ -14,3 +14,15 @@ export function useToast(toast?: Toast | null) {
 		}
 	}, [toast])
 }
+
+export function quickToast({
+	type,
+	title,
+	description,
+}: {
+	type: Toast['type']
+	title: Toast['title']
+	description?: Toast['description']
+}) {
+	showToast[type](title, { description })
+}

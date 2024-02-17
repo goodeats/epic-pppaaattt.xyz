@@ -17,6 +17,16 @@ export const HexcodeStringSchema = (name: string) => {
 		})
 }
 
+export const stringToHexcode = z
+	.string()
+	.transform(val => val.toUpperCase())
+	.transform(val => removeWhitespace(val))
+	.transform(val => filterHexcodeChars(val))
+
+const filterHexcodeChars = (input: string): string => {
+	return input.replace(/[^0-9A-Fa-f]/g, '')
+}
+
 export function formatSringsToHex(input: string[]): string[] {
 	return input.map(value => {
 		return value.startsWith('#') ? value : `#${value}`
@@ -25,4 +35,8 @@ export function formatSringsToHex(input: string[]): string[] {
 
 export function validateStringsAreHexcodes(input: string[]): boolean {
 	return input.every(value => /^#?[0-9A-Fa-f]{6}$/.test(value))
+}
+
+export function validateStringIsHexcode(input: string): boolean {
+	return /^#?[0-9A-Fa-f]{6}$/.test(input)
 }

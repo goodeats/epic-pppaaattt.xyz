@@ -1,60 +1,106 @@
 import { useLoaderData } from '@remix-run/react'
-import { Separator } from '#app/components/ui/separator'
 import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from '#app/components/ui/tabs'
+	SideNavTabContent,
+	SideNavTabText,
+	SideNavTabsWrapper,
+} from '#app/components/shared'
+import { Separator } from '#app/components/ui/separator'
+import { TabsContent, TabsList, TabsTrigger } from '#app/components/ui/tabs'
+import { AppearanceType, appearanceMapping } from '#app/utils/appearances'
+import { PropertyPanel } from './__property-panel'
 import { ArtboardBackgroundColorForm } from './artboard-background-color-form'
 import { ArtboardDimensionsForm } from './artboard-dimensions-form'
 import { type loader } from './route'
 
 export const NavTabs = () => {
 	return (
-		<Tabs defaultValue={'artboard'} className="flex-1">
-			<div className="container h-full py-6">
-				<div className="grid h-full items-stretch gap-6">
-					<div className="hidden flex-col space-y-4 sm:flex md:order-2">
-						<TabsList className={`grid grid-cols-${2}`}>
-							<TabsTrigger value={'artboard'}>Artboard</TabsTrigger>
-							<TabsTrigger value={'layers'}>Layers</TabsTrigger>
-						</TabsList>
-						<TabsContent value={'artboard'}>
-							<NavContentArtboard />
-						</TabsContent>
-						<TabsContent value={'layers'}>
-							Make changes to your artboard layers here.
-						</TabsContent>
-					</div>
-				</div>
-			</div>
-		</Tabs>
+		<SideNavTabsWrapper defaultValue="artboard">
+			<TabsList className={`grid grid-cols-${2}`}>
+				<TabsTrigger value="artboard">Artboard</TabsTrigger>
+				<TabsTrigger value="layers">Layers</TabsTrigger>
+			</TabsList>
+			<TabsContent value="artboard">
+				<NavContentArtboard />
+			</TabsContent>
+			<TabsContent value="layers">
+				Make changes to your artboard layers here.
+			</TabsContent>
+		</SideNavTabsWrapper>
 	)
 }
 
 const NavContentArtboard = () => {
 	const data = useLoaderData<typeof loader>()
-	const { artboard } = data
+	const { artboard, artboardAppearances } = data
 	if (!artboard) return null
 
 	const { project, description } = artboard
 
 	return (
-		<div className="grid h-full items-stretch gap-6">
-			<div className="hidden flex-col space-y-4 sm:flex md:order-2">
-				<div>
-					<div className="text-sm text-muted-foreground">{project.name}</div>
+		<SideNavTabContent>
+			<SideNavTabText>{project.name}</SideNavTabText>
+			<SideNavTabText>{description}</SideNavTabText>
+			<Separator className="my-4" />
 
-					<span className="w-12 rounded-md border border-transparent py-4 text-right text-sm text-muted-foreground hover:border-border">
-						{description}
-					</span>
-					<Separator className="my-4" />
-					<ArtboardDimensionsForm artboard={artboard} />
-					<Separator className="my-4" />
-					<ArtboardBackgroundColorForm artboard={artboard} />
-				</div>
+			<SideNavTabText>Frame</SideNavTabText>
+			<ArtboardDimensionsForm artboard={artboard} />
+			<ArtboardBackgroundColorForm artboard={artboard} />
+
+			<Separator className="my-4" />
+			<div className="flex-dir-col flex">
+				<PropertyPanel
+					title={appearanceMapping[AppearanceType.Palette].typeName}
+					artboard={artboard}
+					artboardAppearanceTypes={artboardAppearances.palette}
+					appearanceType={AppearanceType.Palette}
+				/>
 			</div>
-		</div>
+
+			{/* <SideNavTabText>Appearances</SideNavTabText>
+			<Accordion
+				type="multiple"
+				className="w-full"
+				defaultValue={['palette', 'stroke-style']}
+			>
+				<AccordionItem value="palette">
+					<AccordionTrigger className="bg-secondary px-4">
+						Palette
+					</AccordionTrigger>
+					<AccordionContent>
+						<AppearanceList
+							artboard={artboard}
+							artboardAppearanceTypes={artboardAppearances.palette}
+							appearanceType={AppearanceType.Palette}
+						/>
+					</AccordionContent>
+				</AccordionItem>
+				<AccordionItem value="size">
+					<AccordionTrigger className="bg-secondary px-4">
+						Size
+					</AccordionTrigger>
+					<AccordionContent>
+						<AppearanceList
+							artboard={artboard}
+							artboardAppearanceTypes={artboardAppearances.size}
+							appearanceType={AppearanceType.Size}
+						/>
+					</AccordionContent>
+				</AccordionItem>
+				<AccordionItem value="stroke-style">
+					<AccordionTrigger className="bg-secondary px-4">
+						Stroke Style
+					</AccordionTrigger>
+					<AccordionContent>
+						<AppearanceList
+							artboard={artboard}
+							artboardAppearanceTypes={
+								artboardAppearances[AppearanceType.StrokeStyle]
+							}
+							appearanceType={AppearanceType.StrokeStyle}
+						/>
+					</AccordionContent>
+				</AccordionItem>
+			</Accordion> */}
+		</SideNavTabContent>
 	)
 }

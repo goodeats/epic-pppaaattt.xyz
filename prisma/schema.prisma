@@ -179,7 +179,7 @@ model Connection {
 model Project {
   id         String @id @default(cuid())
   name        String
-  description String
+  description String?
   isVisible   Boolean @default(true)
   slug       String
 
@@ -202,7 +202,7 @@ model Project {
 model Artboard {
   id          String @id @default(cuid())
   name        String
-  description String
+  description String?
   isVisible   Boolean @default(true)
   slug       String
   width       Int
@@ -234,7 +234,7 @@ model Artboard {
 model Layer {
   id          String @id @default(cuid())
   name        String
-  description String
+  description String?
   slug       String
 
   createdAt DateTime @default(now())
@@ -263,10 +263,13 @@ model Layer {
 model Appearance {
   id          String @id @default(cuid())
   name        String
-  description String
+  description String?
   slug       String
   type        String // e.g. fill, stroke, etc. also layoutType, palette, size, etc.
   value       String // string or stringify json
+
+  // global appearances are available to more than one artboard or layer
+  global      Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
