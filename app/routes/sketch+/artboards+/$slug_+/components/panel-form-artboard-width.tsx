@@ -3,7 +3,9 @@ import { getFieldsetConstraint } from '@conform-to/zod'
 import { useActionData, useFetcher } from '@remix-run/react'
 import { type FocusEvent } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
+import { Icon } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
+import { Label } from '#app/components/ui/label'
 import { ArtboardWidthSchema } from '#app/schema/artboard'
 import { useIsPending } from '#app/utils/misc'
 import { INTENT } from '../intent'
@@ -27,10 +29,8 @@ export const PanelFormArtboardWidth = ({
 			...artboard,
 		},
 	})
-	// console.log('width', artboard.width, form)
 
 	const handleSubmit = (event: FocusEvent<HTMLInputElement>) => {
-		console.log('submit')
 		fetcher.submit(event.currentTarget.form, {
 			method: 'POST',
 		})
@@ -42,10 +42,13 @@ export const PanelFormArtboardWidth = ({
 
 			<input type="hidden" name="id" value={artboard.id} />
 			<input type="hidden" name="intent" value={INTENT.artboardUpdateWidth} />
-			<div>
+			<div className="flex w-full items-center space-x-2">
+				<Label htmlFor={fields.width.id} className="w-5 flex-shrink-0">
+					<Icon name="width" className="h-5 w-5" />
+				</Label>
 				<Input
 					type="number"
-					className={'flex h-8'}
+					className="flex h-8"
 					onBlur={e => handleSubmit(e)}
 					disabled={isPending}
 					{...conform.input(fields.width, {

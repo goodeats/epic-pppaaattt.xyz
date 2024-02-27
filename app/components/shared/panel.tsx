@@ -12,7 +12,7 @@ const Panel = ({ children }: { children: React.ReactNode }) => {
 
 const PanelRow = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<div className="relative grid h-8 w-full grid-cols-12 grid-rows-1 items-center px-4">
+		<div className="relative grid h-8 w-full grid-cols-12 grid-rows-1 items-center px-2">
 			{children}
 		</div>
 	)
@@ -20,7 +20,7 @@ const PanelRow = ({ children }: { children: React.ReactNode }) => {
 
 const PanelRowContainer = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<div className="col-start-1 col-end-13 flex items-center justify-between">
+		<div className="col-start-1 col-end-13 flex items-center justify-between gap-2">
 			{children}
 		</div>
 	)

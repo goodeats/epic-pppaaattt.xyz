@@ -1,7 +1,7 @@
 // for using with actions that have multiple intents
 
 export interface IntentActionArgs {
-	request: Request
+	request?: Request
 	userId: string
 	formData: FormData
 }

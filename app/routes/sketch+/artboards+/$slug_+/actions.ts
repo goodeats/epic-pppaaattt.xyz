@@ -7,6 +7,20 @@ import { findArtboardByIdAndOwner } from '#app/models/artboard.server'
 import { ArtboardWidthSchema } from '#app/schema/artboard'
 import { findFirstArtboardInstance } from '#app/utils/prisma-extensions-artboard'
 
+const parseArtboardSubmission = async ({
+	userId,
+	formData,
+	schema,
+}: IntentActionArgs & { schema: z.ZodSchema<any> }) => {
+	return await parse(formData, {
+		schema: schema.superRefine(async (data, ctx) => {
+			const { id } = data
+			const artboard = await findArtboardByIdAndOwner({ id, ownerId: userId })
+			if (!artboard) ctx.addIssue(zodArtboardNotFound)
+		}),
+		async: true,
+	})
+}
 const notSubmissionResponse = (submission: Submission) =>
 	json({ status: 'idle', submission } as const)
 
@@ -22,13 +36,10 @@ export async function artboardUpdateWidthAction({
 	userId,
 	formData,
 }: IntentActionArgs) {
-	const submission = await parse(formData, {
-		schema: ArtboardWidthSchema.superRefine(async (data, ctx) => {
-			const { id } = data
-			const artboard = await findArtboardByIdAndOwner({ id, ownerId: userId })
-			if (!artboard) ctx.addIssue(zodArtboardNotFound)
-		}),
-		async: true,
+	const submission = await parseArtboardSubmission({
+		userId,
+		formData,
+		schema: ArtboardWidthSchema,
 	})
 	if (submission.intent !== 'submit') {
 		return notSubmissionResponse(submission)

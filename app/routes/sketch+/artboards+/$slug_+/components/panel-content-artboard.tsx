@@ -17,6 +17,8 @@ export const PanelContentArtboard = ({
 			<PanelTitle>Frame</PanelTitle>
 			<PanelRow>
 				<PanelRowContainer>
+					{/* 2 cols */}
+					<PanelFormArtboardWidth artboard={artboard} />
 					<PanelFormArtboardWidth artboard={artboard} />
 				</PanelRowContainer>
 			</PanelRow>
