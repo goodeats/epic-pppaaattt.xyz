@@ -1,5 +1,9 @@
 import { invariantResponse } from '@epic-web/invariant'
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import {
+	type DataFunctionArgs,
+	json,
+	type LoaderFunctionArgs,
+} from '@remix-run/node'
 import { useLoaderData, type MetaFunction } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
 import {
@@ -8,9 +12,29 @@ import {
 	SketchBodyContent,
 } from '#app/components/shared'
 import { requireUserId } from '#app/utils/auth.server'
+import { validateCSRF } from '#app/utils/csrf.server'
+import { artboardUpdateWidthAction } from './actions'
 import { CanvasContent } from './components/canvas-content'
 import { PanelContent } from './components/panel-content'
+import { INTENT } from './intent'
 import { getArtboard, getOwner } from './queries'
+
+export async function action({ request }: DataFunctionArgs) {
+	const userId = await requireUserId(request)
+	const formData = await request.formData()
+	await validateCSRF(formData, request.headers)
+
+	const actionArgs = { request, userId, formData }
+	const intent = formData.get('intent')
+	switch (intent) {
+		case INTENT.artboardUpdateWidth: {
+			return artboardUpdateWidthAction(actionArgs)
+		}
+		default: {
+			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
+		}
+	}
+}
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)

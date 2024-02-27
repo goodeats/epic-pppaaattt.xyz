@@ -1,14 +1,25 @@
-import { type Artboard } from '@prisma/client'
-import { SideNavTabText } from '#app/components/shared'
+import {
+	Panel,
+	PanelRow,
+	PanelRowContainer,
+	PanelTitle,
+} from '#app/components/shared'
+import { type PickedArtboardType } from '../queries'
+import { PanelFormArtboardWidth } from './panel-form-artboard-width'
 
 export const PanelContentArtboard = ({
 	artboard,
 }: {
-	artboard: Pick<Artboard, 'width' | 'height' | 'backgroundColor'>
+	artboard: PickedArtboardType
 }) => {
 	return (
-		<div>
-			<SideNavTabText>Frame</SideNavTabText>
-		</div>
+		<Panel>
+			<PanelTitle>Frame</PanelTitle>
+			<PanelRow>
+				<PanelRowContainer>
+					<PanelFormArtboardWidth artboard={artboard} />
+				</PanelRowContainer>
+			</PanelRow>
+		</Panel>
 	)
 }

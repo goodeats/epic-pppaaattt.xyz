@@ -1,10 +1,10 @@
-import { type Artboard } from '@prisma/client'
 import { useEffect, useRef } from 'react'
+import { type PickedArtboardType } from '../queries'
 
 export const CanvasContent = ({
 	artboard,
 }: {
-	artboard: Pick<Artboard, 'width' | 'height' | 'backgroundColor'>
+	artboard: PickedArtboardType
 }) => {
 	const { width, height, backgroundColor } = artboard
 

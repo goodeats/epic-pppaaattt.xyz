@@ -1,16 +1,16 @@
-import { type Artboard } from '@prisma/client'
 import {
 	SideNavTabsList,
 	SideNavTabsTrigger,
 	SideNavTabsWrapper,
 } from '#app/components/shared'
 import { TabsContent } from '#app/components/ui/tabs'
+import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboard } from './panel-content-artboard'
 
 export const PanelContent = ({
 	artboard,
 }: {
-	artboard: Pick<Artboard, 'width' | 'height' | 'backgroundColor'>
+	artboard: PickedArtboardType
 }) => {
 	return (
 		<SideNavTabsWrapper defaultValue="artboard">

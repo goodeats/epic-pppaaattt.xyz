@@ -9,6 +9,11 @@ import {
 } from '@prisma/client'
 import chalk from 'chalk'
 import { type AppearanceType } from './appearances'
+import { ArtboardPrismaExtensions } from './prisma-extensions-artboard'
+
+export const prismaExtended = remember('prisma', () => {
+	return new PrismaClient({}).$extends(ArtboardPrismaExtensions)
+})
 
 export const prisma = remember('prisma', () => {
 	// NOTE: if you change anything in this function you'll need to restart
@@ -24,6 +29,7 @@ export const prisma = remember('prisma', () => {
 			{ level: 'warn', emit: 'stdout' },
 		],
 	})
+	// $on prevents the ability to use prisma extensions
 	client.$on('query', async e => {
 		if (e.duration < logThreshold) return
 		const color =

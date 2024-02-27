@@ -13,7 +13,26 @@ export const getOwner = async (userId: string) => {
 	})
 }
 
-export const getArtboard = async (userId: string, slug: string) => {
+export type PickedArtboardType = {
+	id: string
+	name: string
+	description: string | null
+	slug: string
+	width: number
+	height: number
+	backgroundColor: string
+	updatedAt: Date | string
+	project: {
+		id: string
+		name: string
+		slug: string
+	}
+}
+
+export const getArtboard = async (
+	userId: string,
+	slug: string,
+): Promise<PickedArtboardType | null> => {
 	return await prisma.artboard.findFirst({
 		where: { slug: slug, ownerId: userId },
 		select: {
