@@ -1,12 +1,6 @@
-import {
-	Panel,
-	PanelRow,
-	PanelRowContainer,
-	PanelTitle,
-} from '#app/components/shared'
 import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardHeight } from './panel-form-artboard-height'
-import { PanelFormArtboardWidth } from './panel-form-artboard-width'
+import { PanelContentArtboardBackgroundColor } from './panel-content-artboard-background-color'
+import { PanelContentArtboardFrame } from './panel-content-artboard-frame'
 
 export const PanelContentArtboard = ({
 	artboard,
@@ -14,15 +8,9 @@ export const PanelContentArtboard = ({
 	artboard: PickedArtboardType
 }) => {
 	return (
-		<Panel>
-			<PanelTitle>Frame</PanelTitle>
-			<PanelRow>
-				<PanelRowContainer>
-					{/* 2 cols */}
-					<PanelFormArtboardWidth artboard={artboard} />
-					<PanelFormArtboardHeight artboard={artboard} />
-				</PanelRowContainer>
-			</PanelRow>
-		</Panel>
+		<div>
+			<PanelContentArtboardFrame artboard={artboard} />
+			<PanelContentArtboardBackgroundColor artboard={artboard} />
+		</div>
 	)
 }

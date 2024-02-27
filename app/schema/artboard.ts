@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { HexcodeSchema } from './colors'
 
 const widthMinLength = 1
 const widthMaxLength = 50000
@@ -27,6 +28,11 @@ export const ArtboardHeightSchema = z.object({
 		.max(heightMaxLength, {
 			message: `Height must be at most ${heightMaxLength}`,
 		}),
+})
+
+export const ArtboardBackgroundColorSchema = z.object({
+	id: z.string(),
+	backgroundColor: HexcodeSchema,
 })
 
 export type selectArgsType = z.infer<typeof selectArgs>

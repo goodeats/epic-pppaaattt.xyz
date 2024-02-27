@@ -23,7 +23,7 @@ export const stringToHexcode = z
 	.transform(val => removeWhitespace(val))
 	.transform(val => filterHexcodeChars(val))
 
-const filterHexcodeChars = (input: string): string => {
+export const filterHexcodeChars = (input: string): string => {
 	return input.replace(/[^0-9A-Fa-f]/g, '')
 }
 

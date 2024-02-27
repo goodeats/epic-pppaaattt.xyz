@@ -16,7 +16,7 @@ export const CanvasContent = ({
 			if (!canvas) return
 			const ctx = canvas.getContext('2d')
 			if (!ctx) return
-			ctx.fillStyle = backgroundColor
+			ctx.fillStyle = `#${backgroundColor}`
 			ctx.fillRect(0, 0, width, height)
 			// canvas && CanvasDraw({ canvas, buildAttributes });
 		}, [canvasRef])

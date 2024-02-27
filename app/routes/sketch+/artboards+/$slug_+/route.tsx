@@ -14,6 +14,7 @@ import {
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import {
+	artboardUpdateBackgroundColorAction,
 	artboardUpdateHeightAction,
 	artboardUpdateWidthAction,
 } from './actions'
@@ -35,6 +36,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateHeight: {
 			return artboardUpdateHeightAction(actionArgs)
+		}
+		case INTENT.artboardUpdateBackgroundColor: {
+			return artboardUpdateBackgroundColorAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
