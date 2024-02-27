@@ -4,7 +4,7 @@ import { json } from '@remix-run/node'
 import { z } from 'zod'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import { findArtboardByIdAndOwner } from '#app/models/artboard.server'
-import { ArtboardWidthSchema } from '#app/schema/artboard'
+import { ArtboardHeightSchema, ArtboardWidthSchema } from '#app/schema/artboard'
 import { findFirstArtboardInstance } from '#app/utils/prisma-extensions-artboard'
 
 const parseArtboardSubmission = async ({
@@ -55,6 +55,35 @@ export async function artboardUpdateWidthAction({
 	if (!artboard) return submissionErrorResponse(submission)
 
 	artboard.width = width
+	await artboard.save()
+
+	return json({ status: 'success', submission } as const)
+}
+
+export async function artboardUpdateHeightAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	console.log('hi')
+	const submission = await parseArtboardSubmission({
+		userId,
+		formData,
+		schema: ArtboardHeightSchema,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	const { id, height } = submission.value
+	const artboard = await findFirstArtboardInstance({
+		where: { id, ownerId: userId },
+	})
+	if (!artboard) return submissionErrorResponse(submission)
+
+	artboard.height = height
 	await artboard.save()
 
 	return json({ status: 'success', submission } as const)

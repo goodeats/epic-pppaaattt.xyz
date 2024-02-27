@@ -2,8 +2,8 @@ import { z } from 'zod'
 
 const widthMinLength = 1
 const widthMaxLength = 50000
-// const heightMinLength = 1
-// const heightMaxLength = 10000
+const heightMinLength = 1
+const heightMaxLength = 50000
 
 export const ArtboardWidthSchema = z.object({
 	id: z.string(),
@@ -14,6 +14,18 @@ export const ArtboardWidthSchema = z.object({
 		})
 		.max(widthMaxLength, {
 			message: `Width must be at most ${widthMaxLength}`,
+		}),
+})
+
+export const ArtboardHeightSchema = z.object({
+	id: z.string(),
+	height: z
+		.number()
+		.min(heightMinLength, {
+			message: `Height must be at least ${heightMinLength}`,
+		})
+		.max(heightMaxLength, {
+			message: `Height must be at most ${heightMaxLength}`,
 		}),
 })
 

@@ -13,7 +13,10 @@ import {
 } from '#app/components/shared'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
-import { artboardUpdateWidthAction } from './actions'
+import {
+	artboardUpdateHeightAction,
+	artboardUpdateWidthAction,
+} from './actions'
 import { CanvasContent } from './components/canvas-content'
 import { PanelContent } from './components/panel-content'
 import { INTENT } from './intent'
@@ -29,6 +32,9 @@ export async function action({ request }: DataFunctionArgs) {
 	switch (intent) {
 		case INTENT.artboardUpdateWidth: {
 			return artboardUpdateWidthAction(actionArgs)
+		}
+		case INTENT.artboardUpdateHeight: {
+			return artboardUpdateHeightAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

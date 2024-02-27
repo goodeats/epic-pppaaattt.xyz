@@ -5,6 +5,7 @@ import {
 	PanelTitle,
 } from '#app/components/shared'
 import { type PickedArtboardType } from '../queries'
+import { PanelFormArtboardHeight } from './panel-form-artboard-height'
 import { PanelFormArtboardWidth } from './panel-form-artboard-width'
 
 export const PanelContentArtboard = ({
@@ -19,7 +20,7 @@ export const PanelContentArtboard = ({
 				<PanelRowContainer>
 					{/* 2 cols */}
 					<PanelFormArtboardWidth artboard={artboard} />
-					<PanelFormArtboardWidth artboard={artboard} />
+					<PanelFormArtboardHeight artboard={artboard} />
 				</PanelRowContainer>
 			</PanelRow>
 		</Panel>
