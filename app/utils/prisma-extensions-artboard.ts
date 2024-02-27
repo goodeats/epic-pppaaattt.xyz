@@ -39,6 +39,7 @@ export const ArtboardPrismaExtensions = Prisma.defineExtension({
 	},
 })
 
+// https://github.com/prisma/docs/issues/5058#issuecomment-1636473141
 export type ExtendedArtboard = Prisma.Result<
 	typeof prismaExtended.artboard,
 	any,
