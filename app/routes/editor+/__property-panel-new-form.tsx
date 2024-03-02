@@ -12,9 +12,10 @@ import {
 	TooltipProvider,
 } from '#app/components/ui/tooltip'
 import { type action } from '#app/root'
+import { NewArtboardDesignSchema } from '#app/schema/design'
 import { type AppearanceType } from '#app/utils/appearances'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT, NewArtboardAppearanceSchema } from './actions'
+import { INTENT } from './actions'
 
 export const NewAppearancePanelForm = ({
 	artboardId,
@@ -30,7 +31,7 @@ export const NewAppearancePanelForm = ({
 
 	const [form] = useForm({
 		id: 'panel-create-artboard-appearance',
-		constraint: getFieldsetConstraint(NewArtboardAppearanceSchema),
+		constraint: getFieldsetConstraint(NewArtboardDesignSchema),
 	})
 
 	return (

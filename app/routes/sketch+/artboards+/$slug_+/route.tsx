@@ -17,7 +17,7 @@ import {
 	artboardUpdateBackgroundColorAction,
 	artboardUpdateHeightAction,
 	artboardUpdateWidthAction,
-} from './actions'
+} from './actions/update-artboard'
 import { CanvasContent } from './components/canvas-content'
 import { PanelContent } from './components/panel-content'
 import { INTENT } from './intent'
