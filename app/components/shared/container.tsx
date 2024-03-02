@@ -42,10 +42,10 @@ const ContainerHeader = ({
 
 const ContainerContent = ({
 	children,
-	displayBar,
+	displayBar = false,
 }: {
 	children: React.ReactNode
-	displayBar: boolean
+	displayBar?: boolean
 }) => {
 	return (
 		<div className={`${displayBar ? 'pb-24' : 'pb-12'} overflow-y-auto`}>

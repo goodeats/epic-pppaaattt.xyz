@@ -57,7 +57,9 @@ const ContentHeader = ({
 }) => {
 	const ContentHeaderTitle = () => {
 		if (typeof title === 'string') {
-			return <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
+			return (
+				<h1 className="w-full text-lg font-semibold tracking-tight">{title}</h1>
+			)
 		}
 
 		return title

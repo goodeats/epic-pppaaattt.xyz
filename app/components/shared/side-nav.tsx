@@ -5,7 +5,7 @@ const SideNavWrapper = ({ children }: { children: React.ReactNode }) => {
 	return <div className="relative col-span-1">{children}</div>
 }
 
-const SideNavContainer = ({ children }: { children: React.ReactNode }) => {
+const SideNavContainer = ({ children }: { children?: React.ReactNode }) => {
 	return (
 		<div className="absolute inset-0 flex flex-col overflow-y-auto overflow-x-hidden">
 			{children}
