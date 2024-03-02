@@ -33,6 +33,7 @@ export type whereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({
 	id: z.string().optional(),
 	ownerId: z.string().optional(),
+	artboardId: z.string().optional(),
 })
 
 export type findArtboardArgsType = z.infer<typeof findArtboardArgs>

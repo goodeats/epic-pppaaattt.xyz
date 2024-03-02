@@ -11,6 +11,7 @@ import {
 	SketchBody,
 	SketchBodyContent,
 } from '#app/components/shared'
+import { findManyDesignsWithType } from '#app/models/design.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import { artboardDesignNewArtboardAction } from './actions/artboard-design-palette'
@@ -62,7 +63,11 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const date = new Date(artboard.updatedAt)
 	const artboardTimeAgo = formatDistanceToNow(date)
 
-	return json({ owner, artboard, artboardTimeAgo })
+	const artboardDesigns = await findManyDesignsWithType({
+		where: { artboardId: artboard.id },
+	})
+
+	return json({ owner, artboard, artboardTimeAgo, artboardDesigns })
 }
 
 export default function SketchRoute() {
@@ -73,7 +78,10 @@ export default function SketchRoute() {
 				<CanvasContent artboard={data.artboard} />
 			</SketchBodyContent>
 			<PanelContainer>
-				<PanelContent artboard={data.artboard} />
+				<PanelContent
+					artboard={data.artboard}
+					artboardDesigns={data.artboardDesigns}
+				/>
 			</PanelContainer>
 		</SketchBody>
 	)
