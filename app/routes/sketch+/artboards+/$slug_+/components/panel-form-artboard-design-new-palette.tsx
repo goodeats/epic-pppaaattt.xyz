@@ -29,7 +29,7 @@ export const PanelFormArtboardDesignNewPalette = ({
 		<fetcher.Form method="POST" {...form.props}>
 			<AuthenticityTokenInput />
 
-			<input type="hidden" name="id" value={artboardId} />
+			<input type="hidden" name="artboardId" value={artboardId} />
 			<input
 				type="hidden"
 				name="intent"

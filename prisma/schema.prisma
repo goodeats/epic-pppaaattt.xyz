@@ -412,6 +412,7 @@ model AssetImagesOnLayers {
 
 model Design {
   id         String @id @default(cuid())
+  type      String // e.g. palette, size, fill, stroke, line, etc.
 
   createdAt DateTime @default(now())
 
@@ -430,7 +431,7 @@ model Design {
 model Palette {
   id          String @id @default(cuid())
 
-  format      String // e.g. hex, rgb, hsl, etc.
+  format      String @default("hex") // e.g. hex, rgb, hsl, etc.
   value       String @default("000000")
   opacity     Float @default(1.0)
 

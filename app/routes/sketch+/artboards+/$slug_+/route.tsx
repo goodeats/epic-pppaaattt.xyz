@@ -13,6 +13,7 @@ import {
 } from '#app/components/shared'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
+import { artboardDesignNewArtboardAction } from './actions/artboard-design-palette'
 import {
 	artboardUpdateBackgroundColorAction,
 	artboardUpdateHeightAction,
@@ -39,6 +40,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateBackgroundColor: {
 			return artboardUpdateBackgroundColorAction(actionArgs)
+		}
+		case INTENT.artboardCreateDesignPalette: {
+			return artboardDesignNewArtboardAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

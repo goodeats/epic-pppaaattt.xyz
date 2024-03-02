@@ -1,19 +1,19 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { NewArtboardDesignSchema } from '#app/schema/design'
+import { NewArtboardDesignSchema, designSchema } from '#app/schema/design'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
-import { findFirstArtboardInstance } from '#app/utils/prisma-extensions-artboard'
-import { parseArtboardSubmission } from './utils'
+import { prisma } from '#app/utils/db.server'
+import { parseArtboardDesignSubmission } from './utils'
 
 export async function artboardDesignNewArtboardAction({
 	userId,
 	formData,
 }: IntentActionArgs) {
 	// validation
-	const submission = await parseArtboardSubmission({
+	const submission = await parseArtboardDesignSubmission({
 		userId,
 		formData,
 		schema: NewArtboardDesignSchema,
@@ -26,14 +26,33 @@ export async function artboardDesignNewArtboardAction({
 	}
 
 	// changes
-	const { id, width } = submission.value
-	const artboard = await findFirstArtboardInstance({
-		where: { id, ownerId: userId },
-	})
-	if (!artboard) return submissionErrorResponse(submission)
+	const { artboardId } = submission.value
 
-	artboard.width = width
-	await artboard.save()
+	// start transaction so we can create design and palette together
+	// palette is 1:1 with design which belongs to an artboard
+	try {
+		await prisma.$transaction(async prisma => {
+			// create design first
+			const designData = designSchema.parse({
+				type: 'palette',
+				ownerId: userId,
+				artboardId,
+			})
+			const design = await prisma.design.create({
+				data: designData,
+			})
+
+			// then create palette
+			await prisma.palette.create({
+				data: {
+					designId: design.id,
+				},
+			})
+		})
+	} catch (error) {
+		console.log(error)
+		return submissionErrorResponse(submission)
+	}
 
 	return json({ status: 'success', submission } as const)
 }

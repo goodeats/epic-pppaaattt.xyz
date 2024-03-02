@@ -18,3 +18,21 @@ export const parseArtboardSubmission = async ({
 		async: true,
 	})
 }
+
+export const parseArtboardDesignSubmission = async ({
+	userId,
+	formData,
+	schema,
+}: IntentActionArgs & { schema: z.ZodSchema<any> }) => {
+	return await parse(formData, {
+		schema: schema.superRefine(async (data, ctx) => {
+			const { artboardId } = data
+			const artboard = await findArtboardByIdAndOwner({
+				id: artboardId,
+				ownerId: userId,
+			})
+			if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
+		}),
+		async: true,
+	})
+}

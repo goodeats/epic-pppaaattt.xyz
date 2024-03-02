@@ -10,11 +10,15 @@ import {
 import chalk from 'chalk'
 import { type AppearanceType } from './appearances'
 import { ArtboardPrismaExtensions } from './prisma-extensions-artboard'
-import { DesignPrismaExtensions } from './prisma-extensions-design'
+import {
+	DesignPrismaExtensions,
+	DesignPrismaQueryExtensions,
+} from './prisma-extensions-design'
 
 export const prismaExtended = remember('prisma', () => {
 	return new PrismaClient({})
 		.$extends(ArtboardPrismaExtensions)
+		.$extends(DesignPrismaQueryExtensions)
 		.$extends(DesignPrismaExtensions)
 })
 

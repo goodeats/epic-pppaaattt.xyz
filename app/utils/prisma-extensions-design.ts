@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { type whereArgsType } from '#app/schema/design'
+import { designSchema, type whereArgsType } from '#app/schema/design'
 import { prismaExtended } from './db.server'
 
 // must be in /utils to actually connect to prisma
@@ -9,6 +9,17 @@ import { prismaExtended } from './db.server'
 
 // instance methods .save() and .delete()
 // https://github.com/prisma/prisma-client-extensions/blob/main/instance-methods/script.ts
+
+export const DesignPrismaQueryExtensions = Prisma.defineExtension({
+	query: {
+		design: {
+			create({ args, query }) {
+				args.data = designSchema.parse(args.data)
+				return query(args)
+			},
+		},
+	},
+})
 
 export const DesignPrismaExtensions = Prisma.defineExtension({
 	result: {
