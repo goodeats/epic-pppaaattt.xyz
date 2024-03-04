@@ -14,6 +14,7 @@ import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignEditPalette } from './panel-form-artboard-design-edit-palette'
 import { PanelFormArtboardDesignNewPalette } from './panel-form-artboard-design-new-palette'
+import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
 
 export const PanelContentArtboardDesignPalette = ({
 	artboard,
@@ -31,7 +32,7 @@ export const PanelContentArtboardDesignPalette = ({
 				</div>
 			</PanelHeader>
 			{designPalettes.map(designPalette => {
-				const { id, palette } = designPalette
+				const { id, visible, palette } = designPalette
 				return (
 					<PanelRow key={palette.id}>
 						<PanelRowContainer>
@@ -46,12 +47,11 @@ export const PanelContentArtboardDesignPalette = ({
 								/>
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								{/* <ToggleAppearanceVisibilityPanelForm
+								<PanelFormArtboardDesignToggleVisibility
+									id={id}
 									artboardId={artboard.id}
-									appearanceId={appearance.id}
-									isVisible={isVisible}
-									tooltipContent={isVisible ? 'Hide' : 'Show'}
-								/> */}
+									visible={visible}
+								/>
 								<PanelFormArtboardDesignDelete
 									id={id}
 									artboardId={artboard.id}

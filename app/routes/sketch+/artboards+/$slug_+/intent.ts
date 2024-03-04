@@ -5,4 +5,5 @@ export const INTENT = {
 	artboardCreateDesignPalette: 'create-artboard-design-palette' as const,
 	artboardUpdateDesignPalette: 'update-artboard-design-palette' as const,
 	artboardDeleteDesign: 'delete-artboard-design' as const,
+	artboardToggleVisibilityDesign: 'toggle-visibility-artboard-design' as const,
 }

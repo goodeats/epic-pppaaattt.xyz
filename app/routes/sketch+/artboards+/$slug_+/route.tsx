@@ -14,7 +14,10 @@ import {
 import { findManyDesignsWithType } from '#app/models/design.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
-import { artboardDesignDeleteAction } from './actions/artboard-design'
+import {
+	artboardDesignDeleteAction,
+	artboardDesignToggleVisibilityAction,
+} from './actions/artboard-design'
 import {
 	artboardDesignEditPaletteAction,
 	artboardDesignNewPaletteAction,
@@ -54,6 +57,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardDeleteDesign: {
 			return artboardDesignDeleteAction(actionArgs)
+		}
+		case INTENT.artboardToggleVisibilityDesign: {
+			return artboardDesignToggleVisibilityAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
