@@ -1,7 +1,10 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import { NewArtboardDesignSchema, designSchema } from '#app/schema/design'
-import { EditArtboardPaletteSchema } from '#app/schema/palette'
+import {
+	DeleteArtboardPaletteSchema,
+	EditArtboardPaletteSchema,
+} from '#app/schema/palette'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
@@ -86,6 +89,44 @@ export async function artboardDesignEditPaletteAction({
 	palette.value = value
 	palette.updatedAt = new Date()
 	await palette.save()
+
+	return json({ status: 'success', submission } as const)
+}
+
+export async function artboardDesignDeletePaletteAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	// validation
+	const submission = await parseArtboardDesignSubmission({
+		userId,
+		formData,
+		schema: DeleteArtboardPaletteSchema,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	// changes
+	const { designId } = submission.value
+	// start transaction so we can delete design and palette together
+	// palette is 1:1 with design which belongs to an artboard
+	try {
+		await prisma.$transaction(async prisma => {
+			// logic before delete
+
+			// delete design will cascade delete palette
+			await prisma.design.deleteMany({
+				where: { id: designId },
+			})
+		})
+	} catch (error) {
+		console.log(error)
+		return submissionErrorResponse(submission)
+	}
 
 	return json({ status: 'success', submission } as const)
 }
