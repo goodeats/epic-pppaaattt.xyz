@@ -1,4 +1,9 @@
-import { type whereArgsType } from '#app/schema/design'
+import { type Design } from '@prisma/client'
+import {
+	type selectArgsType,
+	type findDesignArgsType,
+	type whereArgsType,
+} from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 
 export interface IDesignWithType {
@@ -35,4 +40,27 @@ export const findManyDesignsWithType = async ({
 		},
 	})
 	return designs
+}
+
+export const findFirstDesign = async ({
+	where,
+	select,
+}: findDesignArgsType): Promise<Design | null> => {
+	return await prisma.design.findFirst({
+		where,
+		select,
+	})
+}
+
+export const findDesignByIdAndOwner = async ({
+	id,
+	ownerId,
+	select,
+}: {
+	id: whereArgsType['id']
+	ownerId: whereArgsType['ownerId']
+	select?: selectArgsType
+}): Promise<Design | null> => {
+	const where = { id, ownerId }
+	return await findFirstDesign({ where, select })
 }

@@ -36,8 +36,8 @@ const whereArgs = z.object({
 	artboardId: z.string().optional(),
 })
 
-export type findArtboardArgsType = z.infer<typeof findArtboardArgs>
-export const findArtboardArgs = z.object({
+export type findDesignArgsType = z.infer<typeof findDesignArgs>
+export const findDesignArgs = z.object({
 	where: whereArgs,
 	select: selectArgs.optional(),
 })

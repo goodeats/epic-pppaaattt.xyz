@@ -1,14 +1,16 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import { NewArtboardDesignSchema, designSchema } from '#app/schema/design'
+import { EditArtboardPaletteSchema } from '#app/schema/palette'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
+import { findFirstPaletteInstance } from '#app/utils/prisma-extensions-palette'
 import { parseArtboardDesignSubmission } from './utils'
 
-export async function artboardDesignNewArtboardAction({
+export async function artboardDesignNewPaletteAction({
 	userId,
 	formData,
 }: IntentActionArgs) {
@@ -53,6 +55,37 @@ export async function artboardDesignNewArtboardAction({
 		console.log(error)
 		return submissionErrorResponse(submission)
 	}
+
+	return json({ status: 'success', submission } as const)
+}
+
+export async function artboardDesignEditPaletteAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	// validation
+	const submission = await parseArtboardDesignSubmission({
+		userId,
+		formData,
+		schema: EditArtboardPaletteSchema,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	// changes
+	const { id, value } = submission.value
+	const palette = await findFirstPaletteInstance({
+		where: { id },
+	})
+	if (!palette) return submissionErrorResponse(submission)
+
+	palette.value = value
+	palette.updatedAt = new Date()
+	await palette.save()
 
 	return json({ status: 'success', submission } as const)
 }

@@ -37,6 +37,7 @@ export async function artboardUpdateWidthAction({
 	if (!artboard) return submissionErrorResponse(submission)
 
 	artboard.width = width
+	artboard.updatedAt = new Date()
 	await artboard.save()
 
 	return json({ status: 'success', submission } as const)
@@ -67,6 +68,7 @@ export async function artboardUpdateHeightAction({
 	if (!artboard) return submissionErrorResponse(submission)
 
 	artboard.height = height
+	artboard.updatedAt = new Date()
 	await artboard.save()
 
 	return json({ status: 'success', submission } as const)
@@ -97,6 +99,7 @@ export async function artboardUpdateBackgroundColorAction({
 	if (!artboard) return submissionErrorResponse(submission)
 
 	artboard.backgroundColor = backgroundColor
+	artboard.updatedAt = new Date()
 	await artboard.save()
 
 	return json({ status: 'success', submission } as const)

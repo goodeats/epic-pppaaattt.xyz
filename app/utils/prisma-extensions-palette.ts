@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { designSchema, type whereArgsType } from '#app/schema/design'
+import { type whereArgsType } from '#app/schema/design'
 import { prismaExtended } from './db.server'
 
 // must be in /utils to actually connect to prisma
@@ -10,27 +10,16 @@ import { prismaExtended } from './db.server'
 // instance methods .save() and .delete()
 // https://github.com/prisma/prisma-client-extensions/blob/main/instance-methods/script.ts
 
-export const DesignPrismaQueryExtensions = Prisma.defineExtension({
-	query: {
-		design: {
-			create({ args, query }) {
-				args.data = designSchema.parse(args.data)
-				return query(args)
-			},
-		},
-	},
-})
-
-export const DesignPrismaExtensions = Prisma.defineExtension({
+export const PalettePrismaExtensions = Prisma.defineExtension({
 	result: {
-		design: {
+		palette: {
 			save: {
 				needs: { id: true },
-				compute(design) {
+				compute(palette) {
 					return () => {
-						return prismaExtended.design.update({
-							where: { id: design.id },
-							data: design,
+						return prismaExtended.palette.update({
+							where: { id: palette.id },
+							data: palette,
 						})
 					}
 				},
@@ -40,7 +29,7 @@ export const DesignPrismaExtensions = Prisma.defineExtension({
 				needs: { id: true },
 				compute({ id }) {
 					return () => {
-						return prismaExtended.design.delete({
+						return prismaExtended.palette.delete({
 							where: { id },
 						})
 					}
@@ -51,18 +40,18 @@ export const DesignPrismaExtensions = Prisma.defineExtension({
 })
 
 // https://github.com/prisma/docs/issues/5058#issuecomment-1636473141
-export type ExtendedDesign = Prisma.Result<
-	typeof prismaExtended.design,
+export type ExtendedPalette = Prisma.Result<
+	typeof prismaExtended.palette,
 	any,
 	'findFirstOrThrow'
 >
 
-export const findFirstDesignInstance = async ({
+export const findFirstPaletteInstance = async ({
 	where,
 }: {
 	where: whereArgsType
-}): Promise<ExtendedDesign | null> => {
-	return await prismaExtended.design.findFirst({
+}): Promise<ExtendedPalette | null> => {
+	return await prismaExtended.palette.findFirst({
 		where,
 	})
 }

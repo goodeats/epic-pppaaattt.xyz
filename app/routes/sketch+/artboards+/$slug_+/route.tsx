@@ -14,7 +14,10 @@ import {
 import { findManyDesignsWithType } from '#app/models/design.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
-import { artboardDesignNewArtboardAction } from './actions/artboard-design-palette'
+import {
+	artboardDesignEditPaletteAction,
+	artboardDesignNewPaletteAction,
+} from './actions/artboard-design-palette'
 import {
 	artboardUpdateBackgroundColorAction,
 	artboardUpdateHeightAction,
@@ -43,7 +46,10 @@ export async function action({ request }: DataFunctionArgs) {
 			return artboardUpdateBackgroundColorAction(actionArgs)
 		}
 		case INTENT.artboardCreateDesignPalette: {
-			return artboardDesignNewArtboardAction(actionArgs)
+			return artboardDesignNewPaletteAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignPalette: {
+			return artboardDesignEditPaletteAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

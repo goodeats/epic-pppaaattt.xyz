@@ -12,11 +12,10 @@ export const findFirstArtboard = async ({
 	where,
 	select,
 }: findArtboardArgsType): Promise<Artboard | null> => {
-	const artbord = await prisma.artboard.findFirst({
+	return await prisma.artboard.findFirst({
 		where,
 		select,
 	})
-	return artbord
 }
 
 export const findArtboardByIdAndOwner = async ({

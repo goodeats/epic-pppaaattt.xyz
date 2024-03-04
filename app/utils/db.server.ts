@@ -14,12 +14,14 @@ import {
 	DesignPrismaExtensions,
 	DesignPrismaQueryExtensions,
 } from './prisma-extensions-design'
+import { PalettePrismaExtensions } from './prisma-extensions-palette'
 
 export const prismaExtended = remember('prisma', () => {
 	return new PrismaClient({})
 		.$extends(ArtboardPrismaExtensions)
 		.$extends(DesignPrismaQueryExtensions)
 		.$extends(DesignPrismaExtensions)
+		.$extends(PalettePrismaExtensions)
 })
 
 export const prisma = remember('prisma', () => {
