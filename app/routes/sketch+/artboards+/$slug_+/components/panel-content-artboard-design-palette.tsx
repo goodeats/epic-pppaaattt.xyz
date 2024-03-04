@@ -9,18 +9,18 @@ import {
 	// PanelRowContainer,
 	PanelTitle,
 } from '#app/components/shared'
-import { type IPalette } from '#app/models/design.server'
+import { type IDesignWithPalette } from '#app/models/design.server'
 import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardDesignDeletePalette } from './panel-form-artboard-design-delete-palette'
+import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignEditPalette } from './panel-form-artboard-design-edit-palette'
 import { PanelFormArtboardDesignNewPalette } from './panel-form-artboard-design-new-palette'
 
 export const PanelContentArtboardDesignPalette = ({
 	artboard,
-	palettes,
+	designPalettes,
 }: {
 	artboard: PickedArtboardType
-	palettes: IPalette[]
+	designPalettes: IDesignWithPalette[]
 }) => {
 	return (
 		<Panel>
@@ -30,7 +30,8 @@ export const PanelContentArtboardDesignPalette = ({
 					<PanelFormArtboardDesignNewPalette artboardId={artboard.id} />
 				</div>
 			</PanelHeader>
-			{palettes.map(palette => {
+			{designPalettes.map(designPalette => {
+				const { id, palette } = designPalette
 				return (
 					<PanelRow key={palette.id}>
 						<PanelRowContainer>
@@ -51,9 +52,9 @@ export const PanelContentArtboardDesignPalette = ({
 									isVisible={isVisible}
 									tooltipContent={isVisible ? 'Hide' : 'Show'}
 								/> */}
-								<PanelFormArtboardDesignDeletePalette
+								<PanelFormArtboardDesignDelete
+									id={id}
 									artboardId={artboard.id}
-									palette={palette}
 								/>
 							</PanelRowIconContainer>
 						</PanelRowContainer>

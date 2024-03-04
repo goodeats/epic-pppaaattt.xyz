@@ -5,24 +5,20 @@ import {
 	type whereArgsType,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
+import { type IPalette } from './palette.server'
 
 export interface IDesignWithType {
 	id: string
 	type: string
+	visible: boolean
 	createdAt: Date | string
 	ownerId: string
 	artboardId: string | null
 	palette: IPalette | null
 }
 
-export interface IPalette {
-	id: string
-	format: string
-	value: string
-	opacity: number
-	createdAt: Date | string
-	updatedAt: Date | string
-	designId: string
+export interface IDesignWithPalette extends IDesignWithType {
+	palette: IPalette
 }
 
 export const findManyDesignsWithType = async ({

@@ -413,6 +413,7 @@ model AssetImagesOnLayers {
 model Design {
   id         String @id @default(cuid())
   type      String // e.g. palette, size, fill, stroke, line, etc.
+  visible   Boolean @default(true)
 
   createdAt DateTime @default(now())
 

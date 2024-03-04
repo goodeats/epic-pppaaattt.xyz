@@ -24,6 +24,11 @@ export const NewArtboardDesignSchema = z.object({
 	artboardId: z.string(),
 })
 
+export const DeleteArtboardDesignSchema = z.object({
+	id: z.string(),
+	artboardId: z.string(),
+})
+
 export type selectArgsType = z.infer<typeof selectArgs>
 const selectArgs = z.object({
 	id: z.boolean().optional(),

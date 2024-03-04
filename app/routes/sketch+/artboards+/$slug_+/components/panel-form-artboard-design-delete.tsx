@@ -5,26 +5,25 @@ import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
-import { type IPalette } from '#app/models/design.server'
-import { DeleteArtboardPaletteSchema } from '#app/schema/palette'
+import { DeleteArtboardDesignSchema } from '#app/schema/design'
 import { useIsPending } from '#app/utils/misc'
 import { INTENT } from '../intent'
 import { type action } from '../route'
 
-export const PanelFormArtboardDesignDeletePalette = ({
+export const PanelFormArtboardDesignDelete = ({
+	id,
 	artboardId,
-	palette,
 }: {
+	id: string
 	artboardId: Artboard['id']
-	palette: IPalette
 }) => {
 	const fetcher = useFetcher<typeof action>()
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form] = useForm({
-		id: `panel-form-artboard-design-edit-palette-${palette.id}`,
-		constraint: getFieldsetConstraint(DeleteArtboardPaletteSchema),
+		id: `panel-form-artboard-design-delete-${id}`,
+		constraint: getFieldsetConstraint(DeleteArtboardDesignSchema),
 		lastSubmission: actionData?.submission,
 	})
 
@@ -32,14 +31,9 @@ export const PanelFormArtboardDesignDeletePalette = ({
 		<fetcher.Form method="POST" {...form.props}>
 			<AuthenticityTokenInput />
 
-			<input type="hidden" name="id" value={palette.id} />
+			<input type="hidden" name="id" value={id} />
 			<input type="hidden" name="artboardId" value={artboardId} />
-			<input type="hidden" name="designId" value={palette.designId} />
-			<input
-				type="hidden"
-				name="intent"
-				value={INTENT.artboardDeleteDesignPalette}
-			/>
+			<input type="hidden" name="intent" value={INTENT.artboardDeleteDesign} />
 			<Button
 				type="submit"
 				variant="ghost"

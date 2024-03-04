@@ -1,4 +1,8 @@
-import { type IPalette, type IDesignWithType } from '#app/models/design.server'
+import {
+	type IDesignWithType,
+	type IDesignWithPalette,
+} from '#app/models/design.server'
+import { type IPalette } from '#app/models/palette.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboardBackgroundColor } from './panel-content-artboard-background-color'
 import { PanelContentArtboardDesignPalette } from './panel-content-artboard-design-palette'
@@ -11,9 +15,9 @@ export const PanelContentArtboard = ({
 	artboard: PickedArtboardType
 	artboardDesigns: IDesignWithType[]
 }) => {
-	const palettes: IPalette[] = artboardDesigns
+	const designPalettes: IDesignWithPalette[] = artboardDesigns
 		.filter(design => design.type === 'palette' && design.palette !== null)
-		.map(design => design.palette as IPalette)
+		.map(design => ({ ...design, palette: design.palette as IPalette }))
 
 	return (
 		<div>
@@ -21,7 +25,7 @@ export const PanelContentArtboard = ({
 			<PanelContentArtboardBackgroundColor artboard={artboard} />
 			<PanelContentArtboardDesignPalette
 				artboard={artboard}
-				palettes={palettes}
+				designPalettes={designPalettes}
 			/>
 		</div>
 	)
