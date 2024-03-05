@@ -1,0 +1,113 @@
+import { json } from '@remix-run/node'
+import { type IntentActionArgs } from '#app/definitions/intent-action-args'
+import { NewArtboardDesignSchema, designSchema } from '#app/schema/design'
+import { EditArtboardPaletteSchema } from '#app/schema/palette'
+import {
+	notSubmissionResponse,
+	submissionErrorResponse,
+} from '#app/utils/conform-utils'
+import { prisma } from '#app/utils/db.server'
+import { findFirstPaletteInstance } from '#app/utils/prisma-extensions-palette'
+import { parseArtboardDesignSubmission } from './utils'
+
+export async function artboardDesignNewSizeAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	// validation
+	const submission = await parseArtboardDesignSubmission({
+		userId,
+		formData,
+		schema: NewArtboardDesignSchema,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	// changes
+	const { artboardId } = submission.value
+
+	// start transaction so we can create design and size together
+	// size is 1:1 with design which belongs to an artboard
+	try {
+		await prisma.$transaction(async prisma => {
+			// new designs are appended to the end of the list
+			// find the last design in the list by type
+			// we know the artboard already exists for the user by this point
+			const lastArtboardDesignSize = await prisma.design.findFirst({
+				where: { type: 'size', artboardId, nextId: null },
+			})
+
+			// create design before size
+			const designData = designSchema.parse({
+				type: 'size',
+				ownerId: userId,
+				artboardId,
+			})
+			const design = await prisma.design.create({
+				data: designData,
+			})
+
+			// then create size after design
+			await prisma.size.create({
+				data: {
+					designId: design.id,
+				},
+			})
+
+			// if the artboard already has a size
+			// link the new size to the last one
+			// and the last one to the new one
+			if (lastArtboardDesignSize) {
+				await prisma.design.update({
+					where: { id: design.id },
+					data: { prevId: lastArtboardDesignSize.id },
+				})
+
+				await prisma.design.update({
+					where: { id: lastArtboardDesignSize.id },
+					data: { nextId: design.id },
+				})
+			}
+		})
+	} catch (error) {
+		console.log(error)
+		return submissionErrorResponse(submission)
+	}
+
+	return json({ status: 'success', submission } as const)
+}
+
+export async function artboardDesignEditSizeAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	// validation
+	const submission = await parseArtboardDesignSubmission({
+		userId,
+		formData,
+		schema: EditArtboardPaletteSchema,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	// changes
+	const { id, value } = submission.value
+	const size = await findFirstPaletteInstance({
+		where: { id },
+	})
+	if (!size) return submissionErrorResponse(submission)
+
+	size.value = value
+	size.updatedAt = new Date()
+	await size.save()
+
+	return json({ status: 'success', submission } as const)
+}
