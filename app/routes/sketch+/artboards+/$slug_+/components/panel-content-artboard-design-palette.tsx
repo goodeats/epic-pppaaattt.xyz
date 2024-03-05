@@ -15,6 +15,7 @@ import { PanelFormArtboardDesignEditPalette } from './panel-form-artboard-design
 import { PanelFormArtboardDesignNewPalette } from './panel-form-artboard-design-new-palette'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
+import { PanelPopoverArtboardDesignPalette } from './panel-popover-artboard-design-palette'
 
 export const PanelContentArtboardDesignPalette = ({
 	artboard,
@@ -75,10 +76,7 @@ export const PanelContentArtboardDesignPalette = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								{/* <PanelRowIndicator
-									appearance={appearance}
-									appearanceType={appearanceType}
-								/> */}
+								<PanelPopoverArtboardDesignPalette palette={palette} />
 								<PanelFormArtboardDesignEditPalette
 									artboardId={artboard.id}
 									palette={palette}
