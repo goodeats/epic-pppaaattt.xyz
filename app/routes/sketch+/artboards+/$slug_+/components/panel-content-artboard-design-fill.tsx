@@ -11,6 +11,7 @@ import {
 import { type IDesignWithFill } from '#app/models/design.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
+import { PanelFormArtboardDesignEditFill } from './panel-form-artboard-design-edit-fill'
 import { PanelFormArtboardDesignNewFill } from './panel-form-artboard-design-new-fill'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
@@ -72,12 +73,11 @@ export const PanelContentArtboardDesignFill = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<p>yo</p>
 								{/* <PanelPopoverArtboardDesignSize fill={fill} /> */}
-								{/* <PanelFormArtboardDesignEditSize
+								<PanelFormArtboardDesignEditFill
 									artboardId={artboard.id}
 									fill={fill}
-								/> */}
+								/>
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
 								<PanelFormArtboardDesignToggleVisibility
