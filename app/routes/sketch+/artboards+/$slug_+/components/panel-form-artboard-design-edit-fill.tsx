@@ -24,6 +24,8 @@ export const PanelFormArtboardDesignEditFill = ({
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
+	const canEdit = fill.style === 'solid'
+
 	const [form, fields] = useForm({
 		id: `panel-form-artboard-design-edit-fill-${fill.id}`,
 		constraint: getFieldsetConstraint(EditArtboardFillSchema),
@@ -67,18 +69,27 @@ export const PanelFormArtboardDesignEditFill = ({
 				name="intent"
 				value={INTENT.artboardUpdateDesignFill}
 			/>
-			<Input
-				type="text"
-				pattern="[A-F0-9]{6}"
-				maxLength={6}
-				className={'flex h-8'}
-				onChange={e => handleChange(e)}
-				onBlur={e => handleSubmit(e)}
-				disabled={isPending}
-				{...conform.input(fields.value, {
-					ariaAttributes: true,
-				})}
-			/>
+			{canEdit ? (
+				<Input
+					type="text"
+					pattern="[A-F0-9]{6}"
+					maxLength={6}
+					className={'flex h-8'}
+					onChange={e => handleChange(e)}
+					onBlur={e => handleSubmit(e)}
+					disabled={isPending}
+					{...conform.input(fields.value, {
+						ariaAttributes: true,
+					})}
+				/>
+			) : (
+				<Input
+					type="text"
+					className={'flex h-8'}
+					disabled
+					defaultValue="None"
+				/>
+			)}
 		</fetcher.Form>
 	)
 }
