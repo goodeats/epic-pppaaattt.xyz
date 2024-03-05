@@ -23,43 +23,6 @@ export const getArtboard = async (userId: string, artboardId: string) => {
 					updatedAt: true,
 				},
 			},
-			layers: {
-				select: {
-					order: true,
-					isVisible: true,
-					layer: {
-						select: {
-							name: true,
-							description: true,
-							slug: true,
-							updatedAt: true,
-						},
-					},
-				},
-				orderBy: {
-					order: 'asc',
-				},
-			},
-			appearances: {
-				select: {
-					order: true,
-					isVisible: true,
-					overrideValue: true,
-					appearance: {
-						select: {
-							name: true,
-							description: true,
-							slug: true,
-							type: true,
-							value: true,
-							updatedAt: true,
-						},
-					},
-				},
-				orderBy: {
-					order: 'asc',
-				},
-			},
 		},
 	})
 	return artboard

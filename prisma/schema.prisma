@@ -219,7 +219,7 @@ model Artboard {
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId String
 
-  layers LayersOnArtboards[]
+  layers Layer[]
   designs Design[]
   appearances AppearancesOnArtboards[]
 
@@ -237,7 +237,8 @@ model Layer {
   id          String @id @default(cuid())
   name        String
   description String?
-  slug       String
+  slug       String?
+  visible     Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -245,11 +246,20 @@ model Layer {
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId String
 
-  parentId String?
-  parent   Layer? @relation("LayerToLayer", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  children Layer[] @relation("LayerToLayer")
+  artboard Artboard? @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artboardId String?
 
-  artboards LayersOnArtboards[]
+  next Layer? @relation("LayerDoublyLinkedList", fields: [nextId], references: [id])
+  nextId String? @unique
+
+  prev Layer? @relation("LayerDoublyLinkedList")
+  prevId String? @unique
+
+  parentId String?
+  parent   Layer? @relation("ParentChildLayer", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  children Layer[] @relation("ParentChildLayer")
+
+  designs Design[]
   appearances AppearancesOnLayers[]
   assetImages AssetImagesOnLayers[]
 
@@ -340,29 +350,6 @@ model AppearancesOnLayers {
   @@index([appearanceId, layerId])
 }
 
-model LayersOnArtboards {
-  id          String @id @default(cuid())
-  isVisible   Boolean @default(true)
-  // order of layers in the artboard
-  // considered linked lists, but not worth complexity unless I'm adding many layers to an artboard
-  order       Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  layer Layer @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  layerId String
-
-  artboard Artboard @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artboardId String
-
-  // non-unique foreign key
-  @@index([layerId])
-  @@index([artboardId])
-  // This helps our order by in the user search a LOT
-  @@index([layerId, artboardId])
-}
-
 model AssetImage {
   id          String @id @default(cuid())
   name        String
@@ -433,6 +420,9 @@ model Design {
 
   artboard Artboard? @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artboardId String?
+
+  layer Layer? @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  layerId String?
 
   palette Palette?
   size Size?
