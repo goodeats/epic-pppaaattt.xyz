@@ -12,6 +12,7 @@ import {
 	SketchBodyContent,
 } from '#app/components/shared'
 import { findManyDesignsWithType } from '#app/models/design.server'
+import { findManyLayers } from '#app/models/layer.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import {
@@ -59,6 +60,7 @@ import {
 	artboardDesignEditTemplateStyleAction,
 	artboardDesignNewTemplateAction,
 } from './actions/artboard-design-template'
+import { artboardLayerNewAction } from './actions/artboard-layer'
 import {
 	artboardUpdateBackgroundColorAction,
 	artboardUpdateHeightAction,
@@ -167,6 +169,9 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.artboardUpdateDesignTemplateStyle: {
 			return artboardDesignEditTemplateStyleAction(actionArgs)
 		}
+		case INTENT.artboardCreateLayer: {
+			return artboardLayerNewAction(actionArgs)
+		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
 		}
@@ -185,11 +190,15 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const date = new Date(artboard.updatedAt)
 	const artboardTimeAgo = formatDistanceToNow(date)
 
+	const layers = await findManyLayers({
+		where: { ownerId: userId, artboardId: artboard.id },
+	})
+
 	const artboardDesigns = await findManyDesignsWithType({
 		where: { artboardId: artboard.id },
 	})
 
-	return json({ owner, artboard, artboardTimeAgo, artboardDesigns })
+	return json({ owner, artboard, artboardTimeAgo, artboardDesigns, layers })
 }
 
 export default function SketchRoute() {
@@ -197,10 +206,7 @@ export default function SketchRoute() {
 	return (
 		<SketchBody>
 			<PanelContainer variant="left">
-				<PanelContentLeft
-					artboard={data.artboard}
-					artboardDesigns={data.artboardDesigns}
-				/>
+				<PanelContentLeft artboard={data.artboard} layers={data.layers} />
 			</PanelContainer>
 			<SketchBodyContent>
 				<CanvasContent artboard={data.artboard} />

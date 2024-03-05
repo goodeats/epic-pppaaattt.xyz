@@ -5,15 +5,17 @@ import {
 } from '#app/components/shared'
 import { TabsContent } from '#app/components/ui/tabs'
 import { type IDesignWithType } from '#app/models/design.server'
+import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboard } from './panel-content-artboard'
+import { PanelContentArtboardLayer } from './panel-content-artboard-layer'
 
 export const PanelContentLeft = ({
 	artboard,
-	artboardDesigns,
+	layers,
 }: {
 	artboard: PickedArtboardType
-	artboardDesigns: IDesignWithType[]
+	layers: ILayer[]
 }) => {
 	return (
 		<SideNavTabsWrapper defaultValue="layers">
@@ -21,7 +23,9 @@ export const PanelContentLeft = ({
 				<SideNavTabsTrigger value="layers">Layers</SideNavTabsTrigger>
 				<SideNavTabsTrigger value="assets">Assets</SideNavTabsTrigger>
 			</SideNavTabsList>
-			<TabsContent value="layers">Add layers here</TabsContent>
+			<TabsContent value="layers">
+				<PanelContentArtboardLayer artboard={artboard} layers={layers} />
+			</TabsContent>
 			<TabsContent value="assets">Add assets like images here</TabsContent>
 		</SideNavTabsWrapper>
 	)
