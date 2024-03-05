@@ -4,6 +4,7 @@ import {
 	PanelRow,
 	PanelRowContainer,
 	PanelRowIconContainer,
+	PanelRowOrderContainer,
 	PanelRowValueContainer,
 	// PanelRow,
 	// PanelRowContainer,
@@ -14,6 +15,7 @@ import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignEditPalette } from './panel-form-artboard-design-edit-palette'
 import { PanelFormArtboardDesignNewPalette } from './panel-form-artboard-design-new-palette'
+import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
 
 export const PanelContentArtboardDesignPalette = ({
@@ -23,6 +25,7 @@ export const PanelContentArtboardDesignPalette = ({
 	artboard: PickedArtboardType
 	designPalettes: IDesignWithPalette[]
 }) => {
+	const designCount = designPalettes.length
 	return (
 		<Panel>
 			<PanelHeader>
@@ -31,10 +34,26 @@ export const PanelContentArtboardDesignPalette = ({
 					<PanelFormArtboardDesignNewPalette artboardId={artboard.id} />
 				</div>
 			</PanelHeader>
-			{designPalettes.map(designPalette => {
+			{designPalettes.map((designPalette, index) => {
 				const { id, visible, palette } = designPalette
 				return (
 					<PanelRow key={palette.id}>
+						<PanelRowOrderContainer>
+							<PanelFormArtboardDesignReorder
+								id={id}
+								artboardId={artboard.id}
+								panelCount={designCount}
+								panelIndex={index}
+								direction="up"
+							/>
+							<PanelFormArtboardDesignReorder
+								id={id}
+								artboardId={artboard.id}
+								panelCount={designCount}
+								panelIndex={index}
+								direction="down"
+							/>
+						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
 								{/* <PanelRowIndicator

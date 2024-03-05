@@ -14,6 +14,7 @@ export interface Design {
 	artboardId?: string
 }
 
+// use this to ensure enum values are correct
 export const designSchema = z.object({
 	type: z.nativeEnum(DesignTypeEnum),
 	ownerId: z.string(),
@@ -32,6 +33,12 @@ export const DeleteArtboardDesignSchema = z.object({
 export const ToggleVisibilityArtboardDesignSchema = z.object({
 	id: z.string(),
 	artboardId: z.string(),
+})
+
+export const ReorderArtboardDesignSchema = z.object({
+	id: z.string(),
+	artboardId: z.string(),
+	direction: z.enum(['up', 'down']),
 })
 
 export type selectArgsType = z.infer<typeof selectArgs>

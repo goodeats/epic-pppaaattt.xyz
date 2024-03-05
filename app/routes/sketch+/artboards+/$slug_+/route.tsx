@@ -16,6 +16,7 @@ import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import {
 	artboardDesignDeleteAction,
+	artboardDesignReorderAction,
 	artboardDesignToggleVisibilityAction,
 } from './actions/artboard-design'
 import {
@@ -55,11 +56,14 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.artboardUpdateDesignPalette: {
 			return artboardDesignEditPaletteAction(actionArgs)
 		}
-		case INTENT.artboardDeleteDesign: {
-			return artboardDesignDeleteAction(actionArgs)
+		case INTENT.artboardReorderDesign: {
+			return artboardDesignReorderAction(actionArgs)
 		}
 		case INTENT.artboardToggleVisibilityDesign: {
 			return artboardDesignToggleVisibilityAction(actionArgs)
+		}
+		case INTENT.artboardDeleteDesign: {
+			return artboardDesignDeleteAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

@@ -34,7 +34,14 @@ export async function artboardDesignNewPaletteAction({
 	// palette is 1:1 with design which belongs to an artboard
 	try {
 		await prisma.$transaction(async prisma => {
-			// create design first
+			// new designs are appended to the end of the list
+			// find the last design in the list by type
+			// we know the artboard already exists for the user by this point
+			const lastArtboardDesignPalette = await prisma.design.findFirst({
+				where: { type: 'palette', artboardId, nextId: null },
+			})
+
+			// create design before palette
 			const designData = designSchema.parse({
 				type: 'palette',
 				ownerId: userId,
@@ -44,12 +51,27 @@ export async function artboardDesignNewPaletteAction({
 				data: designData,
 			})
 
-			// then create palette
+			// then create palette after design
 			await prisma.palette.create({
 				data: {
 					designId: design.id,
 				},
 			})
+
+			// if the artboard already has a palette
+			// link the new palette to the last one
+			// and the last one to the new one
+			if (lastArtboardDesignPalette) {
+				await prisma.design.update({
+					where: { id: design.id },
+					data: { prevId: lastArtboardDesignPalette.id },
+				})
+
+				await prisma.design.update({
+					where: { id: lastArtboardDesignPalette.id },
+					data: { nextId: design.id },
+				})
+			}
 		})
 	} catch (error) {
 		console.log(error)
