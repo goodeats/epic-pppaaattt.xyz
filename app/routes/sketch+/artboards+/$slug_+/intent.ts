@@ -21,4 +21,8 @@ export const INTENT = {
 		'update-artboard-design-stroke-basis' as const,
 	artboardCreateDesignLine: 'create-artboard-design-line' as const,
 	artboardUpdateDesignLineWidth: 'update-artboard-design-line-width' as const,
+	artboardCreateDesignRotate: 'create-artboard-design-rotate' as const,
+	artboardUpdateDesignRotate: 'update-artboard-design-rotate' as const,
+	artboardUpdateDesignRotateBasis:
+		'update-artboard-design-rotate-basis' as const,
 }

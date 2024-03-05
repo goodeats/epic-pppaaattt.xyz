@@ -34,6 +34,11 @@ import {
 	artboardDesignNewPaletteAction,
 } from './actions/artboard-design-palette'
 import {
+	artboardDesignEditRotateAction,
+	artboardDesignEditRotateBasisAction,
+	artboardDesignNewRotateAction,
+} from './actions/artboard-design-rotate'
+import {
 	artboardDesignEditSizeAction,
 	artboardDesignNewSizeAction,
 } from './actions/artboard-design-size'
@@ -120,6 +125,15 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateDesignLineWidth: {
 			return artboardDesignEditLineWidthAction(actionArgs)
+		}
+		case INTENT.artboardCreateDesignRotate: {
+			return artboardDesignNewRotateAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignRotate: {
+			return artboardDesignEditRotateAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignRotateBasis: {
+			return artboardDesignEditRotateBasisAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

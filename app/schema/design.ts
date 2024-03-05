@@ -6,6 +6,7 @@ export const DesignTypeEnum = {
 	FILL: 'fill',
 	STROKE: 'stroke',
 	LINE: 'line',
+	ROTATE: 'rotate',
 	// add more design types here
 } as const
 type ObjectValues<T> = T[keyof T]
