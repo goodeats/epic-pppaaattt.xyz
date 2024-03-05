@@ -6,6 +6,7 @@ import {
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 import { type IPalette } from './palette.server'
+import { type ISize } from './size.server'
 
 export interface IDesignWithType {
 	id: string
@@ -17,10 +18,15 @@ export interface IDesignWithType {
 	ownerId: string
 	artboardId: string | null
 	palette: IPalette | null
+	size: ISize | null
 }
 
 export interface IDesignWithPalette extends IDesignWithType {
 	palette: IPalette
+}
+
+export interface IDesignWithSize extends IDesignWithType {
+	size: ISize
 }
 
 export const findManyDesignsWithType = async ({
@@ -32,6 +38,7 @@ export const findManyDesignsWithType = async ({
 		where,
 		include: {
 			palette: true,
+			size: true,
 		},
 		orderBy: {
 			type: 'asc',

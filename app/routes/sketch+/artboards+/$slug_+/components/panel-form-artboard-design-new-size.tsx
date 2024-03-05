@@ -10,7 +10,7 @@ import { useIsPending } from '#app/utils/misc'
 import { INTENT } from '../intent'
 import { type action } from '../route'
 
-export const PanelFormArtboardDesignNewPalette = ({
+export const PanelFormArtboardDesignNewSize = ({
 	artboardId,
 }: {
 	artboardId: Artboard['id']
@@ -20,7 +20,7 @@ export const PanelFormArtboardDesignNewPalette = ({
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 	const [form] = useForm({
-		id: 'panel-form-artboard-design-new-palette',
+		id: 'panel-form-artboard-design-new-size',
 		constraint: getFieldsetConstraint(NewArtboardDesignSchema),
 		lastSubmission: actionData?.submission,
 	})
@@ -33,7 +33,7 @@ export const PanelFormArtboardDesignNewPalette = ({
 			<input
 				type="hidden"
 				name="intent"
-				value={INTENT.artboardCreateDesignPalette}
+				value={INTENT.artboardCreateDesignSize}
 			/>
 			<Button
 				type="submit"
