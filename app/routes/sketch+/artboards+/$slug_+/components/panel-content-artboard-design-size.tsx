@@ -15,6 +15,7 @@ import { PanelFormArtboardDesignEditSize } from './panel-form-artboard-design-ed
 import { PanelFormArtboardDesignNewSize } from './panel-form-artboard-design-new-size'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
+import { PanelPopoverArtboardDesignSize } from './panel-popover-artboard-design-size'
 
 export const PanelContentArtboardDesignSize = ({
 	artboard,
@@ -73,7 +74,7 @@ export const PanelContentArtboardDesignSize = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								{/* <PanelPopoverArtboardDesignPalette size={size} /> */}
+								<PanelPopoverArtboardDesignSize size={size} />
 								<PanelFormArtboardDesignEditSize
 									artboardId={artboard.id}
 									size={size}

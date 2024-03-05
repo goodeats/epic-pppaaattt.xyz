@@ -33,6 +33,7 @@ export type IconName =
 	| 'file-minus'
 	| 'file-plus'
 	| 'file-text'
+	| 'gear'
 	| 'github-logo'
 	| 'height'
 	| 'instagram-logo'
