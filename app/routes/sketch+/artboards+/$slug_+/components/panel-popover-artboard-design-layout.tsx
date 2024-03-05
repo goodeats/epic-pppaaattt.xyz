@@ -9,6 +9,8 @@ import {
 	PopoverTrigger,
 } from '#app/components/ui/popover'
 import { type ILayout } from '#app/models/layout.server'
+import { PanelFormArtboardDesignEditLayoutColumns } from './panel-form-artboard-design-edit-layout-columns'
+import { PanelFormArtboardDesignEditLayoutRows } from './panel-form-artboard-design-edit-layout-rows'
 import { PanelFormArtboardDesignEditLayoutStyle } from './panel-form-artboard-design-edit-layout-style'
 
 export const PanelPopoverArtboardDesignLayout = ({
@@ -59,20 +61,16 @@ export const PanelPopoverArtboardDesignLayout = ({
 							</div>
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="rows">Rows</Label>
-								<Input
-									id="rows"
-									defaultValue={layout.rows}
-									className="col-span-2 h-8"
-									disabled
+								<PanelFormArtboardDesignEditLayoutRows
+									artboardId={artboardId}
+									layout={layout}
 								/>
 							</div>
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="columns">Columns</Label>
-								<Input
-									id="columns"
-									defaultValue={layout.columns}
-									className="col-span-2 h-8"
-									disabled
+								<PanelFormArtboardDesignEditLayoutColumns
+									artboardId={artboardId}
+									layout={layout}
 								/>
 							</div>
 						</div>

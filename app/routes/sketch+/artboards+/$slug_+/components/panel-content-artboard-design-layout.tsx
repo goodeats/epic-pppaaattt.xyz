@@ -8,6 +8,7 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
+import { Input } from '#app/components/ui/input'
 import { type IDesignWithLayout } from '#app/models/design.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
@@ -86,9 +87,11 @@ export const PanelContentArtboardDesignLayout = ({
 										layout={layout}
 									/>
 								) : (
-									<PanelFormArtboardDesignEditLayoutCount
-										artboardId={artboard.id}
-										layout={layout}
+									<Input
+										type="text"
+										className={'flex h-8'}
+										disabled
+										defaultValue="Grid"
 									/>
 								)}
 							</PanelRowValueContainer>

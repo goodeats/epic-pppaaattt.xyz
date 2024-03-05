@@ -6,12 +6,12 @@ import { type FocusEvent } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Input } from '#app/components/ui/input'
 import { type ILayout } from '#app/models/layout.server'
-import { EditArtboardLayoutCountSchema } from '#app/schema/layout'
+import { EditArtboardLayoutRowsSchema } from '#app/schema/layout'
 import { useIsPending } from '#app/utils/misc'
 import { INTENT } from '../intent'
 import { type action } from '../route'
 
-export const PanelFormArtboardDesignEditLayoutCount = ({
+export const PanelFormArtboardDesignEditLayoutRows = ({
 	artboardId,
 	layout,
 }: {
@@ -23,8 +23,8 @@ export const PanelFormArtboardDesignEditLayoutCount = ({
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: `panel-form-artboard-design-edit-layout-${layout.id}-count`,
-		constraint: getFieldsetConstraint(EditArtboardLayoutCountSchema),
+		id: `panel-form-artboard-design-edit-layout-${layout.id}-rows`,
+		constraint: getFieldsetConstraint(EditArtboardLayoutRowsSchema),
 		lastSubmission: actionData?.submission,
 		defaultValue: {
 			...layout,
@@ -38,7 +38,11 @@ export const PanelFormArtboardDesignEditLayoutCount = ({
 	}
 
 	return (
-		<fetcher.Form method="POST" {...form.props}>
+		<fetcher.Form
+			method="POST"
+			{...form.props}
+			className={'col-span-2 flex h-8'}
+		>
 			<AuthenticityTokenInput />
 
 			<input type="hidden" name="id" value={layout.id} />
@@ -47,17 +51,17 @@ export const PanelFormArtboardDesignEditLayoutCount = ({
 			<input
 				type="hidden"
 				name="intent"
-				value={INTENT.artboardUpdateDesignLayoutCount}
+				value={INTENT.artboardUpdateDesignLayoutRows}
 			/>
 			<Input
 				type="number"
 				min={1}
-				max={100_000}
+				max={200}
 				className={'flex h-8'}
 				onBlur={e => handleSubmit(e)}
 				autoComplete="off"
 				disabled={isPending}
-				{...conform.input(fields.count, {
+				{...conform.input(fields.rows, {
 					ariaAttributes: true,
 				})}
 			/>
