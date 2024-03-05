@@ -15,6 +15,7 @@ import {
 	DesignPrismaQueryExtensions,
 } from './prisma-extensions-design'
 import { FillPrismaExtensions } from './prisma-extensions-fill'
+import { LayerPrismaExtensions } from './prisma-extensions-layer'
 import { LayoutPrismaExtensions } from './prisma-extensions-layout'
 import { LinePrismaExtensions } from './prisma-extensions-line'
 import { PalettePrismaExtensions } from './prisma-extensions-palette'
@@ -36,6 +37,7 @@ export const prismaExtended = remember('prisma', () => {
 		.$extends(RotatePrismaExtensions)
 		.$extends(LayoutPrismaExtensions)
 		.$extends(TemplatePrismaExtensions)
+		.$extends(LayerPrismaExtensions)
 })
 
 export const prisma = remember('prisma', () => {

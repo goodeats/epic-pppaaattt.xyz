@@ -1,12 +1,19 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { NewArtboardLayerSchema } from '#app/schema/layer'
+import {
+	EditArtboardLayerNameSchema,
+	NewArtboardLayerSchema,
+} from '#app/schema/layer'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
-import { parseArtboardDesignSubmission } from './utils'
+import { findFirstLayerInstance } from '#app/utils/prisma-extensions-layer'
+import {
+	parseArtboardDesignSubmission,
+	parseArtboardLayerUpdateSubmission,
+} from './utils'
 
 export async function artboardLayerNewAction({
 	userId,
@@ -70,6 +77,37 @@ export async function artboardLayerNewAction({
 		console.log(error)
 		return submissionErrorResponse(submission)
 	}
+
+	return json({ status: 'success', submission } as const)
+}
+
+export async function artboardLayerUpdateNameAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	// validation
+	const submission = await parseArtboardLayerUpdateSubmission({
+		userId,
+		formData,
+		schema: EditArtboardLayerNameSchema,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	// changes
+	const { id, name } = submission.value
+	const palette = await findFirstLayerInstance({
+		where: { id },
+	})
+	if (!palette) return submissionErrorResponse(submission)
+
+	palette.name = name
+	palette.updatedAt = new Date()
+	await palette.save()
 
 	return json({ status: 'success', submission } as const)
 }

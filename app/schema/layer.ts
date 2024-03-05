@@ -4,6 +4,12 @@ export const NewArtboardLayerSchema = z.object({
 	artboardId: z.string(),
 })
 
+export const EditArtboardLayerNameSchema = z.object({
+	id: z.string(),
+	artboardId: z.string(),
+	name: z.string().min(1).max(40),
+})
+
 export const DeleteArtboardLayerSchema = z.object({
 	id: z.string(),
 	artboardId: z.string(),
@@ -32,8 +38,8 @@ const whereArgs = z.object({
 	artboardId: z.string().optional(),
 })
 
-export type findDesignArgsType = z.infer<typeof findDesignArgs>
-export const findDesignArgs = z.object({
+export type findLayerArgsType = z.infer<typeof findLayerArgs>
+export const findLayerArgs = z.object({
 	where: whereArgs,
 	select: selectArgs.optional(),
 })

@@ -37,4 +37,5 @@ export const INTENT = {
 	artboardUpdateDesignTemplateStyle:
 		'update-artboard-design-template-style' as const,
 	artboardCreateLayer: 'create-artboard-layer' as const,
+	artboardUpdateLayerName: 'update-artboard-layer-name' as const,
 }
