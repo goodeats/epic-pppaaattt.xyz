@@ -438,6 +438,7 @@ model Design {
   size Size?
   fill Fill?
   stroke Stroke?
+  line Line?
 
   // non-unique foreign key
   @@index([ownerId])
@@ -491,6 +492,18 @@ model Stroke {
   style      String @default("solid") // e.g. solid, gradient, etc.
   value       String @default("000000")
   basis     String @default("defined") // e.g. defined, random, palette, pixel, etc.
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  design Design @relation(fields: [designId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  designId String @unique
+}
+
+model Line {
+  id          String @id @default(cuid())
+
+  width     Float @default(1)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
