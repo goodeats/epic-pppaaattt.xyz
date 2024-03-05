@@ -11,12 +11,12 @@ import {
 	SelectValue,
 } from '#app/components/ui/select'
 import { type IFill } from '#app/models/fill.server'
-import { EditArtboardFillStyleSchema } from '#app/schema/fill'
+import { EditArtboardFillBasisSchema } from '#app/schema/fill'
 import { useIsPending } from '#app/utils/misc'
 import { INTENT } from '../intent'
 import { type action } from '../route'
 
-export const PanelFormArtboardDesignEditFillFormat = ({
+export const PanelFormArtboardDesignEditFillBasis = ({
 	artboardId,
 	fill,
 }: {
@@ -28,23 +28,15 @@ export const PanelFormArtboardDesignEditFillFormat = ({
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: `panel-form-artboard-design-edit-fill-${fill.id}-format`,
-		constraint: getFieldsetConstraint(EditArtboardFillStyleSchema),
+		id: `panel-form-artboard-design-edit-fill-${fill.id}-basis`,
+		constraint: getFieldsetConstraint(EditArtboardFillBasisSchema),
 		lastSubmission: actionData?.submission,
 		defaultValue: {
 			...fill,
 		},
 	})
 
-	// const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-	// 	console.log('handleChange', event)
-	// 	fetcher.submit(event.currentTarget.form, {
-	// 		method: 'POST',
-	// 	})
-	// }
-
 	const handleChange = (value: string) => {
-		// console.log('handleChange', value)
 		fetcher.submit(form.ref.current, {
 			method: 'POST',
 		})
@@ -64,19 +56,21 @@ export const PanelFormArtboardDesignEditFillFormat = ({
 			<input
 				type="hidden"
 				name="intent"
-				value={INTENT.artboardUpdateDesignFillStyle}
+				value={INTENT.artboardUpdateDesignFillBasis}
 			/>
 			<Select
 				onValueChange={value => handleChange(value)}
 				disabled={isPending}
-				{...conform.input(fields.style)}
+				{...conform.input(fields.basis)}
 			>
 				<SelectTrigger>
 					<SelectValue placeholder="Select a format" />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="solid">Solid</SelectItem>
-					<SelectItem value="none">None</SelectItem>
+					<SelectItem value="defined">Defined</SelectItem>
+					<SelectItem value="random">Random</SelectItem>
+					<SelectItem value="palette">Palette</SelectItem>
+					<SelectItem value="pixel">Pixel</SelectItem>
 				</SelectContent>
 			</Select>
 		</fetcher.Form>

@@ -9,7 +9,8 @@ import {
 	PopoverTrigger,
 } from '#app/components/ui/popover'
 import { type IFill } from '#app/models/fill.server'
-import { PanelFormArtboardDesignEditFillFormat } from './panel-form-artboard-design-edit-fill-format'
+import { PanelFormArtboardDesignEditFillBasis } from './panel-form-artboard-design-edit-fill-basis'
+import { PanelFormArtboardDesignEditFillStyle } from './panel-form-artboard-design-edit-fill-style'
 
 export const PanelPopoverArtboardDesignFill = ({
 	artboardId,
@@ -44,7 +45,7 @@ export const PanelPopoverArtboardDesignFill = ({
 						<div className="grid gap-2">
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="style">Style</Label>
-								<PanelFormArtboardDesignEditFillFormat
+								<PanelFormArtboardDesignEditFillStyle
 									artboardId={artboardId}
 									fill={fill}
 								/>
@@ -60,11 +61,9 @@ export const PanelPopoverArtboardDesignFill = ({
 							</div>
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="basis">Basis</Label>
-								<Input
-									id="basis"
-									defaultValue={fill.basis}
-									className="col-span-2 h-8"
-									disabled
+								<PanelFormArtboardDesignEditFillBasis
+									artboardId={artboardId}
+									fill={fill}
 								/>
 							</div>
 						</div>
