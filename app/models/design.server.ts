@@ -12,6 +12,8 @@ export interface IDesignWithType {
 	type: string
 	visible: boolean
 	createdAt: Date | string
+	nextId: string | null
+	prevId: string | null
 	ownerId: string
 	artboardId: string | null
 	palette: IPalette | null

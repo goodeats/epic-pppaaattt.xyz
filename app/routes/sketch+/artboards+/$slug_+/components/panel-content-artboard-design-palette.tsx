@@ -6,8 +6,6 @@ import {
 	PanelRowIconContainer,
 	PanelRowOrderContainer,
 	PanelRowValueContainer,
-	// PanelRow,
-	// PanelRowContainer,
 	PanelTitle,
 } from '#app/components/shared'
 import { type IDesignWithPalette } from '#app/models/design.server'
@@ -25,6 +23,27 @@ export const PanelContentArtboardDesignPalette = ({
 	artboard: PickedArtboardType
 	designPalettes: IDesignWithPalette[]
 }) => {
+	const orderedDesignPalettes = designPalettes.reduce(
+		(acc: IDesignWithPalette[], designPalette) => {
+			if (!designPalette.prevId) {
+				acc.unshift(designPalette) // Add the head of the list to the start
+			} else {
+				let currentDesignIndex = acc.findIndex(
+					d => d.id === designPalette.prevId,
+				)
+				if (currentDesignIndex !== -1) {
+					// Insert the designPalette right after its predecessor
+					acc.splice(currentDesignIndex + 1, 0, designPalette)
+				} else {
+					// If predecessor is not found, add it to the end as a fallback
+					acc.push(designPalette)
+				}
+			}
+			return acc
+		},
+		[],
+	)
+
 	const designCount = designPalettes.length
 	return (
 		<Panel>
@@ -34,7 +53,7 @@ export const PanelContentArtboardDesignPalette = ({
 					<PanelFormArtboardDesignNewPalette artboardId={artboard.id} />
 				</div>
 			</PanelHeader>
-			{designPalettes.map((designPalette, index) => {
+			{orderedDesignPalettes.map((designPalette, index) => {
 				const { id, visible, palette } = designPalette
 				return (
 					<PanelRow key={palette.id}>
