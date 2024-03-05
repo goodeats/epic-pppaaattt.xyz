@@ -13,4 +13,10 @@ export const INTENT = {
 	artboardUpdateDesignFill: 'update-artboard-design-fill' as const,
 	artboardUpdateDesignFillStyle: 'update-artboard-design-fill-style' as const,
 	artboardUpdateDesignFillBasis: 'update-artboard-design-fill-basis' as const,
+	artboardCreateDesignStroke: 'create-artboard-design-stroke' as const,
+	artboardUpdateDesignStroke: 'update-artboard-design-stroke' as const,
+	artboardUpdateDesignStrokeStyle:
+		'update-artboard-design-stroke-style' as const,
+	artboardUpdateDesignStrokeBasis:
+		'update-artboard-design-stroke-basis' as const,
 }

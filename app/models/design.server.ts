@@ -8,6 +8,7 @@ import { prisma } from '#app/utils/db.server'
 import { type IFill } from './fill.server'
 import { type IPalette } from './palette.server'
 import { type ISize } from './size.server'
+import { type IStroke } from './stroke.server'
 
 export interface IDesignWithType {
 	id: string
@@ -21,6 +22,7 @@ export interface IDesignWithType {
 	palette: IPalette | null
 	size: ISize | null
 	fill: IFill | null
+	stroke: IStroke | null
 }
 
 export interface IDesignWithPalette extends IDesignWithType {
@@ -35,6 +37,10 @@ export interface IDesignWithFill extends IDesignWithType {
 	fill: IFill
 }
 
+export interface IDesignWithStroke extends IDesignWithType {
+	stroke: IStroke
+}
+
 export const findManyDesignsWithType = async ({
 	where,
 }: {
@@ -46,6 +52,7 @@ export const findManyDesignsWithType = async ({
 			palette: true,
 			size: true,
 			fill: true,
+			stroke: true,
 		},
 		orderBy: {
 			type: 'asc',
