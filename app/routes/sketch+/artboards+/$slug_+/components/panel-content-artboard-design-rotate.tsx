@@ -8,6 +8,7 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
+import { Input } from '#app/components/ui/input'
 import { type IDesignWithRotate } from '#app/models/design.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
@@ -80,10 +81,19 @@ export const PanelContentArtboardDesignRotate = ({
 									artboardId={artboard.id}
 									rotate={rotate}
 								/>
-								<PanelFormArtboardDesignEditRotate
-									artboardId={artboard.id}
-									rotate={rotate}
-								/>
+								{rotate.basis !== 'defined' ? (
+									<Input
+										type="text"
+										className={'flex h-8'}
+										disabled
+										defaultValue={rotate.basis}
+									/>
+								) : (
+									<PanelFormArtboardDesignEditRotate
+										artboardId={artboard.id}
+										rotate={rotate}
+									/>
+								)}
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
 								<PanelFormArtboardDesignToggleVisibility

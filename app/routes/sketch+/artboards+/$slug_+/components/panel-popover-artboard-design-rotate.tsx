@@ -9,6 +9,7 @@ import {
 	PopoverTrigger,
 } from '#app/components/ui/popover'
 import { type IRotate } from '#app/models/rotate.server'
+import { PanelFormArtboardDesignEditRotateBasis } from './panel-form-artboard-design-edit-rotate-basis'
 
 export const PanelPopoverArtboardDesignRotate = ({
 	artboardId,
@@ -47,6 +48,13 @@ export const PanelPopoverArtboardDesignRotate = ({
 									defaultValue={rotate.rotation}
 									className="col-span-2 h-8"
 									disabled
+								/>
+							</div>
+							<div className="grid grid-cols-3 items-center gap-4">
+								<Label htmlFor="basis">Basis</Label>
+								<PanelFormArtboardDesignEditRotateBasis
+									artboardId={artboardId}
+									rotate={rotate}
 								/>
 							</div>
 						</div>
