@@ -1,9 +1,16 @@
-const PanelContainer = ({ children }: { children?: React.ReactNode }) => {
-	return (
-		<div className="relative w-64 border-l-2 bg-muted py-2 md:rounded-br-3xl">
-			{children}
-		</div>
-	)
+const PanelContainer = ({
+	children,
+	variant,
+}: {
+	children?: React.ReactNode
+	variant?: 'left'
+}) => {
+	const baseClasses = 'relative w-64 bg-muted py-2'
+	const variantClasses =
+		variant === 'left'
+			? 'border-r-2 md:rounded-bl-3xl'
+			: 'border-l-2 md:rounded-br-3xl'
+	return <div className={`${baseClasses} ${variantClasses}`}>{children}</div>
 }
 
 const Panel = ({ children }: { children: React.ReactNode }) => {

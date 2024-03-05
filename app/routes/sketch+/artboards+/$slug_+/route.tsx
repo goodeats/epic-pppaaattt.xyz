@@ -65,7 +65,7 @@ import {
 	artboardUpdateWidthAction,
 } from './actions/update-artboard'
 import { CanvasContent } from './components/canvas-content'
-import { PanelContent } from './components/panel-content'
+import { PanelContentLeft, PanelContentRight } from './components/panel-content'
 import { INTENT } from './intent'
 import { getArtboard, getOwner } from './queries'
 
@@ -196,11 +196,17 @@ export default function SketchRoute() {
 	const data = useLoaderData<typeof loader>()
 	return (
 		<SketchBody>
+			<PanelContainer variant="left">
+				<PanelContentLeft
+					artboard={data.artboard}
+					artboardDesigns={data.artboardDesigns}
+				/>
+			</PanelContainer>
 			<SketchBodyContent>
 				<CanvasContent artboard={data.artboard} />
 			</SketchBodyContent>
 			<PanelContainer>
-				<PanelContent
+				<PanelContentRight
 					artboard={data.artboard}
 					artboardDesigns={data.artboardDesigns}
 				/>
