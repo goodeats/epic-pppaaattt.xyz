@@ -15,6 +15,7 @@ import { PanelFormArtboardDesignEditLayoutCount } from './panel-form-artboard-de
 import { PanelFormArtboardDesignNewLayout } from './panel-form-artboard-design-new-layout'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
+import { PanelPopoverArtboardDesignLayout } from './panel-popover-artboard-design-layout'
 
 export const PanelContentArtboardDesignLayout = ({
 	artboard,
@@ -75,10 +76,10 @@ export const PanelContentArtboardDesignLayout = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								{/* <PanelPopoverArtboardDesignRotate
+								<PanelPopoverArtboardDesignLayout
 									artboardId={artboard.id}
 									layout={layout}
-								/> */}
+								/>
 								{layout.style === 'random' ? (
 									<PanelFormArtboardDesignEditLayoutCount
 										artboardId={artboard.id}
