@@ -7,6 +7,7 @@ import {
 	type IDesignWithLine,
 	type IDesignWithRotate,
 	type IDesignWithLayout,
+	type IDesignWithTemplate,
 } from '#app/models/design.server'
 import { type IFill } from '#app/models/fill.server'
 import { type ILayout } from '#app/models/layout.server'
@@ -15,6 +16,7 @@ import { type IPalette } from '#app/models/palette.server'
 import { type IRotate } from '#app/models/rotate.server'
 import { type ISize } from '#app/models/size.server'
 import { type IStroke } from '#app/models/stroke.server'
+import { type ITemplate } from '#app/models/template.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboardBackgroundColor } from './panel-content-artboard-background-color'
 import { PanelContentArtboardDesignFill } from './panel-content-artboard-design-fill'
@@ -24,6 +26,7 @@ import { PanelContentArtboardDesignPalette } from './panel-content-artboard-desi
 import { PanelContentArtboardDesignRotate } from './panel-content-artboard-design-rotate'
 import { PanelContentArtboardDesignSize } from './panel-content-artboard-design-size'
 import { PanelContentArtboardDesignStroke } from './panel-content-artboard-design-stroke'
+import { PanelContentArtboardDesignTemplate } from './panel-content-artboard-design-template'
 import { PanelContentArtboardFrame } from './panel-content-artboard-frame'
 
 export const PanelContentArtboard = ({
@@ -61,6 +64,10 @@ export const PanelContentArtboard = ({
 		.filter(design => design.type === 'layout' && design.layout !== null)
 		.map(design => ({ ...design, layout: design.layout as ILayout }))
 
+	const designTemplates: IDesignWithTemplate[] = artboardDesigns
+		.filter(design => design.type === 'template' && design.template !== null)
+		.map(design => ({ ...design, template: design.template as ITemplate }))
+
 	return (
 		<div>
 			<PanelContentArtboardFrame artboard={artboard} />
@@ -92,6 +99,10 @@ export const PanelContentArtboard = ({
 			<PanelContentArtboardDesignRotate
 				artboard={artboard}
 				designRotates={designRotates}
+			/>
+			<PanelContentArtboardDesignTemplate
+				artboard={artboard}
+				designTemplates={designTemplates}
 			/>
 		</div>
 	)

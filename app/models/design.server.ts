@@ -12,6 +12,7 @@ import { type IPalette } from './palette.server'
 import { type IRotate } from './rotate.server'
 import { type ISize } from './size.server'
 import { type IStroke } from './stroke.server'
+import { type ITemplate } from './template.server'
 
 export interface IDesignWithType {
 	id: string
@@ -29,6 +30,7 @@ export interface IDesignWithType {
 	line: ILine | null
 	rotate: IRotate | null
 	layout: ILayout | null
+	template: ITemplate | null
 }
 
 export interface IDesignWithPalette extends IDesignWithType {
@@ -59,6 +61,10 @@ export interface IDesignWithLayout extends IDesignWithType {
 	layout: ILayout
 }
 
+export interface IDesignWithTemplate extends IDesignWithType {
+	template: ITemplate
+}
+
 export const findManyDesignsWithType = async ({
 	where,
 }: {
@@ -74,6 +80,7 @@ export const findManyDesignsWithType = async ({
 			line: true,
 			rotate: true,
 			layout: true,
+			template: true,
 		},
 		orderBy: {
 			type: 'asc',

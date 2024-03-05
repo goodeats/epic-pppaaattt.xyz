@@ -33,4 +33,7 @@ export const INTENT = {
 	artboardUpdateDesignLayoutRows: 'update-artboard-design-layout-rows' as const,
 	artboardUpdateDesignLayoutColumns:
 		'update-artboard-design-layout-columns' as const,
+	artboardCreateDesignTemplate: 'create-artboard-design-template' as const,
+	artboardUpdateDesignTemplateStyle:
+		'update-artboard-design-template-style' as const,
 }
