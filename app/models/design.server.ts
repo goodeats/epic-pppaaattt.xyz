@@ -5,6 +5,7 @@ import {
 	type whereArgsType,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
+import { type IFill } from './fill.server'
 import { type IPalette } from './palette.server'
 import { type ISize } from './size.server'
 
@@ -19,6 +20,7 @@ export interface IDesignWithType {
 	artboardId: string | null
 	palette: IPalette | null
 	size: ISize | null
+	fill: IFill | null
 }
 
 export interface IDesignWithPalette extends IDesignWithType {
@@ -27,6 +29,10 @@ export interface IDesignWithPalette extends IDesignWithType {
 
 export interface IDesignWithSize extends IDesignWithType {
 	size: ISize
+}
+
+export interface IDesignWithFill extends IDesignWithType {
+	fill: IFill
 }
 
 export const findManyDesignsWithType = async ({
@@ -39,6 +45,7 @@ export const findManyDesignsWithType = async ({
 		include: {
 			palette: true,
 			size: true,
+			fill: true,
 		},
 		orderBy: {
 			type: 'asc',

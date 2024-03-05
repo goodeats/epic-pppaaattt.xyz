@@ -20,6 +20,10 @@ import {
 	artboardDesignToggleVisibilityAction,
 } from './actions/artboard-design'
 import {
+	artboardDesignEditFillAction,
+	artboardDesignNewFillAction,
+} from './actions/artboard-design-fill'
+import {
 	artboardDesignEditPaletteAction,
 	artboardDesignNewPaletteAction,
 } from './actions/artboard-design-palette'
@@ -74,6 +78,12 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateDesignSize: {
 			return artboardDesignEditSizeAction(actionArgs)
+		}
+		case INTENT.artboardCreateDesignFill: {
+			return artboardDesignNewFillAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignFill: {
+			return artboardDesignEditFillAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
