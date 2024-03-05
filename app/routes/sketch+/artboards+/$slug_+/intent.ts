@@ -9,4 +9,8 @@ export const INTENT = {
 	artboardUpdateDesignPalette: 'update-artboard-design-palette' as const,
 	artboardCreateDesignSize: 'create-artboard-design-size' as const,
 	artboardUpdateDesignSize: 'update-artboard-design-size' as const,
+	artboardCreateDesignFill: 'create-artboard-design-fill' as const,
+	artboardUpdateDesignFill: 'update-artboard-design-fill' as const,
+	artboardUpdateDesignFillStyle: 'update-artboard-design-fill-style' as const,
+	artboardUpdateDesignFillBasis: 'update-artboard-design-fill-basis' as const,
 }

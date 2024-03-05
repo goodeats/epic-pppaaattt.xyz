@@ -7,9 +7,3 @@ export const EditArtboardPaletteSchema = z.object({
 	artboardId: z.string(),
 	value: HexcodeSchema,
 })
-
-export const DeleteArtboardPaletteSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-})

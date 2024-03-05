@@ -3,6 +3,7 @@ import { z } from 'zod'
 export const DesignTypeEnum = {
 	PALETTE: 'palette',
 	SIZE: 'size',
+	FILL: 'fill',
 	// add more design types here
 } as const
 type ObjectValues<T> = T[keyof T]
