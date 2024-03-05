@@ -1,3 +1,4 @@
+import { useSearchParams } from '@remix-run/react'
 import {
 	Panel,
 	PanelHeader,
@@ -8,10 +9,10 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
+import { Icon } from '#app/components/ui/icon'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardLayerNew } from './panel-form-artboard-design-new-layer'
-import { PanelFormArtboardLayerEditName } from './panel-form-artboard-layer-edit-name'
 import { PanelFormArtboardLayerReorder } from './panel-form-artboard-layer-reorder'
 import { PanelFormArtboardLayerToggleVisibility } from './panel-form-artboard-layer-toggle-visibility'
 import { PanelPopoverArtboardLayer } from './panel-popover-artboard-layer'
@@ -23,6 +24,9 @@ export const PanelContentArtboardLayer = ({
 	artboard: PickedArtboardType
 	layers: ILayer[]
 }) => {
+	const [searchParams, setSearchParams] = useSearchParams()
+	const layerSearchParams = searchParams.get('layerId')
+
 	const orderedLayers = layers.reduce((acc: ILayer[], layer) => {
 		if (!layer.prevId) {
 			acc.unshift(layer) // Add the head of the list to the start
@@ -50,8 +54,17 @@ export const PanelContentArtboardLayer = ({
 			</PanelHeader>
 			{orderedLayers.map((layer, index) => {
 				const { id, visible } = layer
+				const isSearchedLayer = layerSearchParams === layer.id
+
 				return (
-					<PanelRow key={layer.id}>
+					<PanelRow
+						key={layer.id}
+						className={
+							isSearchedLayer
+								? 'bg-secondary'
+								: 'hover:bg-secondary focus:bg-secondary'
+						}
+					>
 						<PanelRowOrderContainer>
 							<PanelFormArtboardLayerReorder
 								id={id}
@@ -74,12 +87,27 @@ export const PanelContentArtboardLayer = ({
 									artboardId={artboard.id}
 									layer={layer}
 								/>
-								<PanelFormArtboardLayerEditName
-									artboardId={artboard.id}
-									layer={layer}
-								/>
+								<div
+									className="flex cursor-pointer"
+									onClick={e => {
+										const params = new URLSearchParams()
+										isSearchedLayer
+											? params.delete('layerId')
+											: params.set('layerId', layer.id)
+										setSearchParams(params, {
+											preventScrollReset: true,
+										})
+									}}
+								>
+									{layer.name}
+								</div>
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
+								{isSearchedLayer && (
+									<Icon name="check">
+										<span className="sr-only">Selected</span>
+									</Icon>
+								)}
 								<PanelFormArtboardLayerToggleVisibility
 									id={id}
 									artboardId={artboard.id}

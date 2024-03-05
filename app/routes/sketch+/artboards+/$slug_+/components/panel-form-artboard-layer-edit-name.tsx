@@ -38,7 +38,11 @@ export const PanelFormArtboardLayerEditName = ({
 	}
 
 	return (
-		<fetcher.Form method="POST" {...form.props}>
+		<fetcher.Form
+			method="POST"
+			{...form.props}
+			className={'col-span-2 flex h-8'}
+		>
 			<AuthenticityTokenInput />
 
 			<input type="hidden" name="id" value={layer.id} />

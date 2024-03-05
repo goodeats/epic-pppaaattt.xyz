@@ -1,7 +1,6 @@
 import { type Artboard } from '@prisma/client'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
-import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
 import {
 	Popover,
@@ -12,6 +11,7 @@ import { Separator } from '#app/components/ui/separator'
 import { type ILayer } from '#app/models/layer.server'
 import { PanelFormArtboardLayerDelete } from './panel-form-artboard-layer-delete'
 import { PanelFormArtboardLayerEditDescription } from './panel-form-artboard-layer-edit-description'
+import { PanelFormArtboardLayerEditName } from './panel-form-artboard-layer-edit-name'
 
 export const PanelPopoverArtboardLayer = ({
 	artboardId,
@@ -45,12 +45,16 @@ export const PanelPopoverArtboardLayer = ({
 						<div className="grid gap-2">
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="name">Name</Label>
-								<Input
+								<PanelFormArtboardLayerEditName
+									artboardId={artboardId}
+									layer={layer}
+								/>
+								{/* <Input
 									id="name"
 									defaultValue={layer.name}
 									className="col-span-2 h-8"
 									disabled
-								/>
+								/> */}
 							</div>
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="description">Description</Label>
