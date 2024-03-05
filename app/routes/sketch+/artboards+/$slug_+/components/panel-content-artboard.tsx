@@ -3,15 +3,18 @@ import {
 	type IDesignWithPalette,
 	type IDesignWithSize,
 	type IDesignWithFill,
+	type IDesignWithStroke,
 } from '#app/models/design.server'
 import { type IFill } from '#app/models/fill.server'
 import { type IPalette } from '#app/models/palette.server'
 import { type ISize } from '#app/models/size.server'
+import { type IStroke } from '#app/models/stroke.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboardBackgroundColor } from './panel-content-artboard-background-color'
 import { PanelContentArtboardDesignFill } from './panel-content-artboard-design-fill'
 import { PanelContentArtboardDesignPalette } from './panel-content-artboard-design-palette'
 import { PanelContentArtboardDesignSize } from './panel-content-artboard-design-size'
+import { PanelContentArtboardDesignStroke } from './panel-content-artboard-design-stroke'
 import { PanelContentArtboardFrame } from './panel-content-artboard-frame'
 
 export const PanelContentArtboard = ({
@@ -33,6 +36,10 @@ export const PanelContentArtboard = ({
 		.filter(design => design.type === 'fill' && design.fill !== null)
 		.map(design => ({ ...design, fill: design.fill as IFill }))
 
+	const designStrokes: IDesignWithStroke[] = artboardDesigns
+		.filter(design => design.type === 'stroke' && design.stroke !== null)
+		.map(design => ({ ...design, stroke: design.stroke as IStroke }))
+
 	return (
 		<div>
 			<PanelContentArtboardFrame artboard={artboard} />
@@ -48,6 +55,10 @@ export const PanelContentArtboard = ({
 			<PanelContentArtboardDesignFill
 				artboard={artboard}
 				designFills={designFills}
+			/>
+			<PanelContentArtboardDesignStroke
+				artboard={artboard}
+				designStrokes={designStrokes}
 			/>
 		</div>
 	)

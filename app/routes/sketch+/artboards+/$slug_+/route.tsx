@@ -34,6 +34,12 @@ import {
 	artboardDesignNewSizeAction,
 } from './actions/artboard-design-size'
 import {
+	artboardDesignEditStrokeAction,
+	artboardDesignEditStrokeBasisAction,
+	artboardDesignEditStrokeStyleAction,
+	artboardDesignNewStrokeAction,
+} from './actions/artboard-design-stroke'
+import {
 	artboardUpdateBackgroundColorAction,
 	artboardUpdateHeightAction,
 	artboardUpdateWidthAction,
@@ -92,6 +98,18 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateDesignFillBasis: {
 			return artboardDesignEditFillBasisAction(actionArgs)
+		}
+		case INTENT.artboardCreateDesignStroke: {
+			return artboardDesignNewStrokeAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignStroke: {
+			return artboardDesignEditStrokeAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignStrokeStyle: {
+			return artboardDesignEditStrokeStyleAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignStrokeBasis: {
+			return artboardDesignEditStrokeBasisAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
