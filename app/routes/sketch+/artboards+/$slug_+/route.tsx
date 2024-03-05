@@ -56,6 +56,10 @@ import {
 	artboardDesignNewStrokeAction,
 } from './actions/artboard-design-stroke'
 import {
+	artboardDesignEditTemplateStyleAction,
+	artboardDesignNewTemplateAction,
+} from './actions/artboard-design-template'
+import {
 	artboardUpdateBackgroundColorAction,
 	artboardUpdateHeightAction,
 	artboardUpdateWidthAction,
@@ -156,6 +160,12 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateDesignLayoutColumns: {
 			return artboardDesignEditLayoutColumnsAction(actionArgs)
+		}
+		case INTENT.artboardCreateDesignTemplate: {
+			return artboardDesignNewTemplateAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignTemplateStyle: {
+			return artboardDesignEditTemplateStyleAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
