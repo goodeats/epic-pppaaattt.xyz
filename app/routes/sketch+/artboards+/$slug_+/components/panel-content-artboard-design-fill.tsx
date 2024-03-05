@@ -8,6 +8,7 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
+import { Input } from '#app/components/ui/input'
 import { type IDesignWithFill } from '#app/models/design.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
@@ -78,10 +79,27 @@ export const PanelContentArtboardDesignFill = ({
 									artboardId={artboard.id}
 									fill={fill}
 								/>
-								<PanelFormArtboardDesignEditFill
-									artboardId={artboard.id}
-									fill={fill}
-								/>
+								{/* this is a little buggy, but I can manage for now */}
+								{fill.style === 'none' ? (
+									<Input
+										type="text"
+										className={'flex h-8'}
+										disabled
+										defaultValue="None"
+									/>
+								) : fill.basis !== 'defined' ? (
+									<Input
+										type="text"
+										className={'flex h-8'}
+										disabled
+										defaultValue={fill.basis}
+									/>
+								) : (
+									<PanelFormArtboardDesignEditFill
+										artboardId={artboard.id}
+										fill={fill}
+									/>
+								)}
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
 								<PanelFormArtboardDesignToggleVisibility
