@@ -61,6 +61,7 @@ import {
 	artboardDesignNewTemplateAction,
 } from './actions/artboard-design-template'
 import {
+	artboardLayerDeleteAction,
 	artboardLayerNewAction,
 	artboardLayerToggleVisibilityAction,
 	artboardLayerUpdateDescriptionAction,
@@ -185,6 +186,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardToggleVisibilityLayer: {
 			return artboardLayerToggleVisibilityAction(actionArgs)
+		}
+		case INTENT.artboardDeleteLayer: {
+			return artboardLayerDeleteAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

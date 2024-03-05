@@ -10,7 +10,6 @@ import {
 } from '#app/components/shared'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardLayerNew } from './panel-form-artboard-design-new-layer'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardLayerEditName } from './panel-form-artboard-layer-edit-name'
@@ -70,10 +69,12 @@ export const PanelContentArtboardLayer = ({
 									artboardId={artboard.id}
 									visible={visible}
 								/>
-								<PanelFormArtboardDesignDelete
+								{/* want to hide it from accidentally being clicked */}
+								{/* so it is in the popover */}
+								{/* <PanelFormArtboardLayerDelete
 									id={id}
 									artboardId={artboard.id}
-								/>
+								/> */}
 							</PanelRowIconContainer>
 						</PanelRowContainer>
 					</PanelRow>

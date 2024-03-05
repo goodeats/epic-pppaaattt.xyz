@@ -1,6 +1,7 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import {
+	DeleteArtboardLayerSchema,
 	EditArtboardLayerDescriptionSchema,
 	EditArtboardLayerNameSchema,
 	NewArtboardLayerSchema,
@@ -13,7 +14,7 @@ import {
 import { prisma } from '#app/utils/db.server'
 import { findFirstLayerInstance } from '#app/utils/prisma-extensions-layer'
 import {
-	parseArtboardDesignSubmission,
+	parseArtboardLayerSubmission,
 	parseArtboardLayerUpdateSubmission,
 } from './utils'
 
@@ -22,7 +23,7 @@ export async function artboardLayerNewAction({
 	formData,
 }: IntentActionArgs) {
 	// validation
-	const submission = await parseArtboardDesignSubmission({
+	const submission = await parseArtboardLayerSubmission({
 		userId,
 		formData,
 		schema: NewArtboardLayerSchema,
@@ -175,6 +176,101 @@ export async function artboardLayerToggleVisibilityAction({
 				where: { id },
 				data: { visible: !layer.visible },
 			})
+		})
+	} catch (error) {
+		console.log(error)
+		return submissionErrorResponse(submission)
+	}
+
+	return json({ status: 'success', submission } as const)
+}
+
+export async function artboardLayerDeleteAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	// validation
+	const submission = await parseArtboardLayerUpdateSubmission({
+		userId,
+		formData,
+		schema: DeleteArtboardLayerSchema,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	// changes
+	const { id } = submission.value
+	try {
+		await prisma.$transaction(async prisma => {
+			// logic before delete
+			// find layer first
+			const layer = await prisma.layer.findFirst({
+				where: { id },
+			})
+			if (!layer) return submissionErrorResponse(submission)
+			// get nextId and prevId from layer
+			const { nextId, prevId } = layer
+
+			// delete layer will cascade delete type relation
+			await prisma.layer.delete({
+				where: { id },
+			})
+
+			// if layer is the only layer in the artboard
+			if (!prevId && !nextId) return
+
+			if (!prevId && nextId) {
+				// if head
+				// remove prevId from next layer, becomes head
+				const nextLayer = await prisma.layer.findFirst({
+					where: { id: nextId },
+				})
+				if (nextLayer) {
+					await prisma.layer.update({
+						where: { id: nextId },
+						data: { prevId: null },
+					})
+				}
+			} else if (prevId && !nextId) {
+				// if tail
+				// remove nextId from prev layer, becomes tail
+				const prevLayer = await prisma.layer.findFirst({
+					where: { id: prevId },
+				})
+				if (prevLayer) {
+					await prisma.layer.update({
+						where: { id: prevId },
+						data: { nextId: null },
+					})
+				}
+			} else if (prevId && nextId) {
+				// if in middle
+				// replace nextId for prev layer with nextId of deleted layer
+				const prevLayer = await prisma.layer.findFirst({
+					where: { id: prevId },
+				})
+				if (prevLayer) {
+					await prisma.layer.update({
+						where: { id: prevId },
+						data: { nextId },
+					})
+				}
+
+				// replace prevId for next layer with prevId of deleted layer
+				const nextLayer = await prisma.layer.findFirst({
+					where: { id: nextId },
+				})
+				if (nextLayer) {
+					await prisma.layer.update({
+						where: { id: nextId },
+						data: { prevId },
+					})
+				}
+			}
 		})
 	} catch (error) {
 		console.log(error)

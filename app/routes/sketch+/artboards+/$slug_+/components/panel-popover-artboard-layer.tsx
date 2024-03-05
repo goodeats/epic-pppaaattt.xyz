@@ -8,7 +8,9 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '#app/components/ui/popover'
+import { Separator } from '#app/components/ui/separator'
 import { type ILayer } from '#app/models/layer.server'
+import { PanelFormArtboardLayerDelete } from './panel-form-artboard-layer-delete'
 import { PanelFormArtboardLayerEditDescription } from './panel-form-artboard-layer-edit-description'
 
 export const PanelPopoverArtboardLayer = ({
@@ -55,6 +57,14 @@ export const PanelPopoverArtboardLayer = ({
 								<PanelFormArtboardLayerEditDescription
 									artboardId={artboardId}
 									layer={layer}
+								/>
+							</div>
+							<Separator className="my-4" />
+							<div className="grid grid-cols-3 items-center gap-4">
+								<Label htmlFor="delete">Delete</Label>
+								<PanelFormArtboardLayerDelete
+									id={layer.id}
+									artboardId={artboardId}
 								/>
 							</div>
 						</div>

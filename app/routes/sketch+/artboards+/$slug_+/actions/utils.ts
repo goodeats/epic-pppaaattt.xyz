@@ -95,6 +95,24 @@ export const parseArtboardDesignTypeSubmission = async ({
 	})
 }
 
+export const parseArtboardLayerSubmission = async ({
+	userId,
+	formData,
+	schema,
+}: IntentActionArgs & { schema: z.ZodSchema<any> }) => {
+	return await parse(formData, {
+		schema: schema.superRefine(async (data, ctx) => {
+			const { artboardId } = data
+			const artboard = await findArtboardByIdAndOwner({
+				id: artboardId,
+				ownerId: userId,
+			})
+			if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
+		}),
+		async: true,
+	})
+}
+
 export const parseArtboardLayerUpdateSubmission = async ({
 	userId,
 	formData,
