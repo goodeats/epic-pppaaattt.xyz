@@ -109,12 +109,47 @@ export async function artboardDesignDeleteAction({
 	try {
 		await prisma.$transaction(async prisma => {
 			// logic before delete
-			// TODO: reorder here if necessary
+			// find design first
+			const design = await prisma.design.findFirst({
+				where: { id },
+			})
+			if (!design) return submissionErrorResponse(submission)
 
 			// delete design will cascade delete type relation
 			await prisma.design.delete({
 				where: { id },
 			})
+
+			// if design is the only design in the artboard
+			if (!design.prevId && !design.nextId) return
+
+			if (!design.prevId && design.nextId) {
+				// if head
+				// remove prevId from next design, becomes head
+				await prisma.design.update({
+					where: { id: design.nextId },
+					data: { prevId: null },
+				})
+			} else if (design.prevId && !design.nextId) {
+				// if tail
+				// remove nextId from prev design, becomes tail
+				await prisma.design.update({
+					where: { id: design.prevId },
+					data: { nextId: null },
+				})
+			} else if (design.prevId && design.nextId) {
+				// if in middle
+				// replace nextId for prev design with nextId of deleted design
+				await prisma.design.update({
+					where: { id: design.prevId },
+					data: { nextId: design.nextId },
+				})
+				// replace prevId for next design with prevId of deleted design
+				await prisma.design.update({
+					where: { id: design.nextId },
+					data: { prevId: design.prevId },
+				})
+			}
 		})
 	} catch (error) {
 		console.log(error)
