@@ -16,6 +16,7 @@ import { PanelFormArtboardDesignEditStroke } from './panel-form-artboard-design-
 import { PanelFormArtboardDesignNewStroke } from './panel-form-artboard-design-new-stroke'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
+import { PanelPopoverArtboardDesignStroke } from './panel-popover-artboard-design-stroke'
 
 export const PanelContentArtboardDesignStroke = ({
 	artboard,
@@ -76,10 +77,10 @@ export const PanelContentArtboardDesignStroke = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								{/* <PanelPopoverArtboardDesignFill
+								<PanelPopoverArtboardDesignStroke
 									artboardId={artboard.id}
 									stroke={stroke}
-								/> */}
+								/>
 								{/* this is a little buggy, but I can manage for now */}
 								{stroke.style === 'none' ? (
 									<Input

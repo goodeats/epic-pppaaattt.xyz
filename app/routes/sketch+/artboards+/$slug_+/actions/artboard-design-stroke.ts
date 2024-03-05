@@ -2,16 +2,15 @@ import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import { NewArtboardDesignSchema, designSchema } from '#app/schema/design'
 import {
-	EditArtboardFillBasisSchema,
-	EditArtboardFillStyleSchema,
-} from '#app/schema/fill'
-import { EditArtboardStrokeSchema } from '#app/schema/stroke'
+	EditArtboardStrokeBasisSchema,
+	EditArtboardStrokeSchema,
+	EditArtboardStrokeStyleSchema,
+} from '#app/schema/stroke'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
-import { findFirstFillInstance } from '#app/utils/prisma-extensions-fill'
 import { findFirstStrokeInstance } from '#app/utils/prisma-extensions-stroke'
 import { parseArtboardDesignSubmission } from './utils'
 
@@ -118,7 +117,7 @@ export async function artboardDesignEditStrokeAction({
 	return json({ status: 'success', submission } as const)
 }
 
-export async function artboardDesignEditFillStyleAction({
+export async function artboardDesignEditStrokeStyleAction({
 	userId,
 	formData,
 }: IntentActionArgs) {
@@ -126,7 +125,7 @@ export async function artboardDesignEditFillStyleAction({
 	const submission = await parseArtboardDesignSubmission({
 		userId,
 		formData,
-		schema: EditArtboardFillStyleSchema,
+		schema: EditArtboardStrokeStyleSchema,
 	})
 
 	if (submission.intent !== 'submit') {
@@ -138,7 +137,7 @@ export async function artboardDesignEditFillStyleAction({
 
 	// changes
 	const { id, style } = submission.value
-	const stroke = await findFirstFillInstance({
+	const stroke = await findFirstStrokeInstance({
 		where: { id },
 	})
 	if (!stroke) return submissionErrorResponse(submission)
@@ -150,7 +149,7 @@ export async function artboardDesignEditFillStyleAction({
 	return json({ status: 'success', submission } as const)
 }
 
-export async function artboardDesignEditFillBasisAction({
+export async function artboardDesignEditStrokeBasisAction({
 	userId,
 	formData,
 }: IntentActionArgs) {
@@ -158,7 +157,7 @@ export async function artboardDesignEditFillBasisAction({
 	const submission = await parseArtboardDesignSubmission({
 		userId,
 		formData,
-		schema: EditArtboardFillBasisSchema,
+		schema: EditArtboardStrokeBasisSchema,
 	})
 
 	if (submission.intent !== 'submit') {
@@ -170,7 +169,7 @@ export async function artboardDesignEditFillBasisAction({
 
 	// changes
 	const { id, basis } = submission.value
-	const stroke = await findFirstFillInstance({
+	const stroke = await findFirstStrokeInstance({
 		where: { id },
 	})
 	if (!stroke) return submissionErrorResponse(submission)
