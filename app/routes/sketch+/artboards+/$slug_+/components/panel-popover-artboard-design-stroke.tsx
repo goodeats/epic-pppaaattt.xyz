@@ -30,14 +30,14 @@ export const PanelPopoverArtboardDesignStroke = ({
 						style={{ backgroundColor: `#${stroke.value}` }}
 					>
 						<Icon name="gear">
-							<span className="sr-only">Fill Settings</span>
+							<span className="sr-only">Stroke Settings</span>
 						</Icon>
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent className="w-80">
 					<div className="grid gap-4">
 						<div className="space-y-2">
-							<h4 className="font-medium leading-none">Fill</h4>
+							<h4 className="font-medium leading-none">Stroke</h4>
 							<p className="text-sm text-muted-foreground">
 								Settings for this stroke.
 							</p>

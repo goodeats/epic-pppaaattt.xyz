@@ -26,6 +26,10 @@ import {
 	artboardDesignNewFillAction,
 } from './actions/artboard-design-fill'
 import {
+	artboardDesignEditLineWidthAction,
+	artboardDesignNewLineAction,
+} from './actions/artboard-design-line'
+import {
 	artboardDesignEditPaletteAction,
 	artboardDesignNewPaletteAction,
 } from './actions/artboard-design-palette'
@@ -110,6 +114,12 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateDesignStrokeBasis: {
 			return artboardDesignEditStrokeBasisAction(actionArgs)
+		}
+		case INTENT.artboardCreateDesignLine: {
+			return artboardDesignNewLineAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignLineWidth: {
+			return artboardDesignEditLineWidthAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

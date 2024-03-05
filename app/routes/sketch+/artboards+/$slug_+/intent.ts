@@ -19,4 +19,6 @@ export const INTENT = {
 		'update-artboard-design-stroke-style' as const,
 	artboardUpdateDesignStrokeBasis:
 		'update-artboard-design-stroke-basis' as const,
+	artboardCreateDesignLine: 'create-artboard-design-line' as const,
+	artboardUpdateDesignLineWidth: 'update-artboard-design-line-width' as const,
 }
