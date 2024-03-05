@@ -11,13 +11,23 @@ import {
 	SketchBody,
 	SketchBodyContent,
 } from '#app/components/shared'
+import { findManyDesignsWithType } from '#app/models/design.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
+import {
+	artboardDesignDeleteAction,
+	artboardDesignReorderAction,
+	artboardDesignToggleVisibilityAction,
+} from './actions/artboard-design'
+import {
+	artboardDesignEditPaletteAction,
+	artboardDesignNewPaletteAction,
+} from './actions/artboard-design-palette'
 import {
 	artboardUpdateBackgroundColorAction,
 	artboardUpdateHeightAction,
 	artboardUpdateWidthAction,
-} from './actions'
+} from './actions/update-artboard'
 import { CanvasContent } from './components/canvas-content'
 import { PanelContent } from './components/panel-content'
 import { INTENT } from './intent'
@@ -40,6 +50,21 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.artboardUpdateBackgroundColor: {
 			return artboardUpdateBackgroundColorAction(actionArgs)
 		}
+		case INTENT.artboardCreateDesignPalette: {
+			return artboardDesignNewPaletteAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignPalette: {
+			return artboardDesignEditPaletteAction(actionArgs)
+		}
+		case INTENT.artboardReorderDesign: {
+			return artboardDesignReorderAction(actionArgs)
+		}
+		case INTENT.artboardToggleVisibilityDesign: {
+			return artboardDesignToggleVisibilityAction(actionArgs)
+		}
+		case INTENT.artboardDeleteDesign: {
+			return artboardDesignDeleteAction(actionArgs)
+		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
 		}
@@ -58,7 +83,11 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const date = new Date(artboard.updatedAt)
 	const artboardTimeAgo = formatDistanceToNow(date)
 
-	return json({ owner, artboard, artboardTimeAgo })
+	const artboardDesigns = await findManyDesignsWithType({
+		where: { artboardId: artboard.id },
+	})
+
+	return json({ owner, artboard, artboardTimeAgo, artboardDesigns })
 }
 
 export default function SketchRoute() {
@@ -69,7 +98,10 @@ export default function SketchRoute() {
 				<CanvasContent artboard={data.artboard} />
 			</SketchBodyContent>
 			<PanelContainer>
-				<PanelContent artboard={data.artboard} />
+				<PanelContent
+					artboard={data.artboard}
+					artboardDesigns={data.artboardDesigns}
+				/>
 			</PanelContainer>
 		</SketchBody>
 	)

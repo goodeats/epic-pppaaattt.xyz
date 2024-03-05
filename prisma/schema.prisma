@@ -29,6 +29,7 @@ model User {
   projects    Project[]
   artboards   Artboard[]
   layers      Layer[]
+  designs     Design[]
   appearances Appearance[]
   assetImages AssetImage[]
 }
@@ -219,6 +220,7 @@ model Artboard {
   projectId String
 
   layers LayersOnArtboards[]
+  designs Design[]
   appearances AppearancesOnArtboards[]
 
   // non-unique foreign key
@@ -406,4 +408,48 @@ model AssetImagesOnLayers {
   @@index([layerId])
   // This helps our order by in the user search a LOT
   @@index([assetImageId, layerId])
+}
+
+model Design {
+  id         String @id @default(cuid())
+  type      String // e.g. palette, size, fill, stroke, line, etc.
+  visible   Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  // designs can be ordered by a linked list
+  // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/self-relations#one-to-one-self-relations
+  // with prisma, only one can be "fully annotated" it seems
+  // ! this is a one-to-one self relation between types
+  // so a design with type "palette" should have a next design with type "palette" and not any other type
+  next Design? @relation("DesignToDesign", fields: [nextId], references: [id])
+  nextId String? @unique
+
+  prev Design? @relation("DesignToDesign")
+  prevId String? @unique
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  artboard Artboard? @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artboardId String?
+
+  palette Palette?
+
+  // non-unique foreign key
+  @@index([ownerId])
+}
+
+model Palette {
+  id          String @id @default(cuid())
+
+  format      String @default("hex") // e.g. hex, rgb, hsl, etc.
+  value       String @default("000000")
+  opacity     Float @default(1.0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  design Design @relation(fields: [designId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  designId String @unique
 }
