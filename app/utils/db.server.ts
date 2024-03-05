@@ -17,6 +17,7 @@ import {
 import { FillPrismaExtensions } from './prisma-extensions-fill'
 import { LinePrismaExtensions } from './prisma-extensions-line'
 import { PalettePrismaExtensions } from './prisma-extensions-palette'
+import { RotatePrismaExtensions } from './prisma-extensions-rotate'
 import { SizePrismaExtensions } from './prisma-extensions-size'
 import { StrokePrismaExtensions } from './prisma-extensions-stroke'
 
@@ -30,6 +31,7 @@ export const prismaExtended = remember('prisma', () => {
 		.$extends(FillPrismaExtensions)
 		.$extends(StrokePrismaExtensions)
 		.$extends(LinePrismaExtensions)
+		.$extends(RotatePrismaExtensions)
 })
 
 export const prisma = remember('prisma', () => {
