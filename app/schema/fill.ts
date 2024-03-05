@@ -7,3 +7,10 @@ export const EditArtboardFillSchema = z.object({
 	artboardId: z.string(),
 	value: HexcodeSchema,
 })
+
+export const EditArtboardFillStyleSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	artboardId: z.string(),
+	style: z.enum(['solid', 'none']),
+})

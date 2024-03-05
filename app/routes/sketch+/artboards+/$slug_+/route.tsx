@@ -21,6 +21,7 @@ import {
 } from './actions/artboard-design'
 import {
 	artboardDesignEditFillAction,
+	artboardDesignEditFillStyleAction,
 	artboardDesignNewFillAction,
 } from './actions/artboard-design-fill'
 import {
@@ -84,6 +85,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateDesignFill: {
 			return artboardDesignEditFillAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignFillStyle: {
+			return artboardDesignEditFillStyleAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

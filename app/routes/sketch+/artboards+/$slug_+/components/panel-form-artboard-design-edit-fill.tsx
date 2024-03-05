@@ -7,7 +7,7 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { quickToast } from '#app/components/toaster'
 import { Input } from '#app/components/ui/input'
 import { type IFill } from '#app/models/fill.server'
-import { EditArtboardPaletteSchema } from '#app/schema/palette'
+import { EditArtboardFillSchema } from '#app/schema/fill'
 import { stringToHexcode, validateStringIsHexcode } from '#app/utils/colors'
 import { useIsPending } from '#app/utils/misc'
 import { INTENT } from '../intent'
@@ -26,7 +26,7 @@ export const PanelFormArtboardDesignEditFill = ({
 
 	const [form, fields] = useForm({
 		id: `panel-form-artboard-design-edit-fill-${fill.id}`,
-		constraint: getFieldsetConstraint(EditArtboardPaletteSchema),
+		constraint: getFieldsetConstraint(EditArtboardFillSchema),
 		lastSubmission: actionData?.submission,
 		defaultValue: {
 			...fill,

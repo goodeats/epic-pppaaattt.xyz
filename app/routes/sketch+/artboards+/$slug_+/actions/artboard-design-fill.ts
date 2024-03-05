@@ -1,7 +1,10 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import { NewArtboardDesignSchema, designSchema } from '#app/schema/design'
-import { EditArtboardFillSchema } from '#app/schema/fill'
+import {
+	EditArtboardFillSchema,
+	EditArtboardFillStyleSchema,
+} from '#app/schema/fill'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
@@ -107,6 +110,38 @@ export async function artboardDesignEditFillAction({
 	if (!fill) return submissionErrorResponse(submission)
 
 	fill.value = value
+	fill.updatedAt = new Date()
+	await fill.save()
+
+	return json({ status: 'success', submission } as const)
+}
+
+export async function artboardDesignEditFillStyleAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	// validation
+	const submission = await parseArtboardDesignSubmission({
+		userId,
+		formData,
+		schema: EditArtboardFillStyleSchema,
+	})
+
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	// changes
+	const { id, style } = submission.value
+	const fill = await findFirstFillInstance({
+		where: { id },
+	})
+	if (!fill) return submissionErrorResponse(submission)
+
+	fill.style = style
 	fill.updatedAt = new Date()
 	await fill.save()
 

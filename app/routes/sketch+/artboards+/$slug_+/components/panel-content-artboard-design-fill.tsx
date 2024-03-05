@@ -15,6 +15,7 @@ import { PanelFormArtboardDesignEditFill } from './panel-form-artboard-design-ed
 import { PanelFormArtboardDesignNewFill } from './panel-form-artboard-design-new-fill'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
+import { PanelPopoverArtboardDesignFill } from './panel-popover-artboard-design-fill'
 
 export const PanelContentArtboardDesignFill = ({
 	artboard,
@@ -73,7 +74,10 @@ export const PanelContentArtboardDesignFill = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								{/* <PanelPopoverArtboardDesignSize fill={fill} /> */}
+								<PanelPopoverArtboardDesignFill
+									artboardId={artboard.id}
+									fill={fill}
+								/>
 								<PanelFormArtboardDesignEditFill
 									artboardId={artboard.id}
 									fill={fill}
