@@ -41,4 +41,5 @@ export const INTENT = {
 	artboardUpdateLayerDescription: 'update-artboard-layer-description' as const,
 	artboardToggleVisibilityLayer: 'toggle-visibility-artboard-layer' as const,
 	artboardDeleteLayer: 'delete-artboard-layer' as const,
+	artboardReorderLayer: 'reorder-artboard-layer' as const,
 }

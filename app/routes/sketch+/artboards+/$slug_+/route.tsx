@@ -63,6 +63,7 @@ import {
 import {
 	artboardLayerDeleteAction,
 	artboardLayerNewAction,
+	artboardLayerReorderAction,
 	artboardLayerToggleVisibilityAction,
 	artboardLayerUpdateDescriptionAction,
 	artboardLayerUpdateNameAction,
@@ -189,6 +190,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardDeleteLayer: {
 			return artboardLayerDeleteAction(actionArgs)
+		}
+		case INTENT.artboardReorderLayer: {
+			return artboardLayerReorderAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

@@ -11,8 +11,8 @@ import {
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardLayerNew } from './panel-form-artboard-design-new-layer'
-import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardLayerEditName } from './panel-form-artboard-layer-edit-name'
+import { PanelFormArtboardLayerReorder } from './panel-form-artboard-layer-reorder'
 import { PanelFormArtboardLayerToggleVisibility } from './panel-form-artboard-layer-toggle-visibility'
 import { PanelPopoverArtboardLayer } from './panel-popover-artboard-layer'
 
@@ -23,6 +23,22 @@ export const PanelContentArtboardLayer = ({
 	artboard: PickedArtboardType
 	layers: ILayer[]
 }) => {
+	const orderedLayers = layers.reduce((acc: ILayer[], layer) => {
+		if (!layer.prevId) {
+			acc.unshift(layer) // Add the head of the list to the start
+		} else {
+			let currentDesignIndex = acc.findIndex(d => d.id === layer.prevId)
+			if (currentDesignIndex !== -1) {
+				// Insert the layer right after its predecessor
+				acc.splice(currentDesignIndex + 1, 0, layer)
+			} else {
+				// If predecessor is not found, add it to the end as a fallback
+				acc.push(layer)
+			}
+		}
+		return acc
+	}, [])
+
 	const layerCount = layers.length
 	return (
 		<Panel>
@@ -32,19 +48,19 @@ export const PanelContentArtboardLayer = ({
 					<PanelFormArtboardLayerNew artboardId={artboard.id} />
 				</div>
 			</PanelHeader>
-			{layers.map((layer, index) => {
+			{orderedLayers.map((layer, index) => {
 				const { id, visible } = layer
 				return (
 					<PanelRow key={layer.id}>
 						<PanelRowOrderContainer>
-							<PanelFormArtboardDesignReorder
+							<PanelFormArtboardLayerReorder
 								id={id}
 								artboardId={artboard.id}
 								panelCount={layerCount}
 								panelIndex={index}
 								direction="up"
 							/>
-							<PanelFormArtboardDesignReorder
+							<PanelFormArtboardLayerReorder
 								id={id}
 								artboardId={artboard.id}
 								panelCount={layerCount}
