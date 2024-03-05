@@ -62,6 +62,7 @@ import {
 } from './actions/artboard-design-template'
 import {
 	artboardLayerNewAction,
+	artboardLayerToggleVisibilityAction,
 	artboardLayerUpdateDescriptionAction,
 	artboardLayerUpdateNameAction,
 } from './actions/artboard-layer'
@@ -181,6 +182,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateLayerDescription: {
 			return artboardLayerUpdateDescriptionAction(actionArgs)
+		}
+		case INTENT.artboardToggleVisibilityLayer: {
+			return artboardLayerToggleVisibilityAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

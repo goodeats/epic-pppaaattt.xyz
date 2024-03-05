@@ -4,6 +4,7 @@ import {
 	EditArtboardLayerDescriptionSchema,
 	EditArtboardLayerNameSchema,
 	NewArtboardLayerSchema,
+	ToggleVisibilityArtboardLayerSchema,
 } from '#app/schema/layer'
 import {
 	notSubmissionResponse,
@@ -140,6 +141,45 @@ export async function artboardLayerUpdateDescriptionAction({
 	layer.description = description ?? ''
 	layer.updatedAt = new Date()
 	await layer.save()
+
+	return json({ status: 'success', submission } as const)
+}
+
+export async function artboardLayerToggleVisibilityAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	// validation
+	const submission = await parseArtboardLayerUpdateSubmission({
+		userId,
+		formData,
+		schema: ToggleVisibilityArtboardLayerSchema,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	// changes
+	const { id } = submission.value
+	try {
+		await prisma.$transaction(async prisma => {
+			const layer = await prisma.layer.findFirst({
+				where: { id, ownerId: userId },
+			})
+			if (!layer) return submissionErrorResponse(submission)
+
+			await prisma.layer.update({
+				where: { id },
+				data: { visible: !layer.visible },
+			})
+		})
+	} catch (error) {
+		console.log(error)
+		return submissionErrorResponse(submission)
+	}
 
 	return json({ status: 'success', submission } as const)
 }

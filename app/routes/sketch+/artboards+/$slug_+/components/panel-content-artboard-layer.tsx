@@ -13,8 +13,8 @@ import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardLayerNew } from './panel-form-artboard-design-new-layer'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
 import { PanelFormArtboardLayerEditName } from './panel-form-artboard-layer-edit-name'
+import { PanelFormArtboardLayerToggleVisibility } from './panel-form-artboard-layer-toggle-visibility'
 import { PanelPopoverArtboardLayer } from './panel-popover-artboard-layer'
 
 export const PanelContentArtboardLayer = ({
@@ -65,7 +65,7 @@ export const PanelContentArtboardLayer = ({
 								/>
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<PanelFormArtboardDesignToggleVisibility
+								<PanelFormArtboardLayerToggleVisibility
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}
