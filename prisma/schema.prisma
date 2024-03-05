@@ -459,7 +459,7 @@ model Size {
   id          String @id @default(cuid())
 
   format      String @default("percent") // e.g. percent, px, inches, cm, etc.
-  value       Int @default(10)
+  value       Float @default(10)
   basis     String @default("width") // e.g. width, height, etc.
 
   createdAt DateTime @default(now())

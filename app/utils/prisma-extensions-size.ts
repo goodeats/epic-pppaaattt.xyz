@@ -10,16 +10,16 @@ import { prismaExtended } from './db.server'
 // instance methods .save() and .delete()
 // https://github.com/prisma/prisma-client-extensions/blob/main/instance-methods/script.ts
 
-export const PalettePrismaExtensions = Prisma.defineExtension({
+export const SizePrismaExtensions = Prisma.defineExtension({
 	result: {
-		palette: {
+		size: {
 			save: {
 				needs: { id: true },
-				compute(palette) {
+				compute(size) {
 					return () => {
-						return prismaExtended.palette.update({
-							where: { id: palette.id },
-							data: palette,
+						return prismaExtended.size.update({
+							where: { id: size.id },
+							data: size,
 						})
 					}
 				},
@@ -29,7 +29,7 @@ export const PalettePrismaExtensions = Prisma.defineExtension({
 				needs: { id: true },
 				compute({ id }) {
 					return () => {
-						return prismaExtended.palette.delete({
+						return prismaExtended.size.delete({
 							where: { id },
 						})
 					}
@@ -40,18 +40,18 @@ export const PalettePrismaExtensions = Prisma.defineExtension({
 })
 
 // https://github.com/prisma/docs/issues/5058#issuecomment-1636473141
-export type ExtendedPalette = Prisma.Result<
-	typeof prismaExtended.palette,
+export type ExtendedSize = Prisma.Result<
+	typeof prismaExtended.size,
 	any,
 	'findFirstOrThrow'
 >
 
-export const findFirstPaletteInstance = async ({
+export const findFirstSizeInstance = async ({
 	where,
 }: {
 	where: whereArgsType
-}): Promise<ExtendedPalette | null> => {
-	return await prismaExtended.palette.findFirst({
+}): Promise<ExtendedSize | null> => {
+	return await prismaExtended.size.findFirst({
 		where,
 	})
 }

@@ -8,4 +8,5 @@ export const INTENT = {
 	artboardCreateDesignPalette: 'create-artboard-design-palette' as const,
 	artboardUpdateDesignPalette: 'update-artboard-design-palette' as const,
 	artboardCreateDesignSize: 'create-artboard-design-size' as const,
+	artboardUpdateDesignSize: 'update-artboard-design-size' as const,
 }

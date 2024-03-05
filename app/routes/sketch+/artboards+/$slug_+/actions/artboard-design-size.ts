@@ -1,13 +1,13 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import { NewArtboardDesignSchema, designSchema } from '#app/schema/design'
-import { EditArtboardPaletteSchema } from '#app/schema/palette'
+import { EditArtboardSizeSchema } from '#app/schema/size'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
-import { findFirstPaletteInstance } from '#app/utils/prisma-extensions-palette'
+import { findFirstSizeInstance } from '#app/utils/prisma-extensions-size'
 import { parseArtboardDesignSubmission } from './utils'
 
 export async function artboardDesignNewSizeAction({
@@ -89,8 +89,9 @@ export async function artboardDesignEditSizeAction({
 	const submission = await parseArtboardDesignSubmission({
 		userId,
 		formData,
-		schema: EditArtboardPaletteSchema,
+		schema: EditArtboardSizeSchema,
 	})
+
 	if (submission.intent !== 'submit') {
 		return notSubmissionResponse(submission)
 	}
@@ -100,7 +101,7 @@ export async function artboardDesignEditSizeAction({
 
 	// changes
 	const { id, value } = submission.value
-	const size = await findFirstPaletteInstance({
+	const size = await findFirstSizeInstance({
 		where: { id },
 	})
 	if (!size) return submissionErrorResponse(submission)

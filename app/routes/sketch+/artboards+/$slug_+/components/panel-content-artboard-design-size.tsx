@@ -11,6 +11,7 @@ import {
 import { type IDesignWithSize } from '#app/models/design.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
+import { PanelFormArtboardDesignEditSize } from './panel-form-artboard-design-edit-size'
 import { PanelFormArtboardDesignNewSize } from './panel-form-artboard-design-new-size'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
@@ -72,12 +73,11 @@ export const PanelContentArtboardDesignSize = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<p>yo</p>
 								{/* <PanelPopoverArtboardDesignPalette size={size} /> */}
-								{/* <PanelFormArtboardDesignEditPalette
+								<PanelFormArtboardDesignEditSize
 									artboardId={artboard.id}
 									size={size}
-								/> */}
+								/>
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
 								<PanelFormArtboardDesignToggleVisibility

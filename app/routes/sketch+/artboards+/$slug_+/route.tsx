@@ -23,7 +23,10 @@ import {
 	artboardDesignEditPaletteAction,
 	artboardDesignNewPaletteAction,
 } from './actions/artboard-design-palette'
-import { artboardDesignNewSizeAction } from './actions/artboard-design-size'
+import {
+	artboardDesignEditSizeAction,
+	artboardDesignNewSizeAction,
+} from './actions/artboard-design-size'
 import {
 	artboardUpdateBackgroundColorAction,
 	artboardUpdateHeightAction,
@@ -68,6 +71,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardCreateDesignSize: {
 			return artboardDesignNewSizeAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignSize: {
+			return artboardDesignEditSizeAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

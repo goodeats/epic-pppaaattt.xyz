@@ -15,6 +15,7 @@ import {
 	DesignPrismaQueryExtensions,
 } from './prisma-extensions-design'
 import { PalettePrismaExtensions } from './prisma-extensions-palette'
+import { SizePrismaExtensions } from './prisma-extensions-size'
 
 export const prismaExtended = remember('prisma', () => {
 	return new PrismaClient({})
@@ -22,6 +23,7 @@ export const prismaExtended = remember('prisma', () => {
 		.$extends(DesignPrismaQueryExtensions)
 		.$extends(DesignPrismaExtensions)
 		.$extends(PalettePrismaExtensions)
+		.$extends(SizePrismaExtensions)
 })
 
 export const prisma = remember('prisma', () => {
