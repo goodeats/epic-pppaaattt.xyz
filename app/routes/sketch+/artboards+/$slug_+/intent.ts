@@ -25,4 +25,12 @@ export const INTENT = {
 	artboardUpdateDesignRotate: 'update-artboard-design-rotate' as const,
 	artboardUpdateDesignRotateBasis:
 		'update-artboard-design-rotate-basis' as const,
+	artboardCreateDesignLayout: 'create-artboard-design-layout' as const,
+	artboardUpdateDesignLayoutStyle:
+		'update-artboard-design-layout-style' as const,
+	artboardUpdateDesignLayoutCount:
+		'update-artboard-design-layout-count' as const,
+	artboardUpdateDesignLayoutRows: 'update-artboard-design-layout-rows' as const,
+	artboardUpdateDesignLayoutColumns:
+		'update-artboard-design-layout-columns' as const,
 }

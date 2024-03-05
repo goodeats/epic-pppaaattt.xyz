@@ -6,6 +6,7 @@ import {
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 import { type IFill } from './fill.server'
+import { type ILayout } from './layout.server'
 import { type ILine } from './line.server'
 import { type IPalette } from './palette.server'
 import { type IRotate } from './rotate.server'
@@ -27,6 +28,7 @@ export interface IDesignWithType {
 	stroke: IStroke | null
 	line: ILine | null
 	rotate: IRotate | null
+	layout: ILayout | null
 }
 
 export interface IDesignWithPalette extends IDesignWithType {
@@ -53,6 +55,10 @@ export interface IDesignWithRotate extends IDesignWithType {
 	rotate: IRotate
 }
 
+export interface IDesignWithLayout extends IDesignWithType {
+	layout: ILayout
+}
+
 export const findManyDesignsWithType = async ({
 	where,
 }: {
@@ -67,6 +73,7 @@ export const findManyDesignsWithType = async ({
 			stroke: true,
 			line: true,
 			rotate: true,
+			layout: true,
 		},
 		orderBy: {
 			type: 'asc',

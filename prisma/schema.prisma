@@ -440,6 +440,7 @@ model Design {
   stroke Stroke?
   line Line?
   rotate Rotate?
+  layout Layout?
 
   // non-unique foreign key
   @@index([ownerId])
@@ -518,6 +519,23 @@ model Rotate {
 
   rotation     Float @default(0)
   basis     String @default("defined") // e.g. defined, random, etc.
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  design Design @relation(fields: [designId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  designId String @unique
+}
+
+model Layout {
+  id          String @id @default(cuid())
+
+  style     String @default("random") // e.g. random, grid, flex, etc.
+  // random settings
+  count     Int @default(1000)
+  // grid settings
+  rows     Int @default(9)
+  columns     Int @default(9)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

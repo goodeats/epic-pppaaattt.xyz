@@ -26,6 +26,13 @@ import {
 	artboardDesignNewFillAction,
 } from './actions/artboard-design-fill'
 import {
+	artboardDesignEditLayoutColumnsAction,
+	artboardDesignEditLayoutCountAction,
+	artboardDesignEditLayoutRowsAction,
+	artboardDesignEditLayoutStyleAction,
+	artboardDesignNewLayoutAction,
+} from './actions/artboard-design-layout'
+import {
 	artboardDesignEditLineWidthAction,
 	artboardDesignNewLineAction,
 } from './actions/artboard-design-line'
@@ -134,6 +141,21 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateDesignRotateBasis: {
 			return artboardDesignEditRotateBasisAction(actionArgs)
+		}
+		case INTENT.artboardCreateDesignLayout: {
+			return artboardDesignNewLayoutAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignLayoutStyle: {
+			return artboardDesignEditLayoutStyleAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignLayoutCount: {
+			return artboardDesignEditLayoutCountAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignLayoutRows: {
+			return artboardDesignEditLayoutRowsAction(actionArgs)
+		}
+		case INTENT.artboardUpdateDesignLayoutColumns: {
+			return artboardDesignEditLayoutColumnsAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

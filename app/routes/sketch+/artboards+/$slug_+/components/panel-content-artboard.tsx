@@ -6,8 +6,10 @@ import {
 	type IDesignWithStroke,
 	type IDesignWithLine,
 	type IDesignWithRotate,
+	type IDesignWithLayout,
 } from '#app/models/design.server'
 import { type IFill } from '#app/models/fill.server'
+import { type ILayout } from '#app/models/layout.server'
 import { type ILine } from '#app/models/line.server'
 import { type IPalette } from '#app/models/palette.server'
 import { type IRotate } from '#app/models/rotate.server'
@@ -16,6 +18,7 @@ import { type IStroke } from '#app/models/stroke.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboardBackgroundColor } from './panel-content-artboard-background-color'
 import { PanelContentArtboardDesignFill } from './panel-content-artboard-design-fill'
+import { PanelContentArtboardDesignLayout } from './panel-content-artboard-design-layout'
 import { PanelContentArtboardDesignLine } from './panel-content-artboard-design-line'
 import { PanelContentArtboardDesignPalette } from './panel-content-artboard-design-palette'
 import { PanelContentArtboardDesignRotate } from './panel-content-artboard-design-rotate'
@@ -54,10 +57,18 @@ export const PanelContentArtboard = ({
 		.filter(design => design.type === 'rotate' && design.rotate !== null)
 		.map(design => ({ ...design, rotate: design.rotate as IRotate }))
 
+	const designLayouts: IDesignWithLayout[] = artboardDesigns
+		.filter(design => design.type === 'layout' && design.layout !== null)
+		.map(design => ({ ...design, layout: design.layout as ILayout }))
+
 	return (
 		<div>
 			<PanelContentArtboardFrame artboard={artboard} />
 			<PanelContentArtboardBackgroundColor artboard={artboard} />
+			<PanelContentArtboardDesignLayout
+				artboard={artboard}
+				designLayouts={designLayouts}
+			/>
 			<PanelContentArtboardDesignPalette
 				artboard={artboard}
 				designPalettes={designPalettes}
