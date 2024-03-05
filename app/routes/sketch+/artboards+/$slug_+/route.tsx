@@ -62,6 +62,7 @@ import {
 } from './actions/artboard-design-template'
 import {
 	artboardLayerNewAction,
+	artboardLayerUpdateDescriptionAction,
 	artboardLayerUpdateNameAction,
 } from './actions/artboard-layer'
 import {
@@ -177,6 +178,9 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateLayerName: {
 			return artboardLayerUpdateNameAction(actionArgs)
+		}
+		case INTENT.artboardUpdateLayerDescription: {
+			return artboardLayerUpdateDescriptionAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

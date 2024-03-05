@@ -1,6 +1,7 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import {
+	EditArtboardLayerDescriptionSchema,
 	EditArtboardLayerNameSchema,
 	NewArtboardLayerSchema,
 } from '#app/schema/layer'
@@ -100,14 +101,45 @@ export async function artboardLayerUpdateNameAction({
 
 	// changes
 	const { id, name } = submission.value
-	const palette = await findFirstLayerInstance({
+	const layer = await findFirstLayerInstance({
 		where: { id },
 	})
-	if (!palette) return submissionErrorResponse(submission)
+	if (!layer) return submissionErrorResponse(submission)
 
-	palette.name = name
-	palette.updatedAt = new Date()
-	await palette.save()
+	layer.name = name
+	layer.updatedAt = new Date()
+	await layer.save()
+
+	return json({ status: 'success', submission } as const)
+}
+
+export async function artboardLayerUpdateDescriptionAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	// validation
+	const submission = await parseArtboardLayerUpdateSubmission({
+		userId,
+		formData,
+		schema: EditArtboardLayerDescriptionSchema,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	// changes
+	const { id, description } = submission.value
+	const layer = await findFirstLayerInstance({
+		where: { id },
+	})
+	if (!layer) return submissionErrorResponse(submission)
+
+	layer.description = description ?? ''
+	layer.updatedAt = new Date()
+	await layer.save()
 
 	return json({ status: 'success', submission } as const)
 }

@@ -10,6 +10,12 @@ export const EditArtboardLayerNameSchema = z.object({
 	name: z.string().min(1).max(40),
 })
 
+export const EditArtboardLayerDescriptionSchema = z.object({
+	id: z.string(),
+	artboardId: z.string(),
+	description: z.string().min(0).max(400).optional(),
+})
+
 export const DeleteArtboardLayerSchema = z.object({
 	id: z.string(),
 	artboardId: z.string(),

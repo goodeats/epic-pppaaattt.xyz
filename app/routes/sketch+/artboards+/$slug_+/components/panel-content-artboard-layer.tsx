@@ -15,6 +15,7 @@ import { PanelFormArtboardLayerNew } from './panel-form-artboard-design-new-laye
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
 import { PanelFormArtboardLayerEditName } from './panel-form-artboard-layer-edit-name'
+import { PanelPopoverArtboardLayer } from './panel-popover-artboard-layer'
 
 export const PanelContentArtboardLayer = ({
 	artboard,
@@ -54,8 +55,10 @@ export const PanelContentArtboardLayer = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								{/* {layer.name} */}
-								{/* <PanelPopoverArtboardDesignPalette palette={palette} /> */}
+								<PanelPopoverArtboardLayer
+									artboardId={artboard.id}
+									layer={layer}
+								/>
 								<PanelFormArtboardLayerEditName
 									artboardId={artboard.id}
 									layer={layer}
