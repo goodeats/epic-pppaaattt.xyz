@@ -36,4 +36,10 @@ export const INTENT = {
 	artboardCreateDesignTemplate: 'create-artboard-design-template' as const,
 	artboardUpdateDesignTemplateStyle:
 		'update-artboard-design-template-style' as const,
+	artboardCreateLayer: 'create-artboard-layer' as const,
+	artboardUpdateLayerName: 'update-artboard-layer-name' as const,
+	artboardUpdateLayerDescription: 'update-artboard-layer-description' as const,
+	artboardToggleVisibilityLayer: 'toggle-visibility-artboard-layer' as const,
+	artboardDeleteLayer: 'delete-artboard-layer' as const,
+	artboardReorderLayer: 'reorder-artboard-layer' as const,
 }

@@ -58,6 +58,9 @@ export const List = () => {
 
 	const ListItem = ({ layer }: { layer: Layer }) => {
 		const { slug, name } = layer
+
+		if (!slug || !name) return null
+
 		return (
 			<SideNavListItem key={slug}>
 				<NavLink

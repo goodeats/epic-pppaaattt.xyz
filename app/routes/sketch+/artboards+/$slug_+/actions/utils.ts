@@ -6,6 +6,7 @@ import {
 	findDesignByIdAndOwner,
 	findFirstDesign,
 } from '#app/models/design.server'
+import { findLayerByIdAndOwner } from '#app/models/layer.server'
 import { addNotFoundIssue } from '#app/utils/conform-utils'
 
 export const parseArtboardSubmission = async ({
@@ -89,6 +90,49 @@ export const parseArtboardDesignTypeSubmission = async ({
 				ownerId: userId,
 			})
 			if (!design) ctx.addIssue(addNotFoundIssue('Design'))
+		}),
+		async: true,
+	})
+}
+
+export const parseArtboardLayerSubmission = async ({
+	userId,
+	formData,
+	schema,
+}: IntentActionArgs & { schema: z.ZodSchema<any> }) => {
+	return await parse(formData, {
+		schema: schema.superRefine(async (data, ctx) => {
+			const { artboardId } = data
+			const artboard = await findArtboardByIdAndOwner({
+				id: artboardId,
+				ownerId: userId,
+			})
+			if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
+		}),
+		async: true,
+	})
+}
+
+export const parseArtboardLayerUpdateSubmission = async ({
+	userId,
+	formData,
+	schema,
+}: IntentActionArgs & { schema: z.ZodSchema<any> }) => {
+	return await parse(formData, {
+		schema: schema.superRefine(async (data, ctx) => {
+			const { artboardId, layerId } = data
+
+			const artboard = await findArtboardByIdAndOwner({
+				id: artboardId,
+				ownerId: userId,
+			})
+			if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
+
+			const design = await findLayerByIdAndOwner({
+				id: layerId,
+				ownerId: userId,
+			})
+			if (!design) ctx.addIssue(addNotFoundIssue('Layer'))
 		}),
 		async: true,
 	})
