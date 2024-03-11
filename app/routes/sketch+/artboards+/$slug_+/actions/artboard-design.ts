@@ -10,6 +10,7 @@ import {
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
+import { artboardDesignDeleteService } from '../services/artboard/design/delete-service'
 import { parseArtboardDesignUpdateSubmission } from './utils'
 
 export async function artboardDesignReorderAction({
@@ -259,79 +260,13 @@ export async function artboardDesignDeleteAction({
 	}
 
 	// changes
-	const { id } = submission.value
-	try {
-		await prisma.$transaction(async prisma => {
-			// logic before delete
-			// find design first
-			const design = await prisma.design.findFirst({
-				where: { id },
-			})
-			if (!design) return submissionErrorResponse(submission)
-			// get nextId and prevId from design
-			const { nextId, prevId } = design
+	const { id, artboardId } = submission.value
+	const { success, error } = await artboardDesignDeleteService({
+		id,
+		artboardId,
+	})
 
-			// delete design will cascade delete type relation
-			await prisma.design.delete({
-				where: { id },
-			})
+	if (error) return submissionErrorResponse(submission)
 
-			// if design is the only design in the artboard
-			if (!prevId && !nextId) return
-
-			if (!prevId && nextId) {
-				// if head
-				// remove prevId from next design, becomes head
-				const nextDesign = await prisma.design.findFirst({
-					where: { id: nextId },
-				})
-				if (nextDesign) {
-					await prisma.design.update({
-						where: { id: nextId },
-						data: { prevId: null },
-					})
-				}
-			} else if (prevId && !nextId) {
-				// if tail
-				// remove nextId from prev design, becomes tail
-				const prevDesign = await prisma.design.findFirst({
-					where: { id: prevId },
-				})
-				if (prevDesign) {
-					await prisma.design.update({
-						where: { id: prevId },
-						data: { nextId: null },
-					})
-				}
-			} else if (prevId && nextId) {
-				// if in middle
-				// replace nextId for prev design with nextId of deleted design
-				const prevDesign = await prisma.design.findFirst({
-					where: { id: prevId },
-				})
-				if (prevDesign) {
-					await prisma.design.update({
-						where: { id: prevId },
-						data: { nextId: nextId },
-					})
-				}
-
-				// replace prevId for next design with prevId of deleted design
-				const nextDesign = await prisma.design.findFirst({
-					where: { id: nextId },
-				})
-				if (nextDesign) {
-					await prisma.design.update({
-						where: { id: nextId },
-						data: { prevId: prevId },
-					})
-				}
-			}
-		})
-	} catch (error) {
-		console.log(error)
-		return submissionErrorResponse(submission)
-	}
-
-	return json({ status: 'success', submission } as const)
+	return json({ status: 'success', submission, success } as const)
 }

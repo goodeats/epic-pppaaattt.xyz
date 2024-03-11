@@ -4,7 +4,7 @@ import {
 	type selectArgsType,
 	type whereArgsType,
 } from '#app/schema/artboard'
-import { prisma } from '#app/utils/db.server'
+import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 
 // use prisma extension to .save() or .delete()
 
@@ -29,4 +29,16 @@ export const findArtboardByIdAndOwner = async ({
 }): Promise<Artboard | null> => {
 	const where = { id, ownerId }
 	return await findFirstArtboard({ where, select })
+}
+
+export const findArtboardTransactionPromise = ({
+	id,
+	prisma,
+}: {
+	id: string
+	prisma: PrismaTransactionType
+}) => {
+	return prisma.artboard.findFirst({
+		where: { id },
+	})
 }

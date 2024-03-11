@@ -6,7 +6,9 @@ import {
 	type Appearance,
 	type Layer,
 	type AppearancesOnArtboards,
+	type Prisma,
 } from '@prisma/client'
+import { type DefaultArgs } from '@prisma/client/runtime/library'
 import chalk from 'chalk'
 import { type AppearanceType } from './appearances'
 import { ArtboardPrismaExtensions } from './prisma-extensions-artboard'
@@ -23,6 +25,12 @@ import { RotatePrismaExtensions } from './prisma-extensions-rotate'
 import { SizePrismaExtensions } from './prisma-extensions-size'
 import { StrokePrismaExtensions } from './prisma-extensions-stroke'
 import { TemplatePrismaExtensions } from './prisma-extensions-template'
+
+// for use in transactions and you want to call prisma from functions outside the transaction
+export type PrismaTransactionType = Omit<
+	PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
+	'$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'
+>
 
 export const prismaExtended = remember('prisma', () => {
 	return new PrismaClient({})

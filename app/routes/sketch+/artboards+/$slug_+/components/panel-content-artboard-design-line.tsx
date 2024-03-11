@@ -9,6 +9,7 @@ import {
 	PanelTitle,
 } from '#app/components/shared'
 import { type IDesignWithLine } from '#app/models/design.server'
+import { orderDesigns } from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignEditLine } from './panel-form-artboard-design-edit-line'
@@ -24,24 +25,7 @@ export const PanelContentArtboardDesignLine = ({
 	artboard: PickedArtboardType
 	designLines: IDesignWithLine[]
 }) => {
-	const orderedDesignLines = designLines.reduce(
-		(acc: IDesignWithLine[], designLine) => {
-			if (!designLine.prevId) {
-				acc.unshift(designLine) // Add the head of the list to the start
-			} else {
-				let currentDesignIndex = acc.findIndex(d => d.id === designLine.prevId)
-				if (currentDesignIndex !== -1) {
-					// Insert the designLine right after its predecessor
-					acc.splice(currentDesignIndex + 1, 0, designLine)
-				} else {
-					// If predecessor is not found, add it to the end as a fallback
-					acc.push(designLine)
-				}
-			}
-			return acc
-		},
-		[],
-	)
+	const orderedDesignLines = orderDesigns(designLines) as IDesignWithLine[]
 
 	const designCount = designLines.length
 	return (

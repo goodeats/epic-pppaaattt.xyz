@@ -4,7 +4,7 @@ import {
 	type findDesignArgsType,
 	type whereArgsType,
 } from '#app/schema/design'
-import { prisma } from '#app/utils/db.server'
+import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 import { type IFill } from './fill.server'
 import { type ILayout } from './layout.server'
 import { type ILine } from './line.server'
@@ -14,6 +14,7 @@ import { type ISize } from './size.server'
 import { type IStroke } from './stroke.server'
 import { type ITemplate } from './template.server'
 
+export interface IDesign extends Design {}
 export interface IDesignWithType {
 	id: string
 	type: string
@@ -23,6 +24,7 @@ export interface IDesignWithType {
 	prevId: string | null
 	ownerId: string
 	artboardId: string | null
+	layerId: string | null
 	palette: IPalette | null
 	size: ISize | null
 	fill: IFill | null
@@ -64,6 +66,18 @@ export interface IDesignWithLayout extends IDesignWithType {
 export interface IDesignWithTemplate extends IDesignWithType {
 	template: ITemplate
 }
+
+export type IDesignType =
+	| IDesign
+	| IDesignWithType
+	| IDesignWithPalette
+	| IDesignWithSize
+	| IDesignWithFill
+	| IDesignWithStroke
+	| IDesignWithLine
+	| IDesignWithRotate
+	| IDesignWithLayout
+	| IDesignWithTemplate
 
 export const findManyDesignsWithType = async ({
 	where,
@@ -110,4 +124,16 @@ export const findDesignByIdAndOwner = async ({
 }): Promise<Design | null> => {
 	const where = { id, ownerId }
 	return await findFirstDesign({ where, select })
+}
+
+export const findDesignTransactionPromise = ({
+	id,
+	prisma,
+}: {
+	id: string
+	prisma: PrismaTransactionType
+}) => {
+	return prisma.design.findFirst({
+		where: { id },
+	})
 }
