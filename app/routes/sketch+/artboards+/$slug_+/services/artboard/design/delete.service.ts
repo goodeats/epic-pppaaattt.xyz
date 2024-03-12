@@ -1,6 +1,9 @@
 import { type Design, type Artboard } from '@prisma/client'
 import { findArtboardTransactionPromise } from '#app/models/artboard.server'
-import { findDesignTransactionPromise } from '#app/models/design.server'
+import {
+	connectPrevAndNextDesignsPromise,
+	findDesignTransactionPromise,
+} from '#app/models/design.server'
 import {
 	ArtboardSelectedDesignsSchema,
 	type ArtboardSelectedDesignsType,
@@ -149,7 +152,7 @@ const designUpdateOperations = ({
 	} else if (prevId && nextId && prevDesign && nextDesign) {
 		// If in middle, connect prev and next designs directly
 		updateOperations.push(
-			...connectPrevAndNextDesigns({ prevId, nextId, prisma }),
+			...connectPrevAndNextDesignsPromise({ prevId, nextId, prisma }),
 		)
 	}
 
@@ -180,27 +183,6 @@ const removeNextIdFromPrevDesign = ({
 		where: { id: prevId },
 		data: { nextId: null },
 	})
-}
-
-const connectPrevAndNextDesigns = ({
-	prevId,
-	nextId,
-	prisma,
-}: {
-	prevId: string
-	nextId: string
-	prisma: PrismaTransactionType
-}) => {
-	return [
-		prisma.design.update({
-			where: { id: prevId },
-			data: { nextId },
-		}),
-		prisma.design.update({
-			where: { id: nextId },
-			data: { prevId },
-		}),
-	]
 }
 
 const findArtboardSelectedDesignByType = async ({

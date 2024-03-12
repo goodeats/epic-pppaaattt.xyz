@@ -1,12 +1,15 @@
 import { type Design, type Artboard } from '@prisma/client'
 import {
-	ArtboardSelectedDesignsSchema,
 	type ArtboardSelectedDesignsType,
 	type findArtboardArgsType,
 	type selectArgsType,
 	type whereArgsType,
 } from '#app/schema/artboard'
 import { type designTypeEnum } from '#app/schema/design'
+import {
+	parseArtboardSelectedDesigns,
+	stringifyArtboardSelectedDesigns,
+} from '#app/utils/artboard'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 
 // use prisma extension to .save() or .delete()
@@ -59,22 +62,23 @@ export const updateArtboardSelectedDesignPromise = ({
 	prisma: PrismaTransactionType
 }) => {
 	// parse the selectedDesigns of the artboard
-	const selectedDesigns = ArtboardSelectedDesignsSchema.parse(
-		JSON.parse(artboard.selectedDesigns),
-	) as ArtboardSelectedDesignsType
+	const parsedSelectedDesigns = parseArtboardSelectedDesigns({ artboard })
 
-	// set the key for the selectedDesigns object to update
+	// set the key for the parsedSelectedDesigns object to update
 	const designKey = (type + 'Id') as keyof ArtboardSelectedDesignsType
 
-	// build the updated selectedDesigns object
-	const updatedSelectedDesigns = ArtboardSelectedDesignsSchema.parse({
-		...selectedDesigns,
+	// build the updated parsedSelectedDesigns object
+	const newSelectedDesigns = {
+		...parsedSelectedDesigns,
 		[designKey]: designId,
+	}
+	const updatedSelectedDesigns = stringifyArtboardSelectedDesigns({
+		newSelectedDesigns,
 	})
 
 	// update the selectedDesigns for the artboard
 	return prisma.artboard.update({
 		where: { id: artboard.id },
-		data: { selectedDesigns: JSON.stringify(updatedSelectedDesigns) },
+		data: { selectedDesigns: updatedSelectedDesigns },
 	})
 }

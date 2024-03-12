@@ -21,6 +21,7 @@ export type PickedArtboardType = {
 	width: number
 	height: number
 	backgroundColor: string
+	selectedDesigns: string
 	updatedAt: Date | string
 	project: {
 		id: string
@@ -43,6 +44,7 @@ export const getArtboard = async (
 			width: true,
 			height: true,
 			backgroundColor: true,
+			selectedDesigns: true,
 			updatedAt: true,
 			project: {
 				select: {
