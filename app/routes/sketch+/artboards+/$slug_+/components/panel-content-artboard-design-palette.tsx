@@ -9,10 +9,11 @@ import {
 	PanelTitle,
 } from '#app/components/shared'
 import { type IDesignWithPalette } from '#app/models/design.server'
+import { DesignTypeEnum } from '#app/schema/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignEditPalette } from './panel-form-artboard-design-edit-palette'
-import { PanelFormArtboardDesignNewPalette } from './panel-form-artboard-design-new-palette'
+import { PanelFormArtboardDesignNew } from './panel-form-artboard-design-new'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
 import { PanelPopoverArtboardDesignPalette } from './panel-popover-artboard-design-palette'
@@ -45,17 +46,33 @@ export const PanelContentArtboardDesignPalette = ({
 		[],
 	)
 
+	// helps with disabling reorder buttons
 	const designCount = designPalettes.length
+
+	console.log('orderedDesignPalettes', orderedDesignPalettes)
+	// helps with resetting the selected design for artboard
+	const visibleDesigns: string[] = []
+
 	return (
 		<Panel>
 			<PanelHeader>
 				<PanelTitle>Palette</PanelTitle>
 				<div className="flex flex-shrink">
-					<PanelFormArtboardDesignNewPalette artboardId={artboard.id} />
+					{/* <PanelFormArtboardDesignNewPalette artboardId={artboard.id} /> */}
+					<PanelFormArtboardDesignNew
+						artboardId={artboard.id}
+						type={DesignTypeEnum.PALETTE}
+						visibleDesignsCount={visibleDesigns.length}
+					/>
 				</div>
 			</PanelHeader>
 			{orderedDesignPalettes.map((designPalette, index) => {
 				const { id, visible, palette } = designPalette
+
+				if (visible) {
+					visibleDesigns.push(id)
+				}
+
 				return (
 					<PanelRow key={palette.id}>
 						<PanelRowOrderContainer>
@@ -91,6 +108,7 @@ export const PanelContentArtboardDesignPalette = ({
 								<PanelFormArtboardDesignDelete
 									id={id}
 									artboardId={artboard.id}
+									// isSelected={visibleDesigns[0] === id}
 								/>
 							</PanelRowIconContainer>
 						</PanelRowContainer>

@@ -2,6 +2,7 @@ import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import {
 	DeleteArtboardDesignSchema,
+	NewArtboardDesignSchema,
 	ReorderArtboardDesignSchema,
 	ToggleVisibilityArtboardDesignSchema,
 } from '#app/schema/design'
@@ -10,8 +11,43 @@ import {
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
-import { artboardDesignDeleteService } from '../services/artboard/design/delete-service'
-import { parseArtboardDesignUpdateSubmission } from './utils'
+import { artboardDesignCreateService } from '../services/artboard/design/create.service'
+import { artboardDesignDeleteService } from '../services/artboard/design/delete.service'
+import {
+	parseArtboardDesignSubmission,
+	parseArtboardDesignUpdateSubmission,
+} from './utils'
+
+export async function artboardDesignNewAction({
+	userId,
+	formData,
+}: IntentActionArgs) {
+	// validation
+	const submission = await parseArtboardDesignSubmission({
+		userId,
+		formData,
+		schema: NewArtboardDesignSchema,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+
+	// changes
+	const { artboardId, type, visibleDesignsCount } = submission.value
+	const { success, error } = await artboardDesignCreateService({
+		userId,
+		artboardId,
+		type,
+		visibleDesignsCount,
+	})
+
+	if (error) return submissionErrorResponse(submission)
+
+	return json({ status: 'success', submission, success } as const)
+}
 
 export async function artboardDesignReorderAction({
 	userId,

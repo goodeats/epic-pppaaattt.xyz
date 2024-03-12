@@ -1,70 +1,88 @@
 import { type Design, type Artboard } from '@prisma/client'
+import { type User } from '@sentry/remix'
 import { findArtboardTransactionPromise } from '#app/models/artboard.server'
-import { findDesignTransactionPromise } from '#app/models/design.server'
 import {
 	ArtboardSelectedDesignsSchema,
 	type ArtboardSelectedDesignsType,
 } from '#app/schema/artboard'
+import { designSchema, type designTypeEnum } from '#app/schema/design'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 
-export const artboardDesignDeleteService = async ({
-	id,
+type artboardDesignCreateServiceProps = {
+	userId: User['id']
+	artboardId: Artboard['id']
+	type: designTypeEnum
+	visibleDesignsCount: number
+}
+
+export const artboardDesignCreateService = async ({
+	userId,
 	artboardId,
-}: {
-	id: string
-	artboardId: string
-}) => {
+	type,
+	visibleDesignsCount,
+}: artboardDesignCreateServiceProps) => {
+	console.log('artboardDesignCreateService')
 	try {
 		await prisma.$transaction(async prisma => {
-			// get design
-			const design = await prisma.design.findFirst({
-				where: { id },
-			})
-			if (!design) throw new Error('Design not found')
-			const { nextId, prevId, type } = design
-
-			// get next and previous designs
-			const { nextDesign, prevDesign } = await fetchAdjacentDesigns({
-				design,
-				prisma,
-			})
-
-			const updateOperations = [
-				// delete design first before updating next/prev designs
-				// this is necessary to avoid foreign key unique constraint errors
-				deleteDesignPromise({ id, prisma }),
-				// update next/prev designs if they exist
-				// this is necessary to maintain the linked list structure
-				...designUpdateOperations({
-					nextId,
-					nextDesign,
-					prevId,
-					prevDesign,
-					prisma,
-				}),
-			]
-
-			// Fetch artboard for selected designs
-			const fetchArtboardPromise = findArtboardTransactionPromise({
-				id: artboardId,
-				prisma,
-			})
-
-			// Execute fetch operations in parallel
-			const [artboard] = await Promise.all([fetchArtboardPromise])
-
-			if (!artboard) throw new Error('Artboard not found')
-
-			// if design was selected, remove it or replace it with the next visible design or null
-			const artboardSelectedDesignId = await findArtboardSelectedDesignByType({
-				artboard,
+			// new designs are appended to the end of the list
+			// find the last design in the list (tail) by type
+			const previousDesign = await fetchArtboardDesignTypeTail({
+				artboardId,
 				type,
+				prisma,
 			})
-			if (artboardSelectedDesignId === id) {
-				if (nextId) {
-					// update selected design for artboard to next visible design
-				} else {
-					// remove selected design from artboard
+
+			// create design before its associated type
+			const design = await createDesign({
+				userId,
+				artboardId,
+				type,
+				prisma,
+			})
+			console.log('created design', design)
+			// create the associated type
+			const designType = await createDesignType({
+				designId: design.id,
+				type,
+				prisma,
+			})
+			console.log('created design type', designType)
+
+			const updateOperations = []
+
+			// if the artboard already has a palette
+			// link the new palette to the last one
+			// and the last one to the new one
+			if (previousDesign) {
+				updateOperations.push(
+					...connectPrevAndNextDesigns({
+						prevId: previousDesign.id,
+						nextId: design.id,
+						prisma,
+					}),
+				)
+				console.log('will connect design to previous tail')
+			}
+
+			if (visibleDesignsCount === 0) {
+				// Fetch artboard for selected designs
+				const fetchArtboardPromise = findArtboardTransactionPromise({
+					id: artboardId,
+					prisma,
+				})
+
+				// Execute fetch operations in parallel
+				const [artboard] = await Promise.all([fetchArtboardPromise])
+				if (artboard) {
+					updateOperations.push(
+						updateArtboardSelectedDesign({
+							artboard,
+							designId: design.id,
+							type,
+							prisma,
+						}),
+					)
+					console.log('will update selected design for artboard')
 				}
 			}
 
@@ -72,7 +90,7 @@ export const artboardDesignDeleteService = async ({
 			await Promise.all(updateOperations)
 		})
 
-		console.log('Design deleted successfully')
+		console.log('Design created successfully')
 
 		return { success: true }
 	} catch (error) {
@@ -81,105 +99,70 @@ export const artboardDesignDeleteService = async ({
 	}
 }
 
-const fetchAdjacentDesigns = async ({
-	design,
+const fetchArtboardDesignTypeTail = async ({
+	artboardId,
+	type,
 	prisma,
 }: {
-	design: Design
+	artboardId: Artboard['id']
+	type: designTypeEnum
 	prisma: PrismaTransactionType
 }) => {
-	const { nextId, prevId } = design
-
-	const fetchNextDesignPromise = nextId
-		? findDesignTransactionPromise({
-				id: nextId,
-				prisma,
-		  })
-		: Promise.resolve(null)
-
-	const fetchPrevDesignPromise = prevId
-		? findDesignTransactionPromise({
-				id: prevId,
-				prisma,
-		  })
-		: Promise.resolve(null)
-
-	const [nextDesign, prevDesign] = await Promise.all([
-		fetchNextDesignPromise,
-		fetchPrevDesignPromise,
-	])
-
-	return { nextDesign, prevDesign }
-}
-
-// Delete design (this needs to happen before we can update the next/prev designs)
-const deleteDesignPromise = ({
-	id,
-	prisma,
-}: {
-	id: string
-	prisma: PrismaTransactionType
-}) => {
-	return prisma.design.delete({
-		where: { id },
+	return await prisma.design.findFirst({
+		where: { type, artboardId, nextId: null },
 	})
 }
 
-const designUpdateOperations = ({
-	nextId,
-	nextDesign,
-	prevId,
-	prevDesign,
+const createDesign = async ({
+	userId,
+	artboardId,
+	type,
 	prisma,
 }: {
-	nextId: string | null
-	nextDesign: Design | null
-	prevId: string | null
-	prevDesign: Design | null
+	userId: User['id']
+	artboardId: Artboard['id']
+	type: designTypeEnum
 	prisma: PrismaTransactionType
 }) => {
-	const updateOperations = []
+	// validate the design type is valid
+	const data = designSchema.parse({
+		type,
+		ownerId: userId,
+		artboardId,
+	})
+	return await prisma.design.create({ data })
+}
 
-	if (!prevId && nextId && nextDesign) {
-		// If head, remove prevId from next design, becomes head
-		updateOperations.push(removePrevIdFromNextDesign({ nextId, prisma }))
-	} else if (prevId && !nextId && prevDesign) {
-		// If tail, remove nextId from prev design, becomes tail
-		updateOperations.push(removeNextIdFromPrevDesign({ prevId, prisma }))
-	} else if (prevId && nextId && prevDesign && nextDesign) {
-		// If in middle, connect prev and next designs directly
-		updateOperations.push(
-			...connectPrevAndNextDesigns({ prevId, nextId, prisma }),
-		)
+const createDesignType = async ({
+	designId,
+	type,
+	prisma,
+}: {
+	designId: Design['id']
+	type: designTypeEnum
+	prisma: PrismaTransactionType
+}) => {
+	const data = { designId }
+
+	// each design type has a default value set in the schema
+	switch (type) {
+		case 'palette':
+			return await prisma.palette.create({ data })
+		case 'size':
+			return await prisma.size.create({ data })
+		case 'fill':
+			return await prisma.fill.create({ data })
+		case 'stroke':
+			return await prisma.stroke.create({ data })
+		case 'line':
+			return await prisma.line.create({ data })
+		case 'rotate':
+			return await prisma.rotate.create({ data })
+		case 'layout':
+			return await prisma.layout.create({ data })
+		case 'template':
+			return await prisma.template.create({ data })
 	}
-
-	return updateOperations
-}
-
-const removePrevIdFromNextDesign = ({
-	nextId,
-	prisma,
-}: {
-	nextId: string
-	prisma: PrismaTransactionType
-}) => {
-	return prisma.design.update({
-		where: { id: nextId },
-		data: { prevId: null },
-	})
-}
-
-const removeNextIdFromPrevDesign = ({
-	prevId,
-	prisma,
-}: {
-	prevId: string
-	prisma: PrismaTransactionType
-}) => {
-	return prisma.design.update({
-		where: { id: prevId },
-		data: { nextId: null },
-	})
 }
 
 const connectPrevAndNextDesigns = ({
@@ -187,8 +170,8 @@ const connectPrevAndNextDesigns = ({
 	nextId,
 	prisma,
 }: {
-	prevId: string
-	nextId: string
+	prevId: Design['id']
+	nextId: Design['id']
 	prisma: PrismaTransactionType
 }) => {
 	return [
@@ -203,18 +186,34 @@ const connectPrevAndNextDesigns = ({
 	]
 }
 
-const findArtboardSelectedDesignByType = async ({
+const updateArtboardSelectedDesign = ({
 	artboard,
+	designId,
 	type,
+	prisma,
 }: {
-	artboard: Artboard
-	type: string
-}): Promise<string | undefined> => {
-	const { selectedDesigns } = artboard
-	const parsedSelectedDesigns = ArtboardSelectedDesignsSchema.parse(
-		JSON.parse(selectedDesigns),
+	artboard: Pick<Artboard, 'id' | 'selectedDesigns'>
+	designId: Design['id']
+	type: designTypeEnum
+	prisma: PrismaTransactionType
+}) => {
+	// parse the selectedDesigns of the artboard
+	const selectedDesigns = ArtboardSelectedDesignsSchema.parse(
+		JSON.parse(artboard.selectedDesigns),
 	) as ArtboardSelectedDesignsType
 
+	// set the key for the selectedDesigns object to update
 	const designKey = (type + 'Id') as keyof ArtboardSelectedDesignsType
-	return parsedSelectedDesigns[designKey]
+
+	// build the updated selectedDesigns object
+	const updatedSelectedDesigns = ArtboardSelectedDesignsSchema.parse({
+		...selectedDesigns,
+		[designKey]: designId,
+	})
+
+	// update the selectedDesigns for the artboard
+	return prisma.artboard.update({
+		where: { id: artboard.id },
+		data: { selectedDesigns: JSON.stringify(updatedSelectedDesigns) },
+	})
 }

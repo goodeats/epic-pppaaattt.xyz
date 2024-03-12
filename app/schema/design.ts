@@ -12,7 +12,7 @@ export const DesignTypeEnum = {
 	// add more design types here
 } as const
 type ObjectValues<T> = T[keyof T]
-type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
+export type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
 
 export interface Design {
 	type: designTypeEnum
@@ -29,6 +29,8 @@ export const designSchema = z.object({
 
 export const NewArtboardDesignSchema = z.object({
 	artboardId: z.string(),
+	type: z.nativeEnum(DesignTypeEnum),
+	visibleDesignsCount: z.number(),
 })
 
 export const DeleteArtboardDesignSchema = z.object({
