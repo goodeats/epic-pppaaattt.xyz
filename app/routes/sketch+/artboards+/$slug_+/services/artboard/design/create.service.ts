@@ -21,7 +21,6 @@ export const artboardDesignCreateService = async ({
 	type,
 	visibleDesignsCount,
 }: artboardDesignCreateServiceProps) => {
-	console.log('artboardDesignCreateService')
 	try {
 		await prisma.$transaction(async prisma => {
 			// new designs are appended to the end of the list
@@ -39,20 +38,18 @@ export const artboardDesignCreateService = async ({
 				type,
 				prisma,
 			})
-			console.log('created design', design)
+
 			// create the associated type
-			const designType = await createDesignType({
+			await createDesignType({
 				designId: design.id,
 				type,
 				prisma,
 			})
-			console.log('created design type', designType)
 
+			// update operations to be executed in parallel
 			const updateOperations = []
 
-			// if the artboard already has a palette
-			// link the new palette to the last one
-			// and the last one to the new one
+			// if there is a previous design, connect it to the new design
 			if (previousDesign) {
 				updateOperations.push(
 					...connectPrevAndNextDesigns({
@@ -61,9 +58,9 @@ export const artboardDesignCreateService = async ({
 						prisma,
 					}),
 				)
-				console.log('will connect design to previous tail')
 			}
 
+			// if there are no visible designs, set the new design as selected
 			if (visibleDesignsCount === 0) {
 				// Fetch artboard for selected designs
 				const fetchArtboardPromise = findArtboardTransactionPromise({
@@ -73,6 +70,8 @@ export const artboardDesignCreateService = async ({
 
 				// Execute fetch operations in parallel
 				const [artboard] = await Promise.all([fetchArtboardPromise])
+
+				// if the artboard exists, update the selected design
 				if (artboard) {
 					updateOperations.push(
 						updateArtboardSelectedDesign({
@@ -82,15 +81,12 @@ export const artboardDesignCreateService = async ({
 							prisma,
 						}),
 					)
-					console.log('will update selected design for artboard')
 				}
 			}
 
 			// Execute all update operations in parallel
 			await Promise.all(updateOperations)
 		})
-
-		console.log('Design created successfully')
 
 		return { success: true }
 	} catch (error) {

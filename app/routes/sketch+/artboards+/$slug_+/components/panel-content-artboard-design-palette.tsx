@@ -10,6 +10,7 @@ import {
 } from '#app/components/shared'
 import { type IDesignWithPalette } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
+import { orderDesigns } from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignEditPalette } from './panel-form-artboard-design-edit-palette'
@@ -25,40 +26,23 @@ export const PanelContentArtboardDesignPalette = ({
 	artboard: PickedArtboardType
 	designPalettes: IDesignWithPalette[]
 }) => {
-	const orderedDesignPalettes = designPalettes.reduce(
-		(acc: IDesignWithPalette[], designPalette) => {
-			if (!designPalette.prevId) {
-				acc.unshift(designPalette) // Add the head of the list to the start
-			} else {
-				let currentDesignIndex = acc.findIndex(
-					d => d.id === designPalette.prevId,
-				)
-				if (currentDesignIndex !== -1) {
-					// Insert the designPalette right after its predecessor
-					acc.splice(currentDesignIndex + 1, 0, designPalette)
-				} else {
-					// If predecessor is not found, add it to the end as a fallback
-					acc.push(designPalette)
-				}
-			}
-			return acc
-		},
-		[],
-	)
+	const orderedDesignPalettes = orderDesigns(
+		designPalettes,
+	) as IDesignWithPalette[]
 
 	// helps with disabling reorder buttons
 	const designCount = designPalettes.length
 
-	console.log('orderedDesignPalettes', orderedDesignPalettes)
 	// helps with resetting the selected design for artboard
-	const visibleDesigns: string[] = []
+	const visibleDesigns = orderedDesignPalettes
+		.filter(design => design.visible)
+		.map(design => design.id)
 
 	return (
 		<Panel>
 			<PanelHeader>
 				<PanelTitle>Palette</PanelTitle>
 				<div className="flex flex-shrink">
-					{/* <PanelFormArtboardDesignNewPalette artboardId={artboard.id} /> */}
 					<PanelFormArtboardDesignNew
 						artboardId={artboard.id}
 						type={DesignTypeEnum.PALETTE}
@@ -68,10 +52,6 @@ export const PanelContentArtboardDesignPalette = ({
 			</PanelHeader>
 			{orderedDesignPalettes.map((designPalette, index) => {
 				const { id, visible, palette } = designPalette
-
-				if (visible) {
-					visibleDesigns.push(id)
-				}
 
 				return (
 					<PanelRow key={palette.id}>
