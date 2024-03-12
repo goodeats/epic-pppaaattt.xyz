@@ -9,7 +9,6 @@ export const INTENT = {
 	artboardToggleVisibilityDesign: 'toggle-visibility-artboard-design' as const,
 	artboardDeleteDesign: 'delete-artboard-design' as const,
 	// artboard design palette actions
-	artboardCreateDesignPalette: 'create-artboard-design-palette' as const,
 	artboardUpdateDesignPalette: 'update-artboard-design-palette' as const,
 	// artboard design size actions
 	artboardCreateDesignSize: 'create-artboard-design-size' as const,

@@ -38,10 +38,7 @@ import {
 	artboardDesignEditLineWidthAction,
 	artboardDesignNewLineAction,
 } from './actions/artboard-design-line'
-import {
-	artboardDesignEditPaletteAction,
-	artboardDesignNewPaletteAction,
-} from './actions/artboard-design-palette'
+import { artboardDesignEditPaletteAction } from './actions/artboard-design-palette'
 import {
 	artboardDesignEditRotateAction,
 	artboardDesignEditRotateBasisAction,
@@ -111,9 +108,6 @@ export async function action({ request }: DataFunctionArgs) {
 			return artboardDesignDeleteAction(actionArgs)
 		}
 		// and so on...
-		case INTENT.artboardCreateDesignPalette: {
-			return artboardDesignNewPaletteAction(actionArgs)
-		}
 		case INTENT.artboardUpdateDesignPalette: {
 			return artboardDesignEditPaletteAction(actionArgs)
 		}
