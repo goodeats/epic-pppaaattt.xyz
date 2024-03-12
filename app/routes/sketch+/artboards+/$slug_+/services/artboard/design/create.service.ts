@@ -1,10 +1,10 @@
 import { type Design, type Artboard } from '@prisma/client'
 import { type User } from '@sentry/remix'
-import { findArtboardTransactionPromise } from '#app/models/artboard.server'
 import {
-	ArtboardSelectedDesignsSchema,
-	type ArtboardSelectedDesignsType,
-} from '#app/schema/artboard'
+	findArtboardTransactionPromise,
+	updateArtboardSelectedDesignPromise,
+} from '#app/models/artboard.server'
+import { connectPrevAndNextDesignsPromise } from '#app/models/design.server'
 import { designSchema, type designTypeEnum } from '#app/schema/design'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 
@@ -52,7 +52,7 @@ export const artboardDesignCreateService = async ({
 			// if there is a previous design, connect it to the new design
 			if (previousDesign) {
 				updateOperations.push(
-					...connectPrevAndNextDesigns({
+					...connectPrevAndNextDesignsPromise({
 						prevId: previousDesign.id,
 						nextId: design.id,
 						prisma,
@@ -71,10 +71,10 @@ export const artboardDesignCreateService = async ({
 				// Execute fetch operations in parallel
 				const [artboard] = await Promise.all([fetchArtboardPromise])
 
-				// if the artboard exists, update the selected design
+				// if the artboard exists (it should), update the selected design
 				if (artboard) {
 					updateOperations.push(
-						updateArtboardSelectedDesign({
+						updateArtboardSelectedDesignPromise({
 							artboard,
 							designId: design.id,
 							type,
@@ -159,57 +159,4 @@ const createDesignType = async ({
 		case 'template':
 			return await prisma.template.create({ data })
 	}
-}
-
-const connectPrevAndNextDesigns = ({
-	prevId,
-	nextId,
-	prisma,
-}: {
-	prevId: Design['id']
-	nextId: Design['id']
-	prisma: PrismaTransactionType
-}) => {
-	return [
-		prisma.design.update({
-			where: { id: prevId },
-			data: { nextId },
-		}),
-		prisma.design.update({
-			where: { id: nextId },
-			data: { prevId },
-		}),
-	]
-}
-
-const updateArtboardSelectedDesign = ({
-	artboard,
-	designId,
-	type,
-	prisma,
-}: {
-	artboard: Pick<Artboard, 'id' | 'selectedDesigns'>
-	designId: Design['id']
-	type: designTypeEnum
-	prisma: PrismaTransactionType
-}) => {
-	// parse the selectedDesigns of the artboard
-	const selectedDesigns = ArtboardSelectedDesignsSchema.parse(
-		JSON.parse(artboard.selectedDesigns),
-	) as ArtboardSelectedDesignsType
-
-	// set the key for the selectedDesigns object to update
-	const designKey = (type + 'Id') as keyof ArtboardSelectedDesignsType
-
-	// build the updated selectedDesigns object
-	const updatedSelectedDesigns = ArtboardSelectedDesignsSchema.parse({
-		...selectedDesigns,
-		[designKey]: designId,
-	})
-
-	// update the selectedDesigns for the artboard
-	return prisma.artboard.update({
-		where: { id: artboard.id },
-		data: { selectedDesigns: JSON.stringify(updatedSelectedDesigns) },
-	})
 }

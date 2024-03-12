@@ -137,3 +137,24 @@ export const findDesignTransactionPromise = ({
 		where: { id },
 	})
 }
+
+export const connectPrevAndNextDesignsPromise = ({
+	prevId,
+	nextId,
+	prisma,
+}: {
+	prevId: Design['id']
+	nextId: Design['id']
+	prisma: PrismaTransactionType
+}) => {
+	return [
+		prisma.design.update({
+			where: { id: prevId },
+			data: { nextId },
+		}),
+		prisma.design.update({
+			where: { id: nextId },
+			data: { prevId },
+		}),
+	]
+}
