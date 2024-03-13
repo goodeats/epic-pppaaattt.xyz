@@ -12,6 +12,8 @@ import {
 } from '#app/utils/artboard'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 
+export interface IArtboard extends Artboard {}
+
 // use prisma extension to .save() or .delete()
 
 export const findFirstArtboard = async ({
@@ -43,7 +45,7 @@ export const findArtboardTransactionPromise = ({
 }: {
 	id: string
 	prisma: PrismaTransactionType
-}) => {
+}): Promise<Artboard | null> => {
 	return prisma.artboard.findFirst({
 		where: { id },
 	})
@@ -56,7 +58,7 @@ export const updateArtboardSelectedDesignPromise = ({
 	type,
 	prisma,
 }: {
-	artboard: Pick<Artboard, 'id' | 'selectedDesigns'>
+	artboard: Pick<IArtboard, 'id' | 'selectedDesigns'>
 	designId: Design['id']
 	type: designTypeEnum
 	prisma: PrismaTransactionType
@@ -72,6 +74,35 @@ export const updateArtboardSelectedDesignPromise = ({
 		...parsedSelectedDesigns,
 		[designKey]: designId,
 	}
+	const updatedSelectedDesigns = stringifyArtboardSelectedDesigns({
+		newSelectedDesigns,
+	})
+
+	// update the selectedDesigns for the artboard
+	return prisma.artboard.update({
+		where: { id: artboard.id },
+		data: { selectedDesigns: updatedSelectedDesigns },
+	})
+}
+
+export const removeArtboardSelectedDesignPromise = ({
+	artboard,
+	type,
+	prisma,
+}: {
+	artboard: Pick<IArtboard, 'id' | 'selectedDesigns'>
+	type: designTypeEnum
+	prisma: PrismaTransactionType
+}) => {
+	// parse the selectedDesigns of the artboard
+	const parsedSelectedDesigns = parseArtboardSelectedDesigns({ artboard })
+
+	// set the key for the parsedSelectedDesigns object to update
+	const designKey = (type + 'Id') as keyof ArtboardSelectedDesignsType
+
+	// build the updated parsedSelectedDesigns object
+	// with the design key removed
+	const { [designKey]: _, ...newSelectedDesigns } = parsedSelectedDesigns
 	const updatedSelectedDesigns = stringifyArtboardSelectedDesigns({
 		newSelectedDesigns,
 	})

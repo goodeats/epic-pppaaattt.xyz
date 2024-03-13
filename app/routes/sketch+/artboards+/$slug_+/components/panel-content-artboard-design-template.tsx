@@ -96,6 +96,8 @@ export const PanelContentArtboardDesignTemplate = ({
 								<PanelFormArtboardDesignDelete
 									id={id}
 									artboardId={artboard.id}
+									isSelectedDesign={false}
+									updateSelectedDesignId={null}
 								/>
 							</PanelRowIconContainer>
 						</PanelRowContainer>

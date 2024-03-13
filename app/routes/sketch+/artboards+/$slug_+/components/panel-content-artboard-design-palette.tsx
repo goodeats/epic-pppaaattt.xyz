@@ -10,6 +10,10 @@ import {
 } from '#app/components/shared'
 import { type IDesignWithPalette } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
+import {
+	getNextVisibleDesignId,
+	parseArtboardSelectedDesigns,
+} from '#app/utils/artboard'
 import { orderDesigns } from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
@@ -34,9 +38,11 @@ export const PanelContentArtboardDesignPalette = ({
 	const designCount = designPalettes.length
 
 	// helps with resetting the selected design for artboard
-	const visibleDesigns = orderedDesignPalettes
+	const visibleDesignIds = orderedDesignPalettes
 		.filter(design => design.visible)
 		.map(design => design.id)
+
+	const selectedPaletteId = parseArtboardSelectedDesigns({ artboard }).paletteId
 
 	return (
 		<Panel>
@@ -46,12 +52,17 @@ export const PanelContentArtboardDesignPalette = ({
 					<PanelFormArtboardDesignNew
 						artboardId={artboard.id}
 						type={DesignTypeEnum.PALETTE}
-						visibleDesignsCount={visibleDesigns.length}
+						visibleDesignsCount={visibleDesignIds.length}
 					/>
 				</div>
 			</PanelHeader>
 			{orderedDesignPalettes.map((designPalette, index) => {
 				const { id, visible, palette } = designPalette
+
+				const isSelectedDesign = id === selectedPaletteId
+				const nextVisibleDesignId = isSelectedDesign
+					? getNextVisibleDesignId(visibleDesignIds, id)
+					: null
 
 				return (
 					<PanelRow key={palette.id}>
@@ -88,7 +99,8 @@ export const PanelContentArtboardDesignPalette = ({
 								<PanelFormArtboardDesignDelete
 									id={id}
 									artboardId={artboard.id}
-									// isSelected={visibleDesigns[0] === id}
+									isSelectedDesign={isSelectedDesign}
+									updateSelectedDesignId={nextVisibleDesignId}
 								/>
 							</PanelRowIconContainer>
 						</PanelRowContainer>

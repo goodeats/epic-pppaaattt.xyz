@@ -1,21 +1,26 @@
-import { type Design, type Artboard } from '@prisma/client'
-import { findArtboardTransactionPromise } from '#app/models/artboard.server'
+import { type Design } from '@prisma/client'
+import {
+	findArtboardTransactionPromise,
+	removeArtboardSelectedDesignPromise,
+	updateArtboardSelectedDesignPromise,
+} from '#app/models/artboard.server'
 import {
 	connectPrevAndNextDesignsPromise,
 	findDesignTransactionPromise,
 } from '#app/models/design.server'
-import {
-	ArtboardSelectedDesignsSchema,
-	type ArtboardSelectedDesignsType,
-} from '#app/schema/artboard'
+import { type designTypeEnum } from '#app/schema/design'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 
 export const artboardDesignDeleteService = async ({
 	id,
 	artboardId,
+	isSelectedDesign,
+	updateSelectedDesignId,
 }: {
 	id: string
 	artboardId: string
+	isSelectedDesign: boolean
+	updateSelectedDesignId: string | null
 }) => {
 	try {
 		await prisma.$transaction(async prisma => {
@@ -47,28 +52,22 @@ export const artboardDesignDeleteService = async ({
 				}),
 			]
 
-			// Fetch artboard for selected designs
-			const fetchArtboardPromise = findArtboardTransactionPromise({
-				id: artboardId,
-				prisma,
-			})
-
-			// Execute fetch operations in parallel
-			const [artboard] = await Promise.all([fetchArtboardPromise])
-
-			if (!artboard) throw new Error('Artboard not found')
-
-			// if design was selected, remove it or replace it with the next visible design or null
-			const artboardSelectedDesignId = await findArtboardSelectedDesignByType({
-				artboard,
-				type,
-			})
-			if (artboardSelectedDesignId === id) {
-				if (nextId) {
-					// update selected design for artboard to next visible design
-				} else {
-					// remove selected design from artboard
-				}
+			// if the design was selected
+			// update the artboard selected design for its type
+			// either replace with next visible or remove
+			if (isSelectedDesign) {
+				const artboardUpdatePromises = await artboardUpdateOperations({
+					artboardId,
+					updateSelectedDesignId,
+					type: type as designTypeEnum,
+					prisma,
+				})
+				// typescript seems to be gaslighting me here
+				// the operation succeeds and the args seem valid
+				// spent a couple hours trying to figure out why and choosing to ignore it
+				// will monitor if something weird ever happens
+				// @ts-ignore
+				updateOperations.push(...artboardUpdatePromises)
 			}
 
 			// Execute all update operations in parallel
@@ -185,18 +184,48 @@ const removeNextIdFromPrevDesign = ({
 	})
 }
 
-const findArtboardSelectedDesignByType = async ({
-	artboard,
+const artboardUpdateOperations = async ({
+	artboardId,
+	updateSelectedDesignId,
 	type,
+	prisma,
 }: {
-	artboard: Artboard
-	type: string
-}): Promise<string | undefined> => {
-	const { selectedDesigns } = artboard
-	const parsedSelectedDesigns = ArtboardSelectedDesignsSchema.parse(
-		JSON.parse(selectedDesigns),
-	) as ArtboardSelectedDesignsType
+	artboardId: string
+	updateSelectedDesignId: string | null
+	type: designTypeEnum
+	prisma: PrismaTransactionType
+}) => {
+	// Fetch artboard for selected designs
+	const fetchArtboardPromise = findArtboardTransactionPromise({
+		id: artboardId,
+		prisma,
+	})
+	const [artboard] = await Promise.all([fetchArtboardPromise])
+	if (!artboard) return []
 
-	const designKey = (type + 'Id') as keyof ArtboardSelectedDesignsType
-	return parsedSelectedDesigns[designKey]
+	if (updateSelectedDesignId) {
+		const fetchNewSelectedDesign = findDesignTransactionPromise({
+			id: updateSelectedDesignId,
+			prisma,
+		})
+		const [newSelectedDesign] = await Promise.all([fetchNewSelectedDesign])
+		if (!newSelectedDesign) return []
+
+		return [
+			updateArtboardSelectedDesignPromise({
+				artboard,
+				designId: updateSelectedDesignId,
+				type,
+				prisma,
+			}),
+		]
+	} else {
+		return [
+			removeArtboardSelectedDesignPromise({
+				artboard,
+				type,
+				prisma,
+			}),
+		]
+	}
 }

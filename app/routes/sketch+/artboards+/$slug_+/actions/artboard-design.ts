@@ -296,10 +296,13 @@ export async function artboardDesignDeleteAction({
 	}
 
 	// changes
-	const { id, artboardId } = submission.value
+	const { id, artboardId, isSelectedDesign, updateSelectedDesignId } =
+		submission.value
 	const { success, error } = await artboardDesignDeleteService({
 		id,
 		artboardId,
+		isSelectedDesign,
+		updateSelectedDesignId,
 	})
 
 	if (error) return submissionErrorResponse(submission)
