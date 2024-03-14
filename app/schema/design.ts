@@ -43,6 +43,7 @@ export const DeleteArtboardDesignSchema = z.object({
 export const ToggleVisibilityArtboardDesignSchema = z.object({
 	id: z.string(),
 	artboardId: z.string(),
+	updateSelectedDesignId: z.string().optional(),
 })
 
 export const ReorderArtboardDesignSchema = z.object({

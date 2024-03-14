@@ -13,6 +13,7 @@ import {
 import { prisma } from '#app/utils/db.server'
 import { artboardDesignCreateService } from '../services/artboard/design/create.service'
 import { artboardDesignDeleteService } from '../services/artboard/design/delete.service'
+import { artboardDesignToggleVisibleService } from '../services/artboard/design/toggle-visible.service'
 import {
 	parseArtboardDesignSubmission,
 	parseArtboardDesignUpdateSubmission,
@@ -257,25 +258,16 @@ export async function artboardDesignToggleVisibilityAction({
 	}
 
 	// changes
-	const { id } = submission.value
-	try {
-		await prisma.$transaction(async prisma => {
-			const design = await prisma.design.findFirst({
-				where: { id, ownerId: userId },
-			})
-			if (!design) return submissionErrorResponse(submission)
+	const { id, artboardId, updateSelectedDesignId } = submission.value
+	const { success, error } = await artboardDesignToggleVisibleService({
+		id,
+		artboardId,
+		updateSelectedDesignId,
+	})
 
-			await prisma.design.update({
-				where: { id },
-				data: { visible: !design.visible },
-			})
-		})
-	} catch (error) {
-		console.log(error)
-		return submissionErrorResponse(submission)
-	}
+	if (error) return submissionErrorResponse(submission)
 
-	return json({ status: 'success', submission } as const)
+	return json({ status: 'success', submission, success } as const)
 }
 
 export async function artboardDesignDeleteAction({

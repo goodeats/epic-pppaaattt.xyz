@@ -11,6 +11,7 @@ import {
 import { type IDesignWithPalette } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
+	findFirstDesignIdInArray,
 	getNextVisibleDesignId,
 	parseArtboardSelectedDesigns,
 } from '#app/utils/artboard'
@@ -34,6 +35,9 @@ export const PanelContentArtboardDesignPalette = ({
 		designPalettes,
 	) as IDesignWithPalette[]
 
+	// helps with finding first visible design on toggle visible
+	const orderedDesignIds = orderedDesignPalettes.map(design => design.id)
+
 	// helps with disabling reorder buttons
 	const designCount = designPalettes.length
 
@@ -41,6 +45,9 @@ export const PanelContentArtboardDesignPalette = ({
 	const visibleDesignIds = orderedDesignPalettes
 		.filter(design => design.visible)
 		.map(design => design.id)
+
+	// helps with knowing there is a first visible design
+	const firstVisibleDesignId = visibleDesignIds[0]
 
 	const selectedPaletteId = parseArtboardSelectedDesigns({ artboard }).paletteId
 
@@ -63,6 +70,20 @@ export const PanelContentArtboardDesignPalette = ({
 				const nextVisibleDesignId = isSelectedDesign
 					? getNextVisibleDesignId(visibleDesignIds, id)
 					: null
+
+				// const prevVisibleDesignId = getPrevVisibleDesignId(visibleDesignIds, id)
+
+				const toggleVisibleChangeSelectedDesignId = visible
+					? isSelectedDesign // if visible to not visible
+						? nextVisibleDesignId // if selected, set to next
+						: selectedPaletteId // if not selected, don't change
+					: firstVisibleDesignId // if not visible to visible
+					  ? findFirstDesignIdInArray(
+								orderedDesignIds,
+								firstVisibleDesignId,
+								id,
+					    ) // if first visible, set to first or self -- whichever is first
+					  : id // if no prev visible, set to self
 
 				return (
 					<PanelRow key={palette.id}>
@@ -95,6 +116,7 @@ export const PanelContentArtboardDesignPalette = ({
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}
+									updateSelectedDesignId={toggleVisibleChangeSelectedDesignId}
 								/>
 								<PanelFormArtboardDesignDelete
 									id={id}

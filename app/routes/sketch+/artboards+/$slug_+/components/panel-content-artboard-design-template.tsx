@@ -92,6 +92,7 @@ export const PanelContentArtboardDesignTemplate = ({
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}
+									updateSelectedDesignId={null}
 								/>
 								<PanelFormArtboardDesignDelete
 									id={id}

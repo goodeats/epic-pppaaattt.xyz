@@ -11,6 +11,7 @@ import {
 	stringifyArtboardSelectedDesigns,
 } from '#app/utils/artboard'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
+import { findDesignTransactionPromise } from './design.server'
 
 export interface IArtboard extends Artboard {}
 
@@ -112,4 +113,50 @@ export const removeArtboardSelectedDesignPromise = ({
 		where: { id: artboard.id },
 		data: { selectedDesigns: updatedSelectedDesigns },
 	})
+}
+
+export const artboardUpdateSelectedDesignPromise = async ({
+	artboardId,
+	updateSelectedDesignId,
+	type,
+	prisma,
+}: {
+	artboardId: string
+	updateSelectedDesignId: string | null
+	type: designTypeEnum
+	prisma: PrismaTransactionType
+}) => {
+	// Fetch artboard for selected designs
+	const fetchArtboardPromise = findArtboardTransactionPromise({
+		id: artboardId,
+		prisma,
+	})
+	const [artboard] = await Promise.all([fetchArtboardPromise])
+	if (!artboard) return Promise.resolve()
+
+	if (updateSelectedDesignId) {
+		const fetchNewSelectedDesign = findDesignTransactionPromise({
+			id: updateSelectedDesignId,
+			prisma,
+		})
+		const [newSelectedDesign] = await Promise.all([fetchNewSelectedDesign])
+		if (!newSelectedDesign) return Promise.resolve()
+
+		return [
+			updateArtboardSelectedDesignPromise({
+				artboard,
+				designId: updateSelectedDesignId,
+				type,
+				prisma,
+			}),
+		]
+	} else {
+		return [
+			removeArtboardSelectedDesignPromise({
+				artboard,
+				type,
+				prisma,
+			}),
+		]
+	}
 }
