@@ -14,12 +14,10 @@ import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 export const artboardDesignDeleteService = async ({
 	id,
 	artboardId,
-	isSelectedDesign,
 	updateSelectedDesignId,
 }: {
 	id: string
 	artboardId: string
-	isSelectedDesign: boolean
 	updateSelectedDesignId: string | null
 }) => {
 	try {
@@ -55,20 +53,18 @@ export const artboardDesignDeleteService = async ({
 			// if the design was selected
 			// update the artboard selected design for its type
 			// either replace with next visible or remove
-			if (isSelectedDesign) {
-				const artboardUpdatePromises = await artboardUpdateOperations({
-					artboardId,
-					updateSelectedDesignId,
-					type: type as designTypeEnum,
-					prisma,
-				})
-				// typescript seems to be gaslighting me here
-				// the operation succeeds and the args seem valid
-				// spent a couple hours trying to figure out why and choosing to ignore it
-				// will monitor if something weird ever happens
-				// @ts-ignore
-				updateOperations.push(...artboardUpdatePromises)
-			}
+			const artboardUpdatePromises = await artboardUpdateOperations({
+				artboardId,
+				updateSelectedDesignId,
+				type: type as designTypeEnum,
+				prisma,
+			})
+			// typescript seems to be gaslighting me here
+			// the operation succeeds and the args seem valid
+			// spent a couple hours trying to figure out why and choosing to ignore it
+			// will monitor if something weird ever happens
+			// @ts-ignore
+			updateOperations.push(...artboardUpdatePromises)
 
 			// Execute all update operations in parallel
 			await Promise.all(updateOperations)

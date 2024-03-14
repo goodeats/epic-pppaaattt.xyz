@@ -19,7 +19,7 @@ export const PanelFormArtboardDesignDelete = ({
 	id: string
 	artboardId: Artboard['id']
 	isSelectedDesign: boolean
-	updateSelectedDesignId: string | null
+	updateSelectedDesignId: string | null | undefined
 }) => {
 	const fetcher = useFetcher<typeof action>()
 	const actionData = useActionData<typeof action>()

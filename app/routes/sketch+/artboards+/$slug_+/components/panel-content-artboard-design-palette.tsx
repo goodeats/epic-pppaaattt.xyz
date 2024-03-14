@@ -67,10 +67,8 @@ export const PanelContentArtboardDesignPalette = ({
 				const { id, visible, palette } = designPalette
 
 				const isSelectedDesign = id === selectedPaletteId
-				const nextVisibleDesignId = isSelectedDesign
-					? getNextVisibleDesignId(visibleDesignIds, id)
-					: null
 
+				const nextVisibleDesignId = getNextVisibleDesignId(visibleDesignIds, id)
 				// const prevVisibleDesignId = getPrevVisibleDesignId(visibleDesignIds, id)
 
 				const toggleVisibleChangeSelectedDesignId = visible
@@ -84,6 +82,10 @@ export const PanelContentArtboardDesignPalette = ({
 								id,
 					    ) // if first visible, set to first or self -- whichever is first
 					  : id // if no prev visible, set to self
+
+				const deleteChangeSelectedDesignId = isSelectedDesign
+					? nextVisibleDesignId // if was selected, set to next visible
+					: selectedPaletteId // don't change
 
 				return (
 					<PanelRow key={palette.id}>
@@ -122,7 +124,7 @@ export const PanelContentArtboardDesignPalette = ({
 									id={id}
 									artboardId={artboard.id}
 									isSelectedDesign={isSelectedDesign}
-									updateSelectedDesignId={nextVisibleDesignId}
+									updateSelectedDesignId={deleteChangeSelectedDesignId}
 								/>
 							</PanelRowIconContainer>
 						</PanelRowContainer>

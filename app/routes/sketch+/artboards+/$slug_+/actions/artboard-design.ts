@@ -288,12 +288,10 @@ export async function artboardDesignDeleteAction({
 	}
 
 	// changes
-	const { id, artboardId, isSelectedDesign, updateSelectedDesignId } =
-		submission.value
+	const { id, artboardId, updateSelectedDesignId } = submission.value
 	const { success, error } = await artboardDesignDeleteService({
 		id,
 		artboardId,
-		isSelectedDesign,
 		updateSelectedDesignId,
 	})
 
