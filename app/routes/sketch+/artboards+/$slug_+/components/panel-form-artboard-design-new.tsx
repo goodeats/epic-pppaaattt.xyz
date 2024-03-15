@@ -5,22 +5,31 @@ import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
-import { NewArtboardDesignSchema } from '#app/schema/design'
+import {
+	NewArtboardDesignSchema,
+	type designTypeEnum,
+} from '#app/schema/design'
 import { useIsPending } from '#app/utils/misc'
 import { INTENT } from '../intent'
 import { type action } from '../route'
 
-export const PanelFormArtboardDesignNewFill = ({
-	artboardId,
-}: {
+type PanelFormArtboardDesignNewProps = {
 	artboardId: Artboard['id']
-}) => {
+	type: designTypeEnum
+	visibleDesignsCount: number
+}
+
+export const PanelFormArtboardDesignNew = ({
+	artboardId,
+	type,
+	visibleDesignsCount,
+}: PanelFormArtboardDesignNewProps) => {
 	const fetcher = useFetcher<typeof action>()
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form] = useForm({
-		id: 'panel-form-artboard-design-new-fill',
+		id: `panel-form-artboard-design-new-${type}`,
 		constraint: getFieldsetConstraint(NewArtboardDesignSchema),
 		lastSubmission: actionData?.submission,
 	})
@@ -30,11 +39,14 @@ export const PanelFormArtboardDesignNewFill = ({
 			<AuthenticityTokenInput />
 
 			<input type="hidden" name="artboardId" value={artboardId} />
+			<input type="hidden" name="type" value={type} />
 			<input
 				type="hidden"
-				name="intent"
-				value={INTENT.artboardCreateDesignFill}
+				name="visibleDesignsCount"
+				value={visibleDesignsCount}
 			/>
+			<input type="hidden" name="intent" value={INTENT.artboardCreateDesign} />
+
 			<Button
 				type="submit"
 				variant="ghost"

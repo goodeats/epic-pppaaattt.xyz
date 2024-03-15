@@ -13,9 +13,13 @@ import { type action } from '../route'
 export const PanelFormArtboardDesignDelete = ({
 	id,
 	artboardId,
+	isSelectedDesign,
+	updateSelectedDesignId,
 }: {
 	id: string
 	artboardId: Artboard['id']
+	isSelectedDesign: boolean
+	updateSelectedDesignId: string | null | undefined
 }) => {
 	const fetcher = useFetcher<typeof action>()
 	const actionData = useActionData<typeof action>()
@@ -33,6 +37,20 @@ export const PanelFormArtboardDesignDelete = ({
 
 			<input type="hidden" name="id" value={id} />
 			<input type="hidden" name="artboardId" value={artboardId} />
+			{isSelectedDesign && (
+				<input
+					type="hidden"
+					name="isSelectedDesign"
+					value={String(isSelectedDesign)}
+				/>
+			)}
+			{updateSelectedDesignId && (
+				<input
+					type="hidden"
+					name="updateSelectedDesignId"
+					value={updateSelectedDesignId}
+				/>
+			)}
 			<input type="hidden" name="intent" value={INTENT.artboardDeleteDesign} />
 			<Button
 				type="submit"

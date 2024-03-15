@@ -1,5 +1,9 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
+import {
+	ArtboardSelectedDesignsSchema,
+	type ArtboardSelectedDesignsType,
+} from '#app/schema/artboard'
 import { NewArtboardDesignSchema, designSchema } from '#app/schema/design'
 import { EditArtboardTemplateStyleSchema } from '#app/schema/template'
 import {
@@ -70,6 +74,29 @@ export async function artboardDesignNewTemplateAction({
 				await prisma.design.update({
 					where: { id: lastArtboardDesignTemplate.id },
 					data: { nextId: design.id },
+				})
+			} else {
+				// set selectedDesign for the artboard
+				// get the selectedDesigns from the artboard
+				const artboard = await prisma.artboard.findFirst({
+					where: { id: artboardId },
+					select: { selectedDesigns: true },
+				})
+				if (!artboard) return submissionErrorResponse(submission)
+
+				// parse the selectedDesigns and update the paletteId
+				const selectedDesigns = ArtboardSelectedDesignsSchema.parse(
+					JSON.parse(artboard.selectedDesigns),
+				) as ArtboardSelectedDesignsType
+				const updatedSelectedDesigns = ArtboardSelectedDesignsSchema.parse({
+					...selectedDesigns,
+					templateId: design.id,
+				})
+
+				// update the selectedDesigns for the artboard
+				await prisma.artboard.update({
+					where: { id: artboardId },
+					data: { selectedDesigns: JSON.stringify(updatedSelectedDesigns) },
 				})
 			}
 		})

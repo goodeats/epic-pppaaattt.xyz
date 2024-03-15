@@ -35,6 +35,21 @@ export const ArtboardBackgroundColorSchema = z.object({
 	backgroundColor: HexcodeSchema,
 })
 
+export const ArtboardSelectedDesignsSchema = z.object({
+	paletteId: z.string().optional(),
+	sizeId: z.string().optional(),
+	fillId: z.string().optional(),
+	strokeId: z.string().optional(),
+	lineId: z.string().optional(),
+	rotateId: z.string().optional(),
+	layoutId: z.string().optional(),
+	templateId: z.string().optional(),
+})
+
+export type ArtboardSelectedDesignsType = z.infer<
+	typeof ArtboardSelectedDesignsSchema
+>
+
 export type selectArgsType = z.infer<typeof selectArgs>
 const selectArgs = z.object({
 	id: z.boolean().optional(),

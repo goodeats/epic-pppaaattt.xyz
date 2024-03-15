@@ -10,10 +10,16 @@ import {
 } from '#app/components/shared'
 import { Input } from '#app/components/ui/input'
 import { type IDesignWithLayout } from '#app/models/design.server'
+import { DesignTypeEnum } from '#app/schema/design'
+import {
+	panelItemVariablesDesignType,
+	panelListVariablesDesignType,
+	selectedDesignsOnUpdate,
+} from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignEditLayoutCount } from './panel-form-artboard-design-edit-layout-count'
-import { PanelFormArtboardDesignNewLayout } from './panel-form-artboard-design-new-layout'
+import { PanelFormArtboardDesignNew } from './panel-form-artboard-design-new'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
 import { PanelPopoverArtboardDesignLayout } from './panel-popover-artboard-design-layout'
@@ -25,38 +31,63 @@ export const PanelContentArtboardDesignLayout = ({
 	artboard: PickedArtboardType
 	designLayouts: IDesignWithLayout[]
 }) => {
-	const orderedDesignLayouts = designLayouts.reduce(
-		(acc: IDesignWithLayout[], designLayout) => {
-			if (!designLayout.prevId) {
-				acc.unshift(designLayout) // Add the head of the list to the start
-			} else {
-				let currentDesignIndex = acc.findIndex(
-					d => d.id === designLayout.prevId,
-				)
-				if (currentDesignIndex !== -1) {
-					// Insert the designLayout right after its predecessor
-					acc.splice(currentDesignIndex + 1, 0, designLayout)
-				} else {
-					// If predecessor is not found, add it to the end as a fallback
-					acc.push(designLayout)
-				}
-			}
-			return acc
-		},
-		[],
-	)
+	const {
+		orderedDesigns,
+		orderedDesignIds,
+		designCount,
+		visibleDesignIds,
+		firstVisibleDesignId,
+		selectedDesignId,
+	} = panelListVariablesDesignType({
+		designs: designLayouts,
+		artboard,
+		type: DesignTypeEnum.LAYOUT,
+	})
 
-	const designCount = designLayouts.length
 	return (
 		<Panel>
 			<PanelHeader>
 				<PanelTitle>Layout</PanelTitle>
 				<div className="flex flex-shrink">
-					<PanelFormArtboardDesignNewLayout artboardId={artboard.id} />
+					<PanelFormArtboardDesignNew
+						artboardId={artboard.id}
+						type={DesignTypeEnum.LAYOUT}
+						visibleDesignsCount={visibleDesignIds.length}
+					/>
 				</div>
 			</PanelHeader>
-			{orderedDesignLayouts.map((designLayout, index) => {
-				const { id, visible, layout } = designLayout
+			{orderedDesigns.map((design, index) => {
+				const { id, visible, layout } = design as IDesignWithLayout
+
+				const {
+					isSelectedDesign,
+					nextDesignId,
+					prevDesignId,
+					nextVisibleDesignId,
+				} = panelItemVariablesDesignType({
+					id,
+					selectedDesignId,
+					orderedDesignIds,
+					visibleDesignIds,
+				})
+
+				const {
+					selectDesignIdOnMoveUp,
+					selectDesignIdOnMoveDown,
+					selectDesignIdOnToggleVisible,
+					selectDesignIdOnDelete,
+				} = selectedDesignsOnUpdate({
+					id,
+					selectedDesignId,
+					isSelectedDesign,
+					visible,
+					prevDesignId,
+					nextDesignId,
+					nextVisibleDesignId,
+					firstVisibleDesignId,
+					orderedDesignIds,
+				})
+
 				return (
 					<PanelRow key={layout.id}>
 						<PanelRowOrderContainer>
@@ -66,6 +97,7 @@ export const PanelContentArtboardDesignLayout = ({
 								panelCount={designCount}
 								panelIndex={index}
 								direction="up"
+								updateSelectedDesignId={selectDesignIdOnMoveUp}
 							/>
 							<PanelFormArtboardDesignReorder
 								id={id}
@@ -73,6 +105,7 @@ export const PanelContentArtboardDesignLayout = ({
 								panelCount={designCount}
 								panelIndex={index}
 								direction="down"
+								updateSelectedDesignId={selectDesignIdOnMoveDown}
 							/>
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
@@ -100,10 +133,13 @@ export const PanelContentArtboardDesignLayout = ({
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}
+									updateSelectedDesignId={selectDesignIdOnToggleVisible}
 								/>
 								<PanelFormArtboardDesignDelete
 									id={id}
 									artboardId={artboard.id}
+									isSelectedDesign={false}
+									updateSelectedDesignId={selectDesignIdOnDelete}
 								/>
 							</PanelRowIconContainer>
 						</PanelRowContainer>
