@@ -143,3 +143,64 @@ export const selectedDesignToUpdateOnDelete = ({
 		? nextVisibleDesignId // set to next visible
 		: selectedDesignId // don't change
 }
+
+export const selectedDesignsOnUpdate = ({
+	id,
+	selectedDesignId,
+	isSelectedDesign,
+	visible,
+	prevDesignId,
+	nextDesignId,
+	nextVisibleDesignId,
+	firstVisibleDesignId,
+	orderedDesignIds,
+}: {
+	id: string
+	selectedDesignId: string | null | undefined
+	visible: boolean
+	isSelectedDesign: boolean
+	prevDesignId: string | null
+	nextDesignId: string | null | undefined
+	nextVisibleDesignId: string | null | undefined
+	firstVisibleDesignId: string | null | undefined
+	orderedDesignIds: string[]
+}) => {
+	const selectDesignIdOnMoveUp = selectedDesignToUpdateOnMoveUp({
+		id,
+		selectedDesignId,
+		isSelectedDesign,
+		visible,
+		prevDesignId,
+	})
+
+	const selectDesignIdOnMoveDown = selectedDesignToUpdateOnMoveDown({
+		selectedDesignId,
+		isSelectedDesign,
+		visible,
+		nextDesignId,
+		nextVisibleDesignId,
+	})
+
+	const selectDesignIdOnToggleVisible = selectedDesignToUpdateOnToggleVisible({
+		id,
+		selectedDesignId,
+		isSelectedDesign,
+		visible,
+		firstVisibleDesignId,
+		nextVisibleDesignId,
+		orderedDesignIds,
+	})
+
+	const selectDesignIdOnDelete = selectedDesignToUpdateOnDelete({
+		selectedDesignId,
+		isSelectedDesign,
+		nextVisibleDesignId,
+	})
+
+	return {
+		selectDesignIdOnMoveUp,
+		selectDesignIdOnMoveDown,
+		selectDesignIdOnToggleVisible,
+		selectDesignIdOnDelete,
+	}
+}

@@ -19,10 +19,7 @@ import {
 	designsIdArray,
 	filterVisibleDesigns,
 	orderLinkedDesigns,
-	selectedDesignToUpdateOnDelete,
-	selectedDesignToUpdateOnMoveDown,
-	selectedDesignToUpdateOnMoveUp,
-	selectedDesignToUpdateOnToggleVisible,
+	selectedDesignsOnUpdate,
 } from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
@@ -83,37 +80,21 @@ export const PanelContentArtboardDesignPalette = ({
 				const prevDesignId = getPrevDesignId(orderedDesignIds, id)
 				const nextVisibleDesignId = getNextDesignId(visibleDesignIds, id)
 
-				const selectDesignIdOnMoveUp = selectedDesignToUpdateOnMoveUp({
+				const {
+					selectDesignIdOnMoveUp,
+					selectDesignIdOnMoveDown,
+					selectDesignIdOnToggleVisible,
+					selectDesignIdOnDelete,
+				} = selectedDesignsOnUpdate({
 					id,
 					selectedDesignId,
 					isSelectedDesign,
 					visible,
 					prevDesignId,
-				})
-
-				const selectDesignIdOnMoveDown = selectedDesignToUpdateOnMoveDown({
-					selectedDesignId,
-					isSelectedDesign,
-					visible,
 					nextDesignId,
 					nextVisibleDesignId,
-				})
-
-				const selectDesignIdOnToggleVisible =
-					selectedDesignToUpdateOnToggleVisible({
-						id,
-						selectedDesignId,
-						isSelectedDesign,
-						visible,
-						firstVisibleDesignId,
-						nextVisibleDesignId,
-						orderedDesignIds,
-					})
-
-				const selectDesignIdOnDelete = selectedDesignToUpdateOnDelete({
-					selectedDesignId,
-					isSelectedDesign,
-					nextVisibleDesignId,
+					firstVisibleDesignId,
+					orderedDesignIds,
 				})
 
 				return (
