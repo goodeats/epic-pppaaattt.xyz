@@ -10,10 +10,16 @@ import {
 } from '#app/components/shared'
 import { Input } from '#app/components/ui/input'
 import { type IDesignWithFill } from '#app/models/design.server'
+import { DesignTypeEnum } from '#app/schema/design'
+import {
+	panelItemVariablesDesignType,
+	panelListVariablesDesignType,
+	selectedDesignsOnUpdate,
+} from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignEditFill } from './panel-form-artboard-design-edit-fill'
-import { PanelFormArtboardDesignNewFill } from './panel-form-artboard-design-new-fill'
+import { PanelFormArtboardDesignNew } from './panel-form-artboard-design-new'
 import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
 import { PanelPopoverArtboardDesignFill } from './panel-popover-artboard-design-fill'
@@ -25,36 +31,64 @@ export const PanelContentArtboardDesignFill = ({
 	artboard: PickedArtboardType
 	designFills: IDesignWithFill[]
 }) => {
-	const orderedDesignFills = designFills.reduce(
-		(acc: IDesignWithFill[], designFill) => {
-			if (!designFill.prevId) {
-				acc.unshift(designFill) // Add the head of the list to the start
-			} else {
-				let currentDesignIndex = acc.findIndex(d => d.id === designFill.prevId)
-				if (currentDesignIndex !== -1) {
-					// Insert the designFill right after its predecessor
-					acc.splice(currentDesignIndex + 1, 0, designFill)
-				} else {
-					// If predecessor is not found, add it to the end as a fallback
-					acc.push(designFill)
-				}
-			}
-			return acc
-		},
-		[],
-	)
+	const {
+		orderedDesigns,
+		orderedDesignIds,
+		designCount,
+		visibleDesignIds,
+		firstVisibleDesignId,
+		selectedDesignId,
+	} = panelListVariablesDesignType({
+		designs: designFills,
+		artboard,
+		type: DesignTypeEnum.FILL,
+	})
 
-	const designCount = designFills.length
 	return (
 		<Panel>
 			<PanelHeader>
 				<PanelTitle>Fill</PanelTitle>
 				<div className="flex flex-shrink">
-					<PanelFormArtboardDesignNewFill artboardId={artboard.id} />
+					<PanelFormArtboardDesignNew
+						artboardId={artboard.id}
+						type={DesignTypeEnum.FILL}
+						visibleDesignsCount={visibleDesignIds.length}
+					/>
 				</div>
 			</PanelHeader>
-			{orderedDesignFills.map((designFill, index) => {
-				const { id, visible, fill } = designFill
+			{orderedDesigns.map((design, index) => {
+				const { id, visible, fill } = design as IDesignWithFill
+
+				const {
+					isSelectedDesign,
+					nextDesignId,
+					prevDesignId,
+					nextVisibleDesignId,
+				} = panelItemVariablesDesignType({
+					id,
+					selectedDesignId,
+					orderedDesignIds,
+					visibleDesignIds,
+				})
+				if (isSelectedDesign) console.log('selectedDesignId', fill.value)
+
+				const {
+					selectDesignIdOnMoveUp,
+					selectDesignIdOnMoveDown,
+					selectDesignIdOnToggleVisible,
+					selectDesignIdOnDelete,
+				} = selectedDesignsOnUpdate({
+					id,
+					selectedDesignId,
+					isSelectedDesign,
+					visible,
+					prevDesignId,
+					nextDesignId,
+					nextVisibleDesignId,
+					firstVisibleDesignId,
+					orderedDesignIds,
+				})
+
 				return (
 					<PanelRow key={fill.id}>
 						<PanelRowOrderContainer>
@@ -64,7 +98,7 @@ export const PanelContentArtboardDesignFill = ({
 								panelCount={designCount}
 								panelIndex={index}
 								direction="up"
-								updateSelectedDesignId={null}
+								updateSelectedDesignId={selectDesignIdOnMoveUp}
 							/>
 							<PanelFormArtboardDesignReorder
 								id={id}
@@ -72,7 +106,7 @@ export const PanelContentArtboardDesignFill = ({
 								panelCount={designCount}
 								panelIndex={index}
 								direction="down"
-								updateSelectedDesignId={null}
+								updateSelectedDesignId={selectDesignIdOnMoveDown}
 							/>
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
@@ -108,13 +142,13 @@ export const PanelContentArtboardDesignFill = ({
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}
-									updateSelectedDesignId={null}
+									updateSelectedDesignId={selectDesignIdOnToggleVisible}
 								/>
 								<PanelFormArtboardDesignDelete
 									id={id}
 									artboardId={artboard.id}
 									isSelectedDesign={false}
-									updateSelectedDesignId={null}
+									updateSelectedDesignId={selectDesignIdOnDelete}
 								/>
 							</PanelRowIconContainer>
 						</PanelRowContainer>
