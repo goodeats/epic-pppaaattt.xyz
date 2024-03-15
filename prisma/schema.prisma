@@ -209,6 +209,7 @@ model Artboard {
   width       Int
   height      Int
   backgroundColor String
+  selectedDesigns String @default("{}") // JSON object of first, visible designs
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

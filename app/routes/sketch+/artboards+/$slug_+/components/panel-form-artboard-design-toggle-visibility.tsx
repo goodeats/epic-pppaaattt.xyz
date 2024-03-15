@@ -14,10 +14,12 @@ export const PanelFormArtboardDesignToggleVisibility = ({
 	id,
 	artboardId,
 	visible,
+	updateSelectedDesignId,
 }: {
 	id: string
 	artboardId: Artboard['id']
 	visible: boolean
+	updateSelectedDesignId: string | null | undefined
 }) => {
 	const fetcher = useFetcher<typeof action>()
 	const actionData = useActionData<typeof action>()
@@ -35,6 +37,13 @@ export const PanelFormArtboardDesignToggleVisibility = ({
 
 			<input type="hidden" name="id" value={id} />
 			<input type="hidden" name="artboardId" value={artboardId} />
+			{updateSelectedDesignId && (
+				<input
+					type="hidden"
+					name="updateSelectedDesignId"
+					value={updateSelectedDesignId}
+				/>
+			)}
 			<input
 				type="hidden"
 				name="intent"

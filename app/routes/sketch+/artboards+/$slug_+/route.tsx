@@ -17,6 +17,7 @@ import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import {
 	artboardDesignDeleteAction,
+	artboardDesignNewAction,
 	artboardDesignReorderAction,
 	artboardDesignToggleVisibilityAction,
 } from './actions/artboard-design'
@@ -37,10 +38,7 @@ import {
 	artboardDesignEditLineWidthAction,
 	artboardDesignNewLineAction,
 } from './actions/artboard-design-line'
-import {
-	artboardDesignEditPaletteAction,
-	artboardDesignNewPaletteAction,
-} from './actions/artboard-design-palette'
+import { artboardDesignEditPaletteAction } from './actions/artboard-design-palette'
 import {
 	artboardDesignEditRotateAction,
 	artboardDesignEditRotateBasisAction,
@@ -86,6 +84,7 @@ export async function action({ request }: DataFunctionArgs) {
 	const actionArgs = { request, userId, formData }
 	const intent = formData.get('intent')
 	switch (intent) {
+		// artboard intents
 		case INTENT.artboardUpdateWidth: {
 			return artboardUpdateWidthAction(actionArgs)
 		}
@@ -94,6 +93,10 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateBackgroundColor: {
 			return artboardUpdateBackgroundColorAction(actionArgs)
+		}
+		// artboard design intents
+		case INTENT.artboardCreateDesign: {
+			return artboardDesignNewAction(actionArgs)
 		}
 		case INTENT.artboardReorderDesign: {
 			return artboardDesignReorderAction(actionArgs)
@@ -104,9 +107,7 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.artboardDeleteDesign: {
 			return artboardDesignDeleteAction(actionArgs)
 		}
-		case INTENT.artboardCreateDesignPalette: {
-			return artboardDesignNewPaletteAction(actionArgs)
-		}
+		// and so on...
 		case INTENT.artboardUpdateDesignPalette: {
 			return artboardDesignEditPaletteAction(actionArgs)
 		}

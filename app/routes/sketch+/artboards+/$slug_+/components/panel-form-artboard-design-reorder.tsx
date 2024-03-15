@@ -16,12 +16,14 @@ export const PanelFormArtboardDesignReorder = ({
 	panelIndex,
 	panelCount,
 	direction,
+	updateSelectedDesignId,
 }: {
 	id: string
 	artboardId: Artboard['id']
 	panelIndex: number
 	panelCount: number
 	direction: 'up' | 'down'
+	updateSelectedDesignId: string | null | undefined
 }) => {
 	const fetcher = useFetcher<typeof action>()
 	const actionData = useActionData<typeof action>()
@@ -43,6 +45,13 @@ export const PanelFormArtboardDesignReorder = ({
 			<input type="hidden" name="id" value={id} />
 			<input type="hidden" name="artboardId" value={artboardId} />
 			<input type="hidden" name="direction" value={direction} />
+			{updateSelectedDesignId && (
+				<input
+					type="hidden"
+					name="updateSelectedDesignId"
+					value={updateSelectedDesignId}
+				/>
+			)}
 			<input type="hidden" name="intent" value={INTENT.artboardReorderDesign} />
 			<Button
 				type="submit"
