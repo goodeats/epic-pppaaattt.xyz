@@ -126,6 +126,24 @@ export const findDesignByIdAndOwner = async ({
 	return await findFirstDesign({ where, select })
 }
 
+// only use in transactions
+export const getTransactionDesign = async ({
+	id,
+	prisma,
+}: {
+	id: string
+	prisma: PrismaTransactionType
+}) => {
+	const design = await prisma.design.findFirst({
+		where: { id },
+		include: { palette: true },
+	})
+	// prevent any pending promises in the transaction
+	if (!design) throw new Error(`Design not found: ${id}`)
+
+	return design
+}
+
 export const findDesignTransactionPromise = ({
 	id,
 	prisma,

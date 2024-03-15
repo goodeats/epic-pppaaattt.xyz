@@ -38,6 +38,7 @@ export const PanelContentArtboardDesignPalette = ({
 
 	// helps with finding first visible design on toggle visible
 	const orderedDesignIds = orderedDesignPalettes.map(design => design.id)
+	console.log(orderedDesignIds)
 
 	// helps with disabling reorder buttons
 	const designCount = designPalettes.length
@@ -51,6 +52,12 @@ export const PanelContentArtboardDesignPalette = ({
 	const firstVisibleDesignId = visibleDesignIds[0]
 
 	const selectedPaletteId = parseArtboardSelectedDesigns({ artboard }).paletteId
+	if (selectedPaletteId) {
+		const sd = orderedDesignPalettes.find(
+			design => design.id === selectedPaletteId,
+		)
+		console.log('selected: ', sd?.palette?.value)
+	}
 
 	return (
 		<Panel>

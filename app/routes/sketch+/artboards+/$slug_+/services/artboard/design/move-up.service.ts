@@ -1,4 +1,11 @@
-import { type Design } from '@prisma/client'
+import { type Artboard, type Design } from '@prisma/client'
+import {
+	getTransactionArtboard,
+	removeArtboardSelectedDesignPromise,
+	updateArtboardSelectedDesignPromise,
+} from '#app/models/artboard.server'
+import { getTransactionDesign } from '#app/models/design.server'
+import { type designTypeEnum } from '#app/schema/design'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 
 export const artboardDesignMoveUpService = async ({
@@ -12,13 +19,17 @@ export const artboardDesignMoveUpService = async ({
 }) => {
 	try {
 		await prisma.$transaction(async prisma => {
+			// initialize promises array to run in parallel at the end
+			const promises = []
+
 			// Step 1: get current design
-			const currentDesign = await getDesign({ id, prisma })
+			const currentDesign = await getTransactionDesign({ id, prisma })
 			const { prevId, nextId } = currentDesign
+			const type = currentDesign.type as designTypeEnum
 			if (!prevId) throw new Error('Design is already head')
 
 			// Step 2: get previous design
-			const prevDesign = await getDesign({ id: prevId, prisma })
+			const prevDesign = await getTransactionDesign({ id: prevId, prisma })
 			const prevPrevId = prevDesign.prevId
 
 			// Step 3: get adjacent designs if they exist
@@ -29,26 +40,59 @@ export const artboardDesignMoveUpService = async ({
 			})
 
 			// Step 4: remove nextId and prevId nodes from all designs to satisfy unique constraint when updating other designs
-			const removeNodesPromises = removeDesignNodesPromises({
+			const designPromiseArgs = {
 				currentDesign,
 				prevDesign,
 				prevPrevDesign,
 				nextDesign,
 				prisma,
-			})
+			}
+			console.log('currentDesign', [
+				currentDesign.id,
+				currentDesign.palette?.value,
+			])
+			console.log('prevDesign', [prevDesign.id, prevDesign.palette?.value])
+			console.log('prevPrevDesign', [
+				prevPrevDesign?.id,
+				prevPrevDesign?.palette?.value,
+			])
+			console.log('nextDesign', [nextDesign?.id, nextDesign?.palette?.value])
+			console.log('updateSelectedDesignId', updateSelectedDesignId)
+
+			const removeNodesPromises = removeDesignNodesPromises(designPromiseArgs)
+			promises.push(...removeNodesPromises)
 
 			// Step 5: update nextId and prevId nodes for current and previous designs
 			// and ensure consistency for adjacent designs
-			const updateNodesPromises = updateDesignNodesPromises({
-				currentDesign,
-				prevDesign,
-				prevPrevDesign,
-				nextDesign,
-				prisma,
-			})
+			const updateNodesPromises = updateDesignNodesPromises(designPromiseArgs)
+			promises.push(...updateNodesPromises)
 
-			// Execute all update operations in parallel
-			await Promise.all([...removeNodesPromises, ...updateNodesPromises])
+			// Step 6: update selected design for artboard
+			// for the current design type
+			// either replace or remove
+			const artboard = await getTransactionArtboard({ id: artboardId, prisma })
+			if (updateSelectedDesignId) {
+				const updateSelectedDesignPromise =
+					await findAndUpdateArtboardSelectedDesignPromise({
+						artboard,
+						updateSelectedDesignId,
+						type,
+						prisma,
+					})
+				promises.push(updateSelectedDesignPromise)
+			} else {
+				const removeSelectedDesignPromise = removeArtboardSelectedDesignPromise(
+					{
+						artboard,
+						type,
+						prisma,
+					},
+				)
+				promises.push(removeSelectedDesignPromise)
+			}
+
+			// Final Step: Execute all update operations in parallel
+			await Promise.all(promises)
 		})
 
 		return { success: true }
@@ -56,22 +100,6 @@ export const artboardDesignMoveUpService = async ({
 		console.log(error)
 		return { error: true }
 	}
-}
-
-const getDesign = async ({
-	id,
-	prisma,
-}: {
-	id: string
-	prisma: PrismaTransactionType
-}) => {
-	const design = await prisma.design.findFirst({
-		where: { id },
-		include: { palette: true },
-	})
-	if (!design) throw new Error('Design not found')
-
-	return design
 }
 
 const getAdjacentDesigns = async ({
@@ -84,13 +112,15 @@ const getAdjacentDesigns = async ({
 	prisma: PrismaTransactionType
 }) => {
 	const prevPrevDesign = prevPrevId
-		? await getDesign({
+		? await getTransactionDesign({
 				id: prevPrevId,
 				prisma,
 		  })
 		: null
 
-	const nextDesign = nextId ? await getDesign({ id: nextId, prisma }) : null
+	const nextDesign = nextId
+		? await getTransactionDesign({ id: nextId, prisma })
+		: null
 
 	return { prevPrevDesign, nextDesign }
 }
@@ -227,4 +257,29 @@ const updateDesignNodesPromises = ({
 	}
 
 	return updateDesignNodesPromises
+}
+
+const findAndUpdateArtboardSelectedDesignPromise = async ({
+	artboard,
+	updateSelectedDesignId,
+	type,
+	prisma,
+}: {
+	artboard: Artboard
+	updateSelectedDesignId: string
+	type: designTypeEnum
+	prisma: PrismaTransactionType
+}) => {
+	// find the new selected design, make sure it exists
+	const newSelectedDesign = await getTransactionDesign({
+		id: updateSelectedDesignId,
+		prisma,
+	})
+	const updateSelectedDesignPromise = updateArtboardSelectedDesignPromise({
+		artboard,
+		designId: newSelectedDesign.id,
+		type,
+		prisma,
+	})
+	return updateSelectedDesignPromise
 }

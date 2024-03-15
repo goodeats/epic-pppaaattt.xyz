@@ -53,6 +53,22 @@ export const findArtboardTransactionPromise = ({
 }
 
 // only use in transactions
+export const getTransactionArtboard = async ({
+	id,
+	prisma,
+}: {
+	id: string
+	prisma: PrismaTransactionType
+}) => {
+	const artboard = await prisma.artboard.findFirst({
+		where: { id },
+	})
+	// prevent any pending promises in the transaction
+	if (!artboard) throw new Error(`Artboard not found: ${id}`)
+
+	return artboard
+}
+
 export const updateArtboardSelectedDesignPromise = ({
 	artboard,
 	designId,
@@ -132,7 +148,7 @@ export const artboardUpdateSelectedDesignPromise = async ({
 		prisma,
 	})
 	const [artboard] = await Promise.all([fetchArtboardPromise])
-	if (!artboard) return Promise.resolve()
+	if (!artboard) return [Promise.resolve()]
 
 	if (updateSelectedDesignId) {
 		const fetchNewSelectedDesign = findDesignTransactionPromise({
@@ -140,7 +156,7 @@ export const artboardUpdateSelectedDesignPromise = async ({
 			prisma,
 		})
 		const [newSelectedDesign] = await Promise.all([fetchNewSelectedDesign])
-		if (!newSelectedDesign) return Promise.resolve()
+		if (!newSelectedDesign) return [Promise.resolve()]
 
 		return [
 			updateArtboardSelectedDesignPromise({
