@@ -1,6 +1,7 @@
 import { type PickedArtboardType, type IArtboardBuild } from '../../queries'
 import { canvasDrawBackgroundService } from './draw-background.service'
 import { canvasLayerBuildDrawLayersService } from './layer/build/build-draw-layers.service'
+import { canvasDrawLayersService } from './layer/draw/draw-layers.service'
 
 export interface ICanvasDrawItem {
 	id: string
@@ -33,7 +34,9 @@ export const canvasDrawService = ({
 
 	// Step 3: get draw items for each layer
 	const drawLayers = canvasLayerBuildDrawLayersService({ ctx, artboardBuild })
-	console.log('drawLayers', drawLayers)
+
+	// Step 4: draw layers to canvas
+	canvasDrawLayersService({ ctx, drawLayers })
 }
 
 const getContext = (canvas: HTMLCanvasElement) => {
