@@ -1,6 +1,6 @@
-import { type IArtboardLayerBuild } from '../../../queries'
+import { type IArtboardLayerBuild } from '../../../../queries'
 
-export const canvasDrawLayerTemplateService = ({
+export const canvasBuildLayerDrawTemplateService = ({
 	layer,
 }: {
 	layer: IArtboardLayerBuild

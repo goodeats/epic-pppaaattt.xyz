@@ -1,8 +1,8 @@
-import { type IArtboardLayerBuild } from '../../../queries'
+import { type IArtboardLayerBuild } from '../../../../queries'
 
 type sizeBasis = 'width' | 'height'
 
-export const canvasDrawLayerSizeService = ({
+export const canvasBuildLayerDrawSizeService = ({
 	layer,
 }: {
 	layer: IArtboardLayerBuild

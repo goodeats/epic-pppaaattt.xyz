@@ -1,7 +1,7 @@
 import { randomInRange } from '#app/utils/random.utils'
-import { type IArtboardLayerBuild } from '../../../queries'
+import { type IArtboardLayerBuild } from '../../../../queries'
 
-export const canvasDrawLayerPositionService = ({
+export const canvasBuildLayerDrawPositionService = ({
 	layer,
 }: {
 	layer: IArtboardLayerBuild

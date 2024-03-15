@@ -1,8 +1,8 @@
 import { randomInRange } from '#app/utils/random.utils'
-import { type IArtboardLayerBuild } from '../../../queries'
+import { type IArtboardLayerBuild } from '../../../../queries'
 
 // Math.PI / 1 = 180 degrees
-export const canvasDrawLayerRotateService = ({
+export const canvasBuildLayerDrawRotateService = ({
 	layer,
 }: {
 	layer: IArtboardLayerBuild
