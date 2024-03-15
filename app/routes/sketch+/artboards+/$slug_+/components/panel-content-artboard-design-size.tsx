@@ -10,11 +10,10 @@ import {
 } from '#app/components/shared'
 import { type IDesignWithSize } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
-import { parseArtboardSelectedDesigns } from '#app/utils/artboard'
 import {
-	designsIdArray,
-	filterVisibleDesigns,
-	orderLinkedDesigns,
+	panelItemVariablesDesignType,
+	panelListVariablesDesignType,
+	selectedDesignsOnUpdate,
 } from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
@@ -31,26 +30,18 @@ export const PanelContentArtboardDesignSize = ({
 	artboard: PickedArtboardType
 	designSizes: IDesignWithSize[]
 }) => {
-	const orderedDesigns = orderLinkedDesigns(designSizes) as IDesignWithSize[]
-
-	// helps with finding first visible design on toggle visible
-	// const orderedDesignIds = designsIdArray(orderedDesigns)
-
-	// helps with disabling reorder buttons
-	const designCount = designSizes.length
-
-	// helps with resetting the selected design for artboard
-	const visibleDesigns = filterVisibleDesigns(orderedDesigns)
-	const visibleDesignIds = designsIdArray(visibleDesigns)
-
-	// helps with knowing there is a visible design
-	// const firstVisibleDesignId = visibleDesignIds[0]
-
-	const selectedDesignId = parseArtboardSelectedDesigns({ artboard }).sizeId
-	if (selectedDesignId) {
-		const sd = orderedDesigns.find(design => design.id === selectedDesignId)
-		console.log('selected: ', sd?.size?.value)
-	}
+	const {
+		orderedDesigns,
+		orderedDesignIds,
+		designCount,
+		visibleDesignIds,
+		firstVisibleDesignId,
+		selectedDesignId,
+	} = panelListVariablesDesignType({
+		designs: designSizes,
+		artboard,
+		type: DesignTypeEnum.SIZE,
+	})
 
 	return (
 		<Panel>
@@ -65,7 +56,37 @@ export const PanelContentArtboardDesignSize = ({
 				</div>
 			</PanelHeader>
 			{orderedDesigns.map((design, index) => {
-				const { id, visible, size } = design
+				const { id, visible, size } = design as IDesignWithSize
+
+				const {
+					isSelectedDesign,
+					nextDesignId,
+					prevDesignId,
+					nextVisibleDesignId,
+				} = panelItemVariablesDesignType({
+					id,
+					selectedDesignId,
+					orderedDesignIds,
+					visibleDesignIds,
+				})
+
+				const {
+					selectDesignIdOnMoveUp,
+					selectDesignIdOnMoveDown,
+					selectDesignIdOnToggleVisible,
+					selectDesignIdOnDelete,
+				} = selectedDesignsOnUpdate({
+					id,
+					selectedDesignId,
+					isSelectedDesign,
+					visible,
+					prevDesignId,
+					nextDesignId,
+					nextVisibleDesignId,
+					firstVisibleDesignId,
+					orderedDesignIds,
+				})
+
 				return (
 					<PanelRow key={size.id}>
 						<PanelRowOrderContainer>
@@ -75,7 +96,7 @@ export const PanelContentArtboardDesignSize = ({
 								panelCount={designCount}
 								panelIndex={index}
 								direction="up"
-								updateSelectedDesignId={null}
+								updateSelectedDesignId={selectDesignIdOnMoveUp}
 							/>
 							<PanelFormArtboardDesignReorder
 								id={id}
@@ -83,7 +104,7 @@ export const PanelContentArtboardDesignSize = ({
 								panelCount={designCount}
 								panelIndex={index}
 								direction="down"
-								updateSelectedDesignId={null}
+								updateSelectedDesignId={selectDesignIdOnMoveDown}
 							/>
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
@@ -99,13 +120,13 @@ export const PanelContentArtboardDesignSize = ({
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}
-									updateSelectedDesignId={null}
+									updateSelectedDesignId={selectDesignIdOnToggleVisible}
 								/>
 								<PanelFormArtboardDesignDelete
 									id={id}
 									artboardId={artboard.id}
 									isSelectedDesign={false}
-									updateSelectedDesignId={null}
+									updateSelectedDesignId={selectDesignIdOnDelete}
 								/>
 							</PanelRowIconContainer>
 						</PanelRowContainer>
