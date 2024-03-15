@@ -1,4 +1,5 @@
 import { type IDesignType } from '#app/models/design.server'
+import { findFirstDesignIdInArray } from './artboard'
 
 // this is bad, use the other one
 export const orderDesigns = (designs: IDesignType[]): IDesignType[] => {
@@ -45,4 +46,100 @@ export const orderLinkedDesigns = (designs: IDesignType[]): IDesignType[] => {
 	}
 
 	return orderedDesigns
+}
+
+export const filterVisibleDesigns = (designs: IDesignType[]): IDesignType[] => {
+	return designs.filter(design => design.visible)
+}
+
+export const designsIdArray = (designs: IDesignType[]): string[] => {
+	return designs.map(design => design.id)
+}
+
+export const selectedDesignToUpdateOnMoveUp = ({
+	id,
+	selectedDesignId,
+	isSelectedDesign,
+	visible,
+	prevDesignId,
+}: {
+	id: string
+	selectedDesignId: string | null | undefined
+	visible: boolean
+	isSelectedDesign: boolean
+	prevDesignId: string | null
+}): string | null | undefined => {
+	return isSelectedDesign // if already was selected
+		? selectedDesignId // no change
+		: !visible // if not visible
+		  ? selectedDesignId // no change
+		  : selectedDesignId === prevDesignId // if prev design is selected
+		    ? id // set to self
+		    : selectedDesignId // no change, assumes selected is more than prev
+}
+
+export const selectedDesignToUpdateOnMoveDown = ({
+	selectedDesignId,
+	isSelectedDesign,
+	visible,
+	nextDesignId,
+	nextVisibleDesignId,
+}: {
+	selectedDesignId: string | null | undefined
+	visible: boolean
+	isSelectedDesign: boolean
+	nextDesignId: string | null | undefined
+	nextVisibleDesignId: string | null | undefined
+}): string | null | undefined => {
+	const nextDesignIsVisible = nextDesignId === nextVisibleDesignId
+
+	return isSelectedDesign || visible // if already was selected
+		? nextDesignIsVisible // if next design is visible
+			? nextDesignId // set to next
+			: selectedDesignId // no change
+		: !visible // if not visible
+		  ? selectedDesignId // no change
+		  : nextDesignIsVisible // if next design is visible
+		    ? nextDesignId // set to next
+		    : selectedDesignId // no change
+}
+
+export const selectedDesignToUpdateOnToggleVisible = ({
+	id,
+	selectedDesignId,
+	isSelectedDesign,
+	visible,
+	firstVisibleDesignId,
+	nextVisibleDesignId,
+	orderedDesignIds,
+}: {
+	id: string
+	selectedDesignId: string | null | undefined
+	visible: boolean
+	firstVisibleDesignId: string | null | undefined
+	isSelectedDesign: boolean
+	nextVisibleDesignId: string | null | undefined
+	orderedDesignIds: string[]
+}): string | null | undefined => {
+	return visible
+		? isSelectedDesign // if visible to not visible
+			? nextVisibleDesignId // if selected, set to next
+			: selectedDesignId // if not selected, don't change
+		: firstVisibleDesignId // if not visible to visible
+		  ? findFirstDesignIdInArray(orderedDesignIds, firstVisibleDesignId, id) // if first visible, set to first or self -- whichever is first
+		  : id // if no prev visible, set to self
+}
+
+export const selectedDesignToUpdateOnDelete = ({
+	selectedDesignId,
+	isSelectedDesign,
+	nextVisibleDesignId,
+}: {
+	selectedDesignId: string | null | undefined
+	isSelectedDesign: boolean
+	nextVisibleDesignId: string | null | undefined
+}): string | null | undefined => {
+	return isSelectedDesign // if already was selected
+		? nextVisibleDesignId // set to next visible
+		: selectedDesignId // don't change
 }
