@@ -29,9 +29,17 @@ export const artboardBuildCreateService = async ({
 			designIds: designIdsArray,
 		})
 
+		const container = {
+			width: artboard.width,
+			height: artboard.height,
+			top: 0,
+			left: 0,
+			margin: 0,
+		}
+
 		return {
 			id: artboard.id,
-			layers: [artboardDesignBuilds],
+			layers: [{ ...artboardDesignBuilds, container }],
 		}
 	} catch (error) {
 		console.log(error)

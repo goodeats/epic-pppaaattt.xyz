@@ -222,6 +222,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	})
 
 	const artboardBuild = await getArtboardBuild(artboard)
+	console.log(artboardBuild)
 
 	return json({
 		owner,

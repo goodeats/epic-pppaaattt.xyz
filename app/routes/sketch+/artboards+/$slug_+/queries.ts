@@ -82,6 +82,16 @@ export interface IArtboardLayerBuild {
 	rotate: IRotate
 	layout: ILayout
 	template: ITemplate
+	// create this type
+	container: IArtboardLayerContainerBuild
+}
+
+export interface IArtboardLayerContainerBuild {
+	width: number
+	height: number
+	top: number
+	left: number
+	margin: number
 }
 
 export const getArtboardBuild = async (
