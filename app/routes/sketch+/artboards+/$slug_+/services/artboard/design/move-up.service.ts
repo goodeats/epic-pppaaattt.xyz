@@ -1,3 +1,4 @@
+import { type Design } from '@prisma/client'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 
 export const artboardDesignMoveUpService = async ({
@@ -9,7 +10,6 @@ export const artboardDesignMoveUpService = async ({
 	artboardId: string
 	updateSelectedDesignId: string | null
 }) => {
-	console.log('artboardDesignMoveUpService')
 	try {
 		await prisma.$transaction(async prisma => {
 			const updateNullOperations = []
@@ -17,64 +17,34 @@ export const artboardDesignMoveUpService = async ({
 
 			// Step 1: get current design
 			const currentDesign = await getDesign({ id, prisma })
-			if (!currentDesign) throw new Error('Design not found')
-
 			const { prevId, nextId } = currentDesign
-
-			// Step 2: get previous design
 			if (!prevId) throw new Error('Design is already head')
 
+			// Step 2: get previous design
 			const prevDesign = await getDesign({ id: prevId, prisma })
-			if (!prevDesign) throw new Error('Prev Design not found')
+			const prevPrevId = prevDesign.prevId
 
 			// Step 3: get adjacent designs if they exist
-			let prevPrevDesign, nextDesign
-			if (prevDesign.prevId) {
-				prevPrevDesign = await getDesign({
-					id: prevDesign.prevId,
-					prisma,
-				})
-			}
-
-			if (nextId) {
-				nextDesign = await getDesign({ id: nextId, prisma })
-			}
+			const { prevPrevDesign, nextDesign } = await getAdjacentDesigns({
+				prevPrevId,
+				nextId,
+				prisma,
+			})
 
 			// Step 4: remove nextId and prevId from all designs to satisfy unique constraint when updating other designs
-			// might be a workaround with prisma, but can manage this way for now
-			const currentDesignRemoveNodesPromise = removeDesignNodesPromise({
-				id,
+			const removeNodesPromises = removeDesignNodesPromises({
+				currentDesign,
+				prevDesign,
+				prevPrevDesign,
+				nextDesign,
 				prisma,
 			})
-			const prevDesignRemoveNodesPromise = removeDesignNodesPromise({
-				id: prevDesign.id,
-				prisma,
-			})
-			updateNullOperations.push(
-				currentDesignRemoveNodesPromise,
-				prevDesignRemoveNodesPromise,
-			)
-
-			if (prevPrevDesign) {
-				const prevPrevDesignRemoveNodesPromise = removeDesignNodesPromise({
-					id: prevPrevDesign.id,
-					prisma,
-				})
-				updateNullOperations.push(prevPrevDesignRemoveNodesPromise)
-			}
-
-			if (nextDesign) {
-				const nextDesignRemoveNodesPromise = removeDesignNodesPromise({
-					id: nextDesign.id,
-					prisma,
-				})
-				updateNullOperations.push(nextDesignRemoveNodesPromise)
-			}
+			updateNullOperations.push(...removeNodesPromises)
 
 			// Step 5: swap nextId and prevId for current and previous designs
 			const currentDesignNodesPromise = updateDesignNodesPromise({
 				id,
-				prevId: prevDesign.prevId,
+				prevId: prevPrevId,
 				nextId: prevDesign.id,
 				prisma,
 			})
@@ -126,10 +96,34 @@ const getDesign = async ({
 	id: string
 	prisma: PrismaTransactionType
 }) => {
-	return await prisma.design.findFirst({
+	const design = await prisma.design.findFirst({
 		where: { id },
 		include: { palette: true },
 	})
+	if (!design) throw new Error('Design not found')
+
+	return design
+}
+
+const getAdjacentDesigns = async ({
+	prevPrevId,
+	nextId,
+	prisma,
+}: {
+	prevPrevId: string | null
+	nextId: string | null
+	prisma: PrismaTransactionType
+}) => {
+	const prevPrevDesign = prevPrevId
+		? await getDesign({
+				id: prevPrevId,
+				prisma,
+		  })
+		: null
+
+	const nextDesign = nextId ? await getDesign({ id: nextId, prisma }) : null
+
+	return { prevPrevDesign, nextDesign }
 }
 
 const removeDesignNodesPromise = ({
@@ -160,4 +154,49 @@ const updateDesignNodesPromise = ({
 		where: { id },
 		data: { prevId, nextId },
 	})
+}
+
+const removeDesignNodesPromises = ({
+	currentDesign,
+	prevDesign,
+	prevPrevDesign,
+	nextDesign,
+	prisma,
+}: {
+	currentDesign: Design
+	prevDesign: Design
+	prevPrevDesign: Design | null | undefined
+	nextDesign: Design | null | undefined
+	prisma: PrismaTransactionType
+}) => {
+	const removeDesignNodesPromises = [
+		removeDesignNodesPromise({
+			id: currentDesign.id,
+			prisma,
+		}),
+		removeDesignNodesPromise({
+			id: prevDesign.id,
+			prisma,
+		}),
+	]
+
+	if (prevPrevDesign) {
+		removeDesignNodesPromises.push(
+			removeDesignNodesPromise({
+				id: prevPrevDesign.id,
+				prisma,
+			}),
+		)
+	}
+
+	if (nextDesign) {
+		removeDesignNodesPromises.push(
+			removeDesignNodesPromise({
+				id: nextDesign.id,
+				prisma,
+			}),
+		)
+	}
+
+	return removeDesignNodesPromises
 }
