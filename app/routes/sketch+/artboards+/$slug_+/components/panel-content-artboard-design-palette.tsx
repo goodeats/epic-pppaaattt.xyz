@@ -12,10 +12,11 @@ import { type IDesignWithPalette } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
 	findFirstDesignIdInArray,
-	getNextVisibleDesignId,
+	getNextDesignId,
+	getPrevDesignId,
 	parseArtboardSelectedDesigns,
 } from '#app/utils/artboard'
-import { orderDesigns } from '#app/utils/design'
+import { orderLinkedDesigns } from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignEditPalette } from './panel-form-artboard-design-edit-palette'
@@ -31,7 +32,7 @@ export const PanelContentArtboardDesignPalette = ({
 	artboard: PickedArtboardType
 	designPalettes: IDesignWithPalette[]
 }) => {
-	const orderedDesignPalettes = orderDesigns(
+	const orderedDesignPalettes = orderLinkedDesigns(
 		designPalettes,
 	) as IDesignWithPalette[]
 
@@ -68,8 +69,28 @@ export const PanelContentArtboardDesignPalette = ({
 
 				const isSelectedDesign = id === selectedPaletteId
 
-				const nextVisibleDesignId = getNextVisibleDesignId(visibleDesignIds, id)
-				// const prevVisibleDesignId = getPrevVisibleDesignId(visibleDesignIds, id)
+				const nextDesignId = getNextDesignId(orderedDesignIds, id)
+				const prevDesignId = getPrevDesignId(orderedDesignIds, id)
+				const nextVisibleDesignId = getNextDesignId(visibleDesignIds, id)
+
+				const moveUpChangeSelectedDesignId = isSelectedDesign // if already was selected
+					? selectedPaletteId // no change
+					: !visible // if not visible
+					  ? selectedPaletteId // no change
+					  : selectedPaletteId === prevDesignId // if prev design is selected
+					    ? id // set to self
+					    : selectedPaletteId // no change, assumes selected is more than prev
+
+				const moveDownChangeSelectedDesignId =
+					isSelectedDesign || visible // if already was selected
+						? nextDesignId === nextVisibleDesignId // if next design is visible
+							? nextDesignId // set to next
+							: selectedPaletteId // no change
+						: !visible // if not visible
+						  ? selectedPaletteId // no change
+						  : nextDesignId === nextVisibleDesignId // if next design is visible
+						    ? nextDesignId // set to next
+						    : selectedPaletteId // no change
 
 				const toggleVisibleChangeSelectedDesignId = visible
 					? isSelectedDesign // if visible to not visible
@@ -83,8 +104,8 @@ export const PanelContentArtboardDesignPalette = ({
 					    ) // if first visible, set to first or self -- whichever is first
 					  : id // if no prev visible, set to self
 
-				const deleteChangeSelectedDesignId = isSelectedDesign
-					? nextVisibleDesignId // if was selected, set to next visible
+				const deleteChangeSelectedDesignId = isSelectedDesign // if already was selected
+					? nextVisibleDesignId // set to next visible
 					: selectedPaletteId // don't change
 
 				return (
@@ -96,6 +117,7 @@ export const PanelContentArtboardDesignPalette = ({
 								panelCount={designCount}
 								panelIndex={index}
 								direction="up"
+								updateSelectedDesignId={moveUpChangeSelectedDesignId}
 							/>
 							<PanelFormArtboardDesignReorder
 								id={id}
@@ -103,6 +125,7 @@ export const PanelContentArtboardDesignPalette = ({
 								panelCount={designCount}
 								panelIndex={index}
 								direction="down"
+								updateSelectedDesignId={moveDownChangeSelectedDesignId}
 							/>
 						</PanelRowOrderContainer>
 						<PanelRowContainer>

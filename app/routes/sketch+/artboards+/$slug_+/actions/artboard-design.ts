@@ -13,6 +13,7 @@ import {
 import { prisma } from '#app/utils/db.server'
 import { artboardDesignCreateService } from '../services/artboard/design/create.service'
 import { artboardDesignDeleteService } from '../services/artboard/design/delete.service'
+import { artboardDesignMoveUpService } from '../services/artboard/design/move-up.service'
 import { artboardDesignToggleVisibleService } from '../services/artboard/design/toggle-visible.service'
 import {
 	parseArtboardDesignSubmission,
@@ -68,7 +69,22 @@ export async function artboardDesignReorderAction({
 	}
 
 	// changes
-	const { id, direction } = submission.value
+	const { id, artboardId, direction, updateSelectedDesignId } = submission.value
+	if (direction === 'up') {
+		const { success, error } = await artboardDesignMoveUpService({
+			id,
+			artboardId,
+			updateSelectedDesignId,
+		})
+
+		if (error) return submissionErrorResponse(submission)
+
+		return json({ status: 'success', submission, success } as const)
+	} else {
+		return submissionErrorResponse(submission)
+	}
+
+	// const { id, direction } = submission.value
 	try {
 		await prisma.$transaction(async prisma => {
 			const design = await prisma.design.findFirst({

@@ -23,7 +23,7 @@ export const stringifyArtboardSelectedDesigns = ({
 }
 
 // helper for when a design is deleted, made invisible, or moved
-export const getNextVisibleDesignId = (
+export const getNextDesignId = (
 	visibleDesignIds: string[],
 	currentDesignId: string,
 ): string | null => {
@@ -34,7 +34,7 @@ export const getNextVisibleDesignId = (
 }
 
 // helper for when a design is made visible or moved
-export const getPrevVisibleDesignId = (
+export const getPrevDesignId = (
 	visibleDesignIds: string[],
 	currentDesignId: string,
 ): string | null => {

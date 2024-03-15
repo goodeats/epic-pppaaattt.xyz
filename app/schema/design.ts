@@ -49,6 +49,7 @@ export const ReorderArtboardDesignSchema = z.object({
 	id: z.string(),
 	artboardId: z.string(),
 	direction: z.enum(['up', 'down']),
+	updateSelectedDesignId: z.string().optional(),
 })
 
 export type selectArgsType = z.infer<typeof selectArgs>

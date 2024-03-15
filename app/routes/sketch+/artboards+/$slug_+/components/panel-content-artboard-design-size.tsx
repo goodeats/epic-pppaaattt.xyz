@@ -63,6 +63,7 @@ export const PanelContentArtboardDesignSize = ({
 								panelCount={designCount}
 								panelIndex={index}
 								direction="up"
+								updateSelectedDesignId={null}
 							/>
 							<PanelFormArtboardDesignReorder
 								id={id}
@@ -70,6 +71,7 @@ export const PanelContentArtboardDesignSize = ({
 								panelCount={designCount}
 								panelIndex={index}
 								direction="down"
+								updateSelectedDesignId={null}
 							/>
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
