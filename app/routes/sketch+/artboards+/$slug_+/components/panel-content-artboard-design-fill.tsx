@@ -70,7 +70,6 @@ export const PanelContentArtboardDesignFill = ({
 					orderedDesignIds,
 					visibleDesignIds,
 				})
-				if (isSelectedDesign) console.log('selectedDesignId', fill.value)
 
 				const {
 					selectDesignIdOnMoveUp,

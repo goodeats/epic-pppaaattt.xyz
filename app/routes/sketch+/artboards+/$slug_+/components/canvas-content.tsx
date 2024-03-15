@@ -1,12 +1,15 @@
 import { useEffect, useRef } from 'react'
-import { type PickedArtboardType } from '../queries'
+import { type IArtboardBuild, type PickedArtboardType } from '../queries'
 
 export const CanvasContent = ({
 	artboard,
+	artboardBuild,
 }: {
 	artboard: PickedArtboardType
+	artboardBuild: IArtboardBuild | null
 }) => {
 	const { width, height, backgroundColor } = artboard
+	console.log('artboardBuild', artboardBuild)
 
 	const Canvas = () => {
 		const canvasRef = useRef<HTMLCanvasElement>(null)

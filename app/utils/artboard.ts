@@ -1,5 +1,6 @@
 import { type Artboard } from '@prisma/client'
 import {
+	ArtboardSelectedDesignsCompleteSchema,
 	ArtboardSelectedDesignsSchema,
 	type ArtboardSelectedDesignsType,
 } from '#app/schema/artboard'
@@ -20,6 +21,33 @@ export const stringifyArtboardSelectedDesigns = ({
 }): string => {
 	const validatedJson = ArtboardSelectedDesignsSchema.parse(newSelectedDesigns)
 	return JSON.stringify(validatedJson)
+}
+
+export const artboardSelectedDesignsCompleted = ({
+	artboard: { selectedDesigns },
+}: {
+	artboard: Pick<Artboard, 'selectedDesigns'>
+}): boolean => {
+	const parsedSelectedDesigns = parseArtboardSelectedDesigns({
+		artboard: { selectedDesigns },
+	})
+	// Assuming Zod or similar, replace `parse` with a method that checks validity and returns a boolean
+	// For Zod, it could be something like `.safeParse()` and then checking the success property
+	const result = ArtboardSelectedDesignsCompleteSchema.safeParse(
+		parsedSelectedDesigns,
+	)
+	return result.success
+}
+
+export const artboardSelectedDesignIdsToArray = ({
+	artboard: { selectedDesigns },
+}: {
+	artboard: Pick<Artboard, 'selectedDesigns'>
+}): string[] => {
+	const parsedSelectedDesigns = parseArtboardSelectedDesigns({
+		artboard: { selectedDesigns },
+	})
+	return Object.values(parsedSelectedDesigns)
 }
 
 // helper for when a design is deleted, made invisible, or moved

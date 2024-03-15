@@ -46,6 +46,17 @@ export const ArtboardSelectedDesignsSchema = z.object({
 	templateId: z.string().optional(),
 })
 
+export const ArtboardSelectedDesignsCompleteSchema = z.object({
+	paletteId: z.string(),
+	sizeId: z.string(),
+	fillId: z.string(),
+	strokeId: z.string(),
+	lineId: z.string(),
+	rotateId: z.string(),
+	layoutId: z.string(),
+	templateId: z.string(),
+})
+
 export type ArtboardSelectedDesignsType = z.infer<
 	typeof ArtboardSelectedDesignsSchema
 >

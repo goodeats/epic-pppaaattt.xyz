@@ -1,4 +1,13 @@
+import { type IFill } from '#app/models/fill.server'
+import { type ILayout } from '#app/models/layout.server'
+import { type ILine } from '#app/models/line.server'
+import { type IPalette } from '#app/models/palette.server'
+import { type IRotate } from '#app/models/rotate.server'
+import { type ISize } from '#app/models/size.server'
+import { type IStroke } from '#app/models/stroke.server'
+import { type ITemplate } from '#app/models/template.server'
 import { prisma } from '#app/utils/db.server'
+import { artboardBuildCreateService } from './services/artboard/build/create.service'
 
 export const getOwner = async (userId: string) => {
 	return await prisma.user.findFirst({
@@ -55,4 +64,30 @@ export const getArtboard = async (
 			},
 		},
 	})
+}
+
+// this could be its own model potentially
+// i.e., artboard has many builds
+export interface IArtboardBuild {
+	id: string
+	layers: IArtboardLayerBuild[]
+}
+
+export interface IArtboardLayerBuild {
+	palette: IPalette
+	size: ISize
+	fill: IFill
+	stroke: IStroke
+	line: ILine
+	rotate: IRotate
+	layout: ILayout
+	template: ITemplate
+}
+
+export const getArtboardBuild = async (
+	artboard: PickedArtboardType,
+): Promise<IArtboardBuild | null> => {
+	const artboardBuild = await artboardBuildCreateService({ artboard })
+	console.log('artboardBuild', artboardBuild)
+	return artboardBuild
 }

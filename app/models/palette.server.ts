@@ -1,3 +1,5 @@
+import { type IDesignWithPalette, type IDesignWithType } from './design.server'
+
 export interface IPalette {
 	id: string
 	format: string
@@ -6,4 +8,14 @@ export interface IPalette {
 	createdAt: Date | string
 	updatedAt: Date | string
 	designId: string
+}
+
+export const findPaletteInDesignArray = ({
+	designs,
+}: {
+	designs: IDesignWithType[]
+}): IPalette | undefined => {
+	const design = designs.find(design => design.palette) as IDesignWithPalette
+
+	return design.palette
 }

@@ -74,7 +74,7 @@ import {
 import { CanvasContent } from './components/canvas-content'
 import { PanelContentLeft, PanelContentRight } from './components/panel-content'
 import { INTENT } from './intent'
-import { getArtboard, getOwner } from './queries'
+import { getArtboard, getArtboardBuild, getOwner } from './queries'
 
 export async function action({ request }: DataFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -221,7 +221,16 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 		where: { artboardId: artboard.id },
 	})
 
-	return json({ owner, artboard, artboardTimeAgo, artboardDesigns, layers })
+	const artboardBuild = await getArtboardBuild(artboard)
+
+	return json({
+		owner,
+		artboard,
+		artboardTimeAgo,
+		artboardDesigns,
+		layers,
+		artboardBuild,
+	})
 }
 
 export default function SketchRoute() {
@@ -232,7 +241,10 @@ export default function SketchRoute() {
 				<PanelContentLeft artboard={data.artboard} layers={data.layers} />
 			</PanelContainer>
 			<SketchBodyContent>
-				<CanvasContent artboard={data.artboard} />
+				<CanvasContent
+					artboard={data.artboard}
+					artboardBuild={data.artboardBuild}
+				/>
 			</SketchBodyContent>
 			<PanelContainer>
 				<PanelContentRight
