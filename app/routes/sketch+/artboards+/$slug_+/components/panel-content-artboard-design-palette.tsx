@@ -11,14 +11,8 @@ import {
 import { type IDesignWithPalette } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
-	getNextDesignId,
-	getPrevDesignId,
-	parseArtboardSelectedDesigns,
-} from '#app/utils/artboard'
-import {
-	designsIdArray,
-	filterVisibleDesigns,
-	orderLinkedDesigns,
+	panelItemVariablesDesignType,
+	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
@@ -36,28 +30,18 @@ export const PanelContentArtboardDesignPalette = ({
 	artboard: PickedArtboardType
 	designPalettes: IDesignWithPalette[]
 }) => {
-	const orderedDesigns = orderLinkedDesigns(
-		designPalettes,
-	) as IDesignWithPalette[]
-
-	// helps with finding first visible design on toggle visible
-	const orderedDesignIds = designsIdArray(orderedDesigns)
-
-	// helps with disabling reorder buttons
-	const designCount = orderedDesigns.length
-
-	// helps with resetting the selected design for artboard
-	const visibleDesigns = filterVisibleDesigns(orderedDesigns)
-	const visibleDesignIds = designsIdArray(visibleDesigns)
-
-	// helps with knowing there is a visible design
-	const firstVisibleDesignId = visibleDesignIds[0]
-
-	const selectedDesignId = parseArtboardSelectedDesigns({ artboard }).paletteId
-	if (selectedDesignId) {
-		const sd = orderedDesigns.find(design => design.id === selectedDesignId)
-		console.log('selected: ', sd?.palette?.value)
-	}
+	const {
+		orderedDesigns,
+		orderedDesignIds,
+		designCount,
+		visibleDesignIds,
+		firstVisibleDesignId,
+		selectedDesignId,
+	} = panelListVariablesDesignType({
+		designs: designPalettes,
+		artboard,
+		type: DesignTypeEnum.PALETTE,
+	})
 
 	return (
 		<Panel>
@@ -72,13 +56,19 @@ export const PanelContentArtboardDesignPalette = ({
 				</div>
 			</PanelHeader>
 			{orderedDesigns.map((design, index) => {
-				const { id, visible, palette } = design
+				const { id, visible, palette } = design as IDesignWithPalette
 
-				const isSelectedDesign = id === selectedDesignId
-
-				const nextDesignId = getNextDesignId(orderedDesignIds, id)
-				const prevDesignId = getPrevDesignId(orderedDesignIds, id)
-				const nextVisibleDesignId = getNextDesignId(visibleDesignIds, id)
+				const {
+					isSelectedDesign,
+					nextDesignId,
+					prevDesignId,
+					nextVisibleDesignId,
+				} = panelItemVariablesDesignType({
+					id,
+					selectedDesignId,
+					orderedDesignIds,
+					visibleDesignIds,
+				})
 
 				const {
 					selectDesignIdOnMoveUp,

@@ -1,5 +1,13 @@
 import { type IDesignType } from '#app/models/design.server'
-import { findFirstDesignIdInArray } from './artboard'
+import { type PickedArtboardType } from '#app/routes/sketch+/artboards+/$slug_+/queries'
+import { type ArtboardSelectedDesignsType } from '#app/schema/artboard'
+import { type designTypeEnum } from '#app/schema/design'
+import {
+	findFirstDesignIdInArray,
+	getNextDesignId,
+	getPrevDesignId,
+	parseArtboardSelectedDesigns,
+} from './artboard'
 
 // this is bad, use the other one
 export const orderDesigns = (designs: IDesignType[]): IDesignType[] => {
@@ -202,5 +210,66 @@ export const selectedDesignsOnUpdate = ({
 		selectDesignIdOnMoveDown,
 		selectDesignIdOnToggleVisible,
 		selectDesignIdOnDelete,
+	}
+}
+
+export const panelListVariablesDesignType = ({
+	designs,
+	artboard,
+	type,
+}: {
+	designs: IDesignType[]
+	artboard: PickedArtboardType
+	type: designTypeEnum
+}) => {
+	const orderedDesigns = orderLinkedDesigns(designs) as IDesignType[]
+
+	// helps with finding first visible design on toggle visible
+	const orderedDesignIds = designsIdArray(orderedDesigns)
+
+	// helps with disabling reorder buttons
+	const designCount = orderedDesigns.length
+
+	// helps with resetting the selected design for artboard
+	const visibleDesigns = filterVisibleDesigns(orderedDesigns)
+	const visibleDesignIds = designsIdArray(visibleDesigns)
+
+	// helps with knowing there is a visible design
+	const firstVisibleDesignId = visibleDesignIds[0]
+
+	const designKey = (type + 'Id') as keyof ArtboardSelectedDesignsType
+	const selectedDesignId = parseArtboardSelectedDesigns({ artboard })[designKey]
+
+	return {
+		orderedDesigns,
+		orderedDesignIds,
+		designCount,
+		visibleDesignIds,
+		firstVisibleDesignId,
+		selectedDesignId,
+	}
+}
+
+export const panelItemVariablesDesignType = ({
+	id,
+	selectedDesignId,
+	orderedDesignIds,
+	visibleDesignIds,
+}: {
+	id: string
+	selectedDesignId: string | null | undefined
+	orderedDesignIds: string[]
+	visibleDesignIds: string[]
+}) => {
+	const isSelectedDesign = id === selectedDesignId
+	const nextDesignId = getNextDesignId(orderedDesignIds, id)
+	const prevDesignId = getPrevDesignId(orderedDesignIds, id)
+	const nextVisibleDesignId = getNextDesignId(visibleDesignIds, id)
+
+	return {
+		isSelectedDesign,
+		nextDesignId,
+		prevDesignId,
+		nextVisibleDesignId,
 	}
 }
