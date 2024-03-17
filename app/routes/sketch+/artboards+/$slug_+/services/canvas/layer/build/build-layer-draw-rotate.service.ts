@@ -12,7 +12,7 @@ export const canvasBuildLayerDrawRotateService = ({
 
 	switch (basis) {
 		case 'random':
-			return randomInRange(0, 360)
+			return randomInRange(0, 2)
 		case 'N':
 			return 0
 		case 'NE':
