@@ -1,4 +1,5 @@
 import { type IFill } from '#app/models/fill.server'
+import { type ILayer } from '#app/models/layer.server'
 import { type ILayout } from '#app/models/layout.server'
 import { type ILine } from '#app/models/line.server'
 import { type IPalette } from '#app/models/palette.server'
@@ -96,8 +97,8 @@ export interface IArtboardLayerContainerBuild {
 
 export const getArtboardBuild = async (
 	artboard: PickedArtboardType,
+	layers: ILayer[],
 ): Promise<IArtboardBuild | null> => {
-	const artboardBuild = await artboardBuildCreateService({ artboard })
-	console.log('artboardBuild', artboardBuild)
+	const artboardBuild = await artboardBuildCreateService({ artboard, layers })
 	return artboardBuild
 }

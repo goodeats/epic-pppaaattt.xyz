@@ -58,8 +58,9 @@ const selectArgs = z.object({
 })
 
 export type whereArgsType = z.infer<typeof whereArgs>
+const arrayOfIds = z.object({ in: z.array(z.string()) })
 const whereArgs = z.object({
-	id: z.string().optional(),
+	id: z.union([z.string(), arrayOfIds]).optional(),
 	ownerId: z.string().optional(),
 	artboardId: z.string().optional(),
 })

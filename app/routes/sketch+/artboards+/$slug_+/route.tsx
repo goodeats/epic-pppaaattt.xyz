@@ -221,8 +221,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 		where: { artboardId: artboard.id },
 	})
 
-	const artboardBuild = await getArtboardBuild(artboard)
-	console.log(artboardBuild)
+	const artboardBuild = await getArtboardBuild(artboard, layers)
 
 	return json({
 		owner,

@@ -1,4 +1,6 @@
+import { findManyDesignsWithType } from '#app/models/design.server'
 import { findFillInDesignArray } from '#app/models/fill.server'
+import { type ILayer } from '#app/models/layer.server'
 import { findLayoutInDesignArray } from '#app/models/layout.server'
 import { findLineInDesignArray } from '#app/models/line.server'
 import { findPaletteInDesignArray } from '#app/models/palette.server'
@@ -10,36 +12,42 @@ import {
 	artboardSelectedDesignIdsToArray,
 	artboardSelectedDesignsCompleted,
 } from '#app/utils/artboard'
-import { prisma } from '#app/utils/db.server'
-import { type PickedArtboardType } from '../../../queries'
+import { filterLayersVisible } from '#app/utils/layer.utils'
+import {
+	type IArtboardLayerBuild,
+	type PickedArtboardType,
+} from '../../../queries'
 
 export const artboardBuildCreateService = async ({
 	artboard,
+	layers,
 }: {
 	artboard: PickedArtboardType
+	layers: ILayer[]
 }) => {
 	try {
 		const isCompleted = artboardSelectedDesignsCompleted({ artboard })
 		if (!isCompleted) throw new Error('Artboard designs are not completed')
 
-		const designIdsArray = artboardSelectedDesignIdsToArray({ artboard })
-
-		const artboardDesignBuilds = await getArtboardDesignTypes({
-			artboardId: artboard.id,
-			designIds: designIdsArray,
+		const artboarSelectedDesignIdsArray = artboardSelectedDesignIdsToArray({
+			artboard,
 		})
 
-		const container = {
-			width: artboard.width,
-			height: artboard.height,
-			top: 0,
-			left: 0,
-			margin: 0,
-		}
+		const artboardSelectedDesigns = await getSelectedDesignsForArtboard({
+			artboardId: artboard.id,
+			designIds: artboarSelectedDesignIdsArray,
+			artboard,
+		})
+
+		const visibleLayers = filterLayersVisible({ layers })
+		const layersSelectedDesigns = await getSelectedDesignTypesForLayers({
+			layers: visibleLayers,
+			artboardSelectedDesigns,
+		})
 
 		return {
 			id: artboard.id,
-			layers: [{ ...artboardDesignBuilds, container }],
+			layers: layersSelectedDesigns,
 		}
 	} catch (error) {
 		console.log(error)
@@ -47,30 +55,16 @@ export const artboardBuildCreateService = async ({
 	}
 }
 
-const getArtboardDesignTypes = async ({
+const getSelectedDesignsForArtboard = async ({
 	artboardId,
 	designIds,
+	artboard,
 }: {
 	artboardId: string
 	designIds: string[]
-}) => {
-	const designs = await prisma.design.findMany({
-		where: { artboardId, id: { in: designIds } },
-		include: {
-			palette: true,
-			size: true,
-			fill: true,
-			stroke: true,
-			line: true,
-			rotate: true,
-			layout: true,
-			template: true,
-		},
-		orderBy: {
-			type: 'asc',
-		},
-	})
-
+	artboard: PickedArtboardType
+}): Promise<IArtboardLayerBuild> => {
+	const designs = await getDesigns({ artboardId, ids: designIds })
 	const palette = findPaletteInDesignArray({ designs })
 	if (!palette) throw new Error('Palette not found')
 	const size = findSizeInDesignArray({ designs })
@@ -88,5 +82,47 @@ const getArtboardDesignTypes = async ({
 	const template = findTemplateInDesignArray({ designs })
 	if (!template) throw new Error('Template not found')
 
-	return { palette, size, fill, stroke, line, rotate, layout, template }
+	const { width, height } = artboard
+	const container = {
+		width,
+		height,
+		top: 0,
+		left: 0,
+		margin: 0,
+	}
+
+	return {
+		palette,
+		size,
+		fill,
+		stroke,
+		line,
+		rotate,
+		layout,
+		template,
+		container,
+	}
+}
+
+const getDesigns = async ({
+	artboardId,
+	ids,
+}: {
+	artboardId: string
+	ids: string[]
+}) => {
+	return findManyDesignsWithType({ where: { artboardId, id: { in: ids } } })
+}
+
+const getSelectedDesignTypesForLayers = async ({
+	layers,
+	artboardSelectedDesigns,
+}: {
+	layers: ILayer[]
+	artboardSelectedDesigns: IArtboardLayerBuild
+}) => {
+	return layers.map(layer => {
+		// just return the artboard designs until they are used on layer
+		return artboardSelectedDesigns
+	})
 }
