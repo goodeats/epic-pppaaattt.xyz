@@ -380,6 +380,7 @@ export async function artboardLayerDeleteAction({
 
 	const { id, artboardId } = submission.value
 	const { success, error } = await artboardLayerDeleteService({
+		userId,
 		id,
 		artboardId,
 	})

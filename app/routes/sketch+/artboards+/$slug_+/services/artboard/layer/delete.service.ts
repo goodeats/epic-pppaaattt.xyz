@@ -1,35 +1,36 @@
-import { type Layer } from '@prisma/client'
+import { type User, type Layer, type Artboard } from '@prisma/client'
 import {
 	connectPrevAndNextLayersPromise,
-	findLayerTransactionPromise,
-	getTransactionLayer,
+	findFirstLayer,
 } from '#app/models/layer.server'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 
 export const artboardLayerDeleteService = async ({
+	userId,
 	id,
 	artboardId,
 }: {
-	id: string
-	artboardId: string
+	userId: User['id']
+	id: Layer['id']
+	artboardId: Artboard['id']
 }) => {
 	try {
+		// Step 1: get the layer
+		const layer = await getLayer({
+			userId,
+			id,
+		})
+		const { nextId, prevId } = layer
+
+		// Step 2: get next and previous layers
+		const { nextLayer, prevLayer } = await getAdjacentLayers({
+			userId,
+			layer,
+		})
+
 		await prisma.$transaction(async prisma => {
 			// initialize promises array to run in parallel at the end
 			const promises = []
-
-			// Step 1: get the layer
-			const layer = await getTransactionLayer({
-				id,
-				prisma,
-			})
-			const { nextId, prevId } = layer
-
-			// Step 2: get next and previous layers
-			const { nextLayer, prevLayer } = await fetchAdjacentLayers({
-				layer,
-				prisma,
-			})
 
 			// Step 3: delete layer
 			// this should be first to avoid foreign key unique constraint errors
@@ -61,33 +62,44 @@ export const artboardLayerDeleteService = async ({
 	}
 }
 
-const fetchAdjacentLayers = async ({
-	layer,
-	prisma,
+const getLayer = async ({
+	id,
+	userId,
 }: {
+	id: Layer['id']
+	userId: User['id']
+}) => {
+	const layer = await findFirstLayer({
+		where: { id, ownerId: userId },
+	})
+
+	if (!layer) throw new Error('Layer not found')
+
+	return layer
+}
+
+const getAdjacentLayers = async ({
+	userId,
+	layer,
+}: {
+	userId: User['id']
 	layer: Layer
-	prisma: PrismaTransactionType
 }) => {
 	const { nextId, prevId } = layer
 
-	const fetchNextLayerPromise = nextId
-		? findLayerTransactionPromise({
+	const nextLayer = nextId
+		? await getLayer({
+				userId,
 				id: nextId,
-				prisma,
 		  })
-		: Promise.resolve(null)
+		: null
 
-	const fetchPrevLayerPromise = prevId
-		? findLayerTransactionPromise({
+	const prevLayer = prevId
+		? await getLayer({
+				userId,
 				id: prevId,
-				prisma,
 		  })
-		: Promise.resolve(null)
-
-	const [nextLayer, prevLayer] = await Promise.all([
-		fetchNextLayerPromise,
-		fetchPrevLayerPromise,
-	])
+		: null
 
 	return { nextLayer, prevLayer }
 }

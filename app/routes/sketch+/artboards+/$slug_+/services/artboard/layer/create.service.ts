@@ -7,15 +7,13 @@ import { LayerDataCreateSchema } from '#app/schema/layer'
 import { prisma } from '#app/utils/db.server'
 import { artboardLayerCopyDesignsFromArtboardService } from './copy-designs-from-artboard.service'
 
-type artboardLayerCreateServiceProps = {
-	userId: User['id']
-	artboardId: Artboard['id']
-}
-
 export const artboardLayerCreateService = async ({
 	userId,
 	artboardId,
-}: artboardLayerCreateServiceProps) => {
+}: {
+	userId: User['id']
+	artboardId: Artboard['id']
+}) => {
 	try {
 		// Step 1: find existing artboard layers tail
 		const tailLayer = await fetchArtboardLayersTail({
