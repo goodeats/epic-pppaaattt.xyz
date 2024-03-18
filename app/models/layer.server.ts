@@ -4,7 +4,7 @@ import {
 	type selectArgsType,
 	type whereArgsType,
 } from '#app/schema/layer'
-import { prisma } from '#app/utils/db.server'
+import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 
 export interface ILayer {
 	id: string
@@ -55,4 +55,25 @@ export const findLayerByIdAndOwner = async ({
 }): Promise<Layer | null> => {
 	const where = { id, ownerId }
 	return await findFirstLayer({ where, select })
+}
+
+export const connectPrevAndNextLayersPromise = ({
+	prevId,
+	nextId,
+	prisma,
+}: {
+	prevId: ILayer['id']
+	nextId: ILayer['id']
+	prisma: PrismaTransactionType
+}) => {
+	return [
+		prisma.layer.update({
+			where: { id: prevId },
+			data: { nextId },
+		}),
+		prisma.layer.update({
+			where: { id: nextId },
+			data: { prevId },
+		}),
+	]
 }

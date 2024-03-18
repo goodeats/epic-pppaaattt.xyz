@@ -14,75 +14,56 @@ import {
 } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
 import { findFirstLayerInstance } from '#app/utils/prisma-extensions-layer'
+import { artboardLayerCreateService } from '../services/artboard/layer/create.service'
 import {
 	parseArtboardLayerSubmission,
 	parseArtboardLayerUpdateSubmission,
 } from './utils'
 
+async function validateSubmission({
+	userId,
+	formData,
+	schema,
+}: {
+	userId: string
+	formData: FormData
+	schema: typeof NewArtboardLayerSchema | typeof EditArtboardLayerNameSchema
+}) {
+	const newDesign = schema === NewArtboardLayerSchema
+	const submission = newDesign
+		? await parseArtboardLayerSubmission({ userId, formData, schema })
+		: await parseArtboardLayerUpdateSubmission({ userId, formData, schema })
+
+	if (submission.intent !== 'submit') {
+		return { response: notSubmissionResponse(submission), isValid: false }
+	}
+	if (!submission.value) {
+		return { response: submissionErrorResponse(submission), isValid: false }
+	}
+
+	return { submission, isValid: true }
+}
+
 export async function artboardLayerNewAction({
 	userId,
 	formData,
 }: IntentActionArgs) {
-	// validation
-	const submission = await parseArtboardLayerSubmission({
+	const { submission, isValid, response } = await validateSubmission({
 		userId,
 		formData,
 		schema: NewArtboardLayerSchema,
 	})
-	if (submission.intent !== 'submit') {
-		return notSubmissionResponse(submission)
-	}
-	if (!submission.value) {
-		return submissionErrorResponse(submission)
-	}
+	if (!isValid || !submission) return response
 
-	// changes
 	const { artboardId } = submission.value
-	// start transaction so we can create layer at the end of the list
-	try {
-		await prisma.$transaction(async prisma => {
-			// new layers are appended to the end of the list
-			// find the last layer in the list by type
-			// we know the artboard already exists for the user by this point
-			const lastArtboardLayer = await prisma.layer.findFirst({
-				where: { artboardId, nextId: null },
-			})
+	const { success, error } = await artboardLayerCreateService({
+		userId,
+		artboardId,
+	})
 
-			const artboardLayerCount = await prisma.layer.count({
-				where: { artboardId },
-			})
-			const name = `Layer ${artboardLayerCount + 1}`
+	if (error) return submissionErrorResponse(submission)
 
-			// create layer
-			const layer = await prisma.layer.create({
-				data: {
-					name,
-					ownerId: userId,
-					artboardId,
-				},
-			})
-
-			// if the artboard already has a layer
-			// link the new layer to the last one
-			// and the last one to the new one
-			if (lastArtboardLayer) {
-				await prisma.layer.update({
-					where: { id: layer.id },
-					data: { prevId: lastArtboardLayer.id },
-				})
-
-				await prisma.layer.update({
-					where: { id: lastArtboardLayer.id },
-					data: { nextId: layer.id },
-				})
-			}
-		})
-	} catch (error) {
-		console.log(error)
-		return submissionErrorResponse(submission)
-	}
-
-	return json({ status: 'success', submission } as const)
+	return json({ status: 'success', submission, success } as const)
 }
 
 export async function artboardLayerUpdateNameAction({
