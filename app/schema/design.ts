@@ -25,6 +25,9 @@ export const designSchema = z.object({
 	type: z.nativeEnum(DesignTypeEnum),
 	ownerId: z.string(),
 	artboardId: z.string().optional(),
+	layerId: z.string().optional(),
+	visible: z.boolean().optional(),
+	selected: z.boolean().optional(),
 }) satisfies z.Schema<Design>
 
 export const NewArtboardDesignSchema = z.object({

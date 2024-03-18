@@ -1,7 +1,19 @@
-import { type IDesignType } from '#app/models/design.server'
+import {
+	type IDesignWithPalette,
+	type IDesignType,
+	type IDesignWithType,
+	type IDesignWithSize,
+	type IDesignWithFill,
+	type IDesignWithStroke,
+	type IDesignWithLine,
+	type IDesignWithRotate,
+	type IDesignWithLayout,
+	type IDesignWithTemplate,
+	type IDesignsByType,
+} from '#app/models/design.server'
 import { type PickedArtboardType } from '#app/routes/sketch+/artboards+/$slug_+/queries'
 import { type ArtboardSelectedDesignsType } from '#app/schema/artboard'
-import { type designTypeEnum } from '#app/schema/design'
+import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import {
 	findFirstDesignIdInArray,
 	getNextDesignId,
@@ -9,28 +21,76 @@ import {
 	parseArtboardSelectedDesigns,
 } from './artboard'
 
-// this is bad, use the other one
-export const orderDesigns = (designs: IDesignType[]): IDesignType[] => {
-	// Use reduce to accumulate designs in order based on their prevId
-	return designs.reduce((acc: IDesignType[], design) => {
-		// Check if the design is the head of the list (has no prevId)
-		if (!design.prevId) {
-			// If it is the head, add it to the start of the accumulator array
-			acc.unshift(design)
-		} else {
-			// Find the index of the design's predecessor in the accumulator array
-			let currentDesignIndex = acc.findIndex(d => d.id === design.prevId)
-			if (currentDesignIndex !== -1) {
-				// If the predecessor is found, insert the current design right after it
-				acc.splice(currentDesignIndex + 1, 0, design)
-			} else {
-				// If the predecessor is not found, add the current design to the end of the accumulator array
-				acc.push(design)
-			}
-		}
-		// Return the updated accumulator array
-		return acc
-	}, []) // Initialize the accumulator array as empty
+export const filterAndOrderArtboardDesignsByType = ({
+	artboardDesigns,
+}: {
+	artboardDesigns: IDesignWithType[]
+}): IDesignsByType => {
+	const designPalettes = orderLinkedDesigns(
+		filterDesignsByType(artboardDesigns, 'palette'),
+	) as IDesignWithPalette[]
+	const designSizes = orderLinkedDesigns(
+		filterDesignsByType(artboardDesigns, 'size'),
+	) as IDesignWithSize[]
+	const designFills = orderLinkedDesigns(
+		filterDesignsByType(artboardDesigns, 'fill'),
+	) as IDesignWithFill[]
+	const designStrokes = orderLinkedDesigns(
+		filterDesignsByType(artboardDesigns, 'stroke'),
+	) as IDesignWithStroke[]
+	const designLines = orderLinkedDesigns(
+		filterDesignsByType(artboardDesigns, 'line'),
+	) as IDesignWithLine[]
+	const designRotates = orderLinkedDesigns(
+		filterDesignsByType(artboardDesigns, 'rotate'),
+	) as IDesignWithRotate[]
+	const designLayouts = orderLinkedDesigns(
+		filterDesignsByType(artboardDesigns, 'layout'),
+	) as IDesignWithLayout[]
+	const designTemplates = orderLinkedDesigns(
+		filterDesignsByType(artboardDesigns, 'template'),
+	) as IDesignWithTemplate[]
+
+	return {
+		designPalettes,
+		designSizes,
+		designFills,
+		designStrokes,
+		designLines,
+		designRotates,
+		designLayouts,
+		designTemplates,
+	}
+}
+
+export const filterDesignsByType = (
+	designs: IDesignWithType[],
+	type: designTypeEnum,
+): IDesignType[] => {
+	const typeToPropertyMap: {
+		[key in designTypeEnum]: keyof IDesignWithType | null
+	} = {
+		[DesignTypeEnum.PALETTE]: 'palette',
+		[DesignTypeEnum.SIZE]: 'size',
+		[DesignTypeEnum.FILL]: 'fill',
+		[DesignTypeEnum.STROKE]: 'stroke',
+		[DesignTypeEnum.LINE]: 'line',
+		[DesignTypeEnum.ROTATE]: 'rotate',
+		[DesignTypeEnum.LAYOUT]: 'layout',
+		[DesignTypeEnum.TEMPLATE]: 'template',
+	}
+
+	const property = typeToPropertyMap[type]
+
+	if (!property) {
+		return designs // Or throw an error if the type is not recognized
+	}
+
+	return designs
+		.filter(
+			design => design.type === type.toLowerCase() && design[property] !== null,
+		)
+		.map(design => ({ ...design, [property]: design[property] as any }))
 }
 
 export const orderLinkedDesigns = (designs: IDesignType[]): IDesignType[] => {

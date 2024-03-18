@@ -9,14 +9,7 @@ import {
 	type IDesignWithLayout,
 	type IDesignWithTemplate,
 } from '#app/models/design.server'
-import { type IFill } from '#app/models/fill.server'
-import { type ILayout } from '#app/models/layout.server'
-import { type ILine } from '#app/models/line.server'
-import { type IPalette } from '#app/models/palette.server'
-import { type IRotate } from '#app/models/rotate.server'
-import { type ISize } from '#app/models/size.server'
-import { type IStroke } from '#app/models/stroke.server'
-import { type ITemplate } from '#app/models/template.server'
+import { filterDesignsByType } from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboardBackgroundColor } from './panel-content-artboard-background-color'
 import { PanelContentArtboardDesignFill } from './panel-content-artboard-design-fill'
@@ -36,37 +29,38 @@ export const PanelContentArtboard = ({
 	artboard: PickedArtboardType
 	artboardDesigns: IDesignWithType[]
 }) => {
-	const designPalettes: IDesignWithPalette[] = artboardDesigns
-		.filter(design => design.type === 'palette' && design.palette !== null)
-		.map(design => ({ ...design, palette: design.palette as IPalette }))
-
-	const designSizes: IDesignWithSize[] = artboardDesigns
-		.filter(design => design.type === 'size' && design.size !== null)
-		.map(design => ({ ...design, size: design.size as ISize }))
-
-	const designFills: IDesignWithFill[] = artboardDesigns
-		.filter(design => design.type === 'fill' && design.fill !== null)
-		.map(design => ({ ...design, fill: design.fill as IFill }))
-
-	const designStrokes: IDesignWithStroke[] = artboardDesigns
-		.filter(design => design.type === 'stroke' && design.stroke !== null)
-		.map(design => ({ ...design, stroke: design.stroke as IStroke }))
-
-	const designLines: IDesignWithLine[] = artboardDesigns
-		.filter(design => design.type === 'line' && design.line !== null)
-		.map(design => ({ ...design, line: design.line as ILine }))
-
-	const designRotates: IDesignWithRotate[] = artboardDesigns
-		.filter(design => design.type === 'rotate' && design.rotate !== null)
-		.map(design => ({ ...design, rotate: design.rotate as IRotate }))
-
-	const designLayouts: IDesignWithLayout[] = artboardDesigns
-		.filter(design => design.type === 'layout' && design.layout !== null)
-		.map(design => ({ ...design, layout: design.layout as ILayout }))
-
-	const designTemplates: IDesignWithTemplate[] = artboardDesigns
-		.filter(design => design.type === 'template' && design.template !== null)
-		.map(design => ({ ...design, template: design.template as ITemplate }))
+	const designPalettes = filterDesignsByType(
+		artboardDesigns,
+		'palette',
+	) as IDesignWithPalette[]
+	const designSizes = filterDesignsByType(
+		artboardDesigns,
+		'size',
+	) as IDesignWithSize[]
+	const designFills = filterDesignsByType(
+		artboardDesigns,
+		'fill',
+	) as IDesignWithFill[]
+	const designStrokes = filterDesignsByType(
+		artboardDesigns,
+		'stroke',
+	) as IDesignWithStroke[]
+	const designLines = filterDesignsByType(
+		artboardDesigns,
+		'line',
+	) as IDesignWithLine[]
+	const designRotates = filterDesignsByType(
+		artboardDesigns,
+		'rotate',
+	) as IDesignWithRotate[]
+	const designLayouts = filterDesignsByType(
+		artboardDesigns,
+		'layout',
+	) as IDesignWithLayout[]
+	const designTemplates = filterDesignsByType(
+		artboardDesigns,
+		'template',
+	) as IDesignWithTemplate[]
 
 	return (
 		<div>

@@ -35,6 +35,17 @@ export interface IDesignWithType {
 	template: ITemplate | null
 }
 
+export interface IDesignsByType {
+	designPalettes: IDesignWithPalette[]
+	designSizes: IDesignWithSize[]
+	designFills: IDesignWithFill[]
+	designStrokes: IDesignWithStroke[]
+	designLines: IDesignWithLine[]
+	designRotates: IDesignWithRotate[]
+	designLayouts: IDesignWithLayout[]
+	designTemplates: IDesignWithTemplate[]
+}
+
 export interface IDesignWithPalette extends IDesignWithType {
 	palette: IPalette
 }
@@ -83,7 +94,7 @@ export const findManyDesignsWithType = async ({
 	where,
 }: {
 	where: whereArgsType
-}) => {
+}): Promise<IDesignWithType[]> => {
 	const designs = await prisma.design.findMany({
 		where,
 		include: {

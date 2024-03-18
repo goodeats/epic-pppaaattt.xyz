@@ -11,7 +11,6 @@ import {
 	SketchBody,
 	SketchBodyContent,
 } from '#app/components/shared'
-import { findManyDesignsWithType } from '#app/models/design.server'
 import { findManyLayers } from '#app/models/layer.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
@@ -74,7 +73,12 @@ import {
 import { CanvasContent } from './components/canvas-content'
 import { PanelContentLeft, PanelContentRight } from './components/panel-content'
 import { INTENT } from './intent'
-import { getArtboard, getArtboardBuild, getOwner } from './queries'
+import {
+	getArtboard,
+	getArtboardBuild,
+	getArtboardDesigns,
+	getOwner,
+} from './queries'
 
 export async function action({ request }: DataFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -217,9 +221,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 		where: { ownerId: userId, artboardId: artboard.id },
 	})
 
-	const artboardDesigns = await findManyDesignsWithType({
-		where: { artboardId: artboard.id },
-	})
+	const artboardDesigns = await getArtboardDesigns({ artboard })
 
 	const artboardBuild = await getArtboardBuild(artboard, layers)
 
