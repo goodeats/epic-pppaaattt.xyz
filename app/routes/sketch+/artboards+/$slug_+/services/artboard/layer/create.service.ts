@@ -1,7 +1,10 @@
 import { type User, type Artboard } from '@prisma/client'
-import { connectPrevAndNextLayersPromise } from '#app/models/layer.server'
+import {
+	connectPrevAndNextLayers,
+	findFirstLayer,
+} from '#app/models/layer.server'
 import { LayerDataCreateSchema } from '#app/schema/layer'
-import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
+import { prisma } from '#app/utils/db.server'
 import { artboardLayerCopyDesignsFromArtboardService } from './copy-designs-from-artboard.service'
 
 type artboardLayerCreateServiceProps = {
@@ -13,61 +16,31 @@ export const artboardLayerCreateService = async ({
 	userId,
 	artboardId,
 }: artboardLayerCreateServiceProps) => {
-	// initialize variable for created layer id
-	let createdLayerId: string | null = null
-
 	try {
-		await prisma.$transaction(async prisma => {
-			// initialize promises array to run in parallel at the end
-			const promises = []
-
-			// Step 1: find existing artboard layers tail
-			const tailLayer = await fetchArtboardLayersTail({
-				artboardId,
-				prisma,
-			})
-
-			// Step 2: create new layer
-			const newLayer = await createLayerPromise({
-				userId,
-				artboardId,
-				prisma,
-			})
-			promises.push(newLayer)
-
-			// Step 3: connect new layer to tail layer if it exists
-			if (tailLayer) {
-				promises.push(
-					...connectPrevAndNextLayersPromise({
-						prevId: tailLayer.id,
-						nextId: newLayer.id,
-						prisma,
-					}),
-				)
-			}
-
-			// Step 4: create new layer
-			const [createdLayer] = await Promise.all(promises)
-			console.log('createdLayer', createdLayer)
-			createdLayerId = createdLayer.id
-
-			// After layer is created
-
-			// Final Step: copy new layer designs from artboard
-			// await artboardLayerCopyDesignsFromArtboardService({
-			// 	userId,
-			// 	artboardId,
-			// 	layerId: createdLayer.id,
-			// })
+		// Step 1: find existing artboard layers tail
+		const tailLayer = await fetchArtboardLayersTail({
+			artboardId,
 		})
 
-		if (!createdLayerId) throw new Error('Layer was not created')
-		console.log('createdLayerId', createdLayerId)
+		// Step 2: create new layer
+		const createdLayer = await createLayer({
+			userId,
+			artboardId,
+		})
 
+		// Step 3: connect new layer to tail layer if it exists
+		if (tailLayer) {
+			await connectPrevAndNextLayers({
+				prevId: tailLayer.id,
+				nextId: createdLayer.id,
+			})
+		}
+
+		// Step 4: copy designs from artboard to created layer
 		await artboardLayerCopyDesignsFromArtboardService({
 			userId,
 			artboardId,
-			layerId: createdLayerId,
+			layerId: createdLayer.id,
 		})
 
 		return { success: true }
@@ -79,33 +52,41 @@ export const artboardLayerCreateService = async ({
 
 const fetchArtboardLayersTail = async ({
 	artboardId,
-	prisma,
 }: {
 	artboardId: Artboard['id']
-	prisma: PrismaTransactionType
 }) => {
-	return await prisma.layer.findFirst({
+	return await findFirstLayer({
 		where: { artboardId, nextId: null },
 	})
 }
 
-const createLayerPromise = async ({
+const createLayer = async ({
 	userId,
 	artboardId,
-	prisma,
 }: {
 	userId: User['id']
 	artboardId: Artboard['id']
-	prisma: PrismaTransactionType
 }) => {
-	const artboardLayerCount = await prisma.layer.count({
-		where: { artboardId },
-	})
-	const name = `Layer ${artboardLayerCount + 1}`
+	const name = createLayerName({ artboardId })
 	const data = LayerDataCreateSchema.parse({
 		name,
 		ownerId: userId,
 		artboardId,
 	})
-	return prisma.layer.create({ data })
+	const createdLayer = await prisma.layer.create({ data })
+
+	if (!createdLayer) throw new Error('Layer was not created')
+
+	return createdLayer
+}
+
+const createLayerName = async ({
+	artboardId,
+}: {
+	artboardId: Artboard['id']
+}) => {
+	const artboardLayerCount = await prisma.layer.count({
+		where: { artboardId },
+	})
+	return `Layer ${artboardLayerCount + 1}`
 }

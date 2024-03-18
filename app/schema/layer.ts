@@ -50,10 +50,13 @@ const selectArgs = z.object({
 })
 
 export type whereArgsType = z.infer<typeof whereArgs>
+const zodStringOrNull = z.union([z.string(), z.null()])
 const whereArgs = z.object({
 	id: z.string().optional(),
 	ownerId: z.string().optional(),
 	artboardId: z.string().optional(),
+	prevId: zodStringOrNull.optional(),
+	nextId: zodStringOrNull.optional(),
 })
 
 export type findLayerArgsType = z.infer<typeof findLayerArgs>
