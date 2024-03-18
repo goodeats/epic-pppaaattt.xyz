@@ -66,20 +66,24 @@ const getSelectedDesignsForArtboard = async ({
 }): Promise<IArtboardLayerBuild> => {
 	const designs = await getDesigns({ artboardId, ids: designIds })
 	const palette = findPaletteInDesignArray({ designs })
-	if (!palette) throw new Error('Palette not found')
 	const size = findSizeInDesignArray({ designs })
-	if (!size) throw new Error('Size not found')
 	const fill = findFillInDesignArray({ designs })
-	if (!fill) throw new Error('Fill not found')
 	const stroke = findStrokeInDesignArray({ designs })
-	if (!stroke) throw new Error('Stroke not found')
 	const line = findLineInDesignArray({ designs })
-	if (!line) throw new Error('Line not found')
 	const rotate = findRotateInDesignArray({ designs })
-	if (!rotate) throw new Error('Rotate not found')
 	const layout = findLayoutInDesignArray({ designs })
-	if (!layout) throw new Error('Layout not found')
 	const template = findTemplateInDesignArray({ designs })
+
+	// when the artboard build model is formalized
+	// these can just be verified as joins
+	// not the prettiest code, but this works for now
+	if (!palette) throw new Error('Palette not found')
+	if (!size) throw new Error('Size not found')
+	if (!fill) throw new Error('Fill not found')
+	if (!stroke) throw new Error('Stroke not found')
+	if (!line) throw new Error('Line not found')
+	if (!rotate) throw new Error('Rotate not found')
+	if (!layout) throw new Error('Layout not found')
 	if (!template) throw new Error('Template not found')
 
 	const { width, height } = artboard
