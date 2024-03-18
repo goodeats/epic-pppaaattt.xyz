@@ -134,10 +134,9 @@ export const getTransactionDesign = async ({
 	id: string
 	prisma: PrismaTransactionType
 }) => {
-	const design = await prisma.design.findFirst({
-		where: { id },
-		include: { palette: true },
-	})
+	const designPromise = findDesignTransactionPromise({ id, prisma })
+	const design = await designPromise
+
 	// prevent any pending promises in the transaction
 	if (!design) throw new Error(`Design not found: ${id}`)
 

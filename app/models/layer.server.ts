@@ -57,6 +57,35 @@ export const findLayerByIdAndOwner = async ({
 	return await findFirstLayer({ where, select })
 }
 
+// only use in transactions
+export const getTransactionLayer = async ({
+	id,
+	prisma,
+}: {
+	id: string
+	prisma: PrismaTransactionType
+}) => {
+	const layerPromise = findLayerTransactionPromise({ id, prisma })
+	const layer = await layerPromise
+
+	// prevent any pending promises in the transaction
+	if (!layer) throw new Error(`Layer not found: ${id}`)
+
+	return layer
+}
+
+export const findLayerTransactionPromise = ({
+	id,
+	prisma,
+}: {
+	id: string
+	prisma: PrismaTransactionType
+}) => {
+	return prisma.layer.findFirst({
+		where: { id },
+	})
+}
+
 export const connectPrevAndNextLayersPromise = ({
 	prevId,
 	nextId,

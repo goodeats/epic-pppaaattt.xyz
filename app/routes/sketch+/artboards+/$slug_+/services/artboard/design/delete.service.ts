@@ -70,8 +70,6 @@ export const artboardDesignDeleteService = async ({
 			await Promise.all(updateOperations)
 		})
 
-		console.log('Design deleted successfully')
-
 		return { success: true }
 	} catch (error) {
 		console.log(error)
