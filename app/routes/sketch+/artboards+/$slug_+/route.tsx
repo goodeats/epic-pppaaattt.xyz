@@ -13,7 +13,6 @@ import {
 } from '#app/components/shared'
 import { findManyLayers } from '#app/models/layer.server'
 import { requireUserId } from '#app/utils/auth.server'
-import { validateCSRF } from '#app/utils/csrf.server'
 import {
 	artboardDesignDeleteAction,
 	artboardDesignNewAction,
@@ -83,7 +82,8 @@ import {
 export async function action({ request }: DataFunctionArgs) {
 	const userId = await requireUserId(request)
 	const formData = await request.formData()
-	await validateCSRF(formData, request.headers)
+	// TODO: remove these since this is all run inside the app
+	// await validateCSRF(formData, request.headers)
 
 	const actionArgs = { request, userId, formData }
 	const intent = formData.get('intent')

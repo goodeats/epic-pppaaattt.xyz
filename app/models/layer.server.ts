@@ -108,21 +108,34 @@ export const connectPrevAndNextLayersPromise = ({
 	]
 }
 
-export const connectPrevAndNextLayers = async ({
+export const connectPrevAndNextLayers = ({
 	prevId,
 	nextId,
 }: {
 	prevId: ILayer['id']
 	nextId: ILayer['id']
 }) => {
-	return await prisma.$transaction([
-		prisma.layer.update({
-			where: { id: prevId },
-			data: { nextId },
-		}),
-		prisma.layer.update({
-			where: { id: nextId },
-			data: { prevId },
-		}),
-	])
+	const connectNextToPrev = prisma.layer.update({
+		where: { id: prevId },
+		data: { nextId },
+	})
+	const connectPrevToNext = prisma.layer.update({
+		where: { id: nextId },
+		data: { prevId },
+	})
+	return [connectNextToPrev, connectPrevToNext]
+}
+
+export const updateLayerToHead = ({ id }: { id: ILayer['id'] }) => {
+	return prisma.layer.update({
+		where: { id },
+		data: { prevId: null },
+	})
+}
+
+export const updateLayerToTail = ({ id }: { id: ILayer['id'] }) => {
+	return prisma.layer.update({
+		where: { id },
+		data: { nextId: null },
+	})
 }

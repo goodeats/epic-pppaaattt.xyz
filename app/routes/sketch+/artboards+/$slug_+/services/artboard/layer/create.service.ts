@@ -28,10 +28,11 @@ export const artboardLayerCreateService = async ({
 
 		// Step 3: connect new layer to tail layer if it exists
 		if (tailLayer) {
-			await connectPrevAndNextLayers({
+			const connectLayersPromise = connectPrevAndNextLayers({
 				prevId: tailLayer.id,
 				nextId: createdLayer.id,
 			})
+			await prisma.$transaction(connectLayersPromise)
 		}
 
 		// Step 4: copy designs from artboard to created layer
@@ -65,7 +66,7 @@ const createLayer = async ({
 	userId: User['id']
 	artboardId: Artboard['id']
 }) => {
-	const name = createLayerName({ artboardId })
+	const name = await createLayerName({ artboardId })
 	const data = LayerDataCreateSchema.parse({
 		name,
 		ownerId: userId,

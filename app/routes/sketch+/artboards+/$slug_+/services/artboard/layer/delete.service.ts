@@ -1,9 +1,11 @@
 import { type User, type Layer, type Artboard } from '@prisma/client'
 import {
-	connectPrevAndNextLayersPromise,
 	findFirstLayer,
+	connectPrevAndNextLayers,
+	updateLayerToHead,
+	updateLayerToTail,
 } from '#app/models/layer.server'
-import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
+import { prisma } from '#app/utils/db.server'
 
 export const artboardLayerDeleteService = async ({
 	userId,
@@ -28,32 +30,18 @@ export const artboardLayerDeleteService = async ({
 			layer,
 		})
 
-		await prisma.$transaction(async prisma => {
-			// initialize promises array to run in parallel at the end
-			const promises = []
+		// Step 3: delete layer
+		const deleteLayerPromise = deleteLayer({ id })
 
-			// Step 3: delete layer
-			// this should be first to avoid foreign key unique constraint errors
-			promises.push(
-				deleteLayerPromise({
-					id,
-					prisma,
-				}),
-			)
-
-			// Step 4: update next/prev layers if they exist
-			const layersPromises = layerUpdatePromises({
-				nextId,
-				nextLayer,
-				prevId,
-				prevLayer,
-				prisma,
-			})
-			promises.push(...layersPromises)
-
-			// Final Step: Execute all update operations in parallel
-			await Promise.all(promises)
+		// Step 4: update next/prev layers if they exist
+		const updateLayerNodesPromises = updateLayerNodes({
+			nextId,
+			nextLayer,
+			prevId,
+			prevLayer,
 		})
+
+		await prisma.$transaction([deleteLayerPromise, ...updateLayerNodesPromises])
 
 		return { success: true }
 	} catch (error) {
@@ -104,73 +92,43 @@ const getAdjacentLayers = async ({
 	return { nextLayer, prevLayer }
 }
 
-// Delete layer (this needs to happen before we can update the next/prev layers)
-const deleteLayerPromise = ({
-	id,
-	prisma,
-}: {
-	id: string
-	prisma: PrismaTransactionType
-}) => {
+const deleteLayer = ({ id }: { id: Layer['id'] }) => {
 	return prisma.layer.delete({
 		where: { id },
 	})
 }
 
 // maintain linked list integrity
-const layerUpdatePromises = ({
+const updateLayerNodes = ({
 	nextId,
 	nextLayer,
 	prevId,
 	prevLayer,
-	prisma,
 }: {
 	nextId: string | null
 	nextLayer: Layer | null
 	prevId: string | null
 	prevLayer: Layer | null
-	prisma: PrismaTransactionType
 }) => {
-	const layersPromises = []
+	const updateLayerNodesPromises = []
 
 	if (!prevId && nextId && nextLayer) {
 		// If head, remove prevId from next layer, becomes head
-		layersPromises.push(removePrevIdFromNextLayer({ nextId, prisma }))
-	} else if (prevId && !nextId && prevLayer) {
+		const nextLayerToHeadPromise = updateLayerToHead({ id: nextId })
+		updateLayerNodesPromises.push(nextLayerToHeadPromise)
+	} else if (!nextId && prevId && prevLayer) {
 		// If tail, remove nextId from prev layer, becomes tail
-		layersPromises.push(removeNextIdFromPrevLayer({ prevId, prisma }))
+		const prevLayerToTailPromise = updateLayerToTail({ id: prevId })
+		updateLayerNodesPromises.push(prevLayerToTailPromise)
 	} else if (prevId && nextId && prevLayer && nextLayer) {
 		// If in middle, connect prev and next layers directly
-		layersPromises.push(
-			...connectPrevAndNextLayersPromise({ prevId, nextId, prisma }),
-		)
+		const connectLayersPromise = connectPrevAndNextLayers({
+			prevId,
+			nextId,
+		})
+
+		updateLayerNodesPromises.push(...connectLayersPromise)
 	}
 
-	return layersPromises
-}
-
-const removePrevIdFromNextLayer = ({
-	nextId,
-	prisma,
-}: {
-	nextId: string
-	prisma: PrismaTransactionType
-}) => {
-	return prisma.layer.update({
-		where: { id: nextId },
-		data: { prevId: null },
-	})
-}
-
-const removeNextIdFromPrevLayer = ({
-	prevId,
-	prisma,
-}: {
-	prevId: string
-	prisma: PrismaTransactionType
-}) => {
-	return prisma.layer.update({
-		where: { id: prevId },
-		data: { nextId: null },
-	})
+	return updateLayerNodesPromises
 }
