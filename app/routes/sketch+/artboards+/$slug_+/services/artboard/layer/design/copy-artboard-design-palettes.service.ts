@@ -7,7 +7,7 @@ import { type IPaletteCreateOverrides } from '#app/models/palette.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import { layerDesignCreateService } from '../../../layer/design/create.service'
 
-export const artboardLayerCopyDesignPalettesFromArtboardService = async ({
+export const artboardLayerCopyArtboardDesignPalettesService = async ({
 	userId,
 	layer,
 	designs,

@@ -5,7 +5,7 @@ import {
 } from '#app/models/layer.server'
 import { LayerDataCreateSchema } from '#app/schema/layer'
 import { prisma } from '#app/utils/db.server'
-import { artboardLayerCopyDesignsFromArtboardService } from './copy-designs-from-artboard.service'
+import { artboardLayerCopyArtboardDesignsService } from './copy-artboard-designs.service'
 
 export const artboardLayerCreateService = async ({
 	userId,
@@ -36,7 +36,7 @@ export const artboardLayerCreateService = async ({
 		}
 
 		// Step 4: copy designs from artboard to created layer
-		await artboardLayerCopyDesignsFromArtboardService({
+		await artboardLayerCopyArtboardDesignsService({
 			userId,
 			artboardId,
 			layerId: createdLayer.id,
