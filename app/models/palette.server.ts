@@ -10,6 +10,12 @@ export interface IPalette {
 	designId: string
 }
 
+export interface IPaletteCreateOverrides {
+	format?: string
+	value?: string
+	opacity?: number
+}
+
 export const findPaletteInDesignArray = ({
 	designs,
 }: {

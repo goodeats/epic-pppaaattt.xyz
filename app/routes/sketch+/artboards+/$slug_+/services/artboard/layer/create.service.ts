@@ -16,7 +16,7 @@ export const artboardLayerCreateService = async ({
 }) => {
 	try {
 		// Step 1: find existing artboard layers tail
-		const tailLayer = await fetchArtboardLayersTail({
+		const tailLayer = await getArtboardLayersTail({
 			artboardId,
 		})
 
@@ -44,12 +44,12 @@ export const artboardLayerCreateService = async ({
 
 		return { success: true }
 	} catch (error) {
-		console.log(error)
+		console.log('artboardLayerCreateService error', error)
 		return { error: true }
 	}
 }
 
-const fetchArtboardLayersTail = async ({
+const getArtboardLayersTail = async ({
 	artboardId,
 }: {
 	artboardId: Artboard['id']

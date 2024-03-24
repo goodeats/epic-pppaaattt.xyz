@@ -3,9 +3,11 @@ import {
 	type selectArgsType,
 	type findDesignArgsType,
 	type whereArgsType,
+	type designTypeEnum,
 } from '#app/schema/design'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 import { type IFill } from './fill.server'
+import { type ILayer } from './layer.server'
 import { type ILayout } from './layout.server'
 import { type ILine } from './line.server'
 import { type IPalette } from './palette.server'
@@ -15,10 +17,16 @@ import { type IStroke } from './stroke.server'
 import { type ITemplate } from './template.server'
 
 export interface IDesign extends Design {}
+
+export interface IDesignCreateOverrides {
+	visible?: boolean
+	selected?: boolean
+}
 export interface IDesignWithType {
 	id: string
 	type: string
 	visible: boolean
+	selected: boolean
 	createdAt: Date | string
 	nextId: string | null
 	prevId: string | null
@@ -185,4 +193,42 @@ export const connectPrevAndNextDesignsPromise = ({
 			data: { prevId },
 		}),
 	]
+}
+
+export const connectPrevAndNextDesigns = ({
+	prevId,
+	nextId,
+}: {
+	prevId: IDesign['id']
+	nextId: IDesign['id']
+}) => {
+	const connectNextToPrev = prisma.design.update({
+		where: { id: prevId },
+		data: { nextId },
+	})
+	const connectPrevToNext = prisma.design.update({
+		where: { id: nextId },
+		data: { prevId },
+	})
+	return [connectNextToPrev, connectPrevToNext]
+}
+
+export const updateLayerSelectedDesign = ({
+	layerId,
+	designId,
+	type,
+}: {
+	layerId: ILayer['id']
+	designId: Design['id']
+	type: designTypeEnum
+}) => {
+	const unselectDesign = prisma.design.updateMany({
+		where: { layerId, type, selected: true },
+		data: { selected: false },
+	})
+	const selectDesign = prisma.design.update({
+		where: { id: designId },
+		data: { selected: true },
+	})
+	return [unselectDesign, selectDesign]
 }

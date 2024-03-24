@@ -1,83 +1,72 @@
 import { type User, type Design, type Layer } from '@prisma/client'
-import { connectPrevAndNextDesignsPromise } from '#app/models/design.server'
-import { designSchema, type designTypeEnum } from '#app/schema/design'
-import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
+import {
+	type IDesignCreateOverrides,
+	findFirstDesign,
+	connectPrevAndNextDesigns,
+	updateLayerSelectedDesign,
+} from '#app/models/design.server'
+import { type IPaletteCreateOverrides } from '#app/models/palette.server'
+import {
+	LayerDesignDataCreateSchema,
+	type designTypeEnum,
+} from '#app/schema/design'
+import { prisma } from '#app/utils/db.server'
 
 type layerDesignCreateServiceProps = {
 	userId: User['id']
 	layerId: Layer['id']
 	type: designTypeEnum
-	visibleDesignsCount: number
-	designOptions?: {
-		visible: boolean
-	}
-	designTypeOptions?: {
-		[key: string]: any
-	}
+	designOverrides?: IDesignCreateOverrides
+	designTypeOverrides?: IPaletteCreateOverrides
 }
 
 export const layerDesignCreateService = async ({
 	userId,
 	layerId,
 	type,
-	visibleDesignsCount,
-	designOptions,
-	designTypeOptions,
+	designOverrides = {},
+	designTypeOverrides = {},
 }: layerDesignCreateServiceProps) => {
 	try {
-		await prisma.$transaction(async prisma => {
-			// initialize promises array to run in parallel at the end
-			const promises = []
-
-			// Step 1: find existing layer designs tail
-			const tailDesign = await fetchLayerDesignTypeTail({
-				layerId,
-				type,
-				prisma,
-			})
-
-			// Step 2: create design before its associated type
-			const design = await createDesign({
-				userId,
-				layerId,
-				type,
-				designOptions,
-				prisma,
-			})
-
-			// Step 3: create the associated type
-			await createDesignType({
-				designId: design.id,
-				type,
-				designTypeOptions,
-				prisma,
-			})
-
-			// Step 4: connect new design to tail design if it exists
-			if (tailDesign) {
-				promises.push(
-					...connectPrevAndNextDesignsPromise({
-						prevId: tailDesign.id,
-						nextId: design.id,
-						prisma,
-					}),
-				)
-			}
-
-			// if there are no visible designs, set the new design as selected
-			if (visibleDesignsCount === 0) {
-				const updateSelectedPromise = updateDesignToSelected({
-					layerId,
-					design,
-					type,
-					prisma,
-				})
-				promises.push(updateSelectedPromise)
-			}
-
-			// Execute all update operations in parallel
-			await Promise.all(promises)
+		// Step 1: find existing layer designs tail
+		const tailDesign = await getLayerDesignsTail({
+			layerId,
+			type,
 		})
+
+		// Step 2: create design before its associated type
+		const createdDesign = await createDesign({
+			userId,
+			layerId,
+			type,
+			designOverrides,
+		})
+
+		// Step 3: create the associated design type
+		await createDesignType({
+			designId: createdDesign.id,
+			type,
+			designTypeOverrides,
+		})
+
+		// Step 4: connect new design to tail design, if it exists
+		if (tailDesign) {
+			const connectDesignsPromise = connectPrevAndNextDesigns({
+				prevId: tailDesign.id,
+				nextId: createdDesign.id,
+			})
+			await prisma.$transaction(connectDesignsPromise)
+		}
+
+		// Step 5: update selected design, if selected
+		if (designOverrides.selected) {
+			const updateSelectedDesignPromise = updateLayerSelectedDesign({
+				layerId,
+				designId: createdDesign.id,
+				type,
+			})
+			await prisma.$transaction(updateSelectedDesignPromise)
+		}
 
 		return { success: true }
 	} catch (error) {
@@ -86,16 +75,14 @@ export const layerDesignCreateService = async ({
 	}
 }
 
-const fetchLayerDesignTypeTail = async ({
+const getLayerDesignsTail = async ({
 	layerId,
 	type,
-	prisma,
 }: {
 	layerId: Layer['id']
 	type: designTypeEnum
-	prisma: PrismaTransactionType
 }) => {
-	return await prisma.design.findFirst({
+	return await findFirstDesign({
 		where: { type, layerId, nextId: null },
 	})
 }
@@ -104,48 +91,43 @@ const createDesign = async ({
 	userId,
 	layerId,
 	type,
-	designOptions,
-	prisma,
+	designOverrides,
 }: {
 	userId: User['id']
 	layerId: Layer['id']
 	type: designTypeEnum
-	designOptions?: {
-		visible: boolean
-	}
-	prisma: PrismaTransactionType
+	designOverrides?: IDesignCreateOverrides
 }) => {
-	// validate the design type is valid
-	const data = designSchema.parse({
+	const data = LayerDesignDataCreateSchema.parse({
 		type,
 		ownerId: userId,
 		layerId,
-		...designOptions,
+		...designOverrides,
 	})
-	return await prisma.design.create({ data })
+	const createdDesign = await prisma.design.create({ data })
+
+	if (!createdDesign) throw new Error('Design was not created')
+
+	return createdDesign
 }
 
 const createDesignType = async ({
 	designId,
 	type,
-	designTypeOptions,
-	prisma,
+	designTypeOverrides,
 }: {
 	designId: Design['id']
 	type: designTypeEnum
-	designTypeOptions?: {
-		visible?: boolean
-	}
-	prisma: PrismaTransactionType
+	designTypeOverrides?: IPaletteCreateOverrides
 }) => {
-	const data = { designId, ...designTypeOptions }
+	const data = { designId, ...designTypeOverrides }
 
 	// each design type has a default value set in the schema
 	switch (type) {
 		case 'palette':
 			return await prisma.palette.create({ data })
 		case 'size':
-			return await prisma.size.create({ data })
+		// return await prisma.size.create({ data })
 		case 'fill':
 			return await prisma.fill.create({ data })
 		case 'stroke':
@@ -159,24 +141,4 @@ const createDesignType = async ({
 		case 'template':
 			return await prisma.template.create({ data })
 	}
-}
-
-const updateDesignToSelected = ({
-	layerId,
-	design,
-	type,
-	prisma,
-}: {
-	layerId: Layer['id']
-	design: Design
-	type: designTypeEnum
-	prisma: PrismaTransactionType
-}) => {
-	// ensure no current selected design for type
-	return prisma.design.update({
-		where: { id: design.id },
-		data: {
-			selected: true,
-		},
-	})
 }

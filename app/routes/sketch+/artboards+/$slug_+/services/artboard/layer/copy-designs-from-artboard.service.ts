@@ -1,13 +1,12 @@
 import { type Layer, type Artboard, type User } from '@prisma/client'
 import { findFirstArtboard } from '#app/models/artboard.server'
 import {
-	type IDesignWithPalette,
 	findManyDesignsWithType,
 	type IDesignsByType,
 } from '#app/models/design.server'
 import { findFirstLayer } from '#app/models/layer.server'
-import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
+import { artboardLayerCopyDesignPalettesFromArtboardService } from './design/copy-design-palettes-from-artboard.service'
 
 type artboardLayerCopyDesignsFromArtboardServiceProps = {
 	userId: User['id']
@@ -37,12 +36,11 @@ export const artboardLayerCopyDesignsFromArtboardService = async ({
 			artboardDesigns,
 		})
 
-		// Step 4: create new layer designs
-		await createLayerDesigns({
+		// Step 4: create new layer designs for each type
+		await createLayerDesignTypes({
 			userId,
 			layer,
 			artboardDesignsByType,
-			prisma,
 		})
 
 		return { success: true }
@@ -84,16 +82,14 @@ const getArtboard = async ({
 	return artboard
 }
 
-const createLayerDesigns = async ({
+const createLayerDesignTypes = async ({
 	userId,
 	layer,
 	artboardDesignsByType,
-	prisma,
 }: {
 	userId: User['id']
 	layer: Layer
 	artboardDesignsByType: IDesignsByType
-	prisma: PrismaTransactionType
 }) => {
 	const {
 		designPalettes,
@@ -106,32 +102,9 @@ const createLayerDesigns = async ({
 		// designTemplates,
 	} = artboardDesignsByType
 
-	await copyPaletteDesignsFromArtboard({
+	await artboardLayerCopyDesignPalettesFromArtboardService({
 		userId,
 		layer,
 		designs: designPalettes,
-		prisma,
 	})
-}
-
-const copyPaletteDesignsFromArtboard = async ({
-	userId,
-	layer,
-	designs,
-	prisma,
-}: {
-	userId: User['id']
-	layer: Layer
-	designs: IDesignWithPalette[]
-	prisma: PrismaTransactionType
-}) => {
-	console.log('copyPaletteDesignsFromArtboard', designs)
-	// for (const design of designs) {
-	//   const data = {
-	//     ...design,
-	//     artboardId,
-	//     layerId,
-	//   }
-	//   const createDesignPromise = prisma.design.create({ data })
-	// }
 }
