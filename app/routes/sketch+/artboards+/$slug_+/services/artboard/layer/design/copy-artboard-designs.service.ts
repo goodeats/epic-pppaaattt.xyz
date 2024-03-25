@@ -6,14 +6,14 @@ import {
 } from '#app/models/design.server'
 import { findFirstLayer } from '#app/models/layer.server'
 import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
-import { artboardLayerCopyArtboardDesignFillsService } from './design/copy-artboard-design-fills.service'
-import { artboardLayerCopyArtboardDesignLayoutsService } from './design/copy-artboard-design-layouts.service'
-import { artboardLayerCopyArtboardDesignLinesService } from './design/copy-artboard-design-lines.service'
-import { artboardLayerCopyArtboardDesignPalettesService } from './design/copy-artboard-design-palettes.service'
-import { artboardLayerCopyArtboardDesignRotatesService } from './design/copy-artboard-design-rotates.service'
-import { artboardLayerCopyArtboardDesignSizesService } from './design/copy-artboard-design-sizes.service'
-import { artboardLayerCopyArtboardDesignStrokesService } from './design/copy-artboard-design-strokes.service'
-import { artboardLayerCopyArtboardDesignTemplatesService } from './design/copy-artboard-design-templates.service'
+import { artboardLayerCopyArtboardDesignFillsService } from './copy-artboard-design-fills.service'
+import { artboardLayerCopyArtboardDesignLayoutsService } from './copy-artboard-design-layouts.service'
+import { artboardLayerCopyArtboardDesignLinesService } from './copy-artboard-design-lines.service'
+import { artboardLayerCopyArtboardDesignPalettesService } from './copy-artboard-design-palettes.service'
+import { artboardLayerCopyArtboardDesignRotatesService } from './copy-artboard-design-rotates.service'
+import { artboardLayerCopyArtboardDesignSizesService } from './copy-artboard-design-sizes.service'
+import { artboardLayerCopyArtboardDesignStrokesService } from './copy-artboard-design-strokes.service'
+import { artboardLayerCopyArtboardDesignTemplatesService } from './copy-artboard-design-templates.service'
 
 export const artboardLayerCopyArtboardDesignsService = async ({
 	userId,

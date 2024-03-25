@@ -5,7 +5,7 @@ import {
 } from '#app/models/layer.server'
 import { LayerDataCreateSchema } from '#app/schema/layer'
 import { prisma } from '#app/utils/db.server'
-import { artboardLayerCopyArtboardDesignsService } from './copy-artboard-designs.service'
+import { artboardLayerCopyArtboardDesignsService } from './design/copy-artboard-designs.service'
 
 export const artboardLayerCreateService = async ({
 	userId,

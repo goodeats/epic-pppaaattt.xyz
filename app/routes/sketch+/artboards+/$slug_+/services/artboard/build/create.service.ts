@@ -64,7 +64,7 @@ const getSelectedDesignsForArtboard = async ({
 	designIds: string[]
 	artboard: PickedArtboardType
 }): Promise<IArtboardLayerBuild> => {
-	const designs = await getDesigns({ artboardId, ids: designIds })
+	const designs = await getArtboardDesigns({ artboardId, ids: designIds })
 	const palette = findPaletteInDesignArray({ designs })
 	const size = findSizeInDesignArray({ designs })
 	const fill = findFillInDesignArray({ designs })
@@ -108,14 +108,16 @@ const getSelectedDesignsForArtboard = async ({
 	}
 }
 
-const getDesigns = async ({
+const getArtboardDesigns = async ({
 	artboardId,
 	ids,
 }: {
 	artboardId: string
 	ids: string[]
 }) => {
-	return findManyDesignsWithType({ where: { artboardId, id: { in: ids } } })
+	return await findManyDesignsWithType({
+		where: { artboardId, id: { in: ids } },
+	})
 }
 
 const getSelectedDesignTypesForLayers = async ({
@@ -125,8 +127,46 @@ const getSelectedDesignTypesForLayers = async ({
 	layers: ILayer[]
 	artboardSelectedDesigns: IArtboardLayerBuild
 }) => {
-	return layers.map(layer => {
-		// just return the artboard designs until they are used on layer
-		return artboardSelectedDesigns
+	return await Promise.all(
+		layers.map(layer =>
+			getSelectedDesignTypesForLayer({ layer, artboardSelectedDesigns }),
+		),
+	)
+}
+
+const getSelectedDesignTypesForLayer = async ({
+	layer,
+	artboardSelectedDesigns,
+}: {
+	layer: ILayer
+	artboardSelectedDesigns: IArtboardLayerBuild
+}): Promise<IArtboardLayerBuild> => {
+	const result = { ...artboardSelectedDesigns }
+
+	const designs = await getLayerSelectedDesigns({ layer })
+	const palette = findPaletteInDesignArray({ designs })
+	const size = findSizeInDesignArray({ designs })
+	const fill = findFillInDesignArray({ designs })
+	const stroke = findStrokeInDesignArray({ designs })
+	const line = findLineInDesignArray({ designs })
+	const rotate = findRotateInDesignArray({ designs })
+	const layout = findLayoutInDesignArray({ designs })
+	const template = findTemplateInDesignArray({ designs })
+
+	if (palette) result.palette = palette
+	if (size) result.size = size
+	if (fill) result.fill = fill
+	if (stroke) result.stroke = stroke
+	if (line) result.line = line
+	if (rotate) result.rotate = rotate
+	if (layout) result.layout = layout
+	if (template) result.template = template
+
+	return result
+}
+
+const getLayerSelectedDesigns = async ({ layer }: { layer: ILayer }) => {
+	return await findManyDesignsWithType({
+		where: { layerId: layer.id, selected: true },
 	})
 }
