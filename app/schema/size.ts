@@ -7,6 +7,13 @@ export const SizeDataSchema = z.object({
 	basis: z.string().optional(),
 })
 
+export const EditDesignSizeValueSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	// assuming percentage format is fixed for now
+	value: z.number().min(1).max(1000),
+})
+
 export const EditArtboardSizeSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

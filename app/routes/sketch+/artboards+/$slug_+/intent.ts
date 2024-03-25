@@ -68,6 +68,10 @@ export const DESIGN_PALETTE_INTENT = {
 	updateDesignPaletteValue: 'update-design-palette-value' as const,
 }
 
+export const DESIGN_SIZE_INTENT = {
+	updateDesignSizeValue: 'update-design-size-value' as const,
+}
+
 export const DESIGN_LAYOUT_INTENT = {
 	updateDesignLayoutStyle: 'update-design-layout-style' as const,
 	updateDesignLayoutCount: 'update-design-layout-count' as const,

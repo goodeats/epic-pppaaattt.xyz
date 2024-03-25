@@ -3,6 +3,7 @@ import { requireUserId } from '#app/utils/auth.server'
 import {
 	DESIGN_LAYOUT_INTENT,
 	DESIGN_PALETTE_INTENT,
+	DESIGN_SIZE_INTENT,
 	INTENT,
 	LAYER_DESIGN_INTENT,
 } from '../intent'
@@ -63,6 +64,7 @@ import {
 	designLayoutEditStyleAction,
 } from './design-layout'
 import { designPaletteEditValueAction } from './design-palette'
+import { designSizeEditValueAction } from './design-size'
 import {
 	layerDesignDeleteAction,
 	layerDesignNewAction,
@@ -209,6 +211,10 @@ export async function action({ request }: DataFunctionArgs) {
 		// PALETTE DESIGN INTENTS
 		case DESIGN_PALETTE_INTENT.updateDesignPaletteValue: {
 			return designPaletteEditValueAction(actionArgs)
+		}
+		// SIZE DESIGN INTENTS
+		case DESIGN_SIZE_INTENT.updateDesignSizeValue: {
+			return designSizeEditValueAction(actionArgs)
 		}
 		// LAYOUT DESIGN INTENTS
 		case DESIGN_LAYOUT_INTENT.updateDesignLayoutStyle: {

@@ -2,6 +2,7 @@ import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { PanelContentLayerDesignLayout } from './design/panel-content-layer-design-layout'
 import { PanelContentLayerDesignPalette } from './design/panel-content-layer-design-palette'
+import { PanelContentLayerDesignSize } from './design/panel-content-layer-design-size'
 
 export const PanelContentLayerDesigns = ({
 	layer,
@@ -12,7 +13,7 @@ export const PanelContentLayerDesigns = ({
 }) => {
 	const {
 		designPalettes,
-		// designSizes,
+		designSizes,
 		// designFills,
 		// designStrokes,
 		// designLines,
@@ -32,10 +33,7 @@ export const PanelContentLayerDesigns = ({
 				layer={layer}
 				designPalettes={designPalettes}
 			/>
-			{/* <PanelContentArtboardDesignSize
-				artboard={artboard}
-				designSizes={designSizes}
-			/> */}
+			<PanelContentLayerDesignSize layer={layer} designSizes={designSizes} />
 			{/* <PanelContentArtboardDesignFill
 				artboard={artboard}
 				designFills={designFills}
