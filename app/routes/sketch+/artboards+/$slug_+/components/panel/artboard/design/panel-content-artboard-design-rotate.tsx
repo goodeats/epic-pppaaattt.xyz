@@ -8,27 +8,28 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
-import { type IDesignWithPalette } from '#app/models/design.server'
+import { Input } from '#app/components/ui/input'
+import { type IDesignWithRotate } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
 	panelItemVariablesDesignType,
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
-import { PanelFormArtboardDesignEditPalette } from './panel-form-artboard-design-edit-palette'
-import { PanelFormArtboardDesignNew } from './panel-form-artboard-design-new'
-import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
-import { PanelPopoverArtboardDesignPalette } from './panel-popover-artboard-design-palette'
+import { type PickedArtboardType } from '../../../../queries'
+import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
+import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
+import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
+import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
+import { PanelFormDesignRotateEditRotation } from '../../../forms/design/panel-form-design-rotate-edit-rotation'
+import { PanelPopoverDesignRotate } from '../../../popovers/design/panel-popover-design-rotate'
 
-export const PanelContentArtboardDesignPalette = ({
+export const PanelContentArtboardDesignRotate = ({
 	artboard,
-	designPalettes,
+	designRotates,
 }: {
 	artboard: PickedArtboardType
-	designPalettes: IDesignWithPalette[]
+	designRotates: IDesignWithRotate[]
 }) => {
 	const {
 		orderedDesigns,
@@ -38,25 +39,25 @@ export const PanelContentArtboardDesignPalette = ({
 		firstVisibleDesignId,
 		selectedDesignId,
 	} = panelListVariablesDesignType({
-		designs: designPalettes,
+		designs: designRotates,
 		artboard,
-		type: DesignTypeEnum.PALETTE,
+		type: DesignTypeEnum.ROTATE,
 	})
 
 	return (
 		<Panel>
 			<PanelHeader>
-				<PanelTitle>Palette</PanelTitle>
+				<PanelTitle>Rotate</PanelTitle>
 				<div className="flex flex-shrink">
 					<PanelFormArtboardDesignNew
 						artboardId={artboard.id}
-						type={DesignTypeEnum.PALETTE}
+						type={DesignTypeEnum.ROTATE}
 						visibleDesignsCount={visibleDesignIds.length}
 					/>
 				</div>
 			</PanelHeader>
 			{orderedDesigns.map((design, index) => {
-				const { id, visible, palette } = design as IDesignWithPalette
+				const { id, visible, rotate } = design as IDesignWithRotate
 
 				const {
 					isSelectedDesign,
@@ -88,7 +89,7 @@ export const PanelContentArtboardDesignPalette = ({
 				})
 
 				return (
-					<PanelRow key={palette.id}>
+					<PanelRow key={rotate.id}>
 						<PanelRowOrderContainer>
 							<PanelFormArtboardDesignReorder
 								id={id}
@@ -109,14 +110,20 @@ export const PanelContentArtboardDesignPalette = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverArtboardDesignPalette palette={palette} />
-								<PanelFormArtboardDesignEditPalette
-									artboardId={artboard.id}
-									palette={palette}
-								/>
+								<PanelPopoverDesignRotate rotate={rotate} />
+								{rotate.basis !== 'defined' ? (
+									<Input
+										type="text"
+										className={'flex h-8'}
+										disabled
+										defaultValue={rotate.basis}
+									/>
+								) : (
+									<PanelFormDesignRotateEditRotation rotate={rotate} />
+								)}
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<PanelFormArtboardDesignToggleVisibility
+								<PanelFormArtboardDesignToggleVisible
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}
@@ -125,7 +132,7 @@ export const PanelContentArtboardDesignPalette = ({
 								<PanelFormArtboardDesignDelete
 									id={id}
 									artboardId={artboard.id}
-									isSelectedDesign={isSelectedDesign}
+									isSelectedDesign={false}
 									updateSelectedDesignId={selectDesignIdOnDelete}
 								/>
 							</PanelRowIconContainer>

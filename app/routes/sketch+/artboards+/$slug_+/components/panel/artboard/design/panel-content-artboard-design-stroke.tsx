@@ -16,13 +16,13 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
-import { PanelFormArtboardDesignEditStroke } from './panel-form-artboard-design-edit-stroke'
-import { PanelFormArtboardDesignNew } from './panel-form-artboard-design-new'
-import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
-import { PanelPopoverArtboardDesignStroke } from './panel-popover-artboard-design-stroke'
+import { type PickedArtboardType } from '../../../../queries'
+import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
+import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
+import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
+import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
+import { PanelFormDesignStrokeEditValue } from '../../../forms/design/panel-form-design-stroke-edit-value'
+import { PanelPopoverDesignStroke } from '../../../popovers/design/panel-popover-design-stroke'
 
 export const PanelContentArtboardDesignStroke = ({
 	artboard,
@@ -110,19 +110,9 @@ export const PanelContentArtboardDesignStroke = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverArtboardDesignStroke
-									artboardId={artboard.id}
-									stroke={stroke}
-								/>
+								<PanelPopoverDesignStroke stroke={stroke} />
 								{/* this is a little buggy, but I can manage for now */}
-								{stroke.style === 'none' ? (
-									<Input
-										type="text"
-										className={'flex h-8'}
-										disabled
-										defaultValue="None"
-									/>
-								) : stroke.basis !== 'defined' ? (
+								{stroke.basis !== 'defined' ? (
 									<Input
 										type="text"
 										className={'flex h-8'}
@@ -130,14 +120,11 @@ export const PanelContentArtboardDesignStroke = ({
 										defaultValue={stroke.basis}
 									/>
 								) : (
-									<PanelFormArtboardDesignEditStroke
-										artboardId={artboard.id}
-										stroke={stroke}
-									/>
+									<PanelFormDesignStrokeEditValue stroke={stroke} />
 								)}
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<PanelFormArtboardDesignToggleVisibility
+								<PanelFormArtboardDesignToggleVisible
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}

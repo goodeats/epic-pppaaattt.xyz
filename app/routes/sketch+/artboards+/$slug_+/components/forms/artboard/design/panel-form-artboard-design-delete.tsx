@@ -5,20 +5,20 @@ import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
-import { ToggleVisibilityArtboardDesignSchema } from '#app/schema/design'
+import { DeleteArtboardDesignSchema } from '#app/schema/design-artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../intent'
-import { type action } from '../route'
+import { ARTBOARD_DESIGN_INTENT } from '../../../../intent'
+import { type action } from '../../../../route'
 
-export const PanelFormArtboardDesignToggleVisibility = ({
+export const PanelFormArtboardDesignDelete = ({
 	id,
 	artboardId,
-	visible,
+	isSelectedDesign,
 	updateSelectedDesignId,
 }: {
 	id: string
 	artboardId: Artboard['id']
-	visible: boolean
+	isSelectedDesign: boolean
 	updateSelectedDesignId: string | null | undefined
 }) => {
 	const fetcher = useFetcher<typeof action>()
@@ -26,8 +26,8 @@ export const PanelFormArtboardDesignToggleVisibility = ({
 	const isPending = useIsPending()
 
 	const [form] = useForm({
-		id: `panel-form-artboard-design-toggle-visibility-${id}`,
-		constraint: getFieldsetConstraint(ToggleVisibilityArtboardDesignSchema),
+		id: `panel-form-artboard-design-delete-${id}`,
+		constraint: getFieldsetConstraint(DeleteArtboardDesignSchema),
 		lastSubmission: actionData?.submission,
 	})
 
@@ -37,6 +37,13 @@ export const PanelFormArtboardDesignToggleVisibility = ({
 
 			<input type="hidden" name="id" value={id} />
 			<input type="hidden" name="artboardId" value={artboardId} />
+			{isSelectedDesign && (
+				<input
+					type="hidden"
+					name="isSelectedDesign"
+					value={String(isSelectedDesign)}
+				/>
+			)}
 			{updateSelectedDesignId && (
 				<input
 					type="hidden"
@@ -47,7 +54,7 @@ export const PanelFormArtboardDesignToggleVisibility = ({
 			<input
 				type="hidden"
 				name="intent"
-				value={INTENT.artboardToggleVisibilityDesign}
+				value={ARTBOARD_DESIGN_INTENT.artboardDeleteDesign}
 			/>
 			<Button
 				type="submit"
@@ -55,15 +62,9 @@ export const PanelFormArtboardDesignToggleVisibility = ({
 				className="flex h-8 w-8 cursor-pointer items-center justify-center"
 				disabled={isPending}
 			>
-				{visible ? (
-					<Icon name="eye-open">
-						<span className="sr-only">Hide</span>
-					</Icon>
-				) : (
-					<Icon name="eye-closed">
-						<span className="sr-only">Show</span>
-					</Icon>
-				)}
+				<Icon name="minus">
+					<span className="sr-only">Remove</span>
+				</Icon>
 			</Button>
 		</fetcher.Form>
 	)

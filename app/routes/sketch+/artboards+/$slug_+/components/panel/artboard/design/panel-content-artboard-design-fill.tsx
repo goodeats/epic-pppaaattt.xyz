@@ -16,13 +16,13 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
-import { PanelFormArtboardDesignEditFill } from './panel-form-artboard-design-edit-fill'
-import { PanelFormArtboardDesignNew } from './panel-form-artboard-design-new'
-import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
-import { PanelPopoverArtboardDesignFill } from './panel-popover-artboard-design-fill'
+import { type PickedArtboardType } from '../../../../queries'
+import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
+import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
+import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
+import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
+import { PanelFormDesignFillEditValue } from '../../../forms/design/panel-form-design-fill-edit-value'
+import { PanelPopoverDesignFill } from '../../../popovers/design/panel-popover-design-fill'
 
 export const PanelContentArtboardDesignFill = ({
 	artboard,
@@ -110,17 +110,14 @@ export const PanelContentArtboardDesignFill = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverArtboardDesignFill
-									artboardId={artboard.id}
-									fill={fill}
-								/>
+								<PanelPopoverDesignFill fill={fill} />
 								{/* this is a little buggy, but I can manage for now */}
 								{fill.style === 'none' ? (
 									<Input
 										type="text"
 										className={'flex h-8'}
 										disabled
-										defaultValue="None"
+										defaultValue="No Fill"
 									/>
 								) : fill.basis !== 'defined' ? (
 									<Input
@@ -130,14 +127,11 @@ export const PanelContentArtboardDesignFill = ({
 										defaultValue={fill.basis}
 									/>
 								) : (
-									<PanelFormArtboardDesignEditFill
-										artboardId={artboard.id}
-										fill={fill}
-									/>
+									<PanelFormDesignFillEditValue fill={fill} />
 								)}
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<PanelFormArtboardDesignToggleVisibility
+								<PanelFormArtboardDesignToggleVisible
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}

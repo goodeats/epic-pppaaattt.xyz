@@ -58,6 +58,14 @@ export const ARTBOARD_INTENT = {
 	updateArtboardBackgroundColor: 'update-artboard-background-color' as const,
 }
 
+// artboard design actions
+export const ARTBOARD_DESIGN_INTENT = {
+	artboardCreateDesign: 'create-artboard-design' as const,
+	artboardReorderDesign: 'reorder-artboard-design' as const,
+	artboardToggleVisibleDesign: 'toggle-visible-artboard-design' as const,
+	artboardDeleteDesign: 'delete-artboard-design' as const,
+}
+
 // layer design actions
 export const LAYER_DESIGN_INTENT = {
 	layerCreateDesign: 'create-layer-design' as const,

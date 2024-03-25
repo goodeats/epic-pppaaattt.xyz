@@ -16,13 +16,13 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
-import { PanelFormArtboardDesignEditLayoutCount } from './panel-form-artboard-design-edit-layout-count'
-import { PanelFormArtboardDesignNew } from './panel-form-artboard-design-new'
-import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
-import { PanelPopoverArtboardDesignLayout } from './panel-popover-artboard-design-layout'
+import { type PickedArtboardType } from '../../../../queries'
+import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
+import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
+import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
+import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
+import { PanelFormDesignLayoutEditCount } from '../../../forms/design/panel-form-design-layout-edit-count'
+import { PanelPopoverDesignLayout } from '../../../popovers/design/panel-popover-design-layout'
 
 export const PanelContentArtboardDesignLayout = ({
 	artboard,
@@ -110,26 +110,20 @@ export const PanelContentArtboardDesignLayout = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverArtboardDesignLayout
-									artboardId={artboard.id}
-									layout={layout}
-								/>
+								<PanelPopoverDesignLayout layout={layout} />
 								{layout.style === 'random' ? (
-									<PanelFormArtboardDesignEditLayoutCount
-										artboardId={artboard.id}
-										layout={layout}
-									/>
+									<PanelFormDesignLayoutEditCount layout={layout} />
 								) : (
 									<Input
 										type="text"
 										className={'flex h-8'}
 										disabled
-										defaultValue="Grid"
+										defaultValue={`${layout.rows} x ${layout.columns}`}
 									/>
 								)}
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<PanelFormArtboardDesignToggleVisibility
+								<PanelFormArtboardDesignToggleVisible
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}

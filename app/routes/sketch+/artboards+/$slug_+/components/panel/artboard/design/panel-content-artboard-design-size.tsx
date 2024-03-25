@@ -8,27 +8,27 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
-import { Input } from '#app/components/ui/input'
-import { type IDesignWithTemplate } from '#app/models/design.server'
+import { type IDesignWithSize } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
 	panelItemVariablesDesignType,
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
-import { PanelFormArtboardDesignNew } from './panel-form-artboard-design-new'
-import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
-import { PanelPopoverArtboardDesignTemplate } from './panel-popover-artboard-design-template'
+import { type PickedArtboardType } from '../../../../queries'
+import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
+import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
+import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
+import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
+import { PanelFormDesignSizeEditValue } from '../../../forms/design/panel-form-design-size-edit-value'
+import { PanelPopoverDesignSize } from '../../../popovers/design/panel-popover-design-size'
 
-export const PanelContentArtboardDesignTemplate = ({
+export const PanelContentArtboardDesignSize = ({
 	artboard,
-	designTemplates,
+	designSizes,
 }: {
 	artboard: PickedArtboardType
-	designTemplates: IDesignWithTemplate[]
+	designSizes: IDesignWithSize[]
 }) => {
 	const {
 		orderedDesigns,
@@ -38,25 +38,25 @@ export const PanelContentArtboardDesignTemplate = ({
 		firstVisibleDesignId,
 		selectedDesignId,
 	} = panelListVariablesDesignType({
-		designs: designTemplates,
+		designs: designSizes,
 		artboard,
-		type: DesignTypeEnum.TEMPLATE,
+		type: DesignTypeEnum.SIZE,
 	})
 
 	return (
 		<Panel>
 			<PanelHeader>
-				<PanelTitle>Template</PanelTitle>
+				<PanelTitle>Size</PanelTitle>
 				<div className="flex flex-shrink">
 					<PanelFormArtboardDesignNew
 						artboardId={artboard.id}
-						type={DesignTypeEnum.TEMPLATE}
+						type={DesignTypeEnum.SIZE}
 						visibleDesignsCount={visibleDesignIds.length}
 					/>
 				</div>
 			</PanelHeader>
 			{orderedDesigns.map((design, index) => {
-				const { id, visible, template } = design as IDesignWithTemplate
+				const { id, visible, size } = design as IDesignWithSize
 
 				const {
 					isSelectedDesign,
@@ -88,7 +88,7 @@ export const PanelContentArtboardDesignTemplate = ({
 				})
 
 				return (
-					<PanelRow key={template.id}>
+					<PanelRow key={size.id}>
 						<PanelRowOrderContainer>
 							<PanelFormArtboardDesignReorder
 								id={id}
@@ -109,19 +109,11 @@ export const PanelContentArtboardDesignTemplate = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverArtboardDesignTemplate
-									artboardId={artboard.id}
-									template={template}
-								/>
-								<Input
-									type="text"
-									className={'flex h-8'}
-									disabled
-									defaultValue={template.style}
-								/>
+								<PanelPopoverDesignSize size={size} />
+								<PanelFormDesignSizeEditValue size={size} />
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<PanelFormArtboardDesignToggleVisibility
+								<PanelFormArtboardDesignToggleVisible
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}

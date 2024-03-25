@@ -8,27 +8,27 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
-import { type IDesignWithSize } from '#app/models/design.server'
+import { type IDesignWithPalette } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
 	panelItemVariablesDesignType,
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
-import { PanelFormArtboardDesignEditSize } from './panel-form-artboard-design-edit-size'
-import { PanelFormArtboardDesignNew } from './panel-form-artboard-design-new'
-import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
-import { PanelPopoverArtboardDesignSize } from './panel-popover-artboard-design-size'
+import { type PickedArtboardType } from '../../../../queries'
+import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
+import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
+import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
+import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
+import { PanelFormDesignPaletteEditValue } from '../../../forms/design/panel-form-design-palette-edit-value'
+import { PanelPopoverDesignPalette } from '../../../popovers/design/panel-popover-design-palette'
 
-export const PanelContentArtboardDesignSize = ({
+export const PanelContentArtboardDesignPalette = ({
 	artboard,
-	designSizes,
+	designPalettes,
 }: {
 	artboard: PickedArtboardType
-	designSizes: IDesignWithSize[]
+	designPalettes: IDesignWithPalette[]
 }) => {
 	const {
 		orderedDesigns,
@@ -38,25 +38,25 @@ export const PanelContentArtboardDesignSize = ({
 		firstVisibleDesignId,
 		selectedDesignId,
 	} = panelListVariablesDesignType({
-		designs: designSizes,
+		designs: designPalettes,
 		artboard,
-		type: DesignTypeEnum.SIZE,
+		type: DesignTypeEnum.PALETTE,
 	})
 
 	return (
 		<Panel>
 			<PanelHeader>
-				<PanelTitle>Size</PanelTitle>
+				<PanelTitle>Palette</PanelTitle>
 				<div className="flex flex-shrink">
 					<PanelFormArtboardDesignNew
 						artboardId={artboard.id}
-						type={DesignTypeEnum.SIZE}
+						type={DesignTypeEnum.PALETTE}
 						visibleDesignsCount={visibleDesignIds.length}
 					/>
 				</div>
 			</PanelHeader>
 			{orderedDesigns.map((design, index) => {
-				const { id, visible, size } = design as IDesignWithSize
+				const { id, visible, palette } = design as IDesignWithPalette
 
 				const {
 					isSelectedDesign,
@@ -88,7 +88,7 @@ export const PanelContentArtboardDesignSize = ({
 				})
 
 				return (
-					<PanelRow key={size.id}>
+					<PanelRow key={palette.id}>
 						<PanelRowOrderContainer>
 							<PanelFormArtboardDesignReorder
 								id={id}
@@ -109,14 +109,11 @@ export const PanelContentArtboardDesignSize = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverArtboardDesignSize size={size} />
-								<PanelFormArtboardDesignEditSize
-									artboardId={artboard.id}
-									size={size}
-								/>
+								<PanelPopoverDesignPalette palette={palette} />
+								<PanelFormDesignPaletteEditValue palette={palette} />
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<PanelFormArtboardDesignToggleVisibility
+								<PanelFormArtboardDesignToggleVisible
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}
@@ -125,7 +122,7 @@ export const PanelContentArtboardDesignSize = ({
 								<PanelFormArtboardDesignDelete
 									id={id}
 									artboardId={artboard.id}
-									isSelectedDesign={false}
+									isSelectedDesign={isSelectedDesign}
 									updateSelectedDesignId={selectDesignIdOnDelete}
 								/>
 							</PanelRowIconContainer>

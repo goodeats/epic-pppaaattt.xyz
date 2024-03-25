@@ -1,6 +1,7 @@
 import { type DataFunctionArgs } from '@remix-run/node'
 import { requireUserId } from '#app/utils/auth.server'
 import {
+	ARTBOARD_DESIGN_INTENT,
 	ARTBOARD_INTENT,
 	DESIGN_FILL_INTENT,
 	DESIGN_LAYOUT_INTENT,
@@ -28,7 +29,6 @@ import {
 	artboardDesignEditFillAction,
 	artboardDesignEditFillBasisAction,
 	artboardDesignEditFillStyleAction,
-	artboardDesignNewFillAction,
 } from './artboard-design-fill'
 import {
 	artboardDesignEditLayoutColumnsAction,
@@ -36,30 +36,19 @@ import {
 	artboardDesignEditLayoutRowsAction,
 	artboardDesignEditLayoutStyleAction,
 } from './artboard-design-layout'
-import {
-	artboardDesignEditLineWidthAction,
-	artboardDesignNewLineAction,
-} from './artboard-design-line'
+import { artboardDesignEditLineWidthAction } from './artboard-design-line'
 import { artboardDesignEditPaletteAction } from './artboard-design-palette'
 import {
 	artboardDesignEditRotateAction,
 	artboardDesignEditRotateBasisAction,
-	artboardDesignNewRotateAction,
 } from './artboard-design-rotate'
-import {
-	artboardDesignEditSizeAction,
-	artboardDesignNewSizeAction,
-} from './artboard-design-size'
+import { artboardDesignEditSizeAction } from './artboard-design-size'
 import {
 	artboardDesignEditStrokeAction,
 	artboardDesignEditStrokeBasisAction,
 	artboardDesignEditStrokeStyleAction,
-	artboardDesignNewStrokeAction,
 } from './artboard-design-stroke'
-import {
-	artboardDesignEditTemplateStyleAction,
-	artboardDesignNewTemplateAction,
-} from './artboard-design-template'
+import { artboardDesignEditTemplateStyleAction } from './artboard-design-template'
 import {
 	artboardLayerDeleteAction,
 	artboardLayerNewAction,
@@ -108,7 +97,7 @@ export async function action({ request }: DataFunctionArgs) {
 	const actionArgs = { request, userId, formData }
 	const intent = formData.get('intent')
 	switch (intent) {
-		// artboard intents
+		// ARTBOARD INTENTS
 		case ARTBOARD_INTENT.updateArtboardWidth: {
 			return artboardEditWidthAction(actionArgs)
 		}
@@ -118,31 +107,25 @@ export async function action({ request }: DataFunctionArgs) {
 		case ARTBOARD_INTENT.updateArtboardBackgroundColor: {
 			return artboardEditBackgroundColorAction(actionArgs)
 		}
-		// artboard design intents
-		case INTENT.artboardCreateDesign: {
+		// ARTBOARD DESIGN INTENTS
+		case ARTBOARD_DESIGN_INTENT.artboardCreateDesign: {
 			return artboardDesignNewAction(actionArgs)
 		}
-		case INTENT.artboardReorderDesign: {
+		case ARTBOARD_DESIGN_INTENT.artboardReorderDesign: {
 			return artboardDesignReorderAction(actionArgs)
 		}
-		case INTENT.artboardToggleVisibilityDesign: {
+		case ARTBOARD_DESIGN_INTENT.artboardToggleVisibleDesign: {
 			return artboardDesignToggleVisibilityAction(actionArgs)
 		}
-		case INTENT.artboardDeleteDesign: {
+		case ARTBOARD_DESIGN_INTENT.artboardDeleteDesign: {
 			return artboardDesignDeleteAction(actionArgs)
 		}
 		// and so on...
 		case INTENT.artboardUpdateDesignPalette: {
 			return artboardDesignEditPaletteAction(actionArgs)
 		}
-		case INTENT.artboardCreateDesignSize: {
-			return artboardDesignNewSizeAction(actionArgs)
-		}
 		case INTENT.artboardUpdateDesignSize: {
 			return artboardDesignEditSizeAction(actionArgs)
-		}
-		case INTENT.artboardCreateDesignFill: {
-			return artboardDesignNewFillAction(actionArgs)
 		}
 		case INTENT.artboardUpdateDesignFill: {
 			return artboardDesignEditFillAction(actionArgs)
@@ -153,9 +136,6 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.artboardUpdateDesignFillBasis: {
 			return artboardDesignEditFillBasisAction(actionArgs)
 		}
-		case INTENT.artboardCreateDesignStroke: {
-			return artboardDesignNewStrokeAction(actionArgs)
-		}
 		case INTENT.artboardUpdateDesignStroke: {
 			return artboardDesignEditStrokeAction(actionArgs)
 		}
@@ -165,14 +145,8 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.artboardUpdateDesignStrokeBasis: {
 			return artboardDesignEditStrokeBasisAction(actionArgs)
 		}
-		case INTENT.artboardCreateDesignLine: {
-			return artboardDesignNewLineAction(actionArgs)
-		}
 		case INTENT.artboardUpdateDesignLineWidth: {
 			return artboardDesignEditLineWidthAction(actionArgs)
-		}
-		case INTENT.artboardCreateDesignRotate: {
-			return artboardDesignNewRotateAction(actionArgs)
 		}
 		case INTENT.artboardUpdateDesignRotate: {
 			return artboardDesignEditRotateAction(actionArgs)
@@ -191,9 +165,6 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardUpdateDesignLayoutColumns: {
 			return artboardDesignEditLayoutColumnsAction(actionArgs)
-		}
-		case INTENT.artboardCreateDesignTemplate: {
-			return artboardDesignNewTemplateAction(actionArgs)
 		}
 		case INTENT.artboardUpdateDesignTemplateStyle: {
 			return artboardDesignEditTemplateStyleAction(actionArgs)

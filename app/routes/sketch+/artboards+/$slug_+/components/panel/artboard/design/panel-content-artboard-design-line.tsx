@@ -15,13 +15,13 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardDesignDelete } from './panel-form-artboard-design-delete'
-import { PanelFormArtboardDesignEditLine } from './panel-form-artboard-design-edit-line'
-import { PanelFormArtboardDesignNew } from './panel-form-artboard-design-new'
-import { PanelFormArtboardDesignReorder } from './panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisibility } from './panel-form-artboard-design-toggle-visibility'
-import { PanelPopoverArtboardDesignLine } from './panel-popover-artboard-design-line'
+import { type PickedArtboardType } from '../../../../queries'
+import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
+import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
+import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
+import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
+import { PanelFormDesignLineEditWidth } from '../../../forms/design/panel-form-design-line=edit-width'
+import { PanelPopoverDesignLine } from '../../../popovers/design/panel-popover-design-line'
 
 export const PanelContentArtboardDesignLine = ({
 	artboard,
@@ -109,17 +109,11 @@ export const PanelContentArtboardDesignLine = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverArtboardDesignLine
-									artboardId={artboard.id}
-									line={line}
-								/>
-								<PanelFormArtboardDesignEditLine
-									artboardId={artboard.id}
-									line={line}
-								/>
+								<PanelPopoverDesignLine line={line} />
+								<PanelFormDesignLineEditWidth line={line} />
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<PanelFormArtboardDesignToggleVisibility
+								<PanelFormArtboardDesignToggleVisible
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}

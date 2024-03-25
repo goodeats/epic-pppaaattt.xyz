@@ -12,7 +12,7 @@ import {
 	TooltipProvider,
 } from '#app/components/ui/tooltip'
 import { type action } from '#app/root'
-import { NewArtboardDesignSchema } from '#app/schema/design'
+import { NewArtboardDesignSchema } from '#app/schema/design-artboard'
 import { type AppearanceType } from '#app/utils/appearances'
 import { useIsPending } from '#app/utils/misc'
 import { INTENT } from './actions'

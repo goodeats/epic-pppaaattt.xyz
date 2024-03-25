@@ -5,36 +5,29 @@ import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
-import { ReorderArtboardDesignSchema } from '#app/schema/design'
+import { ToggleVisibleArtboardDesignSchema } from '#app/schema/design-artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../intent'
-import { type action } from '../route'
+import { ARTBOARD_DESIGN_INTENT } from '../../../../intent'
+import { type action } from '../../../../route'
 
-export const PanelFormArtboardDesignReorder = ({
+export const PanelFormArtboardDesignToggleVisible = ({
 	id,
 	artboardId,
-	panelIndex,
-	panelCount,
-	direction,
+	visible,
 	updateSelectedDesignId,
 }: {
 	id: string
 	artboardId: Artboard['id']
-	panelIndex: number
-	panelCount: number
-	direction: 'up' | 'down'
+	visible: boolean
 	updateSelectedDesignId: string | null | undefined
 }) => {
 	const fetcher = useFetcher<typeof action>()
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
-	const atTop = panelIndex === 0 && direction === 'up'
-	const atBottom = panelIndex === panelCount - 1 && direction === 'down'
-
 	const [form] = useForm({
-		id: `panel-form-artboard-design-reorder-${id}-${direction}`,
-		constraint: getFieldsetConstraint(ReorderArtboardDesignSchema),
+		id: `panel-form-artboard-design-toggle-visible-${id}`,
+		constraint: getFieldsetConstraint(ToggleVisibleArtboardDesignSchema),
 		lastSubmission: actionData?.submission,
 	})
 
@@ -44,7 +37,6 @@ export const PanelFormArtboardDesignReorder = ({
 
 			<input type="hidden" name="id" value={id} />
 			<input type="hidden" name="artboardId" value={artboardId} />
-			<input type="hidden" name="direction" value={direction} />
 			{updateSelectedDesignId && (
 				<input
 					type="hidden"
@@ -52,16 +44,26 @@ export const PanelFormArtboardDesignReorder = ({
 					value={updateSelectedDesignId}
 				/>
 			)}
-			<input type="hidden" name="intent" value={INTENT.artboardReorderDesign} />
+			<input
+				type="hidden"
+				name="intent"
+				value={ARTBOARD_DESIGN_INTENT.artboardToggleVisibleDesign}
+			/>
 			<Button
 				type="submit"
 				variant="ghost"
-				className="flex h-4 w-4 cursor-pointer items-center justify-center"
-				disabled={isPending || atTop || atBottom}
+				className="flex h-8 w-8 cursor-pointer items-center justify-center"
+				disabled={isPending}
 			>
-				<Icon name={`chevron-${direction}`}>
-					<span className="sr-only">Move {direction}</span>
-				</Icon>
+				{visible ? (
+					<Icon name="eye-open">
+						<span className="sr-only">Hide</span>
+					</Icon>
+				) : (
+					<Icon name="eye-closed">
+						<span className="sr-only">Show</span>
+					</Icon>
+				)}
 			</Button>
 		</fetcher.Form>
 	)

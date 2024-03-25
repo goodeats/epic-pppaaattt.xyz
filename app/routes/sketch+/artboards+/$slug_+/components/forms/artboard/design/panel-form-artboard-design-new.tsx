@@ -5,13 +5,11 @@ import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
-import {
-	NewArtboardDesignSchema,
-	type designTypeEnum,
-} from '#app/schema/design'
+import { type designTypeEnum } from '#app/schema/design'
+import { NewArtboardDesignSchema } from '#app/schema/design-artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../intent'
-import { type action } from '../route'
+import { ARTBOARD_DESIGN_INTENT } from '../../../../intent'
+import { type action } from '../../../../route'
 
 type PanelFormArtboardDesignNewProps = {
 	artboardId: Artboard['id']
@@ -45,7 +43,11 @@ export const PanelFormArtboardDesignNew = ({
 				name="visibleDesignsCount"
 				value={visibleDesignsCount}
 			/>
-			<input type="hidden" name="intent" value={INTENT.artboardCreateDesign} />
+			<input
+				type="hidden"
+				name="intent"
+				value={ARTBOARD_DESIGN_INTENT.artboardCreateDesign}
+			/>
 
 			<Button
 				type="submit"
