@@ -8,9 +8,9 @@ import { Input } from '#app/components/ui/input'
 import { ArtboardBackgroundColorSchema } from '#app/schema/artboard'
 import { stringToHexcode, validateStringIsHexcode } from '#app/utils/colors'
 import { useIsPending } from '#app/utils/misc'
-import { ARTBOARD_INTENT } from '../intent'
-import { type PickedArtboardType } from '../queries'
-import { type action } from '../route'
+import { ARTBOARD_INTENT } from '../../../intent'
+import { type PickedArtboardType } from '../../../queries'
+import { type action } from '../../../route'
 
 export const PanelFormArtboardEditBackgroundColor = ({
 	artboard,

@@ -1,7 +1,6 @@
 import { type IDesignWithType } from '#app/models/design.server'
 import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
 import { type PickedArtboardType } from '../../../queries'
-import { PanelContentArtboardBackgroundColor } from '../../panel-content-artboard-background-color'
 import { PanelContentArtboardDesignFill } from './design/panel-content-artboard-design-fill'
 import { PanelContentArtboardDesignLayout } from './design/panel-content-artboard-design-layout'
 import { PanelContentArtboardDesignLine } from './design/panel-content-artboard-design-line'
@@ -10,6 +9,7 @@ import { PanelContentArtboardDesignRotate } from './design/panel-content-artboar
 import { PanelContentArtboardDesignSize } from './design/panel-content-artboard-design-size'
 import { PanelContentArtboardDesignStroke } from './design/panel-content-artboard-design-stroke'
 import { PanelContentArtboardDesignTemplate } from './design/panel-content-artboard-design-template'
+import { PanelContentArtboardBackgroundColor } from './panel-content-artboard-background-color'
 import { PanelContentArtboardFrame } from './panel-content-artboard-frame'
 
 export const PanelContentArtboardDesigns = ({
