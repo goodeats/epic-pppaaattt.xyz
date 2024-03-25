@@ -35,7 +35,7 @@ export const PanelContentArtboard = ({
 		designLayouts,
 		designTemplates,
 	} = filterAndOrderArtboardDesignsByType({
-		artboardDesigns,
+		designs: artboardDesigns,
 	})
 
 	return (

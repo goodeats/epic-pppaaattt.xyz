@@ -38,7 +38,7 @@ export const artboardLayerCopyArtboardDesignsService = async ({
 
 		// Step 3: separate artboard designs by type
 		const artboardDesignsByType = filterAndOrderArtboardDesignsByType({
-			artboardDesigns,
+			designs: artboardDesigns,
 		})
 
 		// Step 4: create new layer designs for each type

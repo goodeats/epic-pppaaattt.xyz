@@ -22,33 +22,33 @@ import {
 } from './artboard'
 
 export const filterAndOrderArtboardDesignsByType = ({
-	artboardDesigns,
+	designs,
 }: {
-	artboardDesigns: IDesignWithType[]
+	designs: IDesignWithType[]
 }): IDesignsByType => {
 	const designPalettes = orderLinkedDesigns(
-		filterDesignsByType(artboardDesigns, 'palette'),
+		filterDesignsByType(designs, 'palette'),
 	) as IDesignWithPalette[]
 	const designSizes = orderLinkedDesigns(
-		filterDesignsByType(artboardDesigns, 'size'),
+		filterDesignsByType(designs, 'size'),
 	) as IDesignWithSize[]
 	const designFills = orderLinkedDesigns(
-		filterDesignsByType(artboardDesigns, 'fill'),
+		filterDesignsByType(designs, 'fill'),
 	) as IDesignWithFill[]
 	const designStrokes = orderLinkedDesigns(
-		filterDesignsByType(artboardDesigns, 'stroke'),
+		filterDesignsByType(designs, 'stroke'),
 	) as IDesignWithStroke[]
 	const designLines = orderLinkedDesigns(
-		filterDesignsByType(artboardDesigns, 'line'),
+		filterDesignsByType(designs, 'line'),
 	) as IDesignWithLine[]
 	const designRotates = orderLinkedDesigns(
-		filterDesignsByType(artboardDesigns, 'rotate'),
+		filterDesignsByType(designs, 'rotate'),
 	) as IDesignWithRotate[]
 	const designLayouts = orderLinkedDesigns(
-		filterDesignsByType(artboardDesigns, 'layout'),
+		filterDesignsByType(designs, 'layout'),
 	) as IDesignWithLayout[]
 	const designTemplates = orderLinkedDesigns(
-		filterDesignsByType(artboardDesigns, 'template'),
+		filterDesignsByType(designs, 'template'),
 	) as IDesignWithTemplate[]
 
 	return {
