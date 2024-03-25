@@ -183,3 +183,21 @@ export const parseLayerDesignUpdateSubmission = async ({
 		async: true,
 	})
 }
+
+export const parseDesignSubmission = async ({
+	userId,
+	formData,
+	schema,
+}: IntentActionArgs & { schema: z.ZodSchema<any> }) => {
+	return await parse(formData, {
+		schema: schema.superRefine(async (data, ctx) => {
+			const { designId } = data
+			const design = await findDesignByIdAndOwner({
+				id: designId,
+				ownerId: userId,
+			})
+			if (!design) ctx.addIssue(addNotFoundIssue('Design'))
+		}),
+		async: true,
+	})
+}

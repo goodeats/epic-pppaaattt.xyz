@@ -62,3 +62,11 @@ export const LAYER_DESIGN_INTENT = {
 	layerToggleVisibleDesign: 'toggle-visible-layer-design' as const,
 	layerDeleteDesign: 'delete-layer-design' as const,
 }
+
+// design typs
+export const DESIGN_LAYOUT_INTENT = {
+	updateDesignLayoutStyle: 'update-design-layout-style' as const,
+	updateDesignLayoutCount: 'update-design-layout-count' as const,
+	updateDesignLayoutRows: 'update-design-layout-rows' as const,
+	updateDesignLayoutColumns: 'update-design-layout-columns' as const,
+}

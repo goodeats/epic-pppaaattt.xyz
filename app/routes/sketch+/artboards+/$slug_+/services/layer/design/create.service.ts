@@ -194,7 +194,5 @@ const shouldUpdateSelectedDesign = async ({
 		where: { layerId, type, visible: true },
 	})
 
-	console.log('visibleLayerDesignsByTypeCount', visibleLayerDesignsByTypeCount)
-
 	return Number(visibleLayerDesignsByTypeCount) === 0
 }

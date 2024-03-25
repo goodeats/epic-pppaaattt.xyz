@@ -1,6 +1,6 @@
 import { type DataFunctionArgs } from '@remix-run/node'
 import { requireUserId } from '#app/utils/auth.server'
-import { INTENT, LAYER_DESIGN_INTENT } from '../intent'
+import { DESIGN_LAYOUT_INTENT, INTENT, LAYER_DESIGN_INTENT } from '../intent'
 import {
 	artboardDesignDeleteAction,
 	artboardDesignNewAction,
@@ -18,7 +18,6 @@ import {
 	artboardDesignEditLayoutCountAction,
 	artboardDesignEditLayoutRowsAction,
 	artboardDesignEditLayoutStyleAction,
-	artboardDesignNewLayoutAction,
 } from './artboard-design-layout'
 import {
 	artboardDesignEditLineWidthAction,
@@ -52,6 +51,12 @@ import {
 	artboardLayerUpdateDescriptionAction,
 	artboardLayerUpdateNameAction,
 } from './artboard-layer'
+import {
+	designLayoutEditColumnsAction,
+	designLayoutEditCountAction,
+	designLayoutEditRowsAction,
+	designLayoutEditStyleAction,
+} from './design-layout'
 import {
 	layerDesignDeleteAction,
 	layerDesignNewAction,
@@ -145,9 +150,6 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.artboardUpdateDesignRotateBasis: {
 			return artboardDesignEditRotateBasisAction(actionArgs)
 		}
-		case INTENT.artboardCreateDesignLayout: {
-			return artboardDesignNewLayoutAction(actionArgs)
-		}
 		case INTENT.artboardUpdateDesignLayoutStyle: {
 			return artboardDesignEditLayoutStyleAction(actionArgs)
 		}
@@ -184,6 +186,7 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.artboardReorderLayer: {
 			return artboardLayerReorderAction(actionArgs)
 		}
+		// LAYER DESIGN INTENTS
 		case LAYER_DESIGN_INTENT.layerCreateDesign: {
 			return layerDesignNewAction(actionArgs)
 		}
@@ -195,6 +198,20 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case LAYER_DESIGN_INTENT.layerReorderDesign: {
 			return layerDesignReorderAction(actionArgs)
+		}
+		// DESIGN INTENTS
+		// LAYOUT DESIGN INTENTS
+		case DESIGN_LAYOUT_INTENT.updateDesignLayoutStyle: {
+			return designLayoutEditStyleAction(actionArgs)
+		}
+		case DESIGN_LAYOUT_INTENT.updateDesignLayoutCount: {
+			return designLayoutEditCountAction(actionArgs)
+		}
+		case DESIGN_LAYOUT_INTENT.updateDesignLayoutRows: {
+			return designLayoutEditRowsAction(actionArgs)
+		}
+		case DESIGN_LAYOUT_INTENT.updateDesignLayoutColumns: {
+			return designLayoutEditColumnsAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

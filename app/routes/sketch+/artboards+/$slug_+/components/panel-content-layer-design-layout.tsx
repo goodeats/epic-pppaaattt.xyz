@@ -17,10 +17,12 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
+import { PanelFormDesignLayoutEditCount } from './forms/design/panel-form-design-layout-edit-count'
 import { PanelFormLayerDesignDelete } from './forms/layer/design/panel-form-layer-design-delete'
 import { PanelFormLayerDesignNew } from './forms/layer/design/panel-form-layer-design-new'
 import { PanelFormLayerDesignReorder } from './forms/layer/design/panel-form-layer-design-reorder'
 import { PanelFormLayerDesignToggleVisibile } from './forms/layer/design/panel-form-layer-design-toggle-visible'
+import { PanelPopoverDesignLayout } from './popovers/design/panel-popover-design-layout'
 
 export const PanelContentLayerDesignLayout = ({
 	layer,
@@ -107,27 +109,15 @@ export const PanelContentLayerDesignLayout = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								{/* <PanelPopoverArtboardDesignLayout
-									artboardId={artboard.id}
-									layout={layout}
-								/> */}
+								<PanelPopoverDesignLayout layout={layout} />
 								{layout.style === 'random' ? (
-									// <PanelFormArtboardDesignEditLayoutCount
-									// 	artboardId={artboard.id}
-									// 	layout={layout}
-									// />
-									<Input
-										type="text"
-										className={'flex h-8'}
-										disabled
-										defaultValue="layer random"
-									/>
+									<PanelFormDesignLayoutEditCount layout={layout} />
 								) : (
 									<Input
 										type="text"
 										className={'flex h-8'}
 										disabled
-										defaultValue="Grid"
+										defaultValue={`${layout.rows} x ${layout.columns}`}
 									/>
 								)}
 							</PanelRowValueContainer>
