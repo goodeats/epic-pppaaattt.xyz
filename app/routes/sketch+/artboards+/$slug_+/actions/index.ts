@@ -1,6 +1,7 @@
 import { type DataFunctionArgs } from '@remix-run/node'
 import { requireUserId } from '#app/utils/auth.server'
 import {
+	DESIGN_FILL_INTENT,
 	DESIGN_LAYOUT_INTENT,
 	DESIGN_PALETTE_INTENT,
 	DESIGN_SIZE_INTENT,
@@ -57,6 +58,11 @@ import {
 	artboardLayerUpdateDescriptionAction,
 	artboardLayerUpdateNameAction,
 } from './artboard-layer'
+import {
+	designFillEditBasisAction,
+	designFillEditStyleAction,
+	designFillEditValueAction,
+} from './design-fill'
 import {
 	designLayoutEditColumnsAction,
 	designLayoutEditCountAction,
@@ -216,6 +222,17 @@ export async function action({ request }: DataFunctionArgs) {
 		case DESIGN_SIZE_INTENT.updateDesignSizeValue: {
 			return designSizeEditValueAction(actionArgs)
 		}
+		// FILL DESIGN INTENTS
+		case DESIGN_FILL_INTENT.updateDesignFillValue: {
+			return designFillEditValueAction(actionArgs)
+		}
+		case DESIGN_FILL_INTENT.updateDesignFillStyle: {
+			return designFillEditStyleAction(actionArgs)
+		}
+		case DESIGN_FILL_INTENT.updateDesignFillBasis: {
+			return designFillEditBasisAction(actionArgs)
+		}
+		// STROKE DESIGN INTENTS
 		// LAYOUT DESIGN INTENTS
 		case DESIGN_LAYOUT_INTENT.updateDesignLayoutStyle: {
 			return designLayoutEditStyleAction(actionArgs)

@@ -8,6 +8,24 @@ export const FillDataSchema = z.object({
 	basis: z.enum(['defined', 'random', 'palette', 'pixel']).optional(),
 })
 
+export const EditDesignFillValueSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	value: HexcodeSchema,
+})
+
+export const EditDesignFillStyleSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	style: z.enum(['solid', 'none']),
+})
+
+export const EditDesignFillBasisSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	basis: z.enum(['defined', 'random', 'palette', 'pixel']),
+})
+
 export const EditArtboardFillSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

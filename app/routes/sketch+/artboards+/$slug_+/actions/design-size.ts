@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type IPalette } from '#app/models/palette.server'
+import { type ISize } from '#app/models/size.server'
 import { EditDesignSizeValueSchema } from '#app/schema/size'
 import {
 	notSubmissionResponse,
@@ -57,7 +57,7 @@ export async function designSizeEditValueAction({
 	return json({ status: 'success', submission } as const)
 }
 
-const getSize = async ({ id }: { id: IPalette['id'] }) => {
+const getSize = async ({ id }: { id: ISize['id'] }) => {
 	return await findFirstSizeInstance({
 		where: { id },
 	})

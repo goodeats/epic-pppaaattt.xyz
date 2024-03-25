@@ -72,6 +72,12 @@ export const DESIGN_SIZE_INTENT = {
 	updateDesignSizeValue: 'update-design-size-value' as const,
 }
 
+export const DESIGN_FILL_INTENT = {
+	updateDesignFillValue: 'update-design-fill-value' as const,
+	updateDesignFillStyle: 'update-design-fill-style' as const,
+	updateDesignFillBasis: 'update-design-fill-basis' as const,
+}
+
 export const DESIGN_LAYOUT_INTENT = {
 	updateDesignLayoutStyle: 'update-design-layout-style' as const,
 	updateDesignLayoutCount: 'update-design-layout-count' as const,
