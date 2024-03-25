@@ -65,7 +65,8 @@ export const PanelFormDesignStrokeEditBasis = ({
 				<SelectContent>
 					<SelectItem value="defined">Defined</SelectItem>
 					<SelectItem value="random">Random</SelectItem>
-					<SelectItem value="palette">Palette</SelectItem>
+					<SelectItem value="palette-selected">Palette - Selected</SelectItem>
+					<SelectItem value="palette-random">Palette - Random</SelectItem>
 					<SelectItem value="pixel">Pixel</SelectItem>
 				</SelectContent>
 			</Select>
