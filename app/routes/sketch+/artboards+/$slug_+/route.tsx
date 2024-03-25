@@ -9,6 +9,7 @@ import {
 } from '#app/components/shared'
 import { findManyLayers } from '#app/models/layer.server'
 import { requireUserId } from '#app/utils/auth.server'
+import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { action } from './actions/index.ts'
 import { CanvasContent } from './components/canvas-content'
 import { PanelContentLeft, PanelContentRight } from './components/panel-content'
@@ -32,13 +33,19 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const artboard = await getArtboard(userId, slug as string)
 	invariantResponse(artboard, 'Artboard not found', { status: 404 })
 
-	const { searchParams } = new URL(request.url)
+	const url = new URL(request.url)
+	const { pathname, searchParams } = url
 	const layerId = searchParams.get('layerId')
 	let layer,
 		layerDesigns = null
 	if (layerId) {
 		layer = await getLayer({ layerId, userId, artboardId: artboard.id })
-		invariantResponse(layer, 'Layer not found', { status: 404 })
+		if (!layer) {
+			return redirectWithToast(pathname, {
+				title: 'Layer Not Found',
+				description: `You may have deleted it.`,
+			})
+		}
 
 		layerDesigns = await getLayerDesigns({ layer })
 	}
