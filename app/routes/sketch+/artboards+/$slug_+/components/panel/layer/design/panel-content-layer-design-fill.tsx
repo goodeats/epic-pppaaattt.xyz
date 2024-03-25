@@ -130,7 +130,6 @@ export const PanelContentLayerDesignFill = ({
 								)}
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<div></div>
 								<PanelFormLayerDesignToggleVisibile
 									id={id}
 									layerId={layer.id}

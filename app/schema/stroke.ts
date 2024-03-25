@@ -8,6 +8,24 @@ export const StrokeDataSchema = z.object({
 	basis: z.enum(['defined', 'random', 'palette', 'pixel']).optional(),
 })
 
+export const EditDesignStrokeValueSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	value: HexcodeSchema,
+})
+
+export const EditDesignStrokeStyleSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	style: z.enum(['solid']),
+})
+
+export const EditDesignStrokeBasisSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	basis: z.enum(['defined', 'random', 'palette', 'pixel']),
+})
+
 export const EditArtboardStrokeSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

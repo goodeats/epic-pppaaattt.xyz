@@ -112,7 +112,6 @@ export const PanelContentLayerDesignSize = ({
 								<PanelFormDesignSizeEditValue size={size} />
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<div></div>
 								<PanelFormLayerDesignToggleVisibile
 									id={id}
 									layerId={layer.id}

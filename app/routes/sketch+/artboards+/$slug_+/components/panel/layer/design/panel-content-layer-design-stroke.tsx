@@ -9,7 +9,7 @@ import {
 	PanelTitle,
 } from '#app/components/shared'
 import { Input } from '#app/components/ui/input'
-import { type IDesignWithLayout } from '#app/models/design.server'
+import { type IDesignWithStroke } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
@@ -17,19 +17,19 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { PanelFormDesignLayoutEditCount } from '../../../forms/design/panel-form-design-layout-edit-count'
+import { PanelFormDesignStrokeEditValue } from '../../../forms/design/panel-form-design-stroke-edit-value'
 import { PanelFormLayerDesignDelete } from '../../../forms/layer/design/panel-form-layer-design-delete'
 import { PanelFormLayerDesignNew } from '../../../forms/layer/design/panel-form-layer-design-new'
 import { PanelFormLayerDesignReorder } from '../../../forms/layer/design/panel-form-layer-design-reorder'
 import { PanelFormLayerDesignToggleVisibile } from '../../../forms/layer/design/panel-form-layer-design-toggle-visible'
-import { PanelPopoverDesignLayout } from '../../../popovers/design/panel-popover-design-layout'
+import { PanelPopoverDesignStroke } from '../../../popovers/design/panel-popover-design-stroke'
 
-export const PanelContentLayerDesignLayout = ({
+export const PanelContentLayerDesignStroke = ({
 	layer,
-	designLayouts,
+	designStrokes,
 }: {
 	layer: ILayer
-	designLayouts: IDesignWithLayout[]
+	designStrokes: IDesignWithStroke[]
 }) => {
 	const {
 		orderedDesigns,
@@ -39,24 +39,24 @@ export const PanelContentLayerDesignLayout = ({
 		firstVisibleDesignId,
 		selectedDesignId,
 	} = panelListVariablesDesignType({
-		designs: designLayouts,
-		type: DesignTypeEnum.LAYOUT,
+		designs: designStrokes,
+		type: DesignTypeEnum.STROKE,
 	})
 
 	return (
 		<Panel>
 			<PanelHeader>
-				<PanelTitle>Layout</PanelTitle>
+				<PanelTitle>Stroke</PanelTitle>
 				<div className="flex flex-shrink">
 					<PanelFormLayerDesignNew
 						layerId={layer.id}
-						type={DesignTypeEnum.LAYOUT}
+						type={DesignTypeEnum.STROKE}
 						visibleDesignsCount={visibleDesignIds.length}
 					/>
 				</div>
 			</PanelHeader>
 			{orderedDesigns.map((design, index) => {
-				const { id, visible, layout } = design as IDesignWithLayout
+				const { id, visible, stroke } = design as IDesignWithStroke
 
 				const {
 					isSelectedDesign,
@@ -88,7 +88,7 @@ export const PanelContentLayerDesignLayout = ({
 				})
 
 				return (
-					<PanelRow key={layout.id}>
+					<PanelRow key={stroke.id}>
 						<PanelRowOrderContainer>
 							<PanelFormLayerDesignReorder
 								id={id}
@@ -109,16 +109,17 @@ export const PanelContentLayerDesignLayout = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverDesignLayout layout={layout} />
-								{layout.style === 'random' ? (
-									<PanelFormDesignLayoutEditCount layout={layout} />
-								) : (
+								<PanelPopoverDesignStroke stroke={stroke} />
+								{/* this is a little buggy, but I can manage for now */}
+								{stroke.basis !== 'defined' ? (
 									<Input
 										type="text"
 										className={'flex h-8'}
 										disabled
-										defaultValue={`${layout.rows} x ${layout.columns}`}
+										defaultValue={stroke.basis}
 									/>
+								) : (
+									<PanelFormDesignStrokeEditValue stroke={stroke} />
 								)}
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>

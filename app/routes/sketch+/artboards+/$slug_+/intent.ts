@@ -78,6 +78,12 @@ export const DESIGN_FILL_INTENT = {
 	updateDesignFillBasis: 'update-design-fill-basis' as const,
 }
 
+export const DESIGN_STROKE_INTENT = {
+	updateDesignStrokeValue: 'update-design-stroke-value' as const,
+	updateDesignStrokeStyle: 'update-design-stroke-style' as const,
+	updateDesignStrokeBasis: 'update-design-stroke-basis' as const,
+}
+
 export const DESIGN_LAYOUT_INTENT = {
 	updateDesignLayoutStyle: 'update-design-layout-style' as const,
 	updateDesignLayoutCount: 'update-design-layout-count' as const,

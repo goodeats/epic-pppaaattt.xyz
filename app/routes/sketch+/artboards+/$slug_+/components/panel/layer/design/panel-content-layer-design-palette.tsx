@@ -112,7 +112,6 @@ export const PanelContentLayerDesignPalette = ({
 								<PanelFormDesignPaletteEditValue palette={palette} />
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
-								<div></div>
 								<PanelFormLayerDesignToggleVisibile
 									id={id}
 									layerId={layer.id}

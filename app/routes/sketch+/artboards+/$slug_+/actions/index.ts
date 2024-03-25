@@ -5,6 +5,7 @@ import {
 	DESIGN_LAYOUT_INTENT,
 	DESIGN_PALETTE_INTENT,
 	DESIGN_SIZE_INTENT,
+	DESIGN_STROKE_INTENT,
 	INTENT,
 	LAYER_DESIGN_INTENT,
 } from '../intent'
@@ -71,6 +72,11 @@ import {
 } from './design-layout'
 import { designPaletteEditValueAction } from './design-palette'
 import { designSizeEditValueAction } from './design-size'
+import {
+	designStrokeEditBasisAction,
+	designStrokeEditStyleAction,
+	designStrokeEditValueAction,
+} from './design-stroke'
 import {
 	layerDesignDeleteAction,
 	layerDesignNewAction,
@@ -233,6 +239,15 @@ export async function action({ request }: DataFunctionArgs) {
 			return designFillEditBasisAction(actionArgs)
 		}
 		// STROKE DESIGN INTENTS
+		case DESIGN_STROKE_INTENT.updateDesignStrokeValue: {
+			return designStrokeEditValueAction(actionArgs)
+		}
+		case DESIGN_STROKE_INTENT.updateDesignStrokeStyle: {
+			return designStrokeEditStyleAction(actionArgs)
+		}
+		case DESIGN_STROKE_INTENT.updateDesignStrokeBasis: {
+			return designStrokeEditBasisAction(actionArgs)
+		}
 		// LAYOUT DESIGN INTENTS
 		case DESIGN_LAYOUT_INTENT.updateDesignLayoutStyle: {
 			return designLayoutEditStyleAction(actionArgs)
