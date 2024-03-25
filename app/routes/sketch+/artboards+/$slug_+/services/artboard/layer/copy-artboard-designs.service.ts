@@ -7,6 +7,7 @@ import {
 import { findFirstLayer } from '#app/models/layer.server'
 import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
 import { artboardLayerCopyArtboardDesignFillsService } from './design/copy-artboard-design-fills.service'
+import { artboardLayerCopyArtboardDesignLinesService } from './design/copy-artboard-design-lines.service'
 import { artboardLayerCopyArtboardDesignPalettesService } from './design/copy-artboard-design-palettes.service'
 import { artboardLayerCopyArtboardDesignSizesService } from './design/copy-artboard-design-sizes.service'
 import { artboardLayerCopyArtboardDesignStrokesService } from './design/copy-artboard-design-strokes.service'
@@ -97,7 +98,7 @@ const createLayerDesignTypes = async ({
 		designSizes,
 		designFills,
 		designStrokes,
-		// designLines,
+		designLines,
 		// designRotates,
 		// designLayouts,
 		// designTemplates,
@@ -129,5 +130,12 @@ const createLayerDesignTypes = async ({
 		userId,
 		layer,
 		designs: designStrokes,
+	})
+
+	// Line
+	await artboardLayerCopyArtboardDesignLinesService({
+		userId,
+		layer,
+		designs: designLines,
 	})
 }

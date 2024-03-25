@@ -1,4 +1,11 @@
-import { type IDesignWithLine, type IDesignWithType } from './design.server'
+import { LineDataSchema } from '#app/schema/line'
+import { prisma } from '#app/utils/db.server'
+import {
+	type IDesign,
+	type IDesignTypeCreateOverrides,
+	type IDesignWithLine,
+	type IDesignWithType,
+} from './design.server'
 
 export interface ILine {
 	id: string
@@ -6,6 +13,10 @@ export interface ILine {
 	createdAt: Date | string
 	updatedAt: Date | string
 	designId: string
+}
+
+export interface ILineCreateOverrides {
+	width?: number
 }
 
 export const findLineInDesignArray = ({
@@ -16,4 +27,20 @@ export const findLineInDesignArray = ({
 	const design = designs.find(design => design.line) as IDesignWithLine
 
 	return design.line
+}
+
+export const createDesignLine = ({
+	designId,
+	designTypeOverrides,
+}: {
+	designId: IDesign['id']
+	designTypeOverrides: IDesignTypeCreateOverrides
+}) => {
+	const fillData = {
+		designId,
+		...(designTypeOverrides as ILineCreateOverrides),
+	}
+	const data = LineDataSchema.parse(fillData)
+
+	return prisma.line.create({ data })
 }

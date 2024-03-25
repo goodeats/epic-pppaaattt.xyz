@@ -7,6 +7,7 @@ import {
 	type IDesignTypeCreateOverrides,
 } from '#app/models/design.server'
 import { createDesignFill } from '#app/models/fill.server'
+import { createDesignLine } from '#app/models/line.server'
 import { createDesignPalette } from '#app/models/palette.server'
 import { createDesignSize } from '#app/models/size.server'
 import { createDesignStroke } from '#app/models/stroke.server'
@@ -148,8 +149,11 @@ const createDesignType = ({
 				designId,
 				designTypeOverrides,
 			})
-		// case 'line':
-		// 	return await prisma.line.create({ data })
+		case 'line':
+			return createDesignLine({
+				designId,
+				designTypeOverrides,
+			})
 		// case 'rotate':
 		// 	return await prisma.rotate.create({ data })
 		// case 'layout':
