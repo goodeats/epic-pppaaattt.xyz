@@ -115,7 +115,7 @@ export interface IArtboardBuild {
 }
 
 export interface IArtboardLayerBuild {
-	palette: IPalette
+	palette: IPalette[]
 	size: ISize
 	fill: IFill
 	stroke: IStroke

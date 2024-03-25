@@ -1,8 +1,13 @@
 import { type Design } from '@prisma/client'
-import { type designTypeEnum } from '#app/schema/design'
+import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
-import { type IDesign } from './design.server'
+import {
+	findManyDesignsWithType,
+	type IDesignWithPalette,
+	type IDesign,
+} from './design.server'
 import { type ILayer } from './layer.server'
+import { type IPalette } from './palette.server'
 
 export interface IDesignWithLayer extends IDesign {
 	layer: ILayer
@@ -38,4 +43,17 @@ export const updateLayerSelectedDesign = ({
 		data: { selected: true },
 	})
 	return [unselectDesign, selectDesign]
+}
+
+// might be out of order??
+export const getLayerVisiblePalettes = async ({
+	layerId,
+}: {
+	layerId: ILayer['id']
+}): Promise<IPalette[]> => {
+	const designPalettes = (await findManyDesignsWithType({
+		where: { type: DesignTypeEnum.PALETTE, layerId, visible: true },
+	})) as IDesignWithPalette[]
+
+	return designPalettes.map(design => design.palette)
 }

@@ -60,12 +60,13 @@ const buildLayerDrawItem = ({
 	index: number
 	count: number
 }): ICanvasDrawItem => {
-	const { x, y } = canvasBuildLayerDrawPositionService({
+	const { x, y, pixelHex } = canvasBuildLayerDrawPositionService({
+		ctx,
 		layer,
 	})
 	const size = canvasBuildLayerDrawSizeService({ layer })
-	const fill = canvasBuildLayerDrawFillService({ layer })
-	const stroke = canvasBuildLayerDrawStrokeService({ layer })
+	const fill = canvasBuildLayerDrawFillService({ layer, pixelHex })
+	const stroke = canvasBuildLayerDrawStrokeService({ layer, pixelHex })
 	const line = canvasBuildLayerDrawLineService({ layer })
 	const rotate = canvasBuildLayerDrawRotateService({ layer })
 	const template = canvasBuildLayerDrawTemplateService({ layer })

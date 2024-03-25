@@ -1,16 +1,33 @@
+import { colorRandomHex } from '#app/utils/colors'
+import { randomIndex } from '#app/utils/random.utils'
 import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawFillService = ({
 	layer,
+	pixelHex,
 }: {
 	layer: IArtboardLayerBuild
+	pixelHex: string | null
 }) => {
-	const { fill } = layer
-	const { basis, value } = fill
+	const { fill, palette } = layer
+	const { style, basis, value } = fill
 
-	if (basis === 'defined') {
-		return value
+	if (style === 'none') return 'none'
+
+	switch (basis) {
+		case 'defined':
+			return value
+		case 'random':
+			return colorRandomHex()
+		case 'palette-selected':
+			return palette[0].value
+		case 'palette-random':
+			const index = randomIndex(palette)
+			return palette[index].value
+		case 'pixel':
+			// random to highlight something went wrong
+			return pixelHex || colorRandomHex()
+		default:
+			return '000000'
 	}
-
-	return '000000'
 }

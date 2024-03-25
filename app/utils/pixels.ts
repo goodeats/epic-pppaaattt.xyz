@@ -1,31 +1,13 @@
-type ctxProps = {
-	ctx: CanvasRenderingContext2D
-}
-
-export const ctxBegin = ({ ctx }: ctxProps) => {
-	ctx.beginPath()
-	ctx.save()
-}
-
-export const ctxEnd = ({ ctx }: ctxProps) => {
-	ctx.restore()
-	ctx.closePath()
-}
-
-type ctxPixelCoordColorHexProps = {
+type PixelCoordColorHexProps = {
 	ctx: CanvasRenderingContext2D
 	x: number
 	y: number
 }
 
-export const ctxPixelCoordColorHex = ({
-	ctx,
-	x,
-	y,
-}: ctxPixelCoordColorHexProps) => {
+export const PixelCoordColorHex = ({ ctx, x, y }: PixelCoordColorHexProps) => {
 	const pixelData = buildPixelImageData({ ctx, x, y })
 	const { r, g, b } = buildPixelRGB({ data: pixelData.data })
-	const hex = componentToHex(r) + componentToHex(g) + componentToHex(b)
+	const hex = '#' + componentToHex(r) + componentToHex(g) + componentToHex(b)
 	return hex.toUpperCase()
 }
 
@@ -33,7 +15,7 @@ const buildPixelImageData = ({
 	ctx,
 	x,
 	y,
-}: ctxPixelCoordColorHexProps): ImageData => {
+}: PixelCoordColorHexProps): ImageData => {
 	return ctx.getImageData(x, y, 1, 1)
 }
 

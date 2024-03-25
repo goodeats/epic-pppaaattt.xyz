@@ -49,6 +49,7 @@ const zodStringOrNull = z.union([z.string(), z.null()])
 const whereArgs = z.object({
 	id: z.union([z.string(), arrayOfIds]).optional(),
 	type: z.nativeEnum(DesignTypeEnum).optional(),
+	visible: z.boolean().optional(),
 	selected: z.boolean().optional(),
 	ownerId: z.string().optional(),
 	artboardId: z.string().optional(),
