@@ -30,7 +30,6 @@ model User {
   artboards   Artboard[]
   layers      Layer[]
   designs     Design[]
-  appearances Appearance[]
   assetImages AssetImage[]
 }
 
@@ -221,7 +220,6 @@ model Artboard {
 
   layers Layer[]
   designs Design[]
-  appearances AppearancesOnArtboards[]
 
   // non-unique foreign key
   @@index([projectId])
@@ -260,7 +258,6 @@ model Layer {
   children Layer[] @relation("ParentChildLayer")
 
   designs Design[]
-  appearances AppearancesOnLayers[]
   assetImages AssetImagesOnLayers[]
 
   // non-unique foreign key
@@ -270,84 +267,6 @@ model Layer {
   @@index([ownerId, updatedAt])
   // Unique constraint for slug scoped to ownerId
   @@unique([slug, ownerId])
-}
-
-model Appearance {
-  id          String @id @default(cuid())
-  name        String
-  description String?
-  slug       String
-  type        String // e.g. fill, stroke, etc. also layoutType, palette, size, etc.
-  value       String // string or stringify json
-
-  // global appearances are available to more than one artboard or layer
-  global      Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ownerId String
-
-  layers AppearancesOnLayers[]
-  artboards AppearancesOnArtboards[]
-
-  // non-unique foreign key
-  @@index([ownerId])
-  // This helps our order by in the user search a LOT
-  @@index([ownerId, updatedAt])
-  // Unique constraint for slug scoped to ownerId
-  @@unique([slug, ownerId])
-}
-
-model AppearancesOnArtboards {
-  id          String @id @default(cuid())
-  isVisible   Boolean @default(true)
-  // order of appearance in the artboard... by type?
-  // considered linked lists, but not worth complexity unless I'm adding many appearances to a artboard
-  order       Int
-  // I may want to override the appearance value when on a artboard
-  overrideValue String? // string or stringify json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  appearance Appearance @relation(fields: [appearanceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  appearanceId String
-
-  artboard Artboard @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artboardId String
-
-  // non-unique foreign key
-  @@index([appearanceId])
-  @@index([artboardId])
-  // This helps our order by in the user search a LOT
-  @@index([appearanceId, artboardId])
-}
-
-model AppearancesOnLayers {
-  id          String @id @default(cuid())
-  isVisible   Boolean @default(true)
-  // order of appearance in the layer... by type?
-  // considered linked lists, but not worth complexity unless I'm adding many appearances to a layer
-  order       Int
-  // I may want to override the appearance value when on a layer
-  overrideValue String? // string or stringify json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  appearance Appearance @relation(fields: [appearanceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  appearanceId String
-
-  layer Layer @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  layerId String
-
-  // non-unique foreign key
-  @@index([appearanceId])
-  @@index([layerId])
-  // This helps our order by in the user search a LOT
-  @@index([appearanceId, layerId])
 }
 
 model AssetImage {

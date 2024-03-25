@@ -10,26 +10,6 @@ export const getLayer = async (userId: string, layerId: string) => {
 			slug: true,
 			ownerId: true,
 			updatedAt: true,
-			appearances: {
-				select: {
-					order: true,
-					isVisible: true,
-					overrideValue: true,
-					appearance: {
-						select: {
-							name: true,
-							description: true,
-							slug: true,
-							type: true,
-							value: true,
-							updatedAt: true,
-						},
-					},
-				},
-				orderBy: {
-					order: 'asc',
-				},
-			},
 		},
 	})
 	return layer
