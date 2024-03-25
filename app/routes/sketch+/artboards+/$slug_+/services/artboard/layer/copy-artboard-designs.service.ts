@@ -7,6 +7,7 @@ import {
 import { findFirstLayer } from '#app/models/layer.server'
 import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
 import { artboardLayerCopyArtboardDesignPalettesService } from './design/copy-artboard-design-palettes.service'
+import { artboardLayerCopyArtboardDesignSizesService } from './design/copy-artboard-design-sizes.service'
 
 export const artboardLayerCopyArtboardDesignsService = async ({
 	userId,
@@ -91,7 +92,7 @@ const createLayerDesignTypes = async ({
 }) => {
 	const {
 		designPalettes,
-		// designSizes,
+		designSizes,
 		// designFills,
 		// designStrokes,
 		// designLines,
@@ -108,9 +109,9 @@ const createLayerDesignTypes = async ({
 	})
 
 	// Size
-	// await artboardLayerCopyArtboardDesignSizesService({
-	// 	userId,
-	// 	layer,
-	// 	designs: designSizes,
-	// })
+	await artboardLayerCopyArtboardDesignSizesService({
+		userId,
+		layer,
+		designs: designSizes,
+	})
 }

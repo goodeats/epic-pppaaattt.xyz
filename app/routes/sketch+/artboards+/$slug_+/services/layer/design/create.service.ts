@@ -7,6 +7,7 @@ import {
 	type IDesignTypeCreateOverrides,
 } from '#app/models/design.server'
 import { createDesignPalette } from '#app/models/palette.server'
+import { createDesignSize } from '#app/models/size.server'
 import {
 	LayerDesignDataCreateSchema,
 	type designTypeEnum,
@@ -130,8 +131,11 @@ const createDesignType = ({
 				designId,
 				designTypeOverrides,
 			})
-		// case 'size':
-		// 	return await prisma.size.create({ data })
+		case 'size':
+			return createDesignSize({
+				designId,
+				designTypeOverrides,
+			})
 		// case 'fill':
 		// 	return await prisma.fill.create({ data })
 		// case 'stroke':

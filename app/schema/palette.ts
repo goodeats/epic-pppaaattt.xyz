@@ -3,8 +3,8 @@ import { HexcodeSchema } from './colors'
 
 export const PaletteDataSchema = z.object({
 	designId: z.string(),
-	value: HexcodeSchema.optional(),
 	format: z.string().optional(),
+	value: HexcodeSchema.optional(),
 	opacity: z.number().optional(),
 })
 
