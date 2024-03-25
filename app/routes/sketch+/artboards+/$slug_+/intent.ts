@@ -1,8 +1,4 @@
 export const INTENT = {
-	// artboard actions
-	artboardUpdateWidth: 'update-artboard-width' as const,
-	artboardUpdateHeight: 'update-artboard-height' as const,
-	artboardUpdateBackgroundColor: 'update-artboard-background-color' as const,
 	// artboard design actions
 	artboardCreateDesign: 'create-artboard-design' as const,
 	artboardReorderDesign: 'reorder-artboard-design' as const,
@@ -53,6 +49,13 @@ export const INTENT = {
 	artboardToggleVisibilityLayer: 'toggle-visibility-artboard-layer' as const,
 	artboardDeleteLayer: 'delete-artboard-layer' as const,
 	artboardReorderLayer: 'reorder-artboard-layer' as const,
+}
+
+// artboard actions
+export const ARTBOARD_INTENT = {
+	updateArtboardWidth: 'update-artboard-width' as const,
+	updateArtboardHeight: 'update-artboard-height' as const,
+	updateArtboardBackgroundColor: 'update-artboard-background-color' as const,
 }
 
 // layer design actions

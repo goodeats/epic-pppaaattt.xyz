@@ -6,24 +6,24 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Icon } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { ArtboardWidthSchema } from '#app/schema/artboard'
+import { ArtboardHeightSchema } from '#app/schema/artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../intent'
-import { type PickedArtboardType } from '../queries'
-import { type action } from '../route'
+import { ARTBOARD_INTENT } from '../../../intent'
+import { type PickedArtboardType } from '../../../queries'
+import { type action } from '../../../route'
 
-export const PanelFormArtboardWidth = ({
+export const PanelFormArtboardEditHeight = ({
 	artboard,
 }: {
-	artboard: Pick<PickedArtboardType, 'id' | 'width'>
+	artboard: Pick<PickedArtboardType, 'id' | 'height'>
 }) => {
 	const fetcher = useFetcher<typeof action>()
 
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 	const [form, fields] = useForm({
-		id: 'panel-form-artboard-width',
-		constraint: getFieldsetConstraint(ArtboardWidthSchema),
+		id: 'panel-form-artboard-height',
+		constraint: getFieldsetConstraint(ArtboardHeightSchema),
 		lastSubmission: actionData?.submission,
 		defaultValue: {
 			...artboard,
@@ -41,17 +41,21 @@ export const PanelFormArtboardWidth = ({
 			<AuthenticityTokenInput />
 
 			<input type="hidden" name="id" value={artboard.id} />
-			<input type="hidden" name="intent" value={INTENT.artboardUpdateWidth} />
+			<input
+				type="hidden"
+				name="intent"
+				value={ARTBOARD_INTENT.updateArtboardHeight}
+			/>
 			<div className="flex w-full items-center space-x-2">
-				<Label htmlFor={fields.width.id} className="w-5 flex-shrink-0">
-					<Icon name="width" className="h-5 w-5" />
+				<Label htmlFor={fields.height.id} className="w-5 flex-shrink-0">
+					<Icon name="height" className="h-5 w-5" />
 				</Label>
 				<Input
 					type="number"
 					className="flex h-8"
 					onBlur={e => handleSubmit(e)}
 					disabled={isPending}
-					{...conform.input(fields.width, {
+					{...conform.input(fields.height, {
 						ariaAttributes: true,
 					})}
 				/>

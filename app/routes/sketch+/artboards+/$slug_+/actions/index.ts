@@ -1,6 +1,7 @@
 import { type DataFunctionArgs } from '@remix-run/node'
 import { requireUserId } from '#app/utils/auth.server'
 import {
+	ARTBOARD_INTENT,
 	DESIGN_FILL_INTENT,
 	DESIGN_LAYOUT_INTENT,
 	DESIGN_LINE_INTENT,
@@ -12,6 +13,11 @@ import {
 	INTENT,
 	LAYER_DESIGN_INTENT,
 } from '../intent'
+import {
+	artboardEditBackgroundColorAction,
+	artboardEditHeightAction,
+	artboardEditWidthAction,
+} from './artboard'
 import {
 	artboardDesignDeleteAction,
 	artboardDesignNewAction,
@@ -92,11 +98,6 @@ import {
 	layerDesignReorderAction,
 	layerDesignToggleVisibleAction,
 } from './layer-design'
-import {
-	artboardUpdateBackgroundColorAction,
-	artboardUpdateHeightAction,
-	artboardUpdateWidthAction,
-} from './update-artboard'
 
 export async function action({ request }: DataFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -108,14 +109,14 @@ export async function action({ request }: DataFunctionArgs) {
 	const intent = formData.get('intent')
 	switch (intent) {
 		// artboard intents
-		case INTENT.artboardUpdateWidth: {
-			return artboardUpdateWidthAction(actionArgs)
+		case ARTBOARD_INTENT.updateArtboardWidth: {
+			return artboardEditWidthAction(actionArgs)
 		}
-		case INTENT.artboardUpdateHeight: {
-			return artboardUpdateHeightAction(actionArgs)
+		case ARTBOARD_INTENT.updateArtboardHeight: {
+			return artboardEditHeightAction(actionArgs)
 		}
-		case INTENT.artboardUpdateBackgroundColor: {
-			return artboardUpdateBackgroundColorAction(actionArgs)
+		case ARTBOARD_INTENT.updateArtboardBackgroundColor: {
+			return artboardEditBackgroundColorAction(actionArgs)
 		}
 		// artboard design intents
 		case INTENT.artboardCreateDesign: {

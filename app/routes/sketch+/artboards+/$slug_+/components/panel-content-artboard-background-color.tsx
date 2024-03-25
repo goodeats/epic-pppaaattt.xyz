@@ -5,7 +5,7 @@ import {
 	PanelTitle,
 } from '#app/components/shared'
 import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardBackgroundColor } from './panel-form-artboard-background-color'
+import { PanelFormArtboardEditBackgroundColor } from './panel-form-artboard-background-color'
 
 export const PanelContentArtboardBackgroundColor = ({
 	artboard,
@@ -17,7 +17,7 @@ export const PanelContentArtboardBackgroundColor = ({
 			<PanelTitle>Background Color</PanelTitle>
 			<PanelRow>
 				<PanelRowContainer>
-					<PanelFormArtboardBackgroundColor artboard={artboard} />
+					<PanelFormArtboardEditBackgroundColor artboard={artboard} />
 				</PanelRowContainer>
 			</PanelRow>
 		</Panel>

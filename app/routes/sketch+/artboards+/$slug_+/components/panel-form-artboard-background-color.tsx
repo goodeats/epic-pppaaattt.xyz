@@ -8,11 +8,11 @@ import { Input } from '#app/components/ui/input'
 import { ArtboardBackgroundColorSchema } from '#app/schema/artboard'
 import { stringToHexcode, validateStringIsHexcode } from '#app/utils/colors'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../intent'
+import { ARTBOARD_INTENT } from '../intent'
 import { type PickedArtboardType } from '../queries'
 import { type action } from '../route'
 
-export const PanelFormArtboardBackgroundColor = ({
+export const PanelFormArtboardEditBackgroundColor = ({
 	artboard,
 }: {
 	artboard: Pick<PickedArtboardType, 'id' | 'backgroundColor'>
@@ -60,7 +60,7 @@ export const PanelFormArtboardBackgroundColor = ({
 			<input
 				type="hidden"
 				name="intent"
-				value={INTENT.artboardUpdateBackgroundColor}
+				value={ARTBOARD_INTENT.updateArtboardBackgroundColor}
 			/>
 			<div className="flex w-full items-center space-x-2">
 				<Input

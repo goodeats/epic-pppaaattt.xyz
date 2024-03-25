@@ -1,5 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
+import { type IArtboard } from '#app/models/artboard.server'
 import {
 	ArtboardBackgroundColorSchema,
 	ArtboardHeightSchema,
@@ -12,28 +13,48 @@ import {
 import { findFirstArtboardInstance } from '#app/utils/prisma-extensions-artboard'
 import { parseArtboardSubmission } from './utils'
 
-export async function artboardUpdateWidthAction({
+async function validateSubmission({
+	userId,
+	formData,
+	schema,
+}: {
+	userId: string
+	formData: FormData
+	schema:
+		| typeof ArtboardWidthSchema
+		| typeof ArtboardHeightSchema
+		| typeof ArtboardBackgroundColorSchema
+}) {
+	const submission = await parseArtboardSubmission({
+		userId,
+		formData,
+		schema,
+	})
+
+	if (submission.intent !== 'submit') {
+		return { response: notSubmissionResponse(submission), isValid: false }
+	}
+	if (!submission.value) {
+		return { response: submissionErrorResponse(submission), isValid: false }
+	}
+
+	return { submission, isValid: true }
+}
+
+export async function artboardEditWidthAction({
 	userId,
 	formData,
 }: IntentActionArgs) {
-	// validation
-	const submission = await parseArtboardSubmission({
+	const { submission, isValid, response } = await validateSubmission({
 		userId,
 		formData,
 		schema: ArtboardWidthSchema,
 	})
-	if (submission.intent !== 'submit') {
-		return notSubmissionResponse(submission)
-	}
-	if (!submission.value) {
-		return submissionErrorResponse(submission)
-	}
+	if (!isValid || !submission) return response
 
 	// changes
 	const { id, width } = submission.value
-	const artboard = await findFirstArtboardInstance({
-		where: { id, ownerId: userId },
-	})
+	const artboard = await getArtboard({ id })
 	if (!artboard) return submissionErrorResponse(submission)
 
 	artboard.width = width
@@ -43,7 +64,7 @@ export async function artboardUpdateWidthAction({
 	return json({ status: 'success', submission } as const)
 }
 
-export async function artboardUpdateHeightAction({
+export async function artboardEditHeightAction({
 	userId,
 	formData,
 }: IntentActionArgs) {
@@ -62,9 +83,7 @@ export async function artboardUpdateHeightAction({
 
 	// changes
 	const { id, height } = submission.value
-	const artboard = await findFirstArtboardInstance({
-		where: { id, ownerId: userId },
-	})
+	const artboard = await getArtboard({ id })
 	if (!artboard) return submissionErrorResponse(submission)
 
 	artboard.height = height
@@ -74,7 +93,7 @@ export async function artboardUpdateHeightAction({
 	return json({ status: 'success', submission } as const)
 }
 
-export async function artboardUpdateBackgroundColorAction({
+export async function artboardEditBackgroundColorAction({
 	userId,
 	formData,
 }: IntentActionArgs) {
@@ -93,9 +112,7 @@ export async function artboardUpdateBackgroundColorAction({
 
 	// changes
 	const { id, backgroundColor } = submission.value
-	const artboard = await findFirstArtboardInstance({
-		where: { id, ownerId: userId },
-	})
+	const artboard = await getArtboard({ id })
 	if (!artboard) return submissionErrorResponse(submission)
 
 	artboard.backgroundColor = backgroundColor
@@ -103,4 +120,10 @@ export async function artboardUpdateBackgroundColorAction({
 	await artboard.save()
 
 	return json({ status: 'success', submission } as const)
+}
+
+const getArtboard = async ({ id }: { id: IArtboard['id'] }) => {
+	return await findFirstArtboardInstance({
+		where: { id },
+	})
 }
