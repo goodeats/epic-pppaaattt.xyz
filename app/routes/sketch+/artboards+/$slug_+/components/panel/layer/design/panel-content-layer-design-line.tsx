@@ -31,7 +31,6 @@ export const PanelContentLayerDesignLine = ({
 	designLines: IDesignWithLine[]
 }) => {
 	const {
-		orderedDesigns,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -39,7 +38,6 @@ export const PanelContentLayerDesignLine = ({
 		selectedDesignId,
 	} = panelListVariablesDesignType({
 		designs: designLines,
-		type: DesignTypeEnum.LINE,
 	})
 
 	return (
@@ -54,8 +52,8 @@ export const PanelContentLayerDesignLine = ({
 					/>
 				</div>
 			</PanelHeader>
-			{orderedDesigns.map((design, index) => {
-				const { id, visible, line } = design as IDesignWithLine
+			{designLines.map((design, index) => {
+				const { id, visible, line } = design
 
 				const {
 					isSelectedDesign,

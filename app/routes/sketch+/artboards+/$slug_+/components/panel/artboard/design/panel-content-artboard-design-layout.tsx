@@ -32,7 +32,6 @@ export const PanelContentArtboardDesignLayout = ({
 	designLayouts: IDesignWithLayout[]
 }) => {
 	const {
-		orderedDesigns,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -40,8 +39,6 @@ export const PanelContentArtboardDesignLayout = ({
 		selectedDesignId,
 	} = panelListVariablesDesignType({
 		designs: designLayouts,
-		artboard,
-		type: DesignTypeEnum.LAYOUT,
 	})
 
 	return (
@@ -56,8 +53,8 @@ export const PanelContentArtboardDesignLayout = ({
 					/>
 				</div>
 			</PanelHeader>
-			{orderedDesigns.map((design, index) => {
-				const { id, visible, layout } = design as IDesignWithLayout
+			{designLayouts.map((design, index) => {
+				const { id, visible, layout } = design
 
 				const {
 					isSelectedDesign,

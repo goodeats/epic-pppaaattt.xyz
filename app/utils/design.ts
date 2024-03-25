@@ -11,14 +11,11 @@ import {
 	type IDesignWithTemplate,
 	type IDesignsByType,
 } from '#app/models/design.server'
-import { type PickedArtboardType } from '#app/routes/sketch+/artboards+/$slug_+/queries'
-import { type ArtboardSelectedDesignsType } from '#app/schema/artboard'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import {
 	findFirstDesignIdInArray,
 	getNextDesignId,
 	getPrevDesignId,
-	parseArtboardSelectedDesigns,
 } from './artboard'
 
 export const filterAndOrderArtboardDesignsByType = ({
@@ -273,37 +270,30 @@ export const selectedDesignsOnUpdate = ({
 	}
 }
 
+// these help with suggesting the next design to select on changes
+// so the server doesn't have to work so hard
 export const panelListVariablesDesignType = ({
 	designs,
-	artboard,
-	type,
 }: {
 	designs: IDesignType[]
-	artboard?: PickedArtboardType
-	type: designTypeEnum
 }) => {
-	const orderedDesigns = orderLinkedDesigns(designs) as IDesignType[]
-
 	// helps with finding first visible design on toggle visible
-	const orderedDesignIds = designsIdArray(orderedDesigns)
+	const orderedDesignIds = designsIdArray(designs)
 
 	// helps with disabling reorder buttons
-	const designCount = orderedDesigns.length
+	const designCount = designs.length
 
 	// helps with resetting the selected design for artboard
-	const visibleDesigns = filterVisibleDesigns(orderedDesigns)
+	const visibleDesigns = filterVisibleDesigns(designs)
 	const visibleDesignIds = designsIdArray(visibleDesigns)
 
 	// helps with knowing there is a visible design
 	const firstVisibleDesignId = visibleDesignIds[0]
 
-	const designKey = (type + 'Id') as keyof ArtboardSelectedDesignsType
-	const selectedDesignId = artboard
-		? parseArtboardSelectedDesigns({ artboard })[designKey]
-		: orderedDesigns.find(design => design.selected)?.id
+	const selectedDesignId = designs.find(design => design.selected)?.id
 
 	return {
-		orderedDesigns,
+		orderedDesigns: designs,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,

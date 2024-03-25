@@ -32,7 +32,6 @@ export const PanelContentLayerDesignFill = ({
 	designFills: IDesignWithFill[]
 }) => {
 	const {
-		orderedDesigns,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -40,7 +39,6 @@ export const PanelContentLayerDesignFill = ({
 		selectedDesignId,
 	} = panelListVariablesDesignType({
 		designs: designFills,
-		type: DesignTypeEnum.FILL,
 	})
 
 	return (
@@ -55,8 +53,8 @@ export const PanelContentLayerDesignFill = ({
 					/>
 				</div>
 			</PanelHeader>
-			{orderedDesigns.map((design, index) => {
-				const { id, visible, fill } = design as IDesignWithFill
+			{designFills.map((design, index) => {
+				const { id, visible, fill } = design
 
 				const {
 					isSelectedDesign,

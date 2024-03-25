@@ -31,7 +31,6 @@ export const PanelContentLayerDesignTemplate = ({
 	designTemplates: IDesignWithTemplate[]
 }) => {
 	const {
-		orderedDesigns,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -39,7 +38,6 @@ export const PanelContentLayerDesignTemplate = ({
 		selectedDesignId,
 	} = panelListVariablesDesignType({
 		designs: designTemplates,
-		type: DesignTypeEnum.TEMPLATE,
 	})
 
 	return (
@@ -54,8 +52,8 @@ export const PanelContentLayerDesignTemplate = ({
 					/>
 				</div>
 			</PanelHeader>
-			{orderedDesigns.map((design, index) => {
-				const { id, visible, template } = design as IDesignWithTemplate
+			{designTemplates.map((design, index) => {
+				const { id, visible, template } = design
 
 				const {
 					isSelectedDesign,

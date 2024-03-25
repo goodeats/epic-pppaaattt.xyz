@@ -32,7 +32,6 @@ export const PanelContentArtboardDesignStroke = ({
 	designStrokes: IDesignWithStroke[]
 }) => {
 	const {
-		orderedDesigns,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -40,8 +39,6 @@ export const PanelContentArtboardDesignStroke = ({
 		selectedDesignId,
 	} = panelListVariablesDesignType({
 		designs: designStrokes,
-		artboard,
-		type: DesignTypeEnum.STROKE,
 	})
 
 	return (
@@ -56,8 +53,8 @@ export const PanelContentArtboardDesignStroke = ({
 					/>
 				</div>
 			</PanelHeader>
-			{orderedDesigns.map((design, index) => {
-				const { id, visible, stroke } = design as IDesignWithStroke
+			{designStrokes.map((design, index) => {
+				const { id, visible, stroke } = design
 
 				const {
 					isSelectedDesign,

@@ -32,7 +32,6 @@ export const PanelContentArtboardDesignRotate = ({
 	designRotates: IDesignWithRotate[]
 }) => {
 	const {
-		orderedDesigns,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -40,8 +39,6 @@ export const PanelContentArtboardDesignRotate = ({
 		selectedDesignId,
 	} = panelListVariablesDesignType({
 		designs: designRotates,
-		artboard,
-		type: DesignTypeEnum.ROTATE,
 	})
 
 	return (
@@ -56,8 +53,8 @@ export const PanelContentArtboardDesignRotate = ({
 					/>
 				</div>
 			</PanelHeader>
-			{orderedDesigns.map((design, index) => {
-				const { id, visible, rotate } = design as IDesignWithRotate
+			{designRotates.map((design, index) => {
+				const { id, visible, rotate } = design
 
 				const {
 					isSelectedDesign,

@@ -31,7 +31,6 @@ export const PanelContentArtboardDesignSize = ({
 	designSizes: IDesignWithSize[]
 }) => {
 	const {
-		orderedDesigns,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -39,8 +38,6 @@ export const PanelContentArtboardDesignSize = ({
 		selectedDesignId,
 	} = panelListVariablesDesignType({
 		designs: designSizes,
-		artboard,
-		type: DesignTypeEnum.SIZE,
 	})
 
 	return (
@@ -55,8 +52,8 @@ export const PanelContentArtboardDesignSize = ({
 					/>
 				</div>
 			</PanelHeader>
-			{orderedDesigns.map((design, index) => {
-				const { id, visible, size } = design as IDesignWithSize
+			{designSizes.map((design, index) => {
+				const { id, visible, size } = design
 
 				const {
 					isSelectedDesign,

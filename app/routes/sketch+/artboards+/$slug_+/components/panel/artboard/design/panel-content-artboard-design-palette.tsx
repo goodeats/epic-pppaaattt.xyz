@@ -31,7 +31,6 @@ export const PanelContentArtboardDesignPalette = ({
 	designPalettes: IDesignWithPalette[]
 }) => {
 	const {
-		orderedDesigns,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -39,8 +38,6 @@ export const PanelContentArtboardDesignPalette = ({
 		selectedDesignId,
 	} = panelListVariablesDesignType({
 		designs: designPalettes,
-		artboard,
-		type: DesignTypeEnum.PALETTE,
 	})
 
 	return (
@@ -55,8 +52,8 @@ export const PanelContentArtboardDesignPalette = ({
 					/>
 				</div>
 			</PanelHeader>
-			{orderedDesigns.map((design, index) => {
-				const { id, visible, palette } = design as IDesignWithPalette
+			{designPalettes.map((design, index) => {
+				const { id, visible, palette } = design
 
 				const {
 					isSelectedDesign,

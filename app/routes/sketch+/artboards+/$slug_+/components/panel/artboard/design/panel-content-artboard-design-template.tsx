@@ -31,7 +31,6 @@ export const PanelContentArtboardDesignTemplate = ({
 	designTemplates: IDesignWithTemplate[]
 }) => {
 	const {
-		orderedDesigns,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -39,8 +38,6 @@ export const PanelContentArtboardDesignTemplate = ({
 		selectedDesignId,
 	} = panelListVariablesDesignType({
 		designs: designTemplates,
-		artboard,
-		type: DesignTypeEnum.TEMPLATE,
 	})
 
 	return (
@@ -55,8 +52,8 @@ export const PanelContentArtboardDesignTemplate = ({
 					/>
 				</div>
 			</PanelHeader>
-			{orderedDesigns.map((design, index) => {
-				const { id, visible, template } = design as IDesignWithTemplate
+			{designTemplates.map((design, index) => {
+				const { id, visible, template } = design
 
 				const {
 					isSelectedDesign,

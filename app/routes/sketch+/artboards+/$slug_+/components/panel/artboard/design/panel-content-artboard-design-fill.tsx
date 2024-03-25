@@ -32,7 +32,6 @@ export const PanelContentArtboardDesignFill = ({
 	designFills: IDesignWithFill[]
 }) => {
 	const {
-		orderedDesigns,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -40,8 +39,6 @@ export const PanelContentArtboardDesignFill = ({
 		selectedDesignId,
 	} = panelListVariablesDesignType({
 		designs: designFills,
-		artboard,
-		type: DesignTypeEnum.FILL,
 	})
 
 	return (
@@ -56,8 +53,8 @@ export const PanelContentArtboardDesignFill = ({
 					/>
 				</div>
 			</PanelHeader>
-			{orderedDesigns.map((design, index) => {
-				const { id, visible, fill } = design as IDesignWithFill
+			{designFills.map((design, index) => {
+				const { id, visible, fill } = design
 
 				const {
 					isSelectedDesign,
