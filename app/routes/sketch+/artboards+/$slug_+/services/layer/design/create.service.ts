@@ -18,7 +18,7 @@ import {
 	type designTypeEnum,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
-import { layerUpdateSelectedDesignService } from '../update-selected-design.service'
+import { layerUpdateSelectedDesignService } from './update-selected.service'
 
 export const layerDesignCreateService = async ({
 	userId,
