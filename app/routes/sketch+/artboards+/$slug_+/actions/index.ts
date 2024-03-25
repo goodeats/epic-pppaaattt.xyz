@@ -5,6 +5,7 @@ import {
 	DESIGN_LAYOUT_INTENT,
 	DESIGN_LINE_INTENT,
 	DESIGN_PALETTE_INTENT,
+	DESIGN_ROTATE_INTENT,
 	DESIGN_SIZE_INTENT,
 	DESIGN_STROKE_INTENT,
 	INTENT,
@@ -73,6 +74,10 @@ import {
 } from './design-layout'
 import { designLineEditWidthAction } from './design-line'
 import { designPaletteEditValueAction } from './design-palette'
+import {
+	designRotateEditBasisAction,
+	designRotateEditRotationAction,
+} from './design-rotate'
 import { designSizeEditValueAction } from './design-size'
 import {
 	designStrokeEditBasisAction,
@@ -253,6 +258,13 @@ export async function action({ request }: DataFunctionArgs) {
 		// LINE DESIGN INTENTS
 		case DESIGN_LINE_INTENT.updateDesignLineWidth: {
 			return designLineEditWidthAction(actionArgs)
+		}
+		// ROTATE DESIGN INTENTS
+		case DESIGN_ROTATE_INTENT.updateDesignRotateRotation: {
+			return designRotateEditRotationAction(actionArgs)
+		}
+		case DESIGN_ROTATE_INTENT.updateDesignRotateBasis: {
+			return designRotateEditBasisAction(actionArgs)
 		}
 		// LAYOUT DESIGN INTENTS
 		case DESIGN_LAYOUT_INTENT.updateDesignLayoutStyle: {

@@ -88,6 +88,11 @@ export const DESIGN_LINE_INTENT = {
 	updateDesignLineWidth: 'update-design-line-width' as const,
 }
 
+export const DESIGN_ROTATE_INTENT = {
+	updateDesignRotateRotation: 'update-design-rotate-rotation' as const,
+	updateDesignRotateBasis: 'update-design-rotate-basis' as const,
+}
+
 export const DESIGN_LAYOUT_INTENT = {
 	updateDesignLayoutStyle: 'update-design-layout-style' as const,
 	updateDesignLayoutCount: 'update-design-layout-count' as const,
