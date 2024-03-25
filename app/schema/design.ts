@@ -25,32 +25,18 @@ export const designSchema = z.object({
 	type: z.nativeEnum(DesignTypeEnum),
 	ownerId: z.string(),
 	artboardId: z.string().optional(),
+	layerId: z.string().optional(),
+	visible: z.boolean().optional(),
+	selected: z.boolean().optional(),
 }) satisfies z.Schema<Design>
 
-export const NewArtboardDesignSchema = z.object({
-	artboardId: z.string(),
+export const LayerDesignDataCreateSchema = z.object({
 	type: z.nativeEnum(DesignTypeEnum),
-	visibleDesignsCount: z.number(),
-})
-
-export const DeleteArtboardDesignSchema = z.object({
-	id: z.string(),
-	artboardId: z.string(),
-	updateSelectedDesignId: z.string().optional(),
-})
-
-export const ToggleVisibilityArtboardDesignSchema = z.object({
-	id: z.string(),
-	artboardId: z.string(),
-	updateSelectedDesignId: z.string().optional(),
-})
-
-export const ReorderArtboardDesignSchema = z.object({
-	id: z.string(),
-	artboardId: z.string(),
-	direction: z.enum(['up', 'down']),
-	updateSelectedDesignId: z.string().optional(),
-})
+	ownerId: z.string(),
+	layerId: z.string(),
+	visible: z.boolean().optional(),
+	selected: z.boolean().optional(),
+}) satisfies z.Schema<Design>
 
 export type selectArgsType = z.infer<typeof selectArgs>
 const selectArgs = z.object({
@@ -58,10 +44,17 @@ const selectArgs = z.object({
 })
 
 export type whereArgsType = z.infer<typeof whereArgs>
+const arrayOfIds = z.object({ in: z.array(z.string()) })
+const zodStringOrNull = z.union([z.string(), z.null()])
 const whereArgs = z.object({
-	id: z.string().optional(),
+	id: z.union([z.string(), arrayOfIds]).optional(),
+	type: z.nativeEnum(DesignTypeEnum).optional(),
+	selected: z.boolean().optional(),
 	ownerId: z.string().optional(),
 	artboardId: z.string().optional(),
+	layerId: z.string().optional(),
+	prevId: zodStringOrNull.optional(),
+	nextId: zodStringOrNull.optional(),
 })
 
 export type findDesignArgsType = z.infer<typeof findDesignArgs>

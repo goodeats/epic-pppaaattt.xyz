@@ -4,11 +4,12 @@ import {
 	SideNavTabsWrapper,
 } from '#app/components/shared'
 import { TabsContent } from '#app/components/ui/tabs'
-import { type IDesignWithType } from '#app/models/design.server'
+import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
-import { PanelContentArtboard } from './panel-content-artboard'
-import { PanelContentArtboardLayer } from './panel-content-artboard-layer'
+import { PanelContentArtboardDesigns } from './panel/artboard/panel-content-artboard-designs'
+import { PanelContentArtboardLayers } from './panel/artboard/panel-content-artboard-layers'
+import { PanelContentLayerDesigns } from './panel/layer/panel-content-layer-designs'
 
 export const PanelContentLeft = ({
 	artboard,
@@ -24,7 +25,7 @@ export const PanelContentLeft = ({
 				<SideNavTabsTrigger value="assets">Assets</SideNavTabsTrigger>
 			</SideNavTabsList>
 			<TabsContent value="layers">
-				<PanelContentArtboardLayer artboard={artboard} layers={layers} />
+				<PanelContentArtboardLayers artboard={artboard} layers={layers} />
 			</TabsContent>
 			<TabsContent value="assets">Add assets like images here</TabsContent>
 		</SideNavTabsWrapper>
@@ -34,21 +35,30 @@ export const PanelContentLeft = ({
 export const PanelContentRight = ({
 	artboard,
 	artboardDesigns,
+	layer,
+	layerDesigns,
 }: {
 	artboard: PickedArtboardType
-	artboardDesigns: IDesignWithType[]
+	artboardDesigns: IDesignsByType
+	layer: ILayer | null | undefined
+	layerDesigns: IDesignsByType | null | undefined
 }) => {
+	const layerPanel = layer && layerDesigns
 	return (
-		<SideNavTabsWrapper defaultValue="artboard">
+		<SideNavTabsWrapper defaultValue="designs">
 			<SideNavTabsList cols={2}>
-				<SideNavTabsTrigger value="artboard">Designs</SideNavTabsTrigger>
+				<SideNavTabsTrigger value="designs">Designs</SideNavTabsTrigger>
 				<SideNavTabsTrigger value="actions">Actions</SideNavTabsTrigger>
 			</SideNavTabsList>
-			<TabsContent value="artboard">
-				<PanelContentArtboard
-					artboard={artboard}
-					artboardDesigns={artboardDesigns}
-				/>
+			<TabsContent value="designs">
+				{layerPanel ? (
+					<PanelContentLayerDesigns layer={layer} designs={layerDesigns} />
+				) : (
+					<PanelContentArtboardDesigns
+						artboard={artboard}
+						designs={artboardDesigns}
+					/>
+				)}
 			</TabsContent>
 			<TabsContent value="actions">
 				Add actions like download and duplicate here

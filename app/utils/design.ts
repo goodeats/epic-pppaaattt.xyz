@@ -1,36 +1,88 @@
-import { type IDesignType } from '#app/models/design.server'
-import { type PickedArtboardType } from '#app/routes/sketch+/artboards+/$slug_+/queries'
-import { type ArtboardSelectedDesignsType } from '#app/schema/artboard'
-import { type designTypeEnum } from '#app/schema/design'
 import {
-	findFirstDesignIdInArray,
-	getNextDesignId,
-	getPrevDesignId,
-	parseArtboardSelectedDesigns,
-} from './artboard'
+	type IDesignWithPalette,
+	type IDesignType,
+	type IDesignWithType,
+	type IDesignWithSize,
+	type IDesignWithFill,
+	type IDesignWithStroke,
+	type IDesignWithLine,
+	type IDesignWithRotate,
+	type IDesignWithLayout,
+	type IDesignWithTemplate,
+	type IDesignsByType,
+} from '#app/models/design.server'
+import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 
-// this is bad, use the other one
-export const orderDesigns = (designs: IDesignType[]): IDesignType[] => {
-	// Use reduce to accumulate designs in order based on their prevId
-	return designs.reduce((acc: IDesignType[], design) => {
-		// Check if the design is the head of the list (has no prevId)
-		if (!design.prevId) {
-			// If it is the head, add it to the start of the accumulator array
-			acc.unshift(design)
-		} else {
-			// Find the index of the design's predecessor in the accumulator array
-			let currentDesignIndex = acc.findIndex(d => d.id === design.prevId)
-			if (currentDesignIndex !== -1) {
-				// If the predecessor is found, insert the current design right after it
-				acc.splice(currentDesignIndex + 1, 0, design)
-			} else {
-				// If the predecessor is not found, add the current design to the end of the accumulator array
-				acc.push(design)
-			}
-		}
-		// Return the updated accumulator array
-		return acc
-	}, []) // Initialize the accumulator array as empty
+export const filterAndOrderArtboardDesignsByType = ({
+	designs,
+}: {
+	designs: IDesignWithType[]
+}): IDesignsByType => {
+	const designPalettes = orderLinkedDesigns(
+		filterDesignsByType(designs, 'palette'),
+	) as IDesignWithPalette[]
+	const designSizes = orderLinkedDesigns(
+		filterDesignsByType(designs, 'size'),
+	) as IDesignWithSize[]
+	const designFills = orderLinkedDesigns(
+		filterDesignsByType(designs, 'fill'),
+	) as IDesignWithFill[]
+	const designStrokes = orderLinkedDesigns(
+		filterDesignsByType(designs, 'stroke'),
+	) as IDesignWithStroke[]
+	const designLines = orderLinkedDesigns(
+		filterDesignsByType(designs, 'line'),
+	) as IDesignWithLine[]
+	const designRotates = orderLinkedDesigns(
+		filterDesignsByType(designs, 'rotate'),
+	) as IDesignWithRotate[]
+	const designLayouts = orderLinkedDesigns(
+		filterDesignsByType(designs, 'layout'),
+	) as IDesignWithLayout[]
+	const designTemplates = orderLinkedDesigns(
+		filterDesignsByType(designs, 'template'),
+	) as IDesignWithTemplate[]
+
+	return {
+		designPalettes,
+		designSizes,
+		designFills,
+		designStrokes,
+		designLines,
+		designRotates,
+		designLayouts,
+		designTemplates,
+	}
+}
+
+export const filterDesignsByType = (
+	designs: IDesignWithType[],
+	type: designTypeEnum,
+): IDesignType[] => {
+	const typeToPropertyMap: {
+		[key in designTypeEnum]: keyof IDesignWithType | null
+	} = {
+		[DesignTypeEnum.PALETTE]: 'palette',
+		[DesignTypeEnum.SIZE]: 'size',
+		[DesignTypeEnum.FILL]: 'fill',
+		[DesignTypeEnum.STROKE]: 'stroke',
+		[DesignTypeEnum.LINE]: 'line',
+		[DesignTypeEnum.ROTATE]: 'rotate',
+		[DesignTypeEnum.LAYOUT]: 'layout',
+		[DesignTypeEnum.TEMPLATE]: 'template',
+	}
+
+	const property = typeToPropertyMap[type]
+
+	if (!property) {
+		return designs // Or throw an error if the type is not recognized
+	}
+
+	return designs
+		.filter(
+			design => design.type === type.toLowerCase() && design[property] !== null,
+		)
+		.map(design => ({ ...design, [property]: design[property] as any }))
 }
 
 export const orderLinkedDesigns = (designs: IDesignType[]): IDesignType[] => {
@@ -213,35 +265,30 @@ export const selectedDesignsOnUpdate = ({
 	}
 }
 
+// these help with suggesting the next design to select on changes
+// so the server doesn't have to work so hard
 export const panelListVariablesDesignType = ({
 	designs,
-	artboard,
-	type,
 }: {
 	designs: IDesignType[]
-	artboard: PickedArtboardType
-	type: designTypeEnum
 }) => {
-	const orderedDesigns = orderLinkedDesigns(designs) as IDesignType[]
-
 	// helps with finding first visible design on toggle visible
-	const orderedDesignIds = designsIdArray(orderedDesigns)
+	const orderedDesignIds = designsIdArray(designs)
 
 	// helps with disabling reorder buttons
-	const designCount = orderedDesigns.length
+	const designCount = designs.length
 
 	// helps with resetting the selected design for artboard
-	const visibleDesigns = filterVisibleDesigns(orderedDesigns)
+	const visibleDesigns = filterVisibleDesigns(designs)
 	const visibleDesignIds = designsIdArray(visibleDesigns)
 
 	// helps with knowing there is a visible design
 	const firstVisibleDesignId = visibleDesignIds[0]
 
-	const designKey = (type + 'Id') as keyof ArtboardSelectedDesignsType
-	const selectedDesignId = parseArtboardSelectedDesigns({ artboard })[designKey]
+	const selectedDesignId = designs.find(design => design.selected)?.id
 
 	return {
-		orderedDesigns,
+		orderedDesigns: designs,
 		orderedDesignIds,
 		designCount,
 		visibleDesignIds,
@@ -272,4 +319,40 @@ export const panelItemVariablesDesignType = ({
 		prevDesignId,
 		nextVisibleDesignId,
 	}
+}
+
+// helper for when a design is deleted, made invisible, or moved
+const getNextDesignId = (
+	visibleDesignIds: string[],
+	currentDesignId: string,
+): string | null => {
+	const currentIndex = visibleDesignIds.indexOf(currentDesignId)
+	if (currentIndex === -1) return null
+
+	return visibleDesignIds[currentIndex + 1] || null
+}
+
+// helper for when a design is made visible or moved
+const getPrevDesignId = (
+	visibleDesignIds: string[],
+	currentDesignId: string,
+): string | null => {
+	const currentIndex = visibleDesignIds.indexOf(currentDesignId)
+	if (currentIndex === -1) return null
+
+	return visibleDesignIds[currentIndex - 1] || null
+}
+
+const findFirstDesignIdInArray = (
+	designIds: string[],
+	designId1: string,
+	designId2: string,
+): string | null => {
+	const index1 = designIds.indexOf(designId1)
+	const index2 = designIds.indexOf(designId2)
+	if (index1 === -1 && index2 === -1) return null // Neither value is found
+	if (index1 !== -1 && index2 === -1) return designId1 // Only designId1 is found
+	if (index1 === -1 && index2 !== -1) return designId2 // Only designId2 is found
+	// Both values are found, return the one with the lower index
+	return index1 < index2 ? designId1 : designId2
 }

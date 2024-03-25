@@ -5,20 +5,39 @@ import {
 	type whereArgsType,
 } from '#app/schema/design'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
-import { type IFill } from './fill.server'
-import { type ILayout } from './layout.server'
-import { type ILine } from './line.server'
-import { type IPalette } from './palette.server'
-import { type IRotate } from './rotate.server'
-import { type ISize } from './size.server'
-import { type IStroke } from './stroke.server'
-import { type ITemplate } from './template.server'
+import { type IFillCreateOverrides, type IFill } from './fill.server'
+import { type ILayoutCreateOverrides, type ILayout } from './layout.server'
+import { type ILineCreateOverrides, type ILine } from './line.server'
+import { type IPaletteCreateOverrides, type IPalette } from './palette.server'
+import { type IRotateCreateOverrides, type IRotate } from './rotate.server'
+import { type ISizeCreateOverrides, type ISize } from './size.server'
+import { type IStrokeCreateOverrides, type IStroke } from './stroke.server'
+import {
+	type ITemplateCreateOverrides,
+	type ITemplate,
+} from './template.server'
 
 export interface IDesign extends Design {}
+
+export interface IDesignCreateOverrides {
+	visible?: boolean
+	selected?: boolean
+}
+
+export type IDesignTypeCreateOverrides =
+	| IPaletteCreateOverrides
+	| ISizeCreateOverrides
+	| IFillCreateOverrides
+	| IStrokeCreateOverrides
+	| ILineCreateOverrides
+	| IRotateCreateOverrides
+	| ILayoutCreateOverrides
+	| ITemplateCreateOverrides
 export interface IDesignWithType {
 	id: string
 	type: string
 	visible: boolean
+	selected: boolean
 	createdAt: Date | string
 	nextId: string | null
 	prevId: string | null
@@ -33,6 +52,17 @@ export interface IDesignWithType {
 	rotate: IRotate | null
 	layout: ILayout | null
 	template: ITemplate | null
+}
+
+export interface IDesignsByType {
+	designPalettes: IDesignWithPalette[]
+	designSizes: IDesignWithSize[]
+	designFills: IDesignWithFill[]
+	designStrokes: IDesignWithStroke[]
+	designLines: IDesignWithLine[]
+	designRotates: IDesignWithRotate[]
+	designLayouts: IDesignWithLayout[]
+	designTemplates: IDesignWithTemplate[]
 }
 
 export interface IDesignWithPalette extends IDesignWithType {
@@ -83,7 +113,7 @@ export const findManyDesignsWithType = async ({
 	where,
 }: {
 	where: whereArgsType
-}) => {
+}): Promise<IDesignWithType[]> => {
 	const designs = await prisma.design.findMany({
 		where,
 		include: {
@@ -134,10 +164,9 @@ export const getTransactionDesign = async ({
 	id: string
 	prisma: PrismaTransactionType
 }) => {
-	const design = await prisma.design.findFirst({
-		where: { id },
-		include: { palette: true },
-	})
+	const designPromise = findDesignTransactionPromise({ id, prisma })
+	const design = await designPromise
+
 	// prevent any pending promises in the transaction
 	if (!design) throw new Error(`Design not found: ${id}`)
 
@@ -175,4 +204,77 @@ export const connectPrevAndNextDesignsPromise = ({
 			data: { prevId },
 		}),
 	]
+}
+
+export const connectPrevAndNextDesigns = ({
+	prevId,
+	nextId,
+}: {
+	prevId: IDesign['id']
+	nextId: IDesign['id']
+}) => {
+	const connectNextToPrev = prisma.design.update({
+		where: { id: prevId },
+		data: { nextId },
+	})
+	const connectPrevToNext = prisma.design.update({
+		where: { id: nextId },
+		data: { prevId },
+	})
+	return [connectNextToPrev, connectPrevToNext]
+}
+
+export const updateDesignToHead = ({ id }: { id: IDesign['id'] }) => {
+	return prisma.design.update({
+		where: { id },
+		data: { prevId: null },
+	})
+}
+
+export const updateDesignToTail = ({ id }: { id: IDesign['id'] }) => {
+	return prisma.design.update({
+		where: { id },
+		data: { nextId: null },
+	})
+}
+
+export const updateDesignRemoveNodes = ({ id }: { id: IDesign['id'] }) => {
+	return prisma.design.update({
+		where: { id },
+		data: { prevId: null, nextId: null },
+	})
+}
+
+export const updateDesignNodes = ({
+	id,
+	nextId,
+	prevId,
+}: {
+	id: string
+	nextId: string | null
+	prevId: string | null
+}) => {
+	return prisma.design.update({
+		where: { id },
+		data: { prevId, nextId },
+	})
+}
+
+export const deleteDesign = ({ id }: { id: IDesign['id'] }) => {
+	return prisma.design.delete({
+		where: { id },
+	})
+}
+
+export const updateDesignVisible = ({
+	id,
+	visible,
+}: {
+	id: IDesign['id']
+	visible: boolean
+}) => {
+	return prisma.design.update({
+		where: { id },
+		data: { visible },
+	})
 }

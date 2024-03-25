@@ -1,10 +1,13 @@
 import { useEffect, useRef } from 'react'
-import { type PickedArtboardType } from '../queries'
+import { type IArtboardBuild, type PickedArtboardType } from '../queries'
+import { canvasDrawService } from '../services/canvas/draw.service'
 
 export const CanvasContent = ({
 	artboard,
+	artboardBuild,
 }: {
 	artboard: PickedArtboardType
+	artboardBuild: IArtboardBuild | null
 }) => {
 	const { width, height, backgroundColor } = artboard
 
@@ -13,12 +16,8 @@ export const CanvasContent = ({
 
 		useEffect(() => {
 			const canvas = canvasRef.current
-			if (!canvas) return
-			const ctx = canvas.getContext('2d')
-			if (!ctx) return
-			ctx.fillStyle = `#${backgroundColor}`
-			ctx.fillRect(0, 0, width, height)
-			// canvas && CanvasDraw({ canvas, buildAttributes });
+			const canvasReady = canvas && artboardBuild
+			canvasReady && canvasDrawService({ canvas, artboard, artboardBuild })
 		}, [canvasRef])
 
 		return (

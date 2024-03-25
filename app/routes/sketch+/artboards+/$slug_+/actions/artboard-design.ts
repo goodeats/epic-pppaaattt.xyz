@@ -4,8 +4,8 @@ import {
 	DeleteArtboardDesignSchema,
 	NewArtboardDesignSchema,
 	ReorderArtboardDesignSchema,
-	ToggleVisibilityArtboardDesignSchema,
-} from '#app/schema/design'
+	ToggleVisibleArtboardDesignSchema,
+} from '#app/schema/design-artboard'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
@@ -30,7 +30,7 @@ async function validateSubmission({
 	schema:
 		| typeof NewArtboardDesignSchema
 		| typeof ReorderArtboardDesignSchema
-		| typeof ToggleVisibilityArtboardDesignSchema
+		| typeof ToggleVisibleArtboardDesignSchema
 		| typeof DeleteArtboardDesignSchema
 }) {
 	const newDesign = schema === NewArtboardDesignSchema
@@ -59,12 +59,11 @@ export async function artboardDesignNewAction({
 	})
 	if (!isValid || !submission) return response
 
-	const { artboardId, type, visibleDesignsCount } = submission.value
+	const { artboardId, type } = submission.value
 	const { success, error } = await artboardDesignCreateService({
 		userId,
 		artboardId,
 		type,
-		visibleDesignsCount,
 	})
 
 	if (error) return submissionErrorResponse(submission)
@@ -85,6 +84,7 @@ export async function artboardDesignReorderAction({
 
 	const { id, artboardId, direction, updateSelectedDesignId } = submission.value
 	const args = {
+		userId,
 		id,
 		artboardId,
 		updateSelectedDesignId,
@@ -107,12 +107,13 @@ export async function artboardDesignToggleVisibilityAction({
 	const { submission, isValid, response } = await validateSubmission({
 		userId,
 		formData,
-		schema: ToggleVisibilityArtboardDesignSchema,
+		schema: ToggleVisibleArtboardDesignSchema,
 	})
 	if (!isValid || !submission) return response
 
 	const { id, artboardId, updateSelectedDesignId } = submission.value
 	const { success, error } = await artboardDesignToggleVisibleService({
+		userId,
 		id,
 		artboardId,
 		updateSelectedDesignId,
@@ -136,6 +137,7 @@ export async function artboardDesignDeleteAction({
 
 	const { id, artboardId, updateSelectedDesignId } = submission.value
 	const { success, error } = await artboardDesignDeleteService({
+		userId,
 		id,
 		artboardId,
 		updateSelectedDesignId,

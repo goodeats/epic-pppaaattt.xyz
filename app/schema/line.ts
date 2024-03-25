@@ -1,5 +1,16 @@
 import { z } from 'zod'
 
+export const LineDataSchema = z.object({
+	designId: z.string(),
+	width: z.number().min(1).max(100).optional(),
+})
+
+export const EditDesignLineWidthSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	width: z.number().min(1).max(100),
+})
+
 export const EditArtboardLineWidthSchema = z.object({
 	id: z.string(),
 	designId: z.string(),
