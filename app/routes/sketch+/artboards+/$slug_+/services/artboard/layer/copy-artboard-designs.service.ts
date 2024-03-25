@@ -100,9 +100,17 @@ const createLayerDesignTypes = async ({
 		// designTemplates,
 	} = artboardDesignsByType
 
+	// Palette
 	await artboardLayerCopyArtboardDesignPalettesService({
 		userId,
 		layer,
 		designs: designPalettes,
 	})
+
+	// Size
+	// await artboardLayerCopyArtboardDesignSizesService({
+	// 	userId,
+	// 	layer,
+	// 	designs: designSizes,
+	// })
 }

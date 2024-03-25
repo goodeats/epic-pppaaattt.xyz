@@ -4,21 +4,14 @@ import {
 	findFirstDesign,
 	connectPrevAndNextDesigns,
 	updateLayerSelectedDesign,
+	type IDesignTypeCreateOverrides,
 } from '#app/models/design.server'
-import { type IPaletteCreateOverrides } from '#app/models/palette.server'
+import { createDesignPalette } from '#app/models/palette.server'
 import {
 	LayerDesignDataCreateSchema,
 	type designTypeEnum,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
-
-type layerDesignCreateServiceProps = {
-	userId: User['id']
-	layerId: Layer['id']
-	type: designTypeEnum
-	designOverrides?: IDesignCreateOverrides
-	designTypeOverrides?: IPaletteCreateOverrides
-}
 
 export const layerDesignCreateService = async ({
 	userId,
@@ -26,7 +19,13 @@ export const layerDesignCreateService = async ({
 	type,
 	designOverrides = {},
 	designTypeOverrides = {},
-}: layerDesignCreateServiceProps) => {
+}: {
+	userId: User['id']
+	layerId: Layer['id']
+	type: designTypeEnum
+	designOverrides?: IDesignCreateOverrides
+	designTypeOverrides?: IDesignTypeCreateOverrides
+}) => {
 	try {
 		// Step 1: find existing layer designs tail
 		const tailDesign = await getLayerDesignsTail({
@@ -35,19 +34,24 @@ export const layerDesignCreateService = async ({
 		})
 
 		// Step 2: create design before its associated type
+		console.log('creating design')
 		const createdDesign = await createDesign({
 			userId,
 			layerId,
 			type,
 			designOverrides,
 		})
+		console.log('created design', createdDesign)
 
 		// Step 3: create the associated design type
-		await createDesignType({
+		console.log('creating design type')
+		const createdDesignTypePromise = createDesignType({
 			designId: createdDesign.id,
 			type,
 			designTypeOverrides,
 		})
+		await prisma.$transaction([createdDesignTypePromise])
+		console.log('created design type')
 
 		// Step 4: connect new design to tail design, if it exists
 		if (tailDesign) {
@@ -96,7 +100,7 @@ const createDesign = async ({
 	userId: User['id']
 	layerId: Layer['id']
 	type: designTypeEnum
-	designOverrides?: IDesignCreateOverrides
+	designOverrides: IDesignCreateOverrides
 }) => {
 	const data = LayerDesignDataCreateSchema.parse({
 		type,
@@ -111,34 +115,36 @@ const createDesign = async ({
 	return createdDesign
 }
 
-const createDesignType = async ({
+const createDesignType = ({
 	designId,
 	type,
 	designTypeOverrides,
 }: {
 	designId: Design['id']
 	type: designTypeEnum
-	designTypeOverrides?: IPaletteCreateOverrides
+	designTypeOverrides: IDesignTypeCreateOverrides
 }) => {
-	const data = { designId, ...designTypeOverrides }
-
-	// each design type has a default value set in the schema
 	switch (type) {
 		case 'palette':
-			return await prisma.palette.create({ data })
-		case 'size':
-		// return await prisma.size.create({ data })
-		case 'fill':
-			return await prisma.fill.create({ data })
-		case 'stroke':
-			return await prisma.stroke.create({ data })
-		case 'line':
-			return await prisma.line.create({ data })
-		case 'rotate':
-			return await prisma.rotate.create({ data })
-		case 'layout':
-			return await prisma.layout.create({ data })
-		case 'template':
-			return await prisma.template.create({ data })
+			return createDesignPalette({
+				designId,
+				designTypeOverrides,
+			})
+		// case 'size':
+		// 	return await prisma.size.create({ data })
+		// case 'fill':
+		// 	return await prisma.fill.create({ data })
+		// case 'stroke':
+		// 	return await prisma.stroke.create({ data })
+		// case 'line':
+		// 	return await prisma.line.create({ data })
+		// case 'rotate':
+		// 	return await prisma.rotate.create({ data })
+		// case 'layout':
+		// 	return await prisma.layout.create({ data })
+		// case 'template':
+		// 	return await prisma.template.create({ data })
+		default:
+			throw new Error(`Design type not found: ${type}`)
 	}
 }

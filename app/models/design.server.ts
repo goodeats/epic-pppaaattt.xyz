@@ -10,9 +10,9 @@ import { type IFill } from './fill.server'
 import { type ILayer } from './layer.server'
 import { type ILayout } from './layout.server'
 import { type ILine } from './line.server'
-import { type IPalette } from './palette.server'
+import { type IPaletteCreateOverrides, type IPalette } from './palette.server'
 import { type IRotate } from './rotate.server'
-import { type ISize } from './size.server'
+import { type ISizeCreateOverrides, type ISize } from './size.server'
 import { type IStroke } from './stroke.server'
 import { type ITemplate } from './template.server'
 
@@ -22,6 +22,10 @@ export interface IDesignCreateOverrides {
 	visible?: boolean
 	selected?: boolean
 }
+
+export type IDesignTypeCreateOverrides =
+	| IPaletteCreateOverrides
+	| ISizeCreateOverrides
 export interface IDesignWithType {
 	id: string
 	type: string

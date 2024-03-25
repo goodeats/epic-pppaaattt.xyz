@@ -10,6 +10,12 @@ export interface ISize {
 	designId: string
 }
 
+export interface ISizeCreateOverrides {
+	format?: string
+	value?: number
+	basis?: string
+}
+
 export const findSizeInDesignArray = ({
 	designs,
 }: {

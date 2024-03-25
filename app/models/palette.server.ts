@@ -1,4 +1,11 @@
-import { type IDesignWithPalette, type IDesignWithType } from './design.server'
+import { PaletteDataSchema } from '#app/schema/palette'
+import { prisma } from '#app/utils/db.server'
+import {
+	type IDesignTypeCreateOverrides,
+	type IDesign,
+	type IDesignWithPalette,
+	type IDesignWithType,
+} from './design.server'
 
 export interface IPalette {
 	id: string
@@ -24,4 +31,20 @@ export const findPaletteInDesignArray = ({
 	const design = designs.find(design => design.palette) as IDesignWithPalette
 
 	return design.palette
+}
+
+export const createDesignPalette = ({
+	designId,
+	designTypeOverrides,
+}: {
+	designId: IDesign['id']
+	designTypeOverrides: IDesignTypeCreateOverrides
+}) => {
+	const paletteData = {
+		designId,
+		...(designTypeOverrides as IPaletteCreateOverrides),
+	}
+	const data = PaletteDataSchema.parse(paletteData)
+
+	return prisma.palette.create({ data })
 }
