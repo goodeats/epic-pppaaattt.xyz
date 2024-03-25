@@ -27,10 +27,10 @@ export const findPaletteInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
-}): IPalette | undefined => {
+}): IPalette | null => {
 	const design = designs.find(design => design.palette) as IDesignWithPalette
 
-	return design.palette
+	return design?.palette || null
 }
 
 export const createDesignPalette = ({

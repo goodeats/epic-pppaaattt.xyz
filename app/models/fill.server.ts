@@ -27,10 +27,10 @@ export const findFillInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
-}): IFill | undefined => {
+}): IFill | null => {
 	const design = designs.find(design => design.fill) as IDesignWithFill
 
-	return design.fill
+	return design?.fill || null
 }
 
 export const createDesignFill = ({

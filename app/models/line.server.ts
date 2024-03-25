@@ -23,10 +23,10 @@ export const findLineInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
-}): ILine | undefined => {
+}): ILine | null => {
 	const design = designs.find(design => design.line) as IDesignWithLine
 
-	return design.line
+	return design?.line || null
 }
 
 export const createDesignLine = ({

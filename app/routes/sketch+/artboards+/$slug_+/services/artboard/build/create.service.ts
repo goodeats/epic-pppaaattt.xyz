@@ -1,3 +1,4 @@
+import { type IArtboard } from '#app/models/artboard.server'
 import { findManyDesignsWithType } from '#app/models/design.server'
 import { findFillInDesignArray } from '#app/models/fill.server'
 import { type ILayer } from '#app/models/layer.server'
@@ -8,10 +9,7 @@ import { findRotateInDesignArray } from '#app/models/rotate.server'
 import { findSizeInDesignArray } from '#app/models/size.server'
 import { findStrokeInDesignArray } from '#app/models/stroke.server'
 import { findTemplateInDesignArray } from '#app/models/template.server'
-import {
-	artboardSelectedDesignIdsToArray,
-	artboardSelectedDesignsCompleted,
-} from '#app/utils/artboard'
+import { artboardSelectedDesignsCompleted } from '#app/utils/artboard'
 import { filterLayersVisible } from '#app/utils/layer.utils'
 import {
 	type IArtboardLayerBuild,
@@ -29,13 +27,8 @@ export const artboardBuildCreateService = async ({
 		const isCompleted = artboardSelectedDesignsCompleted({ artboard })
 		if (!isCompleted) throw new Error('Artboard designs are not completed')
 
-		const artboarSelectedDesignIdsArray = artboardSelectedDesignIdsToArray({
-			artboard,
-		})
-
 		const artboardSelectedDesigns = await getSelectedDesignsForArtboard({
 			artboardId: artboard.id,
-			designIds: artboarSelectedDesignIdsArray,
 			artboard,
 		})
 
@@ -57,14 +50,12 @@ export const artboardBuildCreateService = async ({
 
 const getSelectedDesignsForArtboard = async ({
 	artboardId,
-	designIds,
 	artboard,
 }: {
 	artboardId: string
-	designIds: string[]
 	artboard: PickedArtboardType
 }): Promise<IArtboardLayerBuild> => {
-	const designs = await getArtboardDesigns({ artboardId, ids: designIds })
+	const designs = await getArtboardSelectedDesigns({ artboardId })
 	const palette = findPaletteInDesignArray({ designs })
 	const size = findSizeInDesignArray({ designs })
 	const fill = findFillInDesignArray({ designs })
@@ -108,15 +99,13 @@ const getSelectedDesignsForArtboard = async ({
 	}
 }
 
-const getArtboardDesigns = async ({
+const getArtboardSelectedDesigns = async ({
 	artboardId,
-	ids,
 }: {
-	artboardId: string
-	ids: string[]
+	artboardId: IArtboard['id']
 }) => {
 	return await findManyDesignsWithType({
-		where: { artboardId, id: { in: ids } },
+		where: { artboardId, selected: true },
 	})
 }
 
@@ -143,7 +132,7 @@ const getSelectedDesignTypesForLayer = async ({
 }): Promise<IArtboardLayerBuild> => {
 	const result = { ...artboardSelectedDesigns }
 
-	const designs = await getLayerSelectedDesigns({ layer })
+	const designs = await getLayerSelectedDesigns({ layerId: layer.id })
 	const palette = findPaletteInDesignArray({ designs })
 	const size = findSizeInDesignArray({ designs })
 	const fill = findFillInDesignArray({ designs })
@@ -165,8 +154,12 @@ const getSelectedDesignTypesForLayer = async ({
 	return result
 }
 
-const getLayerSelectedDesigns = async ({ layer }: { layer: ILayer }) => {
+const getLayerSelectedDesigns = async ({
+	layerId,
+}: {
+	layerId: ILayer['id']
+}) => {
 	return await findManyDesignsWithType({
-		where: { layerId: layer.id, selected: true },
+		where: { layerId, selected: true },
 	})
 }

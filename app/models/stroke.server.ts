@@ -27,10 +27,10 @@ export const findStrokeInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
-}): IStroke | undefined => {
+}): IStroke | null => {
 	const design = designs.find(design => design.stroke) as IDesignWithStroke
 
-	return design.stroke
+	return design?.stroke || null
 }
 
 export const createDesignStroke = ({

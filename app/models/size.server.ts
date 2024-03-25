@@ -27,10 +27,10 @@ export const findSizeInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
-}): ISize | undefined => {
+}): ISize | null => {
 	const design = designs.find(design => design.size) as IDesignWithSize
 
-	return design.size
+	return design?.size || null
 }
 
 export const createDesignSize = ({

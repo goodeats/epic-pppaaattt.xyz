@@ -7,7 +7,7 @@ import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
 import { NewArtboardLayerSchema } from '#app/schema/layer-artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../../../../intent'
+import { ARTBOARD_LAYER_INTENT } from '../../../../intent'
 import { type action } from '../../../../route'
 
 export const PanelFormArtboardLayerNew = ({
@@ -30,7 +30,11 @@ export const PanelFormArtboardLayerNew = ({
 			<AuthenticityTokenInput />
 
 			<input type="hidden" name="artboardId" value={artboardId} />
-			<input type="hidden" name="intent" value={INTENT.artboardCreateLayer} />
+			<input
+				type="hidden"
+				name="intent"
+				value={ARTBOARD_LAYER_INTENT.artboardCreateLayer}
+			/>
 			<Button
 				type="submit"
 				variant="ghost"

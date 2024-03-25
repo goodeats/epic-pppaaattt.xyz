@@ -29,10 +29,10 @@ export const findLayoutInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
-}): ILayout | undefined => {
+}): ILayout | null => {
 	const design = designs.find(design => design.layout) as IDesignWithLayout
 
-	return design.layout
+	return design?.layout || null
 }
 
 export const createDesignLayout = ({

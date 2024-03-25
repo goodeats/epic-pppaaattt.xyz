@@ -23,10 +23,10 @@ export const findTemplateInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
-}): ITemplate | undefined => {
+}): ITemplate | null => {
 	const design = designs.find(design => design.template) as IDesignWithTemplate
 
-	return design.template
+	return design?.template || null
 }
 
 export const createDesignTemplate = ({

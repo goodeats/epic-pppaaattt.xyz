@@ -25,10 +25,10 @@ export const findRotateInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
-}): IRotate | undefined => {
+}): IRotate | null => {
 	const design = designs.find(design => design.rotate) as IDesignWithRotate
 
-	return design.rotate
+	return design?.rotate || null
 }
 
 export const createDesignRotate = ({
