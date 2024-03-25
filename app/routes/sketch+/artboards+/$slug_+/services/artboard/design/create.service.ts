@@ -1,92 +1,82 @@
-import { type Design, type Artboard } from '@prisma/client'
-import { type User } from '@sentry/remix'
+import { type User } from '@prisma/client'
 import {
-	findArtboardTransactionPromise,
-	updateArtboardSelectedDesignPromise,
-} from '#app/models/artboard.server'
-import { connectPrevAndNextDesignsPromise } from '#app/models/design.server'
-import { designSchema, type designTypeEnum } from '#app/schema/design'
-import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
-
-type artboardDesignCreateServiceProps = {
-	userId: User['id']
-	artboardId: Artboard['id']
-	type: designTypeEnum
-	visibleDesignsCount: number
-}
+	type IDesignCreateOverrides,
+	type IDesignTypeCreateOverrides,
+	findFirstDesign,
+	connectPrevAndNextDesigns,
+	type IDesign,
+} from '#app/models/design.server'
+import { createDesignFill } from '#app/models/fill.server'
+import { createDesignLayout } from '#app/models/layout.server'
+import { createDesignLine } from '#app/models/line.server'
+import { createDesignPalette } from '#app/models/palette.server'
+import { createDesignRotate } from '#app/models/rotate.server'
+import { createDesignSize } from '#app/models/size.server'
+import { createDesignStroke } from '#app/models/stroke.server'
+import { createDesignTemplate } from '#app/models/template.server'
+import { type designTypeEnum } from '#app/schema/design'
+import { ArtboardDesignDataCreateSchema } from '#app/schema/design-artboard'
+import { prisma, type IArtboard } from '#app/utils/db.server'
+import { artboardUpdateSelectedDesignService } from './update-selected.service'
 
 export const artboardDesignCreateService = async ({
 	userId,
 	artboardId,
 	type,
-	visibleDesignsCount,
-}: artboardDesignCreateServiceProps) => {
+	designOverrides = {},
+	designTypeOverrides = {},
+}: {
+	userId: User['id']
+	artboardId: IArtboard['id']
+	type: designTypeEnum
+	designOverrides?: IDesignCreateOverrides
+	designTypeOverrides?: IDesignTypeCreateOverrides
+}) => {
 	try {
-		await prisma.$transaction(async prisma => {
-			// new designs are appended to the end of the list
-			// find the last design in the list (tail) by type
-			const previousDesign = await fetchArtboardDesignTypeTail({
-				artboardId,
-				type,
-				prisma,
-			})
-
-			// create design before its associated type
-			const design = await createDesign({
-				userId,
-				artboardId,
-				type,
-				prisma,
-			})
-
-			// create the associated type
-			await createDesignType({
-				designId: design.id,
-				type,
-				prisma,
-			})
-
-			// update operations to be executed in parallel
-			const updateOperations = []
-
-			// if there is a previous design, connect it to the new design
-			if (previousDesign) {
-				updateOperations.push(
-					...connectPrevAndNextDesignsPromise({
-						prevId: previousDesign.id,
-						nextId: design.id,
-						prisma,
-					}),
-				)
-			}
-
-			// if there are no visible designs, set the new design as selected
-			if (visibleDesignsCount === 0) {
-				// Fetch artboard for selected designs
-				const fetchArtboardPromise = findArtboardTransactionPromise({
-					id: artboardId,
-					prisma,
-				})
-
-				// Execute fetch operations in parallel
-				const [artboard] = await Promise.all([fetchArtboardPromise])
-
-				// if the artboard exists (it should), update the selected design
-				if (artboard) {
-					updateOperations.push(
-						updateArtboardSelectedDesignPromise({
-							artboard,
-							designId: design.id,
-							type,
-							prisma,
-						}),
-					)
-				}
-			}
-
-			// Execute all update operations in parallel
-			await Promise.all(updateOperations)
+		// Step 1: find existing artboard designs tail
+		const tailDesign = await getArtboardDesignsTail({
+			artboardId,
+			type,
 		})
+
+		// Step 2: create design before its associated type
+		const createdDesign = await createDesign({
+			userId,
+			artboardId,
+			type,
+			designOverrides,
+		})
+
+		// Step 3: create the associated design type
+		const createdDesignTypePromise = createDesignType({
+			designId: createdDesign.id,
+			type,
+			designTypeOverrides,
+		})
+		await prisma.$transaction([createdDesignTypePromise])
+
+		// Step 4: connect new design to tail design, if it exists
+		if (tailDesign) {
+			const connectDesignsPromise = connectPrevAndNextDesigns({
+				prevId: tailDesign.id,
+				nextId: createdDesign.id,
+			})
+			await prisma.$transaction(connectDesignsPromise)
+		}
+
+		// Step 5: update selected design, if necessary
+		const shouldSetSelected = await shouldUpdateSelectedDesign({
+			artboardId,
+			type,
+			designOverrides,
+		})
+		if (shouldSetSelected) {
+			await artboardUpdateSelectedDesignService({
+				artboardId,
+				designId: createdDesign.id,
+				type,
+			})
+		}
 
 		return { success: true }
 	} catch (error) {
@@ -95,16 +85,14 @@ export const artboardDesignCreateService = async ({
 	}
 }
 
-const fetchArtboardDesignTypeTail = async ({
+const getArtboardDesignsTail = async ({
 	artboardId,
 	type,
-	prisma,
 }: {
-	artboardId: Artboard['id']
+	artboardId: IArtboard['id']
 	type: designTypeEnum
-	prisma: PrismaTransactionType
 }) => {
-	return await prisma.design.findFirst({
+	return await findFirstDesign({
 		where: { type, artboardId, nextId: null },
 	})
 }
@@ -113,50 +101,97 @@ const createDesign = async ({
 	userId,
 	artboardId,
 	type,
-	prisma,
+	designOverrides,
 }: {
 	userId: User['id']
-	artboardId: Artboard['id']
+	artboardId: IArtboard['id']
 	type: designTypeEnum
-	prisma: PrismaTransactionType
+	designOverrides: IDesignCreateOverrides
 }) => {
-	// validate the design type is valid
-	const data = designSchema.parse({
+	const data = ArtboardDesignDataCreateSchema.parse({
 		type,
 		ownerId: userId,
 		artboardId,
+		...designOverrides,
 	})
-	return await prisma.design.create({ data })
+	const createdDesign = await prisma.design.create({ data })
+
+	if (!createdDesign) throw new Error('Design was not created')
+
+	return createdDesign
 }
 
-const createDesignType = async ({
+const createDesignType = ({
 	designId,
 	type,
-	prisma,
+	designTypeOverrides,
 }: {
-	designId: Design['id']
+	designId: IDesign['id']
 	type: designTypeEnum
-	prisma: PrismaTransactionType
+	designTypeOverrides: IDesignTypeCreateOverrides
 }) => {
-	const data = { designId }
-
-	// each design type has a default value set in the schema
 	switch (type) {
 		case 'palette':
-			return await prisma.palette.create({ data })
+			return createDesignPalette({
+				designId,
+				designTypeOverrides,
+			})
 		case 'size':
-			return await prisma.size.create({ data })
+			return createDesignSize({
+				designId,
+				designTypeOverrides,
+			})
 		case 'fill':
-			return await prisma.fill.create({ data })
+			return createDesignFill({
+				designId,
+				designTypeOverrides,
+			})
 		case 'stroke':
-			return await prisma.stroke.create({ data })
+			return createDesignStroke({
+				designId,
+				designTypeOverrides,
+			})
 		case 'line':
-			return await prisma.line.create({ data })
+			return createDesignLine({
+				designId,
+				designTypeOverrides,
+			})
 		case 'rotate':
-			return await prisma.rotate.create({ data })
+			return createDesignRotate({
+				designId,
+				designTypeOverrides,
+			})
 		case 'layout':
-			return await prisma.layout.create({ data })
+			return createDesignLayout({
+				designId,
+				designTypeOverrides,
+			})
 		case 'template':
-			return await prisma.template.create({ data })
+			return createDesignTemplate({
+				designId,
+				designTypeOverrides,
+			})
+		default:
+			throw new Error(`Design type not found: ${type}`)
 	}
+}
+
+const shouldUpdateSelectedDesign = async ({
+	artboardId,
+	type,
+	designOverrides,
+}: {
+	artboardId: IArtboard['id']
+	type: designTypeEnum
+	designOverrides: IDesignCreateOverrides
+}) => {
+	if (designOverrides.selected) {
+		return true
+	}
+
+	const visibleLayerDesignsByTypeCount = await prisma.design.count({
+		where: { artboardId, type, visible: true },
+	})
+
+	return Number(visibleLayerDesignsByTypeCount) === 0
 }

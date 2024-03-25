@@ -10,7 +10,7 @@ export interface Design {
 export const ArtboardDesignDataCreateSchema = z.object({
 	type: z.nativeEnum(DesignTypeEnum),
 	ownerId: z.string(),
-	artboard: z.string(),
+	artboardId: z.string(),
 	visible: z.boolean().optional(),
 	selected: z.boolean().optional(),
 }) satisfies z.Schema<Design>
@@ -18,7 +18,7 @@ export const ArtboardDesignDataCreateSchema = z.object({
 export const NewArtboardDesignSchema = z.object({
 	artboardId: z.string(),
 	type: z.nativeEnum(DesignTypeEnum),
-	visibleDesignsCount: z.number(),
+	visibleDesignsCount: z.number().optional(),
 })
 
 export const DeleteArtboardDesignSchema = z.object({

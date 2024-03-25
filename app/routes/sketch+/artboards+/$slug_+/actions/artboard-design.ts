@@ -59,12 +59,11 @@ export async function artboardDesignNewAction({
 	})
 	if (!isValid || !submission) return response
 
-	const { artboardId, type, visibleDesignsCount } = submission.value
+	const { artboardId, type } = submission.value
 	const { success, error } = await artboardDesignCreateService({
 		userId,
 		artboardId,
 		type,
-		visibleDesignsCount,
 	})
 
 	if (error) return submissionErrorResponse(submission)

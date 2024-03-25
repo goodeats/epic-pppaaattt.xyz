@@ -1,11 +1,13 @@
-import { type User, type Design, type Layer } from '@prisma/client'
+import { type User } from '@prisma/client'
 import {
 	type IDesignCreateOverrides,
 	findFirstDesign,
 	connectPrevAndNextDesigns,
 	type IDesignTypeCreateOverrides,
+	type IDesign,
 } from '#app/models/design.server'
 import { createDesignFill } from '#app/models/fill.server'
+import { type ILayer } from '#app/models/layer.server'
 import { createDesignLayout } from '#app/models/layout.server'
 import { createDesignLine } from '#app/models/line.server'
 import { createDesignPalette } from '#app/models/palette.server'
@@ -28,7 +30,7 @@ export const layerDesignCreateService = async ({
 	designTypeOverrides = {},
 }: {
 	userId: User['id']
-	layerId: Layer['id']
+	layerId: ILayer['id']
 	type: designTypeEnum
 	designOverrides?: IDesignCreateOverrides
 	designTypeOverrides?: IDesignTypeCreateOverrides
@@ -90,7 +92,7 @@ const getLayerDesignsTail = async ({
 	layerId,
 	type,
 }: {
-	layerId: Layer['id']
+	layerId: ILayer['id']
 	type: designTypeEnum
 }) => {
 	return await findFirstDesign({
@@ -105,7 +107,7 @@ const createDesign = async ({
 	designOverrides,
 }: {
 	userId: User['id']
-	layerId: Layer['id']
+	layerId: ILayer['id']
 	type: designTypeEnum
 	designOverrides: IDesignCreateOverrides
 }) => {
@@ -127,7 +129,7 @@ const createDesignType = ({
 	type,
 	designTypeOverrides,
 }: {
-	designId: Design['id']
+	designId: IDesign['id']
 	type: designTypeEnum
 	designTypeOverrides: IDesignTypeCreateOverrides
 }) => {
@@ -182,7 +184,7 @@ const shouldUpdateSelectedDesign = async ({
 	type,
 	designOverrides,
 }: {
-	layerId: Layer['id']
+	layerId: ILayer['id']
 	type: designTypeEnum
 	designOverrides: IDesignCreateOverrides
 }) => {
