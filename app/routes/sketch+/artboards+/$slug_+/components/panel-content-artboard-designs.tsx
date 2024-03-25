@@ -1,5 +1,4 @@
 import { type IDesignWithType } from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
 import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboardBackgroundColor } from './panel-content-artboard-background-color'
@@ -13,18 +12,13 @@ import { PanelContentArtboardDesignStroke } from './panel-content-artboard-desig
 import { PanelContentArtboardDesignTemplate } from './panel-content-artboard-design-template'
 import { PanelContentArtboardFrame } from './panel-content-artboard-frame'
 
-export const PanelContentArtboard = ({
+export const PanelContentArtboardDesigns = ({
 	artboard,
 	artboardDesigns,
-	layer,
-	layerDesigns,
 }: {
 	artboard: PickedArtboardType
 	artboardDesigns: IDesignWithType[]
-	layer: ILayer | null | undefined
-	layerDesigns: IDesignWithType[] | null | undefined
 }) => {
-	// if layer do something different
 	const {
 		designPalettes,
 		designSizes,

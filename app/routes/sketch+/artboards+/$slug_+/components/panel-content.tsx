@@ -7,7 +7,7 @@ import { TabsContent } from '#app/components/ui/tabs'
 import { type IDesignWithType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
-import { PanelContentArtboard } from './panel-content-artboard'
+import { PanelContentArtboardDesigns } from './panel-content-artboard-designs'
 import { PanelContentArtboardLayer } from './panel-content-artboard-layer'
 
 export const PanelContentLeft = ({
@@ -43,17 +43,15 @@ export const PanelContentRight = ({
 	layerDesigns: IDesignWithType[] | null | undefined
 }) => {
 	return (
-		<SideNavTabsWrapper defaultValue="artboard">
+		<SideNavTabsWrapper defaultValue="designs">
 			<SideNavTabsList cols={2}>
-				<SideNavTabsTrigger value="artboard">Designs</SideNavTabsTrigger>
+				<SideNavTabsTrigger value="designs">Designs</SideNavTabsTrigger>
 				<SideNavTabsTrigger value="actions">Actions</SideNavTabsTrigger>
 			</SideNavTabsList>
-			<TabsContent value="artboard">
-				<PanelContentArtboard
+			<TabsContent value="designs">
+				<PanelContentArtboardDesigns
 					artboard={artboard}
 					artboardDesigns={artboardDesigns}
-					layer={layer}
-					layerDesigns={layerDesigns}
 				/>
 			</TabsContent>
 			<TabsContent value="actions">
