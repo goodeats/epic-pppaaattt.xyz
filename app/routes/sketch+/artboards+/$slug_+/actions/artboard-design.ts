@@ -114,6 +114,7 @@ export async function artboardDesignToggleVisibilityAction({
 
 	const { id, artboardId, updateSelectedDesignId } = submission.value
 	const { success, error } = await artboardDesignToggleVisibleService({
+		userId,
 		id,
 		artboardId,
 		updateSelectedDesignId,
@@ -137,6 +138,7 @@ export async function artboardDesignDeleteAction({
 
 	const { id, artboardId, updateSelectedDesignId } = submission.value
 	const { success, error } = await artboardDesignDeleteService({
+		userId,
 		id,
 		artboardId,
 		updateSelectedDesignId,

@@ -1,45 +1,44 @@
-import { artboardUpdateSelectedDesignPromise } from '#app/models/artboard.server'
+import { type User } from '@prisma/client'
+import {
+	updateDesignVisible,
+	type IDesign,
+	findFirstDesign,
+} from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
-import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
+import { prisma, type IArtboard } from '#app/utils/db.server'
+import { artboardUpdateSelectedDesignService } from '../update-selected-design.service'
 
 export const artboardDesignToggleVisibleService = async ({
+	userId,
 	id,
 	artboardId,
 	updateSelectedDesignId,
 }: {
-	id: string
-	artboardId: string
+	userId: User['id']
+	id: IDesign['id']
+	artboardId: IArtboard['id']
 	updateSelectedDesignId: string | null
 }) => {
 	try {
-		await prisma.$transaction(async prisma => {
-			const design = await prisma.design.findFirst({
-				where: { id },
-			})
-			if (!design) throw new Error('Design not found')
-			const { visible, type } = design
+		// Step 1: get the design
+		const design = await getDesign({ id, userId })
+		const { visible } = design
+		const type = design.type as designTypeEnum
 
-			const updateOperations = [
-				toggleVisibleDesignPromise({ id, visible, prisma }),
-			]
+		// Step 2: update the design visible state
+		const toggleDesignVisiblePromise = updateDesignVisible({
+			id,
+			visible: !visible,
+		})
+		await prisma.$transaction([toggleDesignVisiblePromise])
 
-			// update the artboard selected design for its type
-			// either replace or remove
-			const artboardUpdatePromises = await artboardUpdateSelectedDesignPromise({
-				artboardId,
-				updateSelectedDesignId,
-				type: type as designTypeEnum,
-				prisma,
-			})
-			// typescript seems to be gaslighting me here
-			// the operation succeeds and the args seem valid
-			// spent a couple hours (on delete service) trying to figure out why and choosing to ignore it
-			// will monitor if something weird ever happens
-			// @ts-ignore
-			updateOperations.push(...artboardUpdatePromises)
-
-			// Execute all update operations in parallel
-			await Promise.all(updateOperations)
+		// Step 3: update the selected design for its type, if necessary
+		// visibility is more complicated than just going by the current design state
+		// look for selectedDesignToUpdateOnToggleVisible in design utils
+		await artboardUpdateSelectedDesignService({
+			artboardId,
+			designId: updateSelectedDesignId,
+			type,
 		})
 
 		return { success: true }
@@ -49,18 +48,18 @@ export const artboardDesignToggleVisibleService = async ({
 	}
 }
 
-// toggle visibility of design
-const toggleVisibleDesignPromise = ({
+const getDesign = async ({
 	id,
-	visible,
-	prisma,
+	userId,
 }: {
-	id: string
-	visible: boolean
-	prisma: PrismaTransactionType
+	id: IDesign['id']
+	userId: User['id']
 }) => {
-	return prisma.design.update({
-		where: { id },
-		data: { visible: !visible },
+	const design = await findFirstDesign({
+		where: { id, ownerId: userId },
 	})
+
+	if (!design) throw new Error(`Design not found: ${id}`)
+
+	return design
 }

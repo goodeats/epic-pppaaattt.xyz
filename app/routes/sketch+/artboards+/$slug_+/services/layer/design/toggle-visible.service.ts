@@ -33,7 +33,7 @@ export const layerDesignToggleVisibleService = async ({
 		})
 		await prisma.$transaction([toggleDesignVisiblePromise])
 
-		// Step 3: update the layer selected design for its type, if necessary
+		// Step 3: update the selected design for its type, if necessary
 		// visibility is more complicated than just going by the current design state
 		// look for selectedDesignToUpdateOnToggleVisible in design utils
 		await layerUpdateSelectedDesignService({

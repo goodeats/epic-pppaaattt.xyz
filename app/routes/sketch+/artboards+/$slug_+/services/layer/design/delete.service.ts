@@ -53,7 +53,7 @@ export const layerDesignDeleteService = async ({
 		// Step 5: run all delete promises
 		await prisma.$transaction(deleteDesignPromises)
 
-		// Step 6: update the layer selected design for its type, if necessary
+		// Step 6: update the selected design for its type, if necessary
 		if (selected) {
 			await layerUpdateSelectedDesignService({
 				layerId,
