@@ -279,7 +279,7 @@ export const panelListVariablesDesignType = ({
 	type,
 }: {
 	designs: IDesignType[]
-	artboard: PickedArtboardType
+	artboard?: PickedArtboardType
 	type: designTypeEnum
 }) => {
 	const orderedDesigns = orderLinkedDesigns(designs) as IDesignType[]
@@ -298,7 +298,9 @@ export const panelListVariablesDesignType = ({
 	const firstVisibleDesignId = visibleDesignIds[0]
 
 	const designKey = (type + 'Id') as keyof ArtboardSelectedDesignsType
-	const selectedDesignId = parseArtboardSelectedDesigns({ artboard })[designKey]
+	const selectedDesignId = artboard
+		? parseArtboardSelectedDesigns({ artboard })[designKey]
+		: orderedDesigns.find(design => design.selected)?.id
 
 	return {
 		orderedDesigns,

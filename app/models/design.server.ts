@@ -226,6 +226,42 @@ export const connectPrevAndNextDesigns = ({
 	return [connectNextToPrev, connectPrevToNext]
 }
 
+export const updateDesignToHead = ({ id }: { id: IDesign['id'] }) => {
+	return prisma.design.update({
+		where: { id },
+		data: { prevId: null },
+	})
+}
+
+export const updateDesignToTail = ({ id }: { id: IDesign['id'] }) => {
+	return prisma.design.update({
+		where: { id },
+		data: { nextId: null },
+	})
+}
+
+export const updateDesignRemoveNodes = ({ id }: { id: IDesign['id'] }) => {
+	return prisma.design.update({
+		where: { id },
+		data: { prevId: null, nextId: null },
+	})
+}
+
+export const updateDesignNodes = ({
+	id,
+	nextId,
+	prevId,
+}: {
+	id: string
+	nextId: string | null
+	prevId: string | null
+}) => {
+	return prisma.design.update({
+		where: { id },
+		data: { prevId, nextId },
+	})
+}
+
 export const updateLayerSelectedDesign = ({
 	layerId,
 	designId,
@@ -244,4 +280,23 @@ export const updateLayerSelectedDesign = ({
 		data: { selected: true },
 	})
 	return [unselectDesign, selectDesign]
+}
+
+export const deleteDesign = ({ id }: { id: IDesign['id'] }) => {
+	return prisma.design.delete({
+		where: { id },
+	})
+}
+
+export const updateDesignVisible = ({
+	id,
+	visible,
+}: {
+	id: IDesign['id']
+	visible: boolean
+}) => {
+	return prisma.design.update({
+		where: { id },
+		data: { visible },
+	})
 }

@@ -54,3 +54,11 @@ export const INTENT = {
 	artboardDeleteLayer: 'delete-artboard-layer' as const,
 	artboardReorderLayer: 'reorder-artboard-layer' as const,
 }
+
+// layer design actions
+export const LAYER_DESIGN_INTENT = {
+	layerCreateDesign: 'create-layer-design' as const,
+	layerReorderDesign: 'reorder-layer-design' as const,
+	layerToggleVisibleDesign: 'toggle-visible-layer-design' as const,
+	layerDeleteDesign: 'delete-layer-design' as const,
+}

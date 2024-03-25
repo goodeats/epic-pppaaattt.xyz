@@ -1,6 +1,6 @@
 import { type DataFunctionArgs } from '@remix-run/node'
 import { requireUserId } from '#app/utils/auth.server'
-import { INTENT } from '../intent'
+import { INTENT, LAYER_DESIGN_INTENT } from '../intent'
 import {
 	artboardDesignDeleteAction,
 	artboardDesignNewAction,
@@ -52,6 +52,12 @@ import {
 	artboardLayerUpdateDescriptionAction,
 	artboardLayerUpdateNameAction,
 } from './artboard-layer'
+import {
+	layerDesignDeleteAction,
+	layerDesignNewAction,
+	layerDesignReorderAction,
+	layerDesignToggleVisibleAction,
+} from './layer-design'
 import {
 	artboardUpdateBackgroundColorAction,
 	artboardUpdateHeightAction,
@@ -177,6 +183,18 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardReorderLayer: {
 			return artboardLayerReorderAction(actionArgs)
+		}
+		case LAYER_DESIGN_INTENT.layerCreateDesign: {
+			return layerDesignNewAction(actionArgs)
+		}
+		case LAYER_DESIGN_INTENT.layerDeleteDesign: {
+			return layerDesignDeleteAction(actionArgs)
+		}
+		case LAYER_DESIGN_INTENT.layerToggleVisibleDesign: {
+			return layerDesignToggleVisibleAction(actionArgs)
+		}
+		case LAYER_DESIGN_INTENT.layerReorderDesign: {
+			return layerDesignReorderAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

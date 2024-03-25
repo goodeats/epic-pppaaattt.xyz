@@ -1,5 +1,6 @@
 import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
+import { PanelContentLayerDesignLayout } from './panel-content-layer-design-layout'
 
 export const PanelContentLayerDesigns = ({
 	layer,
@@ -15,17 +16,17 @@ export const PanelContentLayerDesigns = ({
 		// designStrokes,
 		// designLines,
 		// designRotates,
-		// designLayouts,
+		designLayouts,
 		// designTemplates,
 	} = designs
 
 	return (
 		<div>
 			<p>layer panel</p>
-			{/* <PanelContentArtboardDesignLayout
-				artboard={artboard}
+			<PanelContentLayerDesignLayout
+				layer={layer}
 				designLayouts={designLayouts}
-			/> */}
+			/>
 			{/* <PanelContentArtboardDesignPalette
 				artboard={artboard}
 				designPalettes={designPalettes}

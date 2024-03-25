@@ -3,7 +3,6 @@ import {
 	type IDesignCreateOverrides,
 	findFirstDesign,
 	connectPrevAndNextDesigns,
-	updateLayerSelectedDesign,
 	type IDesignTypeCreateOverrides,
 } from '#app/models/design.server'
 import { createDesignFill } from '#app/models/fill.server'
@@ -19,6 +18,7 @@ import {
 	type designTypeEnum,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
+import { layerUpdateSelectedDesignService } from '../update-selected-design.service'
 
 export const layerDesignCreateService = async ({
 	userId,
@@ -41,24 +41,20 @@ export const layerDesignCreateService = async ({
 		})
 
 		// Step 2: create design before its associated type
-		console.log('creating design')
 		const createdDesign = await createDesign({
 			userId,
 			layerId,
 			type,
 			designOverrides,
 		})
-		console.log('created design', createdDesign)
 
 		// Step 3: create the associated design type
-		console.log('creating design type')
 		const createdDesignTypePromise = createDesignType({
 			designId: createdDesign.id,
 			type,
 			designTypeOverrides,
 		})
 		await prisma.$transaction([createdDesignTypePromise])
-		console.log('created design type')
 
 		// Step 4: connect new design to tail design, if it exists
 		if (tailDesign) {
@@ -69,14 +65,18 @@ export const layerDesignCreateService = async ({
 			await prisma.$transaction(connectDesignsPromise)
 		}
 
-		// Step 5: update selected design, if selected
-		if (designOverrides.selected) {
-			const updateSelectedDesignPromise = updateLayerSelectedDesign({
+		// Step 5: update selected design, if necessary
+		const shouldSetSelected = await shouldUpdateSelectedDesign({
+			layerId,
+			type,
+			designOverrides,
+		})
+		if (shouldSetSelected) {
+			await layerUpdateSelectedDesignService({
 				layerId,
 				designId: createdDesign.id,
 				type,
 			})
-			await prisma.$transaction(updateSelectedDesignPromise)
 		}
 
 		return { success: true }
@@ -175,4 +175,26 @@ const createDesignType = ({
 		default:
 			throw new Error(`Design type not found: ${type}`)
 	}
+}
+
+const shouldUpdateSelectedDesign = async ({
+	layerId,
+	type,
+	designOverrides,
+}: {
+	layerId: Layer['id']
+	type: designTypeEnum
+	designOverrides: IDesignCreateOverrides
+}) => {
+	if (designOverrides.selected) {
+		return true
+	}
+
+	const visibleLayerDesignsByTypeCount = await prisma.design.count({
+		where: { layerId, type, visible: true },
+	})
+
+	console.log('visibleLayerDesignsByTypeCount', visibleLayerDesignsByTypeCount)
+
+	return Number(visibleLayerDesignsByTypeCount) === 0
 }

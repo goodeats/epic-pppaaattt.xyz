@@ -59,9 +59,9 @@ export const parseArtboardDesignUpdateSubmission = async ({
 
 			const design = await findFirstDesign({
 				where: {
-					id: id,
+					id,
 					ownerId: userId,
-					artboardId: artboardId,
+					artboardId,
 				},
 			})
 			if (!design) ctx.addIssue(addNotFoundIssue('Design'))
@@ -133,6 +133,52 @@ export const parseArtboardLayerUpdateSubmission = async ({
 				ownerId: userId,
 			})
 			if (!design) ctx.addIssue(addNotFoundIssue('Layer'))
+		}),
+		async: true,
+	})
+}
+
+export const parseLayerDesignSubmission = async ({
+	userId,
+	formData,
+	schema,
+}: IntentActionArgs & { schema: z.ZodSchema<any> }) => {
+	return await parse(formData, {
+		schema: schema.superRefine(async (data, ctx) => {
+			const { layerId } = data
+			const layer = await findLayerByIdAndOwner({
+				id: layerId,
+				ownerId: userId,
+			})
+			if (!layer) ctx.addIssue(addNotFoundIssue('Layer'))
+		}),
+		async: true,
+	})
+}
+
+export const parseLayerDesignUpdateSubmission = async ({
+	userId,
+	formData,
+	schema,
+}: IntentActionArgs & { schema: z.ZodSchema<any> }) => {
+	return await parse(formData, {
+		schema: schema.superRefine(async (data, ctx) => {
+			const { layerId, id } = data
+
+			const layer = await findLayerByIdAndOwner({
+				id: layerId,
+				ownerId: userId,
+			})
+			if (!layer) ctx.addIssue(addNotFoundIssue('Layer'))
+
+			const design = await findFirstDesign({
+				where: {
+					id,
+					ownerId: userId,
+					layerId,
+				},
+			})
+			if (!design) ctx.addIssue(addNotFoundIssue('Design'))
 		}),
 		async: true,
 	})
