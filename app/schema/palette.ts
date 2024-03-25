@@ -8,6 +8,12 @@ export const PaletteDataSchema = z.object({
 	opacity: z.number().optional(),
 })
 
+export const EditDesignPaletteValueSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	value: HexcodeSchema,
+})
+
 export const EditArtboardPaletteSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

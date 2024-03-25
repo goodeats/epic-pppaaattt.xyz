@@ -10,9 +10,9 @@ import {
 } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
+import { PanelContentLayerDesigns } from './panel/layer/panel-content-layer-designs'
 import { PanelContentArtboardDesigns } from './panel-content-artboard-designs'
 import { PanelContentArtboardLayer } from './panel-content-artboard-layer'
-import { PanelContentLayerDesigns } from './panel-content-layer-designs'
 
 export const PanelContentLeft = ({
 	artboard,

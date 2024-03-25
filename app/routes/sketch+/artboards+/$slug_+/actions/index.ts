@@ -1,6 +1,11 @@
 import { type DataFunctionArgs } from '@remix-run/node'
 import { requireUserId } from '#app/utils/auth.server'
-import { DESIGN_LAYOUT_INTENT, INTENT, LAYER_DESIGN_INTENT } from '../intent'
+import {
+	DESIGN_LAYOUT_INTENT,
+	DESIGN_PALETTE_INTENT,
+	INTENT,
+	LAYER_DESIGN_INTENT,
+} from '../intent'
 import {
 	artboardDesignDeleteAction,
 	artboardDesignNewAction,
@@ -57,6 +62,7 @@ import {
 	designLayoutEditRowsAction,
 	designLayoutEditStyleAction,
 } from './design-layout'
+import { designPaletteEditValueAction } from './design-palette'
 import {
 	layerDesignDeleteAction,
 	layerDesignNewAction,
@@ -200,6 +206,10 @@ export async function action({ request }: DataFunctionArgs) {
 			return layerDesignReorderAction(actionArgs)
 		}
 		// DESIGN INTENTS
+		// PALETTE DESIGN INTENTS
+		case DESIGN_PALETTE_INTENT.updateDesignPaletteValue: {
+			return designPaletteEditValueAction(actionArgs)
+		}
 		// LAYOUT DESIGN INTENTS
 		case DESIGN_LAYOUT_INTENT.updateDesignLayoutStyle: {
 			return designLayoutEditStyleAction(actionArgs)

@@ -17,12 +17,12 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { PanelFormDesignLayoutEditCount } from './forms/design/panel-form-design-layout-edit-count'
-import { PanelFormLayerDesignDelete } from './forms/layer/design/panel-form-layer-design-delete'
-import { PanelFormLayerDesignNew } from './forms/layer/design/panel-form-layer-design-new'
-import { PanelFormLayerDesignReorder } from './forms/layer/design/panel-form-layer-design-reorder'
-import { PanelFormLayerDesignToggleVisibile } from './forms/layer/design/panel-form-layer-design-toggle-visible'
-import { PanelPopoverDesignLayout } from './popovers/design/panel-popover-design-layout'
+import { PanelFormDesignLayoutEditCount } from '../../../forms/design/panel-form-design-layout-edit-count'
+import { PanelFormLayerDesignDelete } from '../../../forms/layer/design/panel-form-layer-design-delete'
+import { PanelFormLayerDesignNew } from '../../../forms/layer/design/panel-form-layer-design-new'
+import { PanelFormLayerDesignReorder } from '../../../forms/layer/design/panel-form-layer-design-reorder'
+import { PanelFormLayerDesignToggleVisibile } from '../../../forms/layer/design/panel-form-layer-design-toggle-visible'
+import { PanelPopoverDesignLayout } from '../../../popovers/design/panel-popover-design-layout'
 
 export const PanelContentLayerDesignLayout = ({
 	layer,
