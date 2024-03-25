@@ -1,5 +1,6 @@
 import {
 	findManyDesignsWithType,
+	type IDesignsByType,
 	type IDesignWithType,
 } from '#app/models/design.server'
 import { type IFill } from '#app/models/fill.server'
@@ -12,6 +13,7 @@ import { type ISize } from '#app/models/size.server'
 import { type IStroke } from '#app/models/stroke.server'
 import { type ITemplate } from '#app/models/template.server'
 import { prisma } from '#app/utils/db.server'
+import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
 import { artboardBuildCreateService } from './services/artboard/build/create.service'
 
 export const getOwner = async (userId: string) => {
@@ -89,11 +91,12 @@ export const getLayerDesigns = async ({
 	layer,
 }: {
 	layer: ILayer
-}): Promise<IDesignWithType[]> => {
-	const artboardDesigns = await findManyDesignsWithType({
+}): Promise<IDesignsByType> => {
+	const designs = await findManyDesignsWithType({
 		where: { layerId: layer.id },
 	})
-	return artboardDesigns
+
+	return filterAndOrderArtboardDesignsByType({ designs })
 }
 
 export const getArtboardDesigns = async ({
