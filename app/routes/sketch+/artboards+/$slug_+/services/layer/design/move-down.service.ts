@@ -48,7 +48,6 @@ export const layerDesignMoveDownService = async ({
 			nextDesign,
 			nextNextDesign,
 			prevDesign,
-			prisma,
 		}
 
 		const removeNodesPromises = removeDesignNodes(designPromiseArgs)

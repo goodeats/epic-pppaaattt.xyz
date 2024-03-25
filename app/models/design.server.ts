@@ -3,11 +3,9 @@ import {
 	type selectArgsType,
 	type findDesignArgsType,
 	type whereArgsType,
-	type designTypeEnum,
 } from '#app/schema/design'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 import { type IFillCreateOverrides, type IFill } from './fill.server'
-import { type ILayer } from './layer.server'
 import { type ILayoutCreateOverrides, type ILayout } from './layout.server'
 import { type ILineCreateOverrides, type ILine } from './line.server'
 import { type IPaletteCreateOverrides, type IPalette } from './palette.server'
@@ -260,26 +258,6 @@ export const updateDesignNodes = ({
 		where: { id },
 		data: { prevId, nextId },
 	})
-}
-
-export const updateLayerSelectedDesign = ({
-	layerId,
-	designId,
-	type,
-}: {
-	layerId: ILayer['id']
-	designId: Design['id']
-	type: designTypeEnum
-}) => {
-	const unselectDesign = prisma.design.updateMany({
-		where: { layerId, type, selected: true },
-		data: { selected: false },
-	})
-	const selectDesign = prisma.design.update({
-		where: { id: designId },
-		data: { selected: true },
-	})
-	return [unselectDesign, selectDesign]
 }
 
 export const deleteDesign = ({ id }: { id: IDesign['id'] }) => {

@@ -1,38 +1,37 @@
 import {
-	findFirstVisibleLayerDesign,
-	updateLayerSelectedDesign,
-} from '#app/models/design-layer.server'
+	findFirstVisibleArtboardDesign,
+	updateArtboardSelectedDesign,
+} from '#app/models/design-artboard.server'
 import { type IDesign } from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
-import { prisma } from '#app/utils/db.server'
+import { type IArtboard, prisma } from '#app/utils/db.server'
 
-export const layerUpdateSelectedDesignService = async ({
-	layerId,
+export const artboardUpdateSelectedDesignService = async ({
+	artboardId,
 	designId,
 	type,
 }: {
-	layerId: ILayer['id']
+	artboardId: IArtboard['id']
 	designId?: IDesign['id'] | null
 	type: designTypeEnum
 }) => {
 	try {
 		if (designId) {
-			const updateSelectedDesignPromise = updateLayerSelectedDesign({
-				layerId,
+			const updateSelectedDesignPromise = updateArtboardSelectedDesign({
+				artboardId,
 				designId,
 				type,
 			})
 			await prisma.$transaction(updateSelectedDesignPromise)
 		} else {
-			const firstVisibleDesign = await findFirstVisibleLayerDesign({
-				layerId,
+			const firstVisibleDesign = await findFirstVisibleArtboardDesign({
+				artboardId,
 				type,
 			})
 
 			if (firstVisibleDesign) {
-				const updateSelectedDesignPromise = updateLayerSelectedDesign({
-					layerId,
+				const updateSelectedDesignPromise = updateArtboardSelectedDesign({
+					artboardId,
 					designId: firstVisibleDesign.id,
 					type,
 				})

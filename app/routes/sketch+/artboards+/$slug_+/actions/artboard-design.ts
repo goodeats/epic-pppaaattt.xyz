@@ -85,6 +85,7 @@ export async function artboardDesignReorderAction({
 
 	const { id, artboardId, direction, updateSelectedDesignId } = submission.value
 	const args = {
+		userId,
 		id,
 		artboardId,
 		updateSelectedDesignId,
