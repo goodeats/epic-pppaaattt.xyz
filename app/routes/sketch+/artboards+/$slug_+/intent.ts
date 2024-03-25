@@ -84,6 +84,10 @@ export const DESIGN_STROKE_INTENT = {
 	updateDesignStrokeBasis: 'update-design-stroke-basis' as const,
 }
 
+export const DESIGN_LINE_INTENT = {
+	updateDesignLineWidth: 'update-design-line-width' as const,
+}
+
 export const DESIGN_LAYOUT_INTENT = {
 	updateDesignLayoutStyle: 'update-design-layout-style' as const,
 	updateDesignLayoutCount: 'update-design-layout-count' as const,

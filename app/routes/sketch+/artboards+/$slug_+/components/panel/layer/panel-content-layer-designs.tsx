@@ -2,6 +2,7 @@ import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { PanelContentLayerDesignFill } from './design/panel-content-layer-design-fill'
 import { PanelContentLayerDesignLayout } from './design/panel-content-layer-design-layout'
+import { PanelContentLayerDesignLine } from './design/panel-content-layer-design-line'
 import { PanelContentLayerDesignPalette } from './design/panel-content-layer-design-palette'
 import { PanelContentLayerDesignSize } from './design/panel-content-layer-design-size'
 import { PanelContentLayerDesignStroke } from './design/panel-content-layer-design-stroke'
@@ -18,7 +19,7 @@ export const PanelContentLayerDesigns = ({
 		designSizes,
 		designFills,
 		designStrokes,
-		// designLines,
+		designLines,
 		// designRotates,
 		designLayouts,
 		// designTemplates,
@@ -26,7 +27,6 @@ export const PanelContentLayerDesigns = ({
 
 	return (
 		<div>
-			<p>layer panel</p>
 			<PanelContentLayerDesignLayout
 				layer={layer}
 				designLayouts={designLayouts}
@@ -41,10 +41,7 @@ export const PanelContentLayerDesigns = ({
 				layer={layer}
 				designStrokes={designStrokes}
 			/>
-			{/* <PanelContentArtboardDesignLine
-				artboard={artboard}
-				designLines={designLines}
-			/> */}
+			<PanelContentLayerDesignLine layer={layer} designLines={designLines} />
 			{/* <PanelContentArtboardDesignRotate
 				artboard={artboard}
 				designRotates={designRotates}

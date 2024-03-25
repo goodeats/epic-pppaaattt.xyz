@@ -3,6 +3,7 @@ import { requireUserId } from '#app/utils/auth.server'
 import {
 	DESIGN_FILL_INTENT,
 	DESIGN_LAYOUT_INTENT,
+	DESIGN_LINE_INTENT,
 	DESIGN_PALETTE_INTENT,
 	DESIGN_SIZE_INTENT,
 	DESIGN_STROKE_INTENT,
@@ -70,6 +71,7 @@ import {
 	designLayoutEditRowsAction,
 	designLayoutEditStyleAction,
 } from './design-layout'
+import { designLineEditWidthAction } from './design-line'
 import { designPaletteEditValueAction } from './design-palette'
 import { designSizeEditValueAction } from './design-size'
 import {
@@ -247,6 +249,10 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case DESIGN_STROKE_INTENT.updateDesignStrokeBasis: {
 			return designStrokeEditBasisAction(actionArgs)
+		}
+		// LINE DESIGN INTENTS
+		case DESIGN_LINE_INTENT.updateDesignLineWidth: {
+			return designLineEditWidthAction(actionArgs)
 		}
 		// LAYOUT DESIGN INTENTS
 		case DESIGN_LAYOUT_INTENT.updateDesignLayoutStyle: {
