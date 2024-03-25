@@ -11,8 +11,8 @@ import {
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboardDesigns } from './panel/artboard/panel-content-artboard-designs'
+import { PanelContentArtboardLayers } from './panel/artboard/panel-content-artboard-layers'
 import { PanelContentLayerDesigns } from './panel/layer/panel-content-layer-designs'
-import { PanelContentArtboardLayer } from './panel-content-artboard-layer'
 
 export const PanelContentLeft = ({
 	artboard,
@@ -28,7 +28,7 @@ export const PanelContentLeft = ({
 				<SideNavTabsTrigger value="assets">Assets</SideNavTabsTrigger>
 			</SideNavTabsList>
 			<TabsContent value="layers">
-				<PanelContentArtboardLayer artboard={artboard} layers={layers} />
+				<PanelContentArtboardLayers artboard={artboard} layers={layers} />
 			</TabsContent>
 			<TabsContent value="assets">Add assets like images here</TabsContent>
 		</SideNavTabsWrapper>

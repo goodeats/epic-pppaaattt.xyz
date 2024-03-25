@@ -11,13 +11,13 @@ import {
 } from '#app/components/shared'
 import { Icon } from '#app/components/ui/icon'
 import { type ILayer } from '#app/models/layer.server'
-import { type PickedArtboardType } from '../queries'
-import { PanelFormArtboardLayerNew } from './panel-form-artboard-design-new-layer'
-import { PanelFormArtboardLayerReorder } from './panel-form-artboard-layer-reorder'
-import { PanelFormArtboardLayerToggleVisibility } from './panel-form-artboard-layer-toggle-visibility'
-import { PanelPopoverArtboardLayer } from './panel-popover-artboard-layer'
+import { type PickedArtboardType } from '../../../queries'
+import { PanelFormArtboardLayerNew } from '../../forms/artboard/layer/panel-form-artboard-layer-new'
+import { PanelFormArtboardLayerReorder } from '../../forms/artboard/layer/panel-form-artboard-layer-reorder'
+import { PanelFormArtboardLayerToggleVisibility } from '../../forms/artboard/layer/panel-form-artboard-layer-toggle-visibility'
+import { PanelPopoverLayer } from '../../popovers/layer/panel-popover-layer'
 
-export const PanelContentArtboardLayer = ({
+export const PanelContentArtboardLayers = ({
 	artboard,
 	layers,
 }: {
@@ -83,10 +83,7 @@ export const PanelContentArtboardLayer = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverArtboardLayer
-									artboardId={artboard.id}
-									layer={layer}
-								/>
+								<PanelPopoverLayer artboardId={artboard.id} layer={layer} />
 								<div
 									className="flex cursor-pointer"
 									onClick={e => {

@@ -3,18 +3,16 @@ import { getFieldsetConstraint } from '@conform-to/zod'
 import { type Artboard } from '@prisma/client'
 import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
-import { FormDeleteIcon } from '#app/components/shared'
-import { StatusButton } from '#app/components/ui/status-button'
-import { DeleteArtboardLayerSchema } from '#app/schema/layer'
+import { Button } from '#app/components/ui/button'
+import { Icon } from '#app/components/ui/icon'
+import { NewArtboardLayerSchema } from '#app/schema/layer-artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../intent'
-import { type action } from '../route'
+import { INTENT } from '../../../../intent'
+import { type action } from '../../../../route'
 
-export const PanelFormArtboardLayerDelete = ({
-	id,
+export const PanelFormArtboardLayerNew = ({
 	artboardId,
 }: {
-	id: string
 	artboardId: Artboard['id']
 }) => {
 	const fetcher = useFetcher<typeof action>()
@@ -22,8 +20,8 @@ export const PanelFormArtboardLayerDelete = ({
 	const isPending = useIsPending()
 
 	const [form] = useForm({
-		id: `panel-form-artboard-layer-delete-${id}`,
-		constraint: getFieldsetConstraint(DeleteArtboardLayerSchema),
+		id: 'panel-form-artboard-layer-new',
+		constraint: getFieldsetConstraint(NewArtboardLayerSchema),
 		lastSubmission: actionData?.submission,
 	})
 
@@ -31,19 +29,18 @@ export const PanelFormArtboardLayerDelete = ({
 		<fetcher.Form method="POST" {...form.props}>
 			<AuthenticityTokenInput />
 
-			<input type="hidden" name="id" value={id} />
 			<input type="hidden" name="artboardId" value={artboardId} />
-			<input type="hidden" name="intent" value={INTENT.artboardDeleteLayer} />
-			<StatusButton
+			<input type="hidden" name="intent" value={INTENT.artboardCreateLayer} />
+			<Button
 				type="submit"
-				name="intent"
-				value="delete-layer"
-				variant="destructive"
-				status={isPending ? 'pending' : actionData?.status ?? 'idle'}
+				variant="ghost"
+				className="flex h-8 w-8 cursor-pointer items-center justify-center"
 				disabled={isPending}
 			>
-				<FormDeleteIcon />
-			</StatusButton>
+				<Icon name="plus">
+					<span className="sr-only">Add New</span>
+				</Icon>
+			</Button>
 		</fetcher.Form>
 	)
 }

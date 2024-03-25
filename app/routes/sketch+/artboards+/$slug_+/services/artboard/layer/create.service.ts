@@ -3,7 +3,7 @@ import {
 	connectPrevAndNextLayers,
 	findFirstLayer,
 } from '#app/models/layer.server'
-import { LayerDataCreateSchema } from '#app/schema/layer'
+import { LayerDataCreateSchema } from '#app/schema/layer-artboard'
 import { prisma } from '#app/utils/db.server'
 import { artboardLayerCopyArtboardDesignsService } from './design/copy-artboard-designs.service'
 

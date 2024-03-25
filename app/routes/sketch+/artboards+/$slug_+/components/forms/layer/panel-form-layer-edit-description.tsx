@@ -6,12 +6,12 @@ import { type FocusEvent } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Textarea } from '#app/components/ui/textarea'
 import { type ILayer } from '#app/models/layer.server'
-import { EditArtboardLayerDescriptionSchema } from '#app/schema/layer'
+import { EditLayerDescriptionSchema } from '#app/schema/layer'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../intent'
-import { type action } from '../route'
+import { LAYER_INTENT } from '../../../intent'
+import { type action } from '../../../route'
 
-export const PanelFormArtboardLayerEditDescription = ({
+export const PanelFormLayerEditDescription = ({
 	artboardId,
 	layer,
 }: {
@@ -23,8 +23,8 @@ export const PanelFormArtboardLayerEditDescription = ({
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: `panel-form-artboard-design-edit-layer-${layer.id}-description`,
-		constraint: getFieldsetConstraint(EditArtboardLayerDescriptionSchema),
+		id: `panel-form-layer-edit-${layer.id}-description`,
+		constraint: getFieldsetConstraint(EditLayerDescriptionSchema),
 		lastSubmission: actionData?.submission,
 		defaultValue: {
 			...layer,
@@ -46,7 +46,7 @@ export const PanelFormArtboardLayerEditDescription = ({
 			<input
 				type="hidden"
 				name="intent"
-				value={INTENT.artboardUpdateLayerDescription}
+				value={LAYER_INTENT.updateLayerDescription}
 			/>
 			<Textarea
 				maxLength={400}

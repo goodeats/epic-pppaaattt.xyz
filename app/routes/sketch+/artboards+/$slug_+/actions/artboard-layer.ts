@@ -2,18 +2,15 @@ import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import {
 	DeleteArtboardLayerSchema,
-	EditArtboardLayerDescriptionSchema,
-	EditArtboardLayerNameSchema,
 	NewArtboardLayerSchema,
 	ReorderArtboardLayerSchema,
-	ToggleVisibilityArtboardLayerSchema,
-} from '#app/schema/layer'
+	ToggleVisibleArtboardLayerSchema,
+} from '#app/schema/layer-artboard'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
-import { findFirstLayerInstance } from '#app/utils/prisma-extensions-layer'
 import { artboardLayerCreateService } from '../services/artboard/layer/create.service'
 import { artboardLayerDeleteService } from '../services/artboard/layer/delete.service'
 import {
@@ -30,10 +27,8 @@ async function validateSubmission({
 	formData: FormData
 	schema:
 		| typeof NewArtboardLayerSchema
-		| typeof EditArtboardLayerNameSchema
-		| typeof EditArtboardLayerDescriptionSchema
 		| typeof ReorderArtboardLayerSchema
-		| typeof ToggleVisibilityArtboardLayerSchema
+		| typeof ToggleVisibleArtboardLayerSchema
 		| typeof DeleteArtboardLayerSchema
 }) {
 	const newDesign = schema === NewArtboardLayerSchema
@@ -71,68 +66,6 @@ export async function artboardLayerNewAction({
 	if (error) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
-}
-
-export async function artboardLayerUpdateNameAction({
-	userId,
-	formData,
-}: IntentActionArgs) {
-	// validation
-	const submission = await parseArtboardLayerUpdateSubmission({
-		userId,
-		formData,
-		schema: EditArtboardLayerNameSchema,
-	})
-	if (submission.intent !== 'submit') {
-		return notSubmissionResponse(submission)
-	}
-	if (!submission.value) {
-		return submissionErrorResponse(submission)
-	}
-
-	// changes
-	const { id, name } = submission.value
-	const layer = await findFirstLayerInstance({
-		where: { id },
-	})
-	if (!layer) return submissionErrorResponse(submission)
-
-	layer.name = name
-	layer.updatedAt = new Date()
-	await layer.save()
-
-	return json({ status: 'success', submission } as const)
-}
-
-export async function artboardLayerUpdateDescriptionAction({
-	userId,
-	formData,
-}: IntentActionArgs) {
-	// validation
-	const submission = await parseArtboardLayerUpdateSubmission({
-		userId,
-		formData,
-		schema: EditArtboardLayerDescriptionSchema,
-	})
-	if (submission.intent !== 'submit') {
-		return notSubmissionResponse(submission)
-	}
-	if (!submission.value) {
-		return submissionErrorResponse(submission)
-	}
-
-	// changes
-	const { id, description } = submission.value
-	const layer = await findFirstLayerInstance({
-		where: { id },
-	})
-	if (!layer) return submissionErrorResponse(submission)
-
-	layer.description = description ?? ''
-	layer.updatedAt = new Date()
-	await layer.save()
-
-	return json({ status: 'success', submission } as const)
 }
 
 export async function artboardLayerReorderAction({
@@ -336,7 +269,7 @@ export async function artboardLayerToggleVisibilityAction({
 	const submission = await parseArtboardLayerUpdateSubmission({
 		userId,
 		formData,
-		schema: ToggleVisibilityArtboardLayerSchema,
+		schema: ToggleVisibleArtboardLayerSchema,
 	})
 	if (submission.intent !== 'submit') {
 		return notSubmissionResponse(submission)

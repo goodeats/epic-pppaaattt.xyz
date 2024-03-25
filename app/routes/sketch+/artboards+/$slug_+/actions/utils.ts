@@ -113,6 +113,21 @@ export const parseArtboardLayerSubmission = async ({
 	})
 }
 
+export const parseLayerSubmission = async ({
+	userId,
+	formData,
+	schema,
+}: IntentActionArgs & { schema: z.ZodSchema<any> }) => {
+	return await parse(formData, {
+		schema: schema.superRefine(async (data, ctx) => {
+			const { id } = data
+			const layer = await findLayerByIdAndOwner({ id, ownerId: userId })
+			if (!layer) ctx.addIssue(addNotFoundIssue('Layer'))
+		}),
+		async: true,
+	})
+}
+
 export const parseArtboardLayerUpdateSubmission = async ({
 	userId,
 	formData,

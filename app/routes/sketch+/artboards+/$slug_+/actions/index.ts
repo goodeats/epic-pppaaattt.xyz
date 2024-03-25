@@ -13,6 +13,7 @@ import {
 	DESIGN_TEMPLATE_INTENT,
 	INTENT,
 	LAYER_DESIGN_INTENT,
+	LAYER_INTENT,
 } from '../intent'
 import {
 	artboardEditBackgroundColorAction,
@@ -54,8 +55,6 @@ import {
 	artboardLayerNewAction,
 	artboardLayerReorderAction,
 	artboardLayerToggleVisibilityAction,
-	artboardLayerUpdateDescriptionAction,
-	artboardLayerUpdateNameAction,
 } from './artboard-layer'
 import {
 	designFillEditBasisAction,
@@ -81,6 +80,7 @@ import {
 	designStrokeEditValueAction,
 } from './design-stroke'
 import { designTemplateEditStyleAction } from './design-template'
+import { layerEditDescriptionAction, layerEditNameAction } from './layer'
 import {
 	layerDesignDeleteAction,
 	layerDesignNewAction,
@@ -172,12 +172,6 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.artboardCreateLayer: {
 			return artboardLayerNewAction(actionArgs)
 		}
-		case INTENT.artboardUpdateLayerName: {
-			return artboardLayerUpdateNameAction(actionArgs)
-		}
-		case INTENT.artboardUpdateLayerDescription: {
-			return artboardLayerUpdateDescriptionAction(actionArgs)
-		}
 		case INTENT.artboardToggleVisibilityLayer: {
 			return artboardLayerToggleVisibilityAction(actionArgs)
 		}
@@ -186,6 +180,13 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case INTENT.artboardReorderLayer: {
 			return artboardLayerReorderAction(actionArgs)
+		}
+		// LAYER INTENTS
+		case LAYER_INTENT.updateLayerName: {
+			return layerEditNameAction(actionArgs)
+		}
+		case LAYER_INTENT.updateLayerDescription: {
+			return layerEditDescriptionAction(actionArgs)
 		}
 		// LAYER DESIGN INTENTS
 		case LAYER_DESIGN_INTENT.layerCreateDesign: {

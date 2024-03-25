@@ -5,10 +5,10 @@ import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
-import { ToggleVisibilityArtboardLayerSchema } from '#app/schema/layer'
+import { ToggleVisibleArtboardLayerSchema } from '#app/schema/layer-artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../intent'
-import { type action } from '../route'
+import { INTENT } from '../../../../intent'
+import { type action } from '../../../../route'
 
 export const PanelFormArtboardLayerToggleVisibility = ({
 	id,
@@ -25,7 +25,7 @@ export const PanelFormArtboardLayerToggleVisibility = ({
 
 	const [form] = useForm({
 		id: `panel-form-artboard-layer-toggle-visibility-${id}`,
-		constraint: getFieldsetConstraint(ToggleVisibilityArtboardLayerSchema),
+		constraint: getFieldsetConstraint(ToggleVisibleArtboardLayerSchema),
 		lastSubmission: actionData?.submission,
 	})
 

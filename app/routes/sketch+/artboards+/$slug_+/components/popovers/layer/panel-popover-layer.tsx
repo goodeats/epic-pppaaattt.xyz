@@ -9,11 +9,11 @@ import {
 } from '#app/components/ui/popover'
 import { Separator } from '#app/components/ui/separator'
 import { type ILayer } from '#app/models/layer.server'
-import { PanelFormArtboardLayerDelete } from './panel-form-artboard-layer-delete'
-import { PanelFormArtboardLayerEditDescription } from './panel-form-artboard-layer-edit-description'
-import { PanelFormArtboardLayerEditName } from './panel-form-artboard-layer-edit-name'
+import { PanelFormArtboardLayerDelete } from '../../forms/artboard/layer/panel-form-artboard-layer-delete'
+import { PanelFormLayerEditDescription } from '../../forms/layer/panel-form-layer-edit-description'
+import { PanelFormLayerEditName } from '../../forms/layer/panel-form-layer-edit-name'
 
-export const PanelPopoverArtboardLayer = ({
+export const PanelPopoverLayer = ({
 	artboardId,
 	layer,
 }: {
@@ -45,10 +45,7 @@ export const PanelPopoverArtboardLayer = ({
 						<div className="grid gap-2">
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="name">Name</Label>
-								<PanelFormArtboardLayerEditName
-									artboardId={artboardId}
-									layer={layer}
-								/>
+								<PanelFormLayerEditName artboardId={artboardId} layer={layer} />
 								{/* <Input
 									id="name"
 									defaultValue={layer.name}
@@ -58,7 +55,7 @@ export const PanelPopoverArtboardLayer = ({
 							</div>
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="description">Description</Label>
-								<PanelFormArtboardLayerEditDescription
+								<PanelFormLayerEditDescription
 									artboardId={artboardId}
 									layer={layer}
 								/>

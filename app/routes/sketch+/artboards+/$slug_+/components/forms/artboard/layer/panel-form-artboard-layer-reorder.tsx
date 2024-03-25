@@ -5,10 +5,10 @@ import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
-import { ReorderArtboardLayerSchema } from '#app/schema/layer'
+import { ReorderArtboardLayerSchema } from '#app/schema/layer-artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../intent'
-import { type action } from '../route'
+import { INTENT } from '../../../../intent'
+import { type action } from '../../../../route'
 
 export const PanelFormArtboardLayerReorder = ({
 	id,
