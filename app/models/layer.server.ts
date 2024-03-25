@@ -89,3 +89,38 @@ export const updateLayerToTail = ({ id }: { id: ILayer['id'] }) => {
 		data: { nextId: null },
 	})
 }
+
+export const updateLayerRemoveNodes = ({ id }: { id: ILayer['id'] }) => {
+	return prisma.layer.update({
+		where: { id },
+		data: { prevId: null, nextId: null },
+	})
+}
+
+export const updateLayerNodes = ({
+	id,
+	nextId,
+	prevId,
+}: {
+	id: string
+	nextId: string | null
+	prevId: string | null
+}) => {
+	return prisma.layer.update({
+		where: { id },
+		data: { prevId, nextId },
+	})
+}
+
+export const updateLayerVisible = ({
+	id,
+	visible,
+}: {
+	id: ILayer['id']
+	visible: boolean
+}) => {
+	return prisma.layer.update({
+		where: { id },
+		data: { visible },
+	})
+}

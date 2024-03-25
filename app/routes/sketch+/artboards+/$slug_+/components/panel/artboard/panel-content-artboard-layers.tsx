@@ -14,7 +14,7 @@ import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../../../queries'
 import { PanelFormArtboardLayerNew } from '../../forms/artboard/layer/panel-form-artboard-layer-new'
 import { PanelFormArtboardLayerReorder } from '../../forms/artboard/layer/panel-form-artboard-layer-reorder'
-import { PanelFormArtboardLayerToggleVisibility } from '../../forms/artboard/layer/panel-form-artboard-layer-toggle-visibility'
+import { PanelFormArtboardLayerToggleVisible } from '../../forms/artboard/layer/panel-form-artboard-layer-toggle-visible'
 import { PanelPopoverLayer } from '../../popovers/layer/panel-popover-layer'
 
 export const PanelContentArtboardLayers = ({
@@ -105,7 +105,7 @@ export const PanelContentArtboardLayers = ({
 										<span className="sr-only">Selected</span>
 									</Icon>
 								)}
-								<PanelFormArtboardLayerToggleVisibility
+								<PanelFormArtboardLayerToggleVisible
 									id={id}
 									artboardId={artboard.id}
 									visible={visible}

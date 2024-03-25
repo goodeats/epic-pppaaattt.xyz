@@ -46,12 +46,6 @@ export const PanelPopoverLayer = ({
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="name">Name</Label>
 								<PanelFormLayerEditName artboardId={artboardId} layer={layer} />
-								{/* <Input
-									id="name"
-									defaultValue={layer.name}
-									className="col-span-2 h-8"
-									disabled
-								/> */}
 							</div>
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="description">Description</Label>

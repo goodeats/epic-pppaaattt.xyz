@@ -7,7 +7,7 @@ import { FormDeleteIcon } from '#app/components/shared'
 import { StatusButton } from '#app/components/ui/status-button'
 import { DeleteArtboardLayerSchema } from '#app/schema/layer-artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../../../../intent'
+import { ARTBOARD_LAYER_INTENT } from '../../../../intent'
 import { type action } from '../../../../route'
 
 export const PanelFormArtboardLayerDelete = ({
@@ -33,7 +33,11 @@ export const PanelFormArtboardLayerDelete = ({
 
 			<input type="hidden" name="id" value={id} />
 			<input type="hidden" name="artboardId" value={artboardId} />
-			<input type="hidden" name="intent" value={INTENT.artboardDeleteLayer} />
+			<input
+				type="hidden"
+				name="intent"
+				value={ARTBOARD_LAYER_INTENT.artboardDeleteLayer}
+			/>
 			<StatusButton
 				type="submit"
 				name="intent"

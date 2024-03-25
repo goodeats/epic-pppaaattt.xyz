@@ -66,6 +66,14 @@ export const ARTBOARD_DESIGN_INTENT = {
 	artboardDeleteDesign: 'delete-artboard-design' as const,
 }
 
+// artboard layer actions
+export const ARTBOARD_LAYER_INTENT = {
+	artboardCreateLayer: 'create-artboard-layer' as const,
+	artboardReorderLayer: 'reorder-artboard-layer' as const,
+	artboardToggleVisibleLayer: 'toggle-visible-artboard-layer' as const,
+	artboardDeleteLayer: 'delete-artboard-layer' as const,
+}
+
 // layer actions
 export const LAYER_INTENT = {
 	updateLayerName: 'update-layer-name' as const,

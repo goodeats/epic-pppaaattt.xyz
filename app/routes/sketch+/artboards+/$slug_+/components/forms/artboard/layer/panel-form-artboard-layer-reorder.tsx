@@ -5,9 +5,10 @@ import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
+import { type ILayer } from '#app/models/layer.server'
 import { ReorderArtboardLayerSchema } from '#app/schema/layer-artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../../../../intent'
+import { ARTBOARD_LAYER_INTENT } from '../../../../intent'
 import { type action } from '../../../../route'
 
 export const PanelFormArtboardLayerReorder = ({
@@ -17,7 +18,7 @@ export const PanelFormArtboardLayerReorder = ({
 	panelCount,
 	direction,
 }: {
-	id: string
+	id: ILayer['id']
 	artboardId: Artboard['id']
 	panelIndex: number
 	panelCount: number
@@ -43,7 +44,11 @@ export const PanelFormArtboardLayerReorder = ({
 			<input type="hidden" name="id" value={id} />
 			<input type="hidden" name="artboardId" value={artboardId} />
 			<input type="hidden" name="direction" value={direction} />
-			<input type="hidden" name="intent" value={INTENT.artboardReorderLayer} />
+			<input
+				type="hidden"
+				name="intent"
+				value={ARTBOARD_LAYER_INTENT.artboardReorderLayer}
+			/>
 			<Button
 				type="submit"
 				variant="ghost"

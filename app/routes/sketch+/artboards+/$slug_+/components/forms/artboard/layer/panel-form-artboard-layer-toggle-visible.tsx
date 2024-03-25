@@ -5,17 +5,18 @@ import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Button } from '#app/components/ui/button'
 import { Icon } from '#app/components/ui/icon'
+import { type ILayer } from '#app/models/layer.server'
 import { ToggleVisibleArtboardLayerSchema } from '#app/schema/layer-artboard'
 import { useIsPending } from '#app/utils/misc'
-import { INTENT } from '../../../../intent'
+import { ARTBOARD_LAYER_INTENT } from '../../../../intent'
 import { type action } from '../../../../route'
 
-export const PanelFormArtboardLayerToggleVisibility = ({
+export const PanelFormArtboardLayerToggleVisible = ({
 	id,
 	artboardId,
 	visible,
 }: {
-	id: string
+	id: ILayer['id']
 	artboardId: Artboard['id']
 	visible: boolean
 }) => {
@@ -24,7 +25,7 @@ export const PanelFormArtboardLayerToggleVisibility = ({
 	const isPending = useIsPending()
 
 	const [form] = useForm({
-		id: `panel-form-artboard-layer-toggle-visibility-${id}`,
+		id: `panel-form-artboard-layer-toggle-visible-${id}`,
 		constraint: getFieldsetConstraint(ToggleVisibleArtboardLayerSchema),
 		lastSubmission: actionData?.submission,
 	})
@@ -38,7 +39,7 @@ export const PanelFormArtboardLayerToggleVisibility = ({
 			<input
 				type="hidden"
 				name="intent"
-				value={INTENT.artboardToggleVisibilityLayer}
+				value={ARTBOARD_LAYER_INTENT.artboardToggleVisibleLayer}
 			/>
 			<Button
 				type="submit"

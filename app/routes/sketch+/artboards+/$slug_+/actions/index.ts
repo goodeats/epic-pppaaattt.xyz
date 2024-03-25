@@ -3,6 +3,7 @@ import { requireUserId } from '#app/utils/auth.server'
 import {
 	ARTBOARD_DESIGN_INTENT,
 	ARTBOARD_INTENT,
+	ARTBOARD_LAYER_INTENT,
 	DESIGN_FILL_INTENT,
 	DESIGN_LAYOUT_INTENT,
 	DESIGN_LINE_INTENT,
@@ -54,7 +55,7 @@ import {
 	artboardLayerDeleteAction,
 	artboardLayerNewAction,
 	artboardLayerReorderAction,
-	artboardLayerToggleVisibilityAction,
+	artboardLayerToggleVisibleAction,
 } from './artboard-layer'
 import {
 	designFillEditBasisAction,
@@ -169,18 +170,21 @@ export async function action({ request }: DataFunctionArgs) {
 		case INTENT.artboardUpdateDesignTemplateStyle: {
 			return artboardDesignEditTemplateStyleAction(actionArgs)
 		}
-		case INTENT.artboardCreateLayer: {
+
+		// ARTBOARD LAYER INTENTS
+		case ARTBOARD_LAYER_INTENT.artboardCreateLayer: {
 			return artboardLayerNewAction(actionArgs)
 		}
-		case INTENT.artboardToggleVisibilityLayer: {
-			return artboardLayerToggleVisibilityAction(actionArgs)
+		case ARTBOARD_LAYER_INTENT.artboardToggleVisibleLayer: {
+			return artboardLayerToggleVisibleAction(actionArgs)
 		}
-		case INTENT.artboardDeleteLayer: {
+		case ARTBOARD_LAYER_INTENT.artboardDeleteLayer: {
 			return artboardLayerDeleteAction(actionArgs)
 		}
-		case INTENT.artboardReorderLayer: {
+		case ARTBOARD_LAYER_INTENT.artboardReorderLayer: {
 			return artboardLayerReorderAction(actionArgs)
 		}
+
 		// LAYER INTENTS
 		case LAYER_INTENT.updateLayerName: {
 			return layerEditNameAction(actionArgs)
