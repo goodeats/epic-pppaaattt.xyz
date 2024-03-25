@@ -11,7 +11,6 @@ import {
 import { Separator } from '#app/components/ui/separator'
 import { userHasPermission } from '#app/utils/permissions'
 import { useOptionalUser } from '#app/utils/user'
-import { Appearances } from './appearances'
 import { DeletePermission } from './delete-form'
 import { type loader } from './route'
 
@@ -46,7 +45,6 @@ export const Content = () => {
 				</ul> */}
 			<ContainerP>{data.layer.description}</ContainerP>
 			<Separator className="my-4" />
-			<Appearances />
 		</ContainerContent>
 	)
 }

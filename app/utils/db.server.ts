@@ -3,14 +3,10 @@ import {
 	type Artboard,
 	PrismaClient,
 	type Project,
-	type Appearance,
-	type Layer,
-	type AppearancesOnArtboards,
 	type Prisma,
 } from '@prisma/client'
 import { type DefaultArgs } from '@prisma/client/runtime/library'
 import chalk from 'chalk'
-import { type AppearanceType } from './appearances'
 import { ArtboardPrismaExtensions } from './prisma-extensions-artboard'
 import {
 	DesignPrismaExtensions,
@@ -88,15 +84,4 @@ export interface IProject extends Project {
 
 export interface IArtboard extends Artboard {
 	project?: Project
-}
-
-export interface IAppearance extends Appearance {
-	type: AppearanceType
-	artboards?: IArtboard[]
-	layers?: Layer[]
-}
-
-export interface IAppearancesOnArtboard extends AppearancesOnArtboards {
-	appearance?: IAppearance
-	artboard?: IArtboard
 }
