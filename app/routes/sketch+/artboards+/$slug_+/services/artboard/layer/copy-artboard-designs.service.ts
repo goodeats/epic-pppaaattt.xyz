@@ -9,6 +9,7 @@ import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
 import { artboardLayerCopyArtboardDesignFillsService } from './design/copy-artboard-design-fills.service'
 import { artboardLayerCopyArtboardDesignLinesService } from './design/copy-artboard-design-lines.service'
 import { artboardLayerCopyArtboardDesignPalettesService } from './design/copy-artboard-design-palettes.service'
+import { artboardLayerCopyArtboardDesignRotatesService } from './design/copy-artboard-design-rotates.service'
 import { artboardLayerCopyArtboardDesignSizesService } from './design/copy-artboard-design-sizes.service'
 import { artboardLayerCopyArtboardDesignStrokesService } from './design/copy-artboard-design-strokes.service'
 
@@ -99,7 +100,7 @@ const createLayerDesignTypes = async ({
 		designFills,
 		designStrokes,
 		designLines,
-		// designRotates,
+		designRotates,
 		// designLayouts,
 		// designTemplates,
 	} = artboardDesignsByType
@@ -137,5 +138,12 @@ const createLayerDesignTypes = async ({
 		userId,
 		layer,
 		designs: designLines,
+	})
+
+	// Rotate
+	await artboardLayerCopyArtboardDesignRotatesService({
+		userId,
+		layer,
+		designs: designRotates,
 	})
 }

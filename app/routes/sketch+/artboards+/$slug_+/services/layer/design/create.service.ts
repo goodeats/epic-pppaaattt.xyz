@@ -9,6 +9,7 @@ import {
 import { createDesignFill } from '#app/models/fill.server'
 import { createDesignLine } from '#app/models/line.server'
 import { createDesignPalette } from '#app/models/palette.server'
+import { createDesignRotate } from '#app/models/rotate.server'
 import { createDesignSize } from '#app/models/size.server'
 import { createDesignStroke } from '#app/models/stroke.server'
 import {
@@ -154,8 +155,11 @@ const createDesignType = ({
 				designId,
 				designTypeOverrides,
 			})
-		// case 'rotate':
-		// 	return await prisma.rotate.create({ data })
+		case 'rotate':
+			return createDesignRotate({
+				designId,
+				designTypeOverrides,
+			})
 		// case 'layout':
 		// 	return await prisma.layout.create({ data })
 		// case 'template':

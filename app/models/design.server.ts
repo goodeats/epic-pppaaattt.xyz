@@ -11,7 +11,7 @@ import { type ILayer } from './layer.server'
 import { type ILayout } from './layout.server'
 import { type ILineCreateOverrides, type ILine } from './line.server'
 import { type IPaletteCreateOverrides, type IPalette } from './palette.server'
-import { type IRotate } from './rotate.server'
+import { type IRotateCreateOverrides, type IRotate } from './rotate.server'
 import { type ISizeCreateOverrides, type ISize } from './size.server'
 import { type IStrokeCreateOverrides, type IStroke } from './stroke.server'
 import { type ITemplate } from './template.server'
@@ -29,6 +29,7 @@ export type IDesignTypeCreateOverrides =
 	| IFillCreateOverrides
 	| IStrokeCreateOverrides
 	| ILineCreateOverrides
+	| IRotateCreateOverrides
 export interface IDesignWithType {
 	id: string
 	type: string
