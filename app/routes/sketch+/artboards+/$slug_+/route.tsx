@@ -76,6 +76,8 @@ import {
 	getArtboard,
 	getArtboardBuild,
 	getArtboardDesigns,
+	getLayer,
+	getLayerDesigns,
 	getOwner,
 } from './queries'
 
@@ -214,6 +216,17 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const artboard = await getArtboard(userId, slug as string)
 	invariantResponse(artboard, 'Artboard not found', { status: 404 })
 
+	const { searchParams } = new URL(request.url)
+	const layerId = searchParams.get('layerId')
+	let layer,
+		layerDesigns = null
+	if (layerId) {
+		layer = await getLayer({ layerId, userId, artboardId: artboard.id })
+		invariantResponse(layer, 'Layer not found', { status: 404 })
+
+		layerDesigns = await getLayerDesigns({ layer })
+	}
+
 	const date = new Date(artboard.updatedAt)
 	const artboardTimeAgo = formatDistanceToNow(date)
 
@@ -230,6 +243,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 		artboard,
 		artboardTimeAgo,
 		artboardDesigns,
+		layer,
+		layerDesigns,
 		layers,
 		artboardBuild,
 	})
@@ -237,21 +252,29 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 export default function SketchRoute() {
 	const data = useLoaderData<typeof loader>()
+	const {
+		artboard,
+		artboardDesigns,
+		layer,
+		layerDesigns,
+		layers,
+		artboardBuild,
+	} = data
+
 	return (
 		<SketchBody>
 			<PanelContainer variant="left">
-				<PanelContentLeft artboard={data.artboard} layers={data.layers} />
+				<PanelContentLeft artboard={artboard} layers={layers} />
 			</PanelContainer>
 			<SketchBodyContent>
-				<CanvasContent
-					artboard={data.artboard}
-					artboardBuild={data.artboardBuild}
-				/>
+				<CanvasContent artboard={artboard} artboardBuild={artboardBuild} />
 			</SketchBodyContent>
 			<PanelContainer>
 				<PanelContentRight
-					artboard={data.artboard}
-					artboardDesigns={data.artboardDesigns}
+					artboard={artboard}
+					artboardDesigns={artboardDesigns}
+					layer={layer}
+					layerDesigns={layerDesigns}
 				/>
 			</PanelContainer>
 		</SketchBody>

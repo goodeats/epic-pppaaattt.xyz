@@ -71,6 +71,31 @@ export const getArtboard = async (
 	})
 }
 
+export const getLayer = async ({
+	layerId,
+	userId,
+	artboardId,
+}: {
+	layerId: string
+	userId: string
+	artboardId: string
+}): Promise<ILayer | null> => {
+	return await prisma.layer.findFirst({
+		where: { id: layerId, ownerId: userId, artboardId },
+	})
+}
+
+export const getLayerDesigns = async ({
+	layer,
+}: {
+	layer: ILayer
+}): Promise<IDesignWithType[]> => {
+	const artboardDesigns = await findManyDesignsWithType({
+		where: { layerId: layer.id },
+	})
+	return artboardDesigns
+}
+
 export const getArtboardDesigns = async ({
 	artboard,
 }: {

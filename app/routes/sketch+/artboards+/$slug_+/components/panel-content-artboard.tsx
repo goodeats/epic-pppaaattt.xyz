@@ -1,15 +1,6 @@
-import {
-	type IDesignWithType,
-	type IDesignWithPalette,
-	type IDesignWithSize,
-	type IDesignWithFill,
-	type IDesignWithStroke,
-	type IDesignWithLine,
-	type IDesignWithRotate,
-	type IDesignWithLayout,
-	type IDesignWithTemplate,
-} from '#app/models/design.server'
-import { filterDesignsByType } from '#app/utils/design'
+import { type IDesignWithType } from '#app/models/design.server'
+import { type ILayer } from '#app/models/layer.server'
+import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
 import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboardBackgroundColor } from './panel-content-artboard-background-color'
 import { PanelContentArtboardDesignFill } from './panel-content-artboard-design-fill'
@@ -25,42 +16,27 @@ import { PanelContentArtboardFrame } from './panel-content-artboard-frame'
 export const PanelContentArtboard = ({
 	artboard,
 	artboardDesigns,
+	layer,
+	layerDesigns,
 }: {
 	artboard: PickedArtboardType
 	artboardDesigns: IDesignWithType[]
+	layer: ILayer | null | undefined
+	layerDesigns: IDesignWithType[] | null | undefined
 }) => {
-	const designPalettes = filterDesignsByType(
+	// if layer do something different
+	const {
+		designPalettes,
+		designSizes,
+		designFills,
+		designStrokes,
+		designLines,
+		designRotates,
+		designLayouts,
+		designTemplates,
+	} = filterAndOrderArtboardDesignsByType({
 		artboardDesigns,
-		'palette',
-	) as IDesignWithPalette[]
-	const designSizes = filterDesignsByType(
-		artboardDesigns,
-		'size',
-	) as IDesignWithSize[]
-	const designFills = filterDesignsByType(
-		artboardDesigns,
-		'fill',
-	) as IDesignWithFill[]
-	const designStrokes = filterDesignsByType(
-		artboardDesigns,
-		'stroke',
-	) as IDesignWithStroke[]
-	const designLines = filterDesignsByType(
-		artboardDesigns,
-		'line',
-	) as IDesignWithLine[]
-	const designRotates = filterDesignsByType(
-		artboardDesigns,
-		'rotate',
-	) as IDesignWithRotate[]
-	const designLayouts = filterDesignsByType(
-		artboardDesigns,
-		'layout',
-	) as IDesignWithLayout[]
-	const designTemplates = filterDesignsByType(
-		artboardDesigns,
-		'template',
-	) as IDesignWithTemplate[]
+	})
 
 	return (
 		<div>

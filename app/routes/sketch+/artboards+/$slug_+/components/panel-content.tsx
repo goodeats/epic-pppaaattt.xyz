@@ -34,9 +34,13 @@ export const PanelContentLeft = ({
 export const PanelContentRight = ({
 	artboard,
 	artboardDesigns,
+	layer,
+	layerDesigns,
 }: {
 	artboard: PickedArtboardType
 	artboardDesigns: IDesignWithType[]
+	layer: ILayer | null | undefined
+	layerDesigns: IDesignWithType[] | null | undefined
 }) => {
 	return (
 		<SideNavTabsWrapper defaultValue="artboard">
@@ -48,6 +52,8 @@ export const PanelContentRight = ({
 				<PanelContentArtboard
 					artboard={artboard}
 					artboardDesigns={artboardDesigns}
+					layer={layer}
+					layerDesigns={layerDesigns}
 				/>
 			</TabsContent>
 			<TabsContent value="actions">
