@@ -13,6 +13,7 @@ import { createDesignPalette } from '#app/models/palette.server'
 import { createDesignRotate } from '#app/models/rotate.server'
 import { createDesignSize } from '#app/models/size.server'
 import { createDesignStroke } from '#app/models/stroke.server'
+import { createDesignTemplate } from '#app/models/template.server'
 import {
 	LayerDesignDataCreateSchema,
 	type designTypeEnum,
@@ -166,8 +167,11 @@ const createDesignType = ({
 				designId,
 				designTypeOverrides,
 			})
-		// case 'template':
-		// 	return await prisma.template.create({ data })
+		case 'template':
+			return createDesignTemplate({
+				designId,
+				designTypeOverrides,
+			})
 		default:
 			throw new Error(`Design type not found: ${type}`)
 	}

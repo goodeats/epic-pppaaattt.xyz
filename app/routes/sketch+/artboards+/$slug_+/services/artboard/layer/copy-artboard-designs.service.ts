@@ -13,6 +13,7 @@ import { artboardLayerCopyArtboardDesignPalettesService } from './design/copy-ar
 import { artboardLayerCopyArtboardDesignRotatesService } from './design/copy-artboard-design-rotates.service'
 import { artboardLayerCopyArtboardDesignSizesService } from './design/copy-artboard-design-sizes.service'
 import { artboardLayerCopyArtboardDesignStrokesService } from './design/copy-artboard-design-strokes.service'
+import { artboardLayerCopyArtboardDesignTemplatesService } from './design/copy-artboard-design-templates.service'
 
 export const artboardLayerCopyArtboardDesignsService = async ({
 	userId,
@@ -103,7 +104,7 @@ const createLayerDesignTypes = async ({
 		designLines,
 		designRotates,
 		designLayouts,
-		// designTemplates,
+		designTemplates,
 	} = artboardDesignsByType
 
 	// Palette
@@ -153,5 +154,12 @@ const createLayerDesignTypes = async ({
 		userId,
 		layer,
 		designs: designLayouts,
+	})
+
+	// Template
+	await artboardLayerCopyArtboardDesignTemplatesService({
+		userId,
+		layer,
+		designs: designTemplates,
 	})
 }
