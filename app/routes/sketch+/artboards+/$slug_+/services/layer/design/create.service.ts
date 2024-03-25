@@ -9,6 +9,7 @@ import {
 import { createDesignFill } from '#app/models/fill.server'
 import { createDesignPalette } from '#app/models/palette.server'
 import { createDesignSize } from '#app/models/size.server'
+import { createDesignStroke } from '#app/models/stroke.server'
 import {
 	LayerDesignDataCreateSchema,
 	type designTypeEnum,
@@ -142,8 +143,11 @@ const createDesignType = ({
 				designId,
 				designTypeOverrides,
 			})
-		// case 'stroke':
-		// 	return await prisma.stroke.create({ data })
+		case 'stroke':
+			return createDesignStroke({
+				designId,
+				designTypeOverrides,
+			})
 		// case 'line':
 		// 	return await prisma.line.create({ data })
 		// case 'rotate':

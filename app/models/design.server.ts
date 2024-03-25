@@ -13,7 +13,7 @@ import { type ILine } from './line.server'
 import { type IPaletteCreateOverrides, type IPalette } from './palette.server'
 import { type IRotate } from './rotate.server'
 import { type ISizeCreateOverrides, type ISize } from './size.server'
-import { type IStroke } from './stroke.server'
+import { type IStrokeCreateOverrides, type IStroke } from './stroke.server'
 import { type ITemplate } from './template.server'
 
 export interface IDesign extends Design {}
@@ -27,6 +27,7 @@ export type IDesignTypeCreateOverrides =
 	| IPaletteCreateOverrides
 	| ISizeCreateOverrides
 	| IFillCreateOverrides
+	| IStrokeCreateOverrides
 export interface IDesignWithType {
 	id: string
 	type: string
