@@ -12,7 +12,6 @@ export interface ILayer {
 	description: string | null
 	slug: string | null
 	visible: boolean
-	selectedDesigns: string
 	createdAt: Date | string
 	updatedAt: Date | string
 	ownerId: string

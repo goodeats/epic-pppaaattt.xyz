@@ -193,5 +193,7 @@ const shouldUpdateSelectedDesign = async ({
 		where: { artboardId, type, visible: true },
 	})
 
-	return Number(visibleLayerDesignsByTypeCount) === 0
+	// check if newly created design is the only visible design
+	// and therefore should be selected
+	return Number(visibleLayerDesignsByTypeCount) === 1
 }

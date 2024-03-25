@@ -209,7 +209,6 @@ model Artboard {
   width       Int
   height      Int
   backgroundColor String
-  selectedDesigns String @default("{}") // JSON object of first, visible designs
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -240,7 +239,6 @@ model Layer {
   description String?
   slug       String?
   visible     Boolean @default(true)
-  selectedDesigns String @default("{}") // JSON object of first, visible designs
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
