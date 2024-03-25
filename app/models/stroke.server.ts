@@ -40,11 +40,11 @@ export const createDesignStroke = ({
 	designId: IDesign['id']
 	designTypeOverrides: IDesignTypeCreateOverrides
 }) => {
-	const fillData = {
+	const strokeData = {
 		designId,
 		...(designTypeOverrides as IStrokeCreateOverrides),
 	}
-	const data = StrokeDataSchema.parse(fillData)
+	const data = StrokeDataSchema.parse(strokeData)
 
 	return prisma.stroke.create({ data })
 }

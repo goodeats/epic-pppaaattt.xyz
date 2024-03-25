@@ -1,5 +1,13 @@
 import { z } from 'zod'
 
+export const LayoutDataSchema = z.object({
+	designId: z.string(),
+	style: z.enum(['random', 'grid']).optional(),
+	count: z.number().min(1).max(100_000).optional(),
+	rows: z.number().min(1).max(200).optional(),
+	columns: z.number().min(1).max(200).optional(),
+})
+
 export const EditArtboardLayoutStyleSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

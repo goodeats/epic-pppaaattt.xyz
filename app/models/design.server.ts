@@ -8,7 +8,7 @@ import {
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
 import { type IFillCreateOverrides, type IFill } from './fill.server'
 import { type ILayer } from './layer.server'
-import { type ILayout } from './layout.server'
+import { type ILayoutCreateOverrides, type ILayout } from './layout.server'
 import { type ILineCreateOverrides, type ILine } from './line.server'
 import { type IPaletteCreateOverrides, type IPalette } from './palette.server'
 import { type IRotateCreateOverrides, type IRotate } from './rotate.server'
@@ -30,6 +30,7 @@ export type IDesignTypeCreateOverrides =
 	| IStrokeCreateOverrides
 	| ILineCreateOverrides
 	| IRotateCreateOverrides
+	| ILayoutCreateOverrides
 export interface IDesignWithType {
 	id: string
 	type: string

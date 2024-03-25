@@ -38,11 +38,11 @@ export const createDesignRotate = ({
 	designId: IDesign['id']
 	designTypeOverrides: IDesignTypeCreateOverrides
 }) => {
-	const fillData = {
+	const rotateData = {
 		designId,
 		...(designTypeOverrides as IRotateCreateOverrides),
 	}
-	const data = RotateDataSchema.parse(fillData)
+	const data = RotateDataSchema.parse(rotateData)
 
 	return prisma.rotate.create({ data })
 }

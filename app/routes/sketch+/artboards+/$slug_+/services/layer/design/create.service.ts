@@ -7,6 +7,7 @@ import {
 	type IDesignTypeCreateOverrides,
 } from '#app/models/design.server'
 import { createDesignFill } from '#app/models/fill.server'
+import { createDesignLayout } from '#app/models/layout.server'
 import { createDesignLine } from '#app/models/line.server'
 import { createDesignPalette } from '#app/models/palette.server'
 import { createDesignRotate } from '#app/models/rotate.server'
@@ -160,8 +161,11 @@ const createDesignType = ({
 				designId,
 				designTypeOverrides,
 			})
-		// case 'layout':
-		// 	return await prisma.layout.create({ data })
+		case 'layout':
+			return createDesignLayout({
+				designId,
+				designTypeOverrides,
+			})
 		// case 'template':
 		// 	return await prisma.template.create({ data })
 		default:

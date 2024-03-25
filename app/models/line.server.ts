@@ -36,11 +36,11 @@ export const createDesignLine = ({
 	designId: IDesign['id']
 	designTypeOverrides: IDesignTypeCreateOverrides
 }) => {
-	const fillData = {
+	const lineData = {
 		designId,
 		...(designTypeOverrides as ILineCreateOverrides),
 	}
-	const data = LineDataSchema.parse(fillData)
+	const data = LineDataSchema.parse(lineData)
 
 	return prisma.line.create({ data })
 }
