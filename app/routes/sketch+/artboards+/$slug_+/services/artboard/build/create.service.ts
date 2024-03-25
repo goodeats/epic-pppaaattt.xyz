@@ -9,7 +9,6 @@ import { findRotateInDesignArray } from '#app/models/rotate.server'
 import { findSizeInDesignArray } from '#app/models/size.server'
 import { findStrokeInDesignArray } from '#app/models/stroke.server'
 import { findTemplateInDesignArray } from '#app/models/template.server'
-import { artboardSelectedDesignsCompleted } from '#app/utils/artboard'
 import { filterLayersVisible } from '#app/utils/layer.utils'
 import {
 	type IArtboardLayerBuild,
@@ -24,9 +23,6 @@ export const artboardBuildCreateService = async ({
 	layers: ILayer[]
 }) => {
 	try {
-		const isCompleted = artboardSelectedDesignsCompleted({ artboard })
-		if (!isCompleted) throw new Error('Artboard designs are not completed')
-
 		const artboardSelectedDesigns = await getSelectedDesignsForArtboard({
 			artboardId: artboard.id,
 			artboard,
