@@ -4,10 +4,7 @@ import {
 	SideNavTabsWrapper,
 } from '#app/components/shared'
 import { TabsContent } from '#app/components/ui/tabs'
-import {
-	type IDesignsByType,
-	type IDesignWithType,
-} from '#app/models/design.server'
+import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelContentArtboardDesigns } from './panel/artboard/panel-content-artboard-designs'
@@ -42,7 +39,7 @@ export const PanelContentRight = ({
 	layerDesigns,
 }: {
 	artboard: PickedArtboardType
-	artboardDesigns: IDesignWithType[]
+	artboardDesigns: IDesignsByType
 	layer: ILayer | null | undefined
 	layerDesigns: IDesignsByType | null | undefined
 }) => {
@@ -59,7 +56,7 @@ export const PanelContentRight = ({
 				) : (
 					<PanelContentArtboardDesigns
 						artboard={artboard}
-						artboardDesigns={artboardDesigns}
+						designs={artboardDesigns}
 					/>
 				)}
 			</TabsContent>

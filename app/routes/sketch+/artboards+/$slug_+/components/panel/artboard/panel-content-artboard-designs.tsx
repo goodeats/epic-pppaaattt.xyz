@@ -1,5 +1,4 @@
-import { type IDesignWithType } from '#app/models/design.server'
-import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
+import { type IDesignsByType } from '#app/models/design.server'
 import { type PickedArtboardType } from '../../../queries'
 import { PanelContentArtboardDesignFill } from './design/panel-content-artboard-design-fill'
 import { PanelContentArtboardDesignLayout } from './design/panel-content-artboard-design-layout'
@@ -14,10 +13,10 @@ import { PanelContentArtboardFrame } from './panel-content-artboard-frame'
 
 export const PanelContentArtboardDesigns = ({
 	artboard,
-	artboardDesigns,
+	designs,
 }: {
 	artboard: PickedArtboardType
-	artboardDesigns: IDesignWithType[]
+	designs: IDesignsByType
 }) => {
 	const {
 		designPalettes,
@@ -28,9 +27,7 @@ export const PanelContentArtboardDesigns = ({
 		designRotates,
 		designLayouts,
 		designTemplates,
-	} = filterAndOrderArtboardDesignsByType({
-		designs: artboardDesigns,
-	})
+	} = designs
 
 	return (
 		<div>

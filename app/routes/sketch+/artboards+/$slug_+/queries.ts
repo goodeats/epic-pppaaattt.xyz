@@ -1,7 +1,6 @@
 import {
 	findManyDesignsWithType,
 	type IDesignsByType,
-	type IDesignWithType,
 } from '#app/models/design.server'
 import { type IFill } from '#app/models/fill.server'
 import { type ILayer } from '#app/models/layer.server'
@@ -87,6 +86,18 @@ export const getLayer = async ({
 	})
 }
 
+export const getArtboardDesigns = async ({
+	artboard,
+}: {
+	artboard: PickedArtboardType
+}): Promise<IDesignsByType> => {
+	const designs = await findManyDesignsWithType({
+		where: { artboardId: artboard.id },
+	})
+
+	return filterAndOrderArtboardDesignsByType({ designs })
+}
+
 export const getLayerDesigns = async ({
 	layer,
 }: {
@@ -95,19 +106,7 @@ export const getLayerDesigns = async ({
 	const designs = await findManyDesignsWithType({
 		where: { layerId: layer.id },
 	})
-
 	return filterAndOrderArtboardDesignsByType({ designs })
-}
-
-export const getArtboardDesigns = async ({
-	artboard,
-}: {
-	artboard: PickedArtboardType
-}): Promise<IDesignWithType[]> => {
-	const artboardDesigns = await findManyDesignsWithType({
-		where: { artboardId: artboard.id },
-	})
-	return artboardDesigns
 }
 
 // this could be its own model potentially
