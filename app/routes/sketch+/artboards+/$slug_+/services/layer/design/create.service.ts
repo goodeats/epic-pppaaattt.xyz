@@ -6,6 +6,7 @@ import {
 	updateLayerSelectedDesign,
 	type IDesignTypeCreateOverrides,
 } from '#app/models/design.server'
+import { createDesignFill } from '#app/models/fill.server'
 import { createDesignPalette } from '#app/models/palette.server'
 import { createDesignSize } from '#app/models/size.server'
 import {
@@ -136,8 +137,11 @@ const createDesignType = ({
 				designId,
 				designTypeOverrides,
 			})
-		// case 'fill':
-		// 	return await prisma.fill.create({ data })
+		case 'fill':
+			return createDesignFill({
+				designId,
+				designTypeOverrides,
+			})
 		// case 'stroke':
 		// 	return await prisma.stroke.create({ data })
 		// case 'line':

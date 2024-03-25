@@ -6,7 +6,7 @@ import {
 	type designTypeEnum,
 } from '#app/schema/design'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
-import { type IFill } from './fill.server'
+import { type IFillCreateOverrides, type IFill } from './fill.server'
 import { type ILayer } from './layer.server'
 import { type ILayout } from './layout.server'
 import { type ILine } from './line.server'
@@ -26,6 +26,7 @@ export interface IDesignCreateOverrides {
 export type IDesignTypeCreateOverrides =
 	| IPaletteCreateOverrides
 	| ISizeCreateOverrides
+	| IFillCreateOverrides
 export interface IDesignWithType {
 	id: string
 	type: string
