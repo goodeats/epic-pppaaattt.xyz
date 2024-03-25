@@ -8,7 +8,8 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
-import { type IDesignWithLine } from '#app/models/design.server'
+import { Input } from '#app/components/ui/input'
+import { type IDesignWithTemplate } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
@@ -16,19 +17,18 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { PanelFormDesignLineEditWidth } from '../../../forms/design/panel-form-design-line=edit-width'
 import { PanelFormLayerDesignDelete } from '../../../forms/layer/design/panel-form-layer-design-delete'
 import { PanelFormLayerDesignNew } from '../../../forms/layer/design/panel-form-layer-design-new'
 import { PanelFormLayerDesignReorder } from '../../../forms/layer/design/panel-form-layer-design-reorder'
 import { PanelFormLayerDesignToggleVisibile } from '../../../forms/layer/design/panel-form-layer-design-toggle-visible'
-import { PanelPopoverDesignLine } from '../../../popovers/design/panel-popover-design-line'
+import { PanelPopoverDesignTemplate } from '../../../popovers/design/panel-popover-design-template'
 
-export const PanelContentLayerDesignLine = ({
+export const PanelContentLayerDesignTemplate = ({
 	layer,
-	designLines,
+	designTemplates,
 }: {
 	layer: ILayer
-	designLines: IDesignWithLine[]
+	designTemplates: IDesignWithTemplate[]
 }) => {
 	const {
 		orderedDesigns,
@@ -38,24 +38,24 @@ export const PanelContentLayerDesignLine = ({
 		firstVisibleDesignId,
 		selectedDesignId,
 	} = panelListVariablesDesignType({
-		designs: designLines,
-		type: DesignTypeEnum.LINE,
+		designs: designTemplates,
+		type: DesignTypeEnum.TEMPLATE,
 	})
 
 	return (
 		<Panel>
 			<PanelHeader>
-				<PanelTitle>Line</PanelTitle>
+				<PanelTitle>Template</PanelTitle>
 				<div className="flex flex-shrink">
 					<PanelFormLayerDesignNew
 						layerId={layer.id}
-						type={DesignTypeEnum.LINE}
+						type={DesignTypeEnum.TEMPLATE}
 						visibleDesignsCount={visibleDesignIds.length}
 					/>
 				</div>
 			</PanelHeader>
 			{orderedDesigns.map((design, index) => {
-				const { id, visible, line } = design as IDesignWithLine
+				const { id, visible, template } = design as IDesignWithTemplate
 
 				const {
 					isSelectedDesign,
@@ -87,7 +87,7 @@ export const PanelContentLayerDesignLine = ({
 				})
 
 				return (
-					<PanelRow key={line.id}>
+					<PanelRow key={template.id}>
 						<PanelRowOrderContainer>
 							<PanelFormLayerDesignReorder
 								id={id}
@@ -108,8 +108,13 @@ export const PanelContentLayerDesignLine = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverDesignLine line={line} />
-								<PanelFormDesignLineEditWidth line={line} />
+								<PanelPopoverDesignTemplate template={template} />
+								<Input
+									type="text"
+									className={'flex h-8'}
+									disabled
+									defaultValue={template.style}
+								/>
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
 								<PanelFormLayerDesignToggleVisibile

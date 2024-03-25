@@ -99,3 +99,7 @@ export const DESIGN_LAYOUT_INTENT = {
 	updateDesignLayoutRows: 'update-design-layout-rows' as const,
 	updateDesignLayoutColumns: 'update-design-layout-columns' as const,
 }
+
+export const DESIGN_TEMPLATE_INTENT = {
+	updateDesignTemplateStyle: 'update-design-template-style' as const,
+}

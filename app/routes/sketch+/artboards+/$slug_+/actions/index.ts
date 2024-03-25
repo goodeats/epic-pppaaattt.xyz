@@ -8,6 +8,7 @@ import {
 	DESIGN_ROTATE_INTENT,
 	DESIGN_SIZE_INTENT,
 	DESIGN_STROKE_INTENT,
+	DESIGN_TEMPLATE_INTENT,
 	INTENT,
 	LAYER_DESIGN_INTENT,
 } from '../intent'
@@ -84,6 +85,7 @@ import {
 	designStrokeEditStyleAction,
 	designStrokeEditValueAction,
 } from './design-stroke'
+import { designTemplateEditStyleAction } from './design-template'
 import {
 	layerDesignDeleteAction,
 	layerDesignNewAction,
@@ -278,6 +280,10 @@ export async function action({ request }: DataFunctionArgs) {
 		}
 		case DESIGN_LAYOUT_INTENT.updateDesignLayoutColumns: {
 			return designLayoutEditColumnsAction(actionArgs)
+		}
+		// TEMPLATE DESIGN INTENTS
+		case DESIGN_TEMPLATE_INTENT.updateDesignTemplateStyle: {
+			return designTemplateEditStyleAction(actionArgs)
 		}
 		default: {
 			throw new Response(`Invalid intent "${intent}"`, { status: 400 })

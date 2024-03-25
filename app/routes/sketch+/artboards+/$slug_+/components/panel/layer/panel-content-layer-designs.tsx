@@ -7,6 +7,7 @@ import { PanelContentLayerDesignPalette } from './design/panel-content-layer-des
 import { PanelContentLayerDesignRotate } from './design/panel-content-layer-design-rotate'
 import { PanelContentLayerDesignSize } from './design/panel-content-layer-design-size'
 import { PanelContentLayerDesignStroke } from './design/panel-content-layer-design-stroke'
+import { PanelContentLayerDesignTemplate } from './design/panel-content-layer-design-template'
 
 export const PanelContentLayerDesigns = ({
 	layer,
@@ -23,7 +24,7 @@ export const PanelContentLayerDesigns = ({
 		designLines,
 		designRotates,
 		designLayouts,
-		// designTemplates,
+		designTemplates,
 	} = designs
 
 	return (
@@ -47,10 +48,10 @@ export const PanelContentLayerDesigns = ({
 				layer={layer}
 				designRotates={designRotates}
 			/>
-			{/* <PanelContentArtboardDesignTemplate
-				artboard={artboard}
+			<PanelContentLayerDesignTemplate
+				layer={layer}
 				designTemplates={designTemplates}
-			/> */}
+			/>
 		</div>
 	)
 }
