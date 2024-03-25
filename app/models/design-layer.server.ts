@@ -1,6 +1,7 @@
 import { type Design } from '@prisma/client'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
+import { filterVisibleDesigns, orderLinkedDesigns } from '#app/utils/design'
 import {
 	findManyDesignsWithType,
 	type IDesignWithPalette,
@@ -45,15 +46,18 @@ export const updateLayerSelectedDesign = ({
 	return [unselectDesign, selectDesign]
 }
 
-// might be out of order??
 export const getLayerVisiblePalettes = async ({
 	layerId,
 }: {
 	layerId: ILayer['id']
 }): Promise<IPalette[]> => {
 	const designPalettes = (await findManyDesignsWithType({
-		where: { type: DesignTypeEnum.PALETTE, layerId, visible: true },
+		where: { type: DesignTypeEnum.PALETTE, layerId },
 	})) as IDesignWithPalette[]
 
-	return designPalettes.map(design => design.palette)
+	const visibleDesignPalettes = filterVisibleDesigns(
+		orderLinkedDesigns(designPalettes),
+	) as IDesignWithPalette[]
+
+	return visibleDesignPalettes.map(design => design.palette)
 }

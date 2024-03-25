@@ -1,6 +1,7 @@
 import { type Design } from '@prisma/client'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
+import { filterVisibleDesigns, orderLinkedDesigns } from '#app/utils/design'
 import { type IArtboard } from './artboard.server'
 import {
 	findManyDesignsWithType,
@@ -51,8 +52,12 @@ export const getArtboardVisiblePalettes = async ({
 	artboardId: IArtboard['id']
 }): Promise<IPalette[]> => {
 	const designPalettes = (await findManyDesignsWithType({
-		where: { type: DesignTypeEnum.PALETTE, artboardId, visible: true },
+		where: { type: DesignTypeEnum.PALETTE, artboardId },
 	})) as IDesignWithPalette[]
 
-	return designPalettes.map(design => design.palette)
+	const visibleDesignPalettes = filterVisibleDesigns(
+		orderLinkedDesigns(designPalettes),
+	) as IDesignWithPalette[]
+
+	return visibleDesignPalettes.map(design => design.palette)
 }
