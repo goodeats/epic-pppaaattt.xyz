@@ -278,7 +278,7 @@ async function seed() {
 			slug: 'my-first-artboard',
 			width: 1080,
 			height: 1920,
-			backgroundColor: '#F5F5F5',
+			backgroundColor: 'F5F5F5',
 			ownerId: adminUser.id,
 			projectId: '1zxo9f8e', // Associate with the first project by hard-coded id
 		},

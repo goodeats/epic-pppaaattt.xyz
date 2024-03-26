@@ -120,7 +120,7 @@ const getSelectedDesignTypesForLayers = async ({
 	return await Promise.all(
 		layers.map(layer =>
 			getSelectedDesignTypesForLayer({
-				layerId: layer.id,
+				layer,
 				artboardSelectedDesigns,
 			}),
 		),
@@ -128,13 +128,14 @@ const getSelectedDesignTypesForLayers = async ({
 }
 
 const getSelectedDesignTypesForLayer = async ({
-	layerId,
+	layer,
 	artboardSelectedDesigns,
 }: {
-	layerId: ILayer['id']
+	layer: ILayer
 	artboardSelectedDesigns: IArtboardLayerBuild
 }): Promise<IArtboardLayerBuild> => {
-	const result = { ...artboardSelectedDesigns }
+	const layerId = layer.id
+	const result = { layerId, layerName: layer.name, ...artboardSelectedDesigns }
 
 	const designs = await getLayerSelectedDesigns({ layerId })
 	const size = findSizeInDesignArray({ designs })

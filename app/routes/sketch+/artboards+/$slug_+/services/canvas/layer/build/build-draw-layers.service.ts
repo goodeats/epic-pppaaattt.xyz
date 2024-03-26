@@ -72,7 +72,7 @@ const buildLayerDrawItem = ({
 	const template = canvasBuildLayerDrawTemplateService({ layer })
 
 	return {
-		id: `layer-${index}-${count}`,
+		id: `layer-${layer.layerName}-${index}-${count}`,
 		fillStyle: fill,
 		lineWidth: line,
 		position: { x, y },
