@@ -10,7 +10,10 @@ import {
 	SelectValue,
 } from '#app/components/ui/select'
 import { type IStroke } from '#app/models/stroke.server'
-import { EditDesignStrokeBasisSchema } from '#app/schema/stroke'
+import {
+	EditDesignStrokeBasisSchema,
+	StrokeBasisTypeEnum,
+} from '#app/schema/stroke'
 import { useIsPending } from '#app/utils/misc'
 import { DESIGN_STROKE_INTENT } from '../../../intent'
 import { type action } from '../../../route'
@@ -63,11 +66,14 @@ export const PanelFormDesignStrokeEditBasis = ({
 					<SelectValue placeholder="Select a format" />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="defined">Defined</SelectItem>
-					<SelectItem value="random">Random</SelectItem>
-					<SelectItem value="palette-selected">Palette - Selected</SelectItem>
-					<SelectItem value="palette-random">Palette - Random</SelectItem>
-					<SelectItem value="pixel">Pixel</SelectItem>
+					{Object.values(StrokeBasisTypeEnum).map(strokeBasisEnum => (
+						<SelectItem key={strokeBasisEnum} value={strokeBasisEnum}>
+							{strokeBasisEnum
+								.split('-')
+								.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+								.join(' - ')}
+						</SelectItem>
+					))}
 				</SelectContent>
 			</Select>
 		</fetcher.Form>

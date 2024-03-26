@@ -10,7 +10,10 @@ import {
 	SelectValue,
 } from '#app/components/ui/select'
 import { type IStroke } from '#app/models/stroke.server'
-import { EditDesignStrokeStyleSchema } from '#app/schema/stroke'
+import {
+	EditDesignStrokeStyleSchema,
+	StrokeStyleTypeEnum,
+} from '#app/schema/stroke'
 import { useIsPending } from '#app/utils/misc'
 import { DESIGN_STROKE_INTENT } from '../../../intent'
 import { type action } from '../../../route'
@@ -63,7 +66,14 @@ export const PanelFormDesignStrokeEditStyle = ({
 					<SelectValue placeholder="Select a format" />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="solid">Solid</SelectItem>
+					{Object.values(StrokeStyleTypeEnum).map(strokeStyleEnum => (
+						<SelectItem key={strokeStyleEnum} value={strokeStyleEnum}>
+							{strokeStyleEnum
+								.split('-')
+								.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+								.join(' - ')}
+						</SelectItem>
+					))}
 				</SelectContent>
 			</Select>
 		</fetcher.Form>

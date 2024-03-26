@@ -10,7 +10,7 @@ import {
 	SelectValue,
 } from '#app/components/ui/select'
 import { type IFill } from '#app/models/fill.server'
-import { EditDesignFillBasisSchema } from '#app/schema/fill'
+import { EditDesignFillBasisSchema, FillBasisTypeEnum } from '#app/schema/fill'
 import { useIsPending } from '#app/utils/misc'
 import { DESIGN_FILL_INTENT } from '../../../intent'
 import { type action } from '../../../route'
@@ -59,11 +59,14 @@ export const PanelFormDesignFillEditBasis = ({ fill }: { fill: IFill }) => {
 					<SelectValue placeholder="Select a format" />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="defined">Defined</SelectItem>
-					<SelectItem value="random">Random</SelectItem>
-					<SelectItem value="palette-selected">Palette - Selected</SelectItem>
-					<SelectItem value="palette-random">Palette - Random</SelectItem>
-					<SelectItem value="pixel">Pixel</SelectItem>
+					{Object.values(FillBasisTypeEnum).map(fillBasisEnum => (
+						<SelectItem key={fillBasisEnum} value={fillBasisEnum}>
+							{fillBasisEnum
+								.split('-')
+								.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+								.join(' - ')}
+						</SelectItem>
+					))}
 				</SelectContent>
 			</Select>
 		</fetcher.Form>

@@ -1,14 +1,25 @@
 import { z } from 'zod'
 import { HexcodeSchema } from './colors'
 
-const FillBasisSchema = z.enum([
-	'defined',
-	'random',
-	'palette-selected',
-	'palette-random',
-	'pixel',
-])
-const FillStyleSchema = z.enum(['solid', 'none'])
+export const FillBasisTypeEnum = {
+	DEFINED: 'defined', // exact hex value
+	RANDOM: 'random', // random hex value
+	PALETTE_SELECTED: 'palette-selected', // first palette
+	PALETTE_RANDOM: 'palette-random', // random palette
+	PIXEL: 'pixel', // pixel color
+	// add more basis types here
+} as const
+export const FillStyleTypeEnum = {
+	SOLID: 'solid', // flat color
+	NONE: 'none', // no fill
+	// add more styles here, like gradient, pattern, etc.
+} as const
+type ObjectValues<T> = T[keyof T]
+export type fillBasisTypeEnum = ObjectValues<typeof FillBasisTypeEnum>
+export type fillStyleTypeEnum = ObjectValues<typeof FillStyleTypeEnum>
+
+const FillBasisSchema = z.nativeEnum(FillBasisTypeEnum)
+const FillStyleSchema = z.nativeEnum(FillStyleTypeEnum)
 
 export const FillDataSchema = z.object({
 	designId: z.string(),

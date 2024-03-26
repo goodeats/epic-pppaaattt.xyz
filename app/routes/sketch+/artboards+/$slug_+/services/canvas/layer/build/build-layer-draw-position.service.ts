@@ -1,3 +1,5 @@
+import { FillBasisTypeEnum } from '#app/schema/fill'
+import { StrokeBasisTypeEnum } from '#app/schema/stroke'
 import { randomInRange } from '#app/utils/random.utils'
 import { type IArtboardLayerBuild } from '../../../../queries'
 
@@ -8,7 +10,7 @@ export const canvasBuildLayerDrawPositionService = ({
 	ctx: CanvasRenderingContext2D
 	layer: IArtboardLayerBuild
 }) => {
-	const { container, fill, stroke } = layer
+	const { container } = layer
 	const { width, height, top, left } = container
 
 	// do margins later
@@ -16,11 +18,20 @@ export const canvasBuildLayerDrawPositionService = ({
 	const x = randomInRange(left, width)
 	const y = randomInRange(top, height)
 
-	const getPixelHex = fill.basis === 'pixel' || stroke.basis === 'pixel'
+	const getPixelHex = shouldGetPixelHex({ layer })
 	const pixelHex = getPixelHex ? getHexAtPixel({ ctx, x, y }) : null
 
 	return { x, y, pixelHex }
 }
+
+const shouldGetPixelHex = ({ layer }: { layer: IArtboardLayerBuild }) => {
+	const { fill, stroke } = layer
+	return (
+		fill.basis === FillBasisTypeEnum.PIXEL ||
+		stroke.basis === StrokeBasisTypeEnum.PIXEL
+	)
+}
+
 // Function to get the hex color value at a specific pixel
 const getHexAtPixel = ({
 	ctx,

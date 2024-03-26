@@ -1,3 +1,4 @@
+import { StrokeBasisTypeEnum } from '#app/schema/stroke'
 import { colorRandomHex } from '#app/utils/colors'
 import { randomIndex } from '#app/utils/random.utils'
 import { type IArtboardLayerBuild } from '../../../../queries'
@@ -13,16 +14,16 @@ export const canvasBuildLayerDrawStrokeService = ({
 	const { basis, value } = stroke
 
 	switch (basis) {
-		case 'defined':
+		case StrokeBasisTypeEnum.DEFINED:
 			return value
-		case 'random':
+		case StrokeBasisTypeEnum.RANDOM:
 			return colorRandomHex()
-		case 'palette-selected':
+		case StrokeBasisTypeEnum.PALETTE_SELECTED:
 			return palette[0].value
-		case 'palette-random':
+		case StrokeBasisTypeEnum.PALETTE_RANDOM:
 			const index = randomIndex(palette)
 			return palette[index].value
-		case 'pixel':
+		case StrokeBasisTypeEnum.PIXEL:
 			// random to highlight something went wrong
 			return pixelHex || colorRandomHex()
 		default:
