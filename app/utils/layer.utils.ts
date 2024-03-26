@@ -8,6 +8,8 @@ export const filterLayersVisible = ({
 	return layers.filter(layer => layer.visible)
 }
 
+// TODO: move this to a linked list util
+// linked layers and designs share a lot of code, could be more DRY
 export const orderLinkedLayers = (layers: ILayer[]): ILayer[] => {
 	// Step 1: Find the head of the list
 	const head = layers.find(layer => !layer.prevId)
