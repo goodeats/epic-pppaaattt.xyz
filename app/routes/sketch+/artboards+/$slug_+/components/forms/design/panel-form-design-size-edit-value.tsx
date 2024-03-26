@@ -44,7 +44,9 @@ export const PanelFormDesignSizeEditValue = ({ size }: { size: ISize }) => {
 			<Input
 				type="number"
 				min={0}
-				className={'flex h-8'}
+				className={
+					'flex h-8 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
+				}
 				onBlur={e => handleSubmit(e)}
 				disabled={isPending}
 				{...conform.input(fields.value, {

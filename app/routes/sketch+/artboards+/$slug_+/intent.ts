@@ -42,6 +42,8 @@ export const DESIGN_PALETTE_INTENT = {
 
 export const DESIGN_SIZE_INTENT = {
 	updateDesignSizeValue: 'update-design-size-value' as const,
+	updateDesignSizeBasis: 'update-design-size-basis' as const,
+	updateDesignSizeFormat: 'update-design-size-format' as const,
 }
 
 export const DESIGN_FILL_INTENT = {

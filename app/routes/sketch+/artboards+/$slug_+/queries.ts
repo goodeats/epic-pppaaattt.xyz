@@ -149,6 +149,10 @@ export interface IArtboardLayerContainerBuild {
 	top: number
 	left: number
 	margin: number
+	canvas: {
+		width: number
+		height: number
+	}
 }
 
 export const getArtboardBuild = async (

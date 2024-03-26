@@ -8,6 +8,8 @@ import {
 	PopoverTrigger,
 } from '#app/components/ui/popover'
 import { type ISize } from '#app/models/size.server'
+import { PanelFormDesignSizeEditBasis } from '../../forms/design/panel-form-design-size-edit-basis'
+import { PanelFormDesignSizeEditFormat } from '../../forms/design/panel-form-design-size-edit-format'
 
 export const PanelPopoverDesignSize = ({ size }: { size: ISize }) => {
 	return (
@@ -33,13 +35,8 @@ export const PanelPopoverDesignSize = ({ size }: { size: ISize }) => {
 						</div>
 						<div className="grid gap-2">
 							<div className="grid grid-cols-3 items-center gap-4">
-								<Label htmlFor="format">Format</Label>
-								<Input
-									id="format"
-									defaultValue={size.format}
-									className="col-span-2 h-8"
-									disabled
-								/>
+								<Label htmlFor="style">Format</Label>
+								<PanelFormDesignSizeEditFormat size={size} />
 							</div>
 							<div className="grid grid-cols-3 items-center gap-4">
 								<Label htmlFor="value">Value</Label>
@@ -51,13 +48,8 @@ export const PanelPopoverDesignSize = ({ size }: { size: ISize }) => {
 								/>
 							</div>
 							<div className="grid grid-cols-3 items-center gap-4">
-								<Label htmlFor="basis">Basis</Label>
-								<Input
-									id="basis"
-									defaultValue={size.basis}
-									className="col-span-2 h-8"
-									disabled
-								/>
+								<Label htmlFor="style">Basis</Label>
+								<PanelFormDesignSizeEditBasis size={size} />
 							</div>
 						</div>
 					</div>

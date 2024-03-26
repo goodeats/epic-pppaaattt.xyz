@@ -1,6 +1,5 @@
+import { SizeBasisTypeEnum, SizeFormatTypeEnum } from '#app/schema/size'
 import { type IArtboardLayerBuild } from '../../../../queries'
-
-type sizeBasis = 'width' | 'height'
 
 export const canvasBuildLayerDrawSizeService = ({
 	layer,
@@ -10,10 +9,24 @@ export const canvasBuildLayerDrawSizeService = ({
 	const { size, container } = layer
 	const { basis, value, format } = size
 
-	if (format === 'percent') {
-		const basisSize = container[basis as sizeBasis]
-		return basisSize * (value / 100)
+	if (format === SizeFormatTypeEnum.PERCENT) {
+		const sizePercent = value / 100
+
+		switch (basis) {
+			case SizeBasisTypeEnum.WIDTH:
+				return container.width * sizePercent
+			case SizeBasisTypeEnum.HEIGHT:
+				return container.height * sizePercent
+			case SizeBasisTypeEnum.CANVAS_WIDTH:
+				return container.canvas.width * sizePercent
+			case SizeBasisTypeEnum.CANVAS_HEIGHT:
+				return container.canvas.height * sizePercent
+			default:
+				// something went wrong
+				return 0
+		}
 	}
 
+	// pixel value
 	return value
 }

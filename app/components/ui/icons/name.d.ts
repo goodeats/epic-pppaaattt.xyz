@@ -54,6 +54,8 @@ export type IconName =
 	| 'ruler-square'
 	| 'size'
 	| 'stack'
+	| 'stretch-horizontally'
+	| 'stretch-vertically'
 	| 'sun'
 	| 'trash'
 	| 'update'

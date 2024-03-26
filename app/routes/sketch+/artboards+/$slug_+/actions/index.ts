@@ -49,7 +49,11 @@ import {
 	designRotateEditBasisAction,
 	designRotateEditRotationAction,
 } from './design-rotate'
-import { designSizeEditValueAction } from './design-size'
+import {
+	designSizeEditBasisAction,
+	designSizeEditFormatAction,
+	designSizeEditValueAction,
+} from './design-size'
 import {
 	designStrokeEditBasisAction,
 	designStrokeEditStyleAction,
@@ -142,6 +146,12 @@ export async function action({ request }: DataFunctionArgs) {
 		// SIZE DESIGN INTENTS
 		case DESIGN_SIZE_INTENT.updateDesignSizeValue: {
 			return designSizeEditValueAction(actionArgs)
+		}
+		case DESIGN_SIZE_INTENT.updateDesignSizeBasis: {
+			return designSizeEditBasisAction(actionArgs)
+		}
+		case DESIGN_SIZE_INTENT.updateDesignSizeFormat: {
+			return designSizeEditFormatAction(actionArgs)
 		}
 		// FILL DESIGN INTENTS
 		case DESIGN_FILL_INTENT.updateDesignFillValue: {
