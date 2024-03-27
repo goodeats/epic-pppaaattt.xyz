@@ -23,8 +23,11 @@ export const canvasBuildLayerDrawStrokeService = ({
 		case StrokeBasisTypeEnum.PALETTE_SELECTED:
 			return palette[0].value
 		case StrokeBasisTypeEnum.PALETTE_RANDOM:
-			const index = randomIndex(palette)
-			return palette[index].value
+			const paletteRandomIndex = randomIndex(palette)
+			return palette[paletteRandomIndex].value
+		case StrokeBasisTypeEnum.PALETTE_LOOP:
+			const paletteLoopIndex = index % palette.length
+			return palette[paletteLoopIndex].value
 		case StrokeBasisTypeEnum.PIXEL:
 			// random to highlight something went wrong
 			return pixelHex || colorRandomHex()

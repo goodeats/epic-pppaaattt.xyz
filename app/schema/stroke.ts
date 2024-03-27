@@ -6,6 +6,7 @@ export const StrokeBasisTypeEnum = {
 	RANDOM: 'random', // random hex value
 	PALETTE_SELECTED: 'palette-selected', // first palette
 	PALETTE_RANDOM: 'palette-random', // random palette
+	PALETTE_LOOP: 'palette-loop', // loop palette for each layer item
 	PIXEL: 'pixel', // pixel color
 	// add more basis types here
 } as const
