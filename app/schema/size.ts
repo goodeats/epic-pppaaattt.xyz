@@ -1,23 +1,79 @@
 import { z } from 'zod'
 
+export const SizeFormatTypeEnum = {
+	PERCENT: 'percent', // percent of basis length
+	PIXEL: 'pixel', // exact pixel value
+	// add more format types here
+} as const
+export const SizeBasisTypeEnum = {
+	WIDTH: 'width',
+	HEIGHT: 'height',
+	CANVAS_WIDTH: 'canvas-width',
+	CANVAS_HEIGHT: 'canvas-height',
+	// add more styles here, like gradient, pattern, etc.
+} as const
+type ObjectValues<T> = T[keyof T]
+export type sizeFormatTypeEnum = ObjectValues<typeof SizeFormatTypeEnum>
+export type sizeBasisTypeEnum = ObjectValues<typeof SizeBasisTypeEnum>
+
+const SizeFormatSchema = z.nativeEnum(SizeFormatTypeEnum)
+const SizeBasisSchema = z.nativeEnum(SizeBasisTypeEnum)
+const SizeValueSchema = z.number().positive()
+
 export const SizeDataSchema = z.object({
 	designId: z.string(),
-	format: z.string().optional(),
-	value: z.number().optional(),
-	basis: z.string().optional(),
+	format: SizeFormatSchema.optional(),
+	value: SizeValueSchema.optional(),
+	basis: SizeBasisSchema.optional(),
 })
 
 export const EditDesignSizeValueSchema = z.object({
 	id: z.string(),
 	designId: z.string(),
-	// assuming percentage format is fixed for now
-	value: z.number().min(1).max(1000),
+	value: SizeValueSchema,
 })
+
+export const EditDesignSizeBasisSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	basis: SizeBasisSchema,
+})
+
+export const EditDesignSizeFormatSchema = z.object({
+	id: z.string(),
+	designId: z.string(),
+	format: SizeFormatSchema,
+})
+
+export const sizeFormatIcon = (format: sizeFormatTypeEnum) => {
+	switch (format) {
+		case SizeFormatTypeEnum.PERCENT:
+			return '%'
+		case SizeFormatTypeEnum.PIXEL:
+			return 'px'
+		default:
+			return '%'
+	}
+}
+
+export const sizeBasisIcon = (basis: sizeBasisTypeEnum) => {
+	switch (basis) {
+		case SizeBasisTypeEnum.WIDTH:
+			return 'width'
+		case SizeBasisTypeEnum.HEIGHT:
+			return 'height'
+		case SizeBasisTypeEnum.CANVAS_WIDTH:
+			return 'stretch-horizontally'
+		case SizeBasisTypeEnum.CANVAS_HEIGHT:
+			return 'stretch-vertically'
+		default:
+			return 'width'
+	}
+}
 
 export const EditArtboardSizeSchema = z.object({
 	id: z.string(),
 	designId: z.string(),
 	artboardId: z.string(),
-	// assuming percentage format is fixed for now
-	value: z.number().min(1).max(1000),
+	value: SizeValueSchema,
 })

@@ -12,12 +12,13 @@ import { Input } from '#app/components/ui/input'
 import { type IDesignWithRotate } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { DesignTypeEnum } from '#app/schema/design'
+import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import {
 	panelItemVariablesDesignType,
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { PanelFormDesignRotateEditRotation } from '../../../forms/design/panel-form-design-rotate-edit-rotation'
+import { PanelFormDesignRotateEditValue } from '../../../forms/design/panel-form-design-rotate-edit-value'
 import { PanelFormLayerDesignDelete } from '../../../forms/layer/design/panel-form-layer-design-delete'
 import { PanelFormLayerDesignNew } from '../../../forms/layer/design/panel-form-layer-design-new'
 import { PanelFormLayerDesignReorder } from '../../../forms/layer/design/panel-form-layer-design-reorder'
@@ -55,6 +56,16 @@ export const PanelContentLayerDesignRotate = ({
 			</PanelHeader>
 			{designRotates.map((design, index) => {
 				const { id, visible, rotate } = design
+
+				const RotateBasisIcon = () => {
+					if (rotate.basis !== RotateBasisTypeEnum.DEFINED) return null
+
+					return (
+						<div className="m-2 mr-0 flex h-8 w-8 items-center justify-center">
+							<span className="text-body-xs leading-none">°</span>
+						</div>
+					)
+				}
 
 				const {
 					isSelectedDesign,
@@ -116,8 +127,9 @@ export const PanelContentLayerDesignRotate = ({
 										defaultValue={rotate.basis}
 									/>
 								) : (
-									<PanelFormDesignRotateEditRotation rotate={rotate} />
+									<PanelFormDesignRotateEditValue rotate={rotate} />
 								)}
+								<RotateBasisIcon />
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
 								<PanelFormLayerDesignToggleVisibile

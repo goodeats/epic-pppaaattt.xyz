@@ -1,16 +1,36 @@
+import { FillBasisTypeEnum, FillStyleTypeEnum } from '#app/schema/fill'
+import { colorRandomHex } from '#app/utils/colors'
+import { randomIndex } from '#app/utils/random.utils'
 import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawFillService = ({
 	layer,
+	index,
+	pixelHex,
 }: {
 	layer: IArtboardLayerBuild
+	index: number
+	pixelHex: string | null
 }) => {
-	const { fill } = layer
-	const { basis, value } = fill
+	const { fill, palette } = layer
+	const { style, basis, value } = fill
 
-	if (basis === 'defined') {
-		return value
+	if (style === FillStyleTypeEnum.NONE) return 'none'
+
+	switch (basis) {
+		case FillBasisTypeEnum.DEFINED:
+			return value
+		case FillBasisTypeEnum.RANDOM:
+			return colorRandomHex()
+		case FillBasisTypeEnum.PALETTE_SELECTED:
+			return palette[0].value
+		case FillBasisTypeEnum.PALETTE_RANDOM:
+			const index = randomIndex(palette)
+			return palette[index].value
+		case FillBasisTypeEnum.PIXEL:
+			// random to highlight something went wrong
+			return pixelHex || colorRandomHex()
+		default:
+			return '000000'
 	}
-
-	return '000000'
 }

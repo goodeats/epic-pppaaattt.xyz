@@ -3,7 +3,7 @@ import {
 	type IDesignsByType,
 } from '#app/models/design.server'
 import { type IFill } from '#app/models/fill.server'
-import { type ILayer } from '#app/models/layer.server'
+import { findManyLayers, type ILayer } from '#app/models/layer.server'
 import { type ILayout } from '#app/models/layout.server'
 import { type ILine } from '#app/models/line.server'
 import { type IPalette } from '#app/models/palette.server'
@@ -13,6 +13,7 @@ import { type IStroke } from '#app/models/stroke.server'
 import { type ITemplate } from '#app/models/template.server'
 import { prisma } from '#app/utils/db.server'
 import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
+import { orderLinkedLayers } from '#app/utils/layer.utils'
 import { artboardBuildCreateService } from './services/artboard/build/create.service'
 
 export const getOwner = async (userId: string) => {
@@ -84,6 +85,19 @@ export const getLayer = async ({
 	})
 }
 
+export const getLayers = async ({
+	userId,
+	artboardId,
+}: {
+	userId: string
+	artboardId: string
+}): Promise<ILayer[]> => {
+	const layers = await findManyLayers({
+		where: { ownerId: userId, artboardId },
+	})
+	return orderLinkedLayers(layers)
+}
+
 export const getArtboardDesigns = async ({
 	artboard,
 }: {
@@ -115,12 +129,15 @@ export interface IArtboardBuild {
 }
 
 export interface IArtboardLayerBuild {
-	palette: IPalette
+	layerId?: ILayer['id']
+	layerName?: ILayer['name']
+	palette: IPalette[]
 	size: ISize
 	fill: IFill
 	stroke: IStroke
 	line: ILine
 	rotate: IRotate
+	rotates?: IRotate[]
 	layout: ILayout
 	template: ITemplate
 	// create this type
@@ -133,6 +150,10 @@ export interface IArtboardLayerContainerBuild {
 	top: number
 	left: number
 	margin: number
+	canvas: {
+		width: number
+		height: number
+	}
 }
 
 export const getArtboardBuild = async (

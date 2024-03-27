@@ -1,11 +1,30 @@
 import { z } from 'zod'
 import { HexcodeSchema } from './colors'
 
+export const StrokeBasisTypeEnum = {
+	DEFINED: 'defined', // exact hex value
+	RANDOM: 'random', // random hex value
+	PALETTE_SELECTED: 'palette-selected', // first palette
+	PALETTE_RANDOM: 'palette-random', // random palette
+	PIXEL: 'pixel', // pixel color
+	// add more basis types here
+} as const
+export const StrokeStyleTypeEnum = {
+	SOLID: 'solid', // flat color
+	// add more styles here, like gradient, pattern, etc.
+} as const
+type ObjectValues<T> = T[keyof T]
+export type strokeBasisTypeEnum = ObjectValues<typeof StrokeBasisTypeEnum>
+export type strokeStyleTypeEnum = ObjectValues<typeof StrokeStyleTypeEnum>
+
+const StrokeBasisSchema = z.nativeEnum(StrokeBasisTypeEnum)
+const StrokeStyleSchema = z.nativeEnum(StrokeStyleTypeEnum)
+
 export const StrokeDataSchema = z.object({
 	designId: z.string(),
-	style: z.enum(['solid']).optional(),
+	style: StrokeStyleSchema.optional(),
 	value: HexcodeSchema.optional(),
-	basis: z.enum(['defined', 'random', 'palette', 'pixel']).optional(),
+	basis: StrokeBasisSchema.optional(),
 })
 
 export const EditDesignStrokeValueSchema = z.object({
@@ -17,13 +36,13 @@ export const EditDesignStrokeValueSchema = z.object({
 export const EditDesignStrokeStyleSchema = z.object({
 	id: z.string(),
 	designId: z.string(),
-	style: z.enum(['solid']),
+	style: StrokeStyleSchema,
 })
 
 export const EditDesignStrokeBasisSchema = z.object({
 	id: z.string(),
 	designId: z.string(),
-	basis: z.enum(['defined', 'random', 'palette', 'pixel']),
+	basis: StrokeBasisSchema,
 })
 
 export const EditArtboardStrokeSchema = z.object({
@@ -37,12 +56,12 @@ export const EditArtboardStrokeStyleSchema = z.object({
 	id: z.string(),
 	designId: z.string(),
 	artboardId: z.string(),
-	style: z.enum(['solid']),
+	style: StrokeStyleSchema,
 })
 
 export const EditArtboardStrokeBasisSchema = z.object({
 	id: z.string(),
 	designId: z.string(),
 	artboardId: z.string(),
-	basis: z.enum(['defined', 'random', 'palette', 'pixel']),
+	basis: StrokeBasisSchema,
 })

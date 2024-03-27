@@ -5,12 +5,12 @@ import { type FocusEvent } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Input } from '#app/components/ui/input'
 import { type IRotate } from '#app/models/rotate.server'
-import { EditDesignRotateRotationSchema } from '#app/schema/rotate'
+import { EditDesignRotateValueSchema } from '#app/schema/rotate'
 import { useIsPending } from '#app/utils/misc'
 import { DESIGN_ROTATE_INTENT } from '../../../intent'
 import { type action } from '../../../route'
 
-export const PanelFormDesignRotateEditRotation = ({
+export const PanelFormDesignRotateEditValue = ({
 	rotate,
 }: {
 	rotate: IRotate
@@ -20,8 +20,8 @@ export const PanelFormDesignRotateEditRotation = ({
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: `panel-form-design-rotate-edit-${rotate.id}-rotation`,
-		constraint: getFieldsetConstraint(EditDesignRotateRotationSchema),
+		id: `panel-form-design-rotate-edit-${rotate.id}-value`,
+		constraint: getFieldsetConstraint(EditDesignRotateValueSchema),
 		lastSubmission: actionData?.submission,
 		defaultValue: {
 			...rotate,
@@ -43,15 +43,17 @@ export const PanelFormDesignRotateEditRotation = ({
 			<input
 				type="hidden"
 				name="intent"
-				value={DESIGN_ROTATE_INTENT.updateDesignRotateRotation}
+				value={DESIGN_ROTATE_INTENT.updateDesignRotateValue}
 			/>
 			<Input
-				type="float"
-				className={'flex h-8'}
+				type="number"
+				className={
+					'flex h-8 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
+				}
 				onBlur={e => handleSubmit(e)}
 				autoComplete="off"
 				disabled={isPending}
-				{...conform.input(fields.rotation, {
+				{...conform.input(fields.value, {
 					ariaAttributes: true,
 				})}
 			/>

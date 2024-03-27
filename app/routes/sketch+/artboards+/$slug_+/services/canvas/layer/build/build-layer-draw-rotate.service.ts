@@ -1,35 +1,33 @@
+import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import { randomInRange } from '#app/utils/random.utils'
+import { rotateToRadians } from '#app/utils/rotate'
 import { type IArtboardLayerBuild } from '../../../../queries'
 
-// Math.PI / 1 = 180 degrees
 export const canvasBuildLayerDrawRotateService = ({
 	layer,
+	index,
 }: {
 	layer: IArtboardLayerBuild
+	index: number
 }) => {
 	const { rotate } = layer
-	const { basis, rotation } = rotate
+	const { basis } = rotate
 
-	switch (basis) {
-		case 'random':
-			return randomInRange(0, 2)
-		case 'N':
-			return 0
-		case 'NE':
-			return 0.25
-		case 'E':
-			return 0.5
-		case 'SE':
-			return 0.75
-		case 'S':
-			return 1
-		case 'SW':
-			return 1.25
-		case 'W':
-			return 1.5
-		case 'NW':
-			return 1.75
-		default:
-			return rotation
+	if (basis === RotateBasisTypeEnum.DEFINED_RANDOM) {
+		return randomInRotates({ layer })
 	}
+
+	return rotateToRadians(rotate)
+}
+
+const randomInRotates = ({ layer }: { layer: IArtboardLayerBuild }) => {
+	const { rotates } = layer
+
+	// If there are no rotates or the array is empty, return 0
+	if (!rotates || !rotates.length) return 0
+
+	const randomIndex = randomInRange(0, rotates.length - 1)
+	const rotate = rotates[randomIndex]
+
+	return rotateToRadians(rotate)
 }

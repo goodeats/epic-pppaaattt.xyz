@@ -2,7 +2,7 @@ import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import { type IRotate } from '#app/models/rotate.server'
 import {
-	EditDesignRotateRotationSchema,
+	EditDesignRotateValueSchema,
 	EditDesignRotateBasisSchema,
 } from '#app/schema/rotate'
 import {
@@ -20,7 +20,7 @@ async function validateSubmission({
 	userId: string
 	formData: FormData
 	schema:
-		| typeof EditDesignRotateRotationSchema
+		| typeof EditDesignRotateValueSchema
 		| typeof EditDesignRotateBasisSchema
 }) {
 	const submission = await parseDesignSubmission({
@@ -39,23 +39,23 @@ async function validateSubmission({
 	return { submission, isValid: true }
 }
 
-export async function designRotateEditRotationAction({
+export async function designRotateEditValueAction({
 	userId,
 	formData,
 }: IntentActionArgs) {
 	const { submission, isValid, response } = await validateSubmission({
 		userId,
 		formData,
-		schema: EditDesignRotateRotationSchema,
+		schema: EditDesignRotateValueSchema,
 	})
 	if (!isValid || !submission) return response
 
 	// changes
-	const { id, rotation } = submission.value
+	const { id, value } = submission.value
 	const rotate = await getRotate({ id })
 	if (!rotate) return submissionErrorResponse(submission)
 
-	rotate.rotation = rotation
+	rotate.value = value
 	rotate.updatedAt = new Date()
 	await rotate.save()
 

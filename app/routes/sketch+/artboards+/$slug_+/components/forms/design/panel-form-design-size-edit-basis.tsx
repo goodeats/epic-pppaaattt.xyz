@@ -9,30 +9,23 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '#app/components/ui/select'
-import { type IRotate } from '#app/models/rotate.server'
-import {
-	EditDesignRotateBasisSchema,
-	RotateBasisTypeEnum,
-} from '#app/schema/rotate'
+import { type ISize } from '#app/models/size.server'
+import { EditDesignSizeBasisSchema, SizeBasisTypeEnum } from '#app/schema/size'
 import { useIsPending } from '#app/utils/misc'
-import { DESIGN_ROTATE_INTENT } from '../../../intent'
+import { DESIGN_SIZE_INTENT } from '../../../intent'
 import { type action } from '../../../route'
 
-export const PanelFormDesignRotateEditBasis = ({
-	rotate,
-}: {
-	rotate: IRotate
-}) => {
+export const PanelFormDesignSizeEditBasis = ({ size }: { size: ISize }) => {
 	const fetcher = useFetcher<typeof action>()
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: `panel-form-design-rotate-edit-${rotate.id}-basis`,
-		constraint: getFieldsetConstraint(EditDesignRotateBasisSchema),
+		id: `panel-form-design-size-edit-${size.id}-basis`,
+		constraint: getFieldsetConstraint(EditDesignSizeBasisSchema),
 		lastSubmission: actionData?.submission,
 		defaultValue: {
-			...rotate,
+			...size,
 		},
 	})
 
@@ -50,12 +43,12 @@ export const PanelFormDesignRotateEditBasis = ({
 		>
 			<AuthenticityTokenInput />
 
-			<input type="hidden" name="id" value={rotate.id} />
-			<input type="hidden" name="designId" value={rotate.designId} />
+			<input type="hidden" name="id" value={size.id} />
+			<input type="hidden" name="designId" value={size.designId} />
 			<input
 				type="hidden"
 				name="intent"
-				value={DESIGN_ROTATE_INTENT.updateDesignRotateBasis}
+				value={DESIGN_SIZE_INTENT.updateDesignSizeBasis}
 			/>
 			<Select
 				onValueChange={value => handleChange(value)}
@@ -63,12 +56,12 @@ export const PanelFormDesignRotateEditBasis = ({
 				{...conform.input(fields.basis)}
 			>
 				<SelectTrigger>
-					<SelectValue placeholder="Select a basis" />
+					<SelectValue placeholder="Select a format" />
 				</SelectTrigger>
 				<SelectContent>
-					{Object.values(RotateBasisTypeEnum).map(rotateBasisEnum => (
-						<SelectItem key={rotateBasisEnum} value={rotateBasisEnum}>
-							{rotateBasisEnum
+					{Object.values(SizeBasisTypeEnum).map(sizeBasisEnum => (
+						<SelectItem key={sizeBasisEnum} value={sizeBasisEnum}>
+							{sizeBasisEnum
 								.split('-')
 								.map(word => word.charAt(0).toUpperCase() + word.slice(1))
 								.join(' - ')}

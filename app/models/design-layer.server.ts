@@ -1,8 +1,17 @@
 import { type Design } from '@prisma/client'
-import { type designTypeEnum } from '#app/schema/design'
+import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
-import { type IDesign } from './design.server'
+import { filterVisibleDesigns, orderLinkedDesigns } from '#app/utils/design'
+import { filterDefinedRotates } from '#app/utils/rotate'
+import {
+	findManyDesignsWithType,
+	type IDesignWithPalette,
+	type IDesign,
+	type IDesignWithRotate,
+} from './design.server'
 import { type ILayer } from './layer.server'
+import { type IPalette } from './palette.server'
+import { type IRotate } from './rotate.server'
 
 export interface IDesignWithLayer extends IDesign {
 	layer: ILayer
@@ -38,4 +47,36 @@ export const updateLayerSelectedDesign = ({
 		data: { selected: true },
 	})
 	return [unselectDesign, selectDesign]
+}
+
+export const getLayerVisiblePalettes = async ({
+	layerId,
+}: {
+	layerId: ILayer['id']
+}): Promise<IPalette[]> => {
+	const designPalettes = (await findManyDesignsWithType({
+		where: { type: DesignTypeEnum.PALETTE, layerId },
+	})) as IDesignWithPalette[]
+
+	const visibleDesignPalettes = filterVisibleDesigns(
+		orderLinkedDesigns(designPalettes),
+	) as IDesignWithPalette[]
+
+	return visibleDesignPalettes.map(design => design.palette)
+}
+
+export const getLayerVisibleRotates = async ({
+	layerId,
+}: {
+	layerId: ILayer['id']
+}): Promise<IRotate[]> => {
+	const designRotates = (await findManyDesignsWithType({
+		where: { type: DesignTypeEnum.ROTATE, layerId },
+	})) as IDesignWithRotate[]
+
+	const visibleDesignRotates = filterVisibleDesigns(
+		orderLinkedDesigns(designRotates),
+	) as IDesignWithRotate[]
+
+	return filterDefinedRotates(visibleDesignRotates.map(design => design.rotate))
 }

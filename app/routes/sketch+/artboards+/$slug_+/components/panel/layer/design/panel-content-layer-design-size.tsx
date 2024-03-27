@@ -8,9 +8,17 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
+import { Icon } from '#app/components/ui/icon'
 import { type IDesignWithSize } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { DesignTypeEnum } from '#app/schema/design'
+import {
+	sizeBasisIcon,
+	type sizeBasisTypeEnum,
+	sizeFormatIcon,
+	type sizeFormatTypeEnum,
+	SizeFormatTypeEnum,
+} from '#app/schema/size'
 import {
 	panelItemVariablesDesignType,
 	panelListVariablesDesignType,
@@ -54,6 +62,28 @@ export const PanelContentLayerDesignSize = ({
 			</PanelHeader>
 			{designSizes.map((design, index) => {
 				const { id, visible, size } = design
+
+				const SizeFormatIcon = () => {
+					const icon = sizeFormatIcon(size.format as sizeFormatTypeEnum)
+					return (
+						<div className="m-2 mr-0 flex h-8 w-8 items-center justify-center">
+							<span className="text-body-xs leading-none">{icon}</span>
+						</div>
+					)
+				}
+
+				const SizeBasisIcon = () => {
+					if (size.format === SizeFormatTypeEnum.PIXEL) return null
+
+					const icon = sizeBasisIcon(size.basis as sizeBasisTypeEnum)
+					return (
+						<div className="m-2 mr-0 flex h-8 w-8 items-center justify-center">
+							<Icon name={icon}>
+								<span className="sr-only">Size Basis: {size.basis}</span>
+							</Icon>
+						</div>
+					)
+				}
 
 				const {
 					isSelectedDesign,
@@ -108,6 +138,8 @@ export const PanelContentLayerDesignSize = ({
 							<PanelRowValueContainer>
 								<PanelPopoverDesignSize size={size} />
 								<PanelFormDesignSizeEditValue size={size} />
+								<SizeFormatIcon />
+								<SizeBasisIcon />
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
 								<PanelFormLayerDesignToggleVisibile

@@ -417,6 +417,8 @@ model Line {
   id          String @id @default(cuid())
 
   width     Float @default(1)
+  format      String @default("pixel") // e.g. percent, px, inches, cm, etc.
+  basis     String @default("size") // e.g. width, height, etc.
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -428,7 +430,7 @@ model Line {
 model Rotate {
   id          String @id @default(cuid())
 
-  rotation     Float @default(0)
+  value     Float @default(0)
   basis     String @default("defined") // e.g. defined, random, etc.
 
   createdAt DateTime @default(now())

@@ -42,6 +42,8 @@ export const DESIGN_PALETTE_INTENT = {
 
 export const DESIGN_SIZE_INTENT = {
 	updateDesignSizeValue: 'update-design-size-value' as const,
+	updateDesignSizeBasis: 'update-design-size-basis' as const,
+	updateDesignSizeFormat: 'update-design-size-format' as const,
 }
 
 export const DESIGN_FILL_INTENT = {
@@ -58,10 +60,12 @@ export const DESIGN_STROKE_INTENT = {
 
 export const DESIGN_LINE_INTENT = {
 	updateDesignLineWidth: 'update-design-line-width' as const,
+	updateDesignLineBasis: 'update-design-line-basis' as const,
+	updateDesignLineFormat: 'update-design-line-format' as const,
 }
 
 export const DESIGN_ROTATE_INTENT = {
-	updateDesignRotateRotation: 'update-design-rotate-rotation' as const,
+	updateDesignRotateValue: 'update-design-rotate-value' as const,
 	updateDesignRotateBasis: 'update-design-rotate-basis' as const,
 }
 

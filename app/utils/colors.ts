@@ -40,3 +40,11 @@ export function validateStringsAreHexcodes(input: string[]): boolean {
 export function validateStringIsHexcode(input: string): boolean {
 	return /^#?[0-9A-Fa-f]{6}$/.test(input)
 }
+
+export const colorRandomHex = (): string => {
+	let random = Math.floor(Math.random() * 16777215).toString(16)
+	if (random.length === 5) {
+		random = '0' + random
+	}
+	return random.toUpperCase()
+}

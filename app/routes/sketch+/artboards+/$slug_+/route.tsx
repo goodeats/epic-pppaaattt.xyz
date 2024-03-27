@@ -7,7 +7,6 @@ import {
 	SketchBody,
 	SketchBodyContent,
 } from '#app/components/shared'
-import { findManyLayers } from '#app/models/layer.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { action } from './actions/index.ts'
@@ -19,6 +18,7 @@ import {
 	getArtboardDesigns,
 	getLayer,
 	getLayerDesigns,
+	getLayers,
 	getOwner,
 } from './queries'
 
@@ -53,9 +53,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const date = new Date(artboard.updatedAt)
 	const artboardTimeAgo = formatDistanceToNow(date)
 
-	const layers = await findManyLayers({
-		where: { ownerId: userId, artboardId: artboard.id },
-	})
+	const layers = await getLayers({ userId, artboardId: artboard.id })
+	// const layers = await findManyLayers({
+	// 	where: { ownerId: userId, artboardId: artboard.id },
+	// })
 
 	const artboardDesigns = await getArtboardDesigns({ artboard })
 

@@ -33,7 +33,11 @@ export const CanvasContent = ({
 
 	return (
 		<div className="absolute inset-0 flex p-4">
-			<div className="flex w-full justify-center overflow-y-auto">
+			{/* this was flex was throwing off the canvas aspect ratio */}
+			{/* <div className="flex w-full justify-center overflow-y-auto"> */}
+			{/* TODO: fix this to a zoomable area, similar to Figma */}
+			<div className="w-full overflow-auto">
+				{/* <div className="w-full justify-center overflow-auto"> */}
 				<Canvas />
 			</div>
 		</div>

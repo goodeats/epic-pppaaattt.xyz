@@ -10,6 +10,8 @@ import {
 export interface ILine {
 	id: string
 	width: number
+	basis: string
+	format: string
 	createdAt: Date | string
 	updatedAt: Date | string
 	designId: string

@@ -43,13 +43,21 @@ import {
 	designLayoutEditRowsAction,
 	designLayoutEditStyleAction,
 } from './design-layout'
-import { designLineEditWidthAction } from './design-line'
+import {
+	designLineEditBasisAction,
+	designLineEditFormatAction,
+	designLineEditWidthAction,
+} from './design-line'
 import { designPaletteEditValueAction } from './design-palette'
 import {
 	designRotateEditBasisAction,
-	designRotateEditRotationAction,
+	designRotateEditValueAction,
 } from './design-rotate'
-import { designSizeEditValueAction } from './design-size'
+import {
+	designSizeEditBasisAction,
+	designSizeEditFormatAction,
+	designSizeEditValueAction,
+} from './design-size'
 import {
 	designStrokeEditBasisAction,
 	designStrokeEditStyleAction,
@@ -143,6 +151,12 @@ export async function action({ request }: DataFunctionArgs) {
 		case DESIGN_SIZE_INTENT.updateDesignSizeValue: {
 			return designSizeEditValueAction(actionArgs)
 		}
+		case DESIGN_SIZE_INTENT.updateDesignSizeBasis: {
+			return designSizeEditBasisAction(actionArgs)
+		}
+		case DESIGN_SIZE_INTENT.updateDesignSizeFormat: {
+			return designSizeEditFormatAction(actionArgs)
+		}
 		// FILL DESIGN INTENTS
 		case DESIGN_FILL_INTENT.updateDesignFillValue: {
 			return designFillEditValueAction(actionArgs)
@@ -167,9 +181,15 @@ export async function action({ request }: DataFunctionArgs) {
 		case DESIGN_LINE_INTENT.updateDesignLineWidth: {
 			return designLineEditWidthAction(actionArgs)
 		}
+		case DESIGN_LINE_INTENT.updateDesignLineBasis: {
+			return designLineEditBasisAction(actionArgs)
+		}
+		case DESIGN_LINE_INTENT.updateDesignLineFormat: {
+			return designLineEditFormatAction(actionArgs)
+		}
 		// ROTATE DESIGN INTENTS
-		case DESIGN_ROTATE_INTENT.updateDesignRotateRotation: {
-			return designRotateEditRotationAction(actionArgs)
+		case DESIGN_ROTATE_INTENT.updateDesignRotateValue: {
+			return designRotateEditValueAction(actionArgs)
 		}
 		case DESIGN_ROTATE_INTENT.updateDesignRotateBasis: {
 			return designRotateEditBasisAction(actionArgs)

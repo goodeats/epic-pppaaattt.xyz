@@ -37,9 +37,9 @@ export const artboardLayerCopyArtboardDesignRotatesService = async ({
 		}
 
 		// set design rotate overrides
-		const { rotation, basis } = rotate
+		const { value, basis } = rotate
 		const designRotateOverrides = {
-			rotation,
+			value,
 			basis,
 		} as IRotateCreateOverrides
 

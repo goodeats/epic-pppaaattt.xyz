@@ -9,5 +9,5 @@ export const drawLayerItemRotateService = ({
 }) => {
 	const { rotate } = layerDrawItem
 
-	ctx.rotate(Math.PI * rotate)
+	ctx.rotate(rotate)
 }
