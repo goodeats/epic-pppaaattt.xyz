@@ -12,7 +12,7 @@ export type rotateArrayBasisTypeEnum = ObjectValues<
 	typeof RotateArrayBasisTypeEnum
 >
 
-export const RotateBasisTypeEnum = {
+export const RotateIndividualBasisTypeEnum = {
 	DEFINED: 'defined', // exact rotation value
 	RANDOM: 'random', // random rotation value
 	N: 'N', // 0 degrees
@@ -23,6 +23,13 @@ export const RotateBasisTypeEnum = {
 	SW: 'SW', // 225 degrees
 	W: 'W', // 270 degrees
 	NW: 'NW', // 315 degrees
+} as const
+export type rotateIndividualBasisTypeEnum = ObjectValues<
+	typeof RotateIndividualBasisTypeEnum
+>
+
+export const RotateBasisTypeEnum = {
+	...RotateIndividualBasisTypeEnum,
 	...RotateArrayBasisTypeEnum,
 	// add more basis types here
 } as const
