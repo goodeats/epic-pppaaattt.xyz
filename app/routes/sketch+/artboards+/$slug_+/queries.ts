@@ -137,6 +137,7 @@ export interface IArtboardLayerBuild {
 	stroke: IStroke
 	line: ILine
 	rotate: IRotate
+	rotates?: IRotate[]
 	layout: ILayout
 	template: ITemplate
 	// create this type

@@ -3,6 +3,7 @@ import { z } from 'zod'
 export const RotateBasisTypeEnum = {
 	DEFINED: 'defined', // exact rotation value
 	RANDOM: 'random', // random rotation value
+	DEFINED_RANDOM: 'defined-random', // random visible rotation values
 	N: 'N', // 0 degrees
 	NE: 'NE', // 45 degrees
 	E: 'E', // 90 degrees

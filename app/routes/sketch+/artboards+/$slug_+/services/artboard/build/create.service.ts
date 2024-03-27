@@ -1,6 +1,12 @@
 import { type IArtboard } from '#app/models/artboard.server'
-import { getArtboardVisiblePalettes } from '#app/models/design-artboard.server'
-import { getLayerVisiblePalettes } from '#app/models/design-layer.server'
+import {
+	getArtboardVisiblePalettes,
+	getArtboardVisibleRotates,
+} from '#app/models/design-artboard.server'
+import {
+	getLayerVisiblePalettes,
+	getLayerVisibleRotates,
+} from '#app/models/design-layer.server'
 import { findManyDesignsWithType } from '#app/models/design.server'
 import { findFillInDesignArray } from '#app/models/fill.server'
 import { type ILayer } from '#app/models/layer.server'
@@ -11,6 +17,7 @@ import { findRotateInDesignArray } from '#app/models/rotate.server'
 import { findSizeInDesignArray } from '#app/models/size.server'
 import { findStrokeInDesignArray } from '#app/models/stroke.server'
 import { findTemplateInDesignArray } from '#app/models/template.server'
+import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import { filterLayersVisible } from '#app/utils/layer.utils'
 import {
 	type IArtboardLayerBuild,
@@ -78,6 +85,13 @@ const getSelectedDesignsForArtboard = async ({
 	// get all visible palettes to use for fill or stroke
 	const palettes = await getArtboardVisiblePalettes({ artboardId })
 
+	// get all visible rotates to use for rotate if defined random
+	// no defined random rotates and no rotates will default to 0 rotation
+	const rotates =
+		rotate.basis === RotateBasisTypeEnum.DEFINED_RANDOM
+			? await getArtboardVisibleRotates({ artboardId })
+			: []
+
 	const { width, height } = artboard
 	const container = {
 		width,
@@ -98,6 +112,7 @@ const getSelectedDesignsForArtboard = async ({
 		stroke,
 		line,
 		rotate,
+		rotates,
 		layout,
 		template,
 		container,
@@ -163,6 +178,15 @@ const getSelectedDesignTypesForLayer = async ({
 	const palettes = await getLayerVisiblePalettes({ layerId })
 	if (palettes.length > 0) {
 		result.palette = palettes
+	}
+
+	// get all visible rotates to use for rotate
+	// if empty, then use the artboard rotate
+	if (rotate?.basis === RotateBasisTypeEnum.DEFINED_RANDOM) {
+		const rotates = await getLayerVisibleRotates({ layerId })
+		if (rotates.length > 0) {
+			result.rotates = rotates
+		}
 	}
 
 	return result
