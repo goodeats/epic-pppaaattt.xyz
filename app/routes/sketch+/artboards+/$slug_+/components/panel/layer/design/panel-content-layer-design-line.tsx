@@ -8,9 +8,17 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
+import { Icon } from '#app/components/ui/icon'
 import { type IDesignWithLine } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { DesignTypeEnum } from '#app/schema/design'
+import {
+	lineBasisIcon,
+	type lineBasisTypeEnum,
+	lineFormatIcon,
+	type lineFormatTypeEnum,
+	LineFormatTypeEnum,
+} from '#app/schema/line'
 import {
 	panelItemVariablesDesignType,
 	panelListVariablesDesignType,
@@ -54,6 +62,28 @@ export const PanelContentLayerDesignLine = ({
 			</PanelHeader>
 			{designLines.map((design, index) => {
 				const { id, visible, line } = design
+
+				const LineFormatIcon = () => {
+					const icon = lineFormatIcon(line.format as lineFormatTypeEnum)
+					return (
+						<div className="m-2 mr-0 flex h-8 w-8 items-center justify-center">
+							<span className="text-body-xs leading-none">{icon}</span>
+						</div>
+					)
+				}
+
+				const LineBasisIcon = () => {
+					if (line.format === LineFormatTypeEnum.PIXEL) return null
+
+					const icon = lineBasisIcon(line.basis as lineBasisTypeEnum)
+					return (
+						<div className="m-2 mr-0 flex h-8 w-8 items-center justify-center">
+							<Icon name={icon}>
+								<span className="sr-only">Line Basis: {line.basis}</span>
+							</Icon>
+						</div>
+					)
+				}
 
 				const {
 					isSelectedDesign,
@@ -108,6 +138,8 @@ export const PanelContentLayerDesignLine = ({
 							<PanelRowValueContainer>
 								<PanelPopoverDesignLine line={line} />
 								<PanelFormDesignLineEditWidth line={line} />
+								<LineFormatIcon />
+								<LineBasisIcon />
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
 								<PanelFormLayerDesignToggleVisibile

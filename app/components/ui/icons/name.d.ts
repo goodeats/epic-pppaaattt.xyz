@@ -59,6 +59,7 @@ export type IconName =
 	| 'sun'
 	| 'trash'
 	| 'update'
+	| 'vercel-logo'
 	| 'view-grid'
 	| 'view-horizontal'
 	| 'view-none'

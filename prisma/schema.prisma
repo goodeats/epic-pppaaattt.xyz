@@ -417,6 +417,8 @@ model Line {
   id          String @id @default(cuid())
 
   width     Float @default(1)
+  format      String @default("pixel") // e.g. percent, px, inches, cm, etc.
+  basis     String @default("size") // e.g. width, height, etc.
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

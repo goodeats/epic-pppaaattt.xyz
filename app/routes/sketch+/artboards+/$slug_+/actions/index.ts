@@ -43,7 +43,11 @@ import {
 	designLayoutEditRowsAction,
 	designLayoutEditStyleAction,
 } from './design-layout'
-import { designLineEditWidthAction } from './design-line'
+import {
+	designLineEditBasisAction,
+	designLineEditFormatAction,
+	designLineEditWidthAction,
+} from './design-line'
 import { designPaletteEditValueAction } from './design-palette'
 import {
 	designRotateEditBasisAction,
@@ -176,6 +180,12 @@ export async function action({ request }: DataFunctionArgs) {
 		// LINE DESIGN INTENTS
 		case DESIGN_LINE_INTENT.updateDesignLineWidth: {
 			return designLineEditWidthAction(actionArgs)
+		}
+		case DESIGN_LINE_INTENT.updateDesignLineBasis: {
+			return designLineEditBasisAction(actionArgs)
+		}
+		case DESIGN_LINE_INTENT.updateDesignLineFormat: {
+			return designLineEditFormatAction(actionArgs)
 		}
 		// ROTATE DESIGN INTENTS
 		case DESIGN_ROTATE_INTENT.updateDesignRotateRotation: {

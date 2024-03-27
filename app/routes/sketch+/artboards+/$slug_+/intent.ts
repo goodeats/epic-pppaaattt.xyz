@@ -60,6 +60,8 @@ export const DESIGN_STROKE_INTENT = {
 
 export const DESIGN_LINE_INTENT = {
 	updateDesignLineWidth: 'update-design-line-width' as const,
+	updateDesignLineBasis: 'update-design-line-basis' as const,
+	updateDesignLineFormat: 'update-design-line-format' as const,
 }
 
 export const DESIGN_ROTATE_INTENT = {

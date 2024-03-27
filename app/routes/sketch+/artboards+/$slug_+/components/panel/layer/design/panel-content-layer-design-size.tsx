@@ -17,6 +17,7 @@ import {
 	type sizeBasisTypeEnum,
 	sizeFormatIcon,
 	type sizeFormatTypeEnum,
+	SizeFormatTypeEnum,
 } from '#app/schema/size'
 import {
 	panelItemVariablesDesignType,
@@ -61,7 +62,6 @@ export const PanelContentLayerDesignSize = ({
 			</PanelHeader>
 			{designSizes.map((design, index) => {
 				const { id, visible, size } = design
-				console.log('size', size)
 
 				const SizeFormatIcon = () => {
 					const icon = sizeFormatIcon(size.format as sizeFormatTypeEnum)
@@ -73,6 +73,8 @@ export const PanelContentLayerDesignSize = ({
 				}
 
 				const SizeBasisIcon = () => {
+					if (size.format === SizeFormatTypeEnum.PIXEL) return null
+
 					const icon = sizeBasisIcon(size.basis as sizeBasisTypeEnum)
 					return (
 						<div className="m-2 mr-0 flex h-8 w-8 items-center justify-center">

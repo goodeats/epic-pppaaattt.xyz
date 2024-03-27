@@ -8,6 +8,8 @@ import {
 	PopoverTrigger,
 } from '#app/components/ui/popover'
 import { type ILine } from '#app/models/line.server'
+import { PanelFormDesignLineEditBasis } from '../../forms/design/panel-form-design-line-edit-basis'
+import { PanelFormDesignLineEditFormat } from '../../forms/design/panel-form-design-line-edit-format'
 
 export const PanelPopoverDesignLine = ({ line }: { line: ILine }) => {
 	return (
@@ -41,6 +43,14 @@ export const PanelPopoverDesignLine = ({ line }: { line: ILine }) => {
 									className="col-span-2 h-8"
 									disabled
 								/>
+							</div>
+							<div className="grid grid-cols-3 items-center gap-4">
+								<Label htmlFor="style">Format</Label>
+								<PanelFormDesignLineEditFormat line={line} />
+							</div>
+							<div className="grid grid-cols-3 items-center gap-4">
+								<Label htmlFor="style">Basis</Label>
+								<PanelFormDesignLineEditBasis line={line} />
 							</div>
 						</div>
 					</div>
