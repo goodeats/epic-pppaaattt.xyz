@@ -12,8 +12,10 @@ import {
 
 export const canvasBuildLayerDrawLineService = ({
 	layer,
+	index,
 }: {
 	layer: IArtboardLayerBuild
+	index: number
 }) => {
 	const { line, size, container } = layer
 	const { width, basis, format } = line

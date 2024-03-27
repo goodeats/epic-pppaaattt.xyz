@@ -5,9 +5,11 @@ import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawStrokeService = ({
 	layer,
+	index,
 	pixelHex,
 }: {
 	layer: IArtboardLayerBuild
+	index: number
 	pixelHex: string | null
 }) => {
 	const { stroke, palette } = layer

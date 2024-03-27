@@ -22,9 +22,9 @@ export const canvasLayerBuildDrawLayersService = ({
 	const { layers } = artboardBuild
 
 	const drawLayers = []
-	for (let index = 0; index < layers.length; index++) {
-		const layer = layers[index]
-		const layerDrawItems = buildLayerDrawItems({ ctx, layer, index })
+	for (let i = 0; i < layers.length; i++) {
+		const layer = layers[i]
+		const layerDrawItems = buildLayerDrawItems({ ctx, layer })
 		drawLayers.push(layerDrawItems)
 	}
 	return drawLayers
@@ -33,16 +33,14 @@ export const canvasLayerBuildDrawLayersService = ({
 const buildLayerDrawItems = ({
 	ctx,
 	layer,
-	index,
 }: {
 	ctx: CanvasRenderingContext2D
 	layer: IArtboardLayerBuild
-	index: number
 }): ICanvasDrawItem[] => {
 	const count = canvasBuildLayerDrawCountService({ layer })
 
 	const layerDrawItems = []
-	for (let i = 0; i < count; i++) {
+	for (let index = 0; index < count; index++) {
 		const layerDrawItem = buildLayerDrawItem({ ctx, layer, index, count })
 		layerDrawItems.push(layerDrawItem)
 	}
@@ -63,13 +61,14 @@ const buildLayerDrawItem = ({
 	const { x, y, pixelHex } = canvasBuildLayerDrawPositionService({
 		ctx,
 		layer,
+		index,
 	})
-	const size = canvasBuildLayerDrawSizeService({ layer })
-	const fill = canvasBuildLayerDrawFillService({ layer, pixelHex })
-	const stroke = canvasBuildLayerDrawStrokeService({ layer, pixelHex })
-	const line = canvasBuildLayerDrawLineService({ layer })
-	const rotate = canvasBuildLayerDrawRotateService({ layer })
-	const template = canvasBuildLayerDrawTemplateService({ layer })
+	const size = canvasBuildLayerDrawSizeService({ layer, index })
+	const fill = canvasBuildLayerDrawFillService({ layer, index, pixelHex })
+	const stroke = canvasBuildLayerDrawStrokeService({ layer, index, pixelHex })
+	const line = canvasBuildLayerDrawLineService({ layer, index })
+	const rotate = canvasBuildLayerDrawRotateService({ layer, index })
+	const template = canvasBuildLayerDrawTemplateService({ layer, index })
 
 	return {
 		id: `layer-${layer.layerName}-${index}-${count}`,

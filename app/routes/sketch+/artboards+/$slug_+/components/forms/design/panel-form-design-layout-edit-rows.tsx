@@ -52,8 +52,10 @@ export const PanelFormDesignLayoutEditRows = ({
 			<Input
 				type="number"
 				min={1}
-				max={200}
-				className={'flex h-8'}
+				max={3_000}
+				className={
+					'flex h-8 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
+				}
 				onBlur={e => handleSubmit(e)}
 				autoComplete="off"
 				disabled={isPending}

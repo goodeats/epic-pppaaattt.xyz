@@ -5,8 +5,10 @@ import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawRotateService = ({
 	layer,
+	index,
 }: {
 	layer: IArtboardLayerBuild
+	index: number
 }) => {
 	const { rotate } = layer
 	const { basis } = rotate

@@ -5,9 +5,11 @@ import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawFillService = ({
 	layer,
+	index,
 	pixelHex,
 }: {
 	layer: IArtboardLayerBuild
+	index: number
 	pixelHex: string | null
 }) => {
 	const { fill, palette } = layer

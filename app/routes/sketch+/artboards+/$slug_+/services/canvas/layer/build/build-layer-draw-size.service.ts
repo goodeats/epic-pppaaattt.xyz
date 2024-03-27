@@ -7,8 +7,10 @@ import {
 
 export const canvasBuildLayerDrawSizeService = ({
 	layer,
+	index,
 }: {
 	layer: IArtboardLayerBuild
+	index: number
 }) => {
 	const { size, container } = layer
 	const { value, format } = size
