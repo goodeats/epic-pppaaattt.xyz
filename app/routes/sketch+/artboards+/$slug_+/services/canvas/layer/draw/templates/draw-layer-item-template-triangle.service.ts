@@ -39,6 +39,8 @@ const drawLines = ({
 	inset: number
 	points: number
 }) => {
+	// ctx.lineJoin = 'round'
+	// ctx.miterLimit = 1
 	// top middle
 	ctx.lineTo(0, 0 - radius)
 	ctx.rotate(Math.PI / points)

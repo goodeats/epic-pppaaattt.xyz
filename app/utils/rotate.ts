@@ -47,7 +47,7 @@ export const rotateToRadians = (rotate: IRotate): number => {
 	}
 }
 
-const degreesToRadians = (degrees: number) => degrees * (PI / 180)
+export const degreesToRadians = (degrees: number) => degrees * (PI / 180)
 
 const rotateRandom = (): number => {
 	return Math.random() * PI * 2

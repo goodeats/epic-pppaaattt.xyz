@@ -1,9 +1,11 @@
-import { type ISize } from '#app/models/size.server'
-import { SizeBasisTypeEnum, SizeFormatTypeEnum } from '#app/schema/size'
+import { LineFormatTypeEnum } from '#app/schema/line'
+import { SizeFormatTypeEnum } from '#app/schema/size'
 import {
-	type IArtboardLayerContainerBuild,
-	type IArtboardLayerBuild,
-} from '../../../../queries'
+	calculateMiterStickOutLength,
+	linePercentToPixel,
+} from '#app/utils/line'
+import { sizePercentToPixel } from '#app/utils/size'
+import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawSizeService = ({
 	layer,
@@ -12,38 +14,44 @@ export const canvasBuildLayerDrawSizeService = ({
 	layer: IArtboardLayerBuild
 	index: number
 }) => {
-	const { size, container } = layer
+	const { size, line, container } = layer
 	const { value, format } = size
 
+	// const adjLineSize = linePercentToPixel({ line, size, container })
+	const adjLineSize = getAdjustedLineSize({ line, size, container })
+	console.log(adjLineSize)
+
 	if (format === SizeFormatTypeEnum.PERCENT) {
-		return sizePercentToPixel({ size, container })
+		return sizePercentToPixel({ size, container }) - adjLineSize
 	}
 
 	// pixel value
-	return value
+	return value - adjLineSize
 }
 
-const sizePercentToPixel = ({
+// adjust for line width
+// and miter stick out length
+// https://www.w3schools.com/jsref/canvas_miterlimit.asp (good diagrams at least)
+const getAdjustedLineSize = ({
+	line,
 	size,
 	container,
 }: {
-	size: ISize
-	container: IArtboardLayerContainerBuild
+	line: IArtboardLayerBuild['line']
+	size: IArtboardLayerBuild['size']
+	container: IArtboardLayerBuild['container']
 }) => {
-	const { basis, value } = size
-	const sizePercent = value / 100
+	const { width, format } = line
 
-	switch (basis) {
-		case SizeBasisTypeEnum.WIDTH:
-			return container.width * sizePercent
-		case SizeBasisTypeEnum.HEIGHT:
-			return container.height * sizePercent
-		case SizeBasisTypeEnum.CANVAS_WIDTH:
-			return container.canvas.width * sizePercent
-		case SizeBasisTypeEnum.CANVAS_HEIGHT:
-			return container.canvas.height * sizePercent
-		default:
-			// something went wrong
-			return 0
-	}
+	const formatPercent = format === LineFormatTypeEnum.PERCENT
+	const lineWidth = formatPercent
+		? linePercentToPixel({ line, size, container })
+		: width
+
+	const miterStickOutLength = calculateMiterStickOutLength({
+		lineWidth,
+		angle: 60,
+	})
+
+	return lineWidth / 2 + miterStickOutLength * 2
 }
