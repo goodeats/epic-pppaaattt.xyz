@@ -85,11 +85,6 @@ const getGridPosition = ({
 	const x = columnIndex * stepX + left
 	const y = rowIndex * stepY + top
 
-	if ([0, 9, 10, 98, 99].includes(index)) {
-		console.log(`index: ${index} x: ${x} y: ${y}`)
-		console.log('hex', getHexAtPixel({ ctx, x, y }))
-	}
-
 	return { x, y }
 }
 
