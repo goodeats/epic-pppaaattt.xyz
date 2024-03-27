@@ -21,7 +21,7 @@ import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/pa
 import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
 import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
 import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
-import { PanelFormDesignRotateEditRotation } from '../../../forms/design/panel-form-design-rotate-edit-rotation'
+import { PanelFormDesignRotateEditValue } from '../../../forms/design/panel-form-design-rotate-edit-value'
 import { PanelPopoverDesignRotate } from '../../../popovers/design/panel-popover-design-rotate'
 
 export const PanelContentArtboardDesignRotate = ({
@@ -116,7 +116,7 @@ export const PanelContentArtboardDesignRotate = ({
 										defaultValue={rotate.basis}
 									/>
 								) : (
-									<PanelFormDesignRotateEditRotation rotate={rotate} />
+									<PanelFormDesignRotateEditValue rotate={rotate} />
 								)}
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>

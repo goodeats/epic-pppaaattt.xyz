@@ -430,7 +430,7 @@ model Line {
 model Rotate {
   id          String @id @default(cuid())
 
-  rotation     Float @default(0)
+  value     Float @default(0)
   basis     String @default("defined") // e.g. defined, random, etc.
 
   createdAt DateTime @default(now())

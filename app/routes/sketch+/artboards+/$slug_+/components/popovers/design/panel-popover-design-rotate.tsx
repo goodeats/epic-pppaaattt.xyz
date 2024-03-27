@@ -35,10 +35,10 @@ export const PanelPopoverDesignRotate = ({ rotate }: { rotate: IRotate }) => {
 						</div>
 						<div className="grid gap-2">
 							<div className="grid grid-cols-3 items-center gap-4">
-								<Label htmlFor="rotation">Rotation</Label>
+								<Label htmlFor="value">Value</Label>
 								<Input
-									id="rotation"
-									defaultValue={rotate.rotation}
+									id="value"
+									defaultValue={rotate.value}
 									className="col-span-2 h-8"
 									disabled
 								/>

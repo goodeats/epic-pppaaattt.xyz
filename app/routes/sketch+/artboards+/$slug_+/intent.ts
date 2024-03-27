@@ -65,7 +65,7 @@ export const DESIGN_LINE_INTENT = {
 }
 
 export const DESIGN_ROTATE_INTENT = {
-	updateDesignRotateRotation: 'update-design-rotate-rotation' as const,
+	updateDesignRotateValue: 'update-design-rotate-value' as const,
 	updateDesignRotateBasis: 'update-design-rotate-basis' as const,
 }
 

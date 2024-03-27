@@ -30,13 +30,13 @@ export async function artboardDesignEditRotateAction({
 	}
 
 	// changes
-	const { id, rotation } = submission.value
+	const { id, value } = submission.value
 	const rotate = await findFirstRotateInstance({
 		where: { id },
 	})
 	if (!rotate) return submissionErrorResponse(submission)
 
-	rotate.rotation = rotation
+	rotate.value = value
 	rotate.updatedAt = new Date()
 	await rotate.save()
 

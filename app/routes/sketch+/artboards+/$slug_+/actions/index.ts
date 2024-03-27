@@ -51,7 +51,7 @@ import {
 import { designPaletteEditValueAction } from './design-palette'
 import {
 	designRotateEditBasisAction,
-	designRotateEditRotationAction,
+	designRotateEditValueAction,
 } from './design-rotate'
 import {
 	designSizeEditBasisAction,
@@ -188,8 +188,8 @@ export async function action({ request }: DataFunctionArgs) {
 			return designLineEditFormatAction(actionArgs)
 		}
 		// ROTATE DESIGN INTENTS
-		case DESIGN_ROTATE_INTENT.updateDesignRotateRotation: {
-			return designRotateEditRotationAction(actionArgs)
+		case DESIGN_ROTATE_INTENT.updateDesignRotateValue: {
+			return designRotateEditValueAction(actionArgs)
 		}
 		case DESIGN_ROTATE_INTENT.updateDesignRotateBasis: {
 			return designRotateEditBasisAction(actionArgs)

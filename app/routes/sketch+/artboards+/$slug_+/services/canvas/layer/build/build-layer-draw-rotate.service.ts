@@ -8,7 +8,7 @@ export const canvasBuildLayerDrawRotateService = ({
 	layer: IArtboardLayerBuild
 }) => {
 	const { rotate } = layer
-	const { basis, rotation } = rotate
+	const { basis, value } = rotate
 
 	switch (basis) {
 		case 'random':
@@ -30,6 +30,6 @@ export const canvasBuildLayerDrawRotateService = ({
 		case 'NW':
 			return 1.75
 		default:
-			return rotation
+			return value
 	}
 }

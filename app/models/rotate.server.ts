@@ -9,7 +9,7 @@ import {
 
 export interface IRotate {
 	id: string
-	rotation: number
+	value: number
 	basis: string
 	createdAt: Date | string
 	updatedAt: Date | string
@@ -17,7 +17,7 @@ export interface IRotate {
 }
 
 export interface IRotateCreateOverrides {
-	rotation?: number
+	value?: number
 	basis?: string
 }
 

@@ -17,7 +17,7 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { PanelFormDesignRotateEditRotation } from '../../../forms/design/panel-form-design-rotate-edit-rotation'
+import { PanelFormDesignRotateEditValue } from '../../../forms/design/panel-form-design-rotate-edit-value'
 import { PanelFormLayerDesignDelete } from '../../../forms/layer/design/panel-form-layer-design-delete'
 import { PanelFormLayerDesignNew } from '../../../forms/layer/design/panel-form-layer-design-new'
 import { PanelFormLayerDesignReorder } from '../../../forms/layer/design/panel-form-layer-design-reorder'
@@ -116,7 +116,7 @@ export const PanelContentLayerDesignRotate = ({
 										defaultValue={rotate.basis}
 									/>
 								) : (
-									<PanelFormDesignRotateEditRotation rotate={rotate} />
+									<PanelFormDesignRotateEditValue rotate={rotate} />
 								)}
 							</PanelRowValueContainer>
 							<PanelRowIconContainer>
