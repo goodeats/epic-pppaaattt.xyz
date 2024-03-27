@@ -19,7 +19,6 @@ export const canvasBuildLayerDrawSizeService = ({
 
 	// const adjLineSize = linePercentToPixel({ line, size, container })
 	const adjLineSize = getAdjustedLineSize({ line, size, container })
-	console.log(adjLineSize)
 
 	if (format === SizeFormatTypeEnum.PERCENT) {
 		return sizePercentToPixel({ size, container }) - adjLineSize
