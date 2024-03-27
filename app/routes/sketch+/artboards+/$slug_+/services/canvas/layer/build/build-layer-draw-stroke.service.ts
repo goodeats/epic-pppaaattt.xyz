@@ -28,6 +28,10 @@ export const canvasBuildLayerDrawStrokeService = ({
 		case StrokeBasisTypeEnum.PALETTE_LOOP:
 			const paletteLoopIndex = index % palette.length
 			return palette[paletteLoopIndex].value
+		case StrokeBasisTypeEnum.PALETTE_LOOP_REVERSE:
+			const paletteReverseLoopIndex =
+				palette.length - 1 - (index % palette.length)
+			return palette[paletteReverseLoopIndex].value
 		case StrokeBasisTypeEnum.PIXEL:
 			// random to highlight something went wrong
 			return pixelHex || colorRandomHex()

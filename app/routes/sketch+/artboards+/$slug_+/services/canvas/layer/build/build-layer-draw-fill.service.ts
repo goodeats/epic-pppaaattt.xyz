@@ -30,6 +30,10 @@ export const canvasBuildLayerDrawFillService = ({
 		case FillBasisTypeEnum.PALETTE_LOOP:
 			const paletteLoopIndex = index % palette.length
 			return palette[paletteLoopIndex].value
+		case FillBasisTypeEnum.PALETTE_LOOP_REVERSE:
+			const paletteReverseLoopIndex =
+				palette.length - 1 - (index % palette.length)
+			return palette[paletteReverseLoopIndex].value
 		case FillBasisTypeEnum.PIXEL:
 			// random to highlight something went wrong
 			return pixelHex || colorRandomHex()
