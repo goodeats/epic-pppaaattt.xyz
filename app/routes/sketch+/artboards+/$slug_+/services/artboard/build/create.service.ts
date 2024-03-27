@@ -17,8 +17,9 @@ import { findRotateInDesignArray } from '#app/models/rotate.server'
 import { findSizeInDesignArray } from '#app/models/size.server'
 import { findStrokeInDesignArray } from '#app/models/stroke.server'
 import { findTemplateInDesignArray } from '#app/models/template.server'
-import { RotateBasisTypeEnum } from '#app/schema/rotate'
+import { type rotateBasisTypeEnum } from '#app/schema/rotate'
 import { filterLayersVisible } from '#app/utils/layer.utils'
+import { isArrayRotateBasisType } from '#app/utils/rotate'
 import {
 	type IArtboardLayerBuild,
 	type PickedArtboardType,
@@ -87,10 +88,9 @@ const getSelectedDesignsForArtboard = async ({
 
 	// get all visible rotates to use for rotate if defined random
 	// no defined random rotates and no rotates will default to 0 rotation
-	const rotates =
-		rotate.basis === RotateBasisTypeEnum.DEFINED_RANDOM
-			? await getArtboardVisibleRotates({ artboardId })
-			: []
+	const rotates = isArrayRotateBasisType(rotate.basis as rotateBasisTypeEnum)
+		? await getArtboardVisibleRotates({ artboardId })
+		: []
 
 	const { width, height } = artboard
 	const container = {
@@ -182,7 +182,7 @@ const getSelectedDesignTypesForLayer = async ({
 
 	// get all visible rotates to use for rotate
 	// if empty, then use the artboard rotate
-	if (rotate?.basis === RotateBasisTypeEnum.DEFINED_RANDOM) {
+	if (rotate && isArrayRotateBasisType(rotate.basis as rotateBasisTypeEnum)) {
 		const rotates = await getLayerVisibleRotates({ layerId })
 		if (rotates.length > 0) {
 			result.rotates = rotates

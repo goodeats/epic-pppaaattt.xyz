@@ -23,7 +23,7 @@ import { PanelFormLayerDesignDelete } from '../../../forms/layer/design/panel-fo
 import { PanelFormLayerDesignNew } from '../../../forms/layer/design/panel-form-layer-design-new'
 import { PanelFormLayerDesignReorder } from '../../../forms/layer/design/panel-form-layer-design-reorder'
 import { PanelFormLayerDesignToggleVisibile } from '../../../forms/layer/design/panel-form-layer-design-toggle-visible'
-import { PanelPopoverDesignRotate } from '../../../popovers/design/panel-popover-design-rotate'
+import { PanelDialogDesignRotate } from '../../../popovers/design/panel-dialog-design-rotate'
 
 export const PanelContentLayerDesignRotate = ({
 	layer,
@@ -118,7 +118,12 @@ export const PanelContentLayerDesignRotate = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverDesignRotate rotate={rotate} />
+								{/* popover unusable behavior when select triggered */}
+								{/* moves to top of page and prevents scroll  */}
+								{/* potential here: https://github.com/radix-ui/primitives/issues/2122 */}
+								{/* switching to dialog in the meantime as workaround */}
+								{/* <PanelPopoverDesignRotate rotate={rotate} /> */}
+								<PanelDialogDesignRotate rotate={rotate} />
 								{rotate.basis !== 'defined' ? (
 									<Input
 										type="text"

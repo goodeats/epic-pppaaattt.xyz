@@ -1,20 +1,16 @@
 import { Button } from '#app/components/ui/button'
+import { Dialog, DialogContent, DialogTrigger } from '#app/components/ui/dialog'
 import { Icon } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '#app/components/ui/popover'
 import { type IRotate } from '#app/models/rotate.server'
 import { PanelFormDesignRotateEditBasis } from '../../forms/design/panel-form-design-rotate-edit-basis'
 
-export const PanelPopoverDesignRotate = ({ rotate }: { rotate: IRotate }) => {
+export const PanelDialogDesignRotate = ({ rotate }: { rotate: IRotate }) => {
 	return (
 		<div>
-			<Popover>
-				<PopoverTrigger asChild>
+			<Dialog modal={false}>
+				<DialogTrigger asChild>
 					<Button
 						variant="ghost"
 						size="sm"
@@ -24,19 +20,8 @@ export const PanelPopoverDesignRotate = ({ rotate }: { rotate: IRotate }) => {
 							<span className="sr-only">Rotate Settings</span>
 						</Icon>
 					</Button>
-				</PopoverTrigger>
-				<PopoverContent
-					className="PopoverContent w-80"
-					// when I open the select it scrolls to the top and prevents scroll
-					// so I can't make changes to select below the fold
-					// align="end"
-					// side="top"
-					// sideOffset={100}
-					// avoidCollisions={false}
-					// onPointerDownOutside={e => e.preventDefault()}
-					// onFocusOutside={e => e.preventDefault()}
-					// onInteractOutside={e => e.preventDefault()}
-				>
+				</DialogTrigger>
+				<DialogContent className="w-80">
 					<span tabIndex={0} className="sr-only" />
 					<div className="grid gap-4">
 						<div className="space-y-2">
@@ -61,8 +46,8 @@ export const PanelPopoverDesignRotate = ({ rotate }: { rotate: IRotate }) => {
 							</div>
 						</div>
 					</div>
-				</PopoverContent>
-			</Popover>
+				</DialogContent>
+			</Dialog>
 		</div>
 	)
 }

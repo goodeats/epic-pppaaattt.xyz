@@ -29,7 +29,7 @@ import { PanelFormLayerDesignDelete } from '../../../forms/layer/design/panel-fo
 import { PanelFormLayerDesignNew } from '../../../forms/layer/design/panel-form-layer-design-new'
 import { PanelFormLayerDesignReorder } from '../../../forms/layer/design/panel-form-layer-design-reorder'
 import { PanelFormLayerDesignToggleVisibile } from '../../../forms/layer/design/panel-form-layer-design-toggle-visible'
-import { PanelPopoverDesignLine } from '../../../popovers/design/panel-popover-design-line'
+import { PanelDialogDesignLine } from '../../../popovers/design/panel-dialog-design-line'
 
 export const PanelContentLayerDesignLine = ({
 	layer,
@@ -136,7 +136,8 @@ export const PanelContentLayerDesignLine = ({
 						</PanelRowOrderContainer>
 						<PanelRowContainer>
 							<PanelRowValueContainer>
-								<PanelPopoverDesignLine line={line} />
+								{/* <PanelPopoverDesignLine line={line} /> */}
+								<PanelDialogDesignLine line={line} />
 								<PanelFormDesignLineEditWidth line={line} />
 								<LineFormatIcon />
 								<LineBasisIcon />
