@@ -35,7 +35,7 @@ const randomInRotates = ({ layer }: { layer: IArtboardLayerBuild }) => {
 	const { rotates } = layer
 
 	// If there are no rotates or the array is empty, return 0
-	if (!rotates || !rotates.length) return 0
+	if (!rotates?.length) return 0
 
 	const rotate = getRandomItemInArray(rotates)
 	return rotateToRadians(rotate)
@@ -51,7 +51,7 @@ const loopInRotates = ({
 	const { rotates } = layer
 
 	// If there are no rotates or the array is empty, return 0
-	if (!rotates || !rotates.length) return 0
+	if (!rotates?.length) return 0
 
 	const rotate = getCircularItemInArray(rotates, index)
 	return rotateToRadians(rotate)
@@ -67,7 +67,7 @@ const reverseLoopInRotates = ({
 	const { rotates } = layer
 
 	// If there are no rotates or the array is empty, return 0
-	if (!rotates || !rotates.length) return 0
+	if (!rotates?.length) return 0
 
 	const rotate = getReverseCircularItemInArray(rotates, index)
 	return rotateToRadians(rotate)
