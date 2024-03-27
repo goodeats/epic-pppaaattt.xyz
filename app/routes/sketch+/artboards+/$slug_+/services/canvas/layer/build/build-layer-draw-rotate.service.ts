@@ -1,6 +1,6 @@
 import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import { randomInRange } from '#app/utils/random.utils'
-import { rotateValueToRadians } from '#app/utils/rotate'
+import { rotateToRadians } from '#app/utils/rotate'
 import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawRotateService = ({
@@ -15,7 +15,7 @@ export const canvasBuildLayerDrawRotateService = ({
 		return randomInRotates({ layer })
 	}
 
-	return rotateValueToRadians(rotate)
+	return rotateToRadians(rotate)
 }
 
 const randomInRotates = ({ layer }: { layer: IArtboardLayerBuild }) => {
@@ -27,5 +27,5 @@ const randomInRotates = ({ layer }: { layer: IArtboardLayerBuild }) => {
 	const randomIndex = randomInRange(0, rotates.length - 1)
 	const rotate = rotates[randomIndex]
 
-	return rotateValueToRadians(rotate)
+	return rotateToRadians(rotate)
 }
