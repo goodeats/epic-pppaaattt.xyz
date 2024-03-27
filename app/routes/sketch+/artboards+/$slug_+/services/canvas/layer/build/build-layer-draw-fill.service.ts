@@ -25,8 +25,11 @@ export const canvasBuildLayerDrawFillService = ({
 		case FillBasisTypeEnum.PALETTE_SELECTED:
 			return palette[0].value
 		case FillBasisTypeEnum.PALETTE_RANDOM:
-			const index = randomIndex(palette)
-			return palette[index].value
+			const paletteRandomIndex = randomIndex(palette)
+			return palette[paletteRandomIndex].value
+		case FillBasisTypeEnum.PALETTE_LOOP:
+			const paletteLoopIndex = index % palette.length
+			return palette[paletteLoopIndex].value
 		case FillBasisTypeEnum.PIXEL:
 			// random to highlight something went wrong
 			return pixelHex || colorRandomHex()
