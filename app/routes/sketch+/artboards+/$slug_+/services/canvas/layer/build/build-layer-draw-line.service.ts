@@ -6,6 +6,10 @@ import {
 	type IArtboardLayerBuild,
 } from '../../../../queries'
 
+// FYI line width affects the size of the template
+// come back to this when grid is ready
+// for making sure my adjustments are more precise
+
 export const canvasBuildLayerDrawLineService = ({
 	layer,
 }: {
