@@ -323,13 +323,6 @@ function UserDropdown() {
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
-						<Link prefetch="intent" to={`/editor`}>
-							<Icon className="text-body-md" name="magic-wand">
-								Editor
-							</Icon>
-						</Link>
-					</DropdownMenuItem>
-					<DropdownMenuItem asChild>
 						<Link prefetch="intent" to={`/sketch/artboards`}>
 							<Icon className="text-body-md" name="magic-wand">
 								Sketch

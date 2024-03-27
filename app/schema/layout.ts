@@ -43,31 +43,3 @@ export const EditDesignLayoutColumnsSchema = z.object({
 	designId: z.string(),
 	columns: LayoutGridSchema,
 })
-
-export const EditArtboardLayoutStyleSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	style: LayoutStyleSchema,
-})
-
-export const EditArtboardLayoutCountSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	count: LayoutCountSchema,
-})
-
-export const EditArtboardLayoutRowsSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	rows: LayoutGridSchema,
-})
-
-export const EditArtboardLayoutColumnsSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	columns: LayoutGridSchema,
-})

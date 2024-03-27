@@ -13,10 +13,3 @@ export const EditDesignPaletteValueSchema = z.object({
 	designId: z.string(),
 	value: HexcodeSchema,
 })
-
-export const EditArtboardPaletteSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	value: HexcodeSchema,
-})

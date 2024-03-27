@@ -54,17 +54,3 @@ export const EditDesignRotateBasisSchema = z.object({
 	designId: z.string(),
 	basis: RotateBasisSchema,
 })
-
-export const EditArtboardRotateSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	value: z.number(),
-})
-
-export const EditArtboardRotateBasisSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	basis: RotateBasisSchema,
-})

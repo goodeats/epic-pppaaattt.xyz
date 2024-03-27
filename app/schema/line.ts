@@ -71,10 +71,3 @@ export const lineBasisIcon = (basis: lineBasisTypeEnum) => {
 			return 'width'
 	}
 }
-
-export const EditArtboardLineWidthSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	width: LineWidthSchema,
-})

@@ -47,24 +47,3 @@ export const EditDesignFillBasisSchema = z.object({
 	designId: z.string(),
 	basis: FillBasisSchema,
 })
-
-export const EditArtboardFillSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	value: HexcodeSchema,
-})
-
-export const EditArtboardFillStyleSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	style: FillStyleSchema,
-})
-
-export const EditArtboardFillBasisSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	basis: FillBasisSchema,
-})
