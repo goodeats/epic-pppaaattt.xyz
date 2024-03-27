@@ -1,9 +1,20 @@
 import { z } from 'zod'
 
-export const RotateBasisTypeEnum = {
+type ObjectValues<T> = T[keyof T]
+
+// use this for determining if build should iterate through rotates array
+export const RotateArrayBasisTypeEnum = {
+	VISIBLE_RANDOM: 'visible-random',
+	VISIBLE_LOOP: 'visible-loop',
+	VISIBLE_LOOP_REVERSE: 'visible-loop-reverse',
+} as const
+export type rotateArrayBasisTypeEnum = ObjectValues<
+	typeof RotateArrayBasisTypeEnum
+>
+
+export const RotateIndividualBasisTypeEnum = {
 	DEFINED: 'defined', // exact rotation value
 	RANDOM: 'random', // random rotation value
-	DEFINED_RANDOM: 'defined-random', // random visible rotation values
 	N: 'N', // 0 degrees
 	NE: 'NE', // 45 degrees
 	E: 'E', // 90 degrees
@@ -12,9 +23,16 @@ export const RotateBasisTypeEnum = {
 	SW: 'SW', // 225 degrees
 	W: 'W', // 270 degrees
 	NW: 'NW', // 315 degrees
+} as const
+export type rotateIndividualBasisTypeEnum = ObjectValues<
+	typeof RotateIndividualBasisTypeEnum
+>
+
+export const RotateBasisTypeEnum = {
+	...RotateIndividualBasisTypeEnum,
+	...RotateArrayBasisTypeEnum,
 	// add more basis types here
 } as const
-type ObjectValues<T> = T[keyof T]
 export type rotateBasisTypeEnum = ObjectValues<typeof RotateBasisTypeEnum>
 
 const RotateBasisSchema = z.nativeEnum(RotateBasisTypeEnum)

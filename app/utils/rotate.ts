@@ -1,13 +1,22 @@
 import { type IRotate } from '#app/models/rotate.server'
-import { RotateBasisTypeEnum } from '#app/schema/rotate'
+import {
+	RotateArrayBasisTypeEnum,
+	RotateBasisTypeEnum,
+	type rotateBasisTypeEnum,
+} from '#app/schema/rotate'
 
 // 🥧
 const PI = Math.PI
 
-export const filterDefinedRotates = (rotates: IRotate[]): IRotate[] => {
+export const filterNonArrayRotates = (rotates: IRotate[]): IRotate[] => {
 	return rotates.filter(
-		rotate => rotate.basis !== RotateBasisTypeEnum.DEFINED_RANDOM,
+		rotate => !isArrayRotateBasisType(rotate.basis as rotateBasisTypeEnum),
 	)
+}
+
+// Function to check if a basis is a visible type
+export const isArrayRotateBasisType = (basis: rotateBasisTypeEnum): boolean => {
+	return Object.values(RotateArrayBasisTypeEnum).includes(basis)
 }
 
 export const rotateToRadians = (rotate: IRotate): number => {

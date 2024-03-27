@@ -1,6 +1,10 @@
 import { StrokeBasisTypeEnum } from '#app/schema/stroke'
+import {
+	getCircularItemInArray,
+	getRandomItemInArray,
+	getReverseCircularItemInArray,
+} from '#app/utils/array.utils'
 import { colorRandomHex } from '#app/utils/colors'
-import { randomIndex } from '#app/utils/random.utils'
 import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawStrokeService = ({
@@ -23,8 +27,11 @@ export const canvasBuildLayerDrawStrokeService = ({
 		case StrokeBasisTypeEnum.PALETTE_SELECTED:
 			return palette[0].value
 		case StrokeBasisTypeEnum.PALETTE_RANDOM:
-			const index = randomIndex(palette)
-			return palette[index].value
+			return getRandomItemInArray(palette).value
+		case StrokeBasisTypeEnum.PALETTE_LOOP:
+			return getCircularItemInArray(palette, index).value
+		case StrokeBasisTypeEnum.PALETTE_LOOP_REVERSE:
+			return getReverseCircularItemInArray(palette, index).value
 		case StrokeBasisTypeEnum.PIXEL:
 			// random to highlight something went wrong
 			return pixelHex || colorRandomHex()

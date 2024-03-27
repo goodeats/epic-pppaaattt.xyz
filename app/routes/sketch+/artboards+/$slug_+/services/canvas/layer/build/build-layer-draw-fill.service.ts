@@ -1,6 +1,10 @@
 import { FillBasisTypeEnum, FillStyleTypeEnum } from '#app/schema/fill'
+import {
+	getCircularItemInArray,
+	getRandomItemInArray,
+	getReverseCircularItemInArray,
+} from '#app/utils/array.utils'
 import { colorRandomHex } from '#app/utils/colors'
-import { randomIndex } from '#app/utils/random.utils'
 import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawFillService = ({
@@ -25,8 +29,11 @@ export const canvasBuildLayerDrawFillService = ({
 		case FillBasisTypeEnum.PALETTE_SELECTED:
 			return palette[0].value
 		case FillBasisTypeEnum.PALETTE_RANDOM:
-			const index = randomIndex(palette)
-			return palette[index].value
+			return getRandomItemInArray(palette).value
+		case FillBasisTypeEnum.PALETTE_LOOP:
+			return getCircularItemInArray(palette, index).value
+		case FillBasisTypeEnum.PALETTE_LOOP_REVERSE:
+			return getReverseCircularItemInArray(palette, index).value
 		case FillBasisTypeEnum.PIXEL:
 			// random to highlight something went wrong
 			return pixelHex || colorRandomHex()

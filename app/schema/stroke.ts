@@ -4,8 +4,10 @@ import { HexcodeSchema } from './colors'
 export const StrokeBasisTypeEnum = {
 	DEFINED: 'defined', // exact hex value
 	RANDOM: 'random', // random hex value
-	PALETTE_SELECTED: 'palette-selected', // first palette
-	PALETTE_RANDOM: 'palette-random', // random palette
+	PALETTE_SELECTED: 'palette-selected', // first palette in array
+	PALETTE_RANDOM: 'palette-random', // random palette in array
+	PALETTE_LOOP: 'palette-loop', // loop palette array by index
+	PALETTE_LOOP_REVERSE: 'palette-loop-reverse', // loop reversed palette array by index
 	PIXEL: 'pixel', // pixel color
 	// add more basis types here
 } as const
