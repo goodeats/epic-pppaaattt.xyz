@@ -70,10 +70,3 @@ export const sizeBasisIcon = (basis: sizeBasisTypeEnum) => {
 			return 'width'
 	}
 }
-
-export const EditArtboardSizeSchema = z.object({
-	id: z.string(),
-	designId: z.string(),
-	artboardId: z.string(),
-	value: SizeValueSchema,
-})
