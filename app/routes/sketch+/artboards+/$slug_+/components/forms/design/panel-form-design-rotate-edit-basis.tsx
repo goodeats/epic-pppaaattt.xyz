@@ -10,7 +10,10 @@ import {
 	SelectValue,
 } from '#app/components/ui/select'
 import { type IRotate } from '#app/models/rotate.server'
-import { EditDesignRotateBasisSchema } from '#app/schema/rotate'
+import {
+	EditDesignRotateBasisSchema,
+	RotateBasisTypeEnum,
+} from '#app/schema/rotate'
 import { useIsPending } from '#app/utils/misc'
 import { DESIGN_ROTATE_INTENT } from '../../../intent'
 import { type action } from '../../../route'
@@ -63,16 +66,14 @@ export const PanelFormDesignRotateEditBasis = ({
 					<SelectValue placeholder="Select a basis" />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="defined">Defined</SelectItem>
-					<SelectItem value="random">Random</SelectItem>
-					<SelectItem value="N">N</SelectItem>
-					<SelectItem value="NE">NE</SelectItem>
-					<SelectItem value="E">E</SelectItem>
-					<SelectItem value="SE">SE</SelectItem>
-					<SelectItem value="S">S</SelectItem>
-					<SelectItem value="SW">SW</SelectItem>
-					<SelectItem value="W">W</SelectItem>
-					<SelectItem value="NW">NW</SelectItem>
+					{Object.values(RotateBasisTypeEnum).map(rotateBasisEnum => (
+						<SelectItem key={rotateBasisEnum} value={rotateBasisEnum}>
+							{rotateBasisEnum
+								.split('-')
+								.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+								.join(' - ')}
+						</SelectItem>
+					))}
 				</SelectContent>
 			</Select>
 		</fetcher.Form>

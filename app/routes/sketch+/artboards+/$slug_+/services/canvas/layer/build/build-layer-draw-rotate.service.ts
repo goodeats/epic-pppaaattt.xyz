@@ -1,3 +1,4 @@
+import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import { randomInRange } from '#app/utils/random.utils'
 import { type IArtboardLayerBuild } from '../../../../queries'
 
@@ -11,25 +12,26 @@ export const canvasBuildLayerDrawRotateService = ({
 	const { basis, value } = rotate
 
 	switch (basis) {
-		case 'random':
+		case RotateBasisTypeEnum.RANDOM:
 			return randomInRange(0, 2)
-		case 'N':
+		case RotateBasisTypeEnum.N:
 			return 0
-		case 'NE':
+		case RotateBasisTypeEnum.NE:
 			return 0.25
-		case 'E':
+		case RotateBasisTypeEnum.E:
 			return 0.5
-		case 'SE':
+		case RotateBasisTypeEnum.SE:
 			return 0.75
-		case 'S':
+		case RotateBasisTypeEnum.S:
 			return 1
-		case 'SW':
+		case RotateBasisTypeEnum.SW:
 			return 1.25
-		case 'W':
+		case RotateBasisTypeEnum.W:
 			return 1.5
-		case 'NW':
+		case RotateBasisTypeEnum.NW:
 			return 1.75
 		default:
+			// RotateBasisTypeEnum.DEFINED
 			return value
 	}
 }
