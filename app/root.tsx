@@ -16,6 +16,7 @@ import {
 	Scripts,
 	ScrollRestoration,
 	useLoaderData,
+	useMatches,
 	useRouteLoaderData,
 } from '@remix-run/react'
 import { withSentry } from '@sentry/remix'
@@ -211,25 +212,45 @@ function Document({
 	)
 }
 
+const AppBody = () => {
+	const data = useLoaderData<typeof loader>()
+	const env = data.ENV
+	const isProduction = env.MODE === 'production'
+	const matches = useMatches()
+	const isSketchDashboard = matches.some(m => m.id.includes('sketch'))
+
+	if (isSketchDashboard) {
+		return (
+			<div className="flex h-screen flex-col justify-between">
+				<div className="flex-1">
+					<Outlet />
+				</div>
+			</div>
+		)
+	}
+
+	return (
+		<div className="flex h-screen flex-col justify-between">
+			{isProduction ? <PageHeader /> : <PageHeaderDev />}
+
+			<div className="flex-1">
+				<Outlet />
+			</div>
+
+			<PageFooter />
+		</div>
+	)
+}
+
 function App() {
 	const data = useLoaderData<typeof loader>()
 	const nonce = useNonce()
 	const theme = useTheme()
 	useToast(data.toast)
-	const env = data.ENV
-	const isProduction = env.MODE === 'production'
 
 	return (
 		<Document nonce={nonce} theme={theme} env={data.ENV}>
-			<div className="flex h-screen flex-col justify-between">
-				{isProduction ? <PageHeader /> : <PageHeaderDev />}
-
-				<div className="flex-1">
-					<Outlet />
-				</div>
-
-				<PageFooter />
-			</div>
+			<AppBody />
 			<EpicToaster closeButton position="top-center" theme={theme} />
 			<EpicProgress />
 		</Document>
