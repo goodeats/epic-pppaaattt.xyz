@@ -1,6 +1,24 @@
 import { useEffect, useRef } from 'react'
+import {
+	ReactFlow,
+	type Node,
+	Background,
+	Controls,
+	MiniMap,
+	useNodesState,
+} from 'reactflow'
 import { type IArtboardBuild, type PickedArtboardType } from '../queries'
 import { canvasDrawService } from '../services/canvas/draw.service'
+import 'reactflow/dist/style.css'
+
+const initialNodes = [
+	{
+		id: 'a',
+		type: 'canvas',
+		position: { x: 0, y: 0 },
+		data: { label: 'artboard-canvas' },
+	},
+] satisfies Node[]
 
 export const CanvasContent = ({
 	artboard,
@@ -9,9 +27,8 @@ export const CanvasContent = ({
 	artboard: PickedArtboardType
 	artboardBuild: IArtboardBuild | null
 }) => {
-	const { width, height, backgroundColor } = artboard
-
 	const Canvas = () => {
+		const { width, height, backgroundColor } = artboard
 		const canvasRef = useRef<HTMLCanvasElement>(null)
 
 		useEffect(() => {
@@ -31,15 +48,17 @@ export const CanvasContent = ({
 		)
 	}
 
+	const [nodes] = useNodesState(initialNodes)
+	const nodeTypes = {
+		canvas: Canvas,
+	}
 	return (
 		<div className="absolute inset-0 flex p-4">
-			{/* this was flex was throwing off the canvas aspect ratio */}
-			{/* <div className="flex w-full justify-center overflow-y-auto"> */}
-			{/* TODO: fix this to a zoomable area, similar to Figma */}
-			<div className="w-full overflow-auto">
-				{/* <div className="w-full justify-center overflow-auto"> */}
-				<Canvas />
-			</div>
+			<ReactFlow nodes={nodes} nodeTypes={nodeTypes} fitView>
+				<Background />
+				<MiniMap />
+				<Controls />
+			</ReactFlow>
 		</div>
 	)
 }
