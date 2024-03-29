@@ -9,7 +9,6 @@ import {
 	type MetaFunction,
 } from '@remix-run/node'
 import {
-	Link,
 	Links,
 	LiveReload,
 	Meta,
@@ -24,14 +23,12 @@ import { AuthenticityTokenProvider } from 'remix-utils/csrf/react'
 import { HoneypotProvider } from 'remix-utils/honeypot/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from './components/error-boundary.tsx'
-import Logo from './components/logo.tsx'
+import { PageFooter } from './components/layout/page-footer.tsx'
+import { PageHeader, PageHeaderDev } from './components/layout/page-header.tsx'
 import { EpicProgress } from './components/progress-bar.tsx'
-import { ThemeSwitch } from './components/theme-switch.tsx'
 import { useToast } from './components/toaster.tsx'
-import { Button } from './components/ui/button.tsx'
 import { href as iconsHref } from './components/ui/icon.tsx'
 import { EpicToaster } from './components/ui/sonner.tsx'
-import { UserDropdown } from './components/user-dropdown.tsx'
 import tailwindStyleSheetUrl from './styles/tailwind.css'
 import { getUserId, logout } from './utils/auth.server.ts'
 import { ClientHintCheck, getHints } from './utils/client-hints.tsx'
@@ -45,7 +42,6 @@ import { type Theme, setTheme, getTheme } from './utils/theme.server.ts'
 import { useTheme } from './utils/theme.ts'
 import { makeTimings, time } from './utils/timing.server.ts'
 import { getToast } from './utils/toast.server.ts'
-import { useOptionalUser } from './utils/user.ts'
 
 export const links: LinksFunction = () => {
 	return [
@@ -223,36 +219,21 @@ function Document({
 function App() {
 	const data = useLoaderData<typeof loader>()
 	const nonce = useNonce()
-	const user = useOptionalUser()
 	const theme = useTheme()
 	useToast(data.toast)
+	const env = data.ENV
+	const isProduction = env.MODE === 'production'
 
 	return (
 		<Document nonce={nonce} theme={theme} env={data.ENV}>
 			<div className="flex h-screen flex-col justify-between">
-				<header className="container py-6">
-					<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
-						<Logo />
-						<div className="flex items-center gap-10">
-							{user ? (
-								<UserDropdown />
-							) : (
-								<Button asChild variant="default" size="lg">
-									<Link to="/">Coming Soon</Link>
-								</Button>
-							)}
-						</div>
-					</nav>
-				</header>
+				{isProduction ? <PageHeader /> : <PageHeaderDev />}
 
 				<div className="flex-1">
 					<Outlet />
 				</div>
 
-				<div className="container flex justify-between pb-5">
-					<Logo />
-					<ThemeSwitch />
-				</div>
+				<PageFooter />
 			</div>
 			<EpicToaster closeButton position="top-center" theme={theme} />
 			<EpicProgress />
