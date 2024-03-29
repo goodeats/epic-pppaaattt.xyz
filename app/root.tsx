@@ -21,7 +21,6 @@ import {
 import { withSentry } from '@sentry/remix'
 import { AuthenticityTokenProvider } from 'remix-utils/csrf/react'
 import { HoneypotProvider } from 'remix-utils/honeypot/react'
-import { z } from 'zod'
 import { GeneralErrorBoundary } from './components/error-boundary.tsx'
 import { PageFooter } from './components/layout/page-footer.tsx'
 import { PageHeader, PageHeaderDev } from './components/layout/page-header.tsx'
@@ -39,7 +38,7 @@ import { honeypot } from './utils/honeypot.server.ts'
 import { combineHeaders, getDomainUrl } from './utils/misc.tsx'
 import { useNonce } from './utils/nonce-provider.ts'
 import { type Theme, setTheme, getTheme } from './utils/theme.server.ts'
-import { useTheme } from './utils/theme.ts'
+import { ThemeFormSchema, useTheme } from './utils/theme.ts'
 import { makeTimings, time } from './utils/timing.server.ts'
 import { getToast } from './utils/toast.server.ts'
 
@@ -156,10 +155,6 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
 	}
 	return headers
 }
-
-const ThemeFormSchema = z.object({
-	theme: z.enum(['system', 'light', 'dark']),
-})
 
 export async function action({ request }: ActionFunctionArgs) {
 	const formData = await request.formData()
