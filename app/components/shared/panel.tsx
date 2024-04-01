@@ -7,12 +7,11 @@ const PanelContainer = ({
 	children?: React.ReactNode
 	variant?: 'left'
 }) => {
-	const baseClasses = 'relative w-64 bg-muted py-2'
-	const variantClasses =
-		variant === 'left'
-			? 'border-r-2 md:rounded-bl-3xl'
-			: 'border-l-2 md:rounded-br-3xl'
-	return <div className={`${baseClasses} ${variantClasses}`}>{children}</div>
+	return (
+		<div className="flex w-64 flex-col overflow-y-scroll border-4 border-blue-500 bg-muted py-2">
+			{children}
+		</div>
+	)
 }
 
 const Panel = ({ children }: { children: React.ReactNode }) => {

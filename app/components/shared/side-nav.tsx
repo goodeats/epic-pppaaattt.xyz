@@ -2,7 +2,7 @@ import { Link } from '@remix-run/react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 
 const SideNavWrapper = ({ children }: { children: React.ReactNode }) => {
-	return <div className="relative col-span-1">{children}</div>
+	return <div className="relative col-span-1 flex flex-col">{children}</div>
 }
 
 const SideNavContainer = ({ children }: { children?: React.ReactNode }) => {

@@ -58,6 +58,18 @@ const SideNavTabContent = ({ children }: { children: React.ReactNode }) => {
 	)
 }
 
+const SideNavTabContentPanel = ({
+	children,
+}: {
+	children: React.ReactNode
+}) => {
+	return (
+		<div className="absolute h-full w-64 overflow-y-scroll">
+			<div className="border-4 border-red-300">{children}</div>
+		</div>
+	)
+}
+
 const SideNavTabText = ({
 	children,
 }: {
@@ -71,5 +83,6 @@ export {
 	SideNavTabsList,
 	SideNavTabsTrigger,
 	SideNavTabContent,
+	SideNavTabContentPanel,
 	SideNavTabText,
 }

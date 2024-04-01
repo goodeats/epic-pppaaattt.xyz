@@ -2,28 +2,12 @@ import { cn } from '#app/utils/misc'
 
 const SketchContainer = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<main className="container flex h-full min-h-[400px] px-0 pb-12 md:px-8">
-			{children}
-		</main>
-	)
-}
-
-const SketchWrapper = ({
-	children,
-	className,
-}: {
-	children: React.ReactNode
-	className?: string
-}) => {
-	return (
-		<div
-			className={cn(
-				'flex w-full flex-col bg-muted md:container md:rounded-3xl md:px-0',
-				className,
-			)}
+		<main
+			id="sketch-container"
+			className="flex h-screen w-full flex-col overflow-hidden p-0"
 		>
 			{children}
-		</div>
+		</main>
 	)
 }
 
@@ -83,7 +67,7 @@ const SketchBody = ({
 	return (
 		<div
 			className={cn(
-				'relative flex h-full bg-accent md:rounded-b-3xl',
+				'relative flex flex-1 flex-row border-4 border-yellow-500 bg-accent',
 				className,
 			)}
 		>
@@ -101,10 +85,8 @@ const SketchBodyContent = ({
 }) => {
 	return (
 		<div
-			className={cn(
-				'relative flex h-full flex-1 p-4 md:rounded-bl-3xl',
-				className,
-			)}
+			id="sketch-body-content"
+			className={cn('relative flex-1 border-4 border-red-500 p-4', className)}
 		>
 			{children}
 		</div>
@@ -113,7 +95,6 @@ const SketchBodyContent = ({
 
 export {
 	SketchContainer,
-	SketchWrapper,
 	SketchHeader,
 	SketchHeaderTitle,
 	SketchHeaderActions,

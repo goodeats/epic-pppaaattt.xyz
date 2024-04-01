@@ -54,9 +54,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const artboardTimeAgo = formatDistanceToNow(date)
 
 	const layers = await getLayers({ userId, artboardId: artboard.id })
-	// const layers = await findManyLayers({
-	// 	where: { ownerId: userId, artboardId: artboard.id },
-	// })
 
 	const artboardDesigns = await getArtboardDesigns({ artboard })
 

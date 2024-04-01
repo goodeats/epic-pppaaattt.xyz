@@ -1,3 +1,4 @@
+import { SideNavTabContentPanel } from '#app/components/shared'
 import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { PanelContentLayerDesignFill } from './design/panel-content-layer-design-fill'
@@ -28,7 +29,7 @@ export const PanelContentLayerDesigns = ({
 	} = designs
 
 	return (
-		<div>
+		<SideNavTabContentPanel>
 			<PanelContentLayerDesignLayout
 				layer={layer}
 				designLayouts={designLayouts}
@@ -52,6 +53,6 @@ export const PanelContentLayerDesigns = ({
 				layer={layer}
 				designTemplates={designTemplates}
 			/>
-		</div>
+		</SideNavTabContentPanel>
 	)
 }
