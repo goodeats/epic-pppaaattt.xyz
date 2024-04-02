@@ -1,5 +1,4 @@
 import { Link } from '@remix-run/react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 
 const SideNavWrapper = ({ children }: { children: React.ReactNode }) => {
 	return <div className="relative col-span-1 flex flex-col">{children}</div>
@@ -59,60 +58,6 @@ const SideNavListItem = ({ children }: { children: React.ReactNode }) => {
 const sideNavLinkDefaultClassName =
 	'line-clamp-2 block rounded-l-full py-2 pl-8 pr-6 text-base lg:text-xl'
 
-// careful about using fetchers with looped data
-const SideNavTabs = ({
-	defaultValue,
-	values,
-}: {
-	defaultValue: string
-	values: {
-		id: string
-		name: string
-		content: string | React.ReactNode
-	}[]
-}) => {
-	const SideNavTabsList = () => {
-		return (
-			<TabsList className={`grid grid-cols-${values.length}`}>
-				{values.map(value => {
-					return (
-						<TabsTrigger value={value.id} key={value.id}>
-							{value.name}
-						</TabsTrigger>
-					)
-				})}
-			</TabsList>
-		)
-	}
-
-	const SideNavTabsContent = () => {
-		return (
-			<>
-				{values.map(value => {
-					return (
-						<TabsContent value={value.id} key={value.id}>
-							{value.content}
-						</TabsContent>
-					)
-				})}
-			</>
-		)
-	}
-
-	return (
-		<Tabs defaultValue={defaultValue} className="flex-1">
-			<div className="container h-full py-6">
-				<div className="grid h-full items-stretch gap-6">
-					<div className="hidden flex-col space-y-4 sm:flex md:order-2">
-						<SideNavTabsList />
-						<SideNavTabsContent />
-					</div>
-				</div>
-			</div>
-		</Tabs>
-	)
-}
-
 export {
 	SideNavWrapper,
 	SideNavContainer,
@@ -122,5 +67,4 @@ export {
 	SideNavList,
 	SideNavListItem,
 	sideNavLinkDefaultClassName,
-	SideNavTabs,
 }
