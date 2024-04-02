@@ -1,19 +1,5 @@
 import { cn } from '#app/utils/misc'
 
-const PanelContainer = ({
-	children,
-	variant,
-}: {
-	children?: React.ReactNode
-	variant?: 'left'
-}) => {
-	return (
-		<div className="flex w-64 flex-col overflow-y-scroll border-4 border-blue-500 bg-muted py-2">
-			{children}
-		</div>
-	)
-}
-
 const Panel = ({ children }: { children: React.ReactNode }) => {
 	return <div className="grid w-full border-b-2 py-2">{children}</div>
 }
@@ -92,7 +78,6 @@ const PanelRowIconContainer = ({ children }: { children: React.ReactNode }) => {
 }
 
 export {
-	PanelContainer,
 	Panel,
 	PanelRow,
 	PanelRowContainer,

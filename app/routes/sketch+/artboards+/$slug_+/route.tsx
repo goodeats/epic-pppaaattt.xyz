@@ -2,11 +2,7 @@ import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData, type MetaFunction } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
-import {
-	PanelContainer,
-	SketchBody,
-	SketchBodyContent,
-} from '#app/components/shared'
+import { Sidebar, SketchBody, SketchBodyContent } from '#app/components/shared'
 import { requireUserId } from '#app/utils/auth.server'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { action } from './actions/index.ts'
@@ -84,20 +80,20 @@ export default function SketchRoute() {
 
 	return (
 		<SketchBody>
-			<PanelContainer variant="left">
+			<Sidebar id="sidebar-left">
 				<PanelContentLeft artboard={artboard} layers={layers} />
-			</PanelContainer>
+			</Sidebar>
 			<SketchBodyContent>
 				<CanvasContent artboard={artboard} artboardBuild={artboardBuild} />
 			</SketchBodyContent>
-			<PanelContainer>
+			<Sidebar id="sidebar-right">
 				<PanelContentRight
 					artboard={artboard}
 					artboardDesigns={artboardDesigns}
 					layer={layer}
 					layerDesigns={layerDesigns}
 				/>
-			</PanelContainer>
+			</Sidebar>
 		</SketchBody>
 	)
 }
