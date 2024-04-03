@@ -1,26 +1,20 @@
 import { capitalize } from '#app/utils/string-formatting'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
-import { createContainerComponent } from './utils'
 
 // - place this inside a Sidebar component
-// - flex to full sidbar column height
-// - full width: w-full
-// - flex column layout: flex-col
-const TabbedSidebarContainer = createContainerComponent({
-	defaultTagName: 'div',
-	defaultClassName:
-		'absolute w-full flex h-full flex-col border-4 border-green-500',
-	displayName: 'TabbedSidebarContainer',
-})
 
-const TabbedSidebarTabs = ({
+const TabbedSidebar = ({
 	defaultValue,
 	children,
 }: {
 	defaultValue: string
 	children: React.ReactNode
 }) => {
-	const className = 'flex-1 flex flex-col overflow-hidden px-0'
+	// - absolute with overflow hidden to fit inside Sidebar
+	// - full width and height
+	// - flex column layout: flex-col
+	const className = 'absolute w-full h-full flex flex-col overflow-hidden px-0'
+
 	return (
 		<Tabs defaultValue={defaultValue} className={className}>
 			{children}
@@ -28,7 +22,7 @@ const TabbedSidebarTabs = ({
 	)
 }
 
-const TabbedSidebarTabsList = ({
+const TabbedSidebarList = ({
 	cols,
 	children,
 }: {
@@ -43,7 +37,7 @@ const TabbedSidebarTabsList = ({
 	return <TabsList className={className}>{children}</TabsList>
 }
 
-const TabbedSidebarTabsTrigger = ({ value }: { value: string }) => {
+const TabbedSidebarTrigger = ({ value }: { value: string }) => {
 	// keep muted bg when active
 	// only trigger text color will change
 	const className = 'data-[state=active]:bg-muted'
@@ -55,7 +49,7 @@ const TabbedSidebarTabsTrigger = ({ value }: { value: string }) => {
 	)
 }
 
-const TabbedSidebarTabsContent = ({
+const TabbedSidebarContent = ({
 	value,
 	children,
 }: {
@@ -74,9 +68,8 @@ const TabbedSidebarTabsContent = ({
 }
 
 export {
-	TabbedSidebarContainer,
-	TabbedSidebarTabs,
-	TabbedSidebarTabsList,
-	TabbedSidebarTabsTrigger,
-	TabbedSidebarTabsContent,
+	TabbedSidebar,
+	TabbedSidebarList,
+	TabbedSidebarTrigger,
+	TabbedSidebarContent,
 }

@@ -1,9 +1,8 @@
 import {
-	TabbedSidebarContainer,
-	TabbedSidebarTabs,
-	TabbedSidebarTabsContent,
-	TabbedSidebarTabsList,
-	TabbedSidebarTabsTrigger,
+	TabbedSidebar,
+	TabbedSidebarContent,
+	TabbedSidebarList,
+	TabbedSidebarTrigger,
 } from '../layout'
 
 const SidebarTabs = ({
@@ -18,18 +17,16 @@ const SidebarTabs = ({
 	const defaultTab = defaultValue || tabs[0]
 
 	return (
-		<TabbedSidebarContainer>
-			<TabbedSidebarTabs defaultValue={defaultTab}>
-				{/* tab triggers */}
-				<TabbedSidebarTabsList cols={tabs.length}>
-					{tabs.map(tab => (
-						<TabbedSidebarTabsTrigger key={tab} value={tab} />
-					))}
-				</TabbedSidebarTabsList>
-				{/* content */}
-				{children}
-			</TabbedSidebarTabs>
-		</TabbedSidebarContainer>
+		<TabbedSidebar defaultValue={defaultTab}>
+			{/* tab triggers */}
+			<TabbedSidebarList cols={tabs.length}>
+				{tabs.map(tab => (
+					<TabbedSidebarTrigger key={tab} value={tab} />
+				))}
+			</TabbedSidebarList>
+			{/* content */}
+			{children}
+		</TabbedSidebar>
 	)
 }
 
@@ -40,11 +37,7 @@ const SidebarTabsContent = ({
 	value: string
 	children: React.ReactNode
 }) => {
-	return (
-		<TabbedSidebarTabsContent value={value}>
-			{children}
-		</TabbedSidebarTabsContent>
-	)
+	return <TabbedSidebarContent value={value}>{children}</TabbedSidebarContent>
 }
 
 export { SidebarTabs, SidebarTabsContent }
