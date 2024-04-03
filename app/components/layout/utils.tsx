@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useId } from 'react'
 import { cn } from '#app/utils/misc'
-import { randomId } from '#app/utils/random.utils'
 
 // component factory
 //
@@ -37,17 +36,15 @@ const createContainerComponent = ({
 		className,
 		...props
 	}: ContainerComponentProps) => {
-		const ComponentId = id || `${displayName}-${randomId()}`
+		const fallbackId = useId()
+		const ComponentId = id || `${displayName}-${fallbackId}`
 		const TagName = props.tagName || defaultTagName
-		return React.createElement(
-			TagName,
-			{
-				id: ComponentId,
-				className: cn(defaultClassName, className),
-				...props,
-			},
-			children,
-		)
+		const ComponentProps = {
+			id: ComponentId,
+			className: cn(defaultClassName, className),
+			...props,
+		}
+		return React.createElement(TagName, ComponentProps, children)
 	}
 	Component.displayName = `ContainerComponent(${displayName})`
 	return Component
