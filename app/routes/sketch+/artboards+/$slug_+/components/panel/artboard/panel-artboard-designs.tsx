@@ -1,7 +1,7 @@
 import { type IDesignsByType } from '#app/models/design.server'
 import { designsByTypeToPanelArray } from '#app/utils/design'
 import { type PickedArtboardType } from '../../../queries'
-import { PanelArtboardDesignType } from './design/panel-artboard-design-type'
+import { PanelDesignType } from '../design/type/panel-design-type'
 import { PanelArtboardBackground } from './panel-artboard-background'
 import { PanelArtboardFrame } from './panel-artboard-frame'
 
@@ -20,7 +20,7 @@ export const PanelArtboardDesigns = ({
 			<PanelArtboardFrame artboard={artboard} />
 			<PanelArtboardBackground artboard={artboard} />
 			{designTypePanels.map(({ type, designs }) => (
-				<PanelArtboardDesignType
+				<PanelDesignType
 					key={type}
 					type={type}
 					artboardId={artboardId}

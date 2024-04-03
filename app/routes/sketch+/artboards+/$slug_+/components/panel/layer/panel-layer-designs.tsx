@@ -1,7 +1,7 @@
 import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { designsByTypeToPanelArray } from '#app/utils/design'
-import { PanelLayerDesignType } from './design/panel-layer-design-type'
+import { PanelDesignType } from '../design/type/panel-design-type'
 
 export const PanelLayerDesigns = ({
 	layerId,
@@ -15,7 +15,7 @@ export const PanelLayerDesigns = ({
 	return (
 		<div>
 			{designTypePanels.map(({ type, designs }) => (
-				<PanelLayerDesignType
+				<PanelDesignType
 					key={type}
 					type={type}
 					layerId={layerId}
