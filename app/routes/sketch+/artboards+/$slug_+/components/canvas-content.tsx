@@ -54,7 +54,7 @@ export const CanvasContent = ({
 		canvas: Canvas,
 	}
 	return (
-		<div className="absolute inset-0 flex p-4">
+		<div id="reactflow-wrapper" className="absolute inset-0">
 			<ReactFlow
 				nodes={nodes}
 				nodeTypes={nodeTypes}
