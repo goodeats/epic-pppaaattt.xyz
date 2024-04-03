@@ -3,8 +3,7 @@ import { getFieldsetConstraint } from '@conform-to/zod'
 import { type Artboard } from '@prisma/client'
 import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
-import { Button } from '#app/components/ui/button'
-import { Icon } from '#app/components/ui/icon'
+import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type ILayer } from '#app/models/layer.server'
 import { ToggleVisibleArtboardLayerSchema } from '#app/schema/layer-artboard'
 import { useIsPending } from '#app/utils/misc'
@@ -41,22 +40,13 @@ export const PanelFormArtboardLayerToggleVisible = ({
 				name="intent"
 				value={ARTBOARD_LAYER_INTENT.artboardToggleVisibleLayer}
 			/>
-			<Button
+
+			<PanelIconButton
 				type="submit"
-				variant="ghost"
-				className="flex h-8 w-8 cursor-pointer items-center justify-center"
+				iconName={visible ? 'eye-open' : 'eye-closed'}
+				iconText={visible ? 'Hide Design' : 'Show Design'}
 				disabled={isPending}
-			>
-				{visible ? (
-					<Icon name="eye-open">
-						<span className="sr-only">Hide</span>
-					</Icon>
-				) : (
-					<Icon name="eye-closed">
-						<span className="sr-only">Show</span>
-					</Icon>
-				)}
-			</Button>
+			/>
 		</fetcher.Form>
 	)
 }

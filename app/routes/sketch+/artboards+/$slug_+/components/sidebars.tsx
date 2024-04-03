@@ -4,7 +4,7 @@ import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
 import { PanelArtboardDesigns } from './panel/artboard/panel-artboard-designs'
-import { PanelContentArtboardLayers } from './panel/artboard/panel-content-artboard-layers'
+import { PanelArtboardLayers } from './panel/artboard/panel-artboard-layers'
 import { PanelLayerDesigns } from './panel/layer/panel-layer-designs'
 
 export const SidebarLeft = ({
@@ -18,7 +18,7 @@ export const SidebarLeft = ({
 		<Sidebar id="sidebar-left">
 			<SidebarTabs tabs={['display', 'assets']}>
 				<SidebarTabsContent value="display">
-					<PanelContentArtboardLayers artboard={artboard} layers={layers} />
+					<PanelArtboardLayers artboard={artboard} layers={layers} />
 				</SidebarTabsContent>
 				<SidebarTabsContent value="assets">
 					Add assets like images here

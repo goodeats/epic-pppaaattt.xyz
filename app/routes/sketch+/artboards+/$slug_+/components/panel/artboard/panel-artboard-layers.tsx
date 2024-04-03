@@ -16,7 +16,7 @@ import { PanelFormArtboardLayerReorder } from '../../forms/artboard/layer/panel-
 import { PanelFormArtboardLayerToggleVisible } from '../../forms/artboard/layer/panel-form-artboard-layer-toggle-visible'
 import { PanelPopoverLayer } from '../../popovers/layer/panel-popover-layer'
 
-export const PanelContentArtboardLayers = ({
+export const PanelArtboardLayers = ({
 	artboard,
 	layers,
 }: {
