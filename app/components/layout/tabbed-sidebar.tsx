@@ -9,7 +9,7 @@ import { createContainerComponent } from './utils'
 const TabbedSidebarContainer = createContainerComponent({
 	defaultTagName: 'div',
 	defaultClassName:
-		'absolute w-full flex flex-1 flex-col border-4 border-green-500 bg-secondary',
+		'absolute w-full flex h-full flex-col border-4 border-green-500 bg-secondary',
 	displayName: 'TabbedSidebarContainer',
 })
 
@@ -20,7 +20,7 @@ const TabbedSidebarTabs = ({
 	defaultValue: string
 	children: React.ReactNode
 }) => {
-	const className = 'flex-1 flex flex-col px-0'
+	const className = 'flex-1 flex flex-col overflow-hidden px-0'
 	return (
 		<Tabs defaultValue={defaultValue} className={className}>
 			{children}
@@ -38,7 +38,7 @@ const TabbedSidebarTabsList = ({
 	// - grid layout with columns based on the number of tabs
 	// - border bottom to separate from content
 	// - padding bottom to separate from content
-	const className = `grid grid-cols-${cols} border-b-2 pb-4`
+	const className = `flex-none grid grid-cols-${cols} border-b-2 pb-4`
 
 	return <TabsList className={className}>{children}</TabsList>
 }
@@ -62,17 +62,18 @@ const TabbedSidebarTabsContent = ({
 	children: React.ReactNode
 }) => {
 	const className =
-		'relative bg-violet-400 border-4 border-yellow-500 overflow-y-scroll flex-1'
+		'relative border-4 border-yellow-500 overflow-y-auto flex-auto'
 
-	const TabsContentWrapper = createContainerComponent({
-		defaultTagName: 'div',
-		defaultClassName: 'border-4 border-red-500',
-		displayName: 'TabsContentWrapper',
-	})
+	// const TabsContentWrapper = createContainerComponent({
+	// 	defaultTagName: 'div',
+	// 	defaultClassName: 'border-4 border-red-500',
+	// 	displayName: 'TabsContentWrapper',
+	// })
 
 	return (
 		<TabsContent value={value} className={className}>
-			<TabsContentWrapper>{children}</TabsContentWrapper>
+			{children}
+			{/* <TabsContentWrapper>{children}</TabsContentWrapper> */}
 		</TabsContent>
 	)
 }
