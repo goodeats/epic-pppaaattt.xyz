@@ -3,9 +3,9 @@ import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
 import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
-import { PanelContentArtboardDesigns } from './panel/artboard/panel-content-artboard-designs'
+import { PanelArtboardDesigns } from './panel/artboard/panel-artboard-designs'
 import { PanelContentArtboardLayers } from './panel/artboard/panel-content-artboard-layers'
-import { PanelContentLayerDesigns } from './panel/layer/panel-content-layer-designs'
+import { PanelLayerDesigns } from './panel/layer/panel-layer-designs'
 
 export const SidebarLeft = ({
 	artboard,
@@ -46,9 +46,9 @@ export const SidebarRight = ({
 			<SidebarTabs tabs={['designs', 'actions']}>
 				<SidebarTabsContent value="designs">
 					{layerPanel ? (
-						<PanelContentLayerDesigns layer={layer} designs={layerDesigns} />
+						<PanelLayerDesigns layer={layer} designs={layerDesigns} />
 					) : (
-						<PanelContentArtboardDesigns
+						<PanelArtboardDesigns
 							artboard={artboard}
 							designs={artboardDesigns}
 						/>

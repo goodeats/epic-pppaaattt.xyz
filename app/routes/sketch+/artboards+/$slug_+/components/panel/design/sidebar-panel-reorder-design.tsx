@@ -1,5 +1,6 @@
 import { SidebarPanelRowReorderContainer } from '#app/components/templates'
 import { type IDesignIdOrNull, type IDesign } from '#app/models/design.server'
+import { type ILayer } from '#app/models/layer.server'
 import { type ReorderDesignSchemaType } from '#app/schema/design'
 import { type IArtboard } from '#app/utils/db.server'
 import { type IntentDesignReorder } from '../../../intent'
@@ -8,6 +9,7 @@ import { PanelFormDesignReorder } from '../../forms/design/panel-form-design-reo
 export const SidebarPanelReorderDesign = ({
 	id,
 	artboardId,
+	layerId,
 	designCount,
 	panelIndex,
 	selectDesignIdOnMoveUp,
@@ -16,7 +18,8 @@ export const SidebarPanelReorderDesign = ({
 	schema,
 }: {
 	id: IDesign['id']
-	artboardId: IArtboard['id']
+	artboardId?: IArtboard['id']
+	layerId?: ILayer['id']
 	designCount: number
 	panelIndex: number
 	selectDesignIdOnMoveUp: IDesignIdOrNull
@@ -29,6 +32,7 @@ export const SidebarPanelReorderDesign = ({
 			<PanelFormDesignReorder
 				id={id}
 				artboardId={artboardId}
+				layerId={layerId}
 				panelCount={designCount}
 				panelIndex={panelIndex}
 				direction="up"
@@ -39,6 +43,7 @@ export const SidebarPanelReorderDesign = ({
 			<PanelFormDesignReorder
 				id={id}
 				artboardId={artboardId}
+				layerId={layerId}
 				panelCount={designCount}
 				panelIndex={panelIndex}
 				direction="down"

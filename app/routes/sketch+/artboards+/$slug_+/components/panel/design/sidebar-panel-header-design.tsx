@@ -15,6 +15,7 @@ import { PanelFormDesignNew } from '../../forms/design/panel-form-design-new'
 export const SidebarPanelHeaderDesign = ({
 	type,
 	artboardId,
+	layerId,
 	visibleDesignsCount,
 	intent,
 	schema,
@@ -32,6 +33,7 @@ export const SidebarPanelHeaderDesign = ({
 				<PanelFormDesignNew
 					type={type}
 					artboardId={artboardId}
+					layerId={layerId}
 					visibleDesignsCount={visibleDesignsCount}
 					intent={intent}
 					schema={schema}

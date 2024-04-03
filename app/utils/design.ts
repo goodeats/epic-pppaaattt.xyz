@@ -356,3 +356,34 @@ const findFirstDesignIdInArray = (
 	// Both values are found, return the one with the lower index
 	return index1 < index2 ? designId1 : designId2
 }
+
+export const designsByTypeToPanelArray = ({
+	designs,
+}: {
+	designs: IDesignsByType
+}): {
+	type: designTypeEnum
+	designs: IDesignWithType[]
+}[] => {
+	const {
+		designPalettes,
+		designSizes,
+		designFills,
+		designStrokes,
+		designLines,
+		designRotates,
+		designLayouts,
+		designTemplates,
+	} = designs
+
+	return [
+		{ type: DesignTypeEnum.LAYOUT, designs: designLayouts },
+		{ type: DesignTypeEnum.PALETTE, designs: designPalettes },
+		{ type: DesignTypeEnum.SIZE, designs: designSizes },
+		{ type: DesignTypeEnum.FILL, designs: designFills },
+		{ type: DesignTypeEnum.STROKE, designs: designStrokes },
+		{ type: DesignTypeEnum.LINE, designs: designLines },
+		{ type: DesignTypeEnum.ROTATE, designs: designRotates },
+		{ type: DesignTypeEnum.TEMPLATE, designs: designTemplates },
+	]
+}

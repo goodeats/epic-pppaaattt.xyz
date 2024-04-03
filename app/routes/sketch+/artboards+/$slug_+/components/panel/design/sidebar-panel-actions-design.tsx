@@ -1,5 +1,6 @@
 import { SidebarPanelRowActionsContainer } from '#app/components/templates'
 import { type IDesignIdOrNull, type IDesign } from '#app/models/design.server'
+import { type ILayer } from '#app/models/layer.server'
 import {
 	type ToggleVisibleDesignSchemaType,
 	type DeleteDesignSchemaType,
@@ -15,6 +16,7 @@ import { PanelFormDesignToggleVisible } from '../../forms/design/panel-form-desi
 export const SidebarPanelActionsDesign = ({
 	id,
 	artboardId,
+	layerId,
 	visible,
 	isSelectedDesign,
 	selectDesignIdOnToggleVisible,
@@ -25,7 +27,8 @@ export const SidebarPanelActionsDesign = ({
 	deleteSchema,
 }: {
 	id: IDesign['id']
-	artboardId: IArtboard['id']
+	artboardId?: IArtboard['id']
+	layerId?: ILayer['id']
 	visible: boolean
 	isSelectedDesign: boolean
 	selectDesignIdOnToggleVisible: IDesignIdOrNull
@@ -40,6 +43,7 @@ export const SidebarPanelActionsDesign = ({
 			<PanelFormDesignToggleVisible
 				id={id}
 				artboardId={artboardId}
+				layerId={layerId}
 				visible={visible}
 				updateSelectedDesignId={selectDesignIdOnToggleVisible}
 				intent={toggleVisibleIntent}
@@ -48,6 +52,7 @@ export const SidebarPanelActionsDesign = ({
 			<PanelFormDesignDelete
 				id={id}
 				artboardId={artboardId}
+				layerId={layerId}
 				isSelectedDesign={isSelectedDesign}
 				updateSelectedDesignId={selectDesignIdOnDelete}
 				intent={deleteIntent}
