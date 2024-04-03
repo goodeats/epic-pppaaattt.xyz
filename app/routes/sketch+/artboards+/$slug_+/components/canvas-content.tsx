@@ -6,6 +6,7 @@ import {
 	Controls,
 	MiniMap,
 	useNodesState,
+	BackgroundVariant,
 } from 'reactflow'
 import { type IArtboardBuild, type PickedArtboardType } from '../queries'
 import { canvasDrawService } from '../services/canvas/draw.service'
@@ -48,15 +49,21 @@ export const CanvasContent = ({
 		)
 	}
 
-	const [nodes] = useNodesState(initialNodes)
+	const [nodes, , onNodesChange] = useNodesState(initialNodes)
 	const nodeTypes = {
 		canvas: Canvas,
 	}
 	return (
 		<div className="absolute inset-0 flex p-4">
-			<ReactFlow nodes={nodes} nodeTypes={nodeTypes} fitView>
-				<Background />
-				<MiniMap />
+			<ReactFlow
+				nodes={nodes}
+				nodeTypes={nodeTypes}
+				onNodesChange={onNodesChange}
+				fitView
+				minZoom={0.01}
+			>
+				<Background variant={BackgroundVariant.Dots} />
+				<MiniMap pannable zoomable />
 				<Controls />
 			</ReactFlow>
 		</div>
