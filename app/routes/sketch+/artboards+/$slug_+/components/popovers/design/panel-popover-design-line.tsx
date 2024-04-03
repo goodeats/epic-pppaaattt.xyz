@@ -1,61 +1,35 @@
-import { Button } from '#app/components/ui/button'
-import { Icon } from '#app/components/ui/icon'
+import { SidebarPanelPopoverFormContainer } from '#app/components/templates'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '#app/components/ui/popover'
 import { type ILine } from '#app/models/line.server'
+import { DesignTypeEnum } from '#app/schema/design'
 import { PanelFormDesignLineEditBasis } from '../../forms/design/panel-form-design-line-edit-basis'
 import { PanelFormDesignLineEditFormat } from '../../forms/design/panel-form-design-line-edit-format'
+import { PanelPopover } from '../panel-popover'
 
 export const PanelPopoverDesignLine = ({ line }: { line: ILine }) => {
 	return (
-		<div>
-			<Popover>
-				<PopoverTrigger asChild>
-					<Button
-						variant="ghost"
-						size="sm"
-						className="m-2 mr-0 flex h-8 w-8 cursor-pointer items-center justify-center"
-					>
-						<Icon name="gear">
-							<span className="sr-only">Line Settings</span>
-						</Icon>
-					</Button>
-				</PopoverTrigger>
-				<PopoverContent className="w-80">
-					<div className="grid gap-4">
-						<div className="space-y-2">
-							<h4 className="font-medium leading-none">Line</h4>
-							<p className="text-sm text-muted-foreground">
-								Settings for this line.
-							</p>
-						</div>
-						<div className="grid gap-2">
-							<div className="grid grid-cols-3 items-center gap-4">
-								<Label htmlFor="width">Width</Label>
-								<Input
-									id="width"
-									defaultValue={line.width}
-									className="col-span-2 h-8"
-									disabled
-								/>
-							</div>
-							<div className="grid grid-cols-3 items-center gap-4">
-								<Label htmlFor="style">Format</Label>
-								<PanelFormDesignLineEditFormat line={line} />
-							</div>
-							<div className="grid grid-cols-3 items-center gap-4">
-								<Label htmlFor="style">Basis</Label>
-								<PanelFormDesignLineEditBasis line={line} />
-							</div>
-						</div>
-					</div>
-				</PopoverContent>
-			</Popover>
-		</div>
+		<PanelPopover name={DesignTypeEnum.LINE}>
+			{/* width */}
+			<SidebarPanelPopoverFormContainer>
+				<Label htmlFor="width">Width</Label>
+				<Input
+					id="width"
+					defaultValue={line.width}
+					className="col-span-2 h-8"
+					disabled
+				/>
+			</SidebarPanelPopoverFormContainer>
+			{/* format */}
+			<SidebarPanelPopoverFormContainer>
+				<Label htmlFor="style">Format</Label>
+				<PanelFormDesignLineEditFormat line={line} />
+			</SidebarPanelPopoverFormContainer>
+			{/* basis */}
+			<SidebarPanelPopoverFormContainer>
+				<Label htmlFor="style">Basis</Label>
+				<PanelFormDesignLineEditBasis line={line} />
+			</SidebarPanelPopoverFormContainer>
+		</PanelPopover>
 	)
 }
