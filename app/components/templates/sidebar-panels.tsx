@@ -7,6 +7,7 @@ import {
 	PanelRowValuesContainer,
 	PanelTitle,
 } from '../layout'
+import { Input } from '../ui/input'
 
 const SidebarPanel = ({ children }: { children: React.ReactNode }) => {
 	return <Panel>{children}</Panel>
@@ -63,6 +64,12 @@ const SidebarPanelRowValuesContainer = ({
 	return <PanelRowValuesContainer>{children}</PanelRowValuesContainer>
 }
 
+const SidebarPanelRowValuesDisabled = ({ value }: { value: string }) => {
+	return (
+		<Input type="text" className={'flex h-8'} disabled defaultValue={value} />
+	)
+}
+
 const SidebarPanelRowActionsContainer = ({
 	children,
 }: {
@@ -79,4 +86,5 @@ export {
 	SidebarPanelRowReorderContainer,
 	SidebarPanelRowValuesContainer,
 	SidebarPanelRowActionsContainer,
+	SidebarPanelRowValuesDisabled,
 }

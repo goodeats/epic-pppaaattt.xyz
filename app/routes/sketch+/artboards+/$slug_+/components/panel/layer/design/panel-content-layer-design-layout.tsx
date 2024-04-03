@@ -1,5 +1,4 @@
 import {
-	Panel,
 	PanelHeader,
 	PanelRow,
 	PanelRowContainer,
@@ -8,6 +7,7 @@ import {
 	PanelRowValueContainer,
 	PanelTitle,
 } from '#app/components/shared'
+import { SidebarPanel } from '#app/components/templates'
 import { Input } from '#app/components/ui/input'
 import { type IDesignWithLayout } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
@@ -42,7 +42,7 @@ export const PanelContentLayerDesignLayout = ({
 	})
 
 	return (
-		<Panel>
+		<SidebarPanel>
 			<PanelHeader>
 				<PanelTitle>Layout</PanelTitle>
 				<div className="flex flex-shrink">
@@ -137,6 +137,6 @@ export const PanelContentLayerDesignLayout = ({
 					</PanelRow>
 				)
 			})}
-		</Panel>
+		</SidebarPanel>
 	)
 }

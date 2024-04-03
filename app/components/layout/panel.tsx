@@ -70,6 +70,12 @@ const PanelRowValuesContainer = createContainerComponent({
 	displayName: 'PanelRowValuesContainer',
 })
 
+const PanelRowValuesDisabled = createContainerComponent({
+	defaultTagName: 'input',
+	defaultClassName: 'flex h-8',
+	displayName: 'PanelRowValuesDisabled',
+})
+
 // similar to a <nav> for the panel, but no page navigation is occurring so just div
 // flex shrink to not grow
 const PanelRowActionsContainer = createContainerComponent({
@@ -87,4 +93,5 @@ export {
 	PanelRowReorderContainer,
 	PanelRowValuesContainer,
 	PanelRowActionsContainer,
+	PanelRowValuesDisabled,
 }

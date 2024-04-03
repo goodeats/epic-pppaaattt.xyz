@@ -1,14 +1,13 @@
 import {
-	Panel,
-	PanelHeader,
-	PanelRow,
-	PanelRowContainer,
-	PanelRowIconContainer,
-	PanelRowOrderContainer,
-	PanelRowValueContainer,
-	PanelTitle,
-} from '#app/components/shared'
-import { Input } from '#app/components/ui/input'
+	SidebarPanel,
+	SidebarPanelHeader,
+	SidebarPanelRow,
+	SidebarPanelRowActionsContainer,
+	SidebarPanelRowContainer,
+	SidebarPanelRowReorderContainer,
+	SidebarPanelRowValuesContainer,
+	SidebarPanelRowValuesDisabled,
+} from '#app/components/templates'
 import { type IDesignWithLayout } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
@@ -16,6 +15,7 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
+import { capitalize } from '#app/utils/string-formatting'
 import { type PickedArtboardType } from '../../../../queries'
 import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
@@ -42,17 +42,16 @@ export const PanelContentArtboardDesignLayout = ({
 	})
 
 	return (
-		<Panel>
-			<PanelHeader>
-				<PanelTitle>Layout</PanelTitle>
-				<div className="flex flex-shrink">
+		<SidebarPanel>
+			<SidebarPanelHeader title={capitalize(DesignTypeEnum.LAYOUT)}>
+				<SidebarPanelRowActionsContainer>
 					<PanelFormArtboardDesignNew
 						artboardId={artboard.id}
 						type={DesignTypeEnum.LAYOUT}
 						visibleDesignsCount={visibleDesignIds.length}
 					/>
-				</div>
-			</PanelHeader>
+				</SidebarPanelRowActionsContainer>
+			</SidebarPanelHeader>
 			{designLayouts.map((design, index) => {
 				const { id, visible, layout } = design
 
@@ -86,8 +85,8 @@ export const PanelContentArtboardDesignLayout = ({
 				})
 
 				return (
-					<PanelRow key={layout.id}>
-						<PanelRowOrderContainer>
+					<SidebarPanelRow key={layout.id}>
+						<SidebarPanelRowReorderContainer>
 							<PanelFormArtboardDesignReorder
 								id={id}
 								artboardId={artboard.id}
@@ -104,22 +103,19 @@ export const PanelContentArtboardDesignLayout = ({
 								direction="down"
 								updateSelectedDesignId={selectDesignIdOnMoveDown}
 							/>
-						</PanelRowOrderContainer>
-						<PanelRowContainer>
-							<PanelRowValueContainer>
+						</SidebarPanelRowReorderContainer>
+						<SidebarPanelRowContainer>
+							<SidebarPanelRowValuesContainer>
 								<PanelPopoverDesignLayout layout={layout} />
 								{layout.style === 'random' ? (
 									<PanelFormDesignLayoutEditCount layout={layout} />
 								) : (
-									<Input
-										type="text"
-										className={'flex h-8'}
-										disabled
-										defaultValue={`${layout.rows} x ${layout.columns}`}
+									<SidebarPanelRowValuesDisabled
+										value={`${layout.rows} x ${layout.columns}`}
 									/>
 								)}
-							</PanelRowValueContainer>
-							<PanelRowIconContainer>
+							</SidebarPanelRowValuesContainer>
+							<SidebarPanelRowActionsContainer>
 								<PanelFormArtboardDesignToggleVisible
 									id={id}
 									artboardId={artboard.id}
@@ -132,11 +128,11 @@ export const PanelContentArtboardDesignLayout = ({
 									isSelectedDesign={false}
 									updateSelectedDesignId={selectDesignIdOnDelete}
 								/>
-							</PanelRowIconContainer>
-						</PanelRowContainer>
-					</PanelRow>
+							</SidebarPanelRowActionsContainer>
+						</SidebarPanelRowContainer>
+					</SidebarPanelRow>
 				)
 			})}
-		</Panel>
+		</SidebarPanel>
 	)
 }
