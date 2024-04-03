@@ -1,6 +1,8 @@
 import { colorInvertHexcode } from '#app/utils/colors'
+import { capitalize } from '#app/utils/string-formatting'
 import { createContainerComponent } from '../layout/utils'
 import { Button } from '../ui/button'
+import { Icon } from '../ui/icon'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 
 const SidebarPanelPopover = ({ children }: { children: React.ReactNode }) => {
@@ -8,10 +10,10 @@ const SidebarPanelPopover = ({ children }: { children: React.ReactNode }) => {
 }
 
 const SidebarPanelPopoverTrigger = ({
-	children,
+	iconText,
 	backgroundColor,
 }: {
-	children: React.ReactNode
+	iconText: React.ReactNode
 	backgroundColor?: string
 }) => {
 	// square button with icon
@@ -26,12 +28,12 @@ const SidebarPanelPopoverTrigger = ({
 		  }
 		: {}
 
-	console.log('style', style)
-
 	return (
 		<PopoverTrigger asChild>
 			<Button variant="ghost" size="sm" className={className} style={style}>
-				{children}
+				<Icon name="gear">
+					<span className="sr-only">{iconText}</span>
+				</Icon>
 			</Button>
 		</PopoverTrigger>
 	)
@@ -61,12 +63,15 @@ const SidebarPanelPopoverContent = ({
 }
 
 const SidebarPanelPopoverHeader = ({
-	title,
+	name,
 	description,
 }: {
-	title: string
-	description: string
+	name: string
+	description?: string
 }) => {
+	const popoverTitle = capitalize(name)
+	const popoverDescription = description || `Settings for this ${name}!`
+
 	const SidebarPanelPopoverTitle = createContainerComponent({
 		defaultTagName: 'h4',
 		defaultClassName: 'font-medium leading-none',
@@ -81,9 +86,9 @@ const SidebarPanelPopoverHeader = ({
 
 	return (
 		<div className="space-y-2">
-			<SidebarPanelPopoverTitle>{title}</SidebarPanelPopoverTitle>
+			<SidebarPanelPopoverTitle>{popoverTitle}</SidebarPanelPopoverTitle>
 			<SidebarPanelPopoverDescription>
-				{description}
+				{popoverDescription}
 			</SidebarPanelPopoverDescription>
 		</div>
 	)

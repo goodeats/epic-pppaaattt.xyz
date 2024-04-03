@@ -1,10 +1,7 @@
 import {
 	SidebarPanel,
-	SidebarPanelHeader,
 	SidebarPanelRow,
-	SidebarPanelRowActionsContainer,
 	SidebarPanelRowContainer,
-	SidebarPanelRowReorderContainer,
 	SidebarPanelRowValuesContainer,
 	SidebarPanelRowValuesDisabled,
 } from '#app/components/templates'
@@ -15,14 +12,12 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
-import { capitalize } from '#app/utils/string-formatting'
 import { type PickedArtboardType } from '../../../../queries'
-import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
-import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
-import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
 import { PanelFormDesignLayoutEditCount } from '../../../forms/design/panel-form-design-layout-edit-count'
 import { PanelPopoverDesignLayout } from '../../../popovers/design/panel-popover-design-layout'
+import { SidebarPanelActionsArtboardDesign } from './sidebar-panel-actions-artboard-design'
+import { SidebarPanelHeaderArtboardDesign } from './sidebar-panel-header-artboard-design'
+import { SidebarPanelReorderArtboardDesign } from './sidebar-panel-reorder-artboard-design'
 
 export const PanelContentArtboardDesignLayout = ({
 	artboard,
@@ -43,15 +38,12 @@ export const PanelContentArtboardDesignLayout = ({
 
 	return (
 		<SidebarPanel>
-			<SidebarPanelHeader title={capitalize(DesignTypeEnum.LAYOUT)}>
-				<SidebarPanelRowActionsContainer>
-					<PanelFormArtboardDesignNew
-						artboardId={artboard.id}
-						type={DesignTypeEnum.LAYOUT}
-						visibleDesignsCount={visibleDesignIds.length}
-					/>
-				</SidebarPanelRowActionsContainer>
-			</SidebarPanelHeader>
+			<SidebarPanelHeaderArtboardDesign
+				type={DesignTypeEnum.LAYOUT}
+				artboardId={artboard.id}
+				visibleDesignsCount={visibleDesignIds.length}
+			/>
+
 			{designLayouts.map((design, index) => {
 				const { id, visible, layout } = design
 
@@ -86,25 +78,16 @@ export const PanelContentArtboardDesignLayout = ({
 
 				return (
 					<SidebarPanelRow key={layout.id}>
-						<SidebarPanelRowReorderContainer>
-							<PanelFormArtboardDesignReorder
-								id={id}
-								artboardId={artboard.id}
-								panelCount={designCount}
-								panelIndex={index}
-								direction="up"
-								updateSelectedDesignId={selectDesignIdOnMoveUp}
-							/>
-							<PanelFormArtboardDesignReorder
-								id={id}
-								artboardId={artboard.id}
-								panelCount={designCount}
-								panelIndex={index}
-								direction="down"
-								updateSelectedDesignId={selectDesignIdOnMoveDown}
-							/>
-						</SidebarPanelRowReorderContainer>
+						<SidebarPanelReorderArtboardDesign
+							id={id}
+							artboardId={artboard.id}
+							designCount={designCount}
+							panelIndex={index}
+							selectDesignIdOnMoveUp={selectDesignIdOnMoveUp}
+							selectDesignIdOnMoveDown={selectDesignIdOnMoveDown}
+						/>
 						<SidebarPanelRowContainer>
+							{/* values */}
 							<SidebarPanelRowValuesContainer>
 								<PanelPopoverDesignLayout layout={layout} />
 								{layout.style === 'random' ? (
@@ -115,20 +98,15 @@ export const PanelContentArtboardDesignLayout = ({
 									/>
 								)}
 							</SidebarPanelRowValuesContainer>
-							<SidebarPanelRowActionsContainer>
-								<PanelFormArtboardDesignToggleVisible
-									id={id}
-									artboardId={artboard.id}
-									visible={visible}
-									updateSelectedDesignId={selectDesignIdOnToggleVisible}
-								/>
-								<PanelFormArtboardDesignDelete
-									id={id}
-									artboardId={artboard.id}
-									isSelectedDesign={false}
-									updateSelectedDesignId={selectDesignIdOnDelete}
-								/>
-							</SidebarPanelRowActionsContainer>
+							{/* actions */}
+							<SidebarPanelActionsArtboardDesign
+								id={id}
+								artboardId={artboard.id}
+								visible={visible}
+								isSelectedDesign={isSelectedDesign}
+								selectDesignIdOnToggleVisible={selectDesignIdOnToggleVisible}
+								selectDesignIdOnDelete={selectDesignIdOnDelete}
+							/>
 						</SidebarPanelRowContainer>
 					</SidebarPanelRow>
 				)
