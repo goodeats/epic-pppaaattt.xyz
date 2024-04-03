@@ -23,29 +23,6 @@ export const PanelLayerDesigns = ({
 					designs={designs}
 				/>
 			))}
-			{/* <PanelContentLayerDesignLayout
-				layer={layer}
-				designLayouts={designLayouts}
-			/>
-			<PanelContentLayerDesignPalette
-				layer={layer}
-				designPalettes={designPalettes}
-			/>
-			<PanelContentLayerDesignSize layer={layer} designSizes={designSizes} />
-			<PanelContentLayerDesignFill layer={layer} designFills={designFills} />
-			<PanelContentLayerDesignStroke
-				layer={layer}
-				designStrokes={designStrokes}
-			/>
-			<PanelContentLayerDesignLine layer={layer} designLines={designLines} />
-			<PanelContentLayerDesignRotate
-				layer={layer}
-				designRotates={designRotates}
-			/>
-			<PanelContentLayerDesignTemplate
-				layer={layer}
-				designTemplates={designTemplates}
-			/> */}
 		</div>
 	)
 }
