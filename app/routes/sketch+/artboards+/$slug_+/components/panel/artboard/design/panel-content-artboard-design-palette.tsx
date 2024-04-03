@@ -1,13 +1,12 @@
 import {
-	Panel,
-	PanelHeader,
-	PanelRow,
-	PanelRowContainer,
-	PanelRowIconContainer,
-	PanelRowOrderContainer,
-	PanelRowValueContainer,
-	PanelTitle,
-} from '#app/components/shared'
+	SidebarPanel,
+	SidebarPanelHeader,
+	SidebarPanelRow,
+	SidebarPanelRowActionsContainer,
+	SidebarPanelRowContainer,
+	SidebarPanelRowReorderContainer,
+	SidebarPanelRowValuesContainer,
+} from '#app/components/templates'
 import { type IDesignWithPalette } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
@@ -15,6 +14,7 @@ import {
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
+import { capitalize } from '#app/utils/string-formatting'
 import { type PickedArtboardType } from '../../../../queries'
 import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
 import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
@@ -41,17 +41,16 @@ export const PanelContentArtboardDesignPalette = ({
 	})
 
 	return (
-		<Panel>
-			<PanelHeader>
-				<PanelTitle>Palette</PanelTitle>
-				<div className="flex flex-shrink">
+		<SidebarPanel>
+			<SidebarPanelHeader title={capitalize(DesignTypeEnum.PALETTE)}>
+				<SidebarPanelRowActionsContainer>
 					<PanelFormArtboardDesignNew
 						artboardId={artboard.id}
 						type={DesignTypeEnum.PALETTE}
 						visibleDesignsCount={visibleDesignIds.length}
 					/>
-				</div>
-			</PanelHeader>
+				</SidebarPanelRowActionsContainer>
+			</SidebarPanelHeader>
 			{designPalettes.map((design, index) => {
 				const { id, visible, palette } = design
 
@@ -85,8 +84,8 @@ export const PanelContentArtboardDesignPalette = ({
 				})
 
 				return (
-					<PanelRow key={palette.id}>
-						<PanelRowOrderContainer>
+					<SidebarPanelRow key={palette.id}>
+						<SidebarPanelRowReorderContainer>
 							<PanelFormArtboardDesignReorder
 								id={id}
 								artboardId={artboard.id}
@@ -103,13 +102,13 @@ export const PanelContentArtboardDesignPalette = ({
 								direction="down"
 								updateSelectedDesignId={selectDesignIdOnMoveDown}
 							/>
-						</PanelRowOrderContainer>
-						<PanelRowContainer>
-							<PanelRowValueContainer>
+						</SidebarPanelRowReorderContainer>
+						<SidebarPanelRowContainer>
+							<SidebarPanelRowValuesContainer>
 								<PanelPopoverDesignPalette palette={palette} />
 								<PanelFormDesignPaletteEditValue palette={palette} />
-							</PanelRowValueContainer>
-							<PanelRowIconContainer>
+							</SidebarPanelRowValuesContainer>
+							<SidebarPanelRowActionsContainer>
 								<PanelFormArtboardDesignToggleVisible
 									id={id}
 									artboardId={artboard.id}
@@ -122,11 +121,11 @@ export const PanelContentArtboardDesignPalette = ({
 									isSelectedDesign={isSelectedDesign}
 									updateSelectedDesignId={selectDesignIdOnDelete}
 								/>
-							</PanelRowIconContainer>
-						</PanelRowContainer>
-					</PanelRow>
+							</SidebarPanelRowActionsContainer>
+						</SidebarPanelRowContainer>
+					</SidebarPanelRow>
 				)
 			})}
-		</Panel>
+		</SidebarPanel>
 	)
 }

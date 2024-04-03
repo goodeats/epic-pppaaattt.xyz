@@ -1,3 +1,4 @@
+import { colorInvertHexcode } from '#app/utils/colors'
 import { createContainerComponent } from '../layout/utils'
 import { Button } from '../ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
@@ -8,16 +9,28 @@ const SidebarPanelPopover = ({ children }: { children: React.ReactNode }) => {
 
 const SidebarPanelPopoverTrigger = ({
 	children,
+	backgroundColor,
 }: {
 	children: React.ReactNode
+	backgroundColor?: string
 }) => {
 	// square button with icon
 	const className =
 		'm-2 mr-0 flex h-8 w-8 cursor-pointer items-center justify-center'
 
+	// if backgroundColor is defined, set the background color and the text color inverted
+	const style = backgroundColor
+		? {
+				backgroundColor: `#${backgroundColor}`,
+				color: `#${colorInvertHexcode(backgroundColor)}`,
+		  }
+		: {}
+
+	console.log('style', style)
+
 	return (
 		<PopoverTrigger asChild>
-			<Button variant="ghost" size="sm" className={className}>
+			<Button variant="ghost" size="sm" className={className} style={style}>
 				{children}
 			</Button>
 		</PopoverTrigger>
