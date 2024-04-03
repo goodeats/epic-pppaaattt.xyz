@@ -16,8 +16,8 @@ export const SidebarLeft = ({
 }) => {
 	return (
 		<Sidebar id="sidebar-left">
-			<SidebarTabs tabs={['layers', 'assets']}>
-				<SidebarTabsContent value="layers">
+			<SidebarTabs tabs={['display', 'assets']}>
+				<SidebarTabsContent value="display">
 					<PanelContentArtboardLayers artboard={artboard} layers={layers} />
 				</SidebarTabsContent>
 				<SidebarTabsContent value="assets">

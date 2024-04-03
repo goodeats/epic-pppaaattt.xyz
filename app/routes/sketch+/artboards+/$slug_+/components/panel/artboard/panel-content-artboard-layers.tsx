@@ -1,14 +1,13 @@
 import { useSearchParams } from '@remix-run/react'
 import {
-	Panel,
-	PanelHeader,
-	PanelRow,
-	PanelRowContainer,
-	PanelRowIconContainer,
-	PanelRowOrderContainer,
-	PanelRowValueContainer,
-	PanelTitle,
-} from '#app/components/shared'
+	SidebarPanel,
+	SidebarPanelRowActionsContainer,
+	SidebarPanelHeader,
+	SidebarPanelRow,
+	SidebarPanelRowReorderContainer,
+	SidebarPanelRowContainer,
+	SidebarPanelRowValuesContainer,
+} from '#app/components/templates'
 import { Icon } from '#app/components/ui/icon'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../../../queries'
@@ -27,37 +26,39 @@ export const PanelContentArtboardLayers = ({
 	const [searchParams, setSearchParams] = useSearchParams()
 	const layerSearchParams = searchParams.get('layerId')
 
-	const orderedLayers = layers.reduce((acc: ILayer[], layer) => {
-		if (!layer.prevId) {
-			acc.unshift(layer) // Add the head of the list to the start
-		} else {
-			let currentDesignIndex = acc.findIndex(d => d.id === layer.prevId)
-			if (currentDesignIndex !== -1) {
-				// Insert the layer right after its predecessor
-				acc.splice(currentDesignIndex + 1, 0, layer)
-			} else {
-				// If predecessor is not found, add it to the end as a fallback
-				acc.push(layer)
-			}
-		}
-		return acc
-	}, [])
-
 	const layerCount = layers.length
 	return (
-		<Panel>
-			<PanelHeader>
-				<PanelTitle>Layers</PanelTitle>
-				<div className="flex flex-shrink">
+		<SidebarPanel>
+			<SidebarPanelHeader title="Layers">
+				<SidebarPanelRowActionsContainer>
 					<PanelFormArtboardLayerNew artboardId={artboard.id} />
-				</div>
-			</PanelHeader>
-			{orderedLayers.map((layer, index) => {
+				</SidebarPanelRowActionsContainer>
+			</SidebarPanelHeader>
+			{layers.map((layer, index) => {
 				const { id, visible } = layer
 				const isSearchedLayer = layerSearchParams === layer.id
 
+				const PanelSelect = () => {
+					return (
+						<div
+							className="flex cursor-pointer"
+							onClick={e => {
+								const params = new URLSearchParams()
+								isSearchedLayer
+									? params.delete('layerId')
+									: params.set('layerId', layer.id)
+								setSearchParams(params, {
+									preventScrollReset: true,
+								})
+							}}
+						>
+							{layer.name}
+						</div>
+					)
+				}
+
 				return (
-					<PanelRow
+					<SidebarPanelRow
 						key={layer.id}
 						className={
 							isSearchedLayer
@@ -65,7 +66,7 @@ export const PanelContentArtboardLayers = ({
 								: 'hover:bg-secondary focus:bg-secondary'
 						}
 					>
-						<PanelRowOrderContainer>
+						<SidebarPanelRowReorderContainer>
 							<PanelFormArtboardLayerReorder
 								id={id}
 								artboardId={artboard.id}
@@ -80,26 +81,13 @@ export const PanelContentArtboardLayers = ({
 								panelIndex={index}
 								direction="down"
 							/>
-						</PanelRowOrderContainer>
-						<PanelRowContainer>
-							<PanelRowValueContainer>
+						</SidebarPanelRowReorderContainer>
+						<SidebarPanelRowContainer>
+							<SidebarPanelRowValuesContainer>
 								<PanelPopoverLayer artboardId={artboard.id} layer={layer} />
-								<div
-									className="flex cursor-pointer"
-									onClick={e => {
-										const params = new URLSearchParams()
-										isSearchedLayer
-											? params.delete('layerId')
-											: params.set('layerId', layer.id)
-										setSearchParams(params, {
-											preventScrollReset: true,
-										})
-									}}
-								>
-									{layer.name}
-								</div>
-							</PanelRowValueContainer>
-							<PanelRowIconContainer>
+								<PanelSelect />
+							</SidebarPanelRowValuesContainer>
+							<SidebarPanelRowActionsContainer>
 								{isSearchedLayer && (
 									<Icon name="check">
 										<span className="sr-only">Selected</span>
@@ -110,17 +98,12 @@ export const PanelContentArtboardLayers = ({
 									artboardId={artboard.id}
 									visible={visible}
 								/>
-								{/* want to hide it from accidentally being clicked */}
-								{/* so it is in the popover */}
-								{/* <PanelFormArtboardLayerDelete
-									id={id}
-									artboardId={artboard.id}
-								/> */}
-							</PanelRowIconContainer>
-						</PanelRowContainer>
-					</PanelRow>
+								{/* delete form is in popover */}
+							</SidebarPanelRowActionsContainer>
+						</SidebarPanelRowContainer>
+					</SidebarPanelRow>
 				)
 			})}
-		</Panel>
+		</SidebarPanel>
 	)
 }
