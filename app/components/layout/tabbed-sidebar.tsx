@@ -9,7 +9,7 @@ import { createContainerComponent } from './utils'
 const TabbedSidebarContainer = createContainerComponent({
 	defaultTagName: 'div',
 	defaultClassName:
-		'absolute w-full flex h-full flex-col border-4 border-green-500 bg-secondary',
+		'absolute w-full flex h-full flex-col border-4 border-green-500',
 	displayName: 'TabbedSidebarContainer',
 })
 
@@ -35,16 +35,17 @@ const TabbedSidebarTabsList = ({
 	cols: number
 	children: React.ReactNode
 }) => {
+	// - flex none to not grow
 	// - grid layout with columns based on the number of tabs
 	// - border bottom to separate from content
-	// - padding bottom to separate from content
-	const className = `flex-none grid grid-cols-${cols} border-b-2 pb-4`
+	const className = `flex-none grid grid-cols-${cols} border-b-2`
 
 	return <TabsList className={className}>{children}</TabsList>
 }
 
 const TabbedSidebarTabsTrigger = ({ value }: { value: string }) => {
-	// muted when active
+	// keep muted bg when active
+	// only trigger text color will change
 	const className = 'data-[state=active]:bg-muted'
 
 	return (
@@ -61,19 +62,13 @@ const TabbedSidebarTabsContent = ({
 	value: string
 	children: React.ReactNode
 }) => {
-	const className =
-		'relative border-4 border-yellow-500 overflow-y-auto flex-auto'
-
-	// const TabsContentWrapper = createContainerComponent({
-	// 	defaultTagName: 'div',
-	// 	defaultClassName: 'border-4 border-red-500',
-	// 	displayName: 'TabsContentWrapper',
-	// })
+	// flex full remaining height
+	// overflow-y scroll
+	const className = 'border-4 border-yellow-500 overflow-y-scroll flex-1 mb-4'
 
 	return (
 		<TabsContent value={value} className={className}>
 			{children}
-			{/* <TabsContentWrapper>{children}</TabsContentWrapper> */}
 		</TabsContent>
 	)
 }
