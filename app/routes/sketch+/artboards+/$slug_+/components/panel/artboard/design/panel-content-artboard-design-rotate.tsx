@@ -1,14 +1,10 @@
 import {
-	Panel,
-	PanelHeader,
-	PanelRow,
-	PanelRowContainer,
-	PanelRowIconContainer,
-	PanelRowOrderContainer,
-	PanelRowValueContainer,
-	PanelTitle,
-} from '#app/components/shared'
-import { Input } from '#app/components/ui/input'
+	SidebarPanel,
+	SidebarPanelRow,
+	SidebarPanelRowContainer,
+	SidebarPanelRowValuesContainer,
+	SidebarPanelRowValuesDisabled,
+} from '#app/components/templates'
 import { type IDesignWithRotate } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
@@ -17,12 +13,11 @@ import {
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
 import { type PickedArtboardType } from '../../../../queries'
-import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
-import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
-import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
 import { PanelFormDesignRotateEditValue } from '../../../forms/design/panel-form-design-rotate-edit-value'
 import { PanelPopoverDesignRotate } from '../../../popovers/design/panel-popover-design-rotate'
+import { SidebarPanelActionsArtboardDesign } from './sidebar-panel-actions-artboard-design'
+import { SidebarPanelHeaderArtboardDesign } from './sidebar-panel-header-artboard-design'
+import { SidebarPanelReorderArtboardDesign } from './sidebar-panel-reorder-artboard-design'
 
 export const PanelContentArtboardDesignRotate = ({
 	artboard,
@@ -42,17 +37,13 @@ export const PanelContentArtboardDesignRotate = ({
 	})
 
 	return (
-		<Panel>
-			<PanelHeader>
-				<PanelTitle>Rotate</PanelTitle>
-				<div className="flex flex-shrink">
-					<PanelFormArtboardDesignNew
-						artboardId={artboard.id}
-						type={DesignTypeEnum.ROTATE}
-						visibleDesignsCount={visibleDesignIds.length}
-					/>
-				</div>
-			</PanelHeader>
+		<SidebarPanel>
+			<SidebarPanelHeaderArtboardDesign
+				type={DesignTypeEnum.ROTATE}
+				artboardId={artboard.id}
+				visibleDesignsCount={visibleDesignIds.length}
+			/>
+
 			{designRotates.map((design, index) => {
 				const { id, visible, rotate } = design
 
@@ -86,57 +77,38 @@ export const PanelContentArtboardDesignRotate = ({
 				})
 
 				return (
-					<PanelRow key={rotate.id}>
-						<PanelRowOrderContainer>
-							<PanelFormArtboardDesignReorder
-								id={id}
-								artboardId={artboard.id}
-								panelCount={designCount}
-								panelIndex={index}
-								direction="up"
-								updateSelectedDesignId={selectDesignIdOnMoveUp}
-							/>
-							<PanelFormArtboardDesignReorder
-								id={id}
-								artboardId={artboard.id}
-								panelCount={designCount}
-								panelIndex={index}
-								direction="down"
-								updateSelectedDesignId={selectDesignIdOnMoveDown}
-							/>
-						</PanelRowOrderContainer>
-						<PanelRowContainer>
-							<PanelRowValueContainer>
+					<SidebarPanelRow key={rotate.id}>
+						<SidebarPanelReorderArtboardDesign
+							id={id}
+							artboardId={artboard.id}
+							designCount={designCount}
+							panelIndex={index}
+							selectDesignIdOnMoveUp={selectDesignIdOnMoveUp}
+							selectDesignIdOnMoveDown={selectDesignIdOnMoveDown}
+						/>
+						<SidebarPanelRowContainer>
+							{/* values */}
+							<SidebarPanelRowValuesContainer>
 								<PanelPopoverDesignRotate rotate={rotate} />
 								{rotate.basis !== 'defined' ? (
-									<Input
-										type="text"
-										className={'flex h-8'}
-										disabled
-										defaultValue={rotate.basis}
-									/>
+									<SidebarPanelRowValuesDisabled value={rotate.basis} />
 								) : (
 									<PanelFormDesignRotateEditValue rotate={rotate} />
 								)}
-							</PanelRowValueContainer>
-							<PanelRowIconContainer>
-								<PanelFormArtboardDesignToggleVisible
-									id={id}
-									artboardId={artboard.id}
-									visible={visible}
-									updateSelectedDesignId={selectDesignIdOnToggleVisible}
-								/>
-								<PanelFormArtboardDesignDelete
-									id={id}
-									artboardId={artboard.id}
-									isSelectedDesign={false}
-									updateSelectedDesignId={selectDesignIdOnDelete}
-								/>
-							</PanelRowIconContainer>
-						</PanelRowContainer>
-					</PanelRow>
+							</SidebarPanelRowValuesContainer>
+							{/* actions */}
+							<SidebarPanelActionsArtboardDesign
+								id={id}
+								artboardId={artboard.id}
+								visible={visible}
+								isSelectedDesign={isSelectedDesign}
+								selectDesignIdOnToggleVisible={selectDesignIdOnToggleVisible}
+								selectDesignIdOnDelete={selectDesignIdOnDelete}
+							/>
+						</SidebarPanelRowContainer>
+					</SidebarPanelRow>
 				)
 			})}
-		</Panel>
+		</SidebarPanel>
 	)
 }
