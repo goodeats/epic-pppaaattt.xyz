@@ -2,27 +2,39 @@ import {
 	SidebarPanelHeader,
 	SidebarPanelRowActionsContainer,
 } from '#app/components/templates'
-import { type designTypeEnum } from '#app/schema/design'
+import { type ILayer } from '#app/models/layer.server'
+import {
+	type NewDesignSchemaType,
+	type designTypeEnum,
+} from '#app/schema/design'
 import { type IArtboard } from '#app/utils/db.server'
 import { capitalize } from '#app/utils/string-formatting'
-import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
+import { type IntentDesignCreate } from '../../../intent'
+import { PanelFormDesignNew } from '../../forms/design/panel-form-design-new'
 
-export const SidebarPanelHeaderArtboardDesign = ({
+export const SidebarPanelHeaderDesign = ({
 	type,
 	artboardId,
 	visibleDesignsCount,
+	intent,
+	schema,
 }: {
 	type: designTypeEnum
-	artboardId: IArtboard['id']
+	artboardId?: IArtboard['id']
+	layerId?: ILayer['id']
 	visibleDesignsCount: number
+	intent: IntentDesignCreate
+	schema: NewDesignSchemaType
 }) => {
 	return (
 		<SidebarPanelHeader title={capitalize(type)}>
 			<SidebarPanelRowActionsContainer>
-				<PanelFormArtboardDesignNew
-					artboardId={artboardId}
+				<PanelFormDesignNew
 					type={type}
+					artboardId={artboardId}
 					visibleDesignsCount={visibleDesignsCount}
+					intent={intent}
+					schema={schema}
 				/>
 			</SidebarPanelRowActionsContainer>
 		</SidebarPanelHeader>

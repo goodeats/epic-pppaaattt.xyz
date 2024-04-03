@@ -8,16 +8,23 @@ import {
 import { type IDesignWithRotate } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
+	DeleteArtboardDesignSchema,
+	NewArtboardDesignSchema,
+	ReorderArtboardDesignSchema,
+	ToggleVisibleArtboardDesignSchema,
+} from '#app/schema/design-artboard'
+import {
 	panelItemVariablesDesignType,
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
+import { ARTBOARD_DESIGN_INTENT } from '../../../../intent'
 import { type PickedArtboardType } from '../../../../queries'
 import { PanelFormDesignRotateEditValue } from '../../../forms/design/panel-form-design-rotate-edit-value'
 import { PanelPopoverDesignRotate } from '../../../popovers/design/panel-popover-design-rotate'
-import { SidebarPanelActionsArtboardDesign } from './sidebar-panel-actions-artboard-design'
-import { SidebarPanelHeaderArtboardDesign } from './sidebar-panel-header-artboard-design'
-import { SidebarPanelReorderArtboardDesign } from './sidebar-panel-reorder-artboard-design'
+import { SidebarPanelActionsDesign } from '../../design/sidebar-panel-actions-design'
+import { SidebarPanelHeaderDesign } from '../../design/sidebar-panel-header-design'
+import { SidebarPanelReorderDesign } from '../../design/sidebar-panel-reorder-design'
 
 export const PanelContentArtboardDesignRotate = ({
 	artboard,
@@ -38,10 +45,12 @@ export const PanelContentArtboardDesignRotate = ({
 
 	return (
 		<SidebarPanel>
-			<SidebarPanelHeaderArtboardDesign
+			<SidebarPanelHeaderDesign
 				type={DesignTypeEnum.ROTATE}
 				artboardId={artboard.id}
 				visibleDesignsCount={visibleDesignIds.length}
+				intent={ARTBOARD_DESIGN_INTENT.artboardCreateDesign}
+				schema={NewArtboardDesignSchema}
 			/>
 
 			{designRotates.map((design, index) => {
@@ -78,13 +87,15 @@ export const PanelContentArtboardDesignRotate = ({
 
 				return (
 					<SidebarPanelRow key={rotate.id}>
-						<SidebarPanelReorderArtboardDesign
+						<SidebarPanelReorderDesign
 							id={id}
 							artboardId={artboard.id}
 							designCount={designCount}
 							panelIndex={index}
 							selectDesignIdOnMoveUp={selectDesignIdOnMoveUp}
 							selectDesignIdOnMoveDown={selectDesignIdOnMoveDown}
+							intent={ARTBOARD_DESIGN_INTENT.artboardReorderDesign}
+							schema={ReorderArtboardDesignSchema}
 						/>
 						<SidebarPanelRowContainer>
 							{/* values */}
@@ -97,13 +108,19 @@ export const PanelContentArtboardDesignRotate = ({
 								)}
 							</SidebarPanelRowValuesContainer>
 							{/* actions */}
-							<SidebarPanelActionsArtboardDesign
+							<SidebarPanelActionsDesign
 								id={id}
 								artboardId={artboard.id}
 								visible={visible}
 								isSelectedDesign={isSelectedDesign}
 								selectDesignIdOnToggleVisible={selectDesignIdOnToggleVisible}
 								selectDesignIdOnDelete={selectDesignIdOnDelete}
+								toggleVisibleIntent={
+									ARTBOARD_DESIGN_INTENT.artboardToggleVisibleDesign
+								}
+								toggleVisibleSchema={ToggleVisibleArtboardDesignSchema}
+								deleteIntent={ARTBOARD_DESIGN_INTENT.artboardDeleteDesign}
+								deleteSchema={DeleteArtboardDesignSchema}
 							/>
 						</SidebarPanelRowContainer>
 					</SidebarPanelRow>

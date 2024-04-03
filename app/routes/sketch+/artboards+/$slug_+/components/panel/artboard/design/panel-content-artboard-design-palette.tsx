@@ -7,16 +7,23 @@ import {
 import { type IDesignWithPalette } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
+	DeleteArtboardDesignSchema,
+	NewArtboardDesignSchema,
+	ReorderArtboardDesignSchema,
+	ToggleVisibleArtboardDesignSchema,
+} from '#app/schema/design-artboard'
+import {
 	panelItemVariablesDesignType,
 	panelListVariablesDesignType,
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
+import { ARTBOARD_DESIGN_INTENT } from '../../../../intent'
 import { type PickedArtboardType } from '../../../../queries'
 import { PanelFormDesignPaletteEditValue } from '../../../forms/design/panel-form-design-palette-edit-value'
 import { PanelPopoverDesignPalette } from '../../../popovers/design/panel-popover-design-palette'
-import { SidebarPanelActionsArtboardDesign } from './sidebar-panel-actions-artboard-design'
-import { SidebarPanelHeaderArtboardDesign } from './sidebar-panel-header-artboard-design'
-import { SidebarPanelReorderArtboardDesign } from './sidebar-panel-reorder-artboard-design'
+import { SidebarPanelActionsDesign } from '../../design/sidebar-panel-actions-design'
+import { SidebarPanelHeaderDesign } from '../../design/sidebar-panel-header-design'
+import { SidebarPanelReorderDesign } from '../../design/sidebar-panel-reorder-design'
 
 export const PanelContentArtboardDesignPalette = ({
 	artboard,
@@ -37,10 +44,12 @@ export const PanelContentArtboardDesignPalette = ({
 
 	return (
 		<SidebarPanel>
-			<SidebarPanelHeaderArtboardDesign
+			<SidebarPanelHeaderDesign
 				type={DesignTypeEnum.PALETTE}
 				artboardId={artboard.id}
 				visibleDesignsCount={visibleDesignIds.length}
+				intent={ARTBOARD_DESIGN_INTENT.artboardCreateDesign}
+				schema={NewArtboardDesignSchema}
 			/>
 
 			{designPalettes.map((design, index) => {
@@ -77,13 +86,15 @@ export const PanelContentArtboardDesignPalette = ({
 
 				return (
 					<SidebarPanelRow key={palette.id}>
-						<SidebarPanelReorderArtboardDesign
+						<SidebarPanelReorderDesign
 							id={id}
 							artboardId={artboard.id}
 							designCount={designCount}
 							panelIndex={index}
 							selectDesignIdOnMoveUp={selectDesignIdOnMoveUp}
 							selectDesignIdOnMoveDown={selectDesignIdOnMoveDown}
+							intent={ARTBOARD_DESIGN_INTENT.artboardReorderDesign}
+							schema={ReorderArtboardDesignSchema}
 						/>
 						<SidebarPanelRowContainer>
 							{/* values */}
@@ -92,13 +103,19 @@ export const PanelContentArtboardDesignPalette = ({
 								<PanelFormDesignPaletteEditValue palette={palette} />
 							</SidebarPanelRowValuesContainer>
 							{/* actions */}
-							<SidebarPanelActionsArtboardDesign
+							<SidebarPanelActionsDesign
 								id={id}
 								artboardId={artboard.id}
 								visible={visible}
 								isSelectedDesign={isSelectedDesign}
 								selectDesignIdOnToggleVisible={selectDesignIdOnToggleVisible}
 								selectDesignIdOnDelete={selectDesignIdOnDelete}
+								toggleVisibleIntent={
+									ARTBOARD_DESIGN_INTENT.artboardToggleVisibleDesign
+								}
+								toggleVisibleSchema={ToggleVisibleArtboardDesignSchema}
+								deleteIntent={ARTBOARD_DESIGN_INTENT.artboardDeleteDesign}
+								deleteSchema={DeleteArtboardDesignSchema}
 							/>
 						</SidebarPanelRowContainer>
 					</SidebarPanelRow>
