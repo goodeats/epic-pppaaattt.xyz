@@ -219,25 +219,21 @@ const AppBody = () => {
 	const matches = useMatches()
 	const isSketchDashboard = matches.some(m => m.id.includes('sketch'))
 
-	if (isSketchDashboard) {
-		return (
-			<div className="flex h-screen flex-col justify-between">
-				<div className="flex-1">
-					<Outlet />
-				</div>
-			</div>
-		)
-	}
-
 	return (
 		<div className="flex h-screen flex-col justify-between">
-			{isProduction ? <PageHeader /> : <PageHeaderDev />}
+			{!isSketchDashboard ? (
+				isProduction ? (
+					<PageHeader />
+				) : (
+					<PageHeaderDev />
+				)
+			) : null}
 
 			<div className="flex-1">
 				<Outlet />
 			</div>
 
-			<PageFooter />
+			{!isSketchDashboard ? <PageFooter /> : null}
 		</div>
 	)
 }
