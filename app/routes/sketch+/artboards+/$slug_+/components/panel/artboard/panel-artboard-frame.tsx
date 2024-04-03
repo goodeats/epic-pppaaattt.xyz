@@ -1,28 +1,28 @@
 import {
-	Panel,
-	PanelRow,
-	PanelRowContainer,
-	PanelTitle,
-} from '#app/components/shared'
+	SidebarPanel,
+	SidebarPanelHeader,
+	SidebarPanelRow,
+	SidebarPanelRowContainer,
+} from '#app/components/templates'
 import { type PickedArtboardType } from '../../../queries'
 import { PanelFormArtboardEditHeight } from '../../forms/artboard/panel-form-artboard-edit-height'
 import { PanelFormArtboardEditWidth } from '../../forms/artboard/panel-form-artboard-edit-width'
 
-export const PanelContentArtboardFrame = ({
+export const PanelArtboardFrame = ({
 	artboard,
 }: {
 	artboard: PickedArtboardType
 }) => {
 	return (
-		<Panel>
-			<PanelTitle>Frame</PanelTitle>
-			<PanelRow>
-				<PanelRowContainer>
+		<SidebarPanel>
+			<SidebarPanelHeader title="Frame" />
+			<SidebarPanelRow>
+				<SidebarPanelRowContainer>
 					{/* 2 cols */}
 					<PanelFormArtboardEditWidth artboard={artboard} />
 					<PanelFormArtboardEditHeight artboard={artboard} />
-				</PanelRowContainer>
-			</PanelRow>
-		</Panel>
+				</SidebarPanelRowContainer>
+			</SidebarPanelRow>
+		</SidebarPanel>
 	)
 }

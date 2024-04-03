@@ -18,7 +18,7 @@ const SidebarPanelHeader = ({
 	children,
 }: {
 	title: string
-	children: React.ReactNode
+	children?: React.ReactNode
 }) => {
 	return (
 		<SidebarPanelRow>
