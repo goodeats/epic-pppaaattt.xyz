@@ -2,7 +2,7 @@ import { useForm } from '@conform-to/react'
 import { getFieldsetConstraint } from '@conform-to/zod'
 import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
-import { SidebarPanelButton } from '#app/components/templates/sidebar-panel-forms'
+import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type ILayer } from '#app/models/layer.server'
 import {
 	type NewDesignSchemaType,
@@ -55,7 +55,7 @@ export const PanelFormDesignNew = ({
 			/>
 			<input type="hidden" name="intent" value={intent} />
 
-			<SidebarPanelButton
+			<PanelIconButton
 				type="submit"
 				iconName="plus"
 				iconText="Add New Design"

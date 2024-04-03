@@ -3,8 +3,7 @@ import { getFieldsetConstraint } from '@conform-to/zod'
 import { type Artboard } from '@prisma/client'
 import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
-import { Button } from '#app/components/ui/button'
-import { Icon } from '#app/components/ui/icon'
+import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type ILayer } from '#app/models/layer.server'
 import { ReorderArtboardLayerSchema } from '#app/schema/layer-artboard'
 import { useIsPending } from '#app/utils/misc'
@@ -49,16 +48,13 @@ export const PanelFormArtboardLayerReorder = ({
 				name="intent"
 				value={ARTBOARD_LAYER_INTENT.artboardReorderLayer}
 			/>
-			<Button
+
+			<PanelIconButton
 				type="submit"
-				variant="ghost"
-				className="flex h-4 w-4 cursor-pointer items-center justify-center"
+				iconName={`chevron-${direction}`}
+				iconText={`Move ${direction}`}
 				disabled={isPending || atTop || atBottom}
-			>
-				<Icon name={`chevron-${direction}`}>
-					<span className="sr-only">Move {direction}</span>
-				</Icon>
-			</Button>
+			/>
 		</fetcher.Form>
 	)
 }

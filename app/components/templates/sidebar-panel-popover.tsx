@@ -1,7 +1,7 @@
 import { capitalize } from '#app/utils/string-formatting'
 import { createContainerComponent } from '../layout/utils'
+import { PanelIconButton } from '../ui/panel-icon-button'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { SidebarPanelButton } from './sidebar-panel-forms'
 
 const SidebarPanelPopover = ({ children }: { children: React.ReactNode }) => {
 	return <Popover>{children}</Popover>
@@ -16,10 +16,9 @@ const SidebarPanelPopoverTrigger = ({
 }) => {
 	return (
 		<PopoverTrigger asChild>
-			<SidebarPanelButton
+			<PanelIconButton
 				iconName="gear"
 				iconText={iconText}
-				disabled={false}
 				backgroundColor={backgroundColor}
 			/>
 		</PopoverTrigger>

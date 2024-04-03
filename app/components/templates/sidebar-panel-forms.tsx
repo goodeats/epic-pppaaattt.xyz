@@ -6,13 +6,13 @@ const SidebarPanelButton = ({
 	iconName,
 	iconText,
 	type = 'button',
-	disabled,
+	disabled = false,
 	backgroundColor,
 }: {
 	iconName: IconName
 	iconText: string
 	type?: 'button' | 'submit' | 'reset'
-	disabled: boolean
+	disabled?: boolean
 	backgroundColor?: string
 }) => {
 	const className = 'm-2 mr-0 flex cursor-pointer items-center justify-center'
@@ -41,4 +41,18 @@ const SidebarPanelButton = ({
 	)
 }
 
-export { SidebarPanelButton }
+const SidebarPanelButtonIcon = ({
+	iconName,
+	iconText,
+}: {
+	iconName: IconName
+	iconText: string
+}) => {
+	return (
+		<Icon name={iconName}>
+			<span className="sr-only">{iconText}</span>
+		</Icon>
+	)
+}
+
+export { SidebarPanelButton, SidebarPanelButtonIcon }
