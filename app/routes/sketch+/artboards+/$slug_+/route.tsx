@@ -2,13 +2,12 @@ import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData, type MetaFunction } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
-import { Sidebar } from '#app/components/layout'
 import { SketchBody, SketchBodyContent } from '#app/components/shared'
 import { requireUserId } from '#app/utils/auth.server'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { action } from './actions/index.ts'
 import { CanvasContent } from './components/canvas-content'
-import { PanelContentLeft, PanelContentRight } from './components/panel-content'
+import { SidebarLeft, SidebarRight } from './components/sidebars'
 import {
 	getArtboard,
 	getArtboardBuild,
@@ -81,20 +80,16 @@ export default function SketchRoute() {
 
 	return (
 		<SketchBody>
-			<Sidebar id="sidebar-left">
-				<PanelContentLeft artboard={artboard} layers={layers} />
-			</Sidebar>
+			<SidebarLeft artboard={artboard} layers={layers} />
 			<SketchBodyContent>
 				<CanvasContent artboard={artboard} artboardBuild={artboardBuild} />
 			</SketchBodyContent>
-			<Sidebar id="sidebar-right">
-				<PanelContentRight
-					artboard={artboard}
-					artboardDesigns={artboardDesigns}
-					layer={layer}
-					layerDesigns={layerDesigns}
-				/>
-			</Sidebar>
+			<SidebarRight
+				artboard={artboard}
+				artboardDesigns={artboardDesigns}
+				layer={layer}
+				layerDesigns={layerDesigns}
+			/>
 		</SketchBody>
 	)
 }
