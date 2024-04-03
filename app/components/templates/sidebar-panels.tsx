@@ -6,6 +6,7 @@ import {
 	PanelRowReorderContainer,
 	PanelRowValuesContainer,
 	PanelTitle,
+	PanelTitleContainer,
 } from '../layout'
 import { Input } from '../ui/input'
 
@@ -23,7 +24,9 @@ const SidebarPanelHeader = ({
 	return (
 		<SidebarPanelRow>
 			<PanelRowContainer>
-				<PanelTitle>{title}</PanelTitle>
+				<PanelTitleContainer>
+					<PanelTitle>{title}</PanelTitle>
+				</PanelTitleContainer>
 				{children}
 			</PanelRowContainer>
 		</SidebarPanelRow>

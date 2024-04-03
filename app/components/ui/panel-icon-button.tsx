@@ -43,8 +43,8 @@ export const PanelIconButton = React.forwardRef<
 				variant="ghost"
 				size={size}
 				className={cn(
-					'm-2 mr-0 flex cursor-pointer items-center justify-center',
-					'hover:border hover:border-accent-foreground focus:border focus:border-accent-foreground',
+					'm-2 mx-0 flex cursor-pointer items-center justify-center',
+					'border border-accent hover:border-accent-foreground focus:border-accent-foreground',
 					className,
 				)}
 				style={style}
