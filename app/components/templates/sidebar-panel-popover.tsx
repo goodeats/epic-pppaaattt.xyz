@@ -32,6 +32,12 @@ const SidebarPanelPopoverContent = ({
 	// fixed width
 	const className = 'w-80'
 
+	const SidebarPanelPopoverContentGrid = createContainerComponent({
+		defaultTagName: 'div',
+		defaultClassName: 'grid gap-4',
+		displayName: 'SidebarPanelPopoverContentGrid',
+	})
+
 	return (
 		<PopoverContent className={className}>
 			<SidebarPanelPopoverContentGrid>
@@ -40,12 +46,6 @@ const SidebarPanelPopoverContent = ({
 		</PopoverContent>
 	)
 }
-
-const SidebarPanelPopoverContentGrid = createContainerComponent({
-	defaultTagName: 'div',
-	defaultClassName: 'grid gap-4',
-	displayName: 'SidebarPanelPopoverContentGrid',
-})
 
 const SidebarPanelPopoverHeader = ({
 	title,
@@ -92,7 +92,6 @@ export {
 	SidebarPanelPopover,
 	SidebarPanelPopoverTrigger,
 	SidebarPanelPopoverContent,
-	SidebarPanelPopoverContentGrid,
 	SidebarPanelPopoverHeader,
 	SidebarPanelPopoverFormsContainer,
 	SidebarPanelPopoverFormContainer,
