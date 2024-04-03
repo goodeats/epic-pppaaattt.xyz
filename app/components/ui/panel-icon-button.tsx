@@ -10,6 +10,7 @@ export const PanelIconButton = React.forwardRef<
 		type?: 'button' | 'submit' | 'reset'
 		iconName: IconName
 		iconText?: string | null
+		size?: 'panel' | 'panel-sm'
 		backgroundColor?: string
 	}
 >(
@@ -18,6 +19,7 @@ export const PanelIconButton = React.forwardRef<
 			type = 'button',
 			iconName,
 			iconText,
+			size = 'panel',
 			backgroundColor,
 			className,
 			children,
@@ -25,7 +27,8 @@ export const PanelIconButton = React.forwardRef<
 		},
 		ref,
 	) => {
-		// if backgroundColor is defined, set the background color and the text color inverted
+		// if backgroundColor is defined, set the background color
+		// and the text color inverted so the icon is visible
 		const style = backgroundColor
 			? {
 					backgroundColor: `#${backgroundColor}`,
@@ -38,9 +41,10 @@ export const PanelIconButton = React.forwardRef<
 				ref={ref}
 				type={type}
 				variant="ghost"
-				size="panel"
+				size={size}
 				className={cn(
 					'm-2 mr-0 flex cursor-pointer items-center justify-center',
+					'hover:border hover:border-accent-foreground focus:border focus:border-accent-foreground',
 					className,
 				)}
 				style={style}

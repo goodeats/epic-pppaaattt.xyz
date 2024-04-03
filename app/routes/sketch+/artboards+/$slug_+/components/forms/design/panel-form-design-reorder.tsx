@@ -68,7 +68,9 @@ export const PanelFormDesignReorder = ({
 				type="submit"
 				iconName={`chevron-${direction}`}
 				iconText={`Move ${direction}`}
+				size="panel-sm"
 				disabled={isPending || atTop || atBottom}
+				className="my-0"
 			/>
 		</fetcher.Form>
 	)

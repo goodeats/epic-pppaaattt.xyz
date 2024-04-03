@@ -27,6 +27,7 @@ const buttonVariants = cva(
 				pill: 'px-12 py-3 leading-3',
 				icon: 'h-10 w-10',
 				panel: 'h-8 w-8 px-2',
+				'panel-sm': 'h-4 w-4 p-0',
 			},
 		},
 		defaultVariants: {
