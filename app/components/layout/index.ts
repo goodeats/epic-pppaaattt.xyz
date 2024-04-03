@@ -1,2 +1,4 @@
-export { PageFooter } from './page-footer'
-export { PageHeader, PageHeaderDev } from './page-header'
+export * from './page-footer'
+export * from './page-header'
+export * from './sidebar'
+export * from './tabbed-sidebar'
