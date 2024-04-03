@@ -1,13 +1,9 @@
-import { Button } from '#app/components/ui/button'
-import { Icon } from '#app/components/ui/icon'
+import { SidebarPanelPopoverFormContainer } from '#app/components/templates'
 import { Label } from '#app/components/ui/label'
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '#app/components/ui/popover'
 import { type ITemplate } from '#app/models/template.server'
+import { DesignTypeEnum } from '#app/schema/design'
 import { PanelFormDesignTemplateEditStyle } from '../../forms/design/panel-form-design-template-edit-style'
+import { PanelPopover } from '../panel-popover'
 
 export const PanelPopoverDesignTemplate = ({
 	template,
@@ -15,36 +11,12 @@ export const PanelPopoverDesignTemplate = ({
 	template: ITemplate
 }) => {
 	return (
-		<div>
-			<Popover>
-				<PopoverTrigger asChild>
-					<Button
-						variant="ghost"
-						size="sm"
-						className="m-2 mr-0 flex h-8 w-8 cursor-pointer items-center justify-center"
-					>
-						<Icon name="gear">
-							<span className="sr-only">Template Settings</span>
-						</Icon>
-					</Button>
-				</PopoverTrigger>
-				<PopoverContent className="w-80">
-					<div className="grid gap-4">
-						<div className="space-y-2">
-							<h4 className="font-medium leading-none">Template</h4>
-							<p className="text-sm text-muted-foreground">
-								Settings for this template.
-							</p>
-						</div>
-						<div className="grid gap-2">
-							<div className="grid grid-cols-3 items-center gap-4">
-								<Label htmlFor="style">Style</Label>
-								<PanelFormDesignTemplateEditStyle template={template} />
-							</div>
-						</div>
-					</div>
-				</PopoverContent>
-			</Popover>
-		</div>
+		<PanelPopover name={DesignTypeEnum.FILL}>
+			{/* style */}
+			<SidebarPanelPopoverFormContainer>
+				<Label htmlFor="style">Style</Label>
+				<PanelFormDesignTemplateEditStyle template={template} />
+			</SidebarPanelPopoverFormContainer>
+		</PanelPopover>
 	)
 }
