@@ -46,7 +46,7 @@ export const SidebarRight = ({
 			<SidebarTabs tabs={['designs', 'actions']}>
 				<SidebarTabsContent value="designs">
 					{layerPanel ? (
-						<PanelLayerDesigns layer={layer} designs={layerDesigns} />
+						<PanelLayerDesigns layerId={layer.id} designs={layerDesigns} />
 					) : (
 						<PanelArtboardDesigns
 							artboard={artboard}

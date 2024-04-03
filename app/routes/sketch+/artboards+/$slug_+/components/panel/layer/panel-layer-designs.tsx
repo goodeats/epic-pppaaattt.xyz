@@ -4,13 +4,12 @@ import { designsByTypeToPanelArray } from '#app/utils/design'
 import { PanelLayerDesignType } from './design/panel-layer-design-type'
 
 export const PanelLayerDesigns = ({
-	layer,
+	layerId,
 	designs,
 }: {
-	layer: ILayer
+	layerId: ILayer['id']
 	designs: IDesignsByType
 }) => {
-	const layerId = layer.id
 	const designTypePanels = designsByTypeToPanelArray({ designs })
 
 	return (

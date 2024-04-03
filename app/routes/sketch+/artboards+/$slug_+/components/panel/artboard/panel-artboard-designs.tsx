@@ -13,7 +13,6 @@ export const PanelArtboardDesigns = ({
 	designs: IDesignsByType
 }) => {
 	const artboardId = artboard.id
-
 	const designTypePanels = designsByTypeToPanelArray({ designs })
 
 	return (
