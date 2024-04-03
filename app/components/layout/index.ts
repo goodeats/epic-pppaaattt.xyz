@@ -1,3 +1,4 @@
+export * from './dashboard'
 export * from './page-footer'
 export * from './page-header'
 export * from './sidebar'
