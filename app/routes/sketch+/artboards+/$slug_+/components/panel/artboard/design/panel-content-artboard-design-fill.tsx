@@ -1,14 +1,10 @@
 import {
-	Panel,
-	PanelHeader,
-	PanelRow,
-	PanelRowContainer,
-	PanelRowIconContainer,
-	PanelRowOrderContainer,
-	PanelRowValueContainer,
-	PanelTitle,
-} from '#app/components/shared'
-import { Input } from '#app/components/ui/input'
+	SidebarPanel,
+	SidebarPanelRow,
+	SidebarPanelRowContainer,
+	SidebarPanelRowValuesContainer,
+	SidebarPanelRowValuesDisabled,
+} from '#app/components/templates'
 import { type IDesignWithFill } from '#app/models/design.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
@@ -17,12 +13,11 @@ import {
 	selectedDesignsOnUpdate,
 } from '#app/utils/design'
 import { type PickedArtboardType } from '../../../../queries'
-import { PanelFormArtboardDesignDelete } from '../../../forms/artboard/design/panel-form-artboard-design-delete'
-import { PanelFormArtboardDesignNew } from '../../../forms/artboard/design/panel-form-artboard-design-new'
-import { PanelFormArtboardDesignReorder } from '../../../forms/artboard/design/panel-form-artboard-design-reorder'
-import { PanelFormArtboardDesignToggleVisible } from '../../../forms/artboard/design/panel-form-artboard-design-toggle-visible'
 import { PanelFormDesignFillEditValue } from '../../../forms/design/panel-form-design-fill-edit-value'
 import { PanelPopoverDesignFill } from '../../../popovers/design/panel-popover-design-fill'
+import { SidebarPanelActionsArtboardDesign } from './sidebar-panel-actions-artboard-design'
+import { SidebarPanelHeaderArtboardDesign } from './sidebar-panel-header-artboard-design'
+import { SidebarPanelReorderArtboardDesign } from './sidebar-panel-reorder-artboard-design'
 
 export const PanelContentArtboardDesignFill = ({
 	artboard,
@@ -42,17 +37,13 @@ export const PanelContentArtboardDesignFill = ({
 	})
 
 	return (
-		<Panel>
-			<PanelHeader>
-				<PanelTitle>Fill</PanelTitle>
-				<div className="flex flex-shrink">
-					<PanelFormArtboardDesignNew
-						artboardId={artboard.id}
-						type={DesignTypeEnum.FILL}
-						visibleDesignsCount={visibleDesignIds.length}
-					/>
-				</div>
-			</PanelHeader>
+		<SidebarPanel>
+			<SidebarPanelHeaderArtboardDesign
+				type={DesignTypeEnum.FILL}
+				artboardId={artboard.id}
+				visibleDesignsCount={visibleDesignIds.length}
+			/>
+
 			{designFills.map((design, index) => {
 				const { id, visible, fill } = design
 
@@ -86,65 +77,41 @@ export const PanelContentArtboardDesignFill = ({
 				})
 
 				return (
-					<PanelRow key={fill.id}>
-						<PanelRowOrderContainer>
-							<PanelFormArtboardDesignReorder
-								id={id}
-								artboardId={artboard.id}
-								panelCount={designCount}
-								panelIndex={index}
-								direction="up"
-								updateSelectedDesignId={selectDesignIdOnMoveUp}
-							/>
-							<PanelFormArtboardDesignReorder
-								id={id}
-								artboardId={artboard.id}
-								panelCount={designCount}
-								panelIndex={index}
-								direction="down"
-								updateSelectedDesignId={selectDesignIdOnMoveDown}
-							/>
-						</PanelRowOrderContainer>
-						<PanelRowContainer>
-							<PanelRowValueContainer>
+					<SidebarPanelRow key={fill.id}>
+						<SidebarPanelReorderArtboardDesign
+							id={id}
+							artboardId={artboard.id}
+							designCount={designCount}
+							panelIndex={index}
+							selectDesignIdOnMoveUp={selectDesignIdOnMoveUp}
+							selectDesignIdOnMoveDown={selectDesignIdOnMoveDown}
+						/>
+						<SidebarPanelRowContainer>
+							{/* values */}
+							<SidebarPanelRowValuesContainer>
 								<PanelPopoverDesignFill fill={fill} />
 								{/* this is a little buggy, but I can manage for now */}
 								{fill.style === 'none' ? (
-									<Input
-										type="text"
-										className={'flex h-8'}
-										disabled
-										defaultValue="No Fill"
-									/>
+									<SidebarPanelRowValuesDisabled value="No Fill" />
 								) : fill.basis !== 'defined' ? (
-									<Input
-										type="text"
-										className={'flex h-8'}
-										disabled
-										defaultValue={fill.basis}
-									/>
+									<SidebarPanelRowValuesDisabled value={fill.basis} />
 								) : (
 									<PanelFormDesignFillEditValue fill={fill} />
 								)}
-							</PanelRowValueContainer>
-							<PanelRowIconContainer>
-								<PanelFormArtboardDesignToggleVisible
-									id={id}
-									artboardId={artboard.id}
-									visible={visible}
-									updateSelectedDesignId={selectDesignIdOnToggleVisible}
-								/>
-								<PanelFormArtboardDesignDelete
-									id={id}
-									artboardId={artboard.id}
-									isSelectedDesign={false}
-									updateSelectedDesignId={selectDesignIdOnDelete}
-								/>
-							</PanelRowIconContainer>
-						</PanelRowContainer>
-					</PanelRow>
+							</SidebarPanelRowValuesContainer>
+							{/* actions */}
+							<SidebarPanelActionsArtboardDesign
+								id={id}
+								artboardId={artboard.id}
+								visible={visible}
+								isSelectedDesign={isSelectedDesign}
+								selectDesignIdOnToggleVisible={selectDesignIdOnToggleVisible}
+								selectDesignIdOnDelete={selectDesignIdOnDelete}
+							/>
+						</SidebarPanelRowContainer>
+					</SidebarPanelRow>
 				)
 			})}
-		</Panel>
+		</SidebarPanel>
 	)
 }
