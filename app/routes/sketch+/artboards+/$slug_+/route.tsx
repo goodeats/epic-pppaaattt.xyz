@@ -4,12 +4,11 @@ import { useLoaderData, type MetaFunction } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
 import { Sidebar } from '#app/components/layout'
 import { SketchBody, SketchBodyContent } from '#app/components/shared'
-import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
 import { requireUserId } from '#app/utils/auth.server'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { action } from './actions/index.ts'
 import { CanvasContent } from './components/canvas-content'
-import { PanelContentRight } from './components/panel-content'
+import { PanelContentLeft, PanelContentRight } from './components/panel-content'
 import {
 	getArtboard,
 	getArtboardBuild,
@@ -41,7 +40,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 		if (!layer) {
 			return redirectWithToast(pathname, {
 				title: 'Layer Not Found',
-				description: `You may have deleted it.`,
+				description: `You may have deleted it while it was being viewed.`,
 			})
 		}
 
@@ -76,88 +75,14 @@ export default function SketchRoute() {
 		artboardDesigns,
 		layer,
 		layerDesigns,
-		// layers,
+		layers,
 		artboardBuild,
 	} = data
 
 	return (
 		<SketchBody>
 			<Sidebar id="sidebar-left">
-				<SidebarTabs tabs={['layers', 'assets']}>
-					<SidebarTabsContent value="layers">
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-						<p>layers</p>
-					</SidebarTabsContent>
-					<SidebarTabsContent value="assets">
-						<p>assets</p>
-					</SidebarTabsContent>
-				</SidebarTabs>
-				{/* <PanelContentLeft artboard={artboard} layers={layers} /> */}
+				<PanelContentLeft artboard={artboard} layers={layers} />
 			</Sidebar>
 			<SketchBodyContent>
 				<CanvasContent artboard={artboard} artboardBuild={artboardBuild} />

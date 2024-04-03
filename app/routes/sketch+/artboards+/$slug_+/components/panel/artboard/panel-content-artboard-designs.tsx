@@ -1,4 +1,3 @@
-import { SideNavTabContentPanel } from '#app/components/shared'
 import { type IDesignsByType } from '#app/models/design.server'
 import { type PickedArtboardType } from '../../../queries'
 import { PanelContentArtboardDesignFill } from './design/panel-content-artboard-design-fill'
@@ -31,7 +30,7 @@ export const PanelContentArtboardDesigns = ({
 	} = designs
 
 	return (
-		<SideNavTabContentPanel>
+		<div>
 			<PanelContentArtboardFrame artboard={artboard} />
 			<PanelContentArtboardBackgroundColor artboard={artboard} />
 			<PanelContentArtboardDesignLayout
@@ -66,6 +65,6 @@ export const PanelContentArtboardDesigns = ({
 				artboard={artboard}
 				designTemplates={designTemplates}
 			/>
-		</SideNavTabContentPanel>
+		</div>
 	)
 }

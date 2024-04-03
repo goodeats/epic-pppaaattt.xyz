@@ -1,9 +1,4 @@
-import {
-	SideNavTabsList,
-	SideNavTabsTrigger,
-	SideNavTabsWrapper,
-} from '#app/components/shared'
-import { TabsContent } from '#app/components/ui/tabs'
+import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
 import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
@@ -19,16 +14,14 @@ export const PanelContentLeft = ({
 	layers: ILayer[]
 }) => {
 	return (
-		<SideNavTabsWrapper defaultValue="layers">
-			<SideNavTabsList cols={2}>
-				<SideNavTabsTrigger value="layers">Layers</SideNavTabsTrigger>
-				<SideNavTabsTrigger value="assets">Assets</SideNavTabsTrigger>
-			</SideNavTabsList>
-			<TabsContent value="layers">
+		<SidebarTabs tabs={['layers', 'assets']}>
+			<SidebarTabsContent value="layers">
 				<PanelContentArtboardLayers artboard={artboard} layers={layers} />
-			</TabsContent>
-			<TabsContent value="assets">Add assets like images here</TabsContent>
-		</SideNavTabsWrapper>
+			</SidebarTabsContent>
+			<SidebarTabsContent value="assets">
+				Add assets like images here
+			</SidebarTabsContent>
+		</SidebarTabs>
 	)
 }
 
@@ -44,13 +37,10 @@ export const PanelContentRight = ({
 	layerDesigns: IDesignsByType | null | undefined
 }) => {
 	const layerPanel = layer && layerDesigns
+
 	return (
-		<SideNavTabsWrapper defaultValue="designs">
-			<SideNavTabsList cols={2}>
-				<SideNavTabsTrigger value="designs">Designs</SideNavTabsTrigger>
-				<SideNavTabsTrigger value="actions">Actions</SideNavTabsTrigger>
-			</SideNavTabsList>
-			<TabsContent value="designs">
+		<SidebarTabs tabs={['designs', 'actions']}>
+			<SidebarTabsContent value="designs">
 				{layerPanel ? (
 					<PanelContentLayerDesigns layer={layer} designs={layerDesigns} />
 				) : (
@@ -59,10 +49,10 @@ export const PanelContentRight = ({
 						designs={artboardDesigns}
 					/>
 				)}
-			</TabsContent>
-			<TabsContent value="actions">
+			</SidebarTabsContent>
+			<SidebarTabsContent value="actions">
 				Add actions like download and duplicate here
-			</TabsContent>
-		</SideNavTabsWrapper>
+			</SidebarTabsContent>
+		</SidebarTabs>
 	)
 }

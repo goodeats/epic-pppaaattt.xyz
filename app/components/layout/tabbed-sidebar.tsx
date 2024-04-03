@@ -58,7 +58,7 @@ const TabbedSidebarContent = ({
 }) => {
 	// flex full remaining height
 	// overflow-y scroll
-	const className = 'border-4 border-yellow-500 overflow-y-scroll flex-1 mb-4'
+	const className = 'overflow-y-scroll flex-1 pb-4'
 
 	return (
 		<TabsContent value={value} className={className}>
