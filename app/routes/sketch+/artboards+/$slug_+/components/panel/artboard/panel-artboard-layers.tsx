@@ -34,6 +34,7 @@ export const PanelArtboardLayers = ({
 					<PanelFormArtboardLayerNew artboardId={artboard.id} />
 				</SidebarPanelRowActionsContainer>
 			</SidebarPanelHeader>
+
 			{layers.map((layer, index) => {
 				const { id, visible } = layer
 				const isSearchedLayer = layerSearchParams === layer.id

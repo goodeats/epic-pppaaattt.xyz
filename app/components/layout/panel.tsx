@@ -1,11 +1,5 @@
 import { createContainerComponent } from './utils'
 
-// stylllllllllllllllle
-// make move up/down buttons smaller
-// give space on left, not just absolute?
-// hover effects on icons
-// fix popover infinite loop
-
 // list of panel rows
 // - full width, no grid or flex necessary
 // border and py to separate panels
