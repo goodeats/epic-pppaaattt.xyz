@@ -1,4 +1,9 @@
+import { SidebarPanelPopoverFormContainer } from '#app/components/templates'
+import { Input } from '#app/components/ui/input'
+import { Label } from '#app/components/ui/label'
 import { type IPalette } from '#app/models/palette.server'
+import { DesignTypeEnum } from '#app/schema/design'
+import { PanelPopover } from '../panel-popover'
 
 export const PanelPopoverDesignPalette = ({
 	palette,
@@ -6,11 +11,17 @@ export const PanelPopoverDesignPalette = ({
 	palette: IPalette
 }) => {
 	return (
-		<div>
-			<div
-				className="relative m-2 mr-0 h-4 w-4 overflow-hidden"
-				style={{ backgroundColor: `#${palette.value}` }}
-			></div>
-		</div>
+		<PanelPopover name={DesignTypeEnum.PALETTE} backgroundColor={palette.value}>
+			{/* hex */}
+			<SidebarPanelPopoverFormContainer>
+				<Label htmlFor="value">Hexcode</Label>
+				<Input
+					id="value"
+					defaultValue={palette.value}
+					className="col-span-2 h-8"
+					disabled
+				/>
+			</SidebarPanelPopoverFormContainer>
+		</PanelPopover>
 	)
 }

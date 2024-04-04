@@ -15,10 +15,8 @@ import { createDesignRotate } from '#app/models/rotate.server'
 import { createDesignSize } from '#app/models/size.server'
 import { createDesignStroke } from '#app/models/stroke.server'
 import { createDesignTemplate } from '#app/models/template.server'
-import {
-	LayerDesignDataCreateSchema,
-	type designTypeEnum,
-} from '#app/schema/design'
+import { type designTypeEnum } from '#app/schema/design'
+import { LayerDesignDataCreateSchema } from '#app/schema/design-layer'
 import { prisma } from '#app/utils/db.server'
 import { layerUpdateSelectedDesignService } from './update-selected.service'
 

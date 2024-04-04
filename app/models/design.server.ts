@@ -19,6 +19,8 @@ import {
 
 export interface IDesign extends Design {}
 
+export type IDesignIdOrNull = IDesign['id'] | null | undefined
+
 export interface IDesignCreateOverrides {
 	visible?: boolean
 	selected?: boolean

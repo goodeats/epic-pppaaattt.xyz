@@ -79,3 +79,19 @@ export const DESIGN_LAYOUT_INTENT = {
 export const DESIGN_TEMPLATE_INTENT = {
 	updateDesignTemplateStyle: 'update-design-template-style' as const,
 }
+
+export type IntentDesignCreate =
+	| typeof ARTBOARD_DESIGN_INTENT.artboardCreateDesign
+	| typeof LAYER_DESIGN_INTENT.layerCreateDesign
+
+export type IntentDesignReorder =
+	| typeof ARTBOARD_DESIGN_INTENT.artboardReorderDesign
+	| typeof LAYER_DESIGN_INTENT.layerReorderDesign
+
+export type IntentDesignToggleVisible =
+	| typeof ARTBOARD_DESIGN_INTENT.artboardToggleVisibleDesign
+	| typeof LAYER_DESIGN_INTENT.layerToggleVisibleDesign
+
+export type IntentDesignDelete =
+	| typeof ARTBOARD_DESIGN_INTENT.artboardDeleteDesign
+	| typeof LAYER_DESIGN_INTENT.layerDeleteDesign

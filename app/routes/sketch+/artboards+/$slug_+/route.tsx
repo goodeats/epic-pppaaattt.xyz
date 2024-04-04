@@ -3,15 +3,14 @@ import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData, type MetaFunction } from '@remix-run/react'
 import { formatDistanceToNow } from 'date-fns'
 import {
-	PanelContainer,
-	SketchBody,
-	SketchBodyContent,
-} from '#app/components/shared'
+	DashboardBody,
+	DashboardContent,
+} from '#app/components/layout/dashboard.tsx'
 import { requireUserId } from '#app/utils/auth.server'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { action } from './actions/index.ts'
 import { CanvasContent } from './components/canvas-content'
-import { PanelContentLeft, PanelContentRight } from './components/panel-content'
+import { SidebarLeft, SidebarRight } from './components/sidebars'
 import {
 	getArtboard,
 	getArtboardBuild,
@@ -43,7 +42,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 		if (!layer) {
 			return redirectWithToast(pathname, {
 				title: 'Layer Not Found',
-				description: `You may have deleted it.`,
+				description: `You may have deleted it while it was being viewed.`,
 			})
 		}
 
@@ -54,9 +53,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const artboardTimeAgo = formatDistanceToNow(date)
 
 	const layers = await getLayers({ userId, artboardId: artboard.id })
-	// const layers = await findManyLayers({
-	// 	where: { ownerId: userId, artboardId: artboard.id },
-	// })
 
 	const artboardDesigns = await getArtboardDesigns({ artboard })
 
@@ -86,22 +82,18 @@ export default function SketchRoute() {
 	} = data
 
 	return (
-		<SketchBody>
-			<PanelContainer variant="left">
-				<PanelContentLeft artboard={artboard} layers={layers} />
-			</PanelContainer>
-			<SketchBodyContent>
+		<DashboardBody id="sketch-dashboard-body">
+			<SidebarLeft artboard={artboard} layers={layers} />
+			<DashboardContent id="sketch-dashboard-content">
 				<CanvasContent artboard={artboard} artboardBuild={artboardBuild} />
-			</SketchBodyContent>
-			<PanelContainer>
-				<PanelContentRight
-					artboard={artboard}
-					artboardDesigns={artboardDesigns}
-					layer={layer}
-					layerDesigns={layerDesigns}
-				/>
-			</PanelContainer>
-		</SketchBody>
+			</DashboardContent>
+			<SidebarRight
+				artboard={artboard}
+				artboardDesigns={artboardDesigns}
+				layer={layer}
+				layerDesigns={layerDesigns}
+			/>
+		</DashboardBody>
 	)
 }
 

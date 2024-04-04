@@ -1,4 +1,16 @@
 import { z } from 'zod'
+import {
+	type ToggleVisibleArtboardDesignSchema,
+	type DeleteArtboardDesignSchema,
+	type NewArtboardDesignSchema,
+	type ReorderArtboardDesignSchema,
+} from './design-artboard'
+import {
+	type ToggleVisibleLayerDesignSchema,
+	type DeleteLayerDesignSchema,
+	type NewLayerDesignSchema,
+	type ReorderLayerDesignSchema,
+} from './design-layer'
 
 export const DesignTypeEnum = {
 	PALETTE: 'palette',
@@ -30,13 +42,21 @@ export const designSchema = z.object({
 	selected: z.boolean().optional(),
 }) satisfies z.Schema<Design>
 
-export const LayerDesignDataCreateSchema = z.object({
-	type: z.nativeEnum(DesignTypeEnum),
-	ownerId: z.string(),
-	layerId: z.string(),
-	visible: z.boolean().optional(),
-	selected: z.boolean().optional(),
-}) satisfies z.Schema<Design>
+export type NewDesignSchemaType =
+	| typeof NewArtboardDesignSchema
+	| typeof NewLayerDesignSchema
+
+export type ReorderDesignSchemaType =
+	| typeof ReorderArtboardDesignSchema
+	| typeof ReorderLayerDesignSchema
+
+export type ToggleVisibleDesignSchemaType =
+	| typeof ToggleVisibleArtboardDesignSchema
+	| typeof ToggleVisibleLayerDesignSchema
+
+export type DeleteDesignSchemaType =
+	| typeof DeleteArtboardDesignSchema
+	| typeof DeleteLayerDesignSchema
 
 export type selectArgsType = z.infer<typeof selectArgs>
 const selectArgs = z.object({
