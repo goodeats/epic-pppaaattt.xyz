@@ -1,3 +1,4 @@
+import { type Ref, forwardRef } from 'react'
 import { capitalize } from '#app/utils/string-formatting'
 import { createContainerComponent } from '../layout/utils'
 import { PanelIconButton } from '../ui/panel-icon-button'
@@ -25,28 +26,31 @@ const SidebarPanelPopoverTrigger = ({
 	)
 }
 
-const SidebarPanelPopoverContent = ({
-	children,
-}: {
-	children: React.ReactNode
-}) => {
-	// fixed width
+const SidebarPanelPopoverContentGrid = createContainerComponent({
+	defaultTagName: 'div',
+	defaultClassName: 'grid gap-4',
+	displayName: 'SidebarPanelPopoverContentGrid',
+})
+
+// forwardRef for popover content with forms
+// prevent infinite loop
+// https://www.radix-ui.com/primitives/docs/components/popover#custom-apis
+// https://github.com/radix-ui/primitives/issues/2152#issuecomment-1956478879
+const SidebarPanelPopoverContent = forwardRef<
+	HTMLDivElement,
+	{ children: React.ReactNode }
+>(({ children, ...props }, forwardedRef: Ref<HTMLDivElement>) => {
 	const className = 'w-80'
 
-	const SidebarPanelPopoverContentGrid = createContainerComponent({
-		defaultTagName: 'div',
-		defaultClassName: 'grid gap-4',
-		displayName: 'SidebarPanelPopoverContentGrid',
-	})
-
 	return (
-		<PopoverContent className={className}>
+		<PopoverContent className={className} {...props} ref={forwardedRef}>
 			<SidebarPanelPopoverContentGrid>
 				{children}
 			</SidebarPanelPopoverContentGrid>
 		</PopoverContent>
 	)
-}
+})
+SidebarPanelPopoverContent.displayName = 'SidebarPanelPopoverContent'
 
 const SidebarPanelPopoverHeader = ({
 	name,
