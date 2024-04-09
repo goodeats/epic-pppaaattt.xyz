@@ -1,8 +1,8 @@
+import { type ILayerGenerator } from '#app/definitions/artboard-generator'
 import { FillBasisTypeEnum } from '#app/schema/fill'
 import { LayoutStyleTypeEnum } from '#app/schema/layout'
 import { StrokeBasisTypeEnum } from '#app/schema/stroke'
 import { randomInRange } from '#app/utils/random.utils'
-import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawPositionService = ({
 	ctx,
@@ -10,7 +10,7 @@ export const canvasBuildLayerDrawPositionService = ({
 	index,
 }: {
 	ctx: CanvasRenderingContext2D
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 }): {
 	x: number
@@ -30,7 +30,7 @@ const getPosition = ({
 	index,
 	ctx,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 	ctx: CanvasRenderingContext2D
 }) => {
@@ -44,7 +44,7 @@ const getPosition = ({
 	return getRandomPosition({ layer })
 }
 
-const getRandomPosition = ({ layer }: { layer: IArtboardLayerBuild }) => {
+const getRandomPosition = ({ layer }: { layer: ILayerGenerator }) => {
 	const { container } = layer
 	const { width, height, top, left } = container
 	// add margin later
@@ -58,7 +58,7 @@ const getGridPosition = ({
 	index,
 	ctx,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 	ctx: CanvasRenderingContext2D
 }) => {
@@ -88,7 +88,7 @@ const getGridPosition = ({
 	return { x, y }
 }
 
-const shouldGetPixelHex = ({ layer }: { layer: IArtboardLayerBuild }) => {
+const shouldGetPixelHex = ({ layer }: { layer: ILayerGenerator }) => {
 	const { fill, stroke } = layer
 	return (
 		fill.basis === FillBasisTypeEnum.PIXEL ||

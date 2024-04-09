@@ -25,7 +25,7 @@ export interface ILayoutCreateOverrides {
 	columns?: number
 }
 
-export const findLayoutInDesignArray = ({
+export const findFirstLayoutInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]

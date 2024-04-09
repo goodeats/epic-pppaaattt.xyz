@@ -1,11 +1,11 @@
-import { type ICanvasDrawItem } from '../../draw.service'
+import { type IGenerationItem } from '#app/definitions/artboard-generator'
 
 export const drawLayerItemRotateService = ({
 	ctx,
 	layerDrawItem,
 }: {
 	ctx: CanvasRenderingContext2D
-	layerDrawItem: ICanvasDrawItem
+	layerDrawItem: IGenerationItem
 }) => {
 	const { rotate } = layerDrawItem
 

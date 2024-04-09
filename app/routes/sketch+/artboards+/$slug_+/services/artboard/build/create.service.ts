@@ -1,3 +1,7 @@
+import {
+	type IArtboardGenerator,
+	type ILayerGenerator,
+} from '#app/definitions/artboard-generator'
 import { type IArtboard } from '#app/models/artboard.server'
 import {
 	getArtboardVisiblePalettes,
@@ -8,22 +12,12 @@ import {
 	getLayerVisibleRotates,
 } from '#app/models/design-layer.server'
 import { findManyDesignsWithType } from '#app/models/design.server'
-import { findFillInDesignArray } from '#app/models/fill.server'
 import { type ILayer } from '#app/models/layer.server'
-import { findLayoutInDesignArray } from '#app/models/layout.server'
-import { findLineInDesignArray } from '#app/models/line.server'
-import { findPaletteInDesignArray } from '#app/models/palette.server'
-import { findRotateInDesignArray } from '#app/models/rotate.server'
-import { findSizeInDesignArray } from '#app/models/size.server'
-import { findStrokeInDesignArray } from '#app/models/stroke.server'
-import { findTemplateInDesignArray } from '#app/models/template.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
+import { findFirstDesignsByTypeInArray } from '#app/utils/design'
 import { filterLayersVisible } from '#app/utils/layer.utils'
 import { isArrayRotateBasisType } from '#app/utils/rotate'
-import {
-	type IArtboardLayerBuild,
-	type PickedArtboardType,
-} from '../../../queries'
+import { type PickedArtboardType } from '../../../queries'
 
 export const artboardBuildCreateService = async ({
 	artboard,
@@ -31,7 +25,7 @@ export const artboardBuildCreateService = async ({
 }: {
 	artboard: PickedArtboardType
 	layers: ILayer[]
-}) => {
+}): Promise<IArtboardGenerator | null> => {
 	try {
 		const artboardSelectedDesigns = await getSelectedDesignsForArtboard({
 			artboardId: artboard.id,
@@ -60,16 +54,10 @@ const getSelectedDesignsForArtboard = async ({
 }: {
 	artboardId: string
 	artboard: PickedArtboardType
-}): Promise<IArtboardLayerBuild> => {
+}): Promise<ILayerGenerator> => {
 	const designs = await getArtboardSelectedDesigns({ artboardId })
-	const palette = findPaletteInDesignArray({ designs })
-	const size = findSizeInDesignArray({ designs })
-	const fill = findFillInDesignArray({ designs })
-	const stroke = findStrokeInDesignArray({ designs })
-	const line = findLineInDesignArray({ designs })
-	const rotate = findRotateInDesignArray({ designs })
-	const layout = findLayoutInDesignArray({ designs })
-	const template = findTemplateInDesignArray({ designs })
+	const { palette, size, fill, stroke, line, rotate, layout, template } =
+		findFirstDesignsByTypeInArray({ designs })
 
 	// when the artboard build model is formalized
 	// these can just be verified as joins
@@ -92,18 +80,7 @@ const getSelectedDesignsForArtboard = async ({
 		? await getArtboardVisibleRotates({ artboardId })
 		: []
 
-	const { width, height } = artboard
-	const container = {
-		width,
-		height,
-		top: 0,
-		left: 0,
-		margin: 0,
-		canvas: {
-			width,
-			height,
-		},
-	}
+	const container = getContainer({ artboard })
 
 	return {
 		palette: palettes,
@@ -116,6 +93,21 @@ const getSelectedDesignsForArtboard = async ({
 		layout,
 		template,
 		container,
+	}
+}
+
+const getContainer = ({ artboard }: { artboard: PickedArtboardType }) => {
+	const { width, height } = artboard
+	return {
+		width,
+		height,
+		top: 0,
+		left: 0,
+		margin: 0,
+		canvas: {
+			width,
+			height,
+		},
 	}
 }
 
@@ -134,7 +126,7 @@ const getSelectedDesignTypesForLayers = async ({
 	artboardSelectedDesigns,
 }: {
 	layers: ILayer[]
-	artboardSelectedDesigns: IArtboardLayerBuild
+	artboardSelectedDesigns: ILayerGenerator
 }) => {
 	return await Promise.all(
 		layers.map(layer =>
@@ -151,19 +143,20 @@ const getSelectedDesignTypesForLayer = async ({
 	artboardSelectedDesigns,
 }: {
 	layer: ILayer
-	artboardSelectedDesigns: IArtboardLayerBuild
-}): Promise<IArtboardLayerBuild> => {
+	artboardSelectedDesigns: ILayerGenerator
+}): Promise<ILayerGenerator> => {
+	const { id, name, description } = layer
 	const layerId = layer.id
-	const result = { layerId, layerName: layer.name, ...artboardSelectedDesigns }
+	const result = {
+		...artboardSelectedDesigns,
+		id,
+		name,
+		description,
+	}
 
 	const designs = await getLayerSelectedDesigns({ layerId })
-	const size = findSizeInDesignArray({ designs })
-	const fill = findFillInDesignArray({ designs })
-	const stroke = findStrokeInDesignArray({ designs })
-	const line = findLineInDesignArray({ designs })
-	const rotate = findRotateInDesignArray({ designs })
-	const layout = findLayoutInDesignArray({ designs })
-	const template = findTemplateInDesignArray({ designs })
+	const { size, fill, stroke, line, rotate, layout, template } =
+		findFirstDesignsByTypeInArray({ designs })
 
 	if (size) result.size = size
 	if (fill) result.fill = fill

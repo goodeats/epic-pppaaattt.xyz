@@ -21,7 +21,7 @@ export interface ILineCreateOverrides {
 	width?: number
 }
 
-export const findLineInDesignArray = ({
+export const findFirstLineInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]

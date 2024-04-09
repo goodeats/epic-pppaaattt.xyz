@@ -1,3 +1,4 @@
+import { type ILayerGenerator } from '#app/definitions/artboard-generator'
 import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import {
 	getCircularItemInArray,
@@ -5,13 +6,12 @@ import {
 	getReverseCircularItemInArray,
 } from '#app/utils/array.utils'
 import { rotateToRadians } from '#app/utils/rotate'
-import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawRotateService = ({
 	layer,
 	index,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 }) => {
 	const { rotate } = layer
@@ -31,7 +31,7 @@ export const canvasBuildLayerDrawRotateService = ({
 	}
 }
 
-const randomInRotates = ({ layer }: { layer: IArtboardLayerBuild }) => {
+const randomInRotates = ({ layer }: { layer: ILayerGenerator }) => {
 	const { rotates } = layer
 
 	// If there are no rotates or the array is empty, return 0
@@ -45,7 +45,7 @@ const loopInRotates = ({
 	layer,
 	index,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 }) => {
 	const { rotates } = layer
@@ -61,7 +61,7 @@ const reverseLoopInRotates = ({
 	layer,
 	index,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 }) => {
 	const { rotates } = layer

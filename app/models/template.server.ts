@@ -19,7 +19,7 @@ export interface ITemplateCreateOverrides {
 	style?: string
 }
 
-export const findTemplateInDesignArray = ({
+export const findFirstTemplateInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]

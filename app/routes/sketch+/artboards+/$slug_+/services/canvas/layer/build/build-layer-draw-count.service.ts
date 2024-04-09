@@ -1,10 +1,10 @@
+import { type ILayerGenerator } from '#app/definitions/artboard-generator'
 import { LayoutStyleTypeEnum } from '#app/schema/layout'
-import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawCountService = ({
 	layer,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 }) => {
 	const { layout } = layer
 	const { style, count, rows, columns } = layout

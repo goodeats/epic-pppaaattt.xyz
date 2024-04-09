@@ -1,6 +1,6 @@
+import { type ILayerGeneratorContainer } from '#app/definitions/artboard-generator'
 import { type ILine } from '#app/models/line.server'
 import { type ISize } from '#app/models/size.server'
-import { type IArtboardLayerContainerBuild } from '#app/routes/sketch+/artboards+/$slug_+/queries'
 import { LineBasisTypeEnum } from '#app/schema/line'
 import { degreesToRadians } from './rotate'
 import { sizePercentToPixel } from './size'
@@ -12,7 +12,7 @@ export const linePercentToPixel = ({
 }: {
 	line: ILine
 	size: ISize
-	container: IArtboardLayerContainerBuild
+	container: ILayerGeneratorContainer
 }) => {
 	const { width, basis } = line
 	const linePercent = width / 100

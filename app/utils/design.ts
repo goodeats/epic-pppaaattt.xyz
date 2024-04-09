@@ -11,6 +11,14 @@ import {
 	type IDesignWithTemplate,
 	type IDesignsByType,
 } from '#app/models/design.server'
+import { findFirstFillInDesignArray } from '#app/models/fill.server'
+import { findFirstLayoutInDesignArray } from '#app/models/layout.server'
+import { findFirstLineInDesignArray } from '#app/models/line.server'
+import { findFirstPaletteInDesignArray } from '#app/models/palette.server'
+import { findFirstRotateInDesignArray } from '#app/models/rotate.server'
+import { findFirstSizeInDesignArray } from '#app/models/size.server'
+import { findFirstStrokeInDesignArray } from '#app/models/stroke.server'
+import { findFirstTemplateInDesignArray } from '#app/models/template.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 
 export const filterAndOrderArtboardDesignsByType = ({
@@ -386,4 +394,33 @@ export const designsByTypeToPanelArray = ({
 		{ type: DesignTypeEnum.ROTATE, designs: designRotates },
 		{ type: DesignTypeEnum.TEMPLATE, designs: designTemplates },
 	]
+}
+
+// used from artboard create service
+// get all selected designs by type for artboard and each layer
+// then separate them by type here
+export const findFirstDesignsByTypeInArray = ({
+	designs,
+}: {
+	designs: IDesignWithType[]
+}) => {
+	const palette = findFirstPaletteInDesignArray({ designs })
+	const size = findFirstSizeInDesignArray({ designs })
+	const fill = findFirstFillInDesignArray({ designs })
+	const stroke = findFirstStrokeInDesignArray({ designs })
+	const line = findFirstLineInDesignArray({ designs })
+	const rotate = findFirstRotateInDesignArray({ designs })
+	const layout = findFirstLayoutInDesignArray({ designs })
+	const template = findFirstTemplateInDesignArray({ designs })
+
+	return {
+		palette,
+		size,
+		fill,
+		stroke,
+		line,
+		rotate,
+		layout,
+		template,
+	}
 }

@@ -1,11 +1,11 @@
-import { type ICanvasDrawItem } from '../../draw.service'
+import { type IGenerationItem } from '#app/definitions/artboard-generator'
 
 export const drawLayerItemLineService = ({
 	ctx,
 	layerDrawItem,
 }: {
 	ctx: CanvasRenderingContext2D
-	layerDrawItem: ICanvasDrawItem
+	layerDrawItem: IGenerationItem
 }) => {
 	const { lineWidth } = layerDrawItem
 	ctx.lineWidth = lineWidth

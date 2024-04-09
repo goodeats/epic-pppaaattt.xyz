@@ -1,10 +1,10 @@
-import { type IArtboardLayerBuild } from '../../../../queries'
+import { type ILayerGenerator } from '#app/definitions/artboard-generator'
 
 export const canvasBuildLayerDrawTemplateService = ({
 	layer,
 	index,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 }) => {
 	const { template } = layer

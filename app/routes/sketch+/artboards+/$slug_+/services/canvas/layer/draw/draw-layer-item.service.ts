@@ -1,5 +1,5 @@
+import { type IGenerationItem } from '#app/definitions/artboard-generator'
 import { ctxBegin, ctxEnd } from '../../ctx.utils'
-import { type ICanvasDrawItem } from '../../draw.service'
 import { drawLayerItemFillService } from './draw-layer-item-fill.service'
 import { drawLayerItemLineService } from './draw-layer-item-line.service'
 import { drawLayerItemPositionService } from './draw-layer-item-position.service'
@@ -12,7 +12,7 @@ export const drawLayerItemService = ({
 	layerDrawItem,
 }: {
 	ctx: CanvasRenderingContext2D
-	layerDrawItem: ICanvasDrawItem
+	layerDrawItem: IGenerationItem
 }) => {
 	// Step 1: begin ctx
 	ctxBegin({ ctx })

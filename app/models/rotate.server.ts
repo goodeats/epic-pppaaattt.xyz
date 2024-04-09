@@ -21,7 +21,7 @@ export interface IRotateCreateOverrides {
 	basis?: string
 }
 
-export const findRotateInDesignArray = ({
+export const findFirstRotateInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]

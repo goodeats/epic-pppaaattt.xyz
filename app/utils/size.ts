@@ -1,5 +1,5 @@
+import { type ILayerGeneratorContainer } from '#app/definitions/artboard-generator'
 import { type ISize } from '#app/models/size.server'
-import { type IArtboardLayerContainerBuild } from '#app/routes/sketch+/artboards+/$slug_+/queries'
 import { SizeBasisTypeEnum } from '#app/schema/size'
 
 export const sizePercentToPixel = ({
@@ -7,7 +7,7 @@ export const sizePercentToPixel = ({
 	container,
 }: {
 	size: ISize
-	container: IArtboardLayerContainerBuild
+	container: ILayerGeneratorContainer
 }) => {
 	const { basis, value } = size
 	const sizePercent = value / 100
