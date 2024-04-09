@@ -8,11 +8,11 @@ import {
 	useNodesState,
 	BackgroundVariant,
 } from 'reactflow'
+import { ContainerIndex } from '#app/components/shared'
 import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
 import { type PickedArtboardType } from '../queries'
 import { canvasDrawService } from '../services/canvas/draw.service'
 import 'reactflow/dist/style.css'
-import { ContainerIndex } from '#app/components/shared'
 
 const initialNodes = [
 	{
