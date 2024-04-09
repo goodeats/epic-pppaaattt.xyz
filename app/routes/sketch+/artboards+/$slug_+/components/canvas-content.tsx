@@ -12,6 +12,7 @@ import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
 import { type PickedArtboardType } from '../queries'
 import { canvasDrawService } from '../services/canvas/draw.service'
 import 'reactflow/dist/style.css'
+import { ContainerIndex } from '#app/components/shared'
 
 const initialNodes = [
 	{
@@ -56,17 +57,23 @@ export const CanvasContent = ({
 	}
 	return (
 		<div id="reactflow-wrapper" className="absolute inset-0">
-			<ReactFlow
-				nodes={nodes}
-				nodeTypes={nodeTypes}
-				onNodesChange={onNodesChange}
-				fitView
-				minZoom={0.01}
-			>
-				<Background variant={BackgroundVariant.Dots} />
-				<MiniMap pannable zoomable />
-				<Controls />
-			</ReactFlow>
+			{artboardGenerator?.success ? (
+				<ReactFlow
+					nodes={nodes}
+					nodeTypes={nodeTypes}
+					onNodesChange={onNodesChange}
+					fitView
+					minZoom={0.01}
+				>
+					<Background variant={BackgroundVariant.Dots} />
+					<MiniMap pannable zoomable />
+					<Controls />
+				</ReactFlow>
+			) : (
+				<ContainerIndex>
+					{artboardGenerator?.message || 'Artboard generator unsuccessful'}
+				</ContainerIndex>
+			)}
 		</div>
 	)
 }

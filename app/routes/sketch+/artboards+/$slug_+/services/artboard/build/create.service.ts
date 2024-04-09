@@ -27,20 +27,21 @@ export const artboardBuildCreateService = async ({
 	layers: ILayer[]
 }): Promise<IArtboardGenerator | null> => {
 	try {
-		const artboardSelectedDesigns = await getSelectedDesignsForArtboard({
+		const artboardGeneratorLayer = await buildGeneratorArtboardLayer({
 			artboardId: artboard.id,
 			artboard,
 		})
 
-		const visibleLayers = filterLayersVisible({ layers })
-		const layersSelectedDesigns = await getSelectedDesignTypesForLayers({
-			layers: visibleLayers,
-			artboardSelectedDesigns,
+		const generatorLayers = await buildGeneratorLayers({
+			layers,
+			artboardGeneratorLayer,
 		})
 
 		return {
 			id: artboard.id,
-			layers: layersSelectedDesigns,
+			layers: generatorLayers,
+			success: false,
+			message: 'Artboard generator created successfully.',
 		}
 	} catch (error) {
 		console.log(error)
@@ -48,7 +49,9 @@ export const artboardBuildCreateService = async ({
 	}
 }
 
-const getSelectedDesignsForArtboard = async ({
+// default/global design settings for each layer
+// layer can override any of these values
+const buildGeneratorArtboardLayer = async ({
 	artboardId,
 	artboard,
 }: {
@@ -80,7 +83,7 @@ const getSelectedDesignsForArtboard = async ({
 		? await getArtboardVisibleRotates({ artboardId })
 		: []
 
-	const container = getContainer({ artboard })
+	const container = getArtboardContainer({ artboard })
 
 	return {
 		palette: palettes,
@@ -96,7 +99,11 @@ const getSelectedDesignsForArtboard = async ({
 	}
 }
 
-const getContainer = ({ artboard }: { artboard: PickedArtboardType }) => {
+const getArtboardContainer = ({
+	artboard,
+}: {
+	artboard: PickedArtboardType
+}) => {
 	const { width, height } = artboard
 	return {
 		width,
@@ -121,34 +128,36 @@ const getArtboardSelectedDesigns = async ({
 	})
 }
 
-const getSelectedDesignTypesForLayers = async ({
+const buildGeneratorLayers = async ({
 	layers,
-	artboardSelectedDesigns,
+	artboardGeneratorLayer,
 }: {
 	layers: ILayer[]
-	artboardSelectedDesigns: ILayerGenerator
+	artboardGeneratorLayer: ILayerGenerator
 }) => {
+	const visibleLayers = filterLayersVisible({ layers })
+
 	return await Promise.all(
-		layers.map(layer =>
-			getSelectedDesignTypesForLayer({
+		visibleLayers.map(layer =>
+			buildGeneratorLayer({
 				layer,
-				artboardSelectedDesigns,
+				artboardGeneratorLayer,
 			}),
 		),
 	)
 }
 
-const getSelectedDesignTypesForLayer = async ({
+const buildGeneratorLayer = async ({
 	layer,
-	artboardSelectedDesigns,
+	artboardGeneratorLayer,
 }: {
 	layer: ILayer
-	artboardSelectedDesigns: ILayerGenerator
+	artboardGeneratorLayer: ILayerGenerator
 }): Promise<ILayerGenerator> => {
 	const { id, name, description } = layer
 	const layerId = layer.id
 	const result = {
-		...artboardSelectedDesigns,
+		...artboardGeneratorLayer,
 		id,
 		name,
 		description,
