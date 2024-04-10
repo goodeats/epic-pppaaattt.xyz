@@ -17,8 +17,10 @@ import {
 	type IDesignWithType,
 } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
+import { type IRotate } from '#app/models/rotate.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
 import {
+	filterSelectedDesignTypes,
 	findFirstDesignsByTypeInArray,
 	verifySelectedDesignTypesAllPresent,
 } from '#app/utils/design'
@@ -151,14 +153,13 @@ const buildGeneratorArtboardLayer = async ({
 	// get all visible palettes to use for fill or stroke
 	const palettes = await getArtboardVisiblePalettes({ artboardId })
 
-	// get all visible rotates to use for rotate if defined random
-	// no defined random rotates and no rotates will default to 0 rotation
-	const rotates = isArrayRotateBasisType(
-		artboardGeneratorDesigns.rotate.basis as rotateBasisTypeEnum,
-	)
-		? await getArtboardVisibleRotates({ artboardId })
-		: []
+	// get all visible rotates to use for rotate if visible random
+	const rotates = await getRotates({
+		artboardId,
+		rotate: artboardGeneratorDesigns.rotate,
+	})
 
+	// container defaults to artboar dimensions
 	const container = getArtboardContainer({ artboard })
 
 	return {
@@ -214,44 +215,58 @@ const buildGeneratorLayer = async ({
 	layer: ILayer
 	artboardGeneratorLayer: ILayerGenerator
 }): Promise<ILayerGenerator> => {
-	const { id, name, description } = layer
 	const layerId = layer.id
-	const result = {
+
+	// Step 1: get all selected designs for the layer
+	const layerSelectedDesigns = await getLayerSelectedDesigns({ layerId })
+
+	// Step 2: split the selected designs into the first of each type
+	const selectedDesignTypes = findFirstDesignsByTypeInArray({
+		designs: layerSelectedDesigns,
+	})
+
+	// Step 3: filter the selected designs that are present
+	// separate the palette from the rest of the layer generator designs
+	// if the layer has no palette we do not want to override the artboard palette
+	const { palette, ...layerGeneratorDesigns } = filterSelectedDesignTypes({
+		selectedDesignTypes,
+	})
+
+	// Step 4: initialize the generator layer
+	// with the artboard generator layer settings as default
+	// and the layer generator designs as overrides
+	// and layer details
+	const { id, name, description } = layer
+	const layerGenerator = {
 		...artboardGeneratorLayer,
+		...layerGeneratorDesigns,
 		id,
 		name,
 		description,
 	}
 
-	const designs = await getLayerSelectedDesigns({ layerId })
-	const { size, fill, stroke, line, rotate, layout, template } =
-		findFirstDesignsByTypeInArray({ designs })
-
-	if (size) result.size = size
-	if (fill) result.fill = fill
-	if (stroke) result.stroke = stroke
-	if (line) result.line = line
-	if (rotate) result.rotate = rotate
-	if (layout) result.layout = layout
-	if (template) result.template = template
-
-	// get all visible palettes to use for fill or stroke
+	// Step 5: get all visible palettes to use for fill or stroke
 	// if empty, then use the artboard palette
 	const palettes = await getLayerVisiblePalettes({ layerId })
 	if (palettes.length > 0) {
-		result.palette = palettes
+		layerGenerator.palette = palettes
 	}
 
-	// get all visible rotates to use for rotate
+	// Step 6: get all visible rotates to use for rotate if visible random
 	// if empty, then use the artboard rotate
-	if (rotate && isArrayRotateBasisType(rotate.basis as rotateBasisTypeEnum)) {
-		const rotates = await getLayerVisibleRotates({ layerId })
+	const { rotate } = layerGeneratorDesigns
+	if (rotate) {
+		const rotates = await getRotates({
+			layerId,
+			rotate,
+		})
+
 		if (rotates.length > 0) {
-			result.rotates = rotates
+			layerGenerator.rotates = rotates
 		}
 	}
 
-	return result
+	return layerGenerator
 }
 
 const getLayerSelectedDesigns = async ({
@@ -262,4 +277,25 @@ const getLayerSelectedDesigns = async ({
 	return await findManyDesignsWithType({
 		where: { layerId, selected: true },
 	})
+}
+
+const getRotates = async ({
+	artboardId,
+	layerId,
+	rotate,
+}: {
+	artboardId?: IArtboard['id']
+	layerId?: ILayer['id']
+	rotate: IRotate
+}) => {
+	const allRotates = isArrayRotateBasisType(rotate.basis as rotateBasisTypeEnum)
+
+	if (allRotates) {
+		if (artboardId) {
+			return await getArtboardVisibleRotates({ artboardId })
+		} else if (layerId) {
+			return await getLayerVisibleRotates({ layerId })
+		}
+	}
+	return []
 }

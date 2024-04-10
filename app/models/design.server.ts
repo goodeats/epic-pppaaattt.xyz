@@ -122,6 +122,17 @@ export interface ISelectedDesigns {
 	template: ITemplate | null
 }
 
+export interface ISelectedDesignsFiltered {
+	palette?: IPalette
+	size?: ISize
+	fill?: IFill
+	stroke?: IStroke
+	line?: ILine
+	rotate?: IRotate
+	layout?: ILayout
+	template?: ITemplate
+}
+
 export const findManyDesignsWithType = async ({
 	where,
 }: {

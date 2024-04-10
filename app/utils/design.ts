@@ -11,6 +11,7 @@ import {
 	type IDesignWithTemplate,
 	type IDesignsByType,
 	type ISelectedDesigns,
+	type ISelectedDesignsFiltered,
 } from '#app/models/design.server'
 import { findFirstFillInDesignArray } from '#app/models/fill.server'
 import { findFirstLayoutInDesignArray } from '#app/models/layout.server'
@@ -21,6 +22,7 @@ import { findFirstSizeInDesignArray } from '#app/models/size.server'
 import { findFirstStrokeInDesignArray } from '#app/models/stroke.server'
 import { findFirstTemplateInDesignArray } from '#app/models/template.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
+import { safelyAssignValue } from './typescript-helpers'
 
 export const filterAndOrderArtboardDesignsByType = ({
 	designs,
@@ -426,7 +428,7 @@ export const findFirstDesignsByTypeInArray = ({
 	}
 }
 
-// used from artboard create service
+// used from artboard generator create service
 // verify artboard has all design types
 // or canvas shouldn't be displayed
 export const verifySelectedDesignTypesAllPresent = ({
@@ -458,4 +460,29 @@ export const verifySelectedDesignTypesAllPresent = ({
 
 	// if all design types are present
 	return { success: true, message: 'All selected designs are present' }
+}
+
+// used from artboard generator create service
+// layer generators will have artboard generator designs as default
+// so only return the selected designs for layer to merge and override
+export const filterSelectedDesignTypes = ({
+	selectedDesignTypes,
+}: {
+	selectedDesignTypes: ISelectedDesigns
+}): ISelectedDesignsFiltered => {
+	const filteredSelectedDesigns: Partial<ISelectedDesignsFiltered> = {}
+
+	const designTypes = Object.keys(
+		selectedDesignTypes,
+	) as (keyof ISelectedDesigns)[]
+
+	for (const designType of designTypes) {
+		const designValue = selectedDesignTypes[designType]
+
+		if (designValue === null) continue
+
+		safelyAssignValue(filteredSelectedDesigns, designType, designValue)
+	}
+
+	return filteredSelectedDesigns as ISelectedDesignsFiltered
 }
