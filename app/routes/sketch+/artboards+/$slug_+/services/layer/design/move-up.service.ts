@@ -16,7 +16,6 @@ export const layerDesignMoveUpService = async ({
 	updateSelectedDesignId?: IDesignIdOrNull
 }) => {
 	try {
-		console.log('layer move up')
 		const updateSelectedDesignStrategy = new LayerUpdateSelectedDesignStrategy()
 		return designMoveUpService({
 			userId,

@@ -16,7 +16,6 @@ export const artboardDesignDeleteService = async ({
 	updateSelectedDesignId: IDesignIdOrNull
 }) => {
 	try {
-		console.log('artboardDesignDeleteService')
 		const updateSelectedDesignStrategy =
 			new ArtboardUpdateSelectedDesignStrategy()
 		return designDeleteService({

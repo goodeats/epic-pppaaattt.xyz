@@ -16,7 +16,6 @@ export const layerDesignDeleteService = async ({
 	updateSelectedDesignId?: IDesignIdOrNull
 }) => {
 	try {
-		console.log('layerDesignDeleteService')
 		const updateSelectedDesignStrategy = new LayerUpdateSelectedDesignStrategy()
 		return designDeleteService({
 			userId,

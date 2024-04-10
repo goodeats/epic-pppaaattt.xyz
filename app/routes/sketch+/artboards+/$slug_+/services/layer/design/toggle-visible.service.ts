@@ -16,7 +16,6 @@ export const layerDesignToggleVisibleService = async ({
 	updateSelectedDesignId?: IDesignIdOrNull
 }) => {
 	try {
-		console.log('layerDesignToggleVisibleService')
 		const updateSelectedDesignStrategy = new LayerUpdateSelectedDesignStrategy()
 		return designToggleVisibleService({
 			userId,

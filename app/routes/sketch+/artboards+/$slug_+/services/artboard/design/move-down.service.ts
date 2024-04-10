@@ -16,7 +16,6 @@ export const artboardDesignMoveDownService = async ({
 	updateSelectedDesignId?: IDesignIdOrNull
 }) => {
 	try {
-		console.log('artboard move down')
 		const updateSelectedDesignStrategy =
 			new ArtboardUpdateSelectedDesignStrategy()
 		return designMoveDownService({
