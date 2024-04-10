@@ -1,4 +1,5 @@
 import { type User } from '@prisma/client'
+import { type IArtboard } from '#app/models/artboard.server'
 import {
 	type IDesignCreateOverrides,
 	type IDesignTypeCreateOverrides,
@@ -16,7 +17,7 @@ import { createDesignStroke } from '#app/models/stroke.server'
 import { createDesignTemplate } from '#app/models/template.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { ArtboardDesignDataCreateSchema } from '#app/schema/design-artboard'
-import { prisma, type IArtboard } from '#app/utils/db.server'
+import { prisma } from '#app/utils/db.server'
 import { artboardUpdateSelectedDesignService } from './update-selected.service'
 
 export const artboardDesignCreateService = async ({

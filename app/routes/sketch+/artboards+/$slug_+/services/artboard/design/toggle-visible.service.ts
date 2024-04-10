@@ -1,11 +1,12 @@
 import { type User } from '@prisma/client'
+import { type IArtboard } from '#app/models/artboard.server'
 import {
 	updateDesignVisible,
 	type IDesign,
 	findFirstDesign,
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
-import { prisma, type IArtboard } from '#app/utils/db.server'
+import { prisma } from '#app/utils/db.server'
 import { artboardUpdateSelectedDesignService } from './update-selected.service'
 
 export const artboardDesignToggleVisibleService = async ({

@@ -5,8 +5,12 @@ import {
 	type whereArgsType,
 } from '#app/schema/artboard'
 import { prisma } from '#app/utils/db.server'
+import { type IProjectWithArtboards } from './project.server'
 
 export interface IArtboard extends Artboard {}
+export interface IArtboardWithProject extends IArtboard {
+	project: IProjectWithArtboards
+}
 
 // use prisma extension to .save() or .delete()
 

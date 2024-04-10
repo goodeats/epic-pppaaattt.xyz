@@ -1,10 +1,5 @@
 import { remember } from '@epic-web/remember'
-import {
-	type Artboard,
-	PrismaClient,
-	type Project,
-	type Prisma,
-} from '@prisma/client'
+import { PrismaClient, type Prisma } from '@prisma/client'
 import { type DefaultArgs } from '@prisma/client/runtime/library'
 import chalk from 'chalk'
 import { ArtboardPrismaExtensions } from './prisma-extensions-artboard'
@@ -77,11 +72,3 @@ export const prisma = remember('prisma', () => {
 	client.$connect()
 	return client
 })
-
-export interface IProject extends Project {
-	artboards?: Artboard[]
-}
-
-export interface IArtboard extends Artboard {
-	project?: Project
-}

@@ -1,4 +1,3 @@
-import { type Artboard } from '@prisma/client'
 import {
 	Link,
 	NavLink,
@@ -16,8 +15,8 @@ import {
 	sideNavLinkDefaultClassName,
 } from '#app/components/shared'
 import { Icon } from '#app/components/ui/icon'
+import { type IArtboardWithProject } from '#app/models/artboard.server'
 import { useBreadcrumbs } from '#app/utils/breadcrumbs'
-import { type IArtboard } from '#app/utils/db.server'
 import { cn, getUserImgSrc } from '#app/utils/misc'
 import { useOptionalUser, useUser } from '#app/utils/user'
 import { type loader } from './route'
@@ -85,7 +84,7 @@ export const List = () => {
 		)
 	}
 
-	const ListItem = ({ artboard }: { artboard: Artboard }) => {
+	const ListItem = ({ artboard }: { artboard: IArtboardWithProject }) => {
 		const { slug, name } = artboard
 		return (
 			<SideNavListItem key={slug}>
@@ -110,7 +109,12 @@ export const List = () => {
 				const artboardProject = artboard.project.slug
 
 				if (artboardProject !== projectSlug) return null
-				return <ListItem key={artboard.slug} artboard={artboard as IArtboard} />
+				return (
+					<ListItem
+						key={artboard.slug}
+						artboard={artboard as IArtboardWithProject}
+					/>
+				)
 			})}
 		</SideNavList>
 	)

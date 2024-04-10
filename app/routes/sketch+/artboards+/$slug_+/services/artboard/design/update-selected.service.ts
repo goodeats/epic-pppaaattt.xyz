@@ -1,3 +1,4 @@
+import { type IArtboard } from '#app/models/artboard.server'
 import {
 	deselectArtboardSelectedDesign,
 	findFirstVisibleArtboardDesignByType,
@@ -5,7 +6,7 @@ import {
 } from '#app/models/design-artboard.server'
 import { type IDesign } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
-import { type IArtboard, prisma } from '#app/utils/db.server'
+import { prisma } from '#app/utils/db.server'
 
 export const artboardUpdateSelectedDesignService = async ({
 	artboardId,

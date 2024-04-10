@@ -2,12 +2,12 @@ import {
 	SidebarPanelHeader,
 	SidebarPanelRowActionsContainer,
 } from '#app/components/templates'
+import { type IArtboard } from '#app/models/artboard.server'
 import { type ILayer } from '#app/models/layer.server'
 import {
 	type NewDesignSchemaType,
 	type designTypeEnum,
 } from '#app/schema/design'
-import { type IArtboard } from '#app/utils/db.server'
 import { capitalize } from '#app/utils/string-formatting'
 import { type IntentDesignCreate } from '../../../intent'
 import { PanelFormDesignNew } from '../../forms/design/panel-form-design-new'

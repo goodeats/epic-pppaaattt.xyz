@@ -2,6 +2,7 @@ import {
 	SidebarPanelRow,
 	SidebarPanelRowContainer,
 } from '#app/components/templates'
+import { type IArtboard } from '#app/models/artboard.server'
 import { type IDesign, type IDesignIdOrNull } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import {
@@ -14,7 +15,6 @@ import {
 	ReorderLayerDesignSchema,
 	ToggleVisibleLayerDesignSchema,
 } from '#app/schema/design-layer'
-import { type IArtboard } from '#app/utils/db.server'
 import { ARTBOARD_DESIGN_INTENT, LAYER_DESIGN_INTENT } from '../../../../intent'
 import { SidebarPanelActionsDesign } from '../../design/sidebar-panel-actions-design'
 import { SidebarPanelReorderDesign } from '../../design/sidebar-panel-reorder-design'
