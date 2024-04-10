@@ -2,23 +2,64 @@ import { type User } from '@prisma/client'
 import {
 	type IDesignCreateOverrides,
 	findFirstDesign,
-	connectPrevAndNextDesigns,
 	type IDesignTypeCreateOverrides,
-	type IDesign,
 } from '#app/models/design.server'
-import { createDesignFill } from '#app/models/fill.server'
 import { type ILayer } from '#app/models/layer.server'
-import { createDesignLayout } from '#app/models/layout.server'
-import { createDesignLine } from '#app/models/line.server'
-import { createDesignPalette } from '#app/models/palette.server'
-import { createDesignRotate } from '#app/models/rotate.server'
-import { createDesignSize } from '#app/models/size.server'
-import { createDesignStroke } from '#app/models/stroke.server'
-import { createDesignTemplate } from '#app/models/template.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { LayerDesignDataCreateSchema } from '#app/schema/design-layer'
 import { prisma } from '#app/utils/db.server'
-import { layerUpdateSelectedDesignService } from './update-selected.service'
+import {
+	designCreateService,
+	type ICreateDesignStrategy,
+} from '../../design/create.service'
+import { LayerUpdateSelectedDesignStrategy } from './update-selected.service'
+
+export class LayerCreateDesignStrategy implements ICreateDesignStrategy {
+	async getDesignsByTypeTail({
+		entityId,
+		type,
+	}: {
+		entityId: ILayer['id']
+		type: designTypeEnum
+	}) {
+		return await findFirstDesign({
+			where: { type, layerId: entityId, nextId: null },
+		})
+	}
+
+	async createDesign({
+		userId,
+		entityId,
+		type,
+		designOverrides,
+	}: {
+		userId: User['id']
+		entityId: ILayer['id']
+		type: designTypeEnum
+		designOverrides: IDesignCreateOverrides
+	}) {
+		const data = LayerDesignDataCreateSchema.parse({
+			type,
+			ownerId: userId,
+			layerId: entityId,
+			...designOverrides,
+		})
+		return await prisma.design.create({ data })
+	}
+
+	async visibleDesignsByTypeCount({
+		entityId,
+		type,
+	}: {
+		entityId: ILayer['id']
+		type: designTypeEnum
+	}) {
+		const visibleLayerDesignsByTypeCount = await prisma.design.count({
+			where: { layerId: entityId, type, visible: true },
+		})
+		return Number(visibleLayerDesignsByTypeCount)
+	}
+}
 
 export const layerDesignCreateService = async ({
 	userId,
@@ -34,171 +75,19 @@ export const layerDesignCreateService = async ({
 	designTypeOverrides?: IDesignTypeCreateOverrides
 }) => {
 	try {
-		// Step 1: find existing layer designs tail
-		const tailDesign = await getLayerDesignsTail({
-			layerId,
-			type,
-		})
-
-		// Step 2: create design before its associated type
-		const createdDesign = await createDesign({
+		const strategy = new LayerCreateDesignStrategy()
+		const updateSelectedDesignStrategy = new LayerUpdateSelectedDesignStrategy()
+		return designCreateService({
 			userId,
-			layerId,
+			entityId: layerId,
 			type,
-			designOverrides,
+			designOverrides: designOverrides || {},
+			designTypeOverrides: designTypeOverrides || {},
+			strategy,
+			updateSelectedDesignStrategy,
 		})
-
-		// Step 3: create the associated design type
-		const createdDesignTypePromise = createDesignType({
-			designId: createdDesign.id,
-			type,
-			designTypeOverrides,
-		})
-		await prisma.$transaction([createdDesignTypePromise])
-
-		// Step 4: connect new design to tail design, if it exists
-		if (tailDesign) {
-			const connectDesignsPromise = connectPrevAndNextDesigns({
-				prevId: tailDesign.id,
-				nextId: createdDesign.id,
-			})
-			await prisma.$transaction(connectDesignsPromise)
-		}
-
-		// Step 5: update selected design, if necessary
-		const shouldSetSelected = await shouldUpdateSelectedDesign({
-			layerId,
-			type,
-			designOverrides,
-		})
-		if (shouldSetSelected) {
-			await layerUpdateSelectedDesignService({
-				layerId,
-				designId: createdDesign.id,
-				type,
-			})
-		}
-
-		return { success: true }
 	} catch (error) {
 		console.log(error)
 		return { error: true }
 	}
-}
-
-const getLayerDesignsTail = async ({
-	layerId,
-	type,
-}: {
-	layerId: ILayer['id']
-	type: designTypeEnum
-}) => {
-	return await findFirstDesign({
-		where: { type, layerId, nextId: null },
-	})
-}
-
-const createDesign = async ({
-	userId,
-	layerId,
-	type,
-	designOverrides,
-}: {
-	userId: User['id']
-	layerId: ILayer['id']
-	type: designTypeEnum
-	designOverrides: IDesignCreateOverrides
-}) => {
-	const data = LayerDesignDataCreateSchema.parse({
-		type,
-		ownerId: userId,
-		layerId,
-		...designOverrides,
-	})
-	const createdDesign = await prisma.design.create({ data })
-
-	if (!createdDesign) throw new Error('Design was not created')
-
-	return createdDesign
-}
-
-const createDesignType = ({
-	designId,
-	type,
-	designTypeOverrides,
-}: {
-	designId: IDesign['id']
-	type: designTypeEnum
-	designTypeOverrides: IDesignTypeCreateOverrides
-}) => {
-	switch (type) {
-		case 'palette':
-			return createDesignPalette({
-				designId,
-				designTypeOverrides,
-			})
-		case 'size':
-			return createDesignSize({
-				designId,
-				designTypeOverrides,
-			})
-		case 'fill':
-			return createDesignFill({
-				designId,
-				designTypeOverrides,
-			})
-		case 'stroke':
-			return createDesignStroke({
-				designId,
-				designTypeOverrides,
-			})
-		case 'line':
-			return createDesignLine({
-				designId,
-				designTypeOverrides,
-			})
-		case 'rotate':
-			return createDesignRotate({
-				designId,
-				designTypeOverrides,
-			})
-		case 'layout':
-			return createDesignLayout({
-				designId,
-				designTypeOverrides,
-			})
-		case 'template':
-			return createDesignTemplate({
-				designId,
-				designTypeOverrides,
-			})
-		default:
-			throw new Error(`Design type not found: ${type}`)
-	}
-}
-
-const shouldUpdateSelectedDesign = async ({
-	layerId,
-	type,
-	designOverrides,
-}: {
-	layerId: ILayer['id']
-	type: designTypeEnum
-	designOverrides: IDesignCreateOverrides
-}) => {
-	const { visible, selected } = designOverrides
-	if (selected) {
-		return true
-	}
-	if (visible === false) {
-		return false
-	}
-
-	const visibleLayerDesignsByTypeCount = await prisma.design.count({
-		where: { layerId, type, visible: true },
-	})
-
-	// check if newly created design is the only visible design
-	// and therefore should be selected
-	return Number(visibleLayerDesignsByTypeCount) === 1
 }

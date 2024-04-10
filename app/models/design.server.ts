@@ -164,7 +164,7 @@ export const findManyDesignsWithType = async ({
 export const findFirstDesign = async ({
 	where,
 	select,
-}: findDesignArgsType): Promise<Design | null> => {
+}: findDesignArgsType): Promise<IDesign | null> => {
 	return await prisma.design.findFirst({
 		where,
 		select,
