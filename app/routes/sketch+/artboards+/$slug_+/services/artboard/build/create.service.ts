@@ -34,18 +34,13 @@ export const artboardBuildCreateService = async ({
 	layers: ILayer[]
 }): Promise<IArtboardGenerator> => {
 	try {
-		// Step 1: get all selected designs for the artboard
-		const artboardSelectedDesigns = await getArtboardSelectedDesigns({
-			artboardId: artboard.id,
-		})
-
-		// Step 2: validate the selected designs are all present
+		// Step 1: verify artboard selected designs are all present
 		const { artboardGeneratorDesigns, message } =
-			verifyArtboardGeneratorDesigns({
-				artboardSelectedDesigns,
+			await verifyArtboardGeneratorDesigns({
+				artboard,
 			})
 
-		// Step 3: return failure with message if not valid
+		// Step 2: return failure with message if not
 		if (!artboardGeneratorDesigns) {
 			return {
 				id: artboard.id,
@@ -55,7 +50,7 @@ export const artboardBuildCreateService = async ({
 			}
 		}
 
-		// Step 4: build the artboard generator layer
+		// Step 3: build the artboard generator layer
 		// which will be the global settings for all layers
 		const artboardGeneratorLayer = await buildGeneratorArtboardLayer({
 			artboardId: artboard.id,
@@ -63,6 +58,8 @@ export const artboardBuildCreateService = async ({
 			artboardGeneratorDesigns,
 		})
 
+		// Step 4: build the generator layers
+		// each layer can override any of the global settings
 		const generatorLayers = await buildGeneratorLayers({
 			layers,
 			artboardGeneratorLayer,
@@ -85,6 +82,51 @@ export const artboardBuildCreateService = async ({
 	}
 }
 
+const verifyArtboardGeneratorDesigns = async ({
+	artboard,
+}: {
+	artboard: PickedArtboardType
+}): Promise<{
+	artboardGeneratorDesigns: IGeneratorDesigns | null
+	message: string
+}> => {
+	// Step 1: get all selected designs for the artboard
+	const artboardSelectedDesigns = await getArtboardSelectedDesigns({
+		artboardId: artboard.id,
+	})
+
+	// Step 2: split the selected designs into the first of each type
+	const selectedDesignTypes = findFirstDesignsByTypeInArray({
+		designs: artboardSelectedDesigns,
+	})
+
+	// Step 3: validate that all selected design types are present
+	// message will indicate which design type is missing
+	const { success, message } = verifySelectedDesignTypesAllPresent({
+		selectedDesignTypes,
+	})
+
+	// Step 4: return failure with message if selected designs are not valid
+	if (!success) {
+		return {
+			message,
+			artboardGeneratorDesigns: null,
+		}
+	}
+
+	// Step 5: reformat the selected designs to be generator designs
+	// this is to ensure that the selected designs are not null
+	const artboardGeneratorDesigns = {
+		...selectedDesignTypes,
+		palette: [selectedDesignTypes.palette],
+	} as IGeneratorDesigns
+
+	return {
+		artboardGeneratorDesigns,
+		message: 'Artboard generator designs are present.',
+	}
+}
+
 const getArtboardSelectedDesigns = async ({
 	artboardId,
 }: {
@@ -93,45 +135,6 @@ const getArtboardSelectedDesigns = async ({
 	return await findManyDesignsWithType({
 		where: { artboardId, selected: true },
 	})
-}
-
-const verifyArtboardGeneratorDesigns = ({
-	artboardSelectedDesigns,
-}: {
-	artboardSelectedDesigns: IDesignWithType[]
-}): {
-	artboardGeneratorDesigns: IGeneratorDesigns | null
-	message: string
-} => {
-	// Step 1: split the selected designs into the first of each type
-	const selectedDesignTypes = findFirstDesignsByTypeInArray({
-		designs: artboardSelectedDesigns,
-	})
-
-	// Step 2: validate that all selected design types are present
-	// message will indicate which design type is missing
-	const { success, message } = verifySelectedDesignTypesAllPresent({
-		selectedDesignTypes,
-	})
-
-	// Step 3: return failure with message if selected designs are not valid
-	if (!success) {
-		return {
-			message,
-			artboardGeneratorDesigns: null,
-		}
-	}
-
-	const artboardGeneratorDesigns = {
-		...selectedDesignTypes,
-		palette: [selectedDesignTypes.palette],
-	} as IGeneratorDesigns
-
-	// Step 4: return the selected designs as generator designs, meaning they are not null
-	return {
-		artboardGeneratorDesigns,
-		message: 'Artboard generator designs are present.',
-	}
 }
 
 // default/global design settings for each layer
@@ -145,22 +148,6 @@ const buildGeneratorArtboardLayer = async ({
 	artboard: PickedArtboardType
 	artboardGeneratorDesigns: IGeneratorDesigns
 }): Promise<ILayerGenerator> => {
-	// const designs = await getArtboardSelectedDesigns({ artboardId })
-	// const { palette, size, fill, stroke, line, rotate, layout, template } =
-	// 	findFirstDesignsByTypeInArray({ designs })
-
-	// // when the artboard build model is formalized
-	// // these can just be verified as joins
-	// // not the prettiest code, but this works for now
-	// if (!palette) throw new Error('Palette not found') // still do this to make sure there is an available palette
-	// if (!size) throw new Error('Size not found')
-	// if (!fill) throw new Error('Fill not found')
-	// if (!stroke) throw new Error('Stroke not found')
-	// if (!line) throw new Error('Line not found')
-	// if (!rotate) throw new Error('Rotate not found')
-	// if (!layout) throw new Error('Layout not found')
-	// if (!template) throw new Error('Template not found')
-
 	// get all visible palettes to use for fill or stroke
 	const palettes = await getArtboardVisiblePalettes({ artboardId })
 
@@ -177,14 +164,7 @@ const buildGeneratorArtboardLayer = async ({
 	return {
 		...artboardGeneratorDesigns,
 		palette: palettes,
-		// size,
-		// fill,
-		// stroke,
-		// line,
-		// rotate,
 		rotates,
-		// layout,
-		// template,
 		container,
 	}
 }
