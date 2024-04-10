@@ -23,7 +23,7 @@ export interface IStrokeCreateOverrides {
 	basis?: string
 }
 
-export const findStrokeInDesignArray = ({
+export const findFirstStrokeInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]

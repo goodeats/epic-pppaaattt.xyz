@@ -1,3 +1,4 @@
+import { type ILayerGenerator } from '#app/definitions/artboard-generator'
 import { StrokeBasisTypeEnum } from '#app/schema/stroke'
 import {
 	getCircularItemInArray,
@@ -5,14 +6,13 @@ import {
 	getReverseCircularItemInArray,
 } from '#app/utils/array.utils'
 import { colorRandomHex } from '#app/utils/colors'
-import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawStrokeService = ({
 	layer,
 	index,
 	pixelHex,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 	pixelHex: string | null
 }) => {

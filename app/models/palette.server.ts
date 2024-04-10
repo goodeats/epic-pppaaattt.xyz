@@ -23,7 +23,7 @@ export interface IPaletteCreateOverrides {
 	opacity?: number
 }
 
-export const findPaletteInDesignArray = ({
+export const findFirstPaletteInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]

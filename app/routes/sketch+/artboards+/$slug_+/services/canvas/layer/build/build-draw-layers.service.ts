@@ -1,8 +1,8 @@
 import {
-	type IArtboardLayerBuild,
-	type IArtboardBuild,
-} from '../../../../queries'
-import { type ICanvasDrawItem } from '../../draw.service'
+	type IArtboardGenerator,
+	type IGenerationItem,
+	type ILayerGenerator,
+} from '#app/definitions/artboard-generator'
 import { canvasBuildLayerDrawCountService } from './build-layer-draw-count.service'
 import { canvasBuildLayerDrawFillService } from './build-layer-draw-fill.service'
 import { canvasBuildLayerDrawLineService } from './build-layer-draw-line.service'
@@ -14,50 +14,55 @@ import { canvasBuildLayerDrawTemplateService } from './build-layer-draw-template
 
 export const canvasLayerBuildDrawLayersService = ({
 	ctx,
-	artboardBuild,
+	artboardGenerator,
 }: {
 	ctx: CanvasRenderingContext2D
-	artboardBuild: IArtboardBuild
-}): ICanvasDrawItem[][] => {
-	const { layers } = artboardBuild
+	artboardGenerator: IArtboardGenerator
+}): IGenerationItem[][] => {
+	const { layers } = artboardGenerator
 
 	const drawLayers = []
 	for (let i = 0; i < layers.length; i++) {
 		const layer = layers[i]
-		const layerDrawItems = buildLayerDrawItems({ ctx, layer })
+		const layerDrawItems = buildLayerGenerationItems({ ctx, layer })
 		drawLayers.push(layerDrawItems)
 	}
 	return drawLayers
 }
 
-const buildLayerDrawItems = ({
+const buildLayerGenerationItems = ({
 	ctx,
 	layer,
 }: {
 	ctx: CanvasRenderingContext2D
-	layer: IArtboardLayerBuild
-}): ICanvasDrawItem[] => {
+	layer: ILayerGenerator
+}): IGenerationItem[] => {
 	const count = canvasBuildLayerDrawCountService({ layer })
 
-	const layerDrawItems = []
+	const layerGenerationItems = []
 	for (let index = 0; index < count; index++) {
-		const layerDrawItem = buildLayerDrawItem({ ctx, layer, index, count })
-		layerDrawItems.push(layerDrawItem)
+		const generationItem = buildLayerGenerationItem({
+			ctx,
+			layer,
+			index,
+			count,
+		})
+		layerGenerationItems.push(generationItem)
 	}
-	return layerDrawItems
+	return layerGenerationItems
 }
 
-const buildLayerDrawItem = ({
+const buildLayerGenerationItem = ({
 	ctx,
 	layer,
 	index,
 	count,
 }: {
 	ctx: CanvasRenderingContext2D
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 	count: number
-}): ICanvasDrawItem => {
+}): IGenerationItem => {
 	const { x, y, pixelHex } = canvasBuildLayerDrawPositionService({
 		ctx,
 		layer,
@@ -71,7 +76,7 @@ const buildLayerDrawItem = ({
 	const template = canvasBuildLayerDrawTemplateService({ layer, index })
 
 	return {
-		id: `layer-${layer.layerName}-${index}-${count}`,
+		id: `layer-${layer.id}-${index}-${count}`,
 		fillStyle: fill,
 		lineWidth: line,
 		position: { x, y },

@@ -17,7 +17,7 @@ export interface IDesignWithArtboard extends IDesign {
 	artboard: IArtboard
 }
 
-export const findFirstVisibleArtboardDesign = async ({
+export const findFirstVisibleArtboardDesignByType = async ({
 	artboardId,
 	type,
 }: {
@@ -38,15 +38,28 @@ export const updateArtboardSelectedDesign = ({
 	designId: Design['id']
 	type: designTypeEnum
 }) => {
-	const unselectDesign = prisma.design.updateMany({
-		where: { artboardId, type, selected: true },
-		data: { selected: false },
+	const deselectDesign = deselectArtboardSelectedDesign({
+		artboardId,
+		type,
 	})
 	const selectDesign = prisma.design.update({
 		where: { id: designId },
 		data: { selected: true },
 	})
-	return [unselectDesign, selectDesign]
+	return [deselectDesign, selectDesign]
+}
+
+export const deselectArtboardSelectedDesign = ({
+	artboardId,
+	type,
+}: {
+	artboardId: IArtboard['id']
+	type: designTypeEnum
+}) => {
+	return prisma.design.updateMany({
+		where: { artboardId, type, selected: true },
+		data: { selected: false },
+	})
 }
 
 export const getArtboardVisiblePalettes = async ({

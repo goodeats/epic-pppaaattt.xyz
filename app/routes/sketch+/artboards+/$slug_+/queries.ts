@@ -1,16 +1,9 @@
+import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
 import {
 	findManyDesignsWithType,
 	type IDesignsByType,
 } from '#app/models/design.server'
-import { type IFill } from '#app/models/fill.server'
 import { findManyLayers, type ILayer } from '#app/models/layer.server'
-import { type ILayout } from '#app/models/layout.server'
-import { type ILine } from '#app/models/line.server'
-import { type IPalette } from '#app/models/palette.server'
-import { type IRotate } from '#app/models/rotate.server'
-import { type ISize } from '#app/models/size.server'
-import { type IStroke } from '#app/models/stroke.server'
-import { type ITemplate } from '#app/models/template.server'
 import { prisma } from '#app/utils/db.server'
 import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
 import { orderLinkedLayers } from '#app/utils/layer.utils'
@@ -121,45 +114,10 @@ export const getLayerDesigns = async ({
 	return filterAndOrderArtboardDesignsByType({ designs })
 }
 
-// this could be its own model potentially
-// i.e., artboard has many builds
-export interface IArtboardBuild {
-	id: string
-	layers: IArtboardLayerBuild[]
-}
-
-export interface IArtboardLayerBuild {
-	layerId?: ILayer['id']
-	layerName?: ILayer['name']
-	palette: IPalette[]
-	size: ISize
-	fill: IFill
-	stroke: IStroke
-	line: ILine
-	rotate: IRotate
-	rotates?: IRotate[]
-	layout: ILayout
-	template: ITemplate
-	// create this type
-	container: IArtboardLayerContainerBuild
-}
-
-export interface IArtboardLayerContainerBuild {
-	width: number
-	height: number
-	top: number
-	left: number
-	margin: number
-	canvas: {
-		width: number
-		height: number
-	}
-}
-
-export const getArtboardBuild = async (
+export const getArtboardGenerator = async (
 	artboard: PickedArtboardType,
 	layers: ILayer[],
-): Promise<IArtboardBuild | null> => {
+): Promise<IArtboardGenerator> => {
 	const artboardBuild = await artboardBuildCreateService({ artboard, layers })
 	return artboardBuild
 }

@@ -23,7 +23,7 @@ export interface ISizeCreateOverrides {
 	basis?: string
 }
 
-export const findSizeInDesignArray = ({
+export const findFirstSizeInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]

@@ -23,7 +23,7 @@ export interface IFillCreateOverrides {
 	basis?: string
 }
 
-export const findFillInDesignArray = ({
+export const findFirstFillInDesignArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]

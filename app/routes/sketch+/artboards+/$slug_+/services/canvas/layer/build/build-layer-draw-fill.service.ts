@@ -1,3 +1,4 @@
+import { type ILayerGenerator } from '#app/definitions/artboard-generator'
 import { FillBasisTypeEnum, FillStyleTypeEnum } from '#app/schema/fill'
 import {
 	getCircularItemInArray,
@@ -5,14 +6,13 @@ import {
 	getReverseCircularItemInArray,
 } from '#app/utils/array.utils'
 import { colorRandomHex } from '#app/utils/colors'
-import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawFillService = ({
 	layer,
 	index,
 	pixelHex,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 	pixelHex: string | null
 }) => {

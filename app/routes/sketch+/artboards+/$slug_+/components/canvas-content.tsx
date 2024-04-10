@@ -8,7 +8,9 @@ import {
 	useNodesState,
 	BackgroundVariant,
 } from 'reactflow'
-import { type IArtboardBuild, type PickedArtboardType } from '../queries'
+import { ContainerIndex } from '#app/components/shared'
+import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
+import { type PickedArtboardType } from '../queries'
 import { canvasDrawService } from '../services/canvas/draw.service'
 import 'reactflow/dist/style.css'
 
@@ -23,10 +25,10 @@ const initialNodes = [
 
 export const CanvasContent = ({
 	artboard,
-	artboardBuild,
+	artboardGenerator,
 }: {
 	artboard: PickedArtboardType
-	artboardBuild: IArtboardBuild | null
+	artboardGenerator: IArtboardGenerator | null
 }) => {
 	const Canvas = () => {
 		const { width, height, backgroundColor } = artboard
@@ -34,8 +36,8 @@ export const CanvasContent = ({
 
 		useEffect(() => {
 			const canvas = canvasRef.current
-			const canvasReady = canvas && artboardBuild
-			canvasReady && canvasDrawService({ canvas, artboard, artboardBuild })
+			const canvasReady = canvas && artboardGenerator
+			canvasReady && canvasDrawService({ canvas, artboard, artboardGenerator })
 		}, [canvasRef])
 
 		return (
@@ -55,17 +57,23 @@ export const CanvasContent = ({
 	}
 	return (
 		<div id="reactflow-wrapper" className="absolute inset-0">
-			<ReactFlow
-				nodes={nodes}
-				nodeTypes={nodeTypes}
-				onNodesChange={onNodesChange}
-				fitView
-				minZoom={0.01}
-			>
-				<Background variant={BackgroundVariant.Dots} />
-				<MiniMap pannable zoomable />
-				<Controls />
-			</ReactFlow>
+			{artboardGenerator?.success ? (
+				<ReactFlow
+					nodes={nodes}
+					nodeTypes={nodeTypes}
+					onNodesChange={onNodesChange}
+					fitView
+					minZoom={0.01}
+				>
+					<Background variant={BackgroundVariant.Dots} />
+					<MiniMap pannable zoomable />
+					<Controls />
+				</ReactFlow>
+			) : (
+				<ContainerIndex>
+					{artboardGenerator?.message || 'Artboard generator unsuccessful'}
+				</ContainerIndex>
+			)}
 		</div>
 	)
 }

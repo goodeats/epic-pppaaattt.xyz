@@ -1,3 +1,4 @@
+import { type ILayerGenerator } from '#app/definitions/artboard-generator'
 import { LineFormatTypeEnum } from '#app/schema/line'
 import { SizeFormatTypeEnum } from '#app/schema/size'
 import {
@@ -5,13 +6,12 @@ import {
 	linePercentToPixel,
 } from '#app/utils/line'
 import { sizePercentToPixel } from '#app/utils/size'
-import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawSizeService = ({
 	layer,
 	index,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 }) => {
 	const { size, line, container } = layer
@@ -36,9 +36,9 @@ const getAdjustedLineSize = ({
 	size,
 	container,
 }: {
-	line: IArtboardLayerBuild['line']
-	size: IArtboardLayerBuild['size']
-	container: IArtboardLayerBuild['container']
+	line: ILayerGenerator['line']
+	size: ILayerGenerator['size']
+	container: ILayerGenerator['container']
 }) => {
 	const { width, format } = line
 

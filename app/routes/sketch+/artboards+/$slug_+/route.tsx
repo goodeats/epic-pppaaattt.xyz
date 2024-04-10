@@ -1,7 +1,6 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData, type MetaFunction } from '@remix-run/react'
-import { formatDistanceToNow } from 'date-fns'
 import {
 	DashboardBody,
 	DashboardContent,
@@ -13,7 +12,7 @@ import { CanvasContent } from './components/canvas-content'
 import { SidebarLeft, SidebarRight } from './components/sidebars'
 import {
 	getArtboard,
-	getArtboardBuild,
+	getArtboardGenerator,
 	getArtboardDesigns,
 	getLayer,
 	getLayerDesigns,
@@ -49,24 +48,20 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 		layerDesigns = await getLayerDesigns({ layer })
 	}
 
-	const date = new Date(artboard.updatedAt)
-	const artboardTimeAgo = formatDistanceToNow(date)
-
 	const layers = await getLayers({ userId, artboardId: artboard.id })
 
 	const artboardDesigns = await getArtboardDesigns({ artboard })
 
-	const artboardBuild = await getArtboardBuild(artboard, layers)
+	const artboardGenerator = await getArtboardGenerator(artboard, layers)
 
 	return json({
 		owner,
 		artboard,
-		artboardTimeAgo,
 		artboardDesigns,
 		layer,
 		layerDesigns,
 		layers,
-		artboardBuild,
+		artboardGenerator,
 	})
 }
 
@@ -78,14 +73,17 @@ export default function SketchRoute() {
 		layer,
 		layerDesigns,
 		layers,
-		artboardBuild,
+		artboardGenerator,
 	} = data
 
 	return (
 		<DashboardBody id="sketch-dashboard-body">
 			<SidebarLeft artboard={artboard} layers={layers} />
 			<DashboardContent id="sketch-dashboard-content">
-				<CanvasContent artboard={artboard} artboardBuild={artboardBuild} />
+				<CanvasContent
+					artboard={artboard}
+					artboardGenerator={artboardGenerator}
+				/>
 			</DashboardContent>
 			<SidebarRight
 				artboard={artboard}

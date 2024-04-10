@@ -10,8 +10,19 @@ import {
 	type IDesignWithLayout,
 	type IDesignWithTemplate,
 	type IDesignsByType,
+	type ISelectedDesigns,
+	type ISelectedDesignsFiltered,
 } from '#app/models/design.server'
+import { findFirstFillInDesignArray } from '#app/models/fill.server'
+import { findFirstLayoutInDesignArray } from '#app/models/layout.server'
+import { findFirstLineInDesignArray } from '#app/models/line.server'
+import { findFirstPaletteInDesignArray } from '#app/models/palette.server'
+import { findFirstRotateInDesignArray } from '#app/models/rotate.server'
+import { findFirstSizeInDesignArray } from '#app/models/size.server'
+import { findFirstStrokeInDesignArray } from '#app/models/stroke.server'
+import { findFirstTemplateInDesignArray } from '#app/models/template.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
+import { safelyAssignValue } from './typescript-helpers'
 
 export const filterAndOrderArtboardDesignsByType = ({
 	designs,
@@ -386,4 +397,92 @@ export const designsByTypeToPanelArray = ({
 		{ type: DesignTypeEnum.ROTATE, designs: designRotates },
 		{ type: DesignTypeEnum.TEMPLATE, designs: designTemplates },
 	]
+}
+
+// used from artboard create service
+// get all selected designs by type for artboard and each layer
+// then separate them by type here
+export const findFirstDesignsByTypeInArray = ({
+	designs,
+}: {
+	designs: IDesignWithType[]
+}): ISelectedDesigns => {
+	const palette = findFirstPaletteInDesignArray({ designs })
+	const size = findFirstSizeInDesignArray({ designs })
+	const fill = findFirstFillInDesignArray({ designs })
+	const stroke = findFirstStrokeInDesignArray({ designs })
+	const line = findFirstLineInDesignArray({ designs })
+	const rotate = findFirstRotateInDesignArray({ designs })
+	const layout = findFirstLayoutInDesignArray({ designs })
+	const template = findFirstTemplateInDesignArray({ designs })
+
+	return {
+		palette,
+		size,
+		fill,
+		stroke,
+		line,
+		rotate,
+		layout,
+		template,
+	}
+}
+
+// used from artboard generator create service
+// verify artboard has all design types
+// or canvas shouldn't be displayed
+export const verifySelectedDesignTypesAllPresent = ({
+	selectedDesignTypes,
+}: {
+	selectedDesignTypes: ISelectedDesigns
+}): {
+	success: boolean
+	message: string
+} => {
+	// set the design types to array from keys
+	const designTypes = Object.keys(
+		selectedDesignTypes,
+	) as (keyof ISelectedDesigns)[]
+
+	// iterate through each design type
+	for (const designType of designTypes) {
+		// if the design type is not present
+		if (!selectedDesignTypes[designType]) {
+			// return an error message
+			// with the design type in the message
+			// indicating that the design type is missing
+			return {
+				success: false,
+				message: `Please make a ${designType} design available for the artboard.`,
+			}
+		}
+	}
+
+	// if all design types are present
+	return { success: true, message: 'All selected designs are present' }
+}
+
+// used from artboard generator create service
+// layer generators will have artboard generator designs as default
+// so only return the selected designs for layer to merge and override
+export const filterSelectedDesignTypes = ({
+	selectedDesignTypes,
+}: {
+	selectedDesignTypes: ISelectedDesigns
+}): ISelectedDesignsFiltered => {
+	const filteredSelectedDesigns: Partial<ISelectedDesignsFiltered> = {}
+
+	const designTypes = Object.keys(
+		selectedDesignTypes,
+	) as (keyof ISelectedDesigns)[]
+
+	for (const designType of designTypes) {
+		const designValue = selectedDesignTypes[designType]
+
+		if (designValue === null) continue
+
+		safelyAssignValue(filteredSelectedDesigns, designType, designValue)
+	}
+
+	return filteredSelectedDesigns as ISelectedDesignsFiltered
 }

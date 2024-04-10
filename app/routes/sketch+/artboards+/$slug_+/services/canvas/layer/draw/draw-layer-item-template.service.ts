@@ -1,4 +1,4 @@
-import { type ICanvasDrawItem } from '../../draw.service'
+import { type IGenerationItem } from '#app/definitions/artboard-generator'
 import { drawTemplateTriangleService } from './templates/draw-layer-item-template-triangle.service'
 
 export const drawLayerItemTemplateService = ({
@@ -6,7 +6,7 @@ export const drawLayerItemTemplateService = ({
 	layerDrawItem,
 }: {
 	ctx: CanvasRenderingContext2D
-	layerDrawItem: ICanvasDrawItem
+	layerDrawItem: IGenerationItem
 }) => {
 	const { template } = layerDrawItem
 

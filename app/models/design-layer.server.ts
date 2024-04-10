@@ -38,15 +38,28 @@ export const updateLayerSelectedDesign = ({
 	designId: Design['id']
 	type: designTypeEnum
 }) => {
-	const unselectDesign = prisma.design.updateMany({
-		where: { layerId, type, selected: true },
-		data: { selected: false },
+	const deselectDesign = deselectLayerSelectedDesign({
+		layerId,
+		type,
 	})
 	const selectDesign = prisma.design.update({
 		where: { id: designId },
 		data: { selected: true },
 	})
-	return [unselectDesign, selectDesign]
+	return [deselectDesign, selectDesign]
+}
+
+export const deselectLayerSelectedDesign = ({
+	layerId,
+	type,
+}: {
+	layerId: ILayer['id']
+	type: designTypeEnum
+}) => {
+	return prisma.design.updateMany({
+		where: { layerId, type, selected: true },
+		data: { selected: false },
+	})
 }
 
 export const getLayerVisiblePalettes = async ({

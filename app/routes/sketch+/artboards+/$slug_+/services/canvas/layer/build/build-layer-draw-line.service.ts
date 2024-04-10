@@ -1,12 +1,12 @@
+import { type ILayerGenerator } from '#app/definitions/artboard-generator'
 import { LineFormatTypeEnum } from '#app/schema/line'
 import { linePercentToPixel } from '#app/utils/line'
-import { type IArtboardLayerBuild } from '../../../../queries'
 
 export const canvasBuildLayerDrawLineService = ({
 	layer,
 	index,
 }: {
-	layer: IArtboardLayerBuild
+	layer: ILayerGenerator
 	index: number
 }) => {
 	const { line, size, container } = layer
