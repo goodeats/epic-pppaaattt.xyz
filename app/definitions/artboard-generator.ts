@@ -9,20 +9,17 @@ import { type IStroke } from '#app/models/stroke.server'
 import { type ITemplate } from '#app/models/template.server'
 import { type IArtboard } from '#app/utils/db.server'
 
+// object sent to the client
+// generator has final building blocks for the generation(s)
 export interface IArtboardGenerator {
 	id: IArtboard['id']
 	layers: ILayerGenerator[]
-	success?: boolean
-	message?: string
+	success: boolean
+	message: string
 }
 
-export interface ILayerGenerator {
-	// first pass of artboard global styles won't have these
-	// layer-specific attributes
-	id?: ILayer['id']
-	name?: ILayer['name']
-	description?: ILayer['description']
-	// layer can override or default to artboard design types
+// layer can override or default to artboard design types
+export interface IGeneratorDesigns {
 	palette: IPalette[]
 	size: ISize
 	fill: IFill
@@ -32,7 +29,14 @@ export interface ILayerGenerator {
 	rotates?: IRotate[]
 	layout: ILayout
 	template: ITemplate
-	// create this type
+}
+
+export interface ILayerGenerator extends IGeneratorDesigns {
+	id?: ILayer['id']
+	name?: ILayer['name']
+	description?: ILayer['description']
+
+	// create this design type
 	container: ILayerGeneratorContainer
 }
 

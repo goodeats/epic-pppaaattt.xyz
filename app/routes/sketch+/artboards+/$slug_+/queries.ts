@@ -117,7 +117,7 @@ export const getLayerDesigns = async ({
 export const getArtboardGenerator = async (
 	artboard: PickedArtboardType,
 	layers: ILayer[],
-): Promise<IArtboardGenerator | null> => {
+): Promise<IArtboardGenerator> => {
 	const artboardBuild = await artboardBuildCreateService({ artboard, layers })
 	return artboardBuild
 }

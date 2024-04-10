@@ -111,6 +111,17 @@ export type IDesignType =
 	| IDesignWithLayout
 	| IDesignWithTemplate
 
+export interface ISelectedDesigns {
+	palette: IPalette | null
+	size: ISize | null
+	fill: IFill | null
+	stroke: IStroke | null
+	line: ILine | null
+	rotate: IRotate | null
+	layout: ILayout | null
+	template: ITemplate | null
+}
+
 export const findManyDesignsWithType = async ({
 	where,
 }: {

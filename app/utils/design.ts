@@ -10,6 +10,7 @@ import {
 	type IDesignWithLayout,
 	type IDesignWithTemplate,
 	type IDesignsByType,
+	type ISelectedDesigns,
 } from '#app/models/design.server'
 import { findFirstFillInDesignArray } from '#app/models/fill.server'
 import { findFirstLayoutInDesignArray } from '#app/models/layout.server'
@@ -403,7 +404,7 @@ export const findFirstDesignsByTypeInArray = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
-}) => {
+}): ISelectedDesigns => {
 	const palette = findFirstPaletteInDesignArray({ designs })
 	const size = findFirstSizeInDesignArray({ designs })
 	const fill = findFirstFillInDesignArray({ designs })
@@ -423,4 +424,38 @@ export const findFirstDesignsByTypeInArray = ({
 		layout,
 		template,
 	}
+}
+
+// used from artboard create service
+// verify artboard has all design types
+// or canvas shouldn't be displayed
+export const verifySelectedDesignTypesAllPresent = ({
+	selectedDesignTypes,
+}: {
+	selectedDesignTypes: ISelectedDesigns
+}): {
+	success: boolean
+	message: string
+} => {
+	// set the design types to array from keys
+	const designTypes = Object.keys(
+		selectedDesignTypes,
+	) as (keyof ISelectedDesigns)[]
+
+	// iterate through each design type
+	for (const designType of designTypes) {
+		// if the design type is not present
+		if (!selectedDesignTypes[designType]) {
+			// return an error message
+			// with the design type in the message
+			// indicating that the design type is missing
+			return {
+				success: false,
+				message: `Please make a ${designType} design available for the artboard.`,
+			}
+		}
+	}
+
+	// if all design types are present
+	return { success: true, message: 'All selected designs are present' }
 }

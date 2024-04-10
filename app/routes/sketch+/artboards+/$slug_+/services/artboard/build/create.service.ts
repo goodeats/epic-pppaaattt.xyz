@@ -1,4 +1,5 @@
 import {
+	type IGeneratorDesigns,
 	type IArtboardGenerator,
 	type ILayerGenerator,
 } from '#app/definitions/artboard-generator'
@@ -11,10 +12,16 @@ import {
 	getLayerVisiblePalettes,
 	getLayerVisibleRotates,
 } from '#app/models/design-layer.server'
-import { findManyDesignsWithType } from '#app/models/design.server'
+import {
+	findManyDesignsWithType,
+	type IDesignWithType,
+} from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
-import { findFirstDesignsByTypeInArray } from '#app/utils/design'
+import {
+	findFirstDesignsByTypeInArray,
+	verifySelectedDesignTypesAllPresent,
+} from '#app/utils/design'
 import { filterLayersVisible } from '#app/utils/layer.utils'
 import { isArrayRotateBasisType } from '#app/utils/rotate'
 import { type PickedArtboardType } from '../../../queries'
@@ -25,11 +32,35 @@ export const artboardBuildCreateService = async ({
 }: {
 	artboard: PickedArtboardType
 	layers: ILayer[]
-}): Promise<IArtboardGenerator | null> => {
+}): Promise<IArtboardGenerator> => {
 	try {
+		// Step 1: get all selected designs for the artboard
+		const artboardSelectedDesigns = await getArtboardSelectedDesigns({
+			artboardId: artboard.id,
+		})
+
+		// Step 2: validate the selected designs are all present
+		const { artboardGeneratorDesigns, message } =
+			verifyArtboardGeneratorDesigns({
+				artboardSelectedDesigns,
+			})
+
+		// Step 3: return failure with message if not valid
+		if (!artboardGeneratorDesigns) {
+			return {
+				id: artboard.id,
+				layers: [],
+				success: false,
+				message,
+			}
+		}
+
+		// Step 4: build the artboard generator layer
+		// which will be the global settings for all layers
 		const artboardGeneratorLayer = await buildGeneratorArtboardLayer({
 			artboardId: artboard.id,
 			artboard,
+			artboardGeneratorDesigns,
 		})
 
 		const generatorLayers = await buildGeneratorLayers({
@@ -40,12 +71,66 @@ export const artboardBuildCreateService = async ({
 		return {
 			id: artboard.id,
 			layers: generatorLayers,
-			success: false,
+			success: true,
 			message: 'Artboard generator created successfully.',
 		}
 	} catch (error) {
 		console.log(error)
-		return null
+		return {
+			id: artboard.id,
+			layers: [],
+			success: false,
+			message: 'Unknown error creating artboard generator.',
+		}
+	}
+}
+
+const getArtboardSelectedDesigns = async ({
+	artboardId,
+}: {
+	artboardId: IArtboard['id']
+}): Promise<IDesignWithType[]> => {
+	return await findManyDesignsWithType({
+		where: { artboardId, selected: true },
+	})
+}
+
+const verifyArtboardGeneratorDesigns = ({
+	artboardSelectedDesigns,
+}: {
+	artboardSelectedDesigns: IDesignWithType[]
+}): {
+	artboardGeneratorDesigns: IGeneratorDesigns | null
+	message: string
+} => {
+	// Step 1: split the selected designs into the first of each type
+	const selectedDesignTypes = findFirstDesignsByTypeInArray({
+		designs: artboardSelectedDesigns,
+	})
+
+	// Step 2: validate that all selected design types are present
+	// message will indicate which design type is missing
+	const { success, message } = verifySelectedDesignTypesAllPresent({
+		selectedDesignTypes,
+	})
+
+	// Step 3: return failure with message if selected designs are not valid
+	if (!success) {
+		return {
+			message,
+			artboardGeneratorDesigns: null,
+		}
+	}
+
+	const artboardGeneratorDesigns = {
+		...selectedDesignTypes,
+		palette: [selectedDesignTypes.palette],
+	} as IGeneratorDesigns
+
+	// Step 4: return the selected designs as generator designs, meaning they are not null
+	return {
+		artboardGeneratorDesigns,
+		message: 'Artboard generator designs are present.',
 	}
 }
 
@@ -54,47 +139,52 @@ export const artboardBuildCreateService = async ({
 const buildGeneratorArtboardLayer = async ({
 	artboardId,
 	artboard,
+	artboardGeneratorDesigns,
 }: {
 	artboardId: string
 	artboard: PickedArtboardType
+	artboardGeneratorDesigns: IGeneratorDesigns
 }): Promise<ILayerGenerator> => {
-	const designs = await getArtboardSelectedDesigns({ artboardId })
-	const { palette, size, fill, stroke, line, rotate, layout, template } =
-		findFirstDesignsByTypeInArray({ designs })
+	// const designs = await getArtboardSelectedDesigns({ artboardId })
+	// const { palette, size, fill, stroke, line, rotate, layout, template } =
+	// 	findFirstDesignsByTypeInArray({ designs })
 
-	// when the artboard build model is formalized
-	// these can just be verified as joins
-	// not the prettiest code, but this works for now
-	if (!palette) throw new Error('Palette not found') // still do this to make sure there is an available palette
-	if (!size) throw new Error('Size not found')
-	if (!fill) throw new Error('Fill not found')
-	if (!stroke) throw new Error('Stroke not found')
-	if (!line) throw new Error('Line not found')
-	if (!rotate) throw new Error('Rotate not found')
-	if (!layout) throw new Error('Layout not found')
-	if (!template) throw new Error('Template not found')
+	// // when the artboard build model is formalized
+	// // these can just be verified as joins
+	// // not the prettiest code, but this works for now
+	// if (!palette) throw new Error('Palette not found') // still do this to make sure there is an available palette
+	// if (!size) throw new Error('Size not found')
+	// if (!fill) throw new Error('Fill not found')
+	// if (!stroke) throw new Error('Stroke not found')
+	// if (!line) throw new Error('Line not found')
+	// if (!rotate) throw new Error('Rotate not found')
+	// if (!layout) throw new Error('Layout not found')
+	// if (!template) throw new Error('Template not found')
 
 	// get all visible palettes to use for fill or stroke
 	const palettes = await getArtboardVisiblePalettes({ artboardId })
 
 	// get all visible rotates to use for rotate if defined random
 	// no defined random rotates and no rotates will default to 0 rotation
-	const rotates = isArrayRotateBasisType(rotate.basis as rotateBasisTypeEnum)
+	const rotates = isArrayRotateBasisType(
+		artboardGeneratorDesigns.rotate.basis as rotateBasisTypeEnum,
+	)
 		? await getArtboardVisibleRotates({ artboardId })
 		: []
 
 	const container = getArtboardContainer({ artboard })
 
 	return {
+		...artboardGeneratorDesigns,
 		palette: palettes,
-		size,
-		fill,
-		stroke,
-		line,
-		rotate,
+		// size,
+		// fill,
+		// stroke,
+		// line,
+		// rotate,
 		rotates,
-		layout,
-		template,
+		// layout,
+		// template,
 		container,
 	}
 }
@@ -116,16 +206,6 @@ const getArtboardContainer = ({
 			height,
 		},
 	}
-}
-
-const getArtboardSelectedDesigns = async ({
-	artboardId,
-}: {
-	artboardId: IArtboard['id']
-}) => {
-	return await findManyDesignsWithType({
-		where: { artboardId, selected: true },
-	})
 }
 
 const buildGeneratorLayers = async ({
