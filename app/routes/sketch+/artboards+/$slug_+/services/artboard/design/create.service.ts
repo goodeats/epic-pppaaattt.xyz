@@ -189,7 +189,7 @@ const shouldUpdateSelectedDesign = async ({
 	if (selected) {
 		return true
 	}
-	if (!visible) {
+	if (visible === false) {
 		return false
 	}
 
