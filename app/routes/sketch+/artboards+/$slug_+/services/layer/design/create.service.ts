@@ -54,10 +54,10 @@ export class LayerCreateDesignStrategy implements ICreateDesignStrategy {
 		entityId: ILayer['id']
 		type: designTypeEnum
 	}) {
-		const visibleLayerDesignsByTypeCount = await prisma.design.count({
+		const visibleDesignsByTypeCount = await prisma.design.count({
 			where: { layerId: entityId, type, visible: true },
 		})
-		return Number(visibleLayerDesignsByTypeCount)
+		return Number(visibleDesignsByTypeCount)
 	}
 }
 
