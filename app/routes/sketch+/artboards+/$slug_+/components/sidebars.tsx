@@ -3,6 +3,7 @@ import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
 import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type PickedArtboardType } from '../queries'
+import { PanelActions } from './panel/actions/panel-actions'
 import { PanelArtboardDesigns } from './panel/artboard/panel-artboard-designs'
 import { PanelArtboardLayers } from './panel/artboard/panel-artboard-layers'
 import { PanelLayerDesigns } from './panel/layer/panel-layer-designs'
@@ -55,7 +56,7 @@ export const SidebarRight = ({
 					)}
 				</SidebarTabsContent>
 				<SidebarTabsContent value="actions">
-					Add actions like download and duplicate here
+					<PanelActions />
 				</SidebarTabsContent>
 			</SidebarTabs>
 		</Sidebar>
