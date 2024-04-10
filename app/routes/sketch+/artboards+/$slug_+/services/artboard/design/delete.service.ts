@@ -17,13 +17,14 @@ export const artboardDesignDeleteService = async ({
 }) => {
 	try {
 		console.log('artboardDesignDeleteService')
-		const strategy = new ArtboardUpdateSelectedDesignStrategy()
+		const updateSelectedDesignStrategy =
+			new ArtboardUpdateSelectedDesignStrategy()
 		return designDeleteService({
 			userId,
 			id,
 			entityId: artboardId,
 			updateSelectedDesignId,
-			strategy,
+			updateSelectedDesignStrategy,
 		})
 	} catch (error) {
 		console.log(error)

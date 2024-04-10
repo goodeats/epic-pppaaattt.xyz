@@ -21,13 +21,13 @@ export const designDeleteService = async ({
 	id,
 	entityId,
 	updateSelectedDesignId,
-	strategy,
+	updateSelectedDesignStrategy,
 }: {
 	userId: User['id']
 	id: IDesign['id']
 	entityId: IDesignEntityId
 	updateSelectedDesignId?: IDesignIdOrNull
-	strategy: IUpdateSelectedDesignStrategy
+	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
 }) => {
 	try {
 		const deleteDesignPromises = []
@@ -65,7 +65,7 @@ export const designDeleteService = async ({
 				entityId,
 				designId: updateSelectedDesignId,
 				type,
-				strategy,
+				strategy: updateSelectedDesignStrategy,
 			})
 		}
 

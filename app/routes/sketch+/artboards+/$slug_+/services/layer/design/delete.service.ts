@@ -17,13 +17,13 @@ export const layerDesignDeleteService = async ({
 }) => {
 	try {
 		console.log('layerDesignDeleteService')
-		const strategy = new LayerUpdateSelectedDesignStrategy()
+		const updateSelectedDesignStrategy = new LayerUpdateSelectedDesignStrategy()
 		return designDeleteService({
 			userId,
 			id,
 			entityId: layerId,
 			updateSelectedDesignId,
-			strategy,
+			updateSelectedDesignStrategy,
 		})
 	} catch (error) {
 		console.log(error)
