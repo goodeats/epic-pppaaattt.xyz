@@ -185,8 +185,12 @@ const shouldUpdateSelectedDesign = async ({
 	type: designTypeEnum
 	designOverrides: IDesignCreateOverrides
 }) => {
-	if (designOverrides.selected) {
+	const { visible, selected } = designOverrides
+	if (selected) {
 		return true
+	}
+	if (!visible) {
+		return false
 	}
 
 	const visibleLayerDesignsByTypeCount = await prisma.design.count({

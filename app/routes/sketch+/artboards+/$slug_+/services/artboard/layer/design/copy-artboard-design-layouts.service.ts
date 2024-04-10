@@ -25,10 +25,10 @@ export const artboardLayerCopyArtboardDesignLayoutsService = async ({
 		const { visible, selected, layout } = design as IDesignWithLayout
 
 		// set design overrides
-		const selectedByVisibility = visible && visibleDesignsCount === 0
+		const selectedAsFirstVisible = visible && visibleDesignsCount === 0
 		const designOverrides = {
 			visible,
-			selected: selected || selectedByVisibility,
+			selected: selected || selectedAsFirstVisible,
 		} as IDesignCreateOverrides
 
 		// add to visible designs count

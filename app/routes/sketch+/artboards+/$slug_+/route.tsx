@@ -75,7 +75,6 @@ export default function SketchRoute() {
 		layers,
 		artboardGenerator,
 	} = data
-	console.log('artboardGenerator', artboardGenerator.message)
 
 	return (
 		<DashboardBody id="sketch-dashboard-body">
