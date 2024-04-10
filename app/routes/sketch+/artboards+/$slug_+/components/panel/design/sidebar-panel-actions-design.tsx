@@ -1,11 +1,11 @@
 import { SidebarPanelRowActionsContainer } from '#app/components/templates'
+import { type IArtboard } from '#app/models/artboard.server'
 import { type IDesignIdOrNull, type IDesign } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import {
 	type ToggleVisibleDesignSchemaType,
 	type DeleteDesignSchemaType,
 } from '#app/schema/design'
-import { type IArtboard } from '#app/utils/db.server'
 import {
 	type IntentDesignToggleVisible,
 	type IntentDesignDelete,

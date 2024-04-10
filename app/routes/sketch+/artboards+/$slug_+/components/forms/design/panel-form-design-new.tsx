@@ -3,12 +3,12 @@ import { getFieldsetConstraint } from '@conform-to/zod'
 import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
+import { type IArtboard } from '#app/models/artboard.server'
 import { type ILayer } from '#app/models/layer.server'
 import {
 	type NewDesignSchemaType,
 	type designTypeEnum,
 } from '#app/schema/design'
-import { type IArtboard } from '#app/utils/db.server'
 import { useIsPending } from '#app/utils/misc'
 import { type IntentDesignCreate } from '../../../intent'
 import { type action } from '../../../route'

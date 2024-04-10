@@ -1,8 +1,8 @@
 import { SidebarPanelRowReorderContainer } from '#app/components/templates'
+import { type IArtboard } from '#app/models/artboard.server'
 import { type IDesignIdOrNull, type IDesign } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type ReorderDesignSchemaType } from '#app/schema/design'
-import { type IArtboard } from '#app/utils/db.server'
 import { type IntentDesignReorder } from '../../../intent'
 import { PanelFormDesignReorder } from '../../forms/design/panel-form-design-reorder'
 

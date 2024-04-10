@@ -1,4 +1,5 @@
 import { SidebarPanel } from '#app/components/templates'
+import { type IArtboard } from '#app/models/artboard.server'
 import {
 	type IDesignWithType,
 	type IDesignWithLayout,
@@ -7,7 +8,6 @@ import { type ILayer } from '#app/models/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { NewArtboardDesignSchema } from '#app/schema/design-artboard'
 import { NewLayerDesignSchema } from '#app/schema/design-layer'
-import { type IArtboard } from '#app/utils/db.server'
 import {
 	panelItemVariablesDesignType,
 	panelListVariablesDesignType,

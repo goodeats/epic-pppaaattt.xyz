@@ -1,10 +1,11 @@
 import { type User } from '@prisma/client'
+import { type IArtboard } from '#app/models/artboard.server'
 import {
 	findFirstLayer,
 	updateLayerVisible,
 	type ILayer,
 } from '#app/models/layer.server'
-import { prisma, type IArtboard } from '#app/utils/db.server'
+import { prisma } from '#app/utils/db.server'
 
 export const artboardLayerToggleVisibleService = async ({
 	userId,
