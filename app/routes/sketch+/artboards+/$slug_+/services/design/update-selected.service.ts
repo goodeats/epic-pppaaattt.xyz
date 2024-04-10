@@ -1,4 +1,8 @@
-import { type IDesignEntityId, type IDesign } from '#app/models/design.server'
+import {
+	type IDesignEntityId,
+	type IDesign,
+	type IDesignIdOrNull,
+} from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
 
 export interface IUpdateSelectedDesignStrategy {
@@ -24,7 +28,7 @@ export const updateSelectedDesignService = async ({
 	strategy,
 }: {
 	entityId: IDesignEntityId
-	designId?: IDesign['id'] | null
+	designId?: IDesignIdOrNull
 	type: designTypeEnum
 	strategy: IUpdateSelectedDesignStrategy
 }) => {

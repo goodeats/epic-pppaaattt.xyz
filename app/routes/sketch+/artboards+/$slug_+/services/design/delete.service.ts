@@ -7,6 +7,7 @@ import {
 	connectPrevAndNextDesigns,
 	deleteDesign,
 	type IDesignEntityId,
+	type IDesignIdOrNull,
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
@@ -25,7 +26,7 @@ export const designDeleteService = async ({
 	userId: User['id']
 	id: IDesign['id']
 	entityId: IDesignEntityId
-	updateSelectedDesignId?: string | null
+	updateSelectedDesignId?: IDesignIdOrNull
 	strategy: IUpdateSelectedDesignStrategy
 }) => {
 	try {
@@ -133,20 +134,20 @@ const updateDesignNodes = ({
 
 	if (!prevId && nextId && nextDesign) {
 		// If head, remove prevId from next design, becomes head
-		const nextLayerToHeadPromise = updateDesignToHead({ id: nextId })
-		updateDesignNodesPromises.push(nextLayerToHeadPromise)
+		const nextNodeToHeadPromise = updateDesignToHead({ id: nextId })
+		updateDesignNodesPromises.push(nextNodeToHeadPromise)
 	} else if (!nextId && prevId && prevDesign) {
 		// If tail, remove nextId from prev design, becomes tail
-		const prevLayerToTailPromise = updateDesignToTail({ id: prevId })
-		updateDesignNodesPromises.push(prevLayerToTailPromise)
+		const prevNodeToTailPromise = updateDesignToTail({ id: prevId })
+		updateDesignNodesPromises.push(prevNodeToTailPromise)
 	} else if (prevId && nextId && prevDesign && nextDesign) {
 		// If in middle, connect prev and next designs directly
-		const connectLayersPromise = connectPrevAndNextDesigns({
+		const connectNodesPromise = connectPrevAndNextDesigns({
 			prevId,
 			nextId,
 		})
 
-		updateDesignNodesPromises.push(...connectLayersPromise)
+		updateDesignNodesPromises.push(...connectNodesPromise)
 	}
 
 	return updateDesignNodesPromises
