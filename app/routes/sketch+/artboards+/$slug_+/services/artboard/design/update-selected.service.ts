@@ -7,6 +7,58 @@ import {
 import { type IDesign } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
+import { type IUpdateSelectedDesignStrategy } from '../../design/update-selected.service'
+
+export class ArtboardUpdateSelectedDesignStrategy
+	implements IUpdateSelectedDesignStrategy
+{
+	async updateSelectedDesign({
+		entityId,
+		designId,
+		type,
+	}: {
+		entityId: IArtboard['id']
+		designId: IDesign['id']
+		type: designTypeEnum
+	}) {
+		const updateSelectedDesignPromise = updateArtboardSelectedDesign({
+			artboardId: entityId,
+			designId,
+			type,
+		})
+		console.log('updateSelectedDesignPromise')
+		await prisma.$transaction(updateSelectedDesignPromise)
+	}
+
+	async findFirstVisibleDesign({
+		entityId,
+		type,
+	}: {
+		entityId: IArtboard['id']
+		type: designTypeEnum
+	}) {
+		console.log('findFirstVisibleLayerDesign')
+		return await findFirstVisibleArtboardDesignByType({
+			artboardId: entityId,
+			type,
+		})
+	}
+
+	async deselectDesign({
+		entityId,
+		type,
+	}: {
+		entityId: IArtboard['id']
+		type: designTypeEnum
+	}) {
+		const deselectDesignsPromise = deselectArtboardSelectedDesign({
+			artboardId: entityId,
+			type,
+		})
+		console.log('deselectDesignsPromise')
+		await prisma.$transaction([deselectDesignsPromise])
+	}
+}
 
 export const artboardUpdateSelectedDesignService = async ({
 	artboardId,

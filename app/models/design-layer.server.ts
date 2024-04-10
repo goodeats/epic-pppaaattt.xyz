@@ -17,7 +17,7 @@ export interface IDesignWithLayer extends IDesign {
 	layer: ILayer
 }
 
-export const findFirstVisibleLayerDesign = async ({
+export const findFirstVisibleLayerDesignByType = async ({
 	layerId,
 	type,
 }: {

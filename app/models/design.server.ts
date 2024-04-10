@@ -5,6 +5,7 @@ import {
 	type whereArgsType,
 } from '#app/schema/design'
 import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
+import { type IArtboard } from './artboard.server'
 import { type IFillCreateOverrides, type IFill } from './fill.server'
 import { type ILayoutCreateOverrides, type ILayout } from './layout.server'
 import { type ILineCreateOverrides, type ILine } from './line.server'
@@ -20,6 +21,9 @@ import {
 export interface IDesign extends Design {}
 
 export type IDesignIdOrNull = IDesign['id'] | null | undefined
+
+export type IDesignEntityId = IArtboard['id'] | IDesign['id']
+export type IDesignEntityIdOrNull = IDesignEntityId | null | undefined
 
 export interface IDesignCreateOverrides {
 	visible?: boolean
