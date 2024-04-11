@@ -5,7 +5,7 @@ import {
 } from '#app/models/design.server'
 import { findManyLayers, type ILayer } from '#app/models/layer.server'
 import { prisma } from '#app/utils/db.server'
-import { filterAndOrderArtboardDesignsByType } from '#app/utils/design'
+import { filterAndOrderDesignsByType } from '#app/utils/design'
 import { orderLinkedLayers } from '#app/utils/layer.utils'
 import { artboardBuildCreateService } from './services/artboard/build/create.service'
 
@@ -100,7 +100,7 @@ export const getArtboardDesigns = async ({
 		where: { artboardId: artboard.id },
 	})
 
-	return filterAndOrderArtboardDesignsByType({ designs })
+	return filterAndOrderDesignsByType({ designs })
 }
 
 export const getLayerDesigns = async ({
@@ -111,7 +111,7 @@ export const getLayerDesigns = async ({
 	const designs = await findManyDesignsWithType({
 		where: { layerId: layer.id },
 	})
-	return filterAndOrderArtboardDesignsByType({ designs })
+	return filterAndOrderDesignsByType({ designs })
 }
 
 export const getArtboardGenerator = async (

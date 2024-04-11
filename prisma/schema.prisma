@@ -28,6 +28,8 @@ model User {
   // added after epic-stack created
   projects    Project[]
   artboards   Artboard[]
+  artboardVersions ArtboardVersion[]
+  artboardBranches ArtboardBranch[]
   layers      Layer[]
   designs     Design[]
   assetImages AssetImage[]
@@ -254,9 +256,6 @@ model Layer {
   artboardVersionId String?
   artboardVersion   ArtboardVersion? @relation(fields: [artboardVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  artboardBranchId String?
-  artboardBranch   ArtboardBranch? @relation(fields: [artboardBranchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
   next Layer? @relation("LayerDoublyLinkedList", fields: [nextId], references: [id])
   nextId String? @unique
 
@@ -273,7 +272,6 @@ model Layer {
   // non-unique foreign key
   @@index([ownerId])
   @@index([artboardVersionId])
-  @@index([artboardBranchId])
   @@index([parentId])
   // This helps our order by in the user search a LOT
   @@index([ownerId, updatedAt])
@@ -356,9 +354,6 @@ model Design {
   artboardVersionId String?
   artboardVersion   ArtboardVersion? @relation(fields: [artboardVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  artboardBranchId String?
-  artboardBranch   ArtboardBranch? @relation(fields: [artboardBranchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
   layer Layer? @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   layerId String?
 
@@ -375,7 +370,6 @@ model Design {
   @@index([ownerId])
   @@index([layerId])
   @@index([artboardVersionId])
-  @@index([artboardBranchId])
 }
 
 model Palette {
@@ -500,6 +494,9 @@ model ArtboardVersion {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
   artboard Artboard @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artboardId String
 
@@ -518,6 +515,7 @@ model ArtboardVersion {
   // non-unique foreign key
   @@index([artboardId])
   @@index([branchId])
+  @@index([ownerId])
 
   // Constraints to ensure only one 'latest' version per branch
   // and only one name 'latest' per branch
@@ -535,6 +533,9 @@ model ArtboardBranch {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
   artboard Artboard @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artboardId String
 
@@ -546,11 +547,9 @@ model ArtboardBranch {
   mergeRequestsSource ArtboardMergeRequest[] @relation("ArtboardMergeRequestSourceBranch")
   mergeRequestsTarget ArtboardMergeRequest[] @relation("ArtboardMergeRequestTargetBranch")
 
-  layers Layer[]
-  designs Design[]
-
   // non-unique foreign key
   @@index([artboardId])
+  @@index([ownerId])
 
   // Constraints to ensure only one 'default' version per branch
   // and only unique name per branch

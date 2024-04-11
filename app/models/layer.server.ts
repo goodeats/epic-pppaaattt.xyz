@@ -5,6 +5,7 @@ import {
 	type whereArgsType,
 } from '#app/schema/layer'
 import { prisma } from '#app/utils/db.server'
+import { type IDesignWithType } from './design.server'
 
 export interface ILayer {
 	id: string
@@ -21,6 +22,9 @@ export interface ILayer {
 	parentId: string | null
 	// children: ILayer[]
 	// designs: IDesignWithType[]
+}
+export interface ILayerWithDesigns extends ILayer {
+	designs: IDesignWithType[]
 }
 
 export const findManyLayers = async ({ where }: { where: whereArgsType }) => {

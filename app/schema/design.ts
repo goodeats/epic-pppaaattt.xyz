@@ -6,6 +6,12 @@ import {
 	type ReorderArtboardDesignSchema,
 } from './design-artboard'
 import {
+	type DeleteArtboardVersionDesignSchema,
+	type NewArtboardVersionDesignSchema,
+	type ReorderArtboardVersionDesignSchema,
+	type ToggleVisibleArtboardVersionDesignSchema,
+} from './design-artboard-version'
+import {
 	type ToggleVisibleLayerDesignSchema,
 	type DeleteLayerDesignSchema,
 	type NewLayerDesignSchema,
@@ -37,6 +43,7 @@ export const designSchema = z.object({
 	type: z.nativeEnum(DesignTypeEnum),
 	ownerId: z.string(),
 	artboardId: z.string().optional(),
+	artboardVersionId: z.string().optional(),
 	layerId: z.string().optional(),
 	visible: z.boolean().optional(),
 	selected: z.boolean().optional(),
@@ -44,18 +51,22 @@ export const designSchema = z.object({
 
 export type NewDesignSchemaType =
 	| typeof NewArtboardDesignSchema
+	| typeof NewArtboardVersionDesignSchema
 	| typeof NewLayerDesignSchema
 
 export type ReorderDesignSchemaType =
 	| typeof ReorderArtboardDesignSchema
+	| typeof ReorderArtboardVersionDesignSchema
 	| typeof ReorderLayerDesignSchema
 
 export type ToggleVisibleDesignSchemaType =
 	| typeof ToggleVisibleArtboardDesignSchema
+	| typeof ToggleVisibleArtboardVersionDesignSchema
 	| typeof ToggleVisibleLayerDesignSchema
 
 export type DeleteDesignSchemaType =
 	| typeof DeleteArtboardDesignSchema
+	| typeof DeleteArtboardVersionDesignSchema
 	| typeof DeleteLayerDesignSchema
 
 export type selectArgsType = z.infer<typeof selectArgs>
@@ -73,6 +84,7 @@ const whereArgs = z.object({
 	selected: z.boolean().optional(),
 	ownerId: z.string().optional(),
 	artboardId: z.string().optional(),
+	artboardVersionId: z.string().optional(),
 	layerId: z.string().optional(),
 	prevId: zodStringOrNull.optional(),
 	nextId: zodStringOrNull.optional(),

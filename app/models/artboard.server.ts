@@ -5,11 +5,17 @@ import {
 	type whereArgsType,
 } from '#app/schema/artboard'
 import { prisma } from '#app/utils/db.server'
+import { type IDesignWithType } from './design.server'
+import { type ILayerWithDesigns } from './layer.server'
 import { type IProjectWithArtboards } from './project.server'
 
 export interface IArtboard extends Artboard {}
 export interface IArtboardWithProject extends IArtboard {
 	project: IProjectWithArtboards
+}
+export interface IArtboardWithDesignsAndLayers extends IArtboard {
+	designs: IDesignWithType[]
+	layers: ILayerWithDesigns[]
 }
 
 // use prisma extension to .save() or .delete()

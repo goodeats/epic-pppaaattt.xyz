@@ -24,7 +24,7 @@ import { findFirstTemplateInDesignArray } from '#app/models/template.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { safelyAssignValue } from './typescript-helpers'
 
-export const filterAndOrderArtboardDesignsByType = ({
+export const filterAndOrderDesignsByType = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
@@ -289,7 +289,7 @@ export const panelListVariablesDesignType = ({
 	// helps with disabling reorder buttons
 	const designCount = designs.length
 
-	// helps with resetting the selected design for artboard
+	// helps with resetting the selected design for entity
 	const visibleDesigns = filterVisibleDesigns(designs)
 	const visibleDesignIds = designsIdArray(visibleDesigns)
 
