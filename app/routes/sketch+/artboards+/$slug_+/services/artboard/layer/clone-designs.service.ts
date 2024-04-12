@@ -10,9 +10,9 @@ import {
 	type designTypeEnum,
 } from '#app/schema/design'
 import {
-	cloneDesignsService,
 	type ICloneDesignsStrategy,
-} from '../../design/clone.service'
+	cloneDesignsService,
+} from '../../design/clone-many.service'
 import { layerDesignCreateService } from '../../layer/design/create.service'
 
 export class CloneDesignsToLayerStrategy implements ICloneDesignsStrategy {

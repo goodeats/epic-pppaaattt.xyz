@@ -4,37 +4,15 @@ import {
 	type IDesignCreateOverrides,
 	type IDesignWithType,
 	type IDesignTypeCreateOverrides,
-	type IDesignsByType,
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
-import { type ICloneDesignsStrategy } from '../clone.service'
-import { CloneFillDesignStrategy } from './clone/fill.strategy'
-import { CloneLayoutDesignStrategy } from './clone/layout.strategy'
-import { CloneLineDesignStrategy } from './clone/line.strategy'
-import { ClonePaletteDesignStrategy } from './clone/palette.strategy'
-import { CloneRotateDesignStrategy } from './clone/rotate.strategy'
-import { CloneSizeDesignStrategy } from './clone/size.strategy'
-import { CloneStrokeDesignStrategy } from './clone/stroke.strategy'
-import { CloneTemplateDesignStrategy } from './clone/template.strategy'
+import { type ICloneDesignsStrategy } from '../clone-many.service'
 
 export interface ICloneDesignTypeStrategy {
 	type: designTypeEnum
 	getDesignTypeOverrides(args: {
 		design: IDesignWithType
 	}): IDesignTypeCreateOverrides
-}
-
-export const designTypeStrategies: {
-	[K in keyof IDesignsByType]?: ICloneDesignTypeStrategy
-} = {
-	designPalettes: new ClonePaletteDesignStrategy(),
-	designSizes: new CloneSizeDesignStrategy(),
-	designFills: new CloneFillDesignStrategy(),
-	designStrokes: new CloneStrokeDesignStrategy(),
-	designLines: new CloneLineDesignStrategy(),
-	designRotates: new CloneRotateDesignStrategy(),
-	designLayouts: new CloneLayoutDesignStrategy(),
-	designTemplates: new CloneTemplateDesignStrategy(),
 }
 
 export const cloneDesignTypesService = async ({

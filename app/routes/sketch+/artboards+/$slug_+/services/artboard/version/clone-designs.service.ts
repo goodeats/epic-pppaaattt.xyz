@@ -12,7 +12,7 @@ import {
 import {
 	cloneDesignsService,
 	type ICloneDesignsStrategy,
-} from '../../design/clone.service'
+} from '../../design/clone-many.service'
 import { artboardVersionDesignCreateService } from './design/create.service'
 
 export class CloneDesignsToArtboardVersionStrategy

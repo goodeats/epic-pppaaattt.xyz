@@ -14,9 +14,19 @@ import {
 } from '#app/schema/design'
 import { filterAndOrderDesignsByType } from '#app/utils/design'
 import {
+	CloneFillDesignStrategy,
+	CloneLayoutDesignStrategy,
+	CloneLineDesignStrategy,
+	ClonePaletteDesignStrategy,
+	CloneRotateDesignStrategy,
+	CloneSizeDesignStrategy,
+	CloneStrokeDesignStrategy,
+	CloneTemplateDesignStrategy,
+} from './design-type/clone/strategies'
+import {
 	cloneDesignTypesService,
-	designTypeStrategies,
-} from './design-type/clone.service'
+	type ICloneDesignTypeStrategy,
+} from './design-type/clone-many.service'
 
 export interface ICloneDesignsStrategy {
 	createEntityDesignService(args: {
@@ -56,7 +66,7 @@ export const cloneDesignsService = async ({
 		console.log('source design count: ', sourceDesigns.length)
 
 		// Step 2: separate designs by type and order
-		const designsByType = filterAndOrderDesignsByType({
+		const sourceDesignsByType = filterAndOrderDesignsByType({
 			designs: sourceDesigns,
 		})
 
@@ -64,7 +74,7 @@ export const cloneDesignsService = async ({
 		await cloneDesignsByType({
 			userId,
 			targetEntityId,
-			designsByType,
+			sourceDesignsByType,
 			entityStrategy,
 		})
 
@@ -92,23 +102,38 @@ const getSourceEntityDesigns = async ({
 	return await findManyDesignsWithType({ where })
 }
 
+export const designTypeStrategies: {
+	[K in keyof IDesignsByType]?: ICloneDesignTypeStrategy
+} = {
+	designPalettes: new ClonePaletteDesignStrategy(),
+	designSizes: new CloneSizeDesignStrategy(),
+	designFills: new CloneFillDesignStrategy(),
+	designStrokes: new CloneStrokeDesignStrategy(),
+	designLines: new CloneLineDesignStrategy(),
+	designRotates: new CloneRotateDesignStrategy(),
+	designLayouts: new CloneLayoutDesignStrategy(),
+	designTemplates: new CloneTemplateDesignStrategy(),
+}
+
 const cloneDesignsByType = async ({
 	userId,
 	targetEntityId,
-	designsByType,
+	sourceDesignsByType,
 	entityStrategy,
 }: {
 	userId: User['id']
 	targetEntityId: IDesignEntityId
-	designsByType: IDesignsByType
+	sourceDesignsByType: IDesignsByType
 	entityStrategy: ICloneDesignsStrategy
 }): Promise<void> => {
 	console.log('😂😂 cloneDesignsByType...')
 
 	// Iterate over each design type and clone accordingly
-	for (const key of Object.keys(designsByType) as (keyof IDesignsByType)[]) {
+	for (const key of Object.keys(
+		sourceDesignsByType,
+	) as (keyof IDesignsByType)[]) {
 		const strategy = designTypeStrategies[key]
-		const designs = designsByType[key]
+		const designs = sourceDesignsByType[key]
 		console.log(key, designs.length)
 		if (strategy && designs.length > 0) {
 			console.log('😂😂😂 cloneDesignTypesService...')

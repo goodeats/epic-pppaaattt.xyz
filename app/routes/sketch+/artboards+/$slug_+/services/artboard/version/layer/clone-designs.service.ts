@@ -12,7 +12,7 @@ import {
 import {
 	cloneDesignsService,
 	type ICloneDesignsStrategy,
-} from '../../../design/clone.service'
+} from '../../../design/clone-many.service'
 import { layerDesignCreateService } from '../../../layer/design/create.service'
 
 export class CloneDesignsToLayerStrategy implements ICloneDesignsStrategy {
