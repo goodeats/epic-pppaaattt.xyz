@@ -1,4 +1,5 @@
 import { type User } from '@prisma/client'
+import { type ILayerCreatedResponse } from '#app/models/layer/layer.create.server'
 import {
 	type ILayerWithDesigns,
 	type ILayerEntityId,
@@ -14,7 +15,7 @@ export interface ICloneLayersToEntityStrategy {
 		userId: User['id']
 		targetEntityId: ILayerEntityId
 		layerOverrides: ILayerCreateOverrides
-	}): Promise<void>
+	}): Promise<ILayerCreatedResponse>
 }
 
 export const cloneLayersToEntity = async ({
@@ -30,14 +31,14 @@ export const cloneLayersToEntity = async ({
 }) => {
 	try {
 		// Step 1: get entity layers
-		const entityLayers = await entityStrategy.getSourceEntityLayers({
+		const sourceLayers = await entityStrategy.getSourceEntityLayers({
 			sourceEntityId,
 		})
 
 		// Step 2: re-order layers as linked list
-		const layers = orderLinkedItems<ILayerWithDesigns>(entityLayers)
+		const layers = orderLinkedItems<ILayerWithDesigns>(sourceLayers)
 
-		// Step 4: create new designs for each type
+		// Step 3: clone new layers and thier designs
 		await cloneLayers({
 			userId,
 			targetEntityId,
@@ -47,8 +48,13 @@ export const cloneLayersToEntity = async ({
 
 		return { success: true }
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('cloneLayersToEntity error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }
 
@@ -62,13 +68,13 @@ const cloneLayers = async ({
 	targetEntityId: ILayerEntityId
 	layers: ILayerWithDesigns[]
 	entityStrategy: ICloneLayersToEntityStrategy
-}): Promise<void> => {
-	// Step 2: loop entity design types
+}) => {
+	// Step 1: loop layers
 	// kinda weird way to set the loop up, but it works
 	for (const [, layer] of layers.entries()) {
 		const { name, description, slug, visible } = layer as ILayerWithDesigns
 
-		// Step 3: set layer overrides
+		// Step 2: set layer overrides
 		const layerOverrides = {
 			name,
 			description,
@@ -76,11 +82,19 @@ const cloneLayers = async ({
 			visible,
 		} as ILayerCreateOverrides
 
-		// Step 6: create design type
-		await entityStrategy.createEntityLayerService({
-			userId,
-			targetEntityId,
-			layerOverrides, // layer attributes
-		})
+		// Step 3: create design type
+		const { success, message, createdLayer } =
+			await entityStrategy.createEntityLayerService({
+				userId,
+				targetEntityId,
+				layerOverrides,
+			})
+
+		if (!success || !createdLayer) {
+			console.log('cloneLayers error:', message)
+			return { success: false }
+		}
+
+		// Step 4: clone designs
 	}
 }

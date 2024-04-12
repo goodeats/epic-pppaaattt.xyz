@@ -1,5 +1,6 @@
 import { type User } from '@prisma/client'
 import { type IArtboardVersion } from '#app/models/artboard-version.server'
+import { type ILayerCreatedResponse } from '#app/models/layer/layer.create.server'
 import { getLayersWithDesigns } from '#app/models/layer/layer.get.server'
 import {
 	type ILayerWithDesigns,
@@ -33,11 +34,12 @@ export class CloneLayersToArtboardVersionStrategy
 		userId: User['id']
 		targetEntityId: ILayerEntityId
 		layerOverrides?: ILayerCreateOverrides
-	}): Promise<void> {
-		await artboardVersionLayerCreateService({
+	}): Promise<ILayerCreatedResponse> {
+		return await artboardVersionLayerCreateService({
 			userId,
 			artboardVersionId: targetEntityId,
 			layerOverrides,
+			skipCloneDesigns: true,
 		})
 	}
 }
@@ -61,7 +63,12 @@ export const artboardVersionCloneLayersService = async ({
 			entityStrategy,
 		})
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('artboardVersionCloneLayersService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }

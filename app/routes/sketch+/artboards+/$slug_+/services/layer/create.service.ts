@@ -77,10 +77,15 @@ export const layerCreateService = async ({
 			})
 		}
 
-		return { success: true }
+		return { createdLayer, success: true }
 	} catch (error) {
-		console.log('artboardLayerCreateService error', error)
-		return { error: true }
+		console.log('layerCreateService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }
 

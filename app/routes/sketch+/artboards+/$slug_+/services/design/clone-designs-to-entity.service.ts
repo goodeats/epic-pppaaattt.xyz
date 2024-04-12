@@ -39,13 +39,13 @@ export const cloneDesignsToEntity = async ({
 }) => {
 	try {
 		// Step 1: get entity designs
-		const designs = await entityStrategy.getSourceEntityDesigns({
+		const sourceDesigns = await entityStrategy.getSourceEntityDesigns({
 			sourceEntityId,
 		})
 
 		// Step 2: separate designs by type and order
 		const designsByType = filterAndOrderDesignsByType({
-			designs,
+			designs: sourceDesigns,
 		})
 
 		// Step 4: create new designs for each type
