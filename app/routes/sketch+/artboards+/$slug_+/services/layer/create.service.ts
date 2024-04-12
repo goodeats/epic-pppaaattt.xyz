@@ -6,7 +6,6 @@ import {
 	type ILayer,
 } from '#app/models/layer.server'
 import { prisma } from '#app/utils/db.server'
-import { layerCloneDesignsService } from '../artboard/layer/clone-designs.service'
 
 export interface ICreateLayerStrategy {
 	getEntityLayersTail(args: {
@@ -20,6 +19,11 @@ export interface ICreateLayerStrategy {
 		targetEntityId: ILayerEntityId
 		layerOverrides: ILayerCreateOverrides
 	}): Promise<ILayer | null>
+	layerCloneDesignsService(args: {
+		userId: User['id']
+		sourceEntityId: ILayerEntityId
+		targetEntityId: ILayerEntityId
+	}): Promise<void>
 }
 
 export const layerCreateService = async ({
@@ -70,7 +74,7 @@ export const layerCreateService = async ({
 		// Step 4: copy designs from artboard to created layer
 		// 🚨 IF CLONING LAYERS
 		if (!skipCloneDesigns) {
-			await layerCloneDesignsService({
+			await strategy.layerCloneDesignsService({
 				userId,
 				sourceEntityId: targetEntityId,
 				targetEntityId: createdLayer.id,

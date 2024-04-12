@@ -92,6 +92,7 @@ const cloneLayerToEntity = async ({
 	entityStrategy: ICloneLayersStrategy
 }) => {
 	const { name, description, slug, visible } = layer
+	console.log('layer.designs:', layer.designs)
 
 	// Step 1: set layer overrides
 	const layerOverrides = {

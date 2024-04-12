@@ -60,12 +60,12 @@ export async function artboardLayerNewAction({
 	if (!isValid || !submission) return response
 
 	const { artboardId } = submission.value
-	const { success, error } = await artboardLayerCreateService({
+	const { success } = await artboardLayerCreateService({
 		userId,
 		artboardId,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }

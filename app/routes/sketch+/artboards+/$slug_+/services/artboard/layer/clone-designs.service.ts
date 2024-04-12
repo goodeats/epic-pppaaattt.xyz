@@ -48,7 +48,7 @@ export class CloneDesignsToLayerStrategy implements ICloneDesignsStrategy {
 	}
 }
 
-export const layerCloneDesignsService = async ({
+export const artboardLayerCloneDesignsService = async ({
 	userId,
 	sourceEntityId,
 	targetEntityId,
@@ -57,7 +57,6 @@ export const layerCloneDesignsService = async ({
 	sourceEntityId: IDesignEntityId
 	targetEntityId: ILayer['id']
 }) => {
-	console.log('yoooooo')
 	try {
 		const entityStrategy = new CloneDesignsToLayerStrategy()
 

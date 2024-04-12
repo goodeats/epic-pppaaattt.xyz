@@ -21,7 +21,7 @@ export class CloneDesignsToLayerStrategy implements ICloneDesignsStrategy {
 		sourceEntityId: ILayer['id']
 	}): Promise<IDesignWithType[]> {
 		return await findManyDesignsWithType({
-			where: { artboardId: sourceEntityId },
+			where: { artboardVersionId: sourceEntityId },
 		})
 	}
 
@@ -48,7 +48,7 @@ export class CloneDesignsToLayerStrategy implements ICloneDesignsStrategy {
 	}
 }
 
-export const layerCloneDesignsService = async ({
+export const artboardVersionLayerCloneDesignsService = async ({
 	userId,
 	sourceEntityId,
 	targetEntityId,

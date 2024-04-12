@@ -5,6 +5,7 @@ import {
 	type ILayerCreateOverrides,
 	findFirstLayer,
 	type ILayer,
+	type ILayerEntityId,
 } from '#app/models/layer.server'
 import { ArtboardVersionLayerDataCreateSchema } from '#app/schema/layer-artboard-version'
 import { prisma } from '#app/utils/db.server'
@@ -12,6 +13,7 @@ import {
 	layerCreateService,
 	type ICreateLayerStrategy,
 } from '../../../layer/create.service'
+import { artboardVersionLayerCloneDesignsService } from './clone-designs.service'
 
 export class ArtboardVersionCreateLayerStrategy
 	implements ICreateLayerStrategy
@@ -50,6 +52,22 @@ export class ArtboardVersionCreateLayerStrategy
 	}): Promise<number> {
 		return await prisma.layer.count({
 			where: { artboardVersionId: targetEntityId },
+		})
+	}
+
+	async layerCloneDesignsService({
+		userId,
+		sourceEntityId,
+		targetEntityId,
+	}: {
+		userId: User['id']
+		sourceEntityId: ILayerEntityId
+		targetEntityId: ILayerEntityId
+	}) {
+		await artboardVersionLayerCloneDesignsService({
+			userId,
+			sourceEntityId,
+			targetEntityId,
 		})
 	}
 }
