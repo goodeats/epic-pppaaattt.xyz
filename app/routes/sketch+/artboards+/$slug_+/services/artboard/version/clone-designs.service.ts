@@ -10,13 +10,13 @@ import {
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
 import {
-	type ICloneDesignsToEntityStrategy,
-	cloneDesignsToEntity,
-} from '../../design/clone-designs-to-entity.service'
+	cloneDesignsService,
+	type ICloneDesignsStrategy,
+} from '../../design/clone.service'
 import { artboardVersionDesignCreateService } from './design/create.service'
 
 export class CloneDesignsToArtboardVersionStrategy
-	implements ICloneDesignsToEntityStrategy
+	implements ICloneDesignsStrategy
 {
 	async getSourceEntityDesigns({
 		sourceEntityId,
@@ -63,7 +63,7 @@ export const artboardVersionCloneDesignsService = async ({
 	try {
 		const entityStrategy = new CloneDesignsToArtboardVersionStrategy()
 
-		await cloneDesignsToEntity({
+		await cloneDesignsService({
 			userId,
 			sourceEntityId,
 			targetEntityId,

@@ -8,13 +8,13 @@ import {
 	type ILayerCreateOverrides,
 } from '#app/models/layer.server'
 import {
-	cloneLayersToEntity,
-	type ICloneLayersToEntityStrategy,
-} from '../../layer/clone-layers-to-entity.service'
+	cloneLayersService,
+	type ICloneLayersStrategy,
+} from '../../layer/clone.service'
 import { artboardVersionLayerCreateService } from './layer/create.service'
 
 export class CloneLayersToArtboardVersionStrategy
-	implements ICloneLayersToEntityStrategy
+	implements ICloneLayersStrategy
 {
 	async getSourceEntityLayers({
 		sourceEntityId,
@@ -56,7 +56,7 @@ export const artboardVersionCloneLayersService = async ({
 	try {
 		const entityStrategy = new CloneLayersToArtboardVersionStrategy()
 
-		await cloneLayersToEntity({
+		await cloneLayersService({
 			userId,
 			sourceEntityId,
 			targetEntityId,

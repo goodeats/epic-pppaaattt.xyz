@@ -7,7 +7,7 @@ import {
 	type IDesignsByType,
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
-import { type ICloneDesignsToEntityStrategy } from '../clone-designs-to-entity.service'
+import { type ICloneDesignsStrategy } from '../clone.service'
 import { CloneFillDesignStrategy } from './clone-design-types-fill.service'
 import { CloneLayoutDesignStrategy } from './clone-design-types-layout.service'
 import { CloneLineDesignStrategy } from './clone-design-types-line.service'
@@ -48,7 +48,7 @@ export const cloneDesignTypesToEntity = async ({
 	targetEntityId: IDesignEntityId
 	designs: IDesignWithType[]
 	strategy: ICloneDesignTypeStrategy
-	entityStrategy: ICloneDesignsToEntityStrategy
+	entityStrategy: ICloneDesignsStrategy
 }) => {
 	// Step 1: start visible designs count at 0
 	let visibleDesignsCount = 0

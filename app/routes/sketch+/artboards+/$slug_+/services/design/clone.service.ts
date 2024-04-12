@@ -13,7 +13,7 @@ import {
 	designTypeStrategies,
 } from './design-type/clone-design-types.service'
 
-export interface ICloneDesignsToEntityStrategy {
+export interface ICloneDesignsStrategy {
 	getSourceEntityDesigns(args: {
 		sourceEntityId: IDesignEntityId
 	}): Promise<IDesignWithType[]>
@@ -26,7 +26,7 @@ export interface ICloneDesignsToEntityStrategy {
 	}): Promise<void>
 }
 
-export const cloneDesignsToEntity = async ({
+export const cloneDesignsService = async ({
 	userId,
 	sourceEntityId,
 	targetEntityId,
@@ -35,7 +35,7 @@ export const cloneDesignsToEntity = async ({
 	userId: User['id']
 	sourceEntityId: IDesignEntityId
 	targetEntityId: IDesignEntityId
-	entityStrategy: ICloneDesignsToEntityStrategy
+	entityStrategy: ICloneDesignsStrategy
 }) => {
 	try {
 		// Step 1: get entity designs
@@ -72,7 +72,7 @@ const cloneDesignsByType = async ({
 	userId: User['id']
 	targetEntityId: IDesignEntityId
 	designsByType: IDesignsByType
-	entityStrategy: ICloneDesignsToEntityStrategy
+	entityStrategy: ICloneDesignsStrategy
 }): Promise<void> => {
 	// Iterate over each design type and clone accordingly
 	for (const key of Object.keys(designsByType) as (keyof IDesignsByType)[]) {

@@ -9,14 +9,12 @@ import {
 import { type ILayer } from '#app/models/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
 import {
-	cloneDesignsToEntity,
-	type ICloneDesignsToEntityStrategy,
-} from '../../design/clone-designs-to-entity.service'
+	cloneDesignsService,
+	type ICloneDesignsStrategy,
+} from '../../design/clone.service'
 import { layerDesignCreateService } from '../../layer/design/create.service'
 
-export class CloneDesignsToLayerStrategy
-	implements ICloneDesignsToEntityStrategy
-{
+export class CloneDesignsToLayerStrategy implements ICloneDesignsStrategy {
 	async getSourceEntityDesigns({
 		sourceEntityId,
 	}: {
@@ -63,7 +61,7 @@ export const layerCloneDesignsService = async ({
 	try {
 		const entityStrategy = new CloneDesignsToLayerStrategy()
 
-		await cloneDesignsToEntity({
+		await cloneDesignsService({
 			userId,
 			sourceEntityId,
 			targetEntityId,

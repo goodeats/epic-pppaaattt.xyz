@@ -7,7 +7,7 @@ import {
 } from '#app/models/layer.server'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 
-export interface ICloneLayersToEntityStrategy {
+export interface ICloneLayersStrategy {
 	getSourceEntityLayers(args: {
 		sourceEntityId: ILayerEntityId
 	}): Promise<ILayerWithDesigns[]>
@@ -18,7 +18,7 @@ export interface ICloneLayersToEntityStrategy {
 	}): Promise<ILayerCreatedResponse>
 }
 
-export const cloneLayersToEntity = async ({
+export const cloneLayersService = async ({
 	userId,
 	sourceEntityId,
 	targetEntityId,
@@ -27,7 +27,7 @@ export const cloneLayersToEntity = async ({
 	userId: User['id']
 	sourceEntityId: ILayerEntityId
 	targetEntityId: ILayerEntityId
-	entityStrategy: ICloneLayersToEntityStrategy
+	entityStrategy: ICloneLayersStrategy
 }) => {
 	try {
 		// Step 1: get entity layers
@@ -39,7 +39,7 @@ export const cloneLayersToEntity = async ({
 		const layers = orderLinkedItems<ILayerWithDesigns>(sourceLayers)
 
 		// Step 3: clone new layers and thier designs
-		await cloneLayers({
+		await cloneLayersToEntity({
 			userId,
 			targetEntityId,
 			layers,
@@ -58,7 +58,7 @@ export const cloneLayersToEntity = async ({
 	}
 }
 
-const cloneLayers = async ({
+const cloneLayersToEntity = async ({
 	userId,
 	targetEntityId,
 	layers,
@@ -67,34 +67,53 @@ const cloneLayers = async ({
 	userId: User['id']
 	targetEntityId: ILayerEntityId
 	layers: ILayerWithDesigns[]
-	entityStrategy: ICloneLayersToEntityStrategy
+	entityStrategy: ICloneLayersStrategy
 }) => {
-	// Step 1: loop layers
 	// kinda weird way to set the loop up, but it works
 	for (const [, layer] of layers.entries()) {
-		const { name, description, slug, visible } = layer as ILayerWithDesigns
-
-		// Step 2: set layer overrides
-		const layerOverrides = {
-			name,
-			description,
-			slug,
-			visible,
-		} as ILayerCreateOverrides
-
-		// Step 3: create design type
-		const { success, message, createdLayer } =
-			await entityStrategy.createEntityLayerService({
-				userId,
-				targetEntityId,
-				layerOverrides,
-			})
-
-		if (!success || !createdLayer) {
-			console.log('cloneLayers error:', message)
-			return { success: false }
-		}
-
-		// Step 4: clone designs
+		cloneLayerToEntity({
+			userId,
+			targetEntityId,
+			layer,
+			entityStrategy,
+		})
 	}
+}
+
+const cloneLayerToEntity = async ({
+	userId,
+	targetEntityId,
+	layer,
+	entityStrategy,
+}: {
+	userId: User['id']
+	targetEntityId: ILayerEntityId
+	layer: ILayerWithDesigns
+	entityStrategy: ICloneLayersStrategy
+}) => {
+	const { name, description, slug, visible } = layer
+
+	// Step 1: set layer overrides
+	const layerOverrides = {
+		name,
+		description,
+		slug,
+		visible,
+	} as ILayerCreateOverrides
+
+	// Step 2: create entity layer
+	const { success, message, createdLayer } =
+		await entityStrategy.createEntityLayerService({
+			userId,
+			targetEntityId,
+			layerOverrides,
+		})
+
+	// Step 3: handle errors
+	if (!success || !createdLayer) {
+		console.log('cloneLayers error:', message)
+		return { success: false }
+	}
+
+	// Step 4: clone designs
 }
