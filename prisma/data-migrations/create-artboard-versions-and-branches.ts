@@ -3,6 +3,7 @@ import { type IArtboardVersion } from '#app/models/artboard-version.server'
 import { type IArtboardWithDesignsAndLayers } from '#app/models/artboard.server'
 import { artboardBranchCreateService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/branch/create.service'
 import { artboardVersionCloneDesignsService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/version/clone-designs.service'
+import { artboardVersionCloneLayersService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/version/clone-layers.service'
 import { prisma } from '#app/utils/db.server'
 
 // artboards will have version control now
@@ -47,6 +48,7 @@ export const createArtboardVersionsBranches = async () => {
 			// Step 6: clone artboard designs
 			await cloneArtboardVersionDesigns({ artboard, artboardVersion })
 			// Step 7: clone artboard layers
+			await cloneArtboardVersionLayers({ artboard, artboardVersion })
 			// Step 8: clone artboard layers designs
 		})
 	})
@@ -85,6 +87,20 @@ const cloneArtboardVersionDesigns = async ({
 	artboardVersion: IArtboardVersion
 }) => {
 	return await artboardVersionCloneDesignsService({
+		userId: artboard.ownerId,
+		sourceEntityId: artboard.id,
+		targetEntityId: artboardVersion.id,
+	})
+}
+
+const cloneArtboardVersionLayers = async ({
+	artboard,
+	artboardVersion,
+}: {
+	artboard: IArtboardWithDesignsAndLayers
+	artboardVersion: IArtboardVersion
+}) => {
+	return await artboardVersionCloneLayersService({
 		userId: artboard.ownerId,
 		sourceEntityId: artboard.id,
 		targetEntityId: artboardVersion.id,

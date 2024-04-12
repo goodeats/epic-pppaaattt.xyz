@@ -1,10 +1,12 @@
 import { z } from 'zod'
 import { DesignTypeEnum, type designTypeEnum } from './design'
 
-interface Design {
+// copied from ./design.ts
+// may not be necessary?
+interface DesignLayer {
 	type: designTypeEnum
 	ownerId: string
-	layerId?: string
+	layerId: string
 }
 
 export const LayerDesignDataCreateSchema = z.object({
@@ -13,7 +15,7 @@ export const LayerDesignDataCreateSchema = z.object({
 	layerId: z.string(),
 	visible: z.boolean().optional(),
 	selected: z.boolean().optional(),
-}) satisfies z.Schema<Design>
+}) satisfies z.Schema<DesignLayer>
 
 export const NewLayerDesignSchema = z.object({
 	layerId: z.string(),

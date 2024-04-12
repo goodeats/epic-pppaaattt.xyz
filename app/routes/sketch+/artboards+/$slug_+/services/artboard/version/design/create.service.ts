@@ -4,9 +4,10 @@ import {
 	type IDesignCreateOverrides,
 	type IDesignTypeCreateOverrides,
 	findFirstDesign,
+	type IDesign,
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
-import { ArtboardDesignDataCreateSchema } from '#app/schema/design-artboard'
+import { ArtboardVersionDesignDataCreateSchema } from '#app/schema/design-artboard-version'
 import { prisma } from '#app/utils/db.server'
 import {
 	designCreateService,
@@ -39,8 +40,8 @@ export class ArtboardVersionCreateDesignStrategy
 		entityId: IArtboardVersion['id']
 		type: designTypeEnum
 		designOverrides: IDesignCreateOverrides
-	}) {
-		const data = ArtboardDesignDataCreateSchema.parse({
+	}): Promise<IDesign> {
+		const data = ArtboardVersionDesignDataCreateSchema.parse({
 			type,
 			ownerId: userId,
 			artboardVersionId: entityId,

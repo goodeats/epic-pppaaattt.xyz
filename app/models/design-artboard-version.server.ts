@@ -1,7 +1,8 @@
 import { type Design } from '@prisma/client'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
-import { filterVisibleDesigns, orderLinkedDesigns } from '#app/utils/design'
+import { filterVisibleDesigns } from '#app/utils/design'
+import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { filterNonArrayRotates } from '#app/utils/rotate'
 import { type IArtboardVersion } from './artboard-version.server'
 import {
@@ -72,7 +73,7 @@ export const getArtboardVisiblePalettes = async ({
 	})) as IDesignWithPalette[]
 
 	const visibleDesignPalettes = filterVisibleDesigns(
-		orderLinkedDesigns(designPalettes),
+		orderLinkedItems<IDesignWithPalette>(designPalettes),
 	) as IDesignWithPalette[]
 
 	return visibleDesignPalettes.map(design => design.palette)
@@ -88,7 +89,7 @@ export const getArtboardVisibleRotates = async ({
 	})) as IDesignWithRotate[]
 
 	const visibleDesignRotates = filterVisibleDesigns(
-		orderLinkedDesigns(designRotates),
+		orderLinkedItems<IDesignWithRotate>(designRotates),
 	) as IDesignWithRotate[]
 
 	return filterNonArrayRotates(

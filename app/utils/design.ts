@@ -22,6 +22,7 @@ import { findFirstSizeInDesignArray } from '#app/models/size.server'
 import { findFirstStrokeInDesignArray } from '#app/models/stroke.server'
 import { findFirstTemplateInDesignArray } from '#app/models/template.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
+import { orderLinkedItems } from './linked-list.utils'
 import { safelyAssignValue } from './typescript-helpers'
 
 export const filterAndOrderDesignsByType = ({
@@ -29,28 +30,28 @@ export const filterAndOrderDesignsByType = ({
 }: {
 	designs: IDesignWithType[]
 }): IDesignsByType => {
-	const designPalettes = orderLinkedDesigns(
+	const designPalettes = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'palette'),
 	) as IDesignWithPalette[]
-	const designSizes = orderLinkedDesigns(
+	const designSizes = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'size'),
 	) as IDesignWithSize[]
-	const designFills = orderLinkedDesigns(
+	const designFills = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'fill'),
 	) as IDesignWithFill[]
-	const designStrokes = orderLinkedDesigns(
+	const designStrokes = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'stroke'),
 	) as IDesignWithStroke[]
-	const designLines = orderLinkedDesigns(
+	const designLines = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'line'),
 	) as IDesignWithLine[]
-	const designRotates = orderLinkedDesigns(
+	const designRotates = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'rotate'),
 	) as IDesignWithRotate[]
-	const designLayouts = orderLinkedDesigns(
+	const designLayouts = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'layout'),
 	) as IDesignWithLayout[]
-	const designTemplates = orderLinkedDesigns(
+	const designTemplates = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'template'),
 	) as IDesignWithTemplate[]
 

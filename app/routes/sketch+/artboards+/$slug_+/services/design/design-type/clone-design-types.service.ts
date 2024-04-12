@@ -54,6 +54,7 @@ export const cloneDesignTypesToEntity = async ({
 	let visibleDesignsCount = 0
 
 	// Step 2: loop entity design types
+	// kinda weird way to set the loop up, but it works
 	for (const [, design] of designs.entries()) {
 		const { visible, selected } = design as IDesignWithType
 

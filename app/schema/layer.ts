@@ -1,14 +1,46 @@
 import { z } from 'zod'
+import {
+	type ReorderArtboardLayerSchema,
+	type NewArtboardLayerSchema,
+	type ToggleVisibleArtboardLayerSchema,
+	type DeleteArtboardLayerSchema,
+} from './layer-artboard'
+import {
+	type ReorderArtboardVersionLayerSchema,
+	type NewArtboardVersionLayerSchema,
+	type ToggleVisibleArtboardVersionLayerSchema,
+	type DeleteArtboardVersionLayerSchema,
+} from './layer-artboard-version'
+
+export const LayerNameSchema = z.string().min(1).max(40)
+export const LayerDescriptionSchema = z.string().min(0).max(400).optional()
 
 export const EditLayerNameSchema = z.object({
 	id: z.string(),
-	name: z.string().min(1).max(40),
+	name: LayerNameSchema,
 })
 
 export const EditLayerDescriptionSchema = z.object({
 	id: z.string(),
-	description: z.string().min(0).max(400).optional(),
+	description: LayerDescriptionSchema,
 })
+
+// later there will be layer groups
+export type NewLayerSchemaType =
+	| typeof NewArtboardLayerSchema
+	| typeof NewArtboardVersionLayerSchema
+
+export type ReorderLayerSchemaType =
+	| typeof ReorderArtboardLayerSchema
+	| typeof ReorderArtboardVersionLayerSchema
+
+export type ToggleVisibleLayerSchemaType =
+	| typeof ToggleVisibleArtboardLayerSchema
+	| typeof ToggleVisibleArtboardVersionLayerSchema
+
+export type DeleteLayerSchemaType =
+	| typeof DeleteArtboardLayerSchema
+	| typeof DeleteArtboardVersionLayerSchema
 
 export type selectArgsType = z.infer<typeof selectArgs>
 const selectArgs = z.object({
@@ -21,6 +53,7 @@ const whereArgs = z.object({
 	id: z.string().optional(),
 	ownerId: z.string().optional(),
 	artboardId: z.string().optional(),
+	artboardVersionId: z.string().optional(),
 	prevId: zodStringOrNull.optional(),
 	nextId: zodStringOrNull.optional(),
 })

@@ -3,7 +3,7 @@ import {
 	connectPrevAndNextLayers,
 	findFirstLayer,
 } from '#app/models/layer.server'
-import { LayerDataCreateSchema } from '#app/schema/layer-artboard'
+import { ArtboardLayerDataCreateSchema } from '#app/schema/layer-artboard'
 import { prisma } from '#app/utils/db.server'
 import { layerCloneDesignsService } from './clone-designs.service'
 
@@ -67,7 +67,7 @@ const createLayer = async ({
 	artboardId: Artboard['id']
 }) => {
 	const name = await createLayerName({ artboardId })
-	const data = LayerDataCreateSchema.parse({
+	const data = ArtboardLayerDataCreateSchema.parse({
 		name,
 		ownerId: userId,
 		artboardId,

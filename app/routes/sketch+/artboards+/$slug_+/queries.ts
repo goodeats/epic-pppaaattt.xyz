@@ -6,7 +6,7 @@ import {
 import { findManyLayers, type ILayer } from '#app/models/layer.server'
 import { prisma } from '#app/utils/db.server'
 import { filterAndOrderDesignsByType } from '#app/utils/design'
-import { orderLinkedLayers } from '#app/utils/layer.utils'
+import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { artboardBuildCreateService } from './services/artboard/build/create.service'
 
 export const getOwner = async (userId: string) => {
@@ -88,7 +88,7 @@ export const getLayers = async ({
 	const layers = await findManyLayers({
 		where: { ownerId: userId, artboardId },
 	})
-	return orderLinkedLayers(layers)
+	return orderLinkedItems<ILayer>(layers)
 }
 
 export const getArtboardDesigns = async ({

@@ -5,6 +5,8 @@ import {
 	type whereArgsType,
 } from '#app/schema/layer'
 import { prisma } from '#app/utils/db.server'
+import { type IArtboardVersion } from './artboard-version.server'
+import { type IArtboard } from './artboard.server'
 import { type IDesignWithType } from './design.server'
 
 export interface ILayer {
@@ -23,8 +25,17 @@ export interface ILayer {
 	// children: ILayer[]
 	// designs: IDesignWithType[]
 }
+
+export type ILayerEntityId = IArtboard['id'] | IArtboardVersion['id']
 export interface ILayerWithDesigns extends ILayer {
 	designs: IDesignWithType[]
+}
+
+export interface ILayerCreateOverrides {
+	name?: string
+	description?: string
+	slug?: string
+	visible?: boolean
 }
 
 export const findManyLayers = async ({ where }: { where: whereArgsType }) => {

@@ -35,7 +35,10 @@ export type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
 export interface Design {
 	type: designTypeEnum
 	ownerId: string
+	// one of these should be included
 	artboardId?: string
+	artboardVersionId?: string
+	layerId?: string
 }
 
 // use this to ensure enum values are correct

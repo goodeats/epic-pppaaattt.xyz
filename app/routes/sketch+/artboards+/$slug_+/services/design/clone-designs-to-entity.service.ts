@@ -43,7 +43,7 @@ export const cloneDesignsToEntity = async ({
 			sourceEntityId,
 		})
 
-		// Step 2: separate artboard designs by type and order
+		// Step 2: separate designs by type and order
 		const designsByType = filterAndOrderDesignsByType({
 			designs,
 		})

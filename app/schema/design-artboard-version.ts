@@ -1,10 +1,12 @@
 import { z } from 'zod'
 import { DesignTypeEnum, type designTypeEnum } from './design'
 
-export interface Design {
+// copied from ./design.ts
+// may not be necessary?
+export interface DesignArtboardVersion {
 	type: designTypeEnum
 	ownerId: string
-	artboardVersionId?: string
+	artboardVersionId: string
 }
 
 export const ArtboardVersionDesignDataCreateSchema = z.object({
@@ -13,7 +15,7 @@ export const ArtboardVersionDesignDataCreateSchema = z.object({
 	artboardVersionId: z.string(),
 	visible: z.boolean().optional(),
 	selected: z.boolean().optional(),
-}) satisfies z.Schema<Design>
+}) satisfies z.Schema<DesignArtboardVersion>
 
 export const NewArtboardVersionDesignSchema = z.object({
 	artboardVersionId: z.string(),
