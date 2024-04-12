@@ -7,7 +7,10 @@ import {
 	type IDesignTypeCreateOverrides,
 } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
-import { type designTypeEnum } from '#app/schema/design'
+import {
+	type designCloneSourceTypeEnum,
+	type designTypeEnum,
+} from '#app/schema/design'
 import {
 	cloneDesignsService,
 	type ICloneDesignsStrategy,
@@ -50,10 +53,12 @@ export class CloneDesignsToLayerStrategy implements ICloneDesignsStrategy {
 
 export const layerLayerCloneDesignsService = async ({
 	userId,
+	sourceEntityType,
 	sourceEntityId,
 	targetEntityId,
 }: {
 	userId: User['id']
+	sourceEntityType: designCloneSourceTypeEnum
 	sourceEntityId: IDesignEntityId
 	targetEntityId: ILayer['id']
 }) => {
@@ -62,6 +67,7 @@ export const layerLayerCloneDesignsService = async ({
 
 		await cloneDesignsService({
 			userId,
+			sourceEntityType,
 			sourceEntityId,
 			targetEntityId,
 			entityStrategy,

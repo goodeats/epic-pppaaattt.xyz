@@ -1,17 +1,20 @@
 import { type User } from '@prisma/client'
 import { type ILayerCreatedResponse } from '#app/models/layer/layer.create.server'
+import { getLayersWithDesigns } from '#app/models/layer/layer.get.server'
 import {
 	type ILayerWithDesigns,
 	type ILayerEntityId,
 	type ILayerCreateOverrides,
 } from '#app/models/layer.server'
+import { DesignCloneSourceTypeEnum } from '#app/schema/design'
+import {
+	LayerCloneSourceTypeEnum,
+	type layerCloneSourceTypeEnum,
+} from '#app/schema/layer'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { layerLayerCloneDesignsService } from './clone-designs.service'
 
 export interface ICloneLayersStrategy {
-	getSourceEntityLayers(args: {
-		sourceEntityId: ILayerEntityId
-	}): Promise<ILayerWithDesigns[]>
 	createEntityLayerService(args: {
 		userId: User['id']
 		targetEntityId: ILayerEntityId
@@ -21,29 +24,32 @@ export interface ICloneLayersStrategy {
 
 export const cloneLayersService = async ({
 	userId,
+	sourceEntityType,
 	sourceEntityId,
 	targetEntityId,
 	entityStrategy,
 }: {
 	userId: User['id']
+	sourceEntityType: layerCloneSourceTypeEnum
 	sourceEntityId: ILayerEntityId
 	targetEntityId: ILayerEntityId
 	entityStrategy: ICloneLayersStrategy
 }) => {
 	try {
 		// Step 1: get entity layers
-		const sourceLayers = await entityStrategy.getSourceEntityLayers({
+		const sourceLayers = await getSourceEntityLayers({
+			sourceEntityType,
 			sourceEntityId,
 		})
 
 		// Step 2: re-order layers as linked list
-		const layers = orderLinkedItems<ILayerWithDesigns>(sourceLayers)
+		const orderedLayers = orderLinkedItems<ILayerWithDesigns>(sourceLayers)
 
 		// Step 3: clone new layers and thier designs
 		await cloneLayersToEntity({
 			userId,
 			targetEntityId,
-			layers,
+			sourceLayers: orderedLayers,
 			entityStrategy,
 		})
 
@@ -59,23 +65,40 @@ export const cloneLayersService = async ({
 	}
 }
 
+const getSourceEntityLayers = async ({
+	sourceEntityType,
+	sourceEntityId,
+}: {
+	sourceEntityType: layerCloneSourceTypeEnum
+	sourceEntityId: ILayerEntityId
+}): Promise<ILayerWithDesigns[]> => {
+	const where =
+		sourceEntityType === LayerCloneSourceTypeEnum.ARTBOARD
+			? { artboardId: sourceEntityId }
+			: LayerCloneSourceTypeEnum.ARTBOARD_VERSION
+			  ? { artboardVersionId: sourceEntityId }
+			  : { layerId: sourceEntityId }
+
+	return await getLayersWithDesigns({ where })
+}
+
 const cloneLayersToEntity = async ({
 	userId,
 	targetEntityId,
-	layers,
+	sourceLayers,
 	entityStrategy,
 }: {
 	userId: User['id']
 	targetEntityId: ILayerEntityId
-	layers: ILayerWithDesigns[]
+	sourceLayers: ILayerWithDesigns[]
 	entityStrategy: ICloneLayersStrategy
 }) => {
 	// kinda weird way to set the loop up, but it works
-	for (const [, layer] of layers.entries()) {
+	for (const [, sourceLayer] of sourceLayers.entries()) {
 		cloneLayerToEntity({
 			userId,
 			targetEntityId,
-			layer,
+			sourceLayer,
 			entityStrategy,
 		})
 	}
@@ -84,16 +107,15 @@ const cloneLayersToEntity = async ({
 const cloneLayerToEntity = async ({
 	userId,
 	targetEntityId,
-	layer,
+	sourceLayer,
 	entityStrategy,
 }: {
 	userId: User['id']
 	targetEntityId: ILayerEntityId
-	layer: ILayerWithDesigns
+	sourceLayer: ILayerWithDesigns
 	entityStrategy: ICloneLayersStrategy
 }) => {
-	const { name, description, slug, visible } = layer
-	console.log('layer.designs:', layer.designs)
+	const { name, description, slug, visible } = sourceLayer
 
 	// Step 1: set layer overrides
 	const layerOverrides = {
@@ -120,7 +142,8 @@ const cloneLayerToEntity = async ({
 	// Step 4: clone designs
 	await layerLayerCloneDesignsService({
 		userId,
-		sourceEntityId: layer.id,
+		sourceEntityType: DesignCloneSourceTypeEnum.LAYER,
+		sourceEntityId: sourceLayer.id,
 		targetEntityId: createdLayer.id,
 	})
 }

@@ -4,7 +4,10 @@ import { type IArtboardWithDesignsAndLayers } from '#app/models/artboard.server'
 import { artboardBranchCreateService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/branch/create.service'
 import { artboardVersionCloneDesignsService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/version/clone-designs.service'
 import { artboardVersionCloneLayersService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/version/clone-layers.service'
+import { DesignCloneSourceTypeEnum } from '#app/schema/design'
+import { LayerCloneSourceTypeEnum } from '#app/schema/layer'
 import { prisma } from '#app/utils/db.server'
+import { getCountOfAllEntities } from '#app/utils/dev.utils'
 
 // artboards will have version control now
 // new prisma migration created the following tables:
@@ -32,35 +35,47 @@ import { prisma } from '#app/utils/db.server'
 export const createArtboardVersionsBranches = async () => {
 	console.log('createArtboardVersionsBranches begin 🎬')
 
-	// Step 1: get all artboards
+	// Step 1: remove all artboard branches and versions from previous runs
+	await clear()
+
+	await getCountOfAllEntities()
+
+	// Step 2: get all artboards
 	// with their designs, layers, and layers' designs
 	const artboards = await getArtboards()
 
-	// Step 2: for each artboard
-	artboards.map(async (artboard: IArtboardWithDesignsAndLayers) => {
-		console.log('artboard: ', artboard.name)
-		// Step 3: create a new branch (default) and version (latest)
-		const artboardVersions = await createArtboardBranchWithVersion({ artboard })
-
-		// Step 5: for each artboard version (only 1)
-		artboardVersions.map(async (artboardVersion: IArtboardVersion) => {
-			console.log('artboardVersion: ', artboardVersion.name)
-			// Step 6: clone artboard designs
-			await cloneArtboardVersionDesigns({ artboard, artboardVersion })
-			// Step 7: clone artboard layers
-			await cloneArtboardVersionLayers({ artboard, artboardVersion })
-			// Step 8: clone artboard layers designs
-		})
-	})
-
-	// remove this when ready
-	await clear()
+	// Step 2: clone each artboard to a new version and branch
+	for (const [, artboard] of artboards.entries()) {
+		await cloneArtboard({ artboard })
+	}
 
 	console.log('createArtboardVersionsBranches end 🏁')
+	await getCountOfAllEntities()
+}
+
+const clear = async () => {
+	await prisma.artboardBranch.deleteMany()
+	await prisma.artboardVersion.deleteMany()
 }
 
 const getArtboards = async (): Promise<IArtboardWithDesignsAndLayers[]> => {
 	return await getArtboardsWithDesignsAndLayers()
+}
+
+const cloneArtboard = async ({
+	artboard,
+}: {
+	artboard: IArtboardWithDesignsAndLayers
+}) => {
+	console.log('artboard: ', artboard.name)
+
+	// Step 1: create a new branch and version
+	const artboardVersions = await createArtboardBranchWithVersion({ artboard })
+
+	// Step 2: clone artboard children to the new version
+	for (const [, artboardVersion] of artboardVersions.entries()) {
+		await cloneArtboardChildrenToVersion({ artboard, artboardVersion })
+	}
 }
 
 const createArtboardBranchWithVersion = async ({
@@ -79,7 +94,27 @@ const createArtboardBranchWithVersion = async ({
 	return artboardBranch.versions
 }
 
-const cloneArtboardVersionDesigns = async ({
+const cloneArtboardChildrenToVersion = async ({
+	artboard,
+	artboardVersion,
+}: {
+	artboard: IArtboardWithDesignsAndLayers
+	artboardVersion: IArtboardVersion
+}) => {
+	console.log('artboardVersion: ', artboardVersion.name, artboard.name)
+	const cloneDesigns = await cloneArtboardDesignsToVersion({
+		artboard,
+		artboardVersion,
+	})
+	console.log('cloneDesigns: ', cloneDesigns)
+	const cloneLayers = await cloneArtboardLayersToVersion({
+		artboard,
+		artboardVersion,
+	})
+	console.log('cloneLayers: ', cloneLayers)
+}
+
+const cloneArtboardDesignsToVersion = async ({
 	artboard,
 	artboardVersion,
 }: {
@@ -88,12 +123,13 @@ const cloneArtboardVersionDesigns = async ({
 }) => {
 	return await artboardVersionCloneDesignsService({
 		userId: artboard.ownerId,
+		sourceEntityType: DesignCloneSourceTypeEnum.ARTBOARD,
 		sourceEntityId: artboard.id,
 		targetEntityId: artboardVersion.id,
 	})
 }
 
-const cloneArtboardVersionLayers = async ({
+const cloneArtboardLayersToVersion = async ({
 	artboard,
 	artboardVersion,
 }: {
@@ -102,14 +138,10 @@ const cloneArtboardVersionLayers = async ({
 }) => {
 	return await artboardVersionCloneLayersService({
 		userId: artboard.ownerId,
+		sourceEntityType: LayerCloneSourceTypeEnum.ARTBOARD,
 		sourceEntityId: artboard.id,
 		targetEntityId: artboardVersion.id,
 	})
-}
-
-const clear = async () => {
-	await prisma.artboardBranch.deleteMany()
-	await prisma.artboardVersion.deleteMany()
 }
 
 await createArtboardVersionsBranches()

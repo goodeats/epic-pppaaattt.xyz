@@ -1,14 +1,14 @@
 import { type User } from '@prisma/client'
 import { type IArtboardVersion } from '#app/models/artboard-version.server'
-import { type IArtboard } from '#app/models/artboard.server'
 import {
-	findManyDesignsWithType,
 	type IDesignEntityId,
-	type IDesignWithType,
 	type IDesignCreateOverrides,
 	type IDesignTypeCreateOverrides,
 } from '#app/models/design.server'
-import { type designTypeEnum } from '#app/schema/design'
+import {
+	type designCloneSourceTypeEnum,
+	type designTypeEnum,
+} from '#app/schema/design'
 import {
 	cloneDesignsService,
 	type ICloneDesignsStrategy,
@@ -18,16 +18,6 @@ import { artboardVersionDesignCreateService } from './design/create.service'
 export class CloneDesignsToArtboardVersionStrategy
 	implements ICloneDesignsStrategy
 {
-	async getSourceEntityDesigns({
-		sourceEntityId,
-	}: {
-		sourceEntityId: IArtboard['id']
-	}): Promise<IDesignWithType[]> {
-		return await findManyDesignsWithType({
-			where: { artboardVersionId: sourceEntityId },
-		})
-	}
-
 	async createEntityDesignService({
 		userId,
 		targetEntityId,
@@ -53,10 +43,12 @@ export class CloneDesignsToArtboardVersionStrategy
 
 export const artboardVersionCloneDesignsService = async ({
 	userId,
+	sourceEntityType,
 	sourceEntityId,
 	targetEntityId,
 }: {
 	userId: User['id']
+	sourceEntityType: designCloneSourceTypeEnum
 	sourceEntityId: IDesignEntityId
 	targetEntityId: IArtboardVersion['id']
 }) => {
@@ -65,6 +57,7 @@ export const artboardVersionCloneDesignsService = async ({
 
 		await cloneDesignsService({
 			userId,
+			sourceEntityType,
 			sourceEntityId,
 			targetEntityId,
 			entityStrategy,

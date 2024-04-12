@@ -10,6 +10,7 @@ import {
 	type ILayer,
 	type ILayerEntityId,
 } from '#app/models/layer.server'
+import { DesignCloneSourceTypeEnum } from '#app/schema/design'
 import { ArtboardVersionLayerDataCreateSchema } from '#app/schema/layer-artboard-version'
 import { prisma } from '#app/utils/db.server'
 import {
@@ -69,6 +70,7 @@ export class ArtboardVersionCreateLayerStrategy
 	}) {
 		await artboardVersionLayerCloneDesignsService({
 			userId,
+			sourceEntityType: DesignCloneSourceTypeEnum.ARTBOARD_VERSION,
 			sourceEntityId,
 			targetEntityId,
 		})

@@ -10,6 +10,7 @@ import {
 	findFirstLayer,
 	type ILayerEntityId,
 } from '#app/models/layer.server'
+import { DesignCloneSourceTypeEnum } from '#app/schema/design'
 import { ArtboardLayerDataCreateSchema } from '#app/schema/layer-artboard'
 import { prisma } from '#app/utils/db.server'
 import {
@@ -67,6 +68,7 @@ export class ArtboardCreateLayerStrategy implements ICreateLayerStrategy {
 	}) {
 		await artboardLayerCloneDesignsService({
 			userId,
+			sourceEntityType: DesignCloneSourceTypeEnum.ARTBOARD,
 			sourceEntityId,
 			targetEntityId,
 		})

@@ -1,12 +1,11 @@
 import { type User } from '@prisma/client'
 import { type IArtboardVersion } from '#app/models/artboard-version.server'
 import { type ILayerCreatedResponse } from '#app/models/layer/layer.create.server'
-import { getLayersWithDesigns } from '#app/models/layer/layer.get.server'
 import {
-	type ILayerWithDesigns,
 	type ILayerEntityId,
 	type ILayerCreateOverrides,
 } from '#app/models/layer.server'
+import { type layerCloneSourceTypeEnum } from '#app/schema/layer'
 import {
 	cloneLayersService,
 	type ICloneLayersStrategy,
@@ -16,16 +15,6 @@ import { artboardVersionLayerCreateService } from './layer/create.service'
 export class CloneLayersToArtboardVersionStrategy
 	implements ICloneLayersStrategy
 {
-	async getSourceEntityLayers({
-		sourceEntityId,
-	}: {
-		sourceEntityId: ILayerEntityId
-	}): Promise<ILayerWithDesigns[]> {
-		return await getLayersWithDesigns({
-			where: { artboardId: sourceEntityId },
-		})
-	}
-
 	async createEntityLayerService({
 		userId,
 		targetEntityId,
@@ -49,10 +38,12 @@ export class CloneLayersToArtboardVersionStrategy
 
 export const artboardVersionCloneLayersService = async ({
 	userId,
+	sourceEntityType,
 	sourceEntityId,
 	targetEntityId,
 }: {
 	userId: User['id']
+	sourceEntityType: layerCloneSourceTypeEnum
 	sourceEntityId: ILayerEntityId
 	targetEntityId: IArtboardVersion['id']
 }) => {
@@ -61,6 +52,7 @@ export const artboardVersionCloneLayersService = async ({
 
 		await cloneLayersService({
 			userId,
+			sourceEntityType,
 			sourceEntityId,
 			targetEntityId,
 			entityStrategy,

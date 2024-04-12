@@ -12,6 +12,16 @@ import {
 	type DeleteArtboardVersionLayerSchema,
 } from './layer-artboard-version'
 
+type ObjectValues<T> = T[keyof T]
+export const LayerCloneSourceTypeEnum = {
+	ARTBOARD: 'artboard',
+	ARTBOARD_VERSION: 'artboardVersion',
+	LAYER: 'layer',
+} as const
+export type layerCloneSourceTypeEnum = ObjectValues<
+	typeof LayerCloneSourceTypeEnum
+>
+
 export const LayerNameSchema = z.string().min(1).max(40)
 export const LayerDescriptionSchema = z.string().min(0).max(400).optional()
 

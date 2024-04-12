@@ -276,7 +276,8 @@ model Layer {
   // This helps our order by in the user search a LOT
   @@index([ownerId, updatedAt])
   // Unique constraint for slug scoped to ownerId
-  @@unique([slug, ownerId])
+  @@unique([slug, ownerId, artboardId])
+  @@unique([slug, ownerId, artboardVersionId])
 }
 
 model AssetImage {

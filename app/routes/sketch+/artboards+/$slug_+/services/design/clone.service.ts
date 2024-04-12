@@ -5,8 +5,13 @@ import {
 	type IDesignEntityId,
 	type IDesignWithType,
 	type IDesignsByType,
+	findManyDesignsWithType,
 } from '#app/models/design.server'
-import { type designTypeEnum } from '#app/schema/design'
+import {
+	DesignCloneSourceTypeEnum,
+	type designCloneSourceTypeEnum,
+	type designTypeEnum,
+} from '#app/schema/design'
 import { filterAndOrderDesignsByType } from '#app/utils/design'
 import {
 	cloneDesignTypesService,
@@ -14,9 +19,6 @@ import {
 } from './design-type/clone.service'
 
 export interface ICloneDesignsStrategy {
-	getSourceEntityDesigns(args: {
-		sourceEntityId: IDesignEntityId
-	}): Promise<IDesignWithType[]>
 	createEntityDesignService(args: {
 		userId: User['id']
 		targetEntityId: IDesignEntityId
@@ -28,20 +30,30 @@ export interface ICloneDesignsStrategy {
 
 export const cloneDesignsService = async ({
 	userId,
+	sourceEntityType,
 	sourceEntityId,
 	targetEntityId,
 	entityStrategy,
 }: {
 	userId: User['id']
+	sourceEntityType: designCloneSourceTypeEnum
 	sourceEntityId: IDesignEntityId
 	targetEntityId: IDesignEntityId
 	entityStrategy: ICloneDesignsStrategy
 }) => {
+	console.log(
+		'😂 cloneDesignsService...',
+		{ sourceEntityId },
+		{ targetEntityId },
+	)
+
 	try {
 		// Step 1: get entity designs
-		const sourceDesigns = await entityStrategy.getSourceEntityDesigns({
+		const sourceDesigns = await getSourceEntityDesigns({
+			sourceEntityType,
 			sourceEntityId,
 		})
+		console.log('source design count: ', sourceDesigns.length)
 
 		// Step 2: separate designs by type and order
 		const designsByType = filterAndOrderDesignsByType({
@@ -63,6 +75,23 @@ export const cloneDesignsService = async ({
 	}
 }
 
+const getSourceEntityDesigns = async ({
+	sourceEntityType,
+	sourceEntityId,
+}: {
+	sourceEntityType: designCloneSourceTypeEnum
+	sourceEntityId: IDesignEntityId
+}): Promise<IDesignWithType[]> => {
+	const where =
+		sourceEntityType === DesignCloneSourceTypeEnum.ARTBOARD
+			? { artboardId: sourceEntityId }
+			: DesignCloneSourceTypeEnum.ARTBOARD_VERSION
+			  ? { artboardVersionId: sourceEntityId }
+			  : { layerId: sourceEntityId }
+
+	return await findManyDesignsWithType({ where })
+}
+
 const cloneDesignsByType = async ({
 	userId,
 	targetEntityId,
@@ -74,11 +103,15 @@ const cloneDesignsByType = async ({
 	designsByType: IDesignsByType
 	entityStrategy: ICloneDesignsStrategy
 }): Promise<void> => {
+	console.log('😂😂 cloneDesignsByType...')
+
 	// Iterate over each design type and clone accordingly
 	for (const key of Object.keys(designsByType) as (keyof IDesignsByType)[]) {
 		const strategy = designTypeStrategies[key]
 		const designs = designsByType[key]
+		console.log(key, designs.length)
 		if (strategy && designs.length > 0) {
+			console.log('😂😂😂 cloneDesignTypesService...')
 			await cloneDesignTypesService({
 				userId,
 				targetEntityId,

@@ -32,6 +32,15 @@ export const DesignTypeEnum = {
 type ObjectValues<T> = T[keyof T]
 export type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
 
+export const DesignCloneSourceTypeEnum = {
+	ARTBOARD: 'artboard',
+	ARTBOARD_VERSION: 'artboardVersion',
+	LAYER: 'layer',
+} as const
+export type designCloneSourceTypeEnum = ObjectValues<
+	typeof DesignCloneSourceTypeEnum
+>
+
 export interface Design {
 	type: designTypeEnum
 	ownerId: string
