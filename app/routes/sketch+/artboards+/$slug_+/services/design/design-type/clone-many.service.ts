@@ -3,17 +3,9 @@ import {
 	type IDesignEntityId,
 	type IDesignCreateOverrides,
 	type IDesignWithType,
-	type IDesignTypeCreateOverrides,
 } from '#app/models/design.server'
-import { type designTypeEnum } from '#app/schema/design'
-import { type ICloneDesignsStrategy } from '../clone-many.service'
-
-export interface ICloneDesignTypeStrategy {
-	type: designTypeEnum
-	getDesignTypeOverrides(args: {
-		design: IDesignWithType
-	}): IDesignTypeCreateOverrides
-}
+import { type ICloneDesignsStrategy } from '#app/strategies/design/clone.strategy'
+import { type ICloneDesignTypeStrategy } from '#app/strategies/design-type/clone.strategy'
 
 export const cloneDesignTypesService = async ({
 	userId,

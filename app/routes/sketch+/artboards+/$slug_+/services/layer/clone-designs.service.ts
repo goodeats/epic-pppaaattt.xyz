@@ -3,9 +3,9 @@ import { type IDesignEntityId } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type designCloneSourceTypeEnum } from '#app/schema/design'
 import { CloneDesignToLayerStrategy } from '#app/strategies/design/clone.strategy'
-import { cloneDesignsService } from '../../../design/clone-many.service'
+import { cloneDesignsService } from '../design/clone-many.service'
 
-export const artboardVersionLayerCloneDesignsService = async ({
+export const layerLayerCloneDesignsService = async ({
 	userId,
 	sourceEntityType,
 	sourceEntityId,
@@ -18,7 +18,6 @@ export const artboardVersionLayerCloneDesignsService = async ({
 }) => {
 	try {
 		const entityStrategy = new CloneDesignToLayerStrategy()
-
 		await cloneDesignsService({
 			userId,
 			sourceEntityType,
@@ -27,7 +26,7 @@ export const artboardVersionLayerCloneDesignsService = async ({
 			entityStrategy,
 		})
 	} catch (error) {
-		console.log('artboardVersionLayerCloneDesignsService error:', error)
+		console.log('layerLayerCloneDesignsService error:', error)
 		const errorType = error instanceof Error
 		const errorMessage = errorType ? error.message : 'An unknown error occurred'
 		return {

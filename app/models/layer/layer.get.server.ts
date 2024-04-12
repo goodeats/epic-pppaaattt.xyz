@@ -8,6 +8,7 @@ export const getLayersWithDesigns = async ({
 	where: whereArgsType
 }): Promise<ILayerWithDesigns[]> => {
 	const layers = await prisma.layer.findMany({
+		where,
 		include: {
 			designs: {
 				include: {

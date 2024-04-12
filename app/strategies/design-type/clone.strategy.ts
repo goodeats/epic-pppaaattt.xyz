@@ -1,16 +1,24 @@
 import {
-	type IDesignWithLayout,
-	type IDesignTypeCreateOverrides,
-	type IDesignWithFill,
-	type IDesignWithLine,
 	type IDesignWithPalette,
-	type IDesignWithRotate,
+	type IDesignTypeCreateOverrides,
+	type IDesignWithType,
 	type IDesignWithSize,
+	type IDesignWithFill,
 	type IDesignWithStroke,
+	type IDesignWithLine,
+	type IDesignWithRotate,
+	type IDesignWithLayout,
 	type IDesignWithTemplate,
+	type IDesignsByType,
 } from '#app/models/design.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
-import { type ICloneDesignTypeStrategy } from '../clone-many.service'
+
+export interface ICloneDesignTypeStrategy {
+	type: designTypeEnum
+	getDesignTypeOverrides(args: {
+		design: IDesignWithType
+	}): IDesignTypeCreateOverrides
+}
 
 class ClonePaletteDesignStrategy implements ICloneDesignTypeStrategy {
 	type: designTypeEnum = DesignTypeEnum.PALETTE
@@ -152,6 +160,19 @@ class CloneTemplateDesignStrategy implements ICloneDesignTypeStrategy {
 	}
 }
 
+const cloneDesignTypeStrategies: {
+	[K in keyof IDesignsByType]?: ICloneDesignTypeStrategy
+} = {
+	designPalettes: new ClonePaletteDesignStrategy(),
+	designSizes: new CloneSizeDesignStrategy(),
+	designFills: new CloneFillDesignStrategy(),
+	designStrokes: new CloneStrokeDesignStrategy(),
+	designLines: new CloneLineDesignStrategy(),
+	designRotates: new CloneRotateDesignStrategy(),
+	designLayouts: new CloneLayoutDesignStrategy(),
+	designTemplates: new CloneTemplateDesignStrategy(),
+}
+
 export {
 	ClonePaletteDesignStrategy,
 	CloneSizeDesignStrategy,
@@ -161,4 +182,5 @@ export {
 	CloneRotateDesignStrategy,
 	CloneLayoutDesignStrategy,
 	CloneTemplateDesignStrategy,
+	cloneDesignTypeStrategies,
 }

@@ -16,6 +16,7 @@ type ObjectValues<T> = T[keyof T]
 export const LayerCloneSourceTypeEnum = {
 	ARTBOARD: 'artboard',
 	ARTBOARD_VERSION: 'artboardVersion',
+	LAYER: 'layer',
 } as const
 export type layerCloneSourceTypeEnum = ObjectValues<
 	typeof LayerCloneSourceTypeEnum

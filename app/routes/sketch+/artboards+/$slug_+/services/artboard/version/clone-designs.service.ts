@@ -1,45 +1,9 @@
 import { type User } from '@prisma/client'
 import { type IArtboardVersion } from '#app/models/artboard-version.server'
-import {
-	type IDesignEntityId,
-	type IDesignCreateOverrides,
-	type IDesignTypeCreateOverrides,
-} from '#app/models/design.server'
-import {
-	type designCloneSourceTypeEnum,
-	type designTypeEnum,
-} from '#app/schema/design'
-import {
-	cloneDesignsService,
-	type ICloneDesignsStrategy,
-} from '../../design/clone-many.service'
-import { artboardVersionDesignCreateService } from './design/create.service'
-
-export class CloneDesignsToArtboardVersionStrategy
-	implements ICloneDesignsStrategy
-{
-	async createEntityDesignService({
-		userId,
-		targetEntityId,
-		type,
-		designOverrides,
-		designTypeOverrides,
-	}: {
-		userId: User['id']
-		targetEntityId: IDesignEntityId
-		type: designTypeEnum
-		designOverrides?: IDesignCreateOverrides
-		designTypeOverrides?: IDesignTypeCreateOverrides
-	}): Promise<void> {
-		await artboardVersionDesignCreateService({
-			userId,
-			artboardVersionId: targetEntityId,
-			type,
-			designOverrides,
-			designTypeOverrides,
-		})
-	}
-}
+import { type IDesignEntityId } from '#app/models/design.server'
+import { type designCloneSourceTypeEnum } from '#app/schema/design'
+import { CloneDesignsToArtboardVersionStrategy } from '#app/strategies/design/clone.strategy'
+import { cloneDesignsService } from '../../design/clone-many.service'
 
 export const artboardVersionCloneDesignsService = async ({
 	userId,
@@ -63,7 +27,12 @@ export const artboardVersionCloneDesignsService = async ({
 			entityStrategy,
 		})
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('artboardVersionCloneDesignsService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }

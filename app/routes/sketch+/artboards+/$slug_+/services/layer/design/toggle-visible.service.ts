@@ -1,8 +1,8 @@
 import { type User } from '@prisma/client'
 import { type IDesign, type IDesignIdOrNull } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
+import { LayerUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { designToggleVisibleService } from '../../design/toggle-visible.service'
-import { LayerUpdateSelectedDesignStrategy } from './update-selected.service'
 
 export const layerDesignToggleVisibleService = async ({
 	userId,
@@ -20,7 +20,7 @@ export const layerDesignToggleVisibleService = async ({
 		return designToggleVisibleService({
 			userId,
 			id,
-			entityId: layerId,
+			targetEntityId: layerId,
 			updateSelectedDesignId,
 			updateSelectedDesignStrategy,
 		})

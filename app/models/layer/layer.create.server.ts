@@ -17,6 +17,7 @@ export const createLayer = async ({
 		artboardVersionId?: string
 		description?: string | undefined
 		slug?: string | undefined
+		visible?: boolean
 	}
 }): Promise<ILayer> => {
 	return await prisma.layer.create({ data })

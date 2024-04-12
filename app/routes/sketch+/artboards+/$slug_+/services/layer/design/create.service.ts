@@ -1,65 +1,14 @@
 import { type User } from '@prisma/client'
+import { type IDesignCreatedResponse } from '#app/models/design/design.create.server'
 import {
 	type IDesignCreateOverrides,
-	findFirstDesign,
 	type IDesignTypeCreateOverrides,
 } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
-import { LayerDesignDataCreateSchema } from '#app/schema/design-layer'
-import { prisma } from '#app/utils/db.server'
-import {
-	designCreateService,
-	type ICreateDesignStrategy,
-} from '../../design/create.service'
-import { LayerUpdateSelectedDesignStrategy } from './update-selected.service'
-
-export class LayerCreateDesignStrategy implements ICreateDesignStrategy {
-	async getDesignsByTypeTail({
-		entityId,
-		type,
-	}: {
-		entityId: ILayer['id']
-		type: designTypeEnum
-	}) {
-		return await findFirstDesign({
-			where: { type, layerId: entityId, nextId: null },
-		})
-	}
-
-	async createDesign({
-		userId,
-		entityId,
-		type,
-		designOverrides,
-	}: {
-		userId: User['id']
-		entityId: ILayer['id']
-		type: designTypeEnum
-		designOverrides: IDesignCreateOverrides
-	}) {
-		const data = LayerDesignDataCreateSchema.parse({
-			type,
-			ownerId: userId,
-			layerId: entityId,
-			...designOverrides,
-		})
-		return await prisma.design.create({ data })
-	}
-
-	async visibleDesignsByTypeCount({
-		entityId,
-		type,
-	}: {
-		entityId: ILayer['id']
-		type: designTypeEnum
-	}) {
-		const visibleDesignsByTypeCount = await prisma.design.count({
-			where: { layerId: entityId, type, visible: true },
-		})
-		return Number(visibleDesignsByTypeCount)
-	}
-}
+import { LayerCreateDesignStrategy } from '#app/strategies/design/create.strategy'
+import { LayerUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
+import { designCreateService } from '../../design/create.service'
 
 export const layerDesignCreateService = async ({
 	userId,
@@ -73,13 +22,13 @@ export const layerDesignCreateService = async ({
 	type: designTypeEnum
 	designOverrides?: IDesignCreateOverrides
 	designTypeOverrides?: IDesignTypeCreateOverrides
-}) => {
+}): Promise<IDesignCreatedResponse> => {
 	try {
 		const strategy = new LayerCreateDesignStrategy()
 		const updateSelectedDesignStrategy = new LayerUpdateSelectedDesignStrategy()
 		return designCreateService({
 			userId,
-			entityId: layerId,
+			targetEntityId: layerId,
 			type,
 			designOverrides: designOverrides || {},
 			designTypeOverrides: designTypeOverrides || {},
@@ -87,7 +36,12 @@ export const layerDesignCreateService = async ({
 			updateSelectedDesignStrategy,
 		})
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('layerDesignCreateService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }

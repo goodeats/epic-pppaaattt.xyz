@@ -1,8 +1,8 @@
 import { type User } from '@prisma/client'
 import { type IArtboard } from '#app/models/artboard.server'
 import { type IDesign, type IDesignIdOrNull } from '#app/models/design.server'
+import { ArtboardVersionUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { designToggleVisibleService } from '../../../design/toggle-visible.service'
-import { ArtboardVersionUpdateSelectedDesignStrategy } from './update-selected.service'
 
 export const artboardDesignToggleVisibleService = async ({
 	userId,
@@ -21,7 +21,7 @@ export const artboardDesignToggleVisibleService = async ({
 		return designToggleVisibleService({
 			userId,
 			id,
-			entityId: artboardId,
+			targetEntityId: artboardId,
 			updateSelectedDesignId,
 			updateSelectedDesignStrategy,
 		})

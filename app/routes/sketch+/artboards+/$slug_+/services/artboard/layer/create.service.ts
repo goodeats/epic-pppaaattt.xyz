@@ -1,79 +1,8 @@
 import { type User, type Artboard } from '@prisma/client'
-import { type IArtboard } from '#app/models/artboard.server'
-import {
-	createLayer,
-	type ILayerCreatedResponse,
-} from '#app/models/layer/layer.create.server'
-import {
-	type ILayer,
-	type ILayerCreateOverrides,
-	findFirstLayer,
-	type ILayerEntityId,
-} from '#app/models/layer.server'
-import { DesignCloneSourceTypeEnum } from '#app/schema/design'
-import { ArtboardLayerDataCreateSchema } from '#app/schema/layer-artboard'
-import { prisma } from '#app/utils/db.server'
-import {
-	layerCreateService,
-	type ICreateLayerStrategy,
-} from '../../layer/create.service'
-import { artboardLayerCloneDesignsService } from './clone-designs.service'
-
-export class ArtboardCreateLayerStrategy implements ICreateLayerStrategy {
-	async getEntityLayersTail({
-		targetEntityId,
-	}: {
-		targetEntityId: IArtboard['id']
-	}): Promise<ILayer | null> {
-		return await findFirstLayer({
-			where: { artboardId: targetEntityId, nextId: null },
-		})
-	}
-
-	async createEntityLayer({
-		userId,
-		targetEntityId,
-		layerOverrides,
-	}: {
-		userId: User['id']
-		targetEntityId: IArtboard['id']
-		layerOverrides: ILayerCreateOverrides
-	}): Promise<ILayer> {
-		const data = ArtboardLayerDataCreateSchema.parse({
-			ownerId: userId,
-			artboardId: targetEntityId,
-			...layerOverrides,
-		})
-		return await createLayer({ data })
-	}
-
-	async getEntityLayersCount({
-		targetEntityId,
-	}: {
-		targetEntityId: IArtboard['id']
-	}): Promise<number> {
-		return await prisma.layer.count({
-			where: { artboardId: targetEntityId },
-		})
-	}
-
-	async layerCloneDesignsService({
-		userId,
-		sourceEntityId,
-		targetEntityId,
-	}: {
-		userId: User['id']
-		sourceEntityId: ILayerEntityId
-		targetEntityId: ILayerEntityId
-	}) {
-		await artboardLayerCloneDesignsService({
-			userId,
-			sourceEntityType: DesignCloneSourceTypeEnum.ARTBOARD,
-			sourceEntityId,
-			targetEntityId,
-		})
-	}
-}
+import { type ILayerCreatedResponse } from '#app/models/layer/layer.create.server'
+import { type ILayerCreateOverrides } from '#app/models/layer.server'
+import { ArtboardCreateLayerStrategy } from '#app/strategies/layer/create.strategy'
+import { layerCreateService } from '../../layer/create.service'
 
 export const artboardLayerCreateService = async ({
 	userId,

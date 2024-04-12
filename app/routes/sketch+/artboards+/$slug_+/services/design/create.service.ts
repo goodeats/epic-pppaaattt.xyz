@@ -1,4 +1,5 @@
 import { type User } from '@prisma/client'
+import { type IDesignCreatedResponse } from '#app/models/design/design.create.server'
 import {
 	type IDesignCreateOverrides,
 	connectPrevAndNextDesigns,
@@ -15,32 +16,14 @@ import { createDesignSize } from '#app/models/size.server'
 import { createDesignStroke } from '#app/models/stroke.server'
 import { createDesignTemplate } from '#app/models/template.server'
 import { type designTypeEnum } from '#app/schema/design'
+import { type ICreateDesignStrategy } from '#app/strategies/design/create.strategy'
+import { type IUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { prisma } from '#app/utils/db.server'
-import {
-	updateSelectedDesignService,
-	type IUpdateSelectedDesignStrategy,
-} from './update-selected.service'
-
-export interface ICreateDesignStrategy {
-	getDesignsByTypeTail(args: {
-		entityId: IDesignEntityId
-		type: designTypeEnum
-	}): Promise<IDesign | null>
-	createDesign(args: {
-		userId: User['id']
-		entityId: IDesignEntityId
-		type: designTypeEnum
-		designOverrides: IDesignCreateOverrides
-	}): Promise<IDesign | null>
-	visibleDesignsByTypeCount(args: {
-		entityId: IDesignEntityId
-		type: designTypeEnum
-	}): Promise<number>
-}
+import { updateSelectedDesignService } from './update-selected.service'
 
 export const designCreateService = async ({
 	userId,
-	entityId,
+	targetEntityId,
 	type,
 	designOverrides = {},
 	designTypeOverrides = {},
@@ -48,24 +31,24 @@ export const designCreateService = async ({
 	updateSelectedDesignStrategy,
 }: {
 	userId: User['id']
-	entityId: IDesignEntityId
+	targetEntityId: IDesignEntityId
 	type: designTypeEnum
 	designOverrides?: IDesignCreateOverrides
 	designTypeOverrides?: IDesignTypeCreateOverrides
 	strategy: ICreateDesignStrategy
 	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
-}) => {
+}): Promise<IDesignCreatedResponse> => {
 	try {
 		// Step 1: find existing layer designs tail
 		const tailDesign = await strategy.getDesignsByTypeTail({
-			entityId,
+			targetEntityId,
 			type,
 		})
 
 		// Step 2: create design before its associated type
-		const createdDesign = await strategy.createDesign({
+		const createdDesign = await strategy.createEntityDesign({
 			userId,
-			entityId,
+			targetEntityId,
 			type,
 			designOverrides,
 		})
@@ -90,24 +73,29 @@ export const designCreateService = async ({
 
 		// Step 5: update selected design, if necessary
 		const shouldSetSelected = await shouldUpdateSelectedDesign({
-			entityId,
+			targetEntityId,
 			type,
 			designOverrides,
 			strategy,
 		})
 		if (shouldSetSelected) {
 			await updateSelectedDesignService({
-				entityId,
+				targetEntityId,
 				designId: createdDesign.id,
 				type,
 				strategy: updateSelectedDesignStrategy,
 			})
 		}
 
-		return { success: true }
+		return { createdDesign, success: true }
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('designCreateService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }
 
@@ -167,12 +155,12 @@ const createDesignType = ({
 }
 
 const shouldUpdateSelectedDesign = async ({
-	entityId,
+	targetEntityId,
 	type,
 	designOverrides,
 	strategy,
 }: {
-	entityId: IDesignEntityId
+	targetEntityId: IDesignEntityId
 	type: designTypeEnum
 	designOverrides: IDesignCreateOverrides
 	strategy: ICreateDesignStrategy
@@ -187,7 +175,7 @@ const shouldUpdateSelectedDesign = async ({
 
 	const visibleLayerDesignsByTypeCount =
 		await strategy.visibleDesignsByTypeCount({
-			entityId,
+			targetEntityId,
 			type,
 		})
 

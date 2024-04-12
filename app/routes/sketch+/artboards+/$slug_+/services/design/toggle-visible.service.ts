@@ -7,22 +7,20 @@ import {
 	type IDesignIdOrNull,
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
+import { type IUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { prisma } from '#app/utils/db.server'
-import {
-	updateSelectedDesignService,
-	type IUpdateSelectedDesignStrategy,
-} from './update-selected.service'
+import { updateSelectedDesignService } from './update-selected.service'
 
 export const designToggleVisibleService = async ({
 	userId,
 	id,
-	entityId,
+	targetEntityId,
 	updateSelectedDesignId,
 	updateSelectedDesignStrategy,
 }: {
 	userId: User['id']
 	id: IDesign['id']
-	entityId: IDesignEntityId
+	targetEntityId: IDesignEntityId
 	updateSelectedDesignId?: IDesignIdOrNull
 	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
 }) => {
@@ -43,7 +41,7 @@ export const designToggleVisibleService = async ({
 		// visibility is more complicated than just going by the current design state
 		// look for selectedDesignToUpdateOnToggleVisible in design utils
 		await updateSelectedDesignService({
-			entityId,
+			targetEntityId,
 			designId: updateSelectedDesignId,
 			type,
 			strategy: updateSelectedDesignStrategy,

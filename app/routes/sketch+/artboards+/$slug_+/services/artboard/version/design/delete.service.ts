@@ -1,8 +1,8 @@
 import { type User } from '@prisma/client'
 import { type IArtboard } from '#app/models/artboard.server'
 import { type IDesignIdOrNull, type IDesign } from '#app/models/design.server'
+import { ArtboardVersionUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { designDeleteService } from '../../../design/delete.service'
-import { ArtboardVersionUpdateSelectedDesignStrategy } from './update-selected.service'
 
 export const artboardDesignDeleteService = async ({
 	userId,
@@ -21,7 +21,7 @@ export const artboardDesignDeleteService = async ({
 		return designDeleteService({
 			userId,
 			id,
-			entityId: artboardId,
+			targetEntityId: artboardId,
 			updateSelectedDesignId,
 			updateSelectedDesignStrategy,
 		})

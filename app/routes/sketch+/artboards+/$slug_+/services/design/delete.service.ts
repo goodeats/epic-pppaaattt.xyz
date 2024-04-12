@@ -10,22 +10,20 @@ import {
 	type IDesignIdOrNull,
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
+import { type IUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { prisma } from '#app/utils/db.server'
-import {
-	type IUpdateSelectedDesignStrategy,
-	updateSelectedDesignService,
-} from './update-selected.service'
+import { updateSelectedDesignService } from './update-selected.service'
 
 export const designDeleteService = async ({
 	userId,
 	id,
-	entityId,
+	targetEntityId,
 	updateSelectedDesignId,
 	updateSelectedDesignStrategy,
 }: {
 	userId: User['id']
 	id: IDesign['id']
-	entityId: IDesignEntityId
+	targetEntityId: IDesignEntityId
 	updateSelectedDesignId?: IDesignIdOrNull
 	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
 }) => {
@@ -62,7 +60,7 @@ export const designDeleteService = async ({
 		// Step 6: update the selected design for its type, if necessary
 		if (selected) {
 			await updateSelectedDesignService({
-				entityId,
+				targetEntityId,
 				designId: updateSelectedDesignId,
 				type,
 				strategy: updateSelectedDesignStrategy,

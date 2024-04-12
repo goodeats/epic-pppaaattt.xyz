@@ -3,28 +3,9 @@ import {
 	type ILayerCreateOverrides,
 	connectPrevAndNextLayers,
 	type ILayerEntityId,
-	type ILayer,
 } from '#app/models/layer.server'
+import { type ICreateLayerStrategy } from '#app/strategies/layer/create.strategy'
 import { prisma } from '#app/utils/db.server'
-
-export interface ICreateLayerStrategy {
-	getEntityLayersTail(args: {
-		targetEntityId: ILayerEntityId
-	}): Promise<ILayer | null>
-	getEntityLayersCount(args: {
-		targetEntityId: ILayerEntityId
-	}): Promise<number>
-	createEntityLayer(args: {
-		userId: User['id']
-		targetEntityId: ILayerEntityId
-		layerOverrides: ILayerCreateOverrides
-	}): Promise<ILayer | null>
-	layerCloneDesignsService(args: {
-		userId: User['id']
-		sourceEntityId: ILayerEntityId
-		targetEntityId: ILayerEntityId
-	}): Promise<void>
-}
 
 export const layerCreateService = async ({
 	userId,

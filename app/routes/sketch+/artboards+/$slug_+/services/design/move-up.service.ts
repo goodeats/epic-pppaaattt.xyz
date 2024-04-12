@@ -8,22 +8,20 @@ import {
 	type IDesignEntityId,
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
+import { type IUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { prisma } from '#app/utils/db.server'
-import {
-	updateSelectedDesignService,
-	type IUpdateSelectedDesignStrategy,
-} from './update-selected.service'
+import { updateSelectedDesignService } from './update-selected.service'
 
 export const designMoveUpService = async ({
 	userId,
 	id,
-	entityId,
+	targetEntityId,
 	updateSelectedDesignId,
 	updateSelectedDesignStrategy,
 }: {
 	userId: User['id']
 	id: IDesign['id']
-	entityId: IDesignEntityId
+	targetEntityId: IDesignEntityId
 	updateSelectedDesignId?: IDesignIdOrNull
 	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
 }) => {
@@ -71,7 +69,7 @@ export const designMoveUpService = async ({
 		// reorder is more complicated than just going by the current design state
 		// look for selectedDesignToUpdateOnMoveUp in design utils
 		await updateSelectedDesignService({
-			entityId,
+			targetEntityId,
 			designId: updateSelectedDesignId,
 			type,
 			strategy: updateSelectedDesignStrategy,

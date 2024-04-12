@@ -1,43 +1,9 @@
 import { type User } from '@prisma/client'
-import {
-	type IDesignEntityId,
-	type IDesignCreateOverrides,
-	type IDesignTypeCreateOverrides,
-} from '#app/models/design.server'
+import { type IDesignEntityId } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
-import {
-	type designCloneSourceTypeEnum,
-	type designTypeEnum,
-} from '#app/schema/design'
-import {
-	type ICloneDesignsStrategy,
-	cloneDesignsService,
-} from '../../design/clone-many.service'
-import { layerDesignCreateService } from '../../layer/design/create.service'
-
-export class CloneDesignsToLayerStrategy implements ICloneDesignsStrategy {
-	async createEntityDesignService({
-		userId,
-		targetEntityId,
-		type,
-		designOverrides,
-		designTypeOverrides,
-	}: {
-		userId: User['id']
-		targetEntityId: IDesignEntityId
-		type: designTypeEnum
-		designOverrides?: IDesignCreateOverrides
-		designTypeOverrides?: IDesignTypeCreateOverrides
-	}): Promise<void> {
-		await layerDesignCreateService({
-			userId,
-			layerId: targetEntityId,
-			type,
-			designOverrides,
-			designTypeOverrides,
-		})
-	}
-}
+import { type designCloneSourceTypeEnum } from '#app/schema/design'
+import { CloneDesignToLayerStrategy } from '#app/strategies/design/clone.strategy'
+import { cloneDesignsService } from '../../design/clone-many.service'
 
 export const artboardLayerCloneDesignsService = async ({
 	userId,
@@ -51,7 +17,7 @@ export const artboardLayerCloneDesignsService = async ({
 	targetEntityId: ILayer['id']
 }) => {
 	try {
-		const entityStrategy = new CloneDesignsToLayerStrategy()
+		const entityStrategy = new CloneDesignToLayerStrategy()
 
 		await cloneDesignsService({
 			userId,
@@ -61,7 +27,12 @@ export const artboardLayerCloneDesignsService = async ({
 			entityStrategy,
 		})
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('artboardLayerCloneDesignsService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }

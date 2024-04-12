@@ -7,7 +7,6 @@ import { artboardVersionCloneLayersService } from '#app/routes/sketch+/artboards
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
 import { LayerCloneSourceTypeEnum } from '#app/schema/layer'
 import { prisma } from '#app/utils/db.server'
-import { getCountOfAllEntities } from '#app/utils/dev.utils'
 
 // artboards will have version control now
 // new prisma migration created the following tables:
@@ -38,7 +37,7 @@ export const createArtboardVersionsBranches = async () => {
 	// Step 1: remove all artboard branches and versions from previous runs
 	await clear()
 
-	await getCountOfAllEntities()
+	// const initialEntityCounts = await getCountOfAllEntities()
 
 	// Step 2: get all artboards
 	// with their designs, layers, and layers' designs
@@ -50,12 +49,25 @@ export const createArtboardVersionsBranches = async () => {
 	}
 
 	console.log('createArtboardVersionsBranches end 🏁')
-	await getCountOfAllEntities()
 }
 
 const clear = async () => {
 	await prisma.artboardBranch.deleteMany()
 	await prisma.artboardVersion.deleteMany()
+	await prisma.layer.deleteMany({
+		where: {
+			artboardVersionId: {
+				not: null,
+			},
+		},
+	})
+	await prisma.design.deleteMany({
+		where: {
+			artboardVersionId: {
+				not: null,
+			},
+		},
+	})
 }
 
 const getArtboards = async (): Promise<IArtboardWithDesignsAndLayers[]> => {
@@ -101,17 +113,14 @@ const cloneArtboardChildrenToVersion = async ({
 	artboard: IArtboardWithDesignsAndLayers
 	artboardVersion: IArtboardVersion
 }) => {
-	console.log('artboardVersion: ', artboardVersion.name, artboard.name)
-	const cloneDesigns = await cloneArtboardDesignsToVersion({
+	await cloneArtboardDesignsToVersion({
 		artboard,
 		artboardVersion,
 	})
-	console.log('cloneDesigns: ', cloneDesigns)
-	const cloneLayers = await cloneArtboardLayersToVersion({
+	await cloneArtboardLayersToVersion({
 		artboard,
 		artboardVersion,
 	})
-	console.log('cloneLayers: ', cloneLayers)
 }
 
 const cloneArtboardDesignsToVersion = async ({

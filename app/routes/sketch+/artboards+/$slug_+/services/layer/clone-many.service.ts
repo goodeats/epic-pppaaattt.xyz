@@ -8,11 +8,9 @@ import {
 	LayerCloneSourceTypeEnum,
 	type layerCloneSourceTypeEnum,
 } from '#app/schema/layer'
+import { type ICloneLayersStrategy } from '#app/strategies/layer/clone.strategy'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
-import {
-	cloneLayerService,
-	type ICloneLayersStrategy,
-} from './clone-one.service'
+import { cloneLayerService } from './clone-one.service'
 
 export const cloneLayersService = async ({
 	userId,
@@ -70,7 +68,7 @@ const getSourceEntityLayers = async ({
 			  ? { artboardVersionId: sourceEntityId }
 			  : { layerId: sourceEntityId }
 
-	return orderLinkedItems<ILayerWithDesigns>(
-		await getLayersWithDesigns({ where }),
-	)
+	const layers = await getLayersWithDesigns({ where })
+	const orderedLayers = await orderLinkedItems<ILayerWithDesigns>(layers)
+	return orderedLayers
 }

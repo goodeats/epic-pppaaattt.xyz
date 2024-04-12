@@ -1,8 +1,8 @@
 import { type User } from '@prisma/client'
 import { type IArtboard } from '#app/models/artboard.server'
 import { type IDesign, type IDesignIdOrNull } from '#app/models/design.server'
+import { ArtboardVersionUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { designMoveUpService } from '../../../design/move-up.service'
-import { ArtboardVersionUpdateSelectedDesignStrategy } from './update-selected.service'
 
 export const artboardDesignMoveUpService = async ({
 	userId,
@@ -21,7 +21,7 @@ export const artboardDesignMoveUpService = async ({
 		return designMoveUpService({
 			userId,
 			id,
-			entityId: artboardId,
+			targetEntityId: artboardId,
 			updateSelectedDesignId,
 			updateSelectedDesignStrategy,
 		})

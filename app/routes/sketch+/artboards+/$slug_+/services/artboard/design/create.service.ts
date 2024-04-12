@@ -1,65 +1,14 @@
 import { type User } from '@prisma/client'
 import { type IArtboard } from '#app/models/artboard.server'
+import { type IDesignCreatedResponse } from '#app/models/design/design.create.server'
 import {
 	type IDesignCreateOverrides,
 	type IDesignTypeCreateOverrides,
-	findFirstDesign,
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
-import { ArtboardDesignDataCreateSchema } from '#app/schema/design-artboard'
-import { prisma } from '#app/utils/db.server'
-import {
-	designCreateService,
-	type ICreateDesignStrategy,
-} from '../../design/create.service'
-import { ArtboardUpdateSelectedDesignStrategy } from './update-selected.service'
-
-export class ArtboardCreateDesignStrategy implements ICreateDesignStrategy {
-	async getDesignsByTypeTail({
-		entityId,
-		type,
-	}: {
-		entityId: IArtboard['id']
-		type: designTypeEnum
-	}) {
-		return await findFirstDesign({
-			where: { type, artboardId: entityId, nextId: null },
-		})
-	}
-
-	async createDesign({
-		userId,
-		entityId,
-		type,
-		designOverrides,
-	}: {
-		userId: User['id']
-		entityId: IArtboard['id']
-		type: designTypeEnum
-		designOverrides: IDesignCreateOverrides
-	}) {
-		const data = ArtboardDesignDataCreateSchema.parse({
-			type,
-			ownerId: userId,
-			artboardId: entityId,
-			...designOverrides,
-		})
-		return await prisma.design.create({ data })
-	}
-
-	async visibleDesignsByTypeCount({
-		entityId,
-		type,
-	}: {
-		entityId: IArtboard['id']
-		type: designTypeEnum
-	}) {
-		const visibleDesignsByTypeCount = await prisma.design.count({
-			where: { artboardId: entityId, type, visible: true },
-		})
-		return Number(visibleDesignsByTypeCount)
-	}
-}
+import { ArtboardCreateDesignStrategy } from '#app/strategies/design/create.strategy'
+import { ArtboardUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
+import { designCreateService } from '../../design/create.service'
 
 export const artboardDesignCreateService = async ({
 	userId,
@@ -73,14 +22,14 @@ export const artboardDesignCreateService = async ({
 	type: designTypeEnum
 	designOverrides?: IDesignCreateOverrides
 	designTypeOverrides?: IDesignTypeCreateOverrides
-}) => {
+}): Promise<IDesignCreatedResponse> => {
 	try {
 		const strategy = new ArtboardCreateDesignStrategy()
 		const updateSelectedDesignStrategy =
 			new ArtboardUpdateSelectedDesignStrategy()
 		return designCreateService({
 			userId,
-			entityId: artboardId,
+			targetEntityId: artboardId,
 			type,
 			designOverrides: designOverrides || {},
 			designTypeOverrides: designTypeOverrides || {},
@@ -88,7 +37,12 @@ export const artboardDesignCreateService = async ({
 			updateSelectedDesignStrategy,
 		})
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('artboardDesignCreateService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }

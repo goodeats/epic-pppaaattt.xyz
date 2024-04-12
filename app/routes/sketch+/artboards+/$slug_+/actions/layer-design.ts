@@ -60,13 +60,13 @@ export async function layerDesignNewAction({
 	if (!isValid || !submission) return response
 
 	const { layerId, type } = submission.value
-	const { success, error } = await layerDesignCreateService({
+	const { success } = await layerDesignCreateService({
 		userId,
 		layerId,
 		type,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }

@@ -1,20 +1,12 @@
 import { type User } from '@prisma/client'
-import { type ILayerCreatedResponse } from '#app/models/layer/layer.create.server'
 import {
 	type ILayerWithDesigns,
 	type ILayerEntityId,
 	type ILayerCreateOverrides,
 } from '#app/models/layer.server'
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
-import { layerLayerCloneDesignsService } from './clone-designs-from-entity.service'
-
-export interface ICloneLayersStrategy {
-	createEntityLayerService(args: {
-		userId: User['id']
-		targetEntityId: ILayerEntityId
-		layerOverrides: ILayerCreateOverrides
-	}): Promise<ILayerCreatedResponse>
-}
+import { type ICloneLayersStrategy } from '#app/strategies/layer/clone.strategy'
+import { layerLayerCloneDesignsService } from './clone-designs.service'
 
 export const cloneLayerService = async ({
 	userId,
@@ -31,12 +23,13 @@ export const cloneLayerService = async ({
 		const { name, description, slug, visible } = sourceLayer
 
 		// Step 1: set layer overrides
-		const layerOverrides = {
+		const layerOverrides: ILayerCreateOverrides = {
 			name,
-			description,
-			slug,
 			visible,
-		} as ILayerCreateOverrides
+			// do not include description or slug if they are null
+			...(description && { description }),
+			...(slug && { slug }),
+		}
 
 		// Step 2: create entity layer
 		const { success, message, createdLayer } =
@@ -48,8 +41,7 @@ export const cloneLayerService = async ({
 
 		// Step 3: handle errors
 		if (!success || !createdLayer) {
-			console.log('cloneLayers error:', message)
-			return { success: false }
+			return { success: false, message }
 		}
 
 		// Step 4: clone designs
