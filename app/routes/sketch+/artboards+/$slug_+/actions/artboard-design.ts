@@ -6,15 +6,15 @@ import {
 	ReorderArtboardDesignSchema,
 	ToggleVisibleArtboardDesignSchema,
 } from '#app/schema/design-artboard'
+import { artboardDesignCreateService } from '#app/services/artboard/design/create.service'
+import { artboardDesignDeleteService } from '#app/services/artboard/design/delete.service'
+import { artboardDesignMoveDownService } from '#app/services/artboard/design/move-down.service'
+import { artboardDesignMoveUpService } from '#app/services/artboard/design/move-up.service'
+import { artboardDesignToggleVisibleService } from '#app/services/artboard/design/toggle-visible.service'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
-import { artboardDesignCreateService } from '../services/artboard/design/create.service'
-import { artboardDesignDeleteService } from '../services/artboard/design/delete.service'
-import { artboardDesignMoveDownService } from '../services/artboard/design/move-down.service'
-import { artboardDesignMoveUpService } from '../services/artboard/design/move-up.service'
-import { artboardDesignToggleVisibleService } from '../services/artboard/design/toggle-visible.service'
 import {
 	parseArtboardDesignSubmission,
 	parseArtboardDesignUpdateSubmission,

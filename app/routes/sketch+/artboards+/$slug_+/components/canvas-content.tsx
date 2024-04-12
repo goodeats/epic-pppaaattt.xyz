@@ -10,9 +10,9 @@ import {
 } from 'reactflow'
 import { ContainerIndex } from '#app/components/shared'
 import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
-import { type PickedArtboardType } from '../queries'
-import { canvasDrawService } from '../services/canvas/draw.service'
 import 'reactflow/dist/style.css'
+import { type PickedArtboardType } from '#app/models/artboard.server'
+import { canvasDrawService } from '#app/services/canvas/draw.service'
 
 const initialNodes = [
 	{

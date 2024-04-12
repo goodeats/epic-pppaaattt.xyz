@@ -1,11 +1,11 @@
 import { getArtboardsWithDesignsAndLayers } from '#app/models/artboard/artboard.get.server'
 import { type IArtboardVersion } from '#app/models/artboard-version.server'
 import { type IArtboardWithDesignsAndLayers } from '#app/models/artboard.server'
-import { artboardBranchCreateService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/branch/create.service'
-import { artboardVersionCloneDesignsService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/version/clone-designs.service'
-import { artboardVersionCloneLayersService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/version/clone-layers.service'
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
 import { LayerCloneSourceTypeEnum } from '#app/schema/layer'
+import { artboardBranchCreateService } from '#app/services/artboard/branch/create.service'
+import { artboardVersionCloneDesignsService } from '#app/services/artboard/version/clone-designs.service'
+import { artboardVersionCloneLayersService } from '#app/services/artboard/version/clone-layers.service'
 import { prisma } from '#app/utils/db.server'
 
 // artboards will have version control now

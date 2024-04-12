@@ -1,5 +1,5 @@
 import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
-import { type PickedArtboardType } from '../../queries'
+import { type PickedArtboardType } from '#app/models/artboard.server'
 import { canvasDrawBackgroundService } from './draw-background.service'
 import { canvasLayerBuildDrawLayersService } from './layer/build/build-draw-layers.service'
 import { canvasDrawLayersService } from './layer/draw/draw-layers.service'

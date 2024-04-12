@@ -1,4 +1,4 @@
-import { type PickedArtboardType } from '../../queries'
+import { type PickedArtboardType } from '#app/models/artboard.server'
 
 export const canvasDrawBackgroundService = ({
 	ctx,

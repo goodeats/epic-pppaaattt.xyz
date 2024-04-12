@@ -1,13 +1,14 @@
 import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
+import { type PickedArtboardType } from '#app/models/artboard.server'
 import {
 	findManyDesignsWithType,
 	type IDesignsByType,
 } from '#app/models/design.server'
 import { findManyLayers, type ILayer } from '#app/models/layer.server'
+import { artboardBuildCreateService } from '#app/services/artboard/build/create.service'
 import { prisma } from '#app/utils/db.server'
 import { filterAndOrderDesignsByType } from '#app/utils/design'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
-import { artboardBuildCreateService } from './services/artboard/build/create.service'
 
 export const getOwner = async (userId: string) => {
 	return await prisma.user.findFirst({
@@ -20,22 +21,6 @@ export const getOwner = async (userId: string) => {
 		},
 		where: { id: userId },
 	})
-}
-
-export type PickedArtboardType = {
-	id: string
-	name: string
-	description: string | null
-	slug: string
-	width: number
-	height: number
-	backgroundColor: string
-	updatedAt: Date | string
-	project: {
-		id: string
-		name: string
-		slug: string
-	}
 }
 
 export const getArtboard = async (

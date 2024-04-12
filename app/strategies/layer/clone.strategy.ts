@@ -4,7 +4,7 @@ import {
 	type ILayerCreateOverrides,
 	type ILayerEntityId,
 } from '#app/models/layer.server'
-import { artboardVersionLayerCreateService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/version/layer/create.service'
+import { artboardVersionLayerCreateService } from '#app/services/artboard/version/layer/create.service'
 
 export interface ICloneLayersStrategy {
 	createEntityLayerService(args: {

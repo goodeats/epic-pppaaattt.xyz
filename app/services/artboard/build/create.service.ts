@@ -3,7 +3,10 @@ import {
 	type IArtboardGenerator,
 	type ILayerGenerator,
 } from '#app/definitions/artboard-generator'
-import { type IArtboard } from '#app/models/artboard.server'
+import {
+	type PickedArtboardType,
+	type IArtboard,
+} from '#app/models/artboard.server'
 import {
 	getArtboardVisiblePalettes,
 	getArtboardVisibleRotates,
@@ -26,7 +29,6 @@ import {
 } from '#app/utils/design'
 import { filterLayersVisible } from '#app/utils/layer.utils'
 import { isArrayRotateBasisType } from '#app/utils/rotate'
-import { type PickedArtboardType } from '../../../queries'
 
 export const artboardBuildCreateService = async ({
 	artboard,

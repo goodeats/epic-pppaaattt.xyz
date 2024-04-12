@@ -8,11 +8,11 @@ import {
 	type ILayerCreateOverrides,
 	type ILayerEntityId,
 } from '#app/models/layer.server'
-import { artboardLayerCloneDesignsService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/layer/clone-designs.service'
-import { artboardVersionLayerCloneDesignsService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/version/layer/clone-designs.service'
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
 import { ArtboardLayerDataCreateSchema } from '#app/schema/layer-artboard'
 import { ArtboardVersionLayerDataCreateSchema } from '#app/schema/layer-artboard-version'
+import { artboardLayerCloneDesignsService } from '#app/services/artboard/layer/clone-designs.service'
+import { artboardVersionLayerCloneDesignsService } from '#app/services/artboard/version/layer/clone-designs.service'
 import { prisma } from '#app/utils/db.server'
 
 export interface ICreateLayerStrategy {

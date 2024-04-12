@@ -5,9 +5,9 @@ import {
 	type IDesignCreateOverrides,
 	type IDesignEntityId,
 } from '#app/models/design.server'
-import { artboardVersionDesignCreateService } from '#app/routes/sketch+/artboards+/$slug_+/services/artboard/version/design/create.service'
-import { layerDesignCreateService } from '#app/routes/sketch+/artboards+/$slug_+/services/layer/design/create.service'
 import { type designTypeEnum } from '#app/schema/design'
+import { artboardVersionDesignCreateService } from '#app/services/artboard/version/design/create.service'
+import { layerDesignCreateService } from '#app/services/layer/design/create.service'
 
 export interface ICloneDesignsStrategy {
 	createEntityDesignService(args: {

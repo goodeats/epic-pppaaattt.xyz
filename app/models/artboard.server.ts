@@ -18,6 +18,22 @@ export interface IArtboardWithDesignsAndLayers extends IArtboard {
 	layers: ILayerWithDesigns[]
 }
 
+export type PickedArtboardType = {
+	id: string
+	name: string
+	description: string | null
+	slug: string
+	width: number
+	height: number
+	backgroundColor: string
+	updatedAt: Date | string
+	project: {
+		id: string
+		name: string
+		slug: string
+	}
+}
+
 // use prisma extension to .save() or .delete()
 
 export const findFirstArtboard = async ({

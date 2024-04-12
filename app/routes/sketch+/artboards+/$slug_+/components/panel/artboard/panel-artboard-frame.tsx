@@ -4,7 +4,7 @@ import {
 	SidebarPanelRow,
 	SidebarPanelRowContainer,
 } from '#app/components/templates'
-import { type PickedArtboardType } from '../../../queries'
+import { type PickedArtboardType } from '#app/models/artboard.server'
 import { PanelFormArtboardEditHeight } from '../../forms/artboard/panel-form-artboard-edit-height'
 import { PanelFormArtboardEditWidth } from '../../forms/artboard/panel-form-artboard-edit-width'
 

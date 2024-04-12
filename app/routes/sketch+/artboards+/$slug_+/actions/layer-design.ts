@@ -6,15 +6,15 @@ import {
 	ReorderLayerDesignSchema,
 	ToggleVisibleLayerDesignSchema,
 } from '#app/schema/design-layer'
+import { layerDesignCreateService } from '#app/services/layer/design/create.service'
+import { layerDesignDeleteService } from '#app/services/layer/design/delete.service'
+import { layerDesignMoveDownService } from '#app/services/layer/design/move-down.service'
+import { layerDesignMoveUpService } from '#app/services/layer/design/move-up.service'
+import { layerDesignToggleVisibleService } from '#app/services/layer/design/toggle-visible.service'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
-import { layerDesignCreateService } from '../services/layer/design/create.service'
-import { layerDesignDeleteService } from '../services/layer/design/delete.service'
-import { layerDesignMoveDownService } from '../services/layer/design/move-down.service'
-import { layerDesignMoveUpService } from '../services/layer/design/move-up.service'
-import { layerDesignToggleVisibleService } from '../services/layer/design/toggle-visible.service'
 import {
 	parseLayerDesignSubmission,
 	parseLayerDesignUpdateSubmission,
