@@ -6,6 +6,7 @@ import {
 	type ILayerCreateOverrides,
 } from '#app/models/layer.server'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
+import { layerLayerCloneDesignsService } from './clone-designs.service'
 
 export interface ICloneLayersStrategy {
 	getSourceEntityLayers(args: {
@@ -117,4 +118,9 @@ const cloneLayerToEntity = async ({
 	}
 
 	// Step 4: clone designs
+	await layerLayerCloneDesignsService({
+		userId,
+		sourceEntityId: layer.id,
+		targetEntityId: createdLayer.id,
+	})
 }

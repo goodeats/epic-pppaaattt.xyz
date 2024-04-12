@@ -39,6 +39,9 @@ export class CloneLayersToArtboardVersionStrategy
 			userId,
 			artboardVersionId: targetEntityId,
 			layerOverrides,
+			// need to create layer before cloning designs
+			// later, perhaps pass designs along
+			// or pass back promise to execute in transaction
 			skipCloneDesigns: true,
 		})
 	}

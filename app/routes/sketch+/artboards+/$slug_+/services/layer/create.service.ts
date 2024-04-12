@@ -72,7 +72,8 @@ export const layerCreateService = async ({
 		}
 
 		// Step 4: copy designs from artboard to created layer
-		// 🚨 IF CLONING LAYERS
+		// skip likely from cloning a layer
+		// need to wait for it to be created
 		if (!skipCloneDesigns) {
 			await strategy.layerCloneDesignsService({
 				userId,
