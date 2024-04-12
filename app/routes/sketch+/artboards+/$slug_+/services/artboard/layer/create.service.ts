@@ -1,6 +1,9 @@
 import { type User, type Artboard } from '@prisma/client'
 import { type IArtboard } from '#app/models/artboard.server'
-import { type ILayerCreatedResponse } from '#app/models/layer/layer.create.server'
+import {
+	createLayer,
+	type ILayerCreatedResponse,
+} from '#app/models/layer/layer.create.server'
 import {
 	type ILayer,
 	type ILayerCreateOverrides,
@@ -40,7 +43,7 @@ export class ArtboardCreateLayerStrategy implements ICreateLayerStrategy {
 			artboardId: targetEntityId,
 			...layerOverrides,
 		})
-		return await prisma.layer.create({ data })
+		return await createLayer({ data })
 	}
 
 	async getEntityLayersCount({
