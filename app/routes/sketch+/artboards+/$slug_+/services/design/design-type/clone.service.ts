@@ -8,14 +8,14 @@ import {
 } from '#app/models/design.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { type ICloneDesignsStrategy } from '../clone.service'
-import { CloneFillDesignStrategy } from './clone-design-types-fill.service'
-import { CloneLayoutDesignStrategy } from './clone-design-types-layout.service'
-import { CloneLineDesignStrategy } from './clone-design-types-line.service'
-import { ClonePaletteDesignStrategy } from './clone-design-types-palette.service'
-import { CloneRotateDesignStrategy } from './clone-design-types-rotate.service'
-import { CloneSizeDesignStrategy } from './clone-design-types-size.service'
-import { CloneStrokeDesignStrategy } from './clone-design-types-stroke.service'
-import { CloneTemplateDesignStrategy } from './clone-design-types-template.service'
+import { CloneFillDesignStrategy } from './clone/fill.strategy'
+import { CloneLayoutDesignStrategy } from './clone/layout.strategy'
+import { CloneLineDesignStrategy } from './clone/line.strategy'
+import { ClonePaletteDesignStrategy } from './clone/palette.strategy'
+import { CloneRotateDesignStrategy } from './clone/rotate.strategy'
+import { CloneSizeDesignStrategy } from './clone/size.strategy'
+import { CloneStrokeDesignStrategy } from './clone/stroke.strategy'
+import { CloneTemplateDesignStrategy } from './clone/template.strategy'
 
 export interface ICloneDesignTypeStrategy {
 	type: designTypeEnum
@@ -37,7 +37,7 @@ export const designTypeStrategies: {
 	designTemplates: new CloneTemplateDesignStrategy(),
 }
 
-export const cloneDesignTypesToEntity = async ({
+export const cloneDesignTypesService = async ({
 	userId,
 	targetEntityId,
 	designs,

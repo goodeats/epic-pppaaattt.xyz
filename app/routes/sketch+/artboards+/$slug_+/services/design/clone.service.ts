@@ -9,9 +9,9 @@ import {
 import { type designTypeEnum } from '#app/schema/design'
 import { filterAndOrderDesignsByType } from '#app/utils/design'
 import {
-	cloneDesignTypesToEntity,
+	cloneDesignTypesService,
 	designTypeStrategies,
-} from './design-type/clone-design-types.service'
+} from './design-type/clone.service'
 
 export interface ICloneDesignsStrategy {
 	getSourceEntityDesigns(args: {
@@ -79,7 +79,7 @@ const cloneDesignsByType = async ({
 		const strategy = designTypeStrategies[key]
 		const designs = designsByType[key]
 		if (strategy && designs.length > 0) {
-			await cloneDesignTypesToEntity({
+			await cloneDesignTypesService({
 				userId,
 				targetEntityId,
 				designs,
