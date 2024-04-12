@@ -39,7 +39,6 @@ export const layerCreateService = async ({
 	layerOverrides?: ILayerCreateOverrides
 	strategy: ICreateLayerStrategy
 }) => {
-	console.log('using the shared later create service')
 	try {
 		// Step 1: find existing entity layers tail
 		const tail = await strategy.getEntityLayersTail({

@@ -6,10 +6,8 @@ import {
 	type ILayerCreateOverrides,
 } from '#app/models/layer.server'
 import { type layerCloneSourceTypeEnum } from '#app/schema/layer'
-import {
-	cloneLayersService,
-	type ICloneLayersStrategy,
-} from '../../layer/clone.service'
+import { cloneLayersService } from '../../layer/clone-many.service'
+import { type ICloneLayersStrategy } from '../../layer/clone-one.service'
 import { artboardVersionLayerCreateService } from './layer/create.service'
 
 export class CloneLayersToArtboardVersionStrategy
