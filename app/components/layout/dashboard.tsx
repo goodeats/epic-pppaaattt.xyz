@@ -14,7 +14,7 @@ const Dashboard = createContainerComponent({
 const DashboardHeader = createContainerComponent({
 	defaultTagName: 'header',
 	defaultClassName:
-		'container flex items-start justify-between space-y-2 border-b-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16',
+		'p-8 flex items-start justify-between space-y-2 border-b-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16',
 	displayName: 'DashboardHeader',
 })
 

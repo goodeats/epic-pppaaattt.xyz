@@ -1,6 +1,12 @@
-import { redirect, type LoaderFunctionArgs } from '@remix-run/node'
+import { DashboardBody, DashboardContent } from '#app/components/layout'
+import { ContainerIndex } from '#app/components/shared'
 
-// no artboards list view from sketch
-export async function loader({ params, request }: LoaderFunctionArgs) {
-	return redirect('/sketch/artboards')
+export default function SketchIndexRoute() {
+	return (
+		<DashboardBody id="sketch-dashboard-body">
+			<DashboardContent id="sketch-dashboard-content">
+				<ContainerIndex>Select something to sketch</ContainerIndex>
+			</DashboardContent>
+		</DashboardBody>
+	)
 }
