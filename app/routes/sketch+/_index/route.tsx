@@ -1,11 +1,27 @@
+import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
 import { DashboardBody, DashboardContent } from '#app/components/layout'
-import { ContainerIndex } from '#app/components/shared'
+import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
+import { requireUserId } from '#app/utils/auth.server'
+import { Projects } from './components/projects'
+
+export async function loader({ params, request }: LoaderFunctionArgs) {
+	const userId = await requireUserId(request)
+
+	const projects = await getProjectsWithArtboards({
+		where: { ownerId: userId },
+	})
+	return json({ projects })
+}
 
 export default function SketchIndexRoute() {
+	const data = useLoaderData<typeof loader>()
+	const { projects } = data
+
 	return (
 		<DashboardBody id="sketch-dashboard-body">
 			<DashboardContent id="sketch-dashboard-content">
-				<ContainerIndex>Select something to sketch</ContainerIndex>
+				<Projects projects={projects} />
 			</DashboardContent>
 		</DashboardBody>
 	)

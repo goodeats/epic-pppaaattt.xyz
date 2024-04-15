@@ -4,7 +4,7 @@ import { Dashboard } from '#app/components/layout'
 import { requireUserId } from '#app/utils/auth.server'
 import { Header } from './components/header'
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	await requireUserId(request)
 	return json({})
 }
