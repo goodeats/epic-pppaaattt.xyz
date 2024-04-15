@@ -7,7 +7,7 @@ import {
 import { prisma } from '#app/utils/db.server'
 import { type IDesignWithType } from './design.server'
 import { type ILayerWithDesigns } from './layer.server'
-import { type IProjectWithArtboards } from './project.server'
+import { type IProjectWithArtboards } from './project/project.server'
 
 export interface IArtboard extends Artboard {}
 export interface IArtboardWithProject extends IArtboard {
