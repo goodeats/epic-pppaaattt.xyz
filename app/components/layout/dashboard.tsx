@@ -63,6 +63,18 @@ const DashboardContentContainer = createContainerComponent({
 	displayName: 'DashboardContentContainer',
 })
 
+const DashboardContentHeading1 = createContainerComponent({
+	defaultTagName: 'h1',
+	defaultClassName: 'mb-2 pt-12 text-h1 lg:mb-6',
+	displayName: 'DashboardContentHeading1',
+})
+
+const DashboardContentHeading2 = createContainerComponent({
+	defaultTagName: 'h2',
+	defaultClassName: 'mb-2 pt-12 text-h2 lg:mb-6',
+	displayName: 'DashboardContentHeading2',
+})
+
 export {
 	Dashboard,
 	DashboardHeader,
@@ -72,4 +84,6 @@ export {
 	DashboardContent,
 	DashboardContentWrapper,
 	DashboardContentContainer,
+	DashboardContentHeading1,
+	DashboardContentHeading2,
 }

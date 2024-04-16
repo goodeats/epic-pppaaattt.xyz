@@ -5,7 +5,12 @@ import {
 	type LoaderFunctionArgs,
 } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
-import { DashboardBody, DashboardContent } from '#app/components/layout'
+import {
+	DashboardBody,
+	DashboardContent,
+	DashboardContentHeading1,
+	DashboardContentHeading2,
+} from '#app/components/layout'
 import { DashboardEntityCards } from '#app/components/templates'
 import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
@@ -31,14 +36,14 @@ export default function SketchIndexRoute() {
 		<DashboardBody id="sketch-dashboard-body">
 			<DashboardContent id="sketch-dashboard-content">
 				<div className="container">
-					<h2 className="mb-2 pt-12 text-h2 lg:mb-6">Sketch Dashboard</h2>
+					<DashboardContentHeading1>Sketch Dashboard</DashboardContentHeading1>
 				</div>
 				<div className="container">
-					<h3 className="mb-2 pt-12 text-h3 lg:mb-6">
+					<DashboardContentHeading2>
 						<Link prefetch="intent" to="projects">
 							Projects
 						</Link>
-					</h3>
+					</DashboardContentHeading2>
 					<DashboardEntityCards
 						entities={data.projects}
 						type="Project"

@@ -3,6 +3,7 @@ import {
 	type MetaFunction,
 	type LoaderFunctionArgs,
 } from '@remix-run/node'
+import { DashboardContentHeading1 } from '#app/components/layout'
 import { requireUserId } from '#app/utils/auth.server'
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -14,7 +15,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function SketchProjectsIndexRoute() {
 	return (
 		<div className="container">
-			<h2 className="mb-2 pt-12 text-h2 lg:mb-6">Choose a project</h2>
+			<DashboardContentHeading1>Choose a project</DashboardContentHeading1>
 		</div>
 	)
 }

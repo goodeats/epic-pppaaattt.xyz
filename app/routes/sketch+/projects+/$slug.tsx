@@ -6,6 +6,10 @@ import {
 } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
+import {
+	DashboardContentHeading1,
+	DashboardContentHeading2,
+} from '#app/components/layout'
 import { DashboardEntityCards } from '#app/components/templates'
 import { getProjectWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
@@ -34,22 +38,20 @@ export default function SketchProjectRoute() {
 
 	return (
 		<div className="container">
-			<h2 className="mb-2 pt-12 text-h2 lg:mb-6">{data.project.name}</h2>
-			<div className="container">
-				<h3 className="mb-2 pt-12 text-h3 lg:mb-6">
-					<Link prefetch="intent" to="artboards">
-						Artboards
-					</Link>
-				</h3>
-				<DashboardEntityCards
-					entities={project.artboards}
-					type="Artboard"
-					parent={project.name}
-					basePathNew={`/users/${user.username}/projects/${project.name}/artboards`}
-					basePathEditor={`/users/${user.username}/artboards`}
-					basePathView={'/artboards/'}
-				/>
-			</div>
+			<DashboardContentHeading1>{project.name}</DashboardContentHeading1>
+			<DashboardContentHeading2>
+				<Link prefetch="intent" to="artboards">
+					Artboards
+				</Link>
+			</DashboardContentHeading2>
+			<DashboardEntityCards
+				entities={project.artboards}
+				type="Artboard"
+				parent={project.name}
+				basePathNew={`/users/${user.username}/projects/${project.name}/artboards`}
+				basePathEditor={`/users/${user.username}/artboards`}
+				basePathView={'/artboards/'}
+			/>
 		</div>
 	)
 }
