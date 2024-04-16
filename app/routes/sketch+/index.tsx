@@ -18,6 +18,7 @@ import { requireUserId } from '#app/utils/auth.server'
 import { useUser } from '#app/utils/user'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
+	console.log('sketch+ index route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })

@@ -5,7 +5,6 @@ import {
 	type LoaderFunctionArgs,
 } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
-import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import {
 	DashboardContentHeading1,
 	DashboardContentHeading2,
@@ -17,7 +16,7 @@ import { requireUserId } from '#app/utils/auth.server'
 import { useUser } from '#app/utils/user'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	console.log('sketch+ projects $slug route')
+	console.log('sketch+ projects slug artboards index route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
@@ -31,7 +30,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	return json({ project })
 }
 
-export default function SketchProjectRoute() {
+export default function SketchProjectArtboardsIndexRoute() {
 	const data = useLoaderData<typeof loader>()
 	const { project } = data
 	const user = useUser()
@@ -40,7 +39,10 @@ export default function SketchProjectRoute() {
 		<div className="container">
 			<DashboardContentHeading1>{project.name}</DashboardContentHeading1>
 			<DashboardContentHeading2>
-				<Link prefetch="intent" to="artboards">
+				<Link
+					prefetch="intent"
+					to={`/sketch/projects/${project.name}/artboards`}
+				>
 					Artboards
 				</Link>
 			</DashboardContentHeading2>
@@ -50,7 +52,7 @@ export default function SketchProjectRoute() {
 				parent={project.name}
 				basePathNew={`/users/${user.username}/projects/${project.name}/artboards`}
 				basePathEditor={`/users/${user.username}/artboards`}
-				basePathView="artboards"
+				basePathView={`/sketch/projects/${project.name}/artboards`}
 			/>
 		</div>
 	)
@@ -59,22 +61,10 @@ export default function SketchProjectRoute() {
 export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
 	const projectName = data?.project.name ?? params.slug
 	return [
-		{ title: `${projectName} | Sketchy | XYZ` },
+		{ title: `Artboards | ${projectName} | Sketchy | XYZ` },
 		{
 			name: 'description',
-			content: `Sketchy dashboard for Project: ${projectName}`,
+			content: `Sketchy dashboard artboards for Project: ${projectName}`,
 		},
 	]
-}
-
-export function ErrorBoundary() {
-	return (
-		<GeneralErrorBoundary
-			statusHandlers={{
-				404: ({ params }) => (
-					<p>No project with the name "{params.slug}" exists</p>
-				),
-			}}
-		/>
-	)
 }
