@@ -5,8 +5,8 @@ import { requireUserId } from '#app/utils/auth.server'
 import { Header } from './components/header'
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	await requireUserId(request)
 	console.log('sketch+ route')
+	await requireUserId(request)
 	return json({})
 }
 

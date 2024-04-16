@@ -5,19 +5,10 @@ import {
 	type LoaderFunctionArgs,
 } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import { getProjectWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
-
-export const meta: MetaFunction = () => {
-	return [
-		{ title: 'Sketchy Projects | XYZ' },
-		{
-			name: 'description',
-			content: 'Sketchy dashboard for XYZ - Projects',
-		},
-	]
-}
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects $slug route')
@@ -41,5 +32,28 @@ export default function SketchIndexRoute() {
 		<div className="container">
 			<h2 className="mb-2 pt-12 text-h2 lg:mb-6">{data.project.name}</h2>
 		</div>
+	)
+}
+
+export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
+	const projectName = data?.project.name ?? params.slug
+	return [
+		{ title: `${projectName} | Sketchy | XYZ` },
+		{
+			name: 'description',
+			content: `Sketchy dashboard for Project: ${projectName}`,
+		},
+	]
+}
+
+export function ErrorBoundary() {
+	return (
+		<GeneralErrorBoundary
+			statusHandlers={{
+				404: ({ params }) => (
+					<p>No project with the name "{params.slug}" exists</p>
+				),
+			}}
+		/>
 	)
 }

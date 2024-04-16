@@ -1,3 +1,4 @@
+import { invariantResponse } from '@epic-web/invariant'
 import {
 	json,
 	type MetaFunction,
@@ -6,21 +7,15 @@ import {
 import { Link, useLoaderData } from '@remix-run/react'
 import { DashboardBody, DashboardContent } from '#app/components/layout'
 import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
+import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { ProjectCards } from './components/project-cards'
 
-export const meta: MetaFunction = () => {
-	return [
-		{ title: 'Sketchy | XYZ' },
-		{
-			name: 'description',
-			content: 'Sketchy dashboard for XYZ',
-		},
-	]
-}
-
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
+	const owner = await getUserBasic({ where: { id: userId } })
+	invariantResponse(owner, 'Owner not found', { status: 404 })
+
 	const projects = await getProjectsWithArtboards({
 		where: { ownerId: userId },
 	})
@@ -45,4 +40,14 @@ export default function SketchIndexRoute() {
 			</DashboardContent>
 		</DashboardBody>
 	)
+}
+
+export const meta: MetaFunction = () => {
+	return [
+		{ title: 'Sketchy | XYZ' },
+		{
+			name: 'description',
+			content: 'Sketchy dashboard for XYZ',
+		},
+	]
 }
