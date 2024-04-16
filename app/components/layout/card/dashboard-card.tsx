@@ -9,19 +9,25 @@ import {
 	CardTitle,
 } from '#app/components/ui/card'
 import { Icon, type IconName } from '#app/components/ui/icon'
+import { createContainerComponent } from '../utils'
 
-const DashboardCardWrapper = ({ children }: { children: React.ReactNode }) => {
-	return (
-		<div className="flex flex-col flex-wrap gap-2 md:flex-row">{children}</div>
-	)
-}
+const DashboardCardWrapper = createContainerComponent({
+	defaultTagName: 'div',
+	defaultClassName: 'flex flex-col flex-wrap gap-2 md:flex-row',
+	displayName: 'DashboardCardWrapper',
+})
 
+const DashboardCardNoneWrapper = createContainerComponent({
+	defaultTagName: 'div',
+	defaultClassName: 'mb-2 flex w-80 flex-1 items-center justify-center lg:mb-6',
+	displayName: 'DashboardCardNoneWrapper',
+})
 // placeholder for when cards list is empty
 // i.e., "No projects found"
 const DashboardCardNone = ({ children }: { children: React.ReactNode }) => (
-	<div className="mb-2 flex w-80 flex-1 items-center justify-center lg:mb-6">
+	<DashboardCardNoneWrapper>
 		<h4 className="text-h4">{children}</h4>
-	</div>
+	</DashboardCardNoneWrapper>
 )
 
 const DashboardCard = ({
@@ -33,8 +39,12 @@ const DashboardCard = ({
 	description: string
 	children: React.ReactNode
 }) => {
+	// - fixed width to indicate a smaller card
+	// - more space between cards on larger screens
+	const className = 'mb-2 w-80 lg:mb-6'
+
 	return (
-		<Card className="mb-2 w-80 lg:mb-6">
+		<Card className={className}>
 			<CardHeader>
 				<CardTitle>{title}</CardTitle>
 				<CardDescription>{description}</CardDescription>
@@ -44,27 +54,31 @@ const DashboardCard = ({
 	)
 }
 
+const DashboardCardContentSmall = createContainerComponent({
+	defaultTagName: 'div',
+	defaultClassName: 'space-y-4 truncate',
+	displayName: 'DashboardCardContentSmall',
+})
+
 // currently just one line of text truncated (...)
 // create variant(s) for additional, more complex content
 const DashboardCardContent = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<CardContent>
-			<div className="space-y-4 truncate">{children}</div>
+			<DashboardCardContentSmall>{children}</DashboardCardContentSmall>
 		</CardContent>
 	)
 }
 
-// full width buttons, links, etc.
 const DashboardCardFooter = ({ children }: { children: React.ReactNode }) => {
-	return (
-		<CardFooter className="flex gap-2 border-t px-6 py-4">
-			{children}
-		</CardFooter>
-	)
+	// - full width buttons, links, etc.
+	const className = 'flex gap-2 border-t px-6 py-4'
+	return <CardFooter className={className}>{children}</CardFooter>
 }
 
 // button does not shrink on smaller screens, or to icon square
 // card will never be squished on smaller screens
+// will take up full width of card footer or split if multiple
 const DashboardCardFooterLink = ({
 	to,
 	icon,

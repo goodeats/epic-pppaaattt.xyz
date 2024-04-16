@@ -1,5 +1,5 @@
 import { capitalize } from '#app/utils/string-formatting'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../ui/tabs'
 
 // - place this inside a Sidebar component
 
