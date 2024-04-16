@@ -21,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	return json({})
 }
 
-export default function SketchIndexRoute() {
+export default function SketchProjectsIndexRoute() {
 	return (
 		<div className="container">
 			<h2 className="mb-2 pt-12 text-h2 lg:mb-6">Choose a project</h2>

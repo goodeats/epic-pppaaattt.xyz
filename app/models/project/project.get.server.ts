@@ -6,6 +6,7 @@ export type queryWhereArgsType = z.infer<typeof queryWhereArgs>
 const queryWhereArgs = z.object({
 	id: z.string().optional(),
 	ownerId: z.string().optional(),
+	slug: z.string().optional(),
 })
 
 export const getProjectsWithArtboards = async ({
@@ -27,4 +28,25 @@ export const getProjectsWithArtboards = async ({
 		},
 	})
 	return projects
+}
+
+export const getProjectWithArtboards = async ({
+	where,
+}: {
+	where: queryWhereArgsType
+}): Promise<IProjectWithArtboards | null> => {
+	const project = await prisma.project.findFirst({
+		where,
+		include: {
+			artboards: {
+				orderBy: {
+					createdAt: 'desc',
+				},
+			},
+		},
+		orderBy: {
+			createdAt: 'desc',
+		},
+	})
+	return project
 }
