@@ -6,10 +6,11 @@ import {
 } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
 import { DashboardBody, DashboardContent } from '#app/components/layout'
+import { DashboardEntityCards } from '#app/components/templates'
 import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
-import { ProjectCards } from './components/project-cards'
+import { useUser } from '#app/utils/user'
 
 export const meta: MetaFunction = () => {
 	return [
@@ -35,6 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function SketchProjectsRoute() {
 	const data = useLoaderData<typeof loader>()
+	const user = useUser()
 
 	return (
 		<DashboardBody id="sketch-dashboard-body">
@@ -43,9 +45,17 @@ export default function SketchProjectsRoute() {
 				{/* make this a sidebar? */}
 				<div className="container">
 					<h3 className="mb-2 pt-12 text-h3 lg:mb-6">
-						<Link to="/sketch/projects">Projects</Link>
+						<Link prefetch="intent" to="/sketch/projects">
+							Projects
+						</Link>
 					</h3>
-					<ProjectCards projects={data.projects} />
+					<DashboardEntityCards
+						entities={data.projects}
+						type="Project"
+						parent="portfolio"
+						basePathEditor={`/users/${user.username}/projects`}
+						basePathView={'/sketch/projects'}
+					/>
 				</div>
 			</DashboardContent>
 		</DashboardBody>
