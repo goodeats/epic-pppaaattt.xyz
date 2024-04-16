@@ -7,7 +7,7 @@ import { useLoaderData } from '@remix-run/react'
 import { DashboardBody, DashboardContent } from '#app/components/layout'
 import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
 import { requireUserId } from '#app/utils/auth.server'
-import { Projects } from './components/projects'
+import { ProjectCards } from './components/project-cards'
 
 export const meta: MetaFunction = () => {
 	return [
@@ -33,7 +33,7 @@ export default function SketchIndexRoute() {
 	return (
 		<DashboardBody id="sketch-dashboard-body">
 			<DashboardContent id="sketch-dashboard-content">
-				<Projects projects={data.projects} />
+				<ProjectCards projects={data.projects} />
 			</DashboardContent>
 		</DashboardBody>
 	)

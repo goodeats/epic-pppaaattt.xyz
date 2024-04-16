@@ -9,7 +9,7 @@ import { CardContent } from '#app/components/ui/card'
 import { type IProjectWithArtboards } from '#app/models/project/project.server'
 import { useUser } from '#app/utils/user'
 
-export const Projects = ({
+export const ProjectCards = ({
 	projects,
 }: {
 	projects: IProjectWithArtboards[]
