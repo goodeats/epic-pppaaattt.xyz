@@ -27,7 +27,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	return json({ project })
 }
 
-export default function SketchIndexRoute() {
+export default function SketchProjectRoute() {
 	const data = useLoaderData<typeof loader>()
 	const { project } = data
 	const user = useUser()

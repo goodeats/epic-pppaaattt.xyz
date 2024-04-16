@@ -48,6 +48,21 @@ const DashboardContent = createContainerComponent({
 	displayName: 'DashboardContent',
 })
 
+// - absolute wrapper prevents scroll with sidebar
+const DashboardContentWrapper = createContainerComponent({
+	defaultTagName: 'div',
+	defaultClassName:
+		'absolute inset-0 flex h-full w-full flex-col overflow-hidden',
+	displayName: 'DashboardContentWrapper',
+})
+
+// - scrollable container inside the content wrapper
+const DashboardContentContainer = createContainerComponent({
+	defaultTagName: 'div',
+	defaultClassName: 'flex-1 overflow-y-scroll pb-12',
+	displayName: 'DashboardContentContainer',
+})
+
 export {
 	Dashboard,
 	DashboardHeader,
@@ -55,4 +70,6 @@ export {
 	DashboardNav,
 	DashboardBody,
 	DashboardContent,
+	DashboardContentWrapper,
+	DashboardContentContainer,
 }
