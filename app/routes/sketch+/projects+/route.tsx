@@ -1,9 +1,5 @@
 import { invariantResponse } from '@epic-web/invariant'
-import {
-	json,
-	type MetaFunction,
-	type LoaderFunctionArgs,
-} from '@remix-run/node'
+import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
 import {
 	DashboardBody,
@@ -17,16 +13,6 @@ import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { useUser } from '#app/utils/user'
 import { ProjectsSidebar } from './components/projects-sidebar'
-
-export const meta: MetaFunction = () => {
-	return [
-		{ title: 'Sketchy Projects | XYZ' },
-		{
-			name: 'description',
-			content: 'Sketchy dashboard for XYZ - Projects',
-		},
-	]
-}
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects route')
