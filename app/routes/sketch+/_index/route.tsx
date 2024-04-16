@@ -21,7 +21,6 @@ export const meta: MetaFunction = () => {
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-
 	const projects = await getProjectsWithArtboards({
 		where: { ownerId: userId },
 	})
@@ -30,12 +29,11 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 export default function SketchIndexRoute() {
 	const data = useLoaderData<typeof loader>()
-	const { projects } = data
 
 	return (
 		<DashboardBody id="sketch-dashboard-body">
 			<DashboardContent id="sketch-dashboard-content">
-				<Projects projects={projects} />
+				<Projects projects={data.projects} />
 			</DashboardContent>
 		</DashboardBody>
 	)

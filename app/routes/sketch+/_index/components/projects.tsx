@@ -1,12 +1,13 @@
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '#app/components/ui/card'
-import { type IArtboard } from '#app/models/artboard.server'
+	DashboardCard,
+	DashboardCardContent,
+	DashboardCardFooter,
+	DashboardCardFooterLink,
+	DashboardCardWrapper,
+} from '#app/components/templates'
+import { CardContent } from '#app/components/ui/card'
 import { type IProjectWithArtboards } from '#app/models/project/project.server'
+import { useUser } from '#app/utils/user'
 
 export const Projects = ({
 	projects,
@@ -37,59 +38,62 @@ const NoProjects = () => {
 }
 
 const ProjectList = ({ projects }: { projects: IProjectWithArtboards[] }) => (
-	<div className="flex flex-col flex-wrap gap-2 md:flex-row">
+	<DashboardCardWrapper>
 		<NewProjectCard />
 		{projects.map(project => (
 			<ExistingProjectCard key={project.id} project={project} />
 		))}
-	</div>
+	</DashboardCardWrapper>
 )
 
-const ProjectCard = ({
-	title,
-	description,
-	children,
-}: {
-	title: string
-	description: string
-	children: React.ReactNode
-}) => {
+const NewProjectCard = () => {
+	const user = useUser()
 	return (
-		<Card className="mb-2 w-80 lg:mb-6">
-			<CardHeader>
-				<CardTitle>{title}</CardTitle>
-				<CardDescription>{description}</CardDescription>
-			</CardHeader>
-			<CardContent>{children}</CardContent>
-		</Card>
+		<DashboardCard title="New Project" description="Create a new project">
+			<DashboardCardContent>
+				Add a new project to your portfolio.
+			</DashboardCardContent>
+			<DashboardCardFooter>
+				<DashboardCardFooterLink
+					to={`/users/${user.username}/projects/new`}
+					icon="plus"
+				>
+					New
+				</DashboardCardFooterLink>
+			</DashboardCardFooter>
+		</DashboardCard>
 	)
 }
-
-const CardContentBody = ({ children }: { children: React.ReactNode }) => {
-	return <div className="space-y-4 truncate">{children}</div>
-}
-
-const NewProjectCard = () => (
-	<ProjectCard title="New Project" description="Create a new project">
-		<CardContentBody>Add a new project to your portfolio.</CardContentBody>
-	</ProjectCard>
-)
 
 const ExistingProjectCard = ({
 	project,
 }: {
 	project: IProjectWithArtboards
-}) => (
-	<ProjectCard title={project.name} description={project.description || ''}>
-		<ProjectArtboards artboards={project.artboards} />
-	</ProjectCard>
-)
+}) => {
+	const user = useUser()
+	const artboardNames = project.artboards
+		.map(artboard => artboard.name)
+		.join(', ')
 
-const ProjectArtboards = ({ artboards }: { artboards: IArtboard[] }) => {
-	const artboardNames = artboards.map(artboard => artboard.name).join(', ')
 	return (
-		<CardContentBody>
-			{artboards.length === 0 ? 'No artboards' : artboardNames}
-		</CardContentBody>
+		<DashboardCard title={project.name} description={project.description || ''}>
+			<CardContent>
+				{artboardNames.length === 0 ? 'No artboards' : artboardNames}
+			</CardContent>
+			<DashboardCardFooter>
+				<DashboardCardFooterLink
+					to={`/users/${user.username}/projects/${project.slug}`}
+					icon="pencil-1"
+				>
+					Edit
+				</DashboardCardFooterLink>
+				<DashboardCardFooterLink
+					to={`projects/${project.slug}`}
+					icon="arrow-right"
+				>
+					Go
+				</DashboardCardFooterLink>
+			</DashboardCardFooter>
+		</DashboardCard>
 	)
 }
