@@ -22,9 +22,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
-	const { slug } = params
+	const { projectSlug } = params
 	const project = await getProjectWithArtboards({
-		where: { slug, ownerId: owner.id },
+		where: { slug: projectSlug, ownerId: owner.id },
 	})
 	invariantResponse(project, 'Project not found', { status: 404 })
 
@@ -38,7 +38,7 @@ export default function SketchProjectIndexRoute() {
 
 	return (
 		<div className="container">
-			<DashboardContentHeading1>{project.name}</DashboardContentHeading1>
+			<DashboardContentHeading1>{project.name}!</DashboardContentHeading1>
 			<DashboardContentHeading2>
 				<Link prefetch="intent" to="artboards">
 					Artboards
