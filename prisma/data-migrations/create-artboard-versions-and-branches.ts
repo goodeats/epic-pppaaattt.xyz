@@ -71,7 +71,7 @@ const clear = async () => {
 }
 
 const getArtboards = async (): Promise<IArtboardWithDesignsAndLayers[]> => {
-	return await getArtboardsWithDesignsAndLayers()
+	return await getArtboardsWithDesignsAndLayers({ where: {} })
 }
 
 const cloneArtboard = async ({

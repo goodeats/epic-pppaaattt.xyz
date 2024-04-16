@@ -14,6 +14,7 @@ import { getProjectsWithArtboards } from '#app/models/project/project.get.server
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { useUser } from '#app/utils/user'
+import { type loader as projectsLoader } from './route'
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects index route')
@@ -28,7 +29,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function SketchProjectsIndexRoute() {
-	const data = useLoaderData<typeof loader>()
+	const data = useLoaderData<typeof projectsLoader>()
+	console.log('data', data)
 	const { projects } = data
 	const user = useUser()
 

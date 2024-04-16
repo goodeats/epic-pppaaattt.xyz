@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
 import { type IProjectWithArtboards } from './project.server'
 
-export type queryWhereArgsType = z.infer<typeof queryWhereArgs>
+export type queryProjectWhereArgsType = z.infer<typeof queryWhereArgs>
 const queryWhereArgs = z.object({
 	id: z.string().optional(),
 	ownerId: z.string().optional(),
@@ -12,7 +12,7 @@ const queryWhereArgs = z.object({
 export const getProjectsWithArtboards = async ({
 	where,
 }: {
-	where: queryWhereArgsType
+	where: queryProjectWhereArgsType
 }): Promise<IProjectWithArtboards[]> => {
 	const projects = await prisma.project.findMany({
 		where,
@@ -33,7 +33,7 @@ export const getProjectsWithArtboards = async ({
 export const getProjectWithArtboards = async ({
 	where,
 }: {
-	where: queryWhereArgsType
+	where: queryProjectWhereArgsType
 }): Promise<IProjectWithArtboards | null> => {
 	const project = await prisma.project.findFirst({
 		where,
