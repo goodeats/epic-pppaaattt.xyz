@@ -47,7 +47,7 @@ export const UserDropdown = () => {
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild>
-						<Link prefetch="intent" to={`/sketch/artboards`}>
+						<Link prefetch="intent" to={`/sketch`}>
 							<Icon className="text-body-md" name="magic-wand">
 								Sketch
 							</Icon>

@@ -4,11 +4,12 @@ import {
 	type MetaFunction,
 	type LoaderFunctionArgs,
 } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import { getProjectWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
+import { ProjectArtboardCards } from './components/project-artboard-cards'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects $slug route')
@@ -31,6 +32,12 @@ export default function SketchIndexRoute() {
 	return (
 		<div className="container">
 			<h2 className="mb-2 pt-12 text-h2 lg:mb-6">{data.project.name}</h2>
+			<div className="container">
+				<h3 className="mb-2 pt-12 text-h3 lg:mb-6">
+					<Link to="artboards">Artboards</Link>
+				</h3>
+				<ProjectArtboardCards project={data.project} />
+			</div>
 		</div>
 	)
 }

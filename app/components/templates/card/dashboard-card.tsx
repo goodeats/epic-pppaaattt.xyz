@@ -76,7 +76,7 @@ const DashboardCardFooterLink = ({
 }) => {
 	return (
 		<Button asChild className="flex-1">
-			<Link to={to}>
+			<Link prefetch="intent" to={to}>
 				<Icon name={icon}>
 					<span>{children}</span>
 				</Icon>
