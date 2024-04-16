@@ -1,6 +1,6 @@
 import { colorInvertHexcode } from '#app/utils/colors'
-import { Button } from '../ui/button'
-import { Icon, type IconName } from '../ui/icon'
+import { Button } from '../../ui/button'
+import { Icon, type IconName } from '../../ui/icon'
 
 const SidebarPanelButton = ({
 	iconName,

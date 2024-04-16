@@ -3,7 +3,7 @@ import {
 	TabbedSidebarContent,
 	TabbedSidebarList,
 	TabbedSidebarTrigger,
-} from '../layout'
+} from '../../layout'
 
 const SidebarTabs = ({
 	tabs,

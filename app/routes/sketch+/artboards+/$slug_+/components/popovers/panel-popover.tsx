@@ -1,8 +1,10 @@
 import {
-	SidebarPanelPopover,
-	SidebarPanelPopoverContent,
 	SidebarPanelPopoverFormsContainer,
 	SidebarPanelPopoverHeader,
+} from '#app/components/layout/popover'
+import {
+	SidebarPanelPopover,
+	SidebarPanelPopoverContent,
 	SidebarPanelPopoverTrigger,
 } from '#app/components/templates'
 

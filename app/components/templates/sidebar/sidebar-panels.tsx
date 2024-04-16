@@ -7,8 +7,8 @@ import {
 	PanelRowValuesContainer,
 	PanelTitle,
 	PanelTitleContainer,
-} from '../layout'
-import { Input } from '../ui/input'
+} from '../../layout'
+import { Input } from '../../ui/input'
 
 const SidebarPanel = ({ children }: { children: React.ReactNode }) => {
 	return <Panel>{children}</Panel>

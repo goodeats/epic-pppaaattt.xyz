@@ -10,13 +10,13 @@ import {
 	DashboardContent,
 	DashboardContentContainer,
 	DashboardContentWrapper,
-	Sidebar,
 } from '#app/components/layout'
 import { DashboardEntityCards } from '#app/components/templates'
 import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { useUser } from '#app/utils/user'
+import { ProjectsSidebar } from './components/projects-sidebar'
 
 export const meta: MetaFunction = () => {
 	return [
@@ -42,31 +42,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function SketchProjectsRoute() {
 	const data = useLoaderData<typeof loader>()
+	const { projects } = data
 	const user = useUser()
-
-	const SketchSidebar = () => {
-		return (
-			<Sidebar id="sketch-sidebar-left">
-				<div className="absolute flex h-full w-full flex-col overflow-hidden bg-green-400">
-					<div className="flex-1 overflow-y-scroll">
-						<div className="mb-8 h-36 w-full bg-red-400">yo</div>
-						<div className="mb-8 h-36 w-full bg-red-400">yo</div>
-						<div className="mb-8 h-36 w-full bg-red-400">yo</div>
-						<div className="mb-8 h-36 w-full bg-red-400">yo</div>
-						<div className="mb-8 h-36 w-full bg-red-400">yo</div>
-						<div className="mb-8 h-36 w-full bg-red-400">yo</div>
-						<div className="mb-8 h-36 w-full bg-red-400">yo</div>
-						<div className="mb-8 h-36 w-full bg-red-400">yo</div>
-						<div className="mb-8 h-36 w-full bg-red-400">yo</div>
-					</div>
-				</div>
-			</Sidebar>
-		)
-	}
 
 	return (
 		<DashboardBody id="sketch-dashboard-body">
-			<SketchSidebar />
+			<ProjectsSidebar projects={projects} />
 			<DashboardContent id="sketch-dashboard-content">
 				<DashboardContentWrapper>
 					<DashboardContentContainer>
@@ -78,7 +59,7 @@ export default function SketchProjectsRoute() {
 								</Link>
 							</h3>
 							<DashboardEntityCards
-								entities={data.projects}
+								entities={projects}
 								type="Project"
 								parent="portfolio"
 								basePathEditor={`/users/${user.username}/projects`}
