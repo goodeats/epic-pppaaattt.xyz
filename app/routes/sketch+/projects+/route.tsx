@@ -3,7 +3,7 @@ import {
 	type MetaFunction,
 	type LoaderFunctionArgs,
 } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { Outlet, useLoaderData } from '@remix-run/react'
 import { DashboardBody, DashboardContent } from '#app/components/layout'
 import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
 import { requireUserId } from '#app/utils/auth.server'
@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => {
 	]
 }
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
 	console.log('sketch+ projects route')
 	const projects = await getProjectsWithArtboards({
@@ -34,7 +34,12 @@ export default function SketchIndexRoute() {
 	return (
 		<DashboardBody id="sketch-dashboard-body">
 			<DashboardContent id="sketch-dashboard-content">
-				<ProjectCards projects={data.projects} />
+				<Outlet />
+				{/* make this a sidebar? */}
+				<div className="container">
+					<h3 className="mb-2 pt-12 text-h3 lg:mb-6">Projects</h3>
+					<ProjectCards projects={data.projects} />
+				</div>
 			</DashboardContent>
 		</DashboardBody>
 	)

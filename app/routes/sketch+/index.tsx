@@ -21,8 +21,6 @@ export const meta: MetaFunction = () => {
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	console.log('sketch+ index route')
-
 	const projects = await getProjectsWithArtboards({
 		where: { ownerId: userId },
 	})
