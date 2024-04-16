@@ -1,25 +1,26 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Outlet } from '@remix-run/react'
-import { getProjectWithArtboards } from '#app/models/project/project.get.server'
+import { getArtboardWithDesignsAndLayers } from '#app/models/artboard/artboard.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 
-export const projectLoaderRoute =
-	'routes/sketch+/projects+/$projectSlug_+/route'
+export const artboardLoaderRoute =
+	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	console.log('sketch+ projects slug artboards route')
+	console.log('sketch+ projects slug artboards slug route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
-	const { projectSlug } = params
-	const project = await getProjectWithArtboards({
-		where: { slug: projectSlug, ownerId: owner.id },
+	// https://sergiodxa.com/tutorials/avoid-waterfalls-of-queries-in-remix-loaders
+	const { artboardSlug } = params
+	const artboard = await getArtboardWithDesignsAndLayers({
+		where: { slug: artboardSlug, ownerId: owner.id },
 	})
-	invariantResponse(project, 'Project not found', { status: 404 })
+	invariantResponse(artboard, 'Artboard not found', { status: 404 })
 
-	return json({ project })
+	return json({ artboard })
 }
 
 export default function SketchProjectArtboardsRoute() {

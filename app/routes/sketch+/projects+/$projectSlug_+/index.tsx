@@ -14,7 +14,9 @@ import { DashboardEntityCards } from '#app/components/templates'
 import { getProjectWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
+import { routeLoaderData } from '#app/utils/meta'
 import { useUser } from '#app/utils/user'
+import { projectLoaderRoute } from './route'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects $slug index route')
@@ -36,6 +38,37 @@ export default function SketchProjectIndexRoute() {
 	const { project } = data
 	const user = useUser()
 
+	// I was hoping to find a solution to load the project from the ./route.tsx file
+	// but it seems best for now to load twice: route.tsx and index.tsx
+	// resource: https://sergiodxa.com/tutorials/access-loaders-data-in-remix
+
+	// attempt 1: route loader data
+	// problem: routeData could be null
+	// questions: does it not know it's from parent?
+	// const routeData = useRouteLoaderData<typeof projectLoader>(
+	// 	'routes/sketch+/projects+/$projectSlug_+/route',
+	// ) || { project: null }
+	// console.log('routeData', routeData)
+
+	// attempt 2: useMatches
+	// problem: not typesafe, and could be null
+	// const matches = useMatches()
+	// const projectMatch = matches.find(
+	// 	m => m.id === 'routes/sketch+/projects+/$projectSlug_+/route',
+	// )
+	// const project = projectMatch?.data?.project ?? { project: null }
+	// if (!project) {
+	// 	return <div>no project</div>
+	// }
+
+	// attempt 3: useMatches pt 2
+	// very clever to use at(-2) to go up the array indexes
+	// to get the project data from the parent route
+	// problem: this looks hacky, and not sure how to make typesafe
+	// questions: if I set as type is it still possibly null?
+	// const match = matches.at(-2)
+	// console.log('match', match)
+
 	return (
 		<div className="container">
 			<DashboardContentHeading1>{project.name}!</DashboardContentHeading1>
@@ -56,8 +89,9 @@ export default function SketchProjectIndexRoute() {
 	)
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
-	const projectName = data?.project.name ?? params.slug
+export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
+	const projectData = routeLoaderData(matches, projectLoaderRoute)
+	const projectName = projectData?.project.name ?? params.slug
 	return [
 		{ title: `${projectName} | Sketchy | XYZ` },
 		{

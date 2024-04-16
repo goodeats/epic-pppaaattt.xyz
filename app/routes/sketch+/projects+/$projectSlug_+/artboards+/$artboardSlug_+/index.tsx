@@ -9,7 +9,9 @@ import { DashboardContentHeading1 } from '#app/components/layout'
 import { getArtboardWithDesignsAndLayers } from '#app/models/artboard/artboard.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
-import { type loader as projectLoader } from '../../route'
+import { routeLoaderData } from '#app/utils/meta'
+import { projectLoaderRoute } from '../../route'
+import { artboardLoaderRoute } from './route'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects slug artboards index route')
@@ -17,9 +19,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
-	const { slug } = params
+	// https://sergiodxa.com/tutorials/avoid-waterfalls-of-queries-in-remix-loaders
+	const { artboardSlug } = params
 	const artboard = await getArtboardWithDesignsAndLayers({
-		where: { slug, ownerId: owner.id },
+		where: { slug: artboardSlug, ownerId: owner.id },
 	})
 	invariantResponse(artboard, 'Artboard not found', { status: 404 })
 
@@ -37,18 +40,13 @@ export default function SketchProjectArtboardsIndexRoute() {
 	)
 }
 
-export const meta: MetaFunction<
-	typeof loader,
-	{ 'routes/sketch+/projects+/$slug_+/route': typeof projectLoader }
-> = ({ data, params, matches }) => {
-	const artboardName = data?.artboard.name ?? params.slug
-	const projectMatch = matches.find(
-		m => m.id === 'routes/sketch+/projects+/$slug_+/route',
-	)
-	console.log('projectMatch', projectMatch)
-	// how to get projects loader from projects index route if it gets skipped...
+export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
+	const projectData = routeLoaderData(matches, projectLoaderRoute)
+	const projectName = projectData?.project?.name ?? 'Project'
+	const artboardData = routeLoaderData(matches, artboardLoaderRoute)
+	const artboardName = artboardData?.artboard.name ?? params.slug
 	return [
-		{ title: `${artboardName} | Project | Sketchy | XYZ` },
+		{ title: `${artboardName} | ${projectName} | Sketchy | XYZ` },
 		{
 			name: 'description',
 			content: `Sketchy dashboard artboards for Project: ${artboardName}`,

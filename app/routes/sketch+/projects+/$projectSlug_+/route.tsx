@@ -5,6 +5,8 @@ import { getProjectWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 
+export const projectLoaderRoute =
+	'routes/sketch+/projects+/$projectSlug_+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects $slug route')
 	const userId = await requireUserId(request)
@@ -12,13 +14,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
 	const { projectSlug } = params
-	console.log('params r', params)
-	// console.log('slug r', slug)
 	const project = await getProjectWithArtboards({
 		where: { slug: projectSlug, ownerId: owner.id },
 	})
-
-	console.log('project r', project?.name)
 	invariantResponse(project, 'Project not found', { status: 404 })
 
 	return json({ project })

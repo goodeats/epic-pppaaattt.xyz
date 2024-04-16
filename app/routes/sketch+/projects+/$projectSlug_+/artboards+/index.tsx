@@ -13,17 +13,21 @@ import { DashboardEntityCards } from '#app/components/templates'
 import { getProjectWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
+import { routeLoaderData } from '#app/utils/meta'
 import { useUser } from '#app/utils/user'
+import { projectLoaderRoute } from '../route'
 
+export const artboardstLoaderRoute =
+	'routes/sketch+/projects+/$projectSlug_+/artboards+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects slug artboards index route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
-	const { slug } = params
+	const { projectSlug } = params
 	const project = await getProjectWithArtboards({
-		where: { slug, ownerId: owner.id },
+		where: { slug: projectSlug, ownerId: owner.id },
 	})
 	invariantResponse(project, 'Project not found', { status: 404 })
 
@@ -58,8 +62,9 @@ export default function SketchProjectArtboardsIndexRoute() {
 	)
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
-	const projectName = data?.project.name ?? params.slug
+export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
+	const projectData = routeLoaderData(matches, projectLoaderRoute)
+	const projectName = projectData?.project.name ?? params.slug
 	return [
 		{ title: `Artboards | ${projectName} | Sketchy | XYZ` },
 		{

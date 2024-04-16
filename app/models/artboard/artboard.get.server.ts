@@ -34,11 +34,23 @@ const commonInclude = {
 	},
 }
 
+// TODO: Add schemas for each type of query and parse with zod
+// aka if by id that should be present, if by slug that should be present
+// owner id should be present unless admin (not set up yet)
+const validateQueryWhereArgsPresent = (where: queryArtboardWhereArgsType) => {
+	if (Object.values(where).some(value => !value)) {
+		throw new Error(
+			'Null or undefined values are not allowed in query parameters for artboard.',
+		)
+	}
+}
+
 export const getArtboardsWithDesignsAndLayers = async ({
 	where,
 }: {
 	where: queryArtboardWhereArgsType
 }): Promise<IArtboardWithDesignsAndLayers[]> => {
+	validateQueryWhereArgsPresent(where)
 	const artboards = await prisma.artboard.findMany({
 		where,
 		include: commonInclude,
@@ -51,6 +63,7 @@ export const getArtboardWithDesignsAndLayers = async ({
 }: {
 	where: queryArtboardWhereArgsType
 }): Promise<IArtboardWithDesignsAndLayers | null> => {
+	validateQueryWhereArgsPresent(where)
 	const artboard = await prisma.artboard.findFirst({
 		where,
 		include: commonInclude,

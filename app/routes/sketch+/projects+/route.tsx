@@ -12,6 +12,7 @@ import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { ProjectsSidebar } from './components/projects-sidebar'
 
+export const projectsLoaderRoute = 'routes/sketch+/projects+/route'
 export async function loader({ request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects route')
 	const userId = await requireUserId(request)
