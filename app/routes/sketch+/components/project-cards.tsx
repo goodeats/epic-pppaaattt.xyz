@@ -3,6 +3,7 @@ import {
 	DashboardCardContent,
 	DashboardCardFooter,
 	DashboardCardFooterLink,
+	DashboardCardNone,
 	DashboardCardWrapper,
 } from '#app/components/templates'
 import { CardContent } from '#app/components/ui/card'
@@ -16,7 +17,6 @@ export const ProjectCards = ({
 }) => {
 	return (
 		<div className="container">
-			<h2 className="mb-2 pt-12 text-h2 lg:mb-6">Projects</h2>
 			{projects.length === 0 ? (
 				<NoProjects />
 			) : (
@@ -28,12 +28,10 @@ export const ProjectCards = ({
 
 const NoProjects = () => {
 	return (
-		<div>
+		<DashboardCardWrapper>
 			<NewProjectCard />
-			<div className="flex h-80 items-center justify-center">
-				<h4 className="text-h4">No projects found</h4>
-			</div>
-		</div>
+			<DashboardCardNone>No projects found</DashboardCardNone>
+		</DashboardCardWrapper>
 	)
 }
 

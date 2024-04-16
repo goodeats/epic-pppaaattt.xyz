@@ -7,20 +7,21 @@ import { useLoaderData } from '@remix-run/react'
 import { DashboardBody, DashboardContent } from '#app/components/layout'
 import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
 import { requireUserId } from '#app/utils/auth.server'
-import { ProjectCards } from './components/project-cards'
+import { ProjectCards } from '../components/project-cards'
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: 'Sketchy | XYZ' },
+		{ title: 'Sketchy Projects | XYZ' },
 		{
 			name: 'description',
-			content: 'Sketchy dashboard for XYZ',
+			content: 'Sketchy dashboard for XYZ - Projects',
 		},
 	]
 }
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
+	console.log('sketch+ projects route')
 	const projects = await getProjectsWithArtboards({
 		where: { ownerId: userId },
 	})

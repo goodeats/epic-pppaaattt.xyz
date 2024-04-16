@@ -6,6 +6,7 @@ import { Header } from './components/header'
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	await requireUserId(request)
+	console.log('sketch+ route')
 	return json({})
 }
 

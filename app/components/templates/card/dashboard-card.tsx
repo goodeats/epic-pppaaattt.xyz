@@ -16,6 +16,14 @@ const DashboardCardWrapper = ({ children }: { children: React.ReactNode }) => {
 	)
 }
 
+// placeholder for when cards list is empty
+// i.e., "No projects found"
+const DashboardCardNone = ({ children }: { children: React.ReactNode }) => (
+	<div className="mb-2 flex w-80 flex-1 items-center justify-center lg:mb-6">
+		<h4 className="text-h4">{children}</h4>
+	</div>
+)
+
 const DashboardCard = ({
 	title,
 	description,
@@ -79,6 +87,7 @@ const DashboardCardFooterLink = ({
 
 export {
 	DashboardCardWrapper,
+	DashboardCardNone,
 	DashboardCard,
 	DashboardCardContent,
 	DashboardCardFooter,
