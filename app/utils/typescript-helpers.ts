@@ -18,3 +18,12 @@ export const safelyAssignValue = <
 		target[key] = value as TargetType[KeyType]
 	}
 }
+
+// Helper function to safely update properties
+export function updateProperty<T, K extends keyof T>(
+	obj: T,
+	key: K,
+	value: T[K],
+) {
+	obj[key] = value
+}
