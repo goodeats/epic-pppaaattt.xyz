@@ -1,5 +1,5 @@
 import { type User } from '@prisma/client'
-import { type IArtboardVersion } from '#app/models/artboard-version.server'
+import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type IArtboard } from '#app/models/artboard.server'
 import { createDesign } from '#app/models/design/design.create.server'
 import {

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboardVersion } from '../artboard-version.server'
+import { type IArtboardVersion } from './artboard-version.server'
 
 export type queryArtboardVersionWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({

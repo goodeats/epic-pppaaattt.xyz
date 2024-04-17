@@ -1,5 +1,5 @@
 import { getArtboardsWithDesignsAndLayers } from '#app/models/artboard/artboard.get.server'
-import { type IArtboardVersion } from '#app/models/artboard-version.server'
+import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type IArtboardWithDesignsAndLayers } from '#app/models/artboard.server'
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
 import { LayerCloneSourceTypeEnum } from '#app/schema/layer'
@@ -26,10 +26,10 @@ import { prisma } from '#app/utils/db.server'
 // - routing, ui, and api changes to support artboard versions and branches
 
 // how to run:
-// add the folowing to package.json scripts:
+// 1) add the folowing to package.json scripts:
 // "data:migrate": "npx vite-node ./prisma/data-migrations/create-artboard-versions-and-branches.ts"
-// then run `npm run data:migrate`
-// then remove the script from package.json
+// 2) run `npm run data:migrate`
+// 3) remove the script from package.json
 
 export const createArtboardVersionsBranches = async () => {
 	console.log('createArtboardVersionsBranches begin 🎬')

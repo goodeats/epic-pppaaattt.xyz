@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboardBranchWithVersions } from '../artboard-branch.server'
+import { type IArtboardBranchWithVersions } from './artboard-branch.server'
 
 export type queryArtboardBranchWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({

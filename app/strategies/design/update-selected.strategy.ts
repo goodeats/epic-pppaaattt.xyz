@@ -1,4 +1,4 @@
-import { type IArtboardVersion } from '#app/models/artboard-version.server'
+import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type IArtboard } from '#app/models/artboard.server'
 import {
 	deselectArtboardVersionSelectedDesign,

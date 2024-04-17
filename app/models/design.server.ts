@@ -5,7 +5,7 @@ import {
 	type whereArgsType,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboardVersion } from './artboard-version.server'
+import { type IArtboardVersion } from './artboard-version/artboard-version.server'
 import { type IArtboard } from './artboard.server'
 import { type IFillCreateOverrides, type IFill } from './fill.server'
 import { type ILayoutCreateOverrides, type ILayout } from './layout.server'

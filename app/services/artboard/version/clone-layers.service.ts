@@ -1,5 +1,5 @@
 import { type User } from '@prisma/client'
-import { type IArtboardVersion } from '#app/models/artboard-version.server'
+import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type ILayerEntityId } from '#app/models/layer.server'
 import { type layerCloneSourceTypeEnum } from '#app/schema/layer'
 import { CloneLayersToArtboardVersionStrategy } from '#app/strategies/layer/clone.strategy'

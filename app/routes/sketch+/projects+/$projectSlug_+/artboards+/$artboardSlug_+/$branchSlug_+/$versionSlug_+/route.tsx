@@ -1,9 +1,11 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { type LoaderFunctionArgs, json } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import { getArtboardVersion } from '#app/models/artboard-version/artboard-version.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
+import { CanvasContent } from './components/canvas-content'
 
 export const artboardBranchVersionLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$versionSlug_+/route'
@@ -28,10 +30,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export default function SketchProjectArtboardBranchRoute() {
+	const data = useLoaderData<typeof loader>()
+	const { version } = data
+
 	return (
 		<div>
-			<div>yo</div>
-			{/* <Outlet /> */}
+			<CanvasContent version={version} artboardGenerator={null} />
 		</div>
 	)
 }
