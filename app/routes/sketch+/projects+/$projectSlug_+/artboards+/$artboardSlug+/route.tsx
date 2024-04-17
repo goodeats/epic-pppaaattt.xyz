@@ -18,7 +18,7 @@ import { requireUserId } from '#app/utils/auth.server'
 // docs: https://remix.run/docs/en/main/file-conventions/routes
 
 export const artboardLoaderRoute =
-	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/route'
+	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects slug artboards slug route')
 	const userId = await requireUserId(request)

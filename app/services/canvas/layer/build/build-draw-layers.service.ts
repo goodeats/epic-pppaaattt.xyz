@@ -1,5 +1,5 @@
 import {
-	type IArtboardGenerator,
+	type IArtboardVersionGenerator,
 	type IGenerationItem,
 	type ILayerGenerator,
 } from '#app/definitions/artboard-generator'
@@ -14,12 +14,12 @@ import { canvasBuildLayerDrawTemplateService } from './build-layer-draw-template
 
 export const canvasLayerBuildDrawLayersService = ({
 	ctx,
-	artboardGenerator,
+	generator,
 }: {
 	ctx: CanvasRenderingContext2D
-	artboardGenerator: IArtboardGenerator
+	generator: IArtboardVersionGenerator
 }): IGenerationItem[][] => {
-	const { layers } = artboardGenerator
+	const { layers } = generator
 
 	const drawLayers = []
 	for (let i = 0; i < layers.length; i++) {

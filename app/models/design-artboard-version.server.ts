@@ -63,7 +63,7 @@ export const deselectArtboardVersionSelectedDesign = ({
 	})
 }
 
-export const getArtboardVisiblePalettes = async ({
+export const getArtboardVersionVisiblePalettes = async ({
 	artboardVersionId,
 }: {
 	artboardVersionId: IArtboardVersion['id']
@@ -79,7 +79,7 @@ export const getArtboardVisiblePalettes = async ({
 	return visibleDesignPalettes.map(design => design.palette)
 }
 
-export const getArtboardVisibleRotates = async ({
+export const getArtboardVersionVisibleRotates = async ({
 	artboardVersionId,
 }: {
 	artboardVersionId: IArtboardVersion['id']

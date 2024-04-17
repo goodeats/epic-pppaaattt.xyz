@@ -1,28 +1,25 @@
-import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
-import { type PickedArtboardType } from '#app/models/artboard.server'
+import { type IArtboardVersionGenerator } from '#app/definitions/artboard-generator'
 import { canvasDrawBackgroundService } from './draw-background.service'
 import { canvasLayerBuildDrawLayersService } from './layer/build/build-draw-layers.service'
 import { canvasDrawLayersService } from './layer/draw/draw-layers.service'
 
 export const canvasDrawService = ({
 	canvas,
-	artboard,
-	artboardGenerator,
+	generator,
 }: {
 	canvas: HTMLCanvasElement
-	artboard: PickedArtboardType
-	artboardGenerator: IArtboardGenerator
+	generator: IArtboardVersionGenerator
 }) => {
 	// Step 1: get canvas
 	const ctx = getContext(canvas)
 
 	// Step 2: draw background
-	canvasDrawBackgroundService({ ctx, artboard })
+	canvasDrawBackgroundService({ ctx, generator })
 
 	// Step 3: get draw items for each layer
 	const drawLayers = canvasLayerBuildDrawLayersService({
 		ctx,
-		artboardGenerator,
+		generator,
 	})
 
 	// Step 4: draw layers to canvas

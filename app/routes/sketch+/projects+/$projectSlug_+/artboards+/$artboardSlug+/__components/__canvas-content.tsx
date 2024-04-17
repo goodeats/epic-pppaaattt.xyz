@@ -1,78 +1,81 @@
-import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
-import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import { useEffect, useRef } from 'react'
+import {
+	ReactFlow,
+	type Node,
+	Background,
+	BackgroundVariant,
+	Controls,
+	MiniMap,
+	useNodesState,
+} from 'reactflow'
+import { ContainerIndex } from '#app/components/shared'
+import { type IArtboardVersionGenerator } from '#app/definitions/artboard-generator'
+import { canvasDrawService } from '#app/services/canvas/draw.service'
 import 'reactflow/dist/style.css'
 
-// const initialNodes = [
-// 	{
-// 		id: 'a',
-// 		type: 'canvas',
-// 		position: { x: 0, y: 0 },
-// 		data: { label: 'artboard-canvas' },
-// 	},
-// ] satisfies Node[]
+const initialNodes = [
+	{
+		id: 'a',
+		type: 'canvas',
+		position: { x: 0, y: 0 },
+		data: { label: 'artboard-canvas' },
+	},
+] satisfies Node[]
 
 export const CanvasContent = ({
-	version,
-	artboardGenerator,
+	generator,
 }: {
-	version: IArtboardVersion
-	artboardGenerator: IArtboardGenerator | null
+	generator: IArtboardVersionGenerator
 }) => {
-	// const Canvas = () => {
-	// 	const { width, height, backgroundColor } = artboard
-	// 	const canvasRef = useRef<HTMLCanvasElement>(null)
+	// TODO: move artboard width and height to version
+	const { width, height, backgroundColor } = generator.settings
 
-	// 	useEffect(() => {
-	// 		const canvas = canvasRef.current
-	// 		const canvasReady = canvas && artboardGenerator
-	// 		canvasReady && canvasDrawService({ canvas, artboard, artboardGenerator })
-	// 	}, [canvasRef])
+	const Canvas = () => {
+		const canvasRef = useRef<HTMLCanvasElement>(null)
 
-	// 	return (
-	// 		<canvas
-	// 			id="canvas-editor"
-	// 			ref={canvasRef}
-	// 			width={width}
-	// 			height={height}
-	// 			style={{ backgroundColor }}
-	// 		/>
-	// 	)
-	// }
+		useEffect(() => {
+			const canvas = canvasRef.current
+			const canvasReady = canvas && generator
+			canvasReady && canvasDrawService({ canvas, generator })
+		}, [canvasRef])
 
-	// const [nodes, , onNodesChange] = useNodesState(initialNodes)
-	// const nodeTypes = {
-	// 	canvas: Canvas,
-	// }
+		return (
+			<canvas
+				id="canvas-editor"
+				ref={canvasRef}
+				width={width}
+				height={height}
+				style={{ backgroundColor }}
+			/>
+		)
+	}
 
-	// const ReactFlowComponent = () => {
-	// 	return (
-	// 		<ReactFlow
-	// 			nodes={nodes}
-	// 			nodeTypes={nodeTypes}
-	// 			onNodesChange={onNodesChange}
-	// 			fitView
-	// 			minZoom={0.01}
-	// 		>
-	// 			<Background variant={BackgroundVariant.Dots} />
-	// 			<MiniMap pannable zoomable />
-	// 			<Controls />
-	// 		</ReactFlow>
-	// 	)
-	// }
+	const [nodes, , onNodesChange] = useNodesState(initialNodes)
+	const nodeTypes = {
+		canvas: Canvas,
+	}
 
-	// const FailedComponent = () => {
-	// 	return (
-	// 		<ContainerIndex>
-	// 			{artboardGenerator?.message || 'Artboard generator unsuccessful'}
-	// 		</ContainerIndex>
-	// 	)
-	// }
+	if (!generator.success) {
+		return (
+			<ContainerIndex>
+				{generator?.message || 'Artboard generator unsuccessful'}
+			</ContainerIndex>
+		)
+	}
 
-	// const displayCanvas = artboardGenerator?.success
 	return (
 		<div id="reactflow-wrapper" className="absolute inset-0">
-			<p>todo: build canvas</p>
-			{/* {displayCanvas ? <ReactFlowComponent /> : <FailedComponent />} */}
+			<ReactFlow
+				nodes={nodes}
+				nodeTypes={nodeTypes}
+				onNodesChange={onNodesChange}
+				fitView
+				minZoom={0.01}
+			>
+				<Background variant={BackgroundVariant.Dots} />
+				<MiniMap pannable zoomable />
+				<Controls />
+			</ReactFlow>
 		</div>
 	)
 }

@@ -46,7 +46,7 @@ export function routeLoaderMetaData<K extends keyof RouteLoaders>(
 	matchId: K,
 ): SerializeFrom<RouteLoaders[K]> {
 	const match = matches.find(({ id }) => id === matchId)
-	invariant(match, 'Router loader data not found')
+	invariant(match, `Router loader data not found for meta: ${matchId}`)
 	return match.data as SerializeFrom<RouteLoaders[K]>
 }
 
@@ -56,6 +56,6 @@ export function routeLoaderMatchData<K extends keyof RouteLoaders>(
 	matchId: K,
 ): SerializeFrom<RouteLoaders[K]> {
 	const match = matches.find(({ id }) => id === matchId)
-	invariant(match, 'Router loader data not found')
+	invariant(match, `Router loader data not found for match: ${matchId}`)
 	return match.data as SerializeFrom<RouteLoaders[K]>
 }

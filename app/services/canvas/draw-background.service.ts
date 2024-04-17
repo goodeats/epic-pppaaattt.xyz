@@ -1,13 +1,13 @@
-import { type PickedArtboardType } from '#app/models/artboard.server'
+import { type IArtboardVersionGenerator } from '#app/definitions/artboard-generator'
 
 export const canvasDrawBackgroundService = ({
 	ctx,
-	artboard,
+	generator,
 }: {
 	ctx: CanvasRenderingContext2D
-	artboard: PickedArtboardType
+	generator: IArtboardVersionGenerator
 }) => {
-	const { width, height, backgroundColor } = artboard
+	const { width, height, backgroundColor } = generator.settings
 
 	ctx.fillStyle = `#${backgroundColor}`
 	ctx.fillRect(0, 0, width, height)

@@ -1,3 +1,4 @@
+import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type IArtboard } from '#app/models/artboard.server'
 import { type IFill } from '#app/models/fill.server'
 import { type ILayer } from '#app/models/layer.server'
@@ -17,8 +18,19 @@ export interface IArtboardGenerator {
 	success: boolean
 	message: string
 }
+export interface IArtboardVersionGenerator {
+	id: IArtboardVersion['id']
+	settings: {
+		width: number
+		height: number
+		backgroundColor: string
+	}
+	layers: ILayerGenerator[]
+	success: boolean
+	message: string
+}
 
-// layer can override or default to artboard design types
+// layer can override or default to artboard version design types
 export interface IGeneratorDesigns {
 	palette: IPalette[]
 	size: ISize

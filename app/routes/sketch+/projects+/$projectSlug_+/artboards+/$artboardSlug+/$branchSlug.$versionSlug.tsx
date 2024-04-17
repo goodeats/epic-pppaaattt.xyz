@@ -4,6 +4,7 @@ import { useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import { getArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
+import { artboardVersionGeneratorBuildService } from '#app/services/artboard/version/generator/build.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { CanvasContent } from './__components/__canvas-content'
 
@@ -22,16 +23,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	})
 	invariantResponse(version, 'Artboard Version not found', { status: 404 })
 
-	return json({ version })
+	const generator = await artboardVersionGeneratorBuildService({ version })
+
+	return json({ version, generator })
 }
 
 export default function SketchProjectArtboardBranchRoute() {
 	const data = useLoaderData<typeof loader>()
-	const { version } = data
+	const { generator } = data
 
 	return (
 		<div>
-			<CanvasContent version={version} artboardGenerator={null} />
+			<CanvasContent generator={generator} />
 		</div>
 	)
 }
