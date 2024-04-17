@@ -41,7 +41,6 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => {
-					console.log('version params error boundary', params)
 					return <p>No version with the name "{params.versionSlug}" exists</p>
 				},
 			}}

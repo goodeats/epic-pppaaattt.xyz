@@ -15,7 +15,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	// https://sergiodxa.com/tutorials/avoid-waterfalls-of-queries-in-remix-loaders
 	const { branchSlug } = params
-	console.log('branch slug params', params)
 	const branch = await getArtboardBranchWithVersions({
 		where: { slug: branchSlug, ownerId: owner.id },
 	})
@@ -31,7 +30,6 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => {
-					console.log('branch params error boundary', params)
 					return <p>No branch with the name "{params.branchSlug}" exists</p>
 				},
 			}}

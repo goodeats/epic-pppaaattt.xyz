@@ -24,8 +24,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const { pathname } = new URL(request.url)
 	const redirectPath = `${pathname}/${version.slug}`
 
-	console.log('REDIRECT FROM BRANCH SLUG redirectPath', redirectPath)
-
 	// ensure that data is loaded from the route
 	// redirect on index.tsx
 	return redirect(redirectPath)
@@ -36,7 +34,6 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => {
-					console.log('branch index params error boundary', params)
 					return (
 						<p>No artboard branch with the name "{params.branchSlug}" exists</p>
 					)
