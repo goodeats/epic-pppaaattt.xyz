@@ -1,6 +1,9 @@
 import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboardWithDesignsAndLayers } from '../artboard.server'
+import {
+	type IArtboardWithBranchesAndVersions,
+	type IArtboardWithDesignsAndLayers,
+} from '../artboard.server'
 
 export type queryArtboardWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({
@@ -67,6 +70,33 @@ export const getArtboardWithDesignsAndLayers = async ({
 	const artboard = await prisma.artboard.findFirst({
 		where,
 		include: commonInclude,
+	})
+	return artboard
+}
+export const getArtboardWithDefaultBranchAndLatestVersion = async ({
+	where,
+}: {
+	where: queryArtboardWhereArgsType
+}): Promise<IArtboardWithBranchesAndVersions | null> => {
+	validateQueryWhereArgsPresent(where)
+	const artboard = await prisma.artboard.findFirst({
+		where,
+		include: {
+			branches: {
+				where: {
+					default: true,
+				},
+				take: 1,
+				include: {
+					versions: {
+						where: {
+							latest: true,
+						},
+						take: 1,
+					},
+				},
+			},
+		},
 	})
 	return artboard
 }

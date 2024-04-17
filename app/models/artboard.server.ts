@@ -6,6 +6,7 @@ import {
 	type whereArgsType,
 } from '#app/schema/artboard'
 import { prisma } from '#app/utils/db.server'
+import { type IArtboardBranchWithVersions } from './artboard-branch.server'
 import { type IDesignWithType } from './design.server'
 import { type ILayerWithDesigns } from './layer.server'
 import { type IProjectWithArtboards } from './project/project.server'
@@ -24,6 +25,9 @@ export interface IArtboardWithProject extends IArtboard {
 export interface IArtboardWithDesignsAndLayers extends IArtboard {
 	designs: IDesignWithType[]
 	layers: ILayerWithDesigns[]
+}
+export interface IArtboardWithBranchesAndVersions extends IArtboard {
+	branches: IArtboardBranchWithVersions[]
 }
 
 export type PickedArtboardType = {

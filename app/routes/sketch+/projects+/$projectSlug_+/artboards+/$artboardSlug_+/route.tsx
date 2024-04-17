@@ -1,15 +1,8 @@
 import { invariantResponse } from '@epic-web/invariant'
-import {
-	json,
-	type MetaFunction,
-	type LoaderFunctionArgs,
-} from '@remix-run/node'
-import { Outlet } from '@remix-run/react'
-import { getArtboardWithDesignsAndLayers } from '#app/models/artboard/artboard.get.server'
+import { type LoaderFunctionArgs, redirect } from '@remix-run/node'
+import { getArtboardWithDefaultBranchAndLatestVersion } from '#app/models/artboard/artboard.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
-import { routeLoaderMetaData } from '#app/utils/matches'
-import { projectLoaderRoute } from '../route'
 
 export const artboardLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/route'
@@ -21,28 +14,15 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	// https://sergiodxa.com/tutorials/avoid-waterfalls-of-queries-in-remix-loaders
 	const { artboardSlug } = params
-	const artboard = await getArtboardWithDesignsAndLayers({
+	const artboard = await getArtboardWithDefaultBranchAndLatestVersion({
 		where: { slug: artboardSlug, ownerId: owner.id },
 	})
 	invariantResponse(artboard, 'Artboard not found', { status: 404 })
 
-	return json({ artboard })
-}
+	const branch = artboard.branches[0]
+	const version = branch.versions[0]
 
-export default function SketchProjectArtboardsRoute() {
-	return <Outlet />
-}
+	const { pathname } = new URL(request.url)
 
-export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
-	const projectData = routeLoaderMetaData(matches, projectLoaderRoute)
-	const projectName = projectData?.project?.name ?? 'Project'
-	const artboardData = routeLoaderMetaData(matches, artboardLoaderRoute)
-	const artboardName = artboardData?.artboard.name ?? params.slug
-	return [
-		{ title: `${artboardName} | ${projectName} | Sketchy | XYZ` },
-		{
-			name: 'description',
-			content: `Sketchy dashboard artboards for Project: ${artboardName}`,
-		},
-	]
+	return redirect(`${pathname}/${branch.name}/${version.name}`)
 }
