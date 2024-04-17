@@ -32,7 +32,7 @@ export const ArtboardVersionHeightSchema = z.object({
 
 export const ArtboardVersionBackgroundSchema = z.object({
 	id: z.string(),
-	backgroundColor: HexcodeSchema,
+	background: HexcodeSchema,
 })
 
 export const ArtboardVersionSelectedDesignsSchema = z.object({

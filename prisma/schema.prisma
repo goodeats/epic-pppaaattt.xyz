@@ -497,7 +497,7 @@ model ArtboardVersion {
   // 9:16 aspect ratio (vertical)
   width       Int @default(1080)
   height      Int @default(1920)
-  background String @default("ffffff")
+  background String @default("FFFFFF")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,5 +1,6 @@
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { PanelArtboardVersionWidth } from '#app/routes/resources+/panel.artboard-version.width'
+import { PanelBackground } from './__background'
+import { PanelFrame } from './__frame'
 
 export const PanelArtboardVersionDesigns = ({
 	version,
@@ -11,9 +12,8 @@ export const PanelArtboardVersionDesigns = ({
 
 	return (
 		<div>
-			<PanelArtboardVersionWidth version={version} />
-			{/* <PanelArtboardFrame version={version} /> */}
-			{/* <PanelBackground version={version} /> */}
+			<PanelFrame version={version} />
+			<PanelBackground version={version} />
 			{/* {designTypePanels.map(({ type, designs }) => (
 				<PanelDesignType
 					key={type}
