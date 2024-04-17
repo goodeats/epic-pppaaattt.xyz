@@ -10,11 +10,11 @@ import {
 import {
 	type artboardBranchLoaderRoute,
 	type loader as artboardBranchLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+'
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$branchSlug.index'
 import {
 	type artboardVersionLoaderRoute,
 	type loader as artboardVersionLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$versionSlug_+/route'
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$branchSlug_.$versionSlug'
 import {
 	type artboardLoaderRoute,
 	type loader as artboardLoader,
