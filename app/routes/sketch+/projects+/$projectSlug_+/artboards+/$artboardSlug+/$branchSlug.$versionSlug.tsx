@@ -2,11 +2,17 @@ import { invariantResponse } from '@epic-web/invariant'
 import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
+import {
+	DashboardBody,
+	DashboardContent,
+	DashboardContentWrapper,
+} from '#app/components/layout'
 import { getArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { artboardVersionGeneratorBuildService } from '#app/services/artboard/version/generator/build.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { CanvasContent } from './__components/__canvas-content'
+import { SidebarLeft } from './__components/__sidebars'
 
 export const artboardVersionLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$versionSlug_+/route'
@@ -30,12 +36,19 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 export default function SketchProjectArtboardBranchRoute() {
 	const data = useLoaderData<typeof loader>()
-	const { generator } = data
+	const { version, generator } = data
 
+	// had to consider sidebar from project route level
+	// the component names might need re-thinking, but works
 	return (
-		<div>
-			<CanvasContent generator={generator} />
-		</div>
+		<DashboardContentWrapper>
+			<DashboardBody id="artboard-editor">
+				<SidebarLeft version={version} />
+				<DashboardContent>
+					<CanvasContent generator={generator} />
+				</DashboardContent>
+			</DashboardBody>
+		</DashboardContentWrapper>
 	)
 }
 

@@ -27,7 +27,6 @@ export const CanvasContent = ({
 }: {
 	generator: IArtboardVersionGenerator
 }) => {
-	// TODO: move artboard width and height to version
 	const { width, height, background } = generator.settings
 
 	const Canvas = () => {
@@ -35,8 +34,7 @@ export const CanvasContent = ({
 
 		useEffect(() => {
 			const canvas = canvasRef.current
-			const canvasReady = canvas && generator
-			canvasReady && canvasDrawService({ canvas, generator })
+			canvas && canvasDrawService({ canvas, generator })
 		}, [canvasRef])
 
 		return (
@@ -64,18 +62,16 @@ export const CanvasContent = ({
 	}
 
 	return (
-		<div id="reactflow-wrapper" className="absolute inset-0">
-			<ReactFlow
-				nodes={nodes}
-				nodeTypes={nodeTypes}
-				onNodesChange={onNodesChange}
-				fitView
-				minZoom={0.01}
-			>
-				<Background variant={BackgroundVariant.Dots} />
-				<MiniMap pannable zoomable />
-				<Controls />
-			</ReactFlow>
-		</div>
+		<ReactFlow
+			nodes={nodes}
+			nodeTypes={nodeTypes}
+			onNodesChange={onNodesChange}
+			fitView
+			minZoom={0.01}
+		>
+			<Background variant={BackgroundVariant.Dots} />
+			<MiniMap pannable zoomable />
+			<Controls />
+		</ReactFlow>
 	)
 }
