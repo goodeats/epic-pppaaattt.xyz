@@ -7,7 +7,7 @@ import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { CanvasContent } from './components/canvas-content'
 
-export const artboardBranchVersionLoaderRoute =
+export const artboardVersionLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$versionSlug_+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects slug artboards slug branch version route')
@@ -22,10 +22,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	})
 	invariantResponse(version, 'Artboard Version not found', { status: 404 })
 
-	const { pathname } = new URL(request.url)
-	console.log('pathname', pathname)
-
-	console.log('no redirect...')
 	return json({ version })
 }
 

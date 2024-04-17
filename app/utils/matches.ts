@@ -8,6 +8,14 @@ import {
 	type loader as artboardsLoader,
 } from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+'
 import {
+	type artboardBranchLoaderRoute,
+	type loader as artboardBranchLoader,
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+'
+import {
+	type artboardVersionLoaderRoute,
+	type loader as artboardVersionLoader,
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$versionSlug_+/route'
+import {
 	type artboardLoaderRoute,
 	type loader as artboardLoader,
 } from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/route'
@@ -21,14 +29,16 @@ import {
 } from '#app/routes/sketch+/projects+/route'
 
 // ensure matches route loader data is available for meta
-// https://github.com/remix-run/remix/issues/7347
-
-interface RouteLoaders {
+// https://github.com/remix-run/remix/issues/7347 -- so good
+// eventually these route loaders should reference they are in the sketch+ route
+export interface RouteLoaders {
 	root: typeof rootLoader
 	[projectsLoaderRoute]: typeof projectsLoader
 	[projectLoaderRoute]: typeof projectLoader
 	[artboardstLoaderRoute]: typeof artboardsLoader
 	[artboardLoaderRoute]: typeof artboardLoader
+	[artboardBranchLoaderRoute]: typeof artboardBranchLoader
+	[artboardVersionLoaderRoute]: typeof artboardVersionLoader
 }
 
 export function routeLoaderMetaData<K extends keyof RouteLoaders>(
