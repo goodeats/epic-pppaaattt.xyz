@@ -48,7 +48,7 @@ export const artboardVersionGeneratorBuildService = async ({
 				settings: {
 					width: 1000,
 					height: 1000,
-					backgroundColor: 'FF0000',
+					background: 'FF0000',
 				},
 				layers: [],
 				success: false,
@@ -73,9 +73,9 @@ export const artboardVersionGeneratorBuildService = async ({
 		return {
 			id: version.id,
 			settings: {
-				width: 1000,
-				height: 1000,
-				backgroundColor: 'FF0000',
+				width: version.width,
+				height: version.height,
+				background: version.background,
 			},
 			layers: generatorLayers,
 			success: true,
@@ -88,7 +88,7 @@ export const artboardVersionGeneratorBuildService = async ({
 			settings: {
 				width: 1000,
 				height: 1000,
-				backgroundColor: 'FF0000',
+				background: '000000',
 			},
 			layers: [],
 			success: false,
@@ -191,11 +191,7 @@ const getArtboardVersionContainer = ({
 }: {
 	version: IArtboardVersionWithDesignsAndLayers
 }) => {
-	// migration and data migrate
-	// const { width, height } = version
-	console.log('🚨 update version to have dimensions 🚨')
-	const width = 1920
-	const height = 1080
+	const { width, height } = version
 	return {
 		width,
 		height,

@@ -23,7 +23,7 @@ export interface IArtboardVersionGenerator {
 	settings: {
 		width: number
 		height: number
-		backgroundColor: string
+		background: string
 	}
 	layers: ILayerGenerator[]
 	success: boolean

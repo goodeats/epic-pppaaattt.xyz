@@ -28,7 +28,7 @@ export const CanvasContent = ({
 	generator: IArtboardVersionGenerator
 }) => {
 	// TODO: move artboard width and height to version
-	const { width, height, backgroundColor } = generator.settings
+	const { width, height, background } = generator.settings
 
 	const Canvas = () => {
 		const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -45,7 +45,7 @@ export const CanvasContent = ({
 				ref={canvasRef}
 				width={width}
 				height={height}
-				style={{ backgroundColor }}
+				style={{ backgroundColor: `#${background}` }}
 			/>
 		)
 	}

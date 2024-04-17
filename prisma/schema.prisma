@@ -493,6 +493,12 @@ model ArtboardVersion {
   description String?
   latest   Boolean @default(true)
 
+  // settings
+  // 9:16 aspect ratio (vertical)
+  width       Int @default(1080)
+  height      Int @default(1920)
+  background String @default("ffffff")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

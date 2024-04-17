@@ -7,8 +7,8 @@ export const canvasDrawBackgroundService = ({
 	ctx: CanvasRenderingContext2D
 	generator: IArtboardVersionGenerator
 }) => {
-	const { width, height, backgroundColor } = generator.settings
+	const { width, height, background } = generator.settings
 
-	ctx.fillStyle = `#${backgroundColor}`
+	ctx.fillStyle = `#${background}`
 	ctx.fillRect(0, 0, width, height)
 }

@@ -39,7 +39,7 @@ export const CanvasContent = ({
 		settings: {
 			width,
 			height,
-			backgroundColor,
+			background: backgroundColor,
 		},
 	} as IArtboardVersionGenerator
 
