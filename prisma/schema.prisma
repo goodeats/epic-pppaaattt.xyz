@@ -489,6 +489,7 @@ model Template {
 model ArtboardVersion {
   id        String @id @default(cuid())
   name      String @default("latest")
+  slug       String @default("latest")
   description String?
   latest   Boolean @default(true)
 
@@ -522,11 +523,13 @@ model ArtboardVersion {
   // and only one name 'latest' per branch
   @@unique([branchId, latest])
   @@unique([branchId, name])
+  @@unique([branchId, slug])
 }
 
 model ArtboardBranch {
   id        String @id @default(cuid())
   name      String @default("main")
+  slug      String @default("main")
   description String?
   default   Boolean @default(false)
   active    Boolean @default(true)
@@ -556,6 +559,7 @@ model ArtboardBranch {
   // and only unique name per branch
   @@unique([artboardId, default])
   @@unique([artboardId, name])
+  @@unique([artboardId, slug])
 }
 
 model ArtboardMergeRequest {

@@ -49,7 +49,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => (
-					<p>No project with the name "{params.slug}" exists</p>
+					<p>No project with the name "{params.projectSlug}" exists</p>
 				),
 			}}
 		/>

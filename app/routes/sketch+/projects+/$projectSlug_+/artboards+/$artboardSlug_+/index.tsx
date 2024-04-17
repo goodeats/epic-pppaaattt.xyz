@@ -1,14 +1,12 @@
 import { invariantResponse } from '@epic-web/invariant'
-import { type LoaderFunctionArgs, json } from '@remix-run/node'
+import { type LoaderFunctionArgs, redirect } from '@remix-run/node'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import { getArtboardWithDefaultBranchAndLatestVersion } from '#app/models/artboard/artboard.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 
-export const artboardLoaderRoute =
-	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	console.log('sketch+ projects slug artboards slug route')
+	console.log('sketch+ projects slug artboards slug index route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
@@ -20,9 +18,14 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	})
 	invariantResponse(artboard, 'Artboard not found', { status: 404 })
 
+	const branch = artboard.branches[0]
+	const version = branch.versions[0]
+	const { pathname } = new URL(request.url)
+	const redirectPath = `${pathname}/${branch.slug}/${version.slug}`
+
 	// ensure that data is loaded from the route
 	// redirect on index.tsx
-	return json({ artboard })
+	return redirect(redirectPath)
 }
 
 export function ErrorBoundary() {
