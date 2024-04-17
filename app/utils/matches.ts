@@ -1,5 +1,6 @@
 import { invariant } from '@epic-web/invariant'
 import { type SerializeFrom } from '@remix-run/node'
+import { type UIMatch } from '@remix-run/react'
 import { type MetaMatches } from '@remix-run/react/dist/routeModules'
 import { type loader as rootLoader } from '#app/root.tsx'
 import {
@@ -30,8 +31,18 @@ interface RouteLoaders {
 	[artboardLoaderRoute]: typeof artboardLoader
 }
 
-export function routeLoaderData<K extends keyof RouteLoaders>(
+export function routeLoaderMetaData<K extends keyof RouteLoaders>(
 	matches: MetaMatches,
+	matchId: K,
+): SerializeFrom<RouteLoaders[K]> {
+	const match = matches.find(({ id }) => id === matchId)
+	invariant(match, 'Router loader data not found')
+	return match.data as SerializeFrom<RouteLoaders[K]>
+}
+
+// add a matches for this ??
+export function routeLoaderMatchData<K extends keyof RouteLoaders>(
+	matches: UIMatch[],
 	matchId: K,
 ): SerializeFrom<RouteLoaders[K]> {
 	const match = matches.find(({ id }) => id === matchId)

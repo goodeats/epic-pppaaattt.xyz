@@ -1,17 +1,10 @@
 import { invariantResponse } from '@epic-web/invariant'
-import {
-	json,
-	type MetaFunction,
-	type LoaderFunctionArgs,
-} from '@remix-run/node'
+import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { DashboardContentHeading1 } from '#app/components/layout'
 import { getArtboardWithDesignsAndLayers } from '#app/models/artboard/artboard.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
-import { routeLoaderData } from '#app/utils/meta'
-import { projectLoaderRoute } from '../../route'
-import { artboardLoaderRoute } from './route'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects slug artboards index route')
@@ -38,18 +31,4 @@ export default function SketchProjectArtboardsIndexRoute() {
 			<DashboardContentHeading1>{artboard.name}</DashboardContentHeading1>
 		</div>
 	)
-}
-
-export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
-	const projectData = routeLoaderData(matches, projectLoaderRoute)
-	const projectName = projectData?.project?.name ?? 'Project'
-	const artboardData = routeLoaderData(matches, artboardLoaderRoute)
-	const artboardName = artboardData?.artboard.name ?? params.slug
-	return [
-		{ title: `${artboardName} | ${projectName} | Sketchy | XYZ` },
-		{
-			name: 'description',
-			content: `Sketchy dashboard artboards for Project: ${artboardName}`,
-		},
-	]
 }

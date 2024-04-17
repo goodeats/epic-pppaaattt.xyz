@@ -1,5 +1,9 @@
 import { invariantResponse } from '@epic-web/invariant'
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import {
+	json,
+	type MetaFunction,
+	type LoaderFunctionArgs,
+} from '@remix-run/node'
 import { Outlet, useLoaderData } from '@remix-run/react'
 import {
 	DashboardBody,
@@ -44,4 +48,14 @@ export default function SketchProjectsRoute() {
 			</DashboardContent>
 		</DashboardBody>
 	)
+}
+
+export const meta: MetaFunction = () => {
+	return [
+		{ title: 'Projects | Sketchy | XYZ' },
+		{
+			name: 'description',
+			content: 'Sketchy dashboard for XYZ - Projects',
+		},
+	]
 }

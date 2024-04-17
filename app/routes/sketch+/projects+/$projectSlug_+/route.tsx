@@ -1,9 +1,15 @@
 import { invariantResponse } from '@epic-web/invariant'
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import {
+	json,
+	type MetaFunction,
+	type LoaderFunctionArgs,
+} from '@remix-run/node'
 import { Outlet } from '@remix-run/react'
+import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import { getProjectWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
+import { routeLoaderMetaData } from '#app/utils/matches'
 
 export const projectLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/route'
@@ -24,4 +30,28 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 export default function SketchProjectRoute() {
 	return <Outlet />
+}
+
+export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
+	const projectData = routeLoaderMetaData(matches, projectLoaderRoute)
+	const projectName = projectData?.project.name ?? params.slug
+	return [
+		{ title: `${projectName} | Sketchy | XYZ` },
+		{
+			name: 'description',
+			content: `Sketchy dashboard for Project: ${projectName}`,
+		},
+	]
+}
+
+export function ErrorBoundary() {
+	return (
+		<GeneralErrorBoundary
+			statusHandlers={{
+				404: ({ params }) => (
+					<p>No project with the name "{params.slug}" exists</p>
+				),
+			}}
+		/>
+	)
 }

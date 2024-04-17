@@ -1,9 +1,5 @@
 import { invariantResponse } from '@epic-web/invariant'
-import {
-	json,
-	type MetaFunction,
-	type LoaderFunctionArgs,
-} from '@remix-run/node'
+import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import {
 	DashboardContentHeading1,
@@ -13,9 +9,7 @@ import { DashboardEntityCards } from '#app/components/templates'
 import { getProjectWithArtboards } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
-import { routeLoaderData } from '#app/utils/meta'
 import { useUser } from '#app/utils/user'
-import { projectLoaderRoute } from '../route'
 
 export const artboardstLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/route'
@@ -60,16 +54,4 @@ export default function SketchProjectArtboardsIndexRoute() {
 			/>
 		</div>
 	)
-}
-
-export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
-	const projectData = routeLoaderData(matches, projectLoaderRoute)
-	const projectName = projectData?.project.name ?? params.slug
-	return [
-		{ title: `Artboards | ${projectName} | Sketchy | XYZ` },
-		{
-			name: 'description',
-			content: `Sketchy dashboard artboards for Project: ${projectName}`,
-		},
-	]
 }

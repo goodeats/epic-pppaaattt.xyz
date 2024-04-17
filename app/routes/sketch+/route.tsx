@@ -1,4 +1,8 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import {
+	json,
+	type MetaFunction,
+	type LoaderFunctionArgs,
+} from '@remix-run/node'
 import { Outlet } from '@remix-run/react'
 import { Dashboard } from '#app/components/layout'
 import { requireUserId } from '#app/utils/auth.server'
@@ -17,4 +21,14 @@ export default function SketchRoute() {
 			<Outlet />
 		</Dashboard>
 	)
+}
+
+export const meta: MetaFunction = () => {
+	return [
+		{ title: 'Sketchy | XYZ' },
+		{
+			name: 'description',
+			content: 'Sketchy dashboard for XYZ',
+		},
+	]
 }
