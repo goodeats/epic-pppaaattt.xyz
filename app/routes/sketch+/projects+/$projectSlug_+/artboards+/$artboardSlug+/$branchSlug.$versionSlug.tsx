@@ -5,7 +5,7 @@ import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import { getArtboardVersion } from '#app/models/artboard-version/artboard-version.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
-import { CanvasContent } from './components/canvas-content'
+import { CanvasContent } from './__components/__canvas-content'
 
 export const artboardVersionLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$versionSlug_+/route'
@@ -41,6 +41,7 @@ export function ErrorBoundary() {
 		<GeneralErrorBoundary
 			statusHandlers={{
 				404: ({ params }) => {
+					console.log('version params error boundary', params)
 					return <p>No version with the name "{params.versionSlug}" exists</p>
 				},
 			}}

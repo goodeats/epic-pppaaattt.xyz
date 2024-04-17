@@ -10,15 +10,15 @@ import {
 import {
 	type artboardBranchLoaderRoute,
 	type loader as artboardBranchLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$branchSlug.index'
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/$branchSlug'
 import {
 	type artboardVersionLoaderRoute,
 	type loader as artboardVersionLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$branchSlug_.$versionSlug'
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/$branchSlug.$versionSlug'
 import {
 	type artboardLoaderRoute,
 	type loader as artboardLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/route'
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/route'
 import {
 	type projectLoaderRoute,
 	type loader as projectLoader,
