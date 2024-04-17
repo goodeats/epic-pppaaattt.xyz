@@ -1,8 +1,8 @@
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { PanelBackground } from './__background'
-import { PanelFrame } from './__frame'
+import { PanelArtboardVersionBackground } from './__sidebars.panel.artboard-version._background'
+import { PanelArtboardVersionFrame } from './__sidebars.panel.artboard-version._frame'
 
-export const PanelArtboardVersionDesigns = ({
+export const PanelArtboardVersion = ({
 	version,
 }: {
 	version: IArtboardVersionWithDesignsAndLayers
@@ -12,8 +12,8 @@ export const PanelArtboardVersionDesigns = ({
 
 	return (
 		<div>
-			<PanelFrame version={version} />
-			<PanelBackground version={version} />
+			<PanelArtboardVersionFrame version={version} />
+			<PanelArtboardVersionBackground version={version} />
 			{/* {designTypePanels.map(({ type, designs }) => (
 				<PanelDesignType
 					key={type}

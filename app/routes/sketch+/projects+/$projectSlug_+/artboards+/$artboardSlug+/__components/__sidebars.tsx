@@ -1,7 +1,7 @@
 import { Sidebar } from '#app/components/layout'
 import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { PanelArtboardVersionDesigns } from './panels/artboard-version/__designs'
+import { PanelArtboardVersion } from './__sidebars.panel.artboard-version'
 
 export const SidebarLeft = ({
 	version,
@@ -32,7 +32,7 @@ export const SidebarRight = ({
 		<Sidebar id="sidebar-right">
 			<SidebarTabs tabs={['designs', 'actions']}>
 				<SidebarTabsContent value="designs">
-					<PanelArtboardVersionDesigns version={version} />
+					<PanelArtboardVersion version={version} />
 				</SidebarTabsContent>
 				<SidebarTabsContent value="actions">Actions here</SidebarTabsContent>
 			</SidebarTabs>

@@ -5,21 +5,19 @@ import {
 	SidebarPanelRowContainer,
 } from '#app/components/templates'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { PanelFormArtboardVersionHeight } from '#app/routes/resources+/panel.form.artboard-version.height'
-import { PanelFormArtboardVersionWidth } from '#app/routes/resources+/panel.form.artboard-version.width'
+import { PanelFormArtboardVersionBackground } from '#app/routes/resources+/panel.form.artboard-version.background'
 
-export const PanelFrame = ({
+export const PanelArtboardVersionBackground = ({
 	version,
 }: {
 	version: IArtboardVersionWithDesignsAndLayers
 }) => {
 	return (
 		<SidebarPanel>
-			<SidebarPanelHeader title="Frame" />
+			<SidebarPanelHeader title="Background" />
 			<SidebarPanelRow>
 				<SidebarPanelRowContainer>
-					<PanelFormArtboardVersionWidth version={version} />
-					<PanelFormArtboardVersionHeight version={version} />
+					<PanelFormArtboardVersionBackground version={version} />
 				</SidebarPanelRowContainer>
 			</SidebarPanelRow>
 		</SidebarPanel>
