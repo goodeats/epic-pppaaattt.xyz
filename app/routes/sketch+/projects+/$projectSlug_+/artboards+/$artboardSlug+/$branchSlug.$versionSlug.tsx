@@ -12,7 +12,7 @@ import { getUserBasic } from '#app/models/user/user.get.server'
 import { artboardVersionGeneratorBuildService } from '#app/services/artboard/version/generator/build.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { CanvasContent } from './__components/__canvas-content'
-import { SidebarLeft } from './__components/__sidebars'
+import { SidebarLeft, SidebarRight } from './__components/__sidebars'
 
 export const artboardVersionLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$versionSlug_+/route'
@@ -47,6 +47,7 @@ export default function SketchProjectArtboardBranchRoute() {
 				<DashboardContent>
 					<CanvasContent generator={generator} />
 				</DashboardContent>
+				<SidebarRight version={version} />
 			</DashboardBody>
 		</DashboardContentWrapper>
 	)
