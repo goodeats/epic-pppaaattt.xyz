@@ -12,7 +12,7 @@ const whereArgs = z.object({
 	slug: z.string().optional(),
 })
 
-const designInclude = {
+const includeDesigns = {
 	palette: true,
 	size: true,
 	fill: true,
@@ -24,14 +24,14 @@ const designInclude = {
 }
 
 // no ordering for now since these are linked lists
-const commonInclude = {
+const includeDesignsAndLayers = {
 	designs: {
-		include: designInclude,
+		include: includeDesigns,
 	},
 	layers: {
 		include: {
 			designs: {
-				include: designInclude,
+				include: includeDesigns,
 			},
 		},
 	},
@@ -56,7 +56,7 @@ export const getArtboardsWithDesignsAndLayers = async ({
 	validateQueryWhereArgsPresent(where)
 	const artboards = await prisma.artboard.findMany({
 		where,
-		include: commonInclude,
+		include: includeDesignsAndLayers,
 	})
 	return artboards
 }
@@ -69,7 +69,7 @@ export const getArtboardWithDesignsAndLayers = async ({
 	validateQueryWhereArgsPresent(where)
 	const artboard = await prisma.artboard.findFirst({
 		where,
-		include: commonInclude,
+		include: includeDesignsAndLayers,
 	})
 	return artboard
 }

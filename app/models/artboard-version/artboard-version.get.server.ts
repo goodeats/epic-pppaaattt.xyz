@@ -1,6 +1,9 @@
 import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboardVersion } from './artboard-version.server'
+import {
+	type IArtboardVersionWithDesignsAndLayers,
+	type IArtboardVersion,
+} from './artboard-version.server'
 
 export type queryArtboardVersionWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({
@@ -8,6 +11,31 @@ const whereArgs = z.object({
 	ownerId: z.string().optional(),
 	slug: z.string().optional(),
 })
+
+const includeDesigns = {
+	palette: true,
+	size: true,
+	fill: true,
+	stroke: true,
+	line: true,
+	rotate: true,
+	layout: true,
+	template: true,
+}
+
+// no ordering for now since these are linked lists
+const includeDesignsAndLayers = {
+	designs: {
+		include: includeDesigns,
+	},
+	layers: {
+		include: {
+			designs: {
+				include: includeDesigns,
+			},
+		},
+	},
+}
 
 // TODO: Add schemas for each type of query and parse with zod
 // aka if by id that should be present, if by slug that should be present
@@ -30,6 +58,19 @@ export const getArtboardVersion = async ({
 	validateQueryWhereArgsPresent(where)
 	const artboardVersion = await prisma.artboardVersion.findFirst({
 		where,
+	})
+	return artboardVersion
+}
+
+export const getArtboardVersionWithDesignsAndLayers = async ({
+	where,
+}: {
+	where: queryArtboardVersionWhereArgsType
+}): Promise<IArtboardVersionWithDesignsAndLayers | null> => {
+	validateQueryWhereArgsPresent(where)
+	const artboardVersion = await prisma.artboardVersion.findFirst({
+		where,
+		include: includeDesignsAndLayers,
 	})
 	return artboardVersion
 }

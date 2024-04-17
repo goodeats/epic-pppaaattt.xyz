@@ -2,7 +2,7 @@ import { invariantResponse } from '@epic-web/invariant'
 import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
-import { getArtboardVersion } from '#app/models/artboard-version/artboard-version.get.server'
+import { getArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { CanvasContent } from './__components/__canvas-content'
@@ -17,7 +17,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	// https://sergiodxa.com/tutorials/avoid-waterfalls-of-queries-in-remix-loaders
 	const { versionSlug } = params
-	const version = await getArtboardVersion({
+	const version = await getArtboardVersionWithDesignsAndLayers({
 		where: { slug: versionSlug, ownerId: owner.id },
 	})
 	invariantResponse(version, 'Artboard Version not found', { status: 404 })
