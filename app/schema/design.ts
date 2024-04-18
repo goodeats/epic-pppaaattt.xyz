@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { type ObjectValues } from '#app/utils/typescript-helpers'
 import {
 	type ToggleVisibleArtboardDesignSchema,
 	type DeleteArtboardDesignSchema,
@@ -29,8 +30,14 @@ export const DesignTypeEnum = {
 	TEMPLATE: 'template',
 	// add more design types here
 } as const
-type ObjectValues<T> = T[keyof T]
 export type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
+
+export const DesignParentTypeEnum = {
+	ARTBOARD_VERSION: 'artboardVersion',
+	LAYER: 'layer',
+	// add more design types here
+} as const
+export type designParentTypeEnum = ObjectValues<typeof DesignParentTypeEnum>
 
 export const DesignCloneSourceTypeEnum = {
 	ARTBOARD: 'artboard',

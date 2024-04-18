@@ -5,7 +5,10 @@ import {
 	type whereArgsType,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboardVersion } from './artboard-version/artboard-version.server'
+import {
+	type IArtboardVersionWithDesignsAndLayers,
+	type IArtboardVersion,
+} from './artboard-version/artboard-version.server'
 import { type IArtboard } from './artboard.server'
 import { type IFillCreateOverrides, type IFill } from './fill.server'
 import { type ILayoutCreateOverrides, type ILayout } from './layout.server'
@@ -27,6 +30,7 @@ export type IDesignEntityId =
 	| IArtboard['id']
 	| IDesign['id']
 	| IArtboardVersion['id']
+	| IArtboardVersionWithDesignsAndLayers['id']
 export type IDesignEntityIdOrNull = IDesignEntityId | null | undefined
 
 export interface IDesignCreateOverrides {

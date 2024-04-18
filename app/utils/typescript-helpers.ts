@@ -1,3 +1,7 @@
+// Defines a type that represents the values of an object T.
+// very useful for enums
+export type ObjectValues<T> = T[keyof T]
+
 /**
  * Safely assigns a value to a key on a target object, with an optional null check.
  * @param target The target object to which the value will be assigned.
