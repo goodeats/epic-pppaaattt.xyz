@@ -36,19 +36,13 @@ export async function validateEntitySubmission({
 		schema,
 		strategy,
 	})
-
 	if (submission.intent !== 'submit') {
-		return { response: notSubmissionResponse(submission), isValid: false }
+		return notSubmissionResponse(submission)
 	}
 	if (!submission.value) {
-		return { response: submissionErrorResponse(submission), isValid: false }
+		return submissionErrorResponse(submission)
 	}
-
-	return {
-		submission,
-		response: submissionSuccessResponse(submission),
-		isValid: true,
-	}
+	return submissionSuccessResponse(submission)
 }
 
 export async function parseEntitySubmission({

@@ -13,6 +13,7 @@ import { useHydrated } from 'remix-utils/use-hydrated'
 import { quickToast } from '#app/components/toaster'
 import { Input } from '#app/components/ui/input'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
+import { validateArtboardVersionBackgroundSubmission } from '#app/models/artboard-version/artboard-version.update.server'
 import { ArtboardVersionBackgroundSchema } from '#app/schema/artboard-version'
 import { validateNoJS } from '#app/schema/form-data'
 import { updateArtboardVersionBackgroundService } from '#app/services/artboard/version/update.service'
@@ -31,11 +32,18 @@ export async function action({ request }: DataFunctionArgs) {
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
 
-	const { status, submission } = await updateArtboardVersionBackgroundService({
-		request,
-		userId,
-		formData,
-	})
+	const { status, submission } =
+		await validateArtboardVersionBackgroundSubmission({
+			userId,
+			formData,
+		})
+	let updateSucess = false
+	if (status === 'success') {
+		const { success } = await updateArtboardVersionBackgroundService({
+			...submission.value,
+		})
+		updateSucess = success
+	}
 
 	if (noJS) {
 		throw redirectBack(request, {
@@ -45,7 +53,7 @@ export async function action({ request }: DataFunctionArgs) {
 
 	return json(
 		{ status, submission },
-		{ status: status === 'error' ? 400 : 200 },
+		{ status: status === 'error' || !updateSucess ? 400 : 200 },
 	)
 }
 

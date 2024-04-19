@@ -6,28 +6,37 @@ const widthMaxLength = 50000
 const heightMinLength = 1
 const heightMaxLength = 50000
 
+const widthSchema = z
+	.number()
+	.min(widthMinLength, {
+		message: `Width must be at least ${widthMinLength}`,
+	})
+	.max(widthMaxLength, {
+		message: `Width must be at most ${widthMaxLength}`,
+	})
+
+const heightSchema = z
+	.number()
+	.min(heightMinLength, {
+		message: `Height must be at least ${heightMinLength}`,
+	})
+	.max(heightMaxLength, {
+		message: `Height must be at most ${heightMaxLength}`,
+	})
+
+export type ArtboardVersionUpdateSchemaType =
+	| typeof ArtboardVersionWidthSchema
+	| typeof ArtboardVersionHeightSchema
+	| typeof ArtboardVersionBackgroundSchema
+
 export const ArtboardVersionWidthSchema = z.object({
 	id: z.string(),
-	width: z
-		.number()
-		.min(widthMinLength, {
-			message: `Width must be at least ${widthMinLength}`,
-		})
-		.max(widthMaxLength, {
-			message: `Width must be at most ${widthMaxLength}`,
-		}),
+	width: widthSchema,
 })
 
 export const ArtboardVersionHeightSchema = z.object({
 	id: z.string(),
-	height: z
-		.number()
-		.min(heightMinLength, {
-			message: `Height must be at least ${heightMinLength}`,
-		})
-		.max(heightMaxLength, {
-			message: `Height must be at most ${heightMaxLength}`,
-		}),
+	height: heightSchema,
 })
 
 export const ArtboardVersionBackgroundSchema = z.object({

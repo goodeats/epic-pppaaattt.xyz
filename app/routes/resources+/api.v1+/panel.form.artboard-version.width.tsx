@@ -14,6 +14,7 @@ import { Icon } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
+import { validateArtboardVersionWidthSubmission } from '#app/models/artboard-version/artboard-version.update.server'
 import { ArtboardVersionWidthSchema } from '#app/schema/artboard-version'
 import { validateNoJS } from '#app/schema/form-data'
 import { updateArtboardVersionWidthService } from '#app/services/artboard/version/update.service'
@@ -31,11 +32,17 @@ export async function action({ request }: DataFunctionArgs) {
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
 
-	const { status, submission } = await updateArtboardVersionWidthService({
-		request,
+	const { status, submission } = await validateArtboardVersionWidthSubmission({
 		userId,
 		formData,
 	})
+	let updateSucess = false
+	if (status === 'success') {
+		const { success } = await updateArtboardVersionWidthService({
+			...submission.value,
+		})
+		updateSucess = success
+	}
 
 	if (noJS) {
 		throw redirectBack(request, {
@@ -45,7 +52,7 @@ export async function action({ request }: DataFunctionArgs) {
 
 	return json(
 		{ status, submission },
-		{ status: status === 'error' ? 400 : 200 },
+		{ status: status === 'error' || !updateSucess ? 400 : 200 },
 	)
 }
 
