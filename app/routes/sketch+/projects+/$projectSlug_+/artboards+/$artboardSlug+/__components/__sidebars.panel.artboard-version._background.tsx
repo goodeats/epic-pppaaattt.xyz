@@ -5,7 +5,7 @@ import {
 	SidebarPanelRowContainer,
 } from '#app/components/templates'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { PanelFormArtboardVersionBackground } from '#app/routes/resources+/panel.form.artboard-version.background'
+import { PanelFormArtboardVersionBackground } from '#app/routes/resources+/api.v1+/panel.form.artboard-version.background'
 
 export const PanelArtboardVersionBackground = ({
 	version,

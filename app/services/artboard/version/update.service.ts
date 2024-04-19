@@ -8,13 +8,14 @@ import {
 } from '#app/schema/artboard-version'
 import { ValidateArtboardVersionSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import {
+	notSubmissionResponse,
+	parseEntitySubmission,
 	submissionErrorResponse,
-	validateEntitySubmission,
+	submissionSuccessResponse,
 } from '#app/utils/conform-utils'
 import { findFirstArtboardVersionInstance } from '#app/utils/prisma-extensions-artboard-version'
 import { updateProperty } from '#app/utils/typescript-helpers'
 
-// strategy pattern function
 const getArtboardVersion = async ({ id }: { id: IArtboardVersion['id'] }) => {
 	return await findFirstArtboardVersionInstance({
 		where: { id },
@@ -32,23 +33,37 @@ export async function updateArtboardVersionProperty({
 }) {
 	const strategy = new ValidateArtboardVersionSubmissionStrategy()
 
-	const { submission, isValid, response } = await validateEntitySubmission({
+	const submission = await parseEntitySubmission({
 		userId,
 		formData,
 		schema: propertySchema,
 		strategy,
 	})
-	if (!isValid || !submission) return response
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
 
 	// make changes if response is success
 	const artboardVersion = await getArtboardVersion({ id: submission.value.id })
 	if (!artboardVersion) return submissionErrorResponse(submission)
 
-	updateProperty(artboardVersion, propertyName, submission.value[propertyName])
-	artboardVersion.updatedAt = new Date()
-	await artboardVersion.save()
+	try {
+		updateProperty(
+			artboardVersion,
+			propertyName,
+			submission.value[propertyName],
+		)
+		artboardVersion.updatedAt = new Date()
+		await artboardVersion.save()
 
-	return response
+		return submissionSuccessResponse(submission)
+	} catch (error) {
+		console.error(error)
+		return submissionErrorResponse(submission)
+	}
 }
 
 export async function updateArtboardVersionWidthService(

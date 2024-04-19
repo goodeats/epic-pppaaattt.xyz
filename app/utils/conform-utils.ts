@@ -1,37 +1,16 @@
 import { type Submission } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
-import { type TypedResponse, json } from '@remix-run/node'
 import { z } from 'zod'
 import { type IValidateSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 
-type NotSubmissionResponseType = TypedResponse<{
-	readonly status: 'idle'
-	readonly submission: Submission
-}>
+export const notSubmissionResponse = (submission: Submission) =>
+	({ status: 'idle', submission }) as const
 
-export const notSubmissionResponse = (
-	submission: Submission,
-): NotSubmissionResponseType => json({ status: 'idle', submission } as const)
+export const submissionErrorResponse = (submission: Submission) =>
+	({ status: 'error', submission }) as const
 
-type SubmissionErrorResponseType = TypedResponse<{
-	readonly status: 'error'
-	readonly submission: Submission
-}>
-
-export const submissionErrorResponse = (
-	submission: Submission,
-): SubmissionErrorResponseType =>
-	json({ status: 'error', submission } as const, { status: 400 })
-
-type SubmissionSuccessResponseType = TypedResponse<{
-	readonly status: 'success'
-	readonly submission: Submission
-}>
-
-export const submissionSuccessResponse = (
-	submission: Submission,
-): SubmissionSuccessResponseType =>
-	json({ status: 'success', submission } as const, { status: 200 })
+export const submissionSuccessResponse = (submission: Submission) =>
+	({ status: 'success', submission }) as const
 
 export const addNotFoundIssue = (entity: string) => {
 	return {
@@ -50,14 +29,7 @@ export async function validateEntitySubmission({
 	formData: FormData
 	schema: z.ZodSchema<any>
 	strategy: IValidateSubmissionStrategy
-}): Promise<{
-	submission?: Submission
-	response:
-		| NotSubmissionResponseType
-		| SubmissionErrorResponseType
-		| SubmissionSuccessResponseType
-	isValid: boolean
-}> {
+}) {
 	const submission = await parseEntitySubmission({
 		userId,
 		formData,
@@ -89,7 +61,7 @@ export async function parseEntitySubmission({
 	formData: FormData
 	schema: z.ZodSchema<any>
 	strategy: IValidateSubmissionStrategy
-}): Promise<any> {
+}) {
 	return await parse(formData, {
 		schema: schema.superRefine(async (data, ctx) => {
 			strategy.validateFormDataEntity({ userId, data, ctx })

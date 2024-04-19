@@ -8,12 +8,15 @@ import {
 import { useActionData, useFetcher } from '@remix-run/react'
 import { type FocusEvent } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
+import { redirectBack } from 'remix-utils/redirect-back'
+import { useHydrated } from 'remix-utils/use-hydrated'
 import { Icon } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { ArtboardVersionHeightSchema } from '#app/schema/artboard-version'
-import { updateArtboardVersionHeightService } from '#app/services/artboard/version/update.service'
+import { ArtboardVersionWidthSchema } from '#app/schema/artboard-version'
+import { validateNoJS } from '#app/schema/form-data'
+import { updateArtboardVersionWidthService } from '#app/services/artboard/version/update.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { useIsPending } from '#app/utils/misc'
 
@@ -22,23 +25,42 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	return json({})
 }
 
+const actionPath = '/resources/api/v1/panel/form/artboard-version/width'
 export async function action({ request }: DataFunctionArgs) {
 	const userId = await requireUserId(request)
 	const formData = await request.formData()
-	return await updateArtboardVersionHeightService({ request, userId, formData })
+	const noJS = validateNoJS({ formData })
+
+	const { status, submission } = await updateArtboardVersionWidthService({
+		request,
+		userId,
+		formData,
+	})
+
+	if (noJS) {
+		throw redirectBack(request, {
+			fallback: '/',
+		})
+	}
+
+	return json(
+		{ status, submission },
+		{ status: status === 'error' ? 400 : 200 },
+	)
 }
 
-export const PanelFormArtboardVersionHeight = ({
+export const PanelFormArtboardVersionWidth = ({
 	version,
 }: {
 	version: IArtboardVersionWithDesignsAndLayers
 }) => {
-	const heightFetcher = useFetcher<typeof loader>()
+	const widthFetcher = useFetcher<typeof loader>()
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
+	let isHydrated = useHydrated()
 	const [form, fields] = useForm({
-		id: 'panel-form-artboard-version-height',
-		constraint: getFieldsetConstraint(ArtboardVersionHeightSchema),
+		id: 'panel-form-artboard-version-width',
+		constraint: getFieldsetConstraint(ArtboardVersionWidthSchema),
 		lastSubmission: actionData?.submission,
 		defaultValue: {
 			...version,
@@ -46,31 +68,32 @@ export const PanelFormArtboardVersionHeight = ({
 	})
 
 	const handleSubmit = (event: FocusEvent<HTMLInputElement>) => {
-		heightFetcher.submit(event.currentTarget.form, {
+		widthFetcher.submit(event.currentTarget.form, {
 			method: 'POST',
-			action: '/resources/panel/form/artboard-version/height',
+			action: actionPath,
 		})
 	}
 
 	return (
-		<heightFetcher.Form method="POST" {...form.props}>
+		<widthFetcher.Form method="POST" action={actionPath} {...form.props}>
 			<AuthenticityTokenInput />
 
+			<input type="hidden" name="no-js" value={String(!isHydrated)} />
 			<input type="hidden" name="id" value={version.id} />
 			<div className="flex w-full items-center space-x-2">
-				<Label htmlFor={fields.height.id} className="w-5 flex-shrink-0">
-					<Icon name="height" className="h-5 w-5" />
+				<Label htmlFor={fields.width.id} className="w-5 flex-shrink-0">
+					<Icon name="width" className="h-5 w-5" />
 				</Label>
 				<Input
 					type="number"
 					className="flex h-8"
 					onBlur={e => handleSubmit(e)}
 					disabled={isPending}
-					{...conform.input(fields.height, {
+					{...conform.input(fields.width, {
 						ariaAttributes: true,
 					})}
 				/>
 			</div>
-		</heightFetcher.Form>
+		</widthFetcher.Form>
 	)
 }
