@@ -1,9 +1,12 @@
 import { type User } from '@prisma/client'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type IArtboard } from '#app/models/artboard.server'
-import { createDesign } from '#app/models/design/design.create.server'
 import {
-	findFirstDesign,
+	createArtboardVersionDesign,
+	createDesign,
+} from '#app/models/design/design.create.server'
+import { getDesign } from '#app/models/design/design.get.server'
+import {
 	type IDesign,
 	type IDesignCreateOverrides,
 	type IDesignEntityId,
@@ -11,7 +14,6 @@ import {
 import { type ILayer } from '#app/models/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { ArtboardDesignDataCreateSchema } from '#app/schema/design-artboard'
-import { ArtboardVersionDesignDataCreateSchema } from '#app/schema/design-artboard-version'
 import { LayerDesignDataCreateSchema } from '#app/schema/design-layer'
 import { prisma } from '#app/utils/db.server'
 
@@ -40,7 +42,7 @@ export class LayerCreateDesignStrategy implements ICreateDesignStrategy {
 		targetEntityId: ILayer['id']
 		type: designTypeEnum
 	}): Promise<IDesign | null> {
-		return await findFirstDesign({
+		return await getDesign({
 			where: { type, layerId: targetEntityId, nextId: null },
 		})
 	}
@@ -63,8 +65,7 @@ export class LayerCreateDesignStrategy implements ICreateDesignStrategy {
 			...designOverrides,
 		})
 
-		const butthead = await createDesign({ data })
-		return butthead
+		return await createDesign({ data })
 	}
 
 	async visibleDesignsByTypeCount({
@@ -91,7 +92,7 @@ export class ArtboardVersionCreateDesignStrategy
 		targetEntityId: IArtboardVersion['id']
 		type: designTypeEnum
 	}): Promise<IDesign | null> {
-		return await findFirstDesign({
+		return await getDesign({
 			where: { type, artboardVersionId: targetEntityId, nextId: null },
 		})
 	}
@@ -107,13 +108,15 @@ export class ArtboardVersionCreateDesignStrategy
 		type: designTypeEnum
 		designOverrides: IDesignCreateOverrides
 	}): Promise<IDesign | null> {
-		const data = ArtboardVersionDesignDataCreateSchema.parse({
-			type,
+		const data = {
 			ownerId: userId,
+			type,
 			artboardVersionId: targetEntityId,
 			...designOverrides,
+		}
+		return await createArtboardVersionDesign({
+			data,
 		})
-		return await prisma.design.create({ data })
 	}
 
 	async visibleDesignsByTypeCount({
@@ -138,7 +141,7 @@ export class ArtboardCreateDesignStrategy implements ICreateDesignStrategy {
 		targetEntityId: IArtboard['id']
 		type: designTypeEnum
 	}): Promise<IDesign | null> {
-		return await findFirstDesign({
+		return await getDesign({
 			where: { type, artboardId: targetEntityId, nextId: null },
 		})
 	}

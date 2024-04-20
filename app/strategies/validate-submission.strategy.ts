@@ -30,3 +30,23 @@ export class ValidateArtboardVersionSubmissionStrategy
 		if (!artboardVersion) ctx.addIssue(addNotFoundIssue('Artboard'))
 	}
 }
+
+export class ValidateArtboardVersionParentSubmissionStrategy
+	implements IValidateSubmissionStrategy
+{
+	async validateFormDataEntity({
+		userId,
+		data,
+		ctx,
+	}: {
+		userId: User['id']
+		data: any
+		ctx: any
+	}): Promise<void> {
+		const { artboardVersionId } = data
+		const artboardVersion = await getArtboardVersion({
+			where: { id: artboardVersionId, ownerId: userId },
+		})
+		if (!artboardVersion) ctx.addIssue(addNotFoundIssue('Artboard'))
+	}
+}

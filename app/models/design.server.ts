@@ -174,10 +174,11 @@ export const findFirstDesign = async ({
 	where,
 	select,
 }: findDesignArgsType): Promise<IDesign | null> => {
-	return await prisma.design.findFirst({
+	const design = await prisma.design.findFirst({
 		where,
 		select,
 	})
+	return design
 }
 
 export const findDesignByIdAndOwner = async ({

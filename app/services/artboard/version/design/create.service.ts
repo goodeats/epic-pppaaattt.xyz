@@ -27,7 +27,8 @@ export const artboardVersionDesignCreateService = async ({
 		const strategy = new ArtboardVersionCreateDesignStrategy()
 		const updateSelectedDesignStrategy =
 			new ArtboardVersionUpdateSelectedDesignStrategy()
-		return await designCreateService({
+
+		const createdArtboardVersionDesign = await designCreateService({
 			userId,
 			targetEntityId: artboardVersionId,
 			type,
@@ -36,6 +37,7 @@ export const artboardVersionDesignCreateService = async ({
 			strategy,
 			updateSelectedDesignStrategy,
 		})
+		return createdArtboardVersionDesign
 	} catch (error) {
 		console.log('artboardVersionDesignCreateService error:', error)
 		const errorType = error instanceof Error

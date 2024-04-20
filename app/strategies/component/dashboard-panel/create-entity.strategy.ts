@@ -15,6 +15,7 @@ export class DashboardPanelCreateArtboardVersionDesignTypeStrategy
 	implements IDashboardPanelCreateEntityStrategy
 {
 	schema: NewDesignSchemaType = NewArtboardVersionDesignSchema
-	intent: panelEntityNewIntent = PANEL_ENTITY_NEW_INTENT.createDesignType
+	intent: panelEntityNewIntent =
+		PANEL_ENTITY_NEW_INTENT.createArtboardVersionDesignType
 	iconText = 'Add New Design'
 }
