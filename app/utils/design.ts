@@ -25,6 +25,7 @@ import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import { DashboardPanelUpdateDesignTypeFillValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.fill'
 import { DashboardPanelUpdateDesignTypeLayoutValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.layout'
+import { DashboardPanelUpdateDesignTypeLineValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.line'
 import { DashboardPanelUpdateDesignTypePaletteValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.palette'
 import { DashboardPanelUpdateDesignTypeSizeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.size'
 import { DashboardPanelUpdateDesignTypeStrokeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.stroke'
@@ -389,7 +390,7 @@ export const designsByTypeToPanelArray = ({
 		designSizes,
 		designFills,
 		designStrokes,
-		// designLines,
+		designLines,
 		// designRotates,
 		designLayouts,
 		// designTemplates,
@@ -405,6 +406,8 @@ export const designsByTypeToPanelArray = ({
 		new DashboardPanelUpdateDesignTypeFillValuesStrategy()
 	const strategyStrokeEntityValues =
 		new DashboardPanelUpdateDesignTypeStrokeValuesStrategy()
+	const strategyLineEntityValues =
+		new DashboardPanelUpdateDesignTypeLineValuesStrategy()
 
 	return [
 		{
@@ -432,7 +435,11 @@ export const designsByTypeToPanelArray = ({
 			designs: designStrokes,
 			strategyEntityValues: strategyStrokeEntityValues,
 		},
-		// { type: DesignTypeEnum.LINE, designs: designLines, strategyEntityValues },
+		{
+			type: DesignTypeEnum.LINE,
+			designs: designLines,
+			strategyEntityValues: strategyLineEntityValues,
+		},
 		// {
 		// 	type: DesignTypeEnum.ROTATE,
 		// 	designs: designRotates,

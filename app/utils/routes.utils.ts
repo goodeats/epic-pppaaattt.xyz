@@ -56,6 +56,18 @@ import {
 	action as apiV1DesignTypeLayoutStyleAction,
 } from '#app/routes/resources+/api.v1+/design.type.layout.update.style'
 import {
+	loader as apiV1DesignTypeLineBasisLoader,
+	action as apiV1DesignTypeLineBasisAction,
+} from '#app/routes/resources+/api.v1+/design.type.line.update.basis'
+import {
+	loader as apiV1DesignTypeLineFormatLoader,
+	action as apiV1DesignTypeLineFormatAction,
+} from '#app/routes/resources+/api.v1+/design.type.line.update.format'
+import {
+	loader as apiV1DesignTypeLineWidthLoader,
+	action as apiV1DesignTypeLineWidthAction,
+} from '#app/routes/resources+/api.v1+/design.type.line.update.width'
+import {
 	loader as apiV1DesignTypePaletteValueLoader,
 	action as apiV1DesignTypePaletteValueAction,
 } from '#app/routes/resources+/api.v1+/design.type.palette.update.value'
@@ -143,6 +155,13 @@ export const Routes = {
 								STYLE: `${pathBase}/design/type/stroke/update/style`,
 							},
 						},
+						LINE: {
+							UPDATE: {
+								BASIS: `${pathBase}/design/type/line/update/basis`,
+								FORMAT: `${pathBase}/design/type/line/update/format`,
+								WIDTH: `${pathBase}/design/type/line/update/width`,
+							},
+						},
 					},
 				},
 			},
@@ -193,6 +212,12 @@ export interface ApiRouteLoaders {
 		.BASIS]: typeof apiV1DesignTypeStrokeBasisLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
 		.STYLE]: typeof apiV1DesignTypeStrokeStyleLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
+		.BASIS]: typeof apiV1DesignTypeLineBasisLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
+		.FORMAT]: typeof apiV1DesignTypeLineFormatLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
+		.WIDTH]: typeof apiV1DesignTypeLineWidthLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -238,6 +263,12 @@ export const loaders: ApiRouteLoaders = {
 		apiV1DesignTypeStrokeBasisLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE.STYLE]:
 		apiV1DesignTypeStrokeStyleLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE.BASIS]:
+		apiV1DesignTypeLineBasisLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE.FORMAT]:
+		apiV1DesignTypeLineFormatLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE.WIDTH]:
+		apiV1DesignTypeLineWidthLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -291,6 +322,12 @@ export interface ApiRouteActions {
 		.BASIS]: typeof apiV1DesignTypeStrokeBasisAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
 		.STYLE]: typeof apiV1DesignTypeStrokeStyleAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
+		.WIDTH]: typeof apiV1DesignTypeLineWidthAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
+		.BASIS]: typeof apiV1DesignTypeLineBasisAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
+		.FORMAT]: typeof apiV1DesignTypeLineFormatAction
 }
 
 export const actions: ApiRouteActions = {
@@ -336,6 +373,12 @@ export const actions: ApiRouteActions = {
 		apiV1DesignTypeStrokeBasisAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE.STYLE]:
 		apiV1DesignTypeStrokeStyleAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE.WIDTH]:
+		apiV1DesignTypeLineWidthAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE.BASIS]:
+		apiV1DesignTypeLineBasisAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE.FORMAT]:
+		apiV1DesignTypeLineFormatAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(
