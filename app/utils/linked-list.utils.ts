@@ -8,6 +8,16 @@ interface ILinkedItem {
 }
 
 export const orderLinkedItems = <T extends ILinkedItem>(items: T[]): T[] => {
+	const heads = items.filter(item => !item.prevId)
+	if (heads.length > 1) {
+		console.warn('Multiple heads found in the linked list.')
+	}
+
+	const tails = items.filter(item => !item.nextId)
+	if (tails.length > 1) {
+		console.warn('Multiple tails found in the linked list.')
+	}
+
 	// Step 1: Find the head of the list
 	const head = items.find(item => !item.prevId)
 	if (!head) return []
