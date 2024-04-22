@@ -43,6 +43,10 @@ import {
 	loader as apiV1DesignTypeLayoutStyleLoader,
 	action as apiV1DesignTypeLayoutStyleAction,
 } from '#app/routes/resources+/api.v1+/design.type.layout.update.style'
+import {
+	loader as apiV1DesignTypePaletteValueLoader,
+	action as apiV1DesignTypePaletteValueAction,
+} from '#app/routes/resources+/api.v1+/design.type.palette.update.value'
 import { type ExtractStringValues } from './typescript-helpers'
 
 export type RoutePath = ExtractStringValues<typeof Routes>
@@ -77,6 +81,11 @@ export const Routes = {
 								STYLE: `${pathBase}/design/type/layout/update/style`,
 							},
 						},
+						PALETTE: {
+							UPDATE: {
+								VALUE: `${pathBase}/design/type/palette/update/value`,
+							},
+						},
 					},
 				},
 			},
@@ -107,6 +116,8 @@ export interface ApiRouteLoaders {
 		.COLUMNS]: typeof apiV1DesignTypeLayoutColumnsLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
 		.STYLE]: typeof apiV1DesignTypeLayoutStyleLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.PALETTE.UPDATE
+		.VALUE]: typeof apiV1DesignTypePaletteValueLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -132,6 +143,8 @@ export const loaders: ApiRouteLoaders = {
 		apiV1DesignTypeLayoutColumnsLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.STYLE]:
 		apiV1DesignTypeLayoutStyleLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.PALETTE.UPDATE.VALUE]:
+		apiV1DesignTypePaletteValueLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -165,6 +178,8 @@ export interface ApiRouteActions {
 		.COLUMNS]: typeof apiV1DesignTypeLayoutColumnsAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
 		.STYLE]: typeof apiV1DesignTypeLayoutStyleAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.PALETTE.UPDATE
+		.VALUE]: typeof apiV1DesignTypePaletteValueAction
 }
 
 export const actions: ApiRouteActions = {
@@ -190,6 +205,8 @@ export const actions: ApiRouteActions = {
 		apiV1DesignTypeLayoutColumnsAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.STYLE]:
 		apiV1DesignTypeLayoutStyleAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.PALETTE.UPDATE.VALUE]:
+		apiV1DesignTypePaletteValueAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(

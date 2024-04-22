@@ -24,6 +24,7 @@ import { findFirstTemplateInDesignArray } from '#app/models/template.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import { DashboardPanelUpdateDesignTypeLayoutValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.layout'
+import { DashboardPanelUpdateDesignTypePaletteValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.palette'
 import { orderLinkedItems } from './linked-list.utils'
 import { safelyAssignValue } from './typescript-helpers'
 
@@ -382,47 +383,49 @@ export const designsByTypeToPanelArray = ({
 }[] => {
 	const {
 		designPalettes,
-		designSizes,
-		designFills,
-		designStrokes,
-		designLines,
-		designRotates,
+		// designSizes,
+		// designFills,
+		// designStrokes,
+		// designLines,
+		// designRotates,
 		designLayouts,
-		designTemplates,
+		// designTemplates,
 	} = designs
 
-	const strategyEntityValues =
+	const strategyLayoutEntityValues =
 		new DashboardPanelUpdateDesignTypeLayoutValuesStrategy()
+	const strategyPaletteEntityValues =
+		new DashboardPanelUpdateDesignTypePaletteValuesStrategy()
 
 	return [
 		{
 			type: DesignTypeEnum.LAYOUT,
 			designs: designLayouts,
-			strategyEntityValues,
+			strategyEntityValues: strategyLayoutEntityValues,
 		},
 		{
 			type: DesignTypeEnum.PALETTE,
 			designs: designPalettes,
-			strategyEntityValues,
+			strategyEntityValues: strategyPaletteEntityValues,
 		},
-		{ type: DesignTypeEnum.SIZE, designs: designSizes, strategyEntityValues },
-		{ type: DesignTypeEnum.FILL, designs: designFills, strategyEntityValues },
-		{
-			type: DesignTypeEnum.STROKE,
-			designs: designStrokes,
-			strategyEntityValues,
-		},
-		{ type: DesignTypeEnum.LINE, designs: designLines, strategyEntityValues },
-		{
-			type: DesignTypeEnum.ROTATE,
-			designs: designRotates,
-			strategyEntityValues,
-		},
-		{
-			type: DesignTypeEnum.TEMPLATE,
-			designs: designTemplates,
-			strategyEntityValues,
-		},
+		// { type: DesignTypeEnum.SIZE, designs: designSizes, strategyEntityValues },
+		// { type: DesignTypeEnum.FILL, designs: designFills, strategyEntityValues },
+		// {
+		// 	type: DesignTypeEnum.STROKE,
+		// 	designs: designStrokes,
+		// 	strategyEntityValues,
+		// },
+		// { type: DesignTypeEnum.LINE, designs: designLines, strategyEntityValues },
+		// {
+		// 	type: DesignTypeEnum.ROTATE,
+		// 	designs: designRotates,
+		// 	strategyEntityValues,
+		// },
+		// {
+		// 	type: DesignTypeEnum.TEMPLATE,
+		// 	designs: designTemplates,
+		// 	strategyEntityValues,
+		// },
 	]
 }
 

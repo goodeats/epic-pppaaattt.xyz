@@ -1,10 +1,14 @@
 import { EntityFormType } from '#app/schema/entity'
-import { type defaultValueNumber } from '#app/schema/zod-helpers'
+import {
+	type defaultValueString,
+	type defaultValueNumber,
+} from '#app/schema/zod-helpers'
 import {
 	type IPanelEntityFormArgsOptionalMultiple,
 	type IPanelEntityFormArgs,
 	type IPanelEntityFormArgsMultiple,
 } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
+import { FormFetcherHex } from '../form/fetcher/hex'
 import { FormFetcherNumber } from '../form/fetcher/number'
 import { FormFetcherSelect } from '../form/fetcher/select'
 
@@ -17,9 +21,12 @@ export const PanelEntityForm = ({
 }) => {
 	switch (panelEntityForm.formType) {
 		case EntityFormType.HEX:
-			return null
-		// <FormFetcherHex
-		// />
+			return (
+				<PanelEntityFormHex
+					panelEntityForm={panelEntityForm as IPanelEntityFormArgs}
+					fromPopover={fromPopover}
+				/>
+			)
 		case EntityFormType.NUMBER:
 			return (
 				<PanelEntityFormNumber
@@ -67,7 +74,30 @@ export const PanelEntityFormNumber = ({
 		parentId={panelEntityForm.parentId}
 		parentTypeId={panelEntityForm.parentTypeId}
 		route={panelEntityForm.route}
-		formId={`${panelEntityForm.formId}${fromPopover && '-popover'}`}
+		formId={`${panelEntityForm.formId}-${panelEntityForm.entityId}-${
+			fromPopover ? '-popover' : ''
+		}`}
+		schema={panelEntityForm.schema}
+		// label={panelEntityForm.label}
+	/>
+)
+
+export const PanelEntityFormHex = ({
+	panelEntityForm,
+	fromPopover,
+}: {
+	panelEntityForm: IPanelEntityFormArgs
+	fromPopover?: boolean
+}) => (
+	<FormFetcherHex
+		entityId={panelEntityForm.entityId}
+		defaultValue={panelEntityForm.defaultValue as defaultValueString}
+		parentId={panelEntityForm.parentId}
+		parentTypeId={panelEntityForm.parentTypeId}
+		route={panelEntityForm.route}
+		formId={`${panelEntityForm.formId}-${panelEntityForm.entityId}-${
+			fromPopover ? '-popover' : ''
+		}`}
 		schema={panelEntityForm.schema}
 		// label={panelEntityForm.label}
 	/>
@@ -88,7 +118,9 @@ export const PanelEntityFormSelect = ({
 			parentId={panelEntityForm.parentId}
 			parentTypeId={panelEntityForm.parentTypeId}
 			route={panelEntityForm.route}
-			formId={`${panelEntityForm.formId}${fromPopover && '-popover'}`}
+			formId={`${panelEntityForm.formId}-${panelEntityForm.entityId}-${
+				fromPopover ? '-popover' : ''
+			}`}
 			schema={panelEntityForm.schema}
 			// label={panelEntityForm.label}
 		/>

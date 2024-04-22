@@ -6,7 +6,11 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { type z } from 'zod'
 import { Input } from '#app/components/ui/input'
-import { type IEntityId } from '#app/schema/entity'
+import {
+	type IEntityParentId,
+	type IEntityId,
+	type entityParentIdTypeEnum,
+} from '#app/schema/entity'
 import { type defaultValueString } from '#app/schema/zod-helpers'
 import { useDebounce, useIsPending } from '#app/utils/misc'
 import {
@@ -18,12 +22,16 @@ import {
 export const FormFetcherHex = ({
 	entityId,
 	defaultValue,
+	parentId,
+	parentTypeId,
 	route,
 	formId,
 	schema,
 }: {
 	entityId: IEntityId
 	defaultValue: defaultValueString
+	parentId?: IEntityParentId
+	parentTypeId?: entityParentIdTypeEnum
 	route: RoutePath
 	formId: string
 	schema: z.ZodSchema<any>
@@ -82,6 +90,7 @@ export const FormFetcherHex = ({
 
 			<input type="hidden" name="no-js" value={String(!isHydrated)} />
 			<input type="hidden" name="id" value={entityId} />
+			{parentId && <input type="hidden" name={parentTypeId} value={parentId} />}
 
 			<Input
 				maxLength={6}
