@@ -10,6 +10,7 @@ import {
 	type IEntity,
 } from '#app/schema/entity'
 import {
+	EditDesignLayoutColumnsSchema,
 	EditDesignLayoutCountSchema,
 	EditDesignLayoutRowsSchema,
 } from '#app/schema/layout'
@@ -77,7 +78,7 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 			label: 'Count',
 		}
 
-		const layoutRowArgs = {
+		const layoutRowsArgs = {
 			...sharedntityFormArgs,
 			route: baseRoute.ROWS,
 			formType: EntityFormType.NUMBER,
@@ -87,6 +88,16 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 			label: 'Rows',
 		}
 
-		return [layoutCountArgs, layoutRowArgs]
+		const layoutColumnsArgs = {
+			...sharedntityFormArgs,
+			route: baseRoute.COLUMNS,
+			formType: EntityFormType.NUMBER,
+			defaultValue: { columns: layout.columns },
+			formId: 'design-type-update-layout-columns',
+			schema: EditDesignLayoutColumnsSchema,
+			label: 'Columns',
+		}
+
+		return [layoutCountArgs, layoutRowsArgs, layoutColumnsArgs]
 	}
 }
