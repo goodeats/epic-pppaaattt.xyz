@@ -25,7 +25,12 @@ export const layerDesignToggleVisibleService = async ({
 			updateSelectedDesignStrategy,
 		})
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('layerDesignToggleVisibleService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }

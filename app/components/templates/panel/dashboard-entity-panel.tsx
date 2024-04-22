@@ -6,6 +6,7 @@ import {
 } from '#app/schema/design'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
+import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
 import {
 	SidebarPanel,
 	SidebarPanelRow,
@@ -26,6 +27,7 @@ export const DashboardEntityPanel = ({
 	parent,
 	entities,
 	strategyEntityNew,
+	strategyToggleVisible,
 	strategyEntityDelete,
 }: {
 	type: PanelEntityType
@@ -33,6 +35,7 @@ export const DashboardEntityPanel = ({
 	parent: PanelEntityParent
 	entities: PanelEntities
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
+	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
 	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 }) => {
 	return (
@@ -51,6 +54,7 @@ export const DashboardEntityPanel = ({
 						parentTypeId={parentTypeId}
 						parent={parent}
 						type={type}
+						strategyToggleVisible={strategyToggleVisible}
 						strategyEntityDelete={strategyEntityDelete}
 					/>
 				)
@@ -64,12 +68,14 @@ export const PanelEntityRow = ({
 	parentTypeId,
 	parent,
 	type,
+	strategyToggleVisible,
 	strategyEntityDelete,
 }: {
 	entity: PanelEntity
 	parentTypeId: designParentTypeIdEnum
 	parent: PanelEntityParent
 	type: PanelEntityType
+	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
 	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 }) => {
 	// will want count, index of row
@@ -84,6 +90,7 @@ export const PanelEntityRow = ({
 					entity={entity}
 					parentTypeId={parentTypeId}
 					parent={parent}
+					strategyToggleVisible={strategyToggleVisible}
 					strategyEntityDelete={strategyEntityDelete}
 				/>
 			</SidebarPanelRowContainer>
@@ -95,18 +102,28 @@ export const PanelEntityRowActions = ({
 	entity,
 	parentTypeId,
 	parent,
+	strategyToggleVisible,
 	strategyEntityDelete,
 }: {
 	entity: PanelEntity
 	parentTypeId: designParentTypeIdEnum
 	parent: PanelEntityParent
+	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
 	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 }) => {
 	// will want count, index of row
 	return (
 		<SidebarPanelRowActionsContainer>
-			<div>yo</div>
-
+			<FormFetcherIcon
+				entityId={entity.id}
+				parentTypeId={parentTypeId}
+				parentId={parent.id}
+				route={strategyToggleVisible.route}
+				formId={strategyToggleVisible.formId}
+				schema={strategyToggleVisible.schema}
+				icon={entity.visible ? 'eye-open' : 'eye-closed'}
+				iconText={strategyToggleVisible.iconText}
+			/>
 			<FormFetcherIcon
 				entityId={entity.id}
 				parentTypeId={parentTypeId}

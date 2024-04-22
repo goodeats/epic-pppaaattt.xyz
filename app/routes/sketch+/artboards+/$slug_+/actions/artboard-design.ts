@@ -112,14 +112,14 @@ export async function artboardDesignToggleVisibilityAction({
 	if (!isValid || !submission) return response
 
 	const { id, artboardId, updateSelectedDesignId } = submission.value
-	const { success, error } = await artboardDesignToggleVisibleService({
+	const { success } = await artboardDesignToggleVisibleService({
 		userId,
 		id,
 		artboardId,
 		updateSelectedDesignId,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }

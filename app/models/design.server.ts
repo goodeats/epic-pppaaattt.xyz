@@ -248,16 +248,3 @@ export const updateDesignNodes = ({
 		data: { prevId, nextId },
 	})
 }
-
-export const updateDesignVisible = ({
-	id,
-	visible,
-}: {
-	id: IDesign['id']
-	visible: boolean
-}) => {
-	return prisma.design.update({
-		where: { id },
-		data: { visible },
-	})
-}

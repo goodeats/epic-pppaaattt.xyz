@@ -47,7 +47,7 @@ export const FormFetcherIcon = ({
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
-		id: formId,
+		id: `${formId}-${parentId || 'parent'}-${entityId || 'new'}`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission: actionData?.submission,
 		onSubmit: async (event, { formData }) => {

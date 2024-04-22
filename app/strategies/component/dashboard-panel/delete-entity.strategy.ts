@@ -22,5 +22,5 @@ export class DashboardPanelDeleteArtboardVersionDesignTypeStrategy
 		DesignParentTypeIdEnum.ARTBOARD_VERSION_ID
 	formId: string = 'artboard-version-design-delete'
 	schema: DeleteDesignSchemaType = DeleteArtboardVersionDesignSchema
-	iconText = 'Add New Design'
+	iconText = 'Delete Design'
 }

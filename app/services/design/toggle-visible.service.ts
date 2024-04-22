@@ -1,7 +1,10 @@
 import { type User } from '@prisma/client'
 import {
-	findFirstDesign,
 	updateDesignVisible,
+	type IDesignUpdatedResponse,
+} from '#app/models/design/design.update.server'
+import {
+	findFirstDesign,
 	type IDesign,
 	type IDesignEntityId,
 	type IDesignIdOrNull,
@@ -23,7 +26,7 @@ export const designToggleVisibleService = async ({
 	targetEntityId: IDesignEntityId
 	updateSelectedDesignId?: IDesignIdOrNull
 	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
-}) => {
+}): Promise<IDesignUpdatedResponse> => {
 	try {
 		// Step 1: get the design
 		const design = await getDesign({ id, userId })
@@ -35,7 +38,9 @@ export const designToggleVisibleService = async ({
 			id,
 			visible: !visible,
 		})
-		await prisma.$transaction([toggleDesignVisiblePromise])
+		const [updatedDesign] = await prisma.$transaction([
+			toggleDesignVisiblePromise,
+		])
 
 		// Step 3: update the selected design for its type, if necessary
 		// visibility is more complicated than just going by the current design state
@@ -47,10 +52,15 @@ export const designToggleVisibleService = async ({
 			strategy: updateSelectedDesignStrategy,
 		})
 
-		return { success: true }
+		return { updatedDesign, success: true }
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('designToggleVisibleService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }
 
