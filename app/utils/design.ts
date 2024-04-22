@@ -22,10 +22,8 @@ import { findFirstSizeInDesignArray } from '#app/models/size.server'
 import { findFirstStrokeInDesignArray } from '#app/models/stroke.server'
 import { findFirstTemplateInDesignArray } from '#app/models/template.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
-import {
-	DashboardPanelUpdateDesignTypeLayoutValuesStrategy,
-	type IDashboardPanelUpdateEntityValuesStrategy,
-} from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
+import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
+import { DashboardPanelUpdateDesignTypeLayoutValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.layout'
 import { orderLinkedItems } from './linked-list.utils'
 import { safelyAssignValue } from './typescript-helpers'
 
