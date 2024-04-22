@@ -70,26 +70,6 @@ export class DashboardPanelUpdateDesignTypeSizeValuesStrategy
 			defaultValue: { value },
 		}
 
-		// const sizeBasisArgs = {
-		// 	...sharedEntityFormArgs,
-		// 	...globalSizeBasisArgs,
-		// 	defaultValue: { rows: size.rows },
-		// }
-
-		// const sizeFormatArgs = {
-		// 	...sharedEntityFormArgs,
-		// 	...globalSizeFormatArgs,
-		// 	defaultValue: { columns: size.columns },
-		// }
-
-		// if (style === 'random') {
-		// 	return sizeValueArgs
-		// } else {
-		// 	return {
-		// 		formType: EntityFormType.MULTIPLE,
-		// 		forms: [sizeBasisArgs, sizeFormatArgs],
-		// 	}
-		// }
 		return sizeValueArgs
 	}
 
