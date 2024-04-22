@@ -8,13 +8,11 @@ import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/compon
 import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
 import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
-import { SidebarPanel, SidebarPanelRow, SidebarPanelRowContainer } from '..'
-import { PanelEntityRowActions } from './dashboard-entity-panel.actions'
+import { SidebarPanel } from '..'
 import { PanelEntityHeader } from './dashboard-entity-panel.header'
-import { PanelEntityRowReorder } from './dashboard-entity-panel.reorder'
+import { PanelEntityRow } from './dashboard-entity-panel.row'
 
 type PanelEntities = IDesignWithType[]
-type PanelEntity = IDesignWithType
 type PanelEntityType = designTypeEnum
 type PanelEntityParent = IArtboardVersionWithDesignsAndLayers
 
@@ -54,64 +52,19 @@ export const DashboardEntityPanel = ({
 						entity={entity}
 						parentTypeId={parentTypeId}
 						parent={parent}
-						type={type}
 						entityCount={entityCount}
 						entityIndex={index}
 						strategyReorder={strategyReorder}
 						strategyToggleVisible={strategyToggleVisible}
 						strategyEntityDelete={strategyEntityDelete}
-					/>
+					>
+						<div className="truncate">
+							{entity.id}
+							{entity.id}
+						</div>
+					</PanelEntityRow>
 				)
 			})}
 		</SidebarPanel>
-	)
-}
-
-export const PanelEntityRow = ({
-	entity,
-	parentTypeId,
-	parent,
-	type,
-	entityCount,
-	entityIndex,
-	strategyReorder,
-	strategyToggleVisible,
-	strategyEntityDelete,
-}: {
-	entity: PanelEntity
-	parentTypeId: designParentTypeIdEnum
-	parent: PanelEntityParent
-	type: PanelEntityType
-	entityCount: number
-	entityIndex: number
-	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
-	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
-	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
-}) => {
-	// will want count, index of row
-	return (
-		<SidebarPanelRow>
-			<PanelEntityRowReorder
-				entity={entity}
-				parentTypeId={parentTypeId}
-				parent={parent}
-				entityCount={entityCount}
-				entityIndex={entityIndex}
-				strategyReorder={strategyReorder}
-			/>
-			<SidebarPanelRowContainer>
-				<div className="truncate">
-					{entity.id}
-					{entity.id}
-				</div>
-				<PanelEntityRowActions
-					entity={entity}
-					parentTypeId={parentTypeId}
-					parent={parent}
-					strategyToggleVisible={strategyToggleVisible}
-					strategyEntityDelete={strategyEntityDelete}
-				/>
-			</SidebarPanelRowContainer>
-		</SidebarPanelRow>
 	)
 }
