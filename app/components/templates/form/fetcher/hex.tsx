@@ -1,14 +1,13 @@
 import { conform, useForm } from '@conform-to/react'
-import { getFieldsetConstraint } from '@conform-to/zod'
+import { getFieldsetConstraint, parse } from '@conform-to/zod'
 import { useActionData, useFetcher } from '@remix-run/react'
-import { type ChangeEvent, type FocusEvent } from 'react'
+import { useRef } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { useHydrated } from 'remix-utils/use-hydrated'
-import { quickToast } from '#app/components/toaster'
+import { type z } from 'zod'
 import { Input } from '#app/components/ui/input'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { ArtboardVersionBackgroundSchema } from '#app/schema/artboard-version'
-import { stringToHexcode, validateStringIsHexcode } from '#app/utils/colors'
+import { type defaultValueString } from '#app/schema/zod-helpers'
 import { useDebounce, useIsPending } from '#app/utils/misc'
 import {
 	type RoutePath,
@@ -16,60 +15,64 @@ import {
 	getActionType,
 } from '#app/utils/routes.utils'
 
-// create a shared hex fetcher form
-// import loader and action
-// or enum if that can't be done
-
 export const FormFetcherHex = ({
-	entity,
+	entityId,
+	defaultValue,
 	route,
 	formId,
+	schema,
 }: {
-	entity: IArtboardVersionWithDesignsAndLayers
+	entityId: IArtboardVersionWithDesignsAndLayers['id']
+	defaultValue: defaultValueString
 	route: RoutePath
 	formId: string
+	schema: z.ZodSchema<any>
 }) => {
 	const loader = getLoaderType(route)
 	const action = getActionType(route)
-	const backgroundFetcher = useFetcher<typeof loader>()
+	const fetcher = useFetcher<typeof loader>()
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
+	const defaultValueKey = Object.keys(defaultValue)[0]
 	const [form, fields] = useForm({
 		id: formId,
-		constraint: getFieldsetConstraint(ArtboardVersionBackgroundSchema),
+		constraint: getFieldsetConstraint(schema),
 		lastSubmission: actionData?.submission,
-		defaultValue: {
-			...entity,
+		shouldValidate: 'onInput',
+		shouldRevalidate: 'onInput',
+		onValidate: ({ formData }) => {
+			// set hex chars to uppercase
+			const value = formData.get(defaultValueKey)
+			if (typeof value === 'string') {
+				formData.set(defaultValueKey, value.toUpperCase())
+			}
+			return parse(formData, { schema: schema })
 		},
-	})
-
-	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const parsedValue = stringToHexcode.parse(event.target.value)
-		event.target.value = parsedValue
-	}
-
-	const handleSubmit = (event: FocusEvent<HTMLInputElement>) => {
-		const isHexcode = validateStringIsHexcode(event.target.value)
-		if (!isHexcode) {
-			event.target.value = fields.background.defaultValue || ''
-			quickToast({
-				type: 'error',
-				title: 'Invalid color',
-				description: 'Please enter a valid color hexcode',
+		onSubmit: async (event, { formData }) => {
+			event.preventDefault()
+			fetcher.submit(formData, {
+				method: 'POST',
+				action: route,
 			})
-			return
-		}
+		},
+		defaultValue,
+	})
+	const submitRef = useRef<HTMLButtonElement>(null)
+	const formField = fields[defaultValueKey]
 
-		backgroundFetcher.submit(event.currentTarget.form)
-	}
-	const handleChangeSubmit = useDebounce((form: HTMLFormElement) => {
-		// debugger
-		// backgroundFetcher.submit(form)
+	const handleChangeSubmit = useDebounce((f: HTMLFormElement) => {
+		submitRef.current?.click()
 	}, 400)
 
+	// still do this until conform can change the value to uppercase
+	// or fetcher can handle it, like with theme
+	const handleInput = (input: HTMLInputElement) => {
+		input.value = input.value.toUpperCase()
+	}
+
 	return (
-		<backgroundFetcher.Form
+		<fetcher.Form
 			method="POST"
 			action={route}
 			onChange={e => handleChangeSubmit(e.currentTarget)}
@@ -78,19 +81,22 @@ export const FormFetcherHex = ({
 			<AuthenticityTokenInput />
 
 			<input type="hidden" name="no-js" value={String(!isHydrated)} />
-			<input type="hidden" name="id" value={entity.id} />
+			<input type="hidden" name="id" value={entityId} />
 
 			<Input
-				pattern="[A-F0-9]{6}"
 				maxLength={6}
 				className="flex h-8"
-				onChange={e => handleChange(e)}
-				onBlur={e => handleSubmit(e)}
+				onInput={e => handleInput(e.currentTarget)}
 				disabled={isPending}
-				{...conform.input(fields.background, {
+				{...conform.input(formField, {
 					ariaAttributes: true,
 				})}
 			/>
-		</backgroundFetcher.Form>
+
+			{/* form onChange click this to trigger useForm */}
+			<button type="submit" ref={submitRef} style={{ display: 'none' }}>
+				Submit
+			</button>
+		</fetcher.Form>
 	)
 }
