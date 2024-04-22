@@ -4,8 +4,10 @@ import { FormFetcherNumber } from '../form/fetcher/number'
 
 export const PanelEntityForm = ({
 	panelEntityForm,
+	fromPopover,
 }: {
 	panelEntityForm: IPanelEntityFormArgs
+	fromPopover?: boolean
 }) => {
 	switch (panelEntityForm.formType) {
 		case 'hex':
@@ -13,7 +15,12 @@ export const PanelEntityForm = ({
 		// <FormFetcherHex
 		// />
 		case 'number':
-			return <PanelEntityFormNumber panelEntityForm={panelEntityForm} />
+			return (
+				<PanelEntityFormNumber
+					panelEntityForm={panelEntityForm}
+					fromPopover={fromPopover}
+				/>
+			)
 		case 'string':
 			return null
 		// <FormFetcherString
@@ -25,8 +32,10 @@ export const PanelEntityForm = ({
 
 export const PanelEntityFormNumber = ({
 	panelEntityForm,
+	fromPopover,
 }: {
 	panelEntityForm: IPanelEntityFormArgs
+	fromPopover?: boolean
 }) => (
 	<FormFetcherNumber
 		entityId={panelEntityForm.entityId}
@@ -34,7 +43,8 @@ export const PanelEntityFormNumber = ({
 		parentId={panelEntityForm.parentId}
 		parentTypeId={panelEntityForm.parentTypeId}
 		route={panelEntityForm.route}
-		formId={panelEntityForm.formId}
+		formId={`${panelEntityForm.formId}${fromPopover && '-popover'}`}
 		schema={panelEntityForm.schema}
+		// label={panelEntityForm.label}
 	/>
 )

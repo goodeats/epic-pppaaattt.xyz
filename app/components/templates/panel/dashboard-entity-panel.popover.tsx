@@ -1,16 +1,16 @@
 import {
+	SidebarPanelPopoverFormContainer,
 	SidebarPanelPopoverFormsContainer,
 	SidebarPanelPopoverHeader,
 } from '#app/components/layout/popover'
 import { type IDesignWithType } from '#app/models/design.server'
-import { type defaultValueNumber } from '#app/schema/zod-helpers'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import {
 	SidebarPanelPopover,
 	SidebarPanelPopoverContent,
 	SidebarPanelPopoverTrigger,
 } from '..'
-import { FormFetcherNumber } from '../form/fetcher/number'
+import { PanelEntityForm } from './dashboard-entity-panel.form'
 
 type PanelEntity = IDesignWithType
 
@@ -40,16 +40,12 @@ export const PanelEntityPopover = ({
 				<SidebarPanelPopoverFormsContainer>
 					{panelEntityPopoverForms.map((form, index) => {
 						return (
-							<FormFetcherNumber
-								key={index}
-								entityId={form.entityId}
-								defaultValue={form.defaultValue as defaultValueNumber}
-								parentId={form.parentId}
-								parentTypeId={form.parentTypeId}
-								route={form.route}
-								formId={form.formId}
-								schema={form.schema}
-							/>
+							<SidebarPanelPopoverFormContainer key={index}>
+								{/* TODO: fix labels */}
+								{/* {form.label && <Label htmlFor={form.label}>{form.label}</Label>} */}
+								{form.label && <span>{form.label}</span>}
+								<PanelEntityForm panelEntityForm={form} fromPopover={true} />
+							</SidebarPanelPopoverFormContainer>
 						)
 					})}
 				</SidebarPanelPopoverFormsContainer>

@@ -34,6 +34,7 @@ export const FormFetcherNumber = ({
 	formId,
 	schema,
 	icon,
+	label,
 	inputOptions,
 }: {
 	entityId: string
@@ -44,6 +45,7 @@ export const FormFetcherNumber = ({
 	formId: string
 	schema: z.ZodSchema<any>
 	icon?: IconName
+	label?: string
 	inputOptions?: inputOptions
 }) => {
 	const loader = getLoaderType(route)
@@ -95,6 +97,7 @@ export const FormFetcherNumber = ({
 						<Icon name={icon} className="h-5 w-5" />
 					</Label>
 				)}
+				{label && <Label htmlFor={formField.id}>{label}</Label>}
 				<Input
 					type="number"
 					// https://www.hyperui.dev/blog/remove-number-input-spinners-with-tailwindcss

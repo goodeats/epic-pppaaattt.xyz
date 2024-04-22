@@ -16,6 +16,7 @@ export interface IPanelEntityFormArgs {
 	parentTypeId: 'designId'
 	formId: string
 	schema: z.ZodSchema<any>
+	label?: string
 }
 export interface IDashboardPanelUpdateEntityValuesStrategy {
 	getMainPanelForm(args: { entity: IDesignWithType }): IPanelEntityFormArgs
@@ -61,6 +62,7 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 				parentTypeId: 'designId',
 				formId: 'design-type-update-layout-count',
 				schema: EditDesignLayoutCountSchema,
+				label: 'Count',
 			},
 		]
 	}
