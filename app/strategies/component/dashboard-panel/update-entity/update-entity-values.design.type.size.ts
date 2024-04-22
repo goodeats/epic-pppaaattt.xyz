@@ -44,7 +44,7 @@ const globalSizeFormatArgs = {
 	formType: EntityFormType.SELECT,
 	formId: 'design-type-update-size-format',
 	schema: EditDesignSizeFormatSchema,
-	label: 'Columns',
+	label: 'Format',
 }
 
 export class DashboardPanelUpdateDesignTypeSizeValuesStrategy

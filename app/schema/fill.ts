@@ -30,6 +30,11 @@ export const FillDataSchema = z.object({
 	basis: FillBasisSchema.optional(),
 })
 
+export type DesignFillUpdateSchemaType =
+	| typeof EditDesignFillValueSchema
+	| typeof EditDesignFillBasisSchema
+	| typeof EditDesignFillStyleSchema
+
 export const EditDesignFillValueSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

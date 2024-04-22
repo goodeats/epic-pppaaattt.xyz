@@ -23,6 +23,7 @@ import { findFirstStrokeInDesignArray } from '#app/models/stroke.server'
 import { findFirstTemplateInDesignArray } from '#app/models/template.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
+import { DashboardPanelUpdateDesignTypeFillValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.fill'
 import { DashboardPanelUpdateDesignTypeLayoutValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.layout'
 import { DashboardPanelUpdateDesignTypePaletteValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.palette'
 import { DashboardPanelUpdateDesignTypeSizeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.size'
@@ -385,7 +386,7 @@ export const designsByTypeToPanelArray = ({
 	const {
 		designPalettes,
 		designSizes,
-		// designFills,
+		designFills,
 		// designStrokes,
 		// designLines,
 		// designRotates,
@@ -399,6 +400,8 @@ export const designsByTypeToPanelArray = ({
 		new DashboardPanelUpdateDesignTypePaletteValuesStrategy()
 	const strategySizeEntityValues =
 		new DashboardPanelUpdateDesignTypeSizeValuesStrategy()
+	const strategyFillEntityValues =
+		new DashboardPanelUpdateDesignTypeFillValuesStrategy()
 
 	return [
 		{
@@ -416,7 +419,11 @@ export const designsByTypeToPanelArray = ({
 			designs: designSizes,
 			strategyEntityValues: strategySizeEntityValues,
 		},
-		// { type: DesignTypeEnum.FILL, designs: designFills, strategyEntityValues },
+		{
+			type: DesignTypeEnum.FILL,
+			designs: designFills,
+			strategyEntityValues: strategyFillEntityValues,
+		},
 		// {
 		// 	type: DesignTypeEnum.STROKE,
 		// 	designs: designStrokes,

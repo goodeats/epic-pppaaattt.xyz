@@ -6,7 +6,7 @@ import {
 import { redirectBack } from 'remix-utils/redirect-back'
 import { validateDesignTypeUpdateLayoutRowsSubmission } from '#app/models/design-type/design-type.update.layout.server'
 import { validateNoJS } from '#app/schema/form-data'
-import { updateDesignTypeLayoutRowsService } from '#app/services/design-type/update-layer.service'
+import { updateDesignTypeLayoutRowsService } from '#app/services/design-type/update-layout.service'
 import { requireUserId } from '#app/utils/auth.server'
 
 // https://www.epicweb.dev/full-stack-components

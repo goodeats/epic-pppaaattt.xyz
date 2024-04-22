@@ -28,6 +28,18 @@ import {
 	action as apiV1ArtboardVersionUpdateWidthAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.update.width'
 import {
+	loader as apiV1DesignTypeFillBasisLoader,
+	action as apiV1DesignTypeFillBasisAction,
+} from '#app/routes/resources+/api.v1+/design.type.fill.update.basis'
+import {
+	loader as apiV1DesignTypeFillStyleLoader,
+	action as apiV1DesignTypeFillStyleAction,
+} from '#app/routes/resources+/api.v1+/design.type.fill.update.style'
+import {
+	loader as apiV1DesignTypeFillValueLoader,
+	action as apiV1DesignTypeFillValueAction,
+} from '#app/routes/resources+/api.v1+/design.type.fill.update.value'
+import {
 	loader as apiV1DesignTypeLayoutColumnsLoader,
 	action as apiV1DesignTypeLayoutColumnsAction,
 } from '#app/routes/resources+/api.v1+/design.type.layout.update.columns'
@@ -105,6 +117,13 @@ export const Routes = {
 								VALUE: `${pathBase}/design/type/size/update/value`,
 							},
 						},
+						FILL: {
+							UPDATE: {
+								BASIS: `${pathBase}/design/type/fill/update/basis`,
+								VALUE: `${pathBase}/design/type/fill/update/value`,
+								STYLE: `${pathBase}/design/type/fill/update/style`,
+							},
+						},
 					},
 				},
 			},
@@ -143,6 +162,12 @@ export interface ApiRouteLoaders {
 		.BASIS]: typeof apiV1DesignTypeSizeBasisLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.SIZE.UPDATE
 		.FORMAT]: typeof apiV1DesignTypeSizeFormatLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
+		.VALUE]: typeof apiV1DesignTypeFillValueLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
+		.BASIS]: typeof apiV1DesignTypeFillBasisLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
+		.STYLE]: typeof apiV1DesignTypeFillStyleLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -176,6 +201,12 @@ export const loaders: ApiRouteLoaders = {
 		apiV1DesignTypeSizeBasisLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.SIZE.UPDATE.FORMAT]:
 		apiV1DesignTypeSizeFormatLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE.VALUE]:
+		apiV1DesignTypeFillValueLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE.BASIS]:
+		apiV1DesignTypeFillBasisLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE.STYLE]:
+		apiV1DesignTypeFillStyleLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -217,6 +248,12 @@ export interface ApiRouteActions {
 		.BASIS]: typeof apiV1DesignTypeSizeBasisAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.SIZE.UPDATE
 		.FORMAT]: typeof apiV1DesignTypeSizeFormatAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
+		.VALUE]: typeof apiV1DesignTypeFillValueAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
+		.BASIS]: typeof apiV1DesignTypeFillBasisAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
+		.STYLE]: typeof apiV1DesignTypeFillStyleAction
 }
 
 export const actions: ApiRouteActions = {
@@ -250,6 +287,12 @@ export const actions: ApiRouteActions = {
 		apiV1DesignTypeSizeBasisAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.SIZE.UPDATE.FORMAT]:
 		apiV1DesignTypeSizeFormatAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE.VALUE]:
+		apiV1DesignTypeFillValueAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE.BASIS]:
+		apiV1DesignTypeFillBasisAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE.STYLE]:
+		apiV1DesignTypeFillStyleAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(
