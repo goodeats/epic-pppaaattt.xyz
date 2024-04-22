@@ -6,8 +6,8 @@ import {
 	designsByTypeToPanelArray,
 	filterAndOrderDesignsByType,
 } from '#app/utils/design'
-import { PanelArtboardVersionBackground } from './__sidebars.panel.artboard-version._background'
-import { PanelArtboardVersionFrame } from './__sidebars.panel.artboard-version._frame'
+import { PanelArtboardVersionBackground } from './sidebars.panel.artboard-version._background'
+import { PanelArtboardVersionFrame } from './sidebars.panel.artboard-version._frame'
 
 export const PanelArtboardVersion = ({
 	version,

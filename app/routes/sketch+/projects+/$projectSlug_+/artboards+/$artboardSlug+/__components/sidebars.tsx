@@ -1,7 +1,7 @@
 import { Sidebar } from '#app/components/layout'
 import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { PanelArtboardVersion } from './__sidebars.panel.artboard-version'
+import { PanelArtboardVersion } from './sidebars.panel.artboard-version'
 
 export const SidebarLeft = ({
 	version,
