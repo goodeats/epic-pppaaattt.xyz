@@ -1,6 +1,7 @@
 import { type User } from '@prisma/client'
 import { type z } from 'zod'
 import { getArtboardVersion } from '#app/models/artboard-version/artboard-version.get.server'
+import { getDesign } from '#app/models/design/design.get.server'
 import { addNotFoundIssue } from '#app/utils/conform-utils'
 
 export interface IValidateSubmissionStrategy {
@@ -48,5 +49,25 @@ export class ValidateArtboardVersionParentSubmissionStrategy
 			where: { id: artboardVersionId, ownerId: userId },
 		})
 		if (!artboardVersion) ctx.addIssue(addNotFoundIssue('Artboard'))
+	}
+}
+
+export class ValidateDesignParentSubmissionStrategy
+	implements IValidateSubmissionStrategy
+{
+	async validateFormDataEntity({
+		userId,
+		data,
+		ctx,
+	}: {
+		userId: User['id']
+		data: any
+		ctx: any
+	}): Promise<void> {
+		const { designId } = data
+		const design = await getDesign({
+			where: { id: designId, ownerId: userId },
+		})
+		if (!design) ctx.addIssue(addNotFoundIssue('Design'))
 	}
 }

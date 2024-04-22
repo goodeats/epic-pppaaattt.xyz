@@ -8,7 +8,6 @@ import { type z } from 'zod'
 import { Icon, type IconName } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
 import { type defaultValueNumber } from '#app/schema/zod-helpers'
 import { useDebounce, useIsPending } from '#app/utils/misc'
 import {
@@ -29,14 +28,18 @@ type inputOptions = {
 export const FormFetcherNumber = ({
 	entityId,
 	defaultValue,
+	parentId,
+	parentTypeId,
 	route,
 	formId,
 	schema,
 	icon,
 	inputOptions,
 }: {
-	entityId: IArtboardVersionWithDesignsAndLayers['id']
+	entityId: string
 	defaultValue: defaultValueNumber
+	parentId?: string
+	parentTypeId?: 'designId'
 	route: RoutePath
 	formId: string
 	schema: z.ZodSchema<any>
@@ -50,7 +53,7 @@ export const FormFetcherNumber = ({
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form, fields] = useForm({
-		id: formId,
+		id: `${formId}-${parentId}-${entityId}`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission: actionData?.submission,
 		onValidate: ({ formData }) => {
@@ -84,6 +87,7 @@ export const FormFetcherNumber = ({
 
 			<input type="hidden" name="no-js" value={String(!isHydrated)} />
 			<input type="hidden" name="id" value={entityId} />
+			{parentId && <input type="hidden" name={parentTypeId} value={parentId} />}
 
 			<div className="flex w-full items-center space-x-2">
 				{icon && (

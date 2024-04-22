@@ -6,3 +6,6 @@ export type defaultValueString = {
 export type defaultValueNumber = {
 	[key: string]: number
 }
+export type defaultValueStringOrNumber = {
+	[key: string]: string | number
+}

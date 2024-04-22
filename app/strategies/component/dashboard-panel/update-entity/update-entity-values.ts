@@ -1,28 +1,51 @@
+import { type z } from 'zod'
 import {
-	DesignParentTypeIdEnum,
-	type designParentTypeIdEnum,
-	type ToggleVisibleDesignSchemaType,
-} from '#app/schema/design'
-import { ToggleVisibleArtboardVersionDesignSchema } from '#app/schema/design-artboard-version'
+	type IDesignWithLayout,
+	type IDesignWithType,
+} from '#app/models/design.server'
+import { EditDesignLayoutCountSchema } from '#app/schema/layout'
+import {
+	type defaultValueNumber,
+	type defaultValueStringOrNumber,
+} from '#app/schema/zod-helpers'
 import { Routes, type RoutePath } from '#app/utils/routes.utils'
 
 export interface IDashboardPanelUpdateEntityValuesStrategy {
-	route: RoutePath
-	parentTypeId: designParentTypeIdEnum
-	formId: string
-	schema: ToggleVisibleDesignSchemaType // could also be layer
-	iconText: string
+	getMainPanelForm(args: { entity: IDesignWithType }): {
+		route: RoutePath
+		defaultValue: defaultValueStringOrNumber
+		entityId: string
+		parentId: string
+		parentTypeId: 'designId'
+		formId: string
+		schema: z.ZodSchema<any>
+	}
 }
 
-export class DashboardPanelUpdateArtboardVersionDesignTypeVisibleStrategy
+export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 	implements IDashboardPanelUpdateEntityValuesStrategy
 {
-	route: RoutePath =
-		Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE.VISIBLE
-	parentTypeId: designParentTypeIdEnum =
-		DesignParentTypeIdEnum.ARTBOARD_VERSION_ID
-	formId: string = 'artboard-version-design-update-visible'
-	schema: ToggleVisibleDesignSchemaType =
-		ToggleVisibleArtboardVersionDesignSchema
-	iconText = 'Design'
+	getMainPanelForm({ entity }: { entity: IDesignWithLayout }): {
+		route: RoutePath
+		defaultValue: defaultValueNumber
+		entityId: string
+		parentId: string
+		parentTypeId: 'designId'
+		formId: string
+		schema: z.ZodSchema<any>
+	} {
+		const { layout } = entity
+		// const style = layout.style === 'random' ? 'count' : 'rows'
+		// console.log(style)
+
+		return {
+			route: Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT,
+			defaultValue: { count: layout.count },
+			entityId: layout.id,
+			parentId: entity.id,
+			parentTypeId: 'designId',
+			formId: 'design-type-update-layout-count',
+			schema: EditDesignLayoutCountSchema,
+		}
+	}
 }

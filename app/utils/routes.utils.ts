@@ -27,6 +27,10 @@ import {
 	loader as apiV1ArtboardVersionUpdateWidthLoader,
 	action as apiV1ArtboardVersionUpdateWidthAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.update.width'
+import {
+	loader as apiV1DesignTypeLayoutCountLoader,
+	action as apiV1DesignTypeLayoutCountAction,
+} from '#app/routes/resources+/api.v1+/design.type.layout.update.count'
 import { type ExtractStringValues } from './typescript-helpers'
 
 export type RoutePath = ExtractStringValues<typeof Routes>
@@ -51,6 +55,15 @@ export const Routes = {
 						},
 					},
 				},
+				DESIGN: {
+					TYPE: {
+						LAYOUT: {
+							UPDATE: {
+								COUNT: `${pathBase}/design/type/layout/update/count`,
+							},
+						},
+					},
+				},
 			},
 		},
 	},
@@ -71,6 +84,8 @@ export interface ApiRouteLoaders {
 		.VISIBLE]: typeof apiV1ArtboardVersionDesignUpdateVisibleLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE
 		.ORDER]: typeof apiV1ArtboardVersionDesignUpdateOrderLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
+		.COUNT]: typeof apiV1DesignTypeLayoutCountLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -88,6 +103,8 @@ export const loaders: ApiRouteLoaders = {
 		apiV1ArtboardVersionDesignUpdateVisibleLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE.ORDER]:
 		apiV1ArtboardVersionDesignUpdateOrderLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT]:
+		apiV1DesignTypeLayoutCountLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -113,6 +130,8 @@ export interface ApiRouteActions {
 		.VISIBLE]: typeof apiV1ArtboardVersionDesignUpdateVisibleAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE
 		.ORDER]: typeof apiV1ArtboardVersionDesignUpdateOrderAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
+		.COUNT]: typeof apiV1DesignTypeLayoutCountAction
 }
 
 export const actions: ApiRouteActions = {
@@ -130,6 +149,8 @@ export const actions: ApiRouteActions = {
 		apiV1ArtboardVersionDesignUpdateVisibleAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE.ORDER]:
 		apiV1ArtboardVersionDesignUpdateOrderAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT]:
+		apiV1DesignTypeLayoutCountAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(

@@ -4,11 +4,14 @@ import {
 	type designParentTypeIdEnum,
 	type designTypeEnum,
 } from '#app/schema/design'
+import { type defaultValueNumber } from '#app/schema/zod-helpers'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
+import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
 import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
 import { SidebarPanel, SidebarPanelRowValuesContainer } from '..'
+import { FormFetcherNumber } from '../form/fetcher/number'
 import { PanelEntityHeader } from './dashboard-entity-panel.header'
 import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 import { PanelEntityRow } from './dashboard-entity-panel.row'
@@ -25,6 +28,7 @@ export const DashboardEntityPanel = ({
 	entities,
 	strategyEntityNew,
 	strategyReorder,
+	strategyEntityValues,
 	strategyToggleVisible,
 	strategyEntityDelete,
 }: {
@@ -34,6 +38,7 @@ export const DashboardEntityPanel = ({
 	entities: PanelEntities
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
+	strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy
 	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
 	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 }) => {
@@ -60,7 +65,11 @@ export const DashboardEntityPanel = ({
 						strategyToggleVisible={strategyToggleVisible}
 						strategyEntityDelete={strategyEntityDelete}
 					>
-						<PanelEntityValues type={type} entity={entity} />
+						<PanelEntityValues
+							type={type}
+							entity={entity}
+							strategyEntityValues={strategyEntityValues}
+						/>
 					</PanelEntityRow>
 				)
 			})}
@@ -71,19 +80,31 @@ export const DashboardEntityPanel = ({
 export const PanelEntityValues = ({
 	type,
 	entity,
+	strategyEntityValues,
 }: {
 	type: PanelEntityType
 	entity: PanelEntity
+	strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy
 }) => {
+	const getMainPanelFormStrategy = strategyEntityValues.getMainPanelForm({
+		entity,
+	})
 	return (
 		<SidebarPanelRowValuesContainer>
 			<PanelEntityPopover name={type}>
 				<p>yo</p>
 			</PanelEntityPopover>
-			<div className="truncate">
-				{entity.id}
-				{entity.id}
-			</div>
+			<FormFetcherNumber
+				entityId={getMainPanelFormStrategy.entityId}
+				defaultValue={
+					getMainPanelFormStrategy.defaultValue as defaultValueNumber
+				}
+				parentId={getMainPanelFormStrategy.parentId}
+				parentTypeId={getMainPanelFormStrategy.parentTypeId}
+				route={getMainPanelFormStrategy.route}
+				formId={getMainPanelFormStrategy.formId}
+				schema={getMainPanelFormStrategy.schema}
+			/>
 			{/*
 			{layout.style === 'random' ? (
 				<PanelFormDesignLayoutEditCount layout={layout} />

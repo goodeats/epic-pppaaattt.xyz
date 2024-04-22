@@ -36,20 +36,24 @@ export const PanelArtboardVersionDesigns = ({
 
 	return (
 		<div>
-			{/* {designTypePanels.map(({ type, designs }) => ( */}
-			{designsTrimmed.map(({ type, designs }) => (
-				<DashboardEntityPanel
-					key={type}
-					type={type}
-					parentTypeId={DesignParentTypeIdEnum.ARTBOARD_VERSION_ID}
-					parent={version}
-					entities={designs}
-					strategyEntityNew={strategyEntityNew}
-					strategyReorder={strategyReorder}
-					strategyToggleVisible={strategyToggleVisible}
-					strategyEntityDelete={strategyEntityDelete}
-				/>
-			))}
+			{designsTrimmed.length > 0 &&
+				designsTrimmed.map((designPanel, index) => {
+					const { type, designs, strategyEntityValues } = designPanel
+					return (
+						<DashboardEntityPanel
+							key={type}
+							type={type}
+							parentTypeId={DesignParentTypeIdEnum.ARTBOARD_VERSION_ID}
+							parent={version}
+							entities={designs}
+							strategyEntityNew={strategyEntityNew}
+							strategyReorder={strategyReorder}
+							strategyEntityValues={strategyEntityValues}
+							strategyToggleVisible={strategyToggleVisible}
+							strategyEntityDelete={strategyEntityDelete}
+						/>
+					)
+				})}
 		</div>
 	)
 }

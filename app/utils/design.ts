@@ -22,6 +22,10 @@ import { findFirstSizeInDesignArray } from '#app/models/size.server'
 import { findFirstStrokeInDesignArray } from '#app/models/stroke.server'
 import { findFirstTemplateInDesignArray } from '#app/models/template.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
+import {
+	DashboardPanelUpdateDesignTypeLayoutValuesStrategy,
+	type IDashboardPanelUpdateEntityValuesStrategy,
+} from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import { orderLinkedItems } from './linked-list.utils'
 import { safelyAssignValue } from './typescript-helpers'
 
@@ -376,6 +380,7 @@ export const designsByTypeToPanelArray = ({
 }): {
 	type: designTypeEnum
 	designs: IDesignWithType[]
+	strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy
 }[] => {
 	const {
 		designPalettes,
@@ -388,15 +393,38 @@ export const designsByTypeToPanelArray = ({
 		designTemplates,
 	} = designs
 
+	const strategyEntityValues =
+		new DashboardPanelUpdateDesignTypeLayoutValuesStrategy()
+
 	return [
-		{ type: DesignTypeEnum.LAYOUT, designs: designLayouts },
-		{ type: DesignTypeEnum.PALETTE, designs: designPalettes },
-		{ type: DesignTypeEnum.SIZE, designs: designSizes },
-		{ type: DesignTypeEnum.FILL, designs: designFills },
-		{ type: DesignTypeEnum.STROKE, designs: designStrokes },
-		{ type: DesignTypeEnum.LINE, designs: designLines },
-		{ type: DesignTypeEnum.ROTATE, designs: designRotates },
-		{ type: DesignTypeEnum.TEMPLATE, designs: designTemplates },
+		{
+			type: DesignTypeEnum.LAYOUT,
+			designs: designLayouts,
+			strategyEntityValues,
+		},
+		{
+			type: DesignTypeEnum.PALETTE,
+			designs: designPalettes,
+			strategyEntityValues,
+		},
+		{ type: DesignTypeEnum.SIZE, designs: designSizes, strategyEntityValues },
+		{ type: DesignTypeEnum.FILL, designs: designFills, strategyEntityValues },
+		{
+			type: DesignTypeEnum.STROKE,
+			designs: designStrokes,
+			strategyEntityValues,
+		},
+		{ type: DesignTypeEnum.LINE, designs: designLines, strategyEntityValues },
+		{
+			type: DesignTypeEnum.ROTATE,
+			designs: designRotates,
+			strategyEntityValues,
+		},
+		{
+			type: DesignTypeEnum.TEMPLATE,
+			designs: designTemplates,
+			strategyEntityValues,
+		},
 	]
 }
 
