@@ -60,6 +60,11 @@ export const EntityFormType = {
 	NUMBER: 'number',
 	ICON: 'icon',
 	MOVE_ICON: 'move-icon',
+	SELECT: 'select',
 	// add more form types here
 } as const
 export type entityFormTypeEnum = ObjectValues<typeof EntityFormType>
+
+export type IEntityEnumSelectOption = {
+	[x: string]: string
+}

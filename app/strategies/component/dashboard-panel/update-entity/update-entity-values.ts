@@ -8,14 +8,18 @@ import {
 	type IEntityId,
 	type IEntityParentId,
 	type IEntity,
+	type IEntityEnumSelectOption,
 } from '#app/schema/entity'
 import {
 	EditDesignLayoutColumnsSchema,
 	EditDesignLayoutCountSchema,
 	EditDesignLayoutRowsSchema,
+	EditDesignLayoutStyleSchema,
+	LayoutStyleTypeEnum,
 } from '#app/schema/layout'
 import { type defaultValueStringOrNumber } from '#app/schema/zod-helpers'
 import { Routes, type RoutePath } from '#app/utils/routes.utils'
+import { transformEntityEnumValueForSelect } from '#app/utils/string-formatting'
 
 export interface IPanelEntityFormArgs {
 	route: RoutePath
@@ -27,6 +31,7 @@ export interface IPanelEntityFormArgs {
 	formId: string
 	schema: z.ZodSchema<any>
 	label?: string
+	options?: IEntityEnumSelectOption[]
 }
 export interface IDashboardPanelUpdateEntityValuesStrategy {
 	getMainPanelForm(args: { entity: IEntity }): IPanelEntityFormArgs
@@ -68,6 +73,21 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 			parentTypeId: EntityParentIdType.DESIGN_ID,
 		}
 
+		const options = Object.values(LayoutStyleTypeEnum).map(layoutStyleEnum => ({
+			[layoutStyleEnum]: transformEntityEnumValueForSelect(layoutStyleEnum),
+		}))
+
+		const layoutStyleArgs = {
+			...sharedntityFormArgs,
+			route: baseRoute.STYLE,
+			formType: EntityFormType.SELECT,
+			options,
+			defaultValue: { style: layout.style },
+			formId: 'design-type-update-layout-style',
+			schema: EditDesignLayoutStyleSchema,
+			label: 'Style',
+		}
+
 		const layoutCountArgs = {
 			...sharedntityFormArgs,
 			route: baseRoute.COUNT,
@@ -98,6 +118,6 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 			label: 'Columns',
 		}
 
-		return [layoutCountArgs, layoutRowsArgs, layoutColumnsArgs]
+		return [layoutStyleArgs, layoutCountArgs, layoutRowsArgs, layoutColumnsArgs]
 	}
 }
