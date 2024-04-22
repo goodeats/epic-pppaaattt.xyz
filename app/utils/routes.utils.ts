@@ -31,6 +31,10 @@ import {
 	loader as apiV1DesignTypeLayoutCountLoader,
 	action as apiV1DesignTypeLayoutCountAction,
 } from '#app/routes/resources+/api.v1+/design.type.layout.update.count'
+import {
+	loader as apiV1DesignTypeLayoutRowsLoader,
+	action as apiV1DesignTypeLayoutRowsAction,
+} from '#app/routes/resources+/api.v1+/design.type.layout.update.rows'
 import { type ExtractStringValues } from './typescript-helpers'
 
 export type RoutePath = ExtractStringValues<typeof Routes>
@@ -60,6 +64,7 @@ export const Routes = {
 						LAYOUT: {
 							UPDATE: {
 								COUNT: `${pathBase}/design/type/layout/update/count`,
+								ROWS: `${pathBase}/design/type/layout/update/rows`,
 							},
 						},
 					},
@@ -86,6 +91,8 @@ export interface ApiRouteLoaders {
 		.ORDER]: typeof apiV1ArtboardVersionDesignUpdateOrderLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
 		.COUNT]: typeof apiV1DesignTypeLayoutCountLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
+		.ROWS]: typeof apiV1DesignTypeLayoutRowsLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -105,6 +112,8 @@ export const loaders: ApiRouteLoaders = {
 		apiV1ArtboardVersionDesignUpdateOrderLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT]:
 		apiV1DesignTypeLayoutCountLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.ROWS]:
+		apiV1DesignTypeLayoutRowsLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -132,6 +141,8 @@ export interface ApiRouteActions {
 		.ORDER]: typeof apiV1ArtboardVersionDesignUpdateOrderAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
 		.COUNT]: typeof apiV1DesignTypeLayoutCountAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
+		.ROWS]: typeof apiV1DesignTypeLayoutRowsAction
 }
 
 export const actions: ApiRouteActions = {
@@ -151,6 +162,8 @@ export const actions: ApiRouteActions = {
 		apiV1ArtboardVersionDesignUpdateOrderAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT]:
 		apiV1DesignTypeLayoutCountAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.ROWS]:
+		apiV1DesignTypeLayoutRowsAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(

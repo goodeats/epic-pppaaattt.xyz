@@ -9,7 +9,10 @@ import {
 	type IEntityParentId,
 	type IEntity,
 } from '#app/schema/entity'
-import { EditDesignLayoutCountSchema } from '#app/schema/layout'
+import {
+	EditDesignLayoutCountSchema,
+	EditDesignLayoutRowsSchema,
+} from '#app/schema/layout'
 import { type defaultValueStringOrNumber } from '#app/schema/zod-helpers'
 import { Routes, type RoutePath } from '#app/utils/routes.utils'
 
@@ -64,16 +67,26 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 			parentTypeId: EntityParentIdType.DESIGN_ID,
 		}
 
-		return [
-			{
-				...sharedntityFormArgs,
-				route: baseRoute.COUNT,
-				formType: EntityFormType.NUMBER,
-				defaultValue: { count: layout.count },
-				formId: 'design-type-update-layout-count',
-				schema: EditDesignLayoutCountSchema,
-				label: 'Count',
-			},
-		]
+		const layoutCountArgs = {
+			...sharedntityFormArgs,
+			route: baseRoute.COUNT,
+			formType: EntityFormType.NUMBER,
+			defaultValue: { count: layout.count },
+			formId: 'design-type-update-layout-count',
+			schema: EditDesignLayoutCountSchema,
+			label: 'Count',
+		}
+
+		const layoutRowArgs = {
+			...sharedntityFormArgs,
+			route: baseRoute.ROWS,
+			formType: EntityFormType.NUMBER,
+			defaultValue: { rows: layout.rows },
+			formId: 'design-type-update-layout-rows',
+			schema: EditDesignLayoutRowsSchema,
+			label: 'Rows',
+		}
+
+		return [layoutCountArgs, layoutRowArgs]
 	}
 }
