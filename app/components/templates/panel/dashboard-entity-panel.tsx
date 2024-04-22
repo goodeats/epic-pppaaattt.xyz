@@ -8,11 +8,13 @@ import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/compon
 import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
 import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
-import { SidebarPanel } from '..'
+import { SidebarPanel, SidebarPanelRowValuesContainer } from '..'
 import { PanelEntityHeader } from './dashboard-entity-panel.header'
+import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 import { PanelEntityRow } from './dashboard-entity-panel.row'
 
 type PanelEntities = IDesignWithType[]
+type PanelEntity = IDesignWithType
 type PanelEntityType = designTypeEnum
 type PanelEntityParent = IArtboardVersionWithDesignsAndLayers
 
@@ -58,13 +60,38 @@ export const DashboardEntityPanel = ({
 						strategyToggleVisible={strategyToggleVisible}
 						strategyEntityDelete={strategyEntityDelete}
 					>
-						<div className="truncate">
-							{entity.id}
-							{entity.id}
-						</div>
+						<PanelEntityValues type={type} entity={entity} />
 					</PanelEntityRow>
 				)
 			})}
 		</SidebarPanel>
+	)
+}
+
+export const PanelEntityValues = ({
+	type,
+	entity,
+}: {
+	type: PanelEntityType
+	entity: PanelEntity
+}) => {
+	return (
+		<SidebarPanelRowValuesContainer>
+			<PanelEntityPopover name={type}>
+				<p>yo</p>
+			</PanelEntityPopover>
+			<div className="truncate">
+				{entity.id}
+				{entity.id}
+			</div>
+			{/*
+			{layout.style === 'random' ? (
+				<PanelFormDesignLayoutEditCount layout={layout} />
+			) : (
+				<SidebarPanelRowValuesDisabled
+					value={`${layout.rows} x ${layout.columns}`}
+				/>
+			)} */}
+		</SidebarPanelRowValuesContainer>
 	)
 }
