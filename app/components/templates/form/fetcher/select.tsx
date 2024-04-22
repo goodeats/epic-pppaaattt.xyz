@@ -51,7 +51,6 @@ export const FormFetcherSelect = ({
 	icon?: IconName
 	label?: string
 }) => {
-	console.log('options', options)
 	const loader = getLoaderType(route)
 	const action = getActionType(route)
 	const fetcher = useFetcher<typeof loader>()
@@ -116,8 +115,6 @@ export const FormFetcherSelect = ({
 								</SelectItem>
 							)
 						})}
-						{/* <SelectItem value="random">Random</SelectItem> */}
-						{/* <SelectItem value="grid">Grid</SelectItem> */}
 					</SelectContent>
 				</Select>
 

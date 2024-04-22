@@ -33,8 +33,19 @@ export interface IPanelEntityFormArgs {
 	label?: string
 	options?: IEntityEnumSelectOption[]
 }
+
+export interface IPanelEntityFormArgsMultiple {
+	formType: entityFormTypeEnum // MULTIPLE
+	forms: IPanelEntityFormArgs[]
+}
+
+export type IPanelEntityFormArgsOptionalMultiple =
+	| IPanelEntityFormArgsMultiple
+	| IPanelEntityFormArgs
 export interface IDashboardPanelUpdateEntityValuesStrategy {
-	getMainPanelForm(args: { entity: IEntity }): IPanelEntityFormArgs
+	getMainPanelForm(args: {
+		entity: IEntity
+	}): IPanelEntityFormArgsOptionalMultiple
 	getPopoverForms(args: { entity: IEntity }): IPanelEntityFormArgs[]
 }
 
@@ -45,18 +56,54 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 		entity,
 	}: {
 		entity: IDesignWithLayout
-	}): IPanelEntityFormArgs {
+	}): IPanelEntityFormArgsOptionalMultiple {
 		const { layout } = entity
-		// const style = layout.style === 'random' ? 'count' : 'rows'
-		return {
-			route: Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT,
-			formType: EntityFormType.NUMBER,
-			defaultValue: { count: layout.count },
+		const { style } = layout
+
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
+		const sharedntityFormArgs = {
 			entityId: layout.id,
 			parentId: entity.id,
 			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+
+		const layoutCountArgs = {
+			...sharedntityFormArgs,
+			route: baseRoute.COUNT,
+			formType: EntityFormType.NUMBER,
+			defaultValue: { count: layout.count },
 			formId: 'design-type-update-layout-count',
 			schema: EditDesignLayoutCountSchema,
+			label: 'Count',
+		}
+
+		const layoutRowsArgs = {
+			...sharedntityFormArgs,
+			route: baseRoute.ROWS,
+			formType: EntityFormType.NUMBER,
+			defaultValue: { rows: layout.rows },
+			formId: 'design-type-update-layout-rows',
+			schema: EditDesignLayoutRowsSchema,
+			label: 'Rows',
+		}
+
+		const layoutColumnsArgs = {
+			...sharedntityFormArgs,
+			route: baseRoute.COLUMNS,
+			formType: EntityFormType.NUMBER,
+			defaultValue: { columns: layout.columns },
+			formId: 'design-type-update-layout-columns',
+			schema: EditDesignLayoutColumnsSchema,
+			label: 'Columns',
+		}
+
+		if (style === 'random') {
+			return layoutCountArgs
+		} else {
+			return {
+				formType: EntityFormType.MULTIPLE,
+				forms: [layoutRowsArgs, layoutColumnsArgs],
+			}
 		}
 	}
 

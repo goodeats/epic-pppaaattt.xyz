@@ -61,6 +61,7 @@ export const EntityFormType = {
 	ICON: 'icon',
 	MOVE_ICON: 'move-icon',
 	SELECT: 'select',
+	MULTIPLE: 'multiple',
 	// add more form types here
 } as const
 export type entityFormTypeEnum = ObjectValues<typeof EntityFormType>

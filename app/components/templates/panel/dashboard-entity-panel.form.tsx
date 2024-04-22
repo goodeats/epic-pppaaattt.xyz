@@ -1,6 +1,10 @@
 import { EntityFormType } from '#app/schema/entity'
 import { type defaultValueNumber } from '#app/schema/zod-helpers'
-import { type IPanelEntityFormArgs } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
+import {
+	type IPanelEntityFormArgsOptionalMultiple,
+	type IPanelEntityFormArgs,
+	type IPanelEntityFormArgsMultiple,
+} from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import { FormFetcherNumber } from '../form/fetcher/number'
 import { FormFetcherSelect } from '../form/fetcher/select'
 
@@ -8,7 +12,7 @@ export const PanelEntityForm = ({
 	panelEntityForm,
 	fromPopover,
 }: {
-	panelEntityForm: IPanelEntityFormArgs
+	panelEntityForm: IPanelEntityFormArgsOptionalMultiple
 	fromPopover?: boolean
 }) => {
 	switch (panelEntityForm.formType) {
@@ -19,17 +23,31 @@ export const PanelEntityForm = ({
 		case EntityFormType.NUMBER:
 			return (
 				<PanelEntityFormNumber
-					panelEntityForm={panelEntityForm}
+					panelEntityForm={panelEntityForm as IPanelEntityFormArgs}
 					fromPopover={fromPopover}
 				/>
 			)
 		case EntityFormType.SELECT:
-			console.log('here', panelEntityForm)
 			return (
 				<PanelEntityFormSelect
-					panelEntityForm={panelEntityForm}
+					panelEntityForm={panelEntityForm as IPanelEntityFormArgs}
 					fromPopover={fromPopover}
 				/>
+			)
+		case EntityFormType.MULTIPLE:
+			const panelEntityFormMultiple =
+				panelEntityForm as IPanelEntityFormArgsMultiple
+			// multiple is good for pairs like rows and columns next to each other
+			return (
+				<div className="flex">
+					{panelEntityFormMultiple.forms.map((panelEntityForm, i) => (
+						<PanelEntityForm
+							key={i}
+							panelEntityForm={panelEntityForm}
+							fromPopover={fromPopover}
+						/>
+					))}
+				</div>
 			)
 		default:
 			return null
@@ -62,7 +80,6 @@ export const PanelEntityFormSelect = ({
 	panelEntityForm: IPanelEntityFormArgs
 	fromPopover?: boolean
 }) => {
-	console.log('panelEntityForm', panelEntityForm)
 	return (
 		<FormFetcherSelect
 			entityId={panelEntityForm.entityId}
