@@ -6,12 +6,12 @@ import { useHydrated } from 'remix-utils/use-hydrated'
 import { type z } from 'zod'
 import { type IconName } from '#app/components/ui/icon'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
-import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { type IDesignWithType } from '#app/models/design.server'
 import {
-	type designParentTypeIdEnum,
-	type designTypeEnum,
-} from '#app/schema/design'
+	type entityParentIdTypeEnum,
+	type IEntityParentId,
+	type IEntityId,
+	type IEntityType,
+} from '#app/schema/entity'
 import { useIsPending } from '#app/utils/misc'
 import {
 	type RoutePath,
@@ -30,10 +30,10 @@ export const FormFetcherIcon = ({
 	icon,
 	iconText,
 }: {
-	entityId?: IDesignWithType['id']
-	type?: designTypeEnum
-	parentTypeId: designParentTypeIdEnum
-	parentId: IArtboardVersionWithDesignsAndLayers['id']
+	entityId?: IEntityId
+	type?: IEntityType
+	parentTypeId: entityParentIdTypeEnum
+	parentId: IEntityParentId
 	route: RoutePath
 	formId: string
 	schema: z.ZodSchema<any>

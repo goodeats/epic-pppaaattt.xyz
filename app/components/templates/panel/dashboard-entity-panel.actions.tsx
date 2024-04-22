@@ -1,13 +1,9 @@
-import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { type IDesignWithType } from '#app/models/design.server'
 import { type designParentTypeIdEnum } from '#app/schema/design'
+import { type IEntityVisible, type IEntityParentType } from '#app/schema/entity'
 import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
 import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
 import { SidebarPanelRowActionsContainer } from '..'
 import { FormFetcherIcon } from '../form/fetcher/icon'
-
-type PanelEntity = IDesignWithType
-type PanelEntityParent = IArtboardVersionWithDesignsAndLayers
 
 export const PanelEntityRowActions = ({
 	entity,
@@ -16,9 +12,9 @@ export const PanelEntityRowActions = ({
 	strategyToggleVisible,
 	strategyEntityDelete,
 }: {
-	entity: PanelEntity
+	entity: IEntityVisible
 	parentTypeId: designParentTypeIdEnum
-	parent: PanelEntityParent
+	parent: IEntityParentType
 	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
 	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 }) => {

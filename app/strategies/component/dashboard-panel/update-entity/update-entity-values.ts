@@ -1,26 +1,32 @@
 import { type z } from 'zod'
+import { type IDesignWithLayout } from '#app/models/design.server'
 import {
-	type IDesignWithLayout,
-	type IDesignWithType,
-} from '#app/models/design.server'
+	EntityFormType,
+	type entityParentIdTypeEnum,
+	type entityFormTypeEnum,
+	EntityParentIdType,
+	type IEntityId,
+	type IEntityParentId,
+	type IEntity,
+} from '#app/schema/entity'
 import { EditDesignLayoutCountSchema } from '#app/schema/layout'
 import { type defaultValueStringOrNumber } from '#app/schema/zod-helpers'
 import { Routes, type RoutePath } from '#app/utils/routes.utils'
 
 export interface IPanelEntityFormArgs {
 	route: RoutePath
-	formType: 'hex' | 'number' | 'string'
+	formType: entityFormTypeEnum
 	defaultValue: defaultValueStringOrNumber
-	entityId: string
-	parentId: string
-	parentTypeId: 'designId'
+	entityId: IEntityId
+	parentId: IEntityParentId
+	parentTypeId: entityParentIdTypeEnum
 	formId: string
 	schema: z.ZodSchema<any>
 	label?: string
 }
 export interface IDashboardPanelUpdateEntityValuesStrategy {
-	getMainPanelForm(args: { entity: IDesignWithType }): IPanelEntityFormArgs
-	getPopoverForms(args: { entity: IDesignWithType }): IPanelEntityFormArgs[]
+	getMainPanelForm(args: { entity: IEntity }): IPanelEntityFormArgs
+	getPopoverForms(args: { entity: IEntity }): IPanelEntityFormArgs[]
 }
 
 export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
@@ -35,11 +41,11 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 		// const style = layout.style === 'random' ? 'count' : 'rows'
 		return {
 			route: Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT,
-			formType: 'number',
+			formType: EntityFormType.NUMBER,
 			defaultValue: { count: layout.count },
 			entityId: layout.id,
 			parentId: entity.id,
-			parentTypeId: 'designId',
+			parentTypeId: EntityParentIdType.DESIGN_ID,
 			formId: 'design-type-update-layout-count',
 			schema: EditDesignLayoutCountSchema,
 		}
@@ -51,15 +57,19 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 		entity: IDesignWithLayout
 	}): IPanelEntityFormArgs[] {
 		const { layout } = entity
-		// const style = layout.style === 'random' ? 'count' : 'rows'
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
+		const sharedntityFormArgs = {
+			entityId: layout.id,
+			parentId: entity.id,
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+
 		return [
 			{
-				route: Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT,
-				formType: 'number',
+				...sharedntityFormArgs,
+				route: baseRoute.COUNT,
+				formType: EntityFormType.NUMBER,
 				defaultValue: { count: layout.count },
-				entityId: layout.id,
-				parentId: entity.id,
-				parentTypeId: 'designId',
 				formId: 'design-type-update-layout-count',
 				schema: EditDesignLayoutCountSchema,
 				label: 'Count',

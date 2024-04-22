@@ -6,7 +6,7 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { type z } from 'zod'
 import { Input } from '#app/components/ui/input'
-import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
+import { type IEntityId } from '#app/schema/entity'
 import { type defaultValueString } from '#app/schema/zod-helpers'
 import { useDebounce, useIsPending } from '#app/utils/misc'
 import {
@@ -22,7 +22,7 @@ export const FormFetcherHex = ({
 	formId,
 	schema,
 }: {
-	entityId: IArtboardVersionWithDesignsAndLayers['id']
+	entityId: IEntityId
 	defaultValue: defaultValueString
 	route: RoutePath
 	formId: string

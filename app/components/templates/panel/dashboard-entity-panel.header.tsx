@@ -1,15 +1,9 @@
-import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import {
-	type designParentTypeIdEnum,
-	type designTypeEnum,
-} from '#app/schema/design'
+import { type designParentTypeIdEnum } from '#app/schema/design'
+import { type IEntityParentType, type IEntityType } from '#app/schema/entity'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { capitalize } from '#app/utils/string-formatting'
 import { SidebarPanelHeader, SidebarPanelRowActionsContainer } from '..'
 import { FormFetcherIcon } from '../form/fetcher/icon'
-
-type PanelEntityType = designTypeEnum
-type PanelEntityParent = IArtboardVersionWithDesignsAndLayers
 
 export const PanelEntityHeader = ({
 	type,
@@ -17,9 +11,9 @@ export const PanelEntityHeader = ({
 	parent,
 	strategyEntityNew,
 }: {
-	type: PanelEntityType
+	type: IEntityType
 	parentTypeId: designParentTypeIdEnum
-	parent: PanelEntityParent
+	parent: IEntityParentType
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 }) => {
 	return (

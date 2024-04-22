@@ -8,6 +8,11 @@ import { type z } from 'zod'
 import { Icon, type IconName } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
+import {
+	type IEntityId,
+	type IEntityParentId,
+	type entityParentIdTypeEnum,
+} from '#app/schema/entity'
 import { type defaultValueNumber } from '#app/schema/zod-helpers'
 import { useDebounce, useIsPending } from '#app/utils/misc'
 import {
@@ -15,15 +20,6 @@ import {
 	getLoaderType,
 	getActionType,
 } from '#app/utils/routes.utils'
-
-// defer to zod schema
-type inputOptions = {
-	min?: number
-	max?: number
-	step?: number
-	placeholder?: string
-	required?: boolean
-}
 
 export const FormFetcherNumber = ({
 	entityId,
@@ -35,18 +31,16 @@ export const FormFetcherNumber = ({
 	schema,
 	icon,
 	label,
-	inputOptions,
 }: {
-	entityId: string
+	entityId: IEntityId
 	defaultValue: defaultValueNumber
-	parentId?: string
-	parentTypeId?: 'designId'
+	parentId?: IEntityParentId
+	parentTypeId?: entityParentIdTypeEnum
 	route: RoutePath
 	formId: string
 	schema: z.ZodSchema<any>
 	icon?: IconName
 	label?: string
-	inputOptions?: inputOptions
 }) => {
 	const loader = getLoaderType(route)
 	const action = getActionType(route)

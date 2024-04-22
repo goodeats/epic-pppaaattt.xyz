@@ -5,9 +5,11 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { type z } from 'zod'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
-import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { type IDesignWithType } from '#app/models/design.server'
-import { type designParentTypeIdEnum } from '#app/schema/design'
+import {
+	type IEntityId,
+	type IEntityParentId,
+	type entityParentIdTypeEnum,
+} from '#app/schema/entity'
 import { useIsPending } from '#app/utils/misc'
 import {
 	type RoutePath,
@@ -25,9 +27,9 @@ export const FormFetcherMoveIcon = ({
 	direction,
 	atTopOrBottom = false,
 }: {
-	entityId?: IDesignWithType['id']
-	parentTypeId: designParentTypeIdEnum
-	parentId: IArtboardVersionWithDesignsAndLayers['id']
+	entityId?: IEntityId
+	parentTypeId: entityParentIdTypeEnum
+	parentId: IEntityParentId
 	route: RoutePath
 	formId: string
 	schema: z.ZodSchema<any>

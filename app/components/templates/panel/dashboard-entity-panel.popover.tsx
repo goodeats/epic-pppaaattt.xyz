@@ -3,7 +3,7 @@ import {
 	SidebarPanelPopoverFormsContainer,
 	SidebarPanelPopoverHeader,
 } from '#app/components/layout/popover'
-import { type IDesignWithType } from '#app/models/design.server'
+import { type IEntity } from '#app/schema/entity'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import {
 	SidebarPanelPopover,
@@ -12,8 +12,6 @@ import {
 } from '..'
 import { PanelEntityForm } from './dashboard-entity-panel.form'
 
-type PanelEntity = IDesignWithType
-
 export const PanelEntityPopover = ({
 	name,
 	entity,
@@ -21,7 +19,7 @@ export const PanelEntityPopover = ({
 	strategyEntityValues,
 }: {
 	name: string
-	entity: PanelEntity
+	entity: IEntity
 	backgroundColor?: string
 	strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy
 }) => {
