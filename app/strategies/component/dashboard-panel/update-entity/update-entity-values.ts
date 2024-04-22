@@ -1,4 +1,5 @@
 import { type z } from 'zod'
+import { type IconName } from '#app/components/ui/icon'
 import {
 	type entityParentIdTypeEnum,
 	type entityFormTypeEnum,
@@ -31,10 +32,18 @@ export interface IPanelEntityFormArgsMultiple {
 export type IPanelEntityFormArgsOptionalMultiple =
 	| IPanelEntityFormArgsMultiple
 	| IPanelEntityFormArgs
+
+export interface IDashboardPanelIcon {
+	icon?: IconName
+	symbol?: string
+	text: string
+}
 export interface IDashboardPanelUpdateEntityValuesStrategy {
 	getMainPanelForm(args: {
 		entity: IEntity
 	}): IPanelEntityFormArgsOptionalMultiple
 	getPopoverForms(args: { entity: IEntity }): IPanelEntityFormArgs[]
 	getPopoverTriggerColor(args: { entity: IEntity }): string | undefined
+	getPanelFormatIcon(args: { entity: IEntity }): IDashboardPanelIcon | undefined
+	getPanelBasisIcon(args: { entity: IEntity }): IDashboardPanelIcon | undefined
 }

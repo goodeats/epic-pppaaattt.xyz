@@ -1,3 +1,4 @@
+import { type IconName } from '#app/components/ui/icon'
 import { type IDesignWithSize } from '#app/models/design.server'
 import { EntityFormType, EntityParentIdType } from '#app/schema/entity'
 import {
@@ -6,6 +7,10 @@ import {
 	EditDesignSizeValueSchema,
 	SizeBasisTypeEnum,
 	SizeFormatTypeEnum,
+	sizeBasisIcon,
+	type sizeFormatTypeEnum,
+	type sizeBasisTypeEnum,
+	sizeFormatIcon,
 } from '#app/schema/size'
 import { Routes } from '#app/utils/routes.utils'
 import { transformEntityEnumValueForSelect } from '#app/utils/string-formatting'
@@ -13,6 +18,7 @@ import {
 	type IPanelEntityFormArgsOptionalMultiple,
 	type IDashboardPanelUpdateEntityValuesStrategy,
 	type IPanelEntityFormArgs,
+	type IDashboardPanelIcon,
 } from './update-entity-values'
 
 const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.SIZE.UPDATE
@@ -135,11 +141,35 @@ export class DashboardPanelUpdateDesignTypeSizeValuesStrategy
 		return [sizeValueArgs, sizeBasisArgs, sizeFormatArgs]
 	}
 
-	getPopoverTriggerColor({
+	getPopoverTriggerColor({ entity }: { entity: IDesignWithSize }): undefined {
+		return undefined
+	}
+
+	getPanelFormatIcon({
 		entity,
 	}: {
 		entity: IDesignWithSize
-	}): string | undefined {
-		return undefined
+	}): IDashboardPanelIcon {
+		const { size } = entity
+		const { format } = size
+
+		const symbol = sizeFormatIcon(format as sizeFormatTypeEnum)
+		return { symbol, text: `Size Format: ${format}` }
+	}
+
+	getPanelBasisIcon({
+		entity,
+	}: {
+		entity: IDesignWithSize
+	}): IDashboardPanelIcon | undefined {
+		const { size } = entity
+		const { format, basis } = size
+
+		if (format === SizeFormatTypeEnum.PIXEL) return undefined
+		const icon = sizeBasisIcon(basis as sizeBasisTypeEnum) as IconName
+		return {
+			icon,
+			text: `Size Basis: ${basis}`,
+		}
 	}
 }

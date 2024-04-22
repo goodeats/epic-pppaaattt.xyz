@@ -69,11 +69,15 @@ export class DashboardPanelUpdateDesignTypePaletteValuesStrategy
 		return [paletteValueArgs]
 	}
 
-	getPopoverTriggerColor({
-		entity,
-	}: {
-		entity: IDesignWithPalette
-	}): string | undefined {
+	getPopoverTriggerColor({ entity }: { entity: IDesignWithPalette }): string {
 		return entity.palette.value
+	}
+
+	getPanelFormatIcon({ entity }: { entity: IDesignWithPalette }): undefined {
+		return undefined
+	}
+
+	getPanelBasisIcon({ entity }: { entity: IDesignWithPalette }): undefined {
+		return undefined
 	}
 }

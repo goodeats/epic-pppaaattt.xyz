@@ -51,14 +51,7 @@ export const EditDesignSizeFormatSchema = z.object({
 })
 
 export const sizeFormatIcon = (format: sizeFormatTypeEnum) => {
-	switch (format) {
-		case SizeFormatTypeEnum.PERCENT:
-			return '%'
-		case SizeFormatTypeEnum.PIXEL:
-			return 'px'
-		default:
-			return '%'
-	}
+	return format === SizeFormatTypeEnum.PERCENT ? '%' : 'px'
 }
 
 export const sizeBasisIcon = (basis: sizeBasisTypeEnum) => {

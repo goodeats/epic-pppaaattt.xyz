@@ -2,6 +2,7 @@ import { type IEntity, type IEntityType } from '#app/schema/entity'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import { SidebarPanelRowValuesContainer } from '..'
 import { PanelEntityForm } from './dashboard-entity-panel.form'
+import { PanelEntityIcon } from './dashboard-entity-panel.icons'
 import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
 export const PanelEntityValues = ({
@@ -16,6 +17,12 @@ export const PanelEntityValues = ({
 	const panelEntityMainForm = strategyEntityValues.getMainPanelForm({
 		entity,
 	})
+	const panelEntityFormatIcon = strategyEntityValues.getPanelFormatIcon({
+		entity,
+	})
+	const panelEntityBasisIcon = strategyEntityValues.getPanelBasisIcon({
+		entity,
+	})
 
 	return (
 		<SidebarPanelRowValuesContainer>
@@ -25,14 +32,12 @@ export const PanelEntityValues = ({
 				strategyEntityValues={strategyEntityValues}
 			/>
 			<PanelEntityForm panelEntityForm={panelEntityMainForm} />
-			{/*
-			{layout.style === 'random' ? (
-				<PanelFormDesignLayoutEditCount layout={layout} />
-			) : (
-				<SidebarPanelRowValuesDisabled
-					value={`${layout.rows} x ${layout.columns}`}
-				/>
-			)} */}
+			{panelEntityFormatIcon && (
+				<PanelEntityIcon panelEntityIcon={panelEntityFormatIcon} />
+			)}
+			{panelEntityBasisIcon && (
+				<PanelEntityIcon panelEntityIcon={panelEntityBasisIcon} />
+			)}
 		</SidebarPanelRowValuesContainer>
 	)
 }
