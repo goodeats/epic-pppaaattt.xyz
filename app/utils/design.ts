@@ -25,6 +25,7 @@ import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import { DashboardPanelUpdateDesignTypeLayoutValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.layout'
 import { DashboardPanelUpdateDesignTypePaletteValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.palette'
+import { DashboardPanelUpdateDesignTypeSizeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.size'
 import { orderLinkedItems } from './linked-list.utils'
 import { safelyAssignValue } from './typescript-helpers'
 
@@ -383,7 +384,7 @@ export const designsByTypeToPanelArray = ({
 }[] => {
 	const {
 		designPalettes,
-		// designSizes,
+		designSizes,
 		// designFills,
 		// designStrokes,
 		// designLines,
@@ -396,6 +397,8 @@ export const designsByTypeToPanelArray = ({
 		new DashboardPanelUpdateDesignTypeLayoutValuesStrategy()
 	const strategyPaletteEntityValues =
 		new DashboardPanelUpdateDesignTypePaletteValuesStrategy()
+	const strategySizeEntityValues =
+		new DashboardPanelUpdateDesignTypeSizeValuesStrategy()
 
 	return [
 		{
@@ -408,7 +411,11 @@ export const designsByTypeToPanelArray = ({
 			designs: designPalettes,
 			strategyEntityValues: strategyPaletteEntityValues,
 		},
-		// { type: DesignTypeEnum.SIZE, designs: designSizes, strategyEntityValues },
+		{
+			type: DesignTypeEnum.SIZE,
+			designs: designSizes,
+			strategyEntityValues: strategySizeEntityValues,
+		},
 		// { type: DesignTypeEnum.FILL, designs: designFills, strategyEntityValues },
 		// {
 		// 	type: DesignTypeEnum.STROKE,

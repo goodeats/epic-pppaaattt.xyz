@@ -22,7 +22,7 @@ export const PanelArtboardVersionDesigns = ({
 		designs: orderedDesigns,
 	})
 	// remove trim after testing actions work for one design type
-	const designsTrimmed = designTypePanels.slice(0, 2)
+	const designsTrimmed = designTypePanels.slice(0, 3)
 	// const designsTrimmed = designTypePanels
 
 	const strategyEntityNew =

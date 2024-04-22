@@ -27,6 +27,11 @@ export const SizeDataSchema = z.object({
 	basis: SizeBasisSchema.optional(),
 })
 
+export type DesignSizeUpdateSchemaType =
+	| typeof EditDesignSizeValueSchema
+	| typeof EditDesignSizeBasisSchema
+	| typeof EditDesignSizeFormatSchema
+
 export const EditDesignSizeValueSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

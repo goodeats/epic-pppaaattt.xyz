@@ -72,7 +72,6 @@ export async function validateDesignTypeUpdateLayoutStyleSubmission(
 }
 
 const getLayoutInstance = async ({ id }: { id: ILayout['id'] }) => {
-	console.log('id', id)
 	return await findFirstLayoutInstance({
 		where: { id },
 	})
