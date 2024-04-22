@@ -136,4 +136,12 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 
 		return [layoutStyleArgs, layoutCountArgs, layoutRowsArgs, layoutColumnsArgs]
 	}
+
+	getPopoverTriggerColor({
+		entity,
+	}: {
+		entity: IDesignWithLayout
+	}): string | undefined {
+		return undefined
+	}
 }

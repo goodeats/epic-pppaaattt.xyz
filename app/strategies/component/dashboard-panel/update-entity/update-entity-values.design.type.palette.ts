@@ -17,7 +17,7 @@ const globalPaletteValueArgs = {
 	formType: EntityFormType.HEX,
 	formId: 'design-type-update-palette-value',
 	schema: EditDesignPaletteValueSchema,
-	label: 'Value',
+	label: 'Hex',
 }
 
 export class DashboardPanelUpdateDesignTypePaletteValuesStrategy
@@ -67,5 +67,13 @@ export class DashboardPanelUpdateDesignTypePaletteValuesStrategy
 		}
 
 		return [paletteValueArgs]
+	}
+
+	getPopoverTriggerColor({
+		entity,
+	}: {
+		entity: IDesignWithPalette
+	}): string | undefined {
+		return entity.palette.value
 	}
 }

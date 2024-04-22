@@ -26,12 +26,16 @@ export const PanelEntityPopover = ({
 	const panelEntityPopoverForms = strategyEntityValues.getPopoverForms({
 		entity,
 	})
+	const panelEntityPopoverTriggerColor =
+		strategyEntityValues.getPopoverTriggerColor({
+			entity,
+		})
 
 	return (
 		<SidebarPanelPopover>
 			<SidebarPanelPopoverTrigger
 				iconText={`${name} settings`}
-				backgroundColor={backgroundColor}
+				backgroundColor={panelEntityPopoverTriggerColor}
 			/>
 			<SidebarPanelPopoverContent>
 				<SidebarPanelPopoverHeader name={name} />

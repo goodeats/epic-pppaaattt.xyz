@@ -36,4 +36,5 @@ export interface IDashboardPanelUpdateEntityValuesStrategy {
 		entity: IEntity
 	}): IPanelEntityFormArgsOptionalMultiple
 	getPopoverForms(args: { entity: IEntity }): IPanelEntityFormArgs[]
+	getPopoverTriggerColor(args: { entity: IEntity }): string | undefined
 }
