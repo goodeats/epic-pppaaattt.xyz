@@ -50,7 +50,7 @@ export class DashboardPanelUpdateDesignTypeFillValuesStrategy
 		entity: IDesignWithFill
 	}): IPanelEntityFormArgsOptionalMultiple {
 		const { fill } = entity
-		const { value } = fill
+		const { value, basis, style } = fill
 
 		const sharedEntityFormArgs = {
 			...globalEntityFormArgs,
@@ -58,12 +58,42 @@ export class DashboardPanelUpdateDesignTypeFillValuesStrategy
 			parentId: entity.id,
 		}
 
+		if (style === FillStyleTypeEnum.NONE) {
+			const optionsStyle = Object.values(FillStyleTypeEnum).map(
+				fillStyleEnum => ({
+					[fillStyleEnum]: transformEntityEnumValueForSelect(fillStyleEnum),
+				}),
+			)
+			const fillStyleArgs = {
+				...sharedEntityFormArgs,
+				...globalFillStyleArgs,
+				options: optionsStyle,
+				defaultValue: { style },
+			}
+			return fillStyleArgs
+		}
+
+		if (basis !== FillBasisTypeEnum.DEFINED) {
+			const optionsBasis = Object.values(FillBasisTypeEnum).map(
+				fillBasisEnum => ({
+					[fillBasisEnum]: transformEntityEnumValueForSelect(fillBasisEnum),
+				}),
+			)
+
+			const fillBasisArgs = {
+				...sharedEntityFormArgs,
+				...globalFillBasisArgs,
+				options: optionsBasis,
+				defaultValue: { basis },
+			}
+			return fillBasisArgs
+		}
+
 		const fillValueArgs = {
 			...sharedEntityFormArgs,
 			...globalFillValueArgs,
 			defaultValue: { value },
 		}
-
 		return fillValueArgs
 	}
 
