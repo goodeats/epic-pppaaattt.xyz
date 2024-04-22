@@ -1,7 +1,7 @@
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
 import { type IDesignWithType } from '#app/models/design.server'
 import {
-	type designParentTypeEnum,
+	type designParentTypeIdEnum,
 	type designTypeEnum,
 } from '#app/schema/design'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
@@ -21,13 +21,13 @@ type PanelEntityParent = IArtboardVersionWithDesignsAndLayers
 
 export const DashboardEntityPanel = ({
 	type,
-	parentType,
+	parentTypeId,
 	parent,
 	entities,
 	strategyEntityNew,
 }: {
 	type: PanelEntityType
-	parentType: designParentTypeEnum
+	parentTypeId: designParentTypeIdEnum
 	parent: PanelEntityParent
 	entities: PanelEntities
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
@@ -36,7 +36,7 @@ export const DashboardEntityPanel = ({
 		<SidebarPanel>
 			<PanelEntityHeader
 				type={type}
-				parentType={parentType}
+				parentTypeId={parentTypeId}
 				parent={parent}
 				strategyEntityNew={strategyEntityNew}
 			/>
@@ -56,28 +56,21 @@ export const DashboardEntityPanel = ({
 
 export const PanelEntityHeader = ({
 	type,
-	parentType,
+	parentTypeId,
 	parent,
 	strategyEntityNew,
 }: {
 	type: PanelEntityType
-	parentType: designParentTypeEnum
+	parentTypeId: designParentTypeIdEnum
 	parent: PanelEntityParent
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 }) => {
 	return (
 		<SidebarPanelHeader title={capitalize(type)}>
 			<SidebarPanelRowActionsContainer>
-				{/* <PanelFormNewEntity
-					type={type}
-					parentType={parentType}
-					parentId={parent.id}
-					schema={strategyEntityNew.schema}
-					intent={strategyEntityNew.intent}
-					iconText={strategyEntityNew.iconText}
-				/> */}
 				<FormFetcherIcon
 					type={type}
+					parentTypeId={parentTypeId}
 					parentId={parent.id}
 					route={strategyEntityNew.route}
 					formId="panel-form-artboard-version-background"

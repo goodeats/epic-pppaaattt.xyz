@@ -1,6 +1,6 @@
 import { DashboardEntityPanel } from '#app/components/templates/panel/dashboard-entity-panel'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { DesignParentTypeEnum } from '#app/schema/design'
+import { DesignParentTypeIdEnum } from '#app/schema/design'
 import { DashboardPanelCreateArtboardVersionDesignTypeStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import {
 	designsByTypeToPanelArray,
@@ -41,7 +41,7 @@ export const PanelArtboardVersion = ({
 				<DashboardEntityPanel
 					key={type}
 					type={type}
-					parentType={DesignParentTypeEnum.ARTBOARD_VERSION}
+					parentTypeId={DesignParentTypeIdEnum.ARTBOARD_VERSION_ID}
 					parent={version}
 					entities={designs}
 					strategyEntityNew={strategyEntityNew}

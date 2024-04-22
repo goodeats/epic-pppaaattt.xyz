@@ -32,12 +32,12 @@ export const DesignTypeEnum = {
 } as const
 export type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
 
-export const DesignParentTypeEnum = {
-	ARTBOARD_VERSION: 'artboardVersion',
-	LAYER: 'layer',
+export const DesignParentTypeIdEnum = {
+	ARTBOARD_VERSION_ID: 'artboardVersionId',
+	LAYER_ID: 'layerId',
 	// add more design types here
 } as const
-export type designParentTypeEnum = ObjectValues<typeof DesignParentTypeEnum>
+export type designParentTypeIdEnum = ObjectValues<typeof DesignParentTypeIdEnum>
 
 export const DesignCloneSourceTypeEnum = {
 	ARTBOARD: 'artboard',

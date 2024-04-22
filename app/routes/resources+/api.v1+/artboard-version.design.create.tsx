@@ -24,7 +24,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: DataFunctionArgs) {
-	console.log('ACTION CREATE AV DESGIN 🚨')
 	const userId = await requireUserId(request)
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
