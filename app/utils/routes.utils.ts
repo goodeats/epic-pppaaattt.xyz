@@ -72,6 +72,14 @@ import {
 	action as apiV1DesignTypePaletteValueAction,
 } from '#app/routes/resources+/api.v1+/design.type.palette.update.value'
 import {
+	loader as apiV1DesignTypeRotateBasisLoader,
+	action as apiV1DesignTypeRotateBasisAction,
+} from '#app/routes/resources+/api.v1+/design.type.rotate.update.basis'
+import {
+	loader as apiV1DesignTypeRotateValueLoader,
+	action as apiV1DesignTypeRotateValueAction,
+} from '#app/routes/resources+/api.v1+/design.type.rotate.update.value'
+import {
 	loader as apiV1DesignTypeSizeBasisLoader,
 	action as apiV1DesignTypeSizeBasisAction,
 } from '#app/routes/resources+/api.v1+/design.type.size.update.basis'
@@ -162,6 +170,12 @@ export const Routes = {
 								WIDTH: `${pathBase}/design/type/line/update/width`,
 							},
 						},
+						ROTATE: {
+							UPDATE: {
+								BASIS: `${pathBase}/design/type/rotate/update/basis`,
+								VALUE: `${pathBase}/design/type/rotate/update/value`,
+							},
+						},
 					},
 				},
 			},
@@ -218,6 +232,10 @@ export interface ApiRouteLoaders {
 		.FORMAT]: typeof apiV1DesignTypeLineFormatLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
 		.WIDTH]: typeof apiV1DesignTypeLineWidthLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE
+		.VALUE]: typeof apiV1DesignTypeRotateValueLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE
+		.BASIS]: typeof apiV1DesignTypeRotateBasisLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -269,6 +287,10 @@ export const loaders: ApiRouteLoaders = {
 		apiV1DesignTypeLineFormatLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE.WIDTH]:
 		apiV1DesignTypeLineWidthLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE.VALUE]:
+		apiV1DesignTypeRotateValueLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE.BASIS]:
+		apiV1DesignTypeRotateBasisLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -328,6 +350,10 @@ export interface ApiRouteActions {
 		.BASIS]: typeof apiV1DesignTypeLineBasisAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
 		.FORMAT]: typeof apiV1DesignTypeLineFormatAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE
+		.VALUE]: typeof apiV1DesignTypeRotateValueAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE
+		.BASIS]: typeof apiV1DesignTypeRotateBasisAction
 }
 
 export const actions: ApiRouteActions = {
@@ -379,6 +405,10 @@ export const actions: ApiRouteActions = {
 		apiV1DesignTypeLineBasisAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE.FORMAT]:
 		apiV1DesignTypeLineFormatAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE.VALUE]:
+		apiV1DesignTypeRotateValueAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE.BASIS]:
+		apiV1DesignTypeRotateBasisAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(

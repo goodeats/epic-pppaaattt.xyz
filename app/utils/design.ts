@@ -27,6 +27,7 @@ import { DashboardPanelUpdateDesignTypeFillValuesStrategy } from '#app/strategie
 import { DashboardPanelUpdateDesignTypeLayoutValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.layout'
 import { DashboardPanelUpdateDesignTypeLineValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.line'
 import { DashboardPanelUpdateDesignTypePaletteValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.palette'
+import { DashboardPanelUpdateDesignTypeRotateValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.rotate'
 import { DashboardPanelUpdateDesignTypeSizeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.size'
 import { DashboardPanelUpdateDesignTypeStrokeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.stroke'
 import { orderLinkedItems } from './linked-list.utils'
@@ -391,7 +392,7 @@ export const designsByTypeToPanelArray = ({
 		designFills,
 		designStrokes,
 		designLines,
-		// designRotates,
+		designRotates,
 		designLayouts,
 		// designTemplates,
 	} = designs
@@ -408,6 +409,8 @@ export const designsByTypeToPanelArray = ({
 		new DashboardPanelUpdateDesignTypeStrokeValuesStrategy()
 	const strategyLineEntityValues =
 		new DashboardPanelUpdateDesignTypeLineValuesStrategy()
+	const strategyRotateEntityValues =
+		new DashboardPanelUpdateDesignTypeRotateValuesStrategy()
 
 	return [
 		{
@@ -440,11 +443,11 @@ export const designsByTypeToPanelArray = ({
 			designs: designLines,
 			strategyEntityValues: strategyLineEntityValues,
 		},
-		// {
-		// 	type: DesignTypeEnum.ROTATE,
-		// 	designs: designRotates,
-		// 	strategyEntityValues,
-		// },
+		{
+			type: DesignTypeEnum.ROTATE,
+			designs: designRotates,
+			strategyEntityValues: strategyRotateEntityValues,
+		},
 		// {
 		// 	type: DesignTypeEnum.TEMPLATE,
 		// 	designs: designTemplates,
