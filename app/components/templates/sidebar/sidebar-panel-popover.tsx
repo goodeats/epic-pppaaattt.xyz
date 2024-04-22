@@ -12,7 +12,7 @@ const SidebarPanelPopoverTrigger = ({
 	backgroundColor,
 }: {
 	iconText: string
-	backgroundColor?: string
+	backgroundColor?: string | null | undefined
 }) => {
 	return (
 		<PopoverTrigger asChild>
