@@ -41,7 +41,6 @@ const validateQueryWhereArgsPresent = (where: queryDesignWhereArgsType) => {
 			missingValues[key] = value
 		}
 	}
-	console.log('missingValues: ', missingValues)
 
 	if (Object.keys(missingValues).length > 0) {
 		console.log('Missing values:', missingValues)
@@ -51,6 +50,31 @@ const validateQueryWhereArgsPresent = (where: queryDesignWhereArgsType) => {
 	}
 }
 
+export const getDesigns = async ({
+	where,
+}: {
+	where: queryDesignWhereArgsType
+}): Promise<IDesign[]> => {
+	validateQueryWhereArgsPresent(where)
+	const design = await prisma.design.findMany({
+		where,
+	})
+	return design
+}
+
+export const getDesignsWithType = async ({
+	where,
+}: {
+	where: queryDesignWhereArgsType
+}): Promise<IDesignWithType[]> => {
+	validateQueryWhereArgsPresent(where)
+	const design = await prisma.design.findMany({
+		where,
+		include: designTypes,
+	})
+	return design
+}
+
 export const getDesign = async ({
 	where,
 }: {
@@ -58,11 +82,7 @@ export const getDesign = async ({
 }): Promise<IDesign | null> => {
 	validateQueryWhereArgsPresent(where)
 	const design = await prisma.design.findFirst({
-		where: {
-			type: 'layout',
-			artboardVersionId: 'cluwthigt0001iiznscjrk4i9',
-			nextId: null,
-		},
+		where,
 	})
 	return design
 }

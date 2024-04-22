@@ -1,5 +1,9 @@
 import { invariant } from '@epic-web/invariant'
 import {
+	loader as apiV1ArtboardVersionDesignCreateLoader,
+	action as apiV1ArtboardVersionDesignCreateAction,
+} from '#app/routes/resources+/api.v1+/artboard-version.design.create'
+import {
 	loader as apiV1ArtboardVersionUpdateBackgroundLoader,
 	action as apiV1ArtboardVersionUpdateBackgroundAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.update.background'
@@ -26,6 +30,9 @@ export const Routes = {
 						WIDTH: `${pathBase}/artboard-version/update/width`,
 						HEIGHT: `${pathBase}/artboard-version/update/height`,
 					},
+					DESIGN: {
+						CREATE: `${pathBase}/artboard-version/design/create`,
+					},
 				},
 			},
 		},
@@ -39,6 +46,8 @@ export interface ApiRouteLoaders {
 		.WIDTH]: typeof apiV1ArtboardVersionUpdateWidthLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE
 		.HEIGHT]: typeof apiV1ArtboardVersionUpdateHeightLoader
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN
+		.CREATE]: typeof apiV1ArtboardVersionDesignCreateLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -48,6 +57,8 @@ export const loaders: ApiRouteLoaders = {
 		apiV1ArtboardVersionUpdateWidthLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE.HEIGHT]:
 		apiV1ArtboardVersionUpdateHeightLoader,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.CREATE]:
+		apiV1ArtboardVersionDesignCreateLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -65,6 +76,8 @@ export interface ApiRouteActions {
 		.WIDTH]: typeof apiV1ArtboardVersionUpdateWidthAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE
 		.HEIGHT]: typeof apiV1ArtboardVersionUpdateHeightAction
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN
+		.CREATE]: typeof apiV1ArtboardVersionDesignCreateAction
 }
 
 export const actions: ApiRouteActions = {
@@ -74,6 +87,8 @@ export const actions: ApiRouteActions = {
 		apiV1ArtboardVersionUpdateWidthAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE.HEIGHT]:
 		apiV1ArtboardVersionUpdateHeightAction,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.CREATE]:
+		apiV1ArtboardVersionDesignCreateAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(

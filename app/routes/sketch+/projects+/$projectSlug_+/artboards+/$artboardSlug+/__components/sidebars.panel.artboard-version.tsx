@@ -14,9 +14,14 @@ export const PanelArtboardVersion = ({
 }: {
 	version: IArtboardVersionWithDesignsAndLayers
 }) => {
-	const designTypePanels = designsByTypeToPanelArray({
-		designs: filterAndOrderDesignsByType({ designs: version.designs }),
+	const orderedDesigns = filterAndOrderDesignsByType({
+		designs: version.designs,
 	})
+	const designTypePanels = designsByTypeToPanelArray({
+		designs: orderedDesigns,
+	})
+	// remove trim after testing actions work for one design type
+	const designsTrimmed = [designTypePanels[0]]
 
 	const strategyEntityNew =
 		new DashboardPanelCreateArtboardVersionDesignTypeStrategy()
@@ -25,7 +30,8 @@ export const PanelArtboardVersion = ({
 		<div>
 			<PanelArtboardVersionFrame version={version} />
 			<PanelArtboardVersionBackground version={version} />
-			{designTypePanels.map(({ type, designs }) => (
+			{/* {designTypePanels.map(({ type, designs }) => ( */}
+			{designsTrimmed.map(({ type, designs }) => (
 				// strategy functions:
 				// - entities are designs
 				// - new design

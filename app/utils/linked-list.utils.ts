@@ -1,3 +1,6 @@
+// TODO: add mechanism to fix broken linked lists
+// i.e., two heads, two tails, missing items, etc.
+
 interface ILinkedItem {
 	id: string
 	nextId: string | null

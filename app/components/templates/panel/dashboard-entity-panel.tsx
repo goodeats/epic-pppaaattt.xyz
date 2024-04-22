@@ -1,6 +1,5 @@
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
 import { type IDesignWithType } from '#app/models/design.server'
-import { PanelFormNewEntity } from '#app/routes/resources+/api.v1+/panel.form.new-entity'
 import {
 	type designParentTypeEnum,
 	type designTypeEnum,
@@ -13,6 +12,7 @@ import {
 	SidebarPanelRow,
 	SidebarPanelRowActionsContainer,
 } from '..'
+import { FormFetcherIcon } from '../form/fetcher/icon'
 
 type PanelEntities = IDesignWithType[]
 type PanelEntity = IDesignWithType
@@ -68,12 +68,21 @@ export const PanelEntityHeader = ({
 	return (
 		<SidebarPanelHeader title={capitalize(type)}>
 			<SidebarPanelRowActionsContainer>
-				<PanelFormNewEntity
+				{/* <PanelFormNewEntity
 					type={type}
 					parentType={parentType}
 					parentId={parent.id}
 					schema={strategyEntityNew.schema}
 					intent={strategyEntityNew.intent}
+					iconText={strategyEntityNew.iconText}
+				/> */}
+				<FormFetcherIcon
+					type={type}
+					parentId={parent.id}
+					route={strategyEntityNew.route}
+					formId="panel-form-artboard-version-background"
+					schema={strategyEntityNew.schema}
+					icon="plus"
 					iconText={strategyEntityNew.iconText}
 				/>
 			</SidebarPanelRowActionsContainer>
