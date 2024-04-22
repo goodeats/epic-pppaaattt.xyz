@@ -24,5 +24,5 @@ export class DashboardPanelUpdateArtboardVersionDesignTypeVisibleStrategy
 	formId: string = 'artboard-version-design-update-visible'
 	schema: ToggleVisibleDesignSchemaType =
 		ToggleVisibleArtboardVersionDesignSchema
-	iconText = 'Add New Design'
+	iconText = 'Design'
 }
