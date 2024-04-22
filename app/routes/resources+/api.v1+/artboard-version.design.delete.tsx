@@ -4,9 +4,9 @@ import {
 	type DataFunctionArgs,
 } from '@remix-run/node'
 import { redirectBack } from 'remix-utils/redirect-back'
-import { validateArtboardVersionNewDesignSubmission } from '#app/models/design-artboard-version/design-artboard-version.create.server'
+import { validateArtboardVersionDeleteDesignSubmission } from '#app/models/design-artboard-version/design-artboard-version.delete.server'
 import { validateNoJS } from '#app/schema/form-data'
-import { artboardVersionDesignCreateService } from '#app/services/artboard/version/design/create.service'
+import { artboardVersionDesignDeleteService } from '#app/services/artboard/version/design/delete.service'
 import { requireUserId } from '#app/utils/auth.server'
 
 // https://www.epicweb.dev/full-stack-components
@@ -21,19 +21,20 @@ export async function action({ request }: DataFunctionArgs) {
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
 
-	let createSuccess = false
+	let deleteSuccess = false
 	const { status, submission } =
-		await validateArtboardVersionNewDesignSubmission({
+		await validateArtboardVersionDeleteDesignSubmission({
 			userId,
 			formData,
 		})
+	console.log('validation: ', status, submission)
 
 	if (status === 'success') {
-		const { success } = await artboardVersionDesignCreateService({
+		const { success } = await artboardVersionDesignDeleteService({
 			userId,
 			...submission.value,
 		})
-		createSuccess = success
+		deleteSuccess = success
 	}
 
 	if (noJS) {
@@ -45,7 +46,7 @@ export async function action({ request }: DataFunctionArgs) {
 	return json(
 		{ status, submission },
 		{
-			status: status === 'error' || !createSuccess ? 422 : 201,
+			status: status === 'error' || !deleteSuccess ? 404 : 200,
 		},
 	)
 }

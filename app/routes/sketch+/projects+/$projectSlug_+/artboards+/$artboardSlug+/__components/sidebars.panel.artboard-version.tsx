@@ -2,6 +2,7 @@ import { DashboardEntityPanel } from '#app/components/templates/panel/dashboard-
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
 import { DesignParentTypeIdEnum } from '#app/schema/design'
 import { DashboardPanelCreateArtboardVersionDesignTypeStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
+import { DashboardPanelDeleteArtboardVersionDesignTypeStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
 import {
 	designsByTypeToPanelArray,
 	filterAndOrderDesignsByType,
@@ -25,6 +26,8 @@ export const PanelArtboardVersion = ({
 
 	const strategyEntityNew =
 		new DashboardPanelCreateArtboardVersionDesignTypeStrategy()
+	const strategyEntityDelete =
+		new DashboardPanelDeleteArtboardVersionDesignTypeStrategy()
 
 	return (
 		<div>
@@ -45,6 +48,7 @@ export const PanelArtboardVersion = ({
 					parent={version}
 					entities={designs}
 					strategyEntityNew={strategyEntityNew}
+					strategyEntityDelete={strategyEntityDelete}
 				/>
 			))}
 		</div>

@@ -1,11 +1,14 @@
 import { type User } from '@prisma/client'
 import {
+	deleteDesign,
+	type IDesignDeletedResponse,
+} from '#app/models/design/design.delete.server'
+import {
 	type IDesign,
 	findFirstDesign,
 	updateDesignToHead,
 	updateDesignToTail,
 	connectPrevAndNextDesigns,
-	deleteDesign,
 	type IDesignEntityId,
 	type IDesignIdOrNull,
 } from '#app/models/design.server'
@@ -26,7 +29,7 @@ export const designDeleteService = async ({
 	targetEntityId: IDesignEntityId
 	updateSelectedDesignId?: IDesignIdOrNull
 	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
-}) => {
+}): Promise<IDesignDeletedResponse> => {
 	try {
 		const deleteDesignPromises = []
 
@@ -69,8 +72,13 @@ export const designDeleteService = async ({
 
 		return { success: true }
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('designDeleteService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }
 

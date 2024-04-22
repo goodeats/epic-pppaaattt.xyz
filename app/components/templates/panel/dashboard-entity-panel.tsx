@@ -5,14 +5,15 @@ import {
 	type designTypeEnum,
 } from '#app/schema/design'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
-import { capitalize } from '#app/utils/string-formatting'
+import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
 import {
 	SidebarPanel,
-	SidebarPanelHeader,
 	SidebarPanelRow,
 	SidebarPanelRowActionsContainer,
+	SidebarPanelRowContainer,
 } from '..'
 import { FormFetcherIcon } from '../form/fetcher/icon'
+import { PanelEntityHeader } from './dashboard-entity-panel.header'
 
 type PanelEntities = IDesignWithType[]
 type PanelEntity = IDesignWithType
@@ -25,12 +26,14 @@ export const DashboardEntityPanel = ({
 	parent,
 	entities,
 	strategyEntityNew,
+	strategyEntityDelete,
 }: {
 	type: PanelEntityType
 	parentTypeId: designParentTypeIdEnum
 	parent: PanelEntityParent
 	entities: PanelEntities
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
+	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 }) => {
 	return (
 		<SidebarPanel>
@@ -44,9 +47,11 @@ export const DashboardEntityPanel = ({
 				return (
 					<PanelEntityRow
 						key={index}
-						type={type}
-						parent={parent}
 						entity={entity}
+						parentTypeId={parentTypeId}
+						parent={parent}
+						type={type}
+						strategyEntityDelete={strategyEntityDelete}
 					/>
 				)
 			})}
@@ -54,50 +59,64 @@ export const DashboardEntityPanel = ({
 	)
 }
 
-export const PanelEntityHeader = ({
-	type,
+export const PanelEntityRow = ({
+	entity,
 	parentTypeId,
 	parent,
-	strategyEntityNew,
+	type,
+	strategyEntityDelete,
 }: {
-	type: PanelEntityType
+	entity: PanelEntity
 	parentTypeId: designParentTypeIdEnum
 	parent: PanelEntityParent
-	strategyEntityNew: IDashboardPanelCreateEntityStrategy
+	type: PanelEntityType
+	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 }) => {
+	// will want count, index of row
 	return (
-		<SidebarPanelHeader title={capitalize(type)}>
-			<SidebarPanelRowActionsContainer>
-				<FormFetcherIcon
-					type={type}
+		<SidebarPanelRow>
+			<SidebarPanelRowContainer>
+				<div className="truncate">
+					{entity.id}
+					{entity.id}
+				</div>
+				<PanelEntityRowActions
+					entity={entity}
 					parentTypeId={parentTypeId}
-					parentId={parent.id}
-					route={strategyEntityNew.route}
-					formId="panel-form-artboard-version-background"
-					schema={strategyEntityNew.schema}
-					icon="plus"
-					iconText={strategyEntityNew.iconText}
+					parent={parent}
+					strategyEntityDelete={strategyEntityDelete}
 				/>
-			</SidebarPanelRowActionsContainer>
-		</SidebarPanelHeader>
+			</SidebarPanelRowContainer>
+		</SidebarPanelRow>
 	)
 }
 
-export const PanelEntityRow = ({
-	type,
-	parent,
+export const PanelEntityRowActions = ({
 	entity,
+	parentTypeId,
+	parent,
+	strategyEntityDelete,
 }: {
-	type: PanelEntityType
-	parent: PanelEntityParent
 	entity: PanelEntity
+	parentTypeId: designParentTypeIdEnum
+	parent: PanelEntityParent
+	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 }) => {
+	// will want count, index of row
 	return (
-		<SidebarPanelRow>
-			<div className="truncate">
-				{entity.id}
-				{entity.id}
-			</div>
-		</SidebarPanelRow>
+		<SidebarPanelRowActionsContainer>
+			<div>yo</div>
+
+			<FormFetcherIcon
+				entityId={entity.id}
+				parentTypeId={parentTypeId}
+				parentId={parent.id}
+				route={strategyEntityDelete.route}
+				formId={strategyEntityDelete.formId}
+				schema={strategyEntityDelete.schema}
+				icon="minus"
+				iconText={strategyEntityDelete.iconText}
+			/>
+		</SidebarPanelRowActionsContainer>
 	)
 }

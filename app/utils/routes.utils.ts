@@ -4,6 +4,10 @@ import {
 	action as apiV1ArtboardVersionDesignCreateAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.design.create'
 import {
+	loader as apiV1ArtboardVersionDesignDeleteLoader,
+	action as apiV1ArtboardVersionDesignDeleteAction,
+} from '#app/routes/resources+/api.v1+/artboard-version.design.delete'
+import {
 	loader as apiV1ArtboardVersionUpdateBackgroundLoader,
 	action as apiV1ArtboardVersionUpdateBackgroundAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.update.background'
@@ -32,6 +36,7 @@ export const Routes = {
 					},
 					DESIGN: {
 						CREATE: `${pathBase}/artboard-version/design/create`,
+						DELETE: `${pathBase}/artboard-version/design/delete`,
 					},
 				},
 			},
@@ -48,6 +53,8 @@ export interface ApiRouteLoaders {
 		.HEIGHT]: typeof apiV1ArtboardVersionUpdateHeightLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN
 		.CREATE]: typeof apiV1ArtboardVersionDesignCreateLoader
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN
+		.DELETE]: typeof apiV1ArtboardVersionDesignDeleteLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -59,6 +66,8 @@ export const loaders: ApiRouteLoaders = {
 		apiV1ArtboardVersionUpdateHeightLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.CREATE]:
 		apiV1ArtboardVersionDesignCreateLoader,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.DELETE]:
+		apiV1ArtboardVersionDesignDeleteLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -78,6 +87,8 @@ export interface ApiRouteActions {
 		.HEIGHT]: typeof apiV1ArtboardVersionUpdateHeightAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN
 		.CREATE]: typeof apiV1ArtboardVersionDesignCreateAction
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN
+		.DELETE]: typeof apiV1ArtboardVersionDesignDeleteAction
 }
 
 export const actions: ApiRouteActions = {
@@ -89,6 +100,8 @@ export const actions: ApiRouteActions = {
 		apiV1ArtboardVersionUpdateHeightAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.CREATE]:
 		apiV1ArtboardVersionDesignCreateAction,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.DELETE]:
+		apiV1ArtboardVersionDesignDeleteAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(

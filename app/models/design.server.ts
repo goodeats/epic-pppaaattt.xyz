@@ -249,12 +249,6 @@ export const updateDesignNodes = ({
 	})
 }
 
-export const deleteDesign = ({ id }: { id: IDesign['id'] }) => {
-	return prisma.design.delete({
-		where: { id },
-	})
-}
-
 export const updateDesignVisible = ({
 	id,
 	visible,

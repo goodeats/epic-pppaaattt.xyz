@@ -7,6 +7,7 @@ import { type z } from 'zod'
 import { type IconName } from '#app/components/ui/icon'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
+import { type IDesignWithType } from '#app/models/design.server'
 import {
 	type designParentTypeIdEnum,
 	type designTypeEnum,
@@ -19,6 +20,7 @@ import {
 } from '#app/utils/routes.utils'
 
 export const FormFetcherIcon = ({
+	entityId,
 	type,
 	parentTypeId,
 	parentId,
@@ -28,7 +30,8 @@ export const FormFetcherIcon = ({
 	icon,
 	iconText,
 }: {
-	type: designTypeEnum
+	entityId?: IDesignWithType['id']
+	type?: designTypeEnum
 	parentTypeId: designParentTypeIdEnum
 	parentId: IArtboardVersionWithDesignsAndLayers['id']
 	route: RoutePath
@@ -61,8 +64,9 @@ export const FormFetcherIcon = ({
 			<AuthenticityTokenInput />
 
 			<input type="hidden" name="no-js" value={String(!isHydrated)} />
+			{entityId && <input type="hidden" name="id" value={entityId} />}
 			<input type="hidden" name={parentTypeId} value={parentId} />
-			<input type="hidden" name="type" value={type} />
+			{type && <input type="hidden" name="type" value={type} />}
 
 			<PanelIconButton
 				type="submit"

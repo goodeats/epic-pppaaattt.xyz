@@ -136,14 +136,14 @@ export async function layerDesignDeleteAction({
 	if (!isValid || !submission) return response
 
 	const { id, layerId, updateSelectedDesignId } = submission.value
-	const { success, error } = await layerDesignDeleteService({
+	const { success } = await layerDesignDeleteService({
 		userId,
 		id,
 		layerId,
 		updateSelectedDesignId,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }

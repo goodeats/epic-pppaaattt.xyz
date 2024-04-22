@@ -136,14 +136,14 @@ export async function artboardDesignDeleteAction({
 	if (!isValid || !submission) return response
 
 	const { id, artboardId, updateSelectedDesignId } = submission.value
-	const { success, error } = await artboardDesignDeleteService({
+	const { success } = await artboardDesignDeleteService({
 		userId,
 		id,
 		artboardId,
 		updateSelectedDesignId,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }
