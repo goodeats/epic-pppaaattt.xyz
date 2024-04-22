@@ -1,4 +1,5 @@
 import { type User } from '@prisma/client'
+import { type IDesignUpdatedResponse } from '#app/models/design/design.update.server'
 import {
 	type IDesign,
 	findFirstDesign,
@@ -24,7 +25,7 @@ export const designMoveDownService = async ({
 	targetEntityId: IDesignEntityId
 	updateSelectedDesignId?: IDesignIdOrNull
 	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
-}) => {
+}): Promise<IDesignUpdatedResponse> => {
 	try {
 		const moveDownDesignPromises = []
 
@@ -77,8 +78,13 @@ export const designMoveDownService = async ({
 
 		return { success: true }
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('designMoveDownService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }
 

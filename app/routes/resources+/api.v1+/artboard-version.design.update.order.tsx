@@ -4,9 +4,10 @@ import {
 	type DataFunctionArgs,
 } from '@remix-run/node'
 import { redirectBack } from 'remix-utils/redirect-back'
-import { validateArtboardVersionToggleVisibeDesignSubmission } from '#app/models/design-artboard-version/design-artboard-version.update.server'
+import { validateArtboardVersionReorderDesignSubmission } from '#app/models/design-artboard-version/design-artboard-version.update.server'
 import { validateNoJS } from '#app/schema/form-data'
-import { artboardDesignToggleVisibleService } from '#app/services/artboard/design/toggle-visible.service'
+import { artboardVersionDesignMoveDownService } from '#app/services/artboard/version/design/move-down.service'
+import { artboardVersionDesignMoveUpService } from '#app/services/artboard/version/design/move-up.service'
 import { requireUserId } from '#app/utils/auth.server'
 
 // https://www.epicweb.dev/full-stack-components
@@ -23,16 +24,23 @@ export async function action({ request }: DataFunctionArgs) {
 
 	let updateSuccess = false
 	const { status, submission } =
-		await validateArtboardVersionToggleVisibeDesignSubmission({
+		await validateArtboardVersionReorderDesignSubmission({
 			userId,
 			formData,
 		})
 
 	if (status === 'success') {
-		const { success } = await artboardDesignToggleVisibleService({
-			userId,
-			...submission.value,
-		})
+		const { direction } = submission.value
+		const { success } =
+			direction === 'up'
+				? await artboardVersionDesignMoveUpService({
+						userId,
+						...submission.value,
+				  })
+				: await artboardVersionDesignMoveDownService({
+						userId,
+						...submission.value,
+				  })
 		updateSuccess = success
 	}
 

@@ -6,8 +6,15 @@ import {
 } from '#app/schema/design'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
+import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
 import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
-import { SidebarPanel, SidebarPanelRow, SidebarPanelRowContainer } from '..'
+import {
+	SidebarPanel,
+	SidebarPanelRow,
+	SidebarPanelRowContainer,
+	SidebarPanelRowReorderContainer,
+} from '..'
+import { FormFetcherMoveIcon } from '../form/fetcher/move-icon'
 import { PanelEntityRowActions } from './dashboard-entity-panel.actions'
 import { PanelEntityHeader } from './dashboard-entity-panel.header'
 
@@ -22,6 +29,7 @@ export const DashboardEntityPanel = ({
 	parent,
 	entities,
 	strategyEntityNew,
+	strategyReorder,
 	strategyToggleVisible,
 	strategyEntityDelete,
 }: {
@@ -30,9 +38,12 @@ export const DashboardEntityPanel = ({
 	parent: PanelEntityParent
 	entities: PanelEntities
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
+	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
 	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 }) => {
+	const entityCount = entities.length
+
 	return (
 		<SidebarPanel>
 			<PanelEntityHeader
@@ -49,6 +60,9 @@ export const DashboardEntityPanel = ({
 						parentTypeId={parentTypeId}
 						parent={parent}
 						type={type}
+						entityCount={entityCount}
+						entityIndex={index}
+						strategyReorder={strategyReorder}
 						strategyToggleVisible={strategyToggleVisible}
 						strategyEntityDelete={strategyEntityDelete}
 					/>
@@ -63,6 +77,9 @@ export const PanelEntityRow = ({
 	parentTypeId,
 	parent,
 	type,
+	entityCount,
+	entityIndex,
+	strategyReorder,
 	strategyToggleVisible,
 	strategyEntityDelete,
 }: {
@@ -70,12 +87,23 @@ export const PanelEntityRow = ({
 	parentTypeId: designParentTypeIdEnum
 	parent: PanelEntityParent
 	type: PanelEntityType
+	entityCount: number
+	entityIndex: number
+	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
 	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 }) => {
 	// will want count, index of row
 	return (
 		<SidebarPanelRow>
+			<PanelEntityRowReorder
+				entity={entity}
+				parentTypeId={parentTypeId}
+				parent={parent}
+				entityCount={entityCount}
+				entityIndex={entityIndex}
+				strategyReorder={strategyReorder}
+			/>
 			<SidebarPanelRowContainer>
 				<div className="truncate">
 					{entity.id}
@@ -90,5 +118,49 @@ export const PanelEntityRow = ({
 				/>
 			</SidebarPanelRowContainer>
 		</SidebarPanelRow>
+	)
+}
+
+export const PanelEntityRowReorder = ({
+	entity,
+	parentTypeId,
+	parent,
+	entityCount,
+	entityIndex,
+	strategyReorder,
+}: {
+	entity: PanelEntity
+	parentTypeId: designParentTypeIdEnum
+	parent: PanelEntityParent
+	entityCount: number
+	entityIndex: number
+	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
+}) => {
+	const atTop = entityIndex === 0
+	const atBottom = entityIndex === entityCount - 1
+
+	return (
+		<SidebarPanelRowReorderContainer>
+			<FormFetcherMoveIcon
+				entityId={entity.id}
+				parentTypeId={parentTypeId}
+				parentId={parent.id}
+				route={strategyReorder.route}
+				formId={strategyReorder.formId}
+				schema={strategyReorder.schema}
+				direction="up"
+				atTopOrBottom={atTop}
+			/>
+			<FormFetcherMoveIcon
+				entityId={entity.id}
+				parentTypeId={parentTypeId}
+				parentId={parent.id}
+				route={strategyReorder.route}
+				formId={strategyReorder.formId}
+				schema={strategyReorder.schema}
+				direction="down"
+				atTopOrBottom={atBottom}
+			/>
+		</SidebarPanelRowReorderContainer>
 	)
 }

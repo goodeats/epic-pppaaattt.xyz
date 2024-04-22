@@ -90,12 +90,12 @@ export async function layerDesignReorderAction({
 		updateSelectedDesignId,
 	}
 
-	const { success, error } =
+	const { success } =
 		direction === 'up'
 			? await layerDesignMoveUpService(args)
 			: await layerDesignMoveDownService(args)
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }

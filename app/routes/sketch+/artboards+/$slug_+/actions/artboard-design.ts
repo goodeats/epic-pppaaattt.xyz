@@ -90,12 +90,12 @@ export async function artboardDesignReorderAction({
 		updateSelectedDesignId,
 	}
 
-	const { success, error } =
+	const { success } =
 		direction === 'up'
 			? await artboardDesignMoveUpService(args)
 			: await artboardDesignMoveDownService(args)
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }

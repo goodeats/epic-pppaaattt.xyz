@@ -1,5 +1,6 @@
 import { type User } from '@prisma/client'
 import { type IArtboard } from '#app/models/artboard.server'
+import { type IDesignUpdatedResponse } from '#app/models/design/design.update.server'
 import { type IDesign, type IDesignIdOrNull } from '#app/models/design.server'
 import { ArtboardUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { designMoveUpService } from '../../design/move-up.service'
@@ -14,7 +15,7 @@ export const artboardDesignMoveUpService = async ({
 	id: IDesign['id']
 	artboardId: IArtboard['id']
 	updateSelectedDesignId: IDesignIdOrNull
-}) => {
+}): Promise<IDesignUpdatedResponse> => {
 	try {
 		const updateSelectedDesignStrategy =
 			new ArtboardUpdateSelectedDesignStrategy()
@@ -26,7 +27,12 @@ export const artboardDesignMoveUpService = async ({
 			updateSelectedDesignStrategy,
 		})
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('artboardDesignMoveUpService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }

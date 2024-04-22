@@ -8,6 +8,10 @@ import {
 	action as apiV1ArtboardVersionDesignDeleteAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.design.delete'
 import {
+	loader as apiV1ArtboardVersionDesignUpdateOrderLoader,
+	action as apiV1ArtboardVersionDesignUpdateOrderAction,
+} from '#app/routes/resources+/api.v1+/artboard-version.design.update.order'
+import {
 	loader as apiV1ArtboardVersionDesignUpdateVisibleLoader,
 	action as apiV1ArtboardVersionDesignUpdateVisibleAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.design.update.visible'
@@ -43,6 +47,7 @@ export const Routes = {
 						DELETE: `${pathBase}/artboard-version/design/delete`,
 						UPDATE: {
 							VISIBLE: `${pathBase}/artboard-version/design/update/visible`,
+							ORDER: `${pathBase}/artboard-version/design/update/order`,
 						},
 					},
 				},
@@ -64,6 +69,8 @@ export interface ApiRouteLoaders {
 		.DELETE]: typeof apiV1ArtboardVersionDesignDeleteLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE
 		.VISIBLE]: typeof apiV1ArtboardVersionDesignUpdateVisibleLoader
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE
+		.ORDER]: typeof apiV1ArtboardVersionDesignUpdateOrderLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -79,6 +86,8 @@ export const loaders: ApiRouteLoaders = {
 		apiV1ArtboardVersionDesignDeleteLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE.VISIBLE]:
 		apiV1ArtboardVersionDesignUpdateVisibleLoader,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE.ORDER]:
+		apiV1ArtboardVersionDesignUpdateOrderLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -102,6 +111,8 @@ export interface ApiRouteActions {
 		.DELETE]: typeof apiV1ArtboardVersionDesignDeleteAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE
 		.VISIBLE]: typeof apiV1ArtboardVersionDesignUpdateVisibleAction
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE
+		.ORDER]: typeof apiV1ArtboardVersionDesignUpdateOrderAction
 }
 
 export const actions: ApiRouteActions = {
@@ -117,6 +128,8 @@ export const actions: ApiRouteActions = {
 		apiV1ArtboardVersionDesignDeleteAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE.VISIBLE]:
 		apiV1ArtboardVersionDesignUpdateVisibleAction,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE.ORDER]:
+		apiV1ArtboardVersionDesignUpdateOrderAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(

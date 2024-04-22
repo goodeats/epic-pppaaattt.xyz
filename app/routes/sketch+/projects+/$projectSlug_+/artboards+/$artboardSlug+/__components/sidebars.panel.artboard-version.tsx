@@ -3,6 +3,7 @@ import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-
 import { DesignParentTypeIdEnum } from '#app/schema/design'
 import { DashboardPanelCreateArtboardVersionDesignTypeStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { DashboardPanelDeleteArtboardVersionDesignTypeStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
+import { DashboardPanelUpdateArtboardVersionDesignTypeOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
 import { DashboardPanelUpdateArtboardVersionDesignTypeVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
 import {
 	designsByTypeToPanelArray,
@@ -27,6 +28,8 @@ export const PanelArtboardVersion = ({
 
 	const strategyEntityNew =
 		new DashboardPanelCreateArtboardVersionDesignTypeStrategy()
+	const strategyReorder =
+		new DashboardPanelUpdateArtboardVersionDesignTypeOrderStrategy()
 	const strategyToggleVisible =
 		new DashboardPanelUpdateArtboardVersionDesignTypeVisibleStrategy()
 	const strategyEntityDelete =
@@ -51,6 +54,7 @@ export const PanelArtboardVersion = ({
 					parent={version}
 					entities={designs}
 					strategyEntityNew={strategyEntityNew}
+					strategyReorder={strategyReorder}
 					strategyToggleVisible={strategyToggleVisible}
 					strategyEntityDelete={strategyEntityDelete}
 				/>
