@@ -21,9 +21,6 @@ export const PanelArtboardVersionDesigns = ({
 	const designTypePanels = designsByTypeToPanelArray({
 		designs: orderedDesigns,
 	})
-	// remove trim after testing actions work for one design type
-	const designsTrimmed = designTypePanels.slice(0, 7)
-	// const designsTrimmed = designTypePanels
 
 	const strategyEntityNew =
 		new DashboardPanelCreateArtboardVersionDesignTypeStrategy()
@@ -36,24 +33,23 @@ export const PanelArtboardVersionDesigns = ({
 
 	return (
 		<div>
-			{designsTrimmed.length > 0 &&
-				designsTrimmed.map((designPanel, index) => {
-					const { type, designs, strategyEntityValues } = designPanel
-					return (
-						<DashboardEntityPanel
-							key={type}
-							type={type}
-							parentTypeId={DesignParentTypeIdEnum.ARTBOARD_VERSION_ID}
-							parent={version}
-							entities={designs}
-							strategyEntityNew={strategyEntityNew}
-							strategyReorder={strategyReorder}
-							strategyEntityValues={strategyEntityValues}
-							strategyToggleVisible={strategyToggleVisible}
-							strategyEntityDelete={strategyEntityDelete}
-						/>
-					)
-				})}
+			{designTypePanels.map((designPanel, index) => {
+				const { type, designs, strategyEntityValues } = designPanel
+				return (
+					<DashboardEntityPanel
+						key={type}
+						type={type}
+						parentTypeId={DesignParentTypeIdEnum.ARTBOARD_VERSION_ID}
+						parent={version}
+						entities={designs}
+						strategyEntityNew={strategyEntityNew}
+						strategyReorder={strategyReorder}
+						strategyEntityValues={strategyEntityValues}
+						strategyToggleVisible={strategyToggleVisible}
+						strategyEntityDelete={strategyEntityDelete}
+					/>
+				)
+			})}
 		</div>
 	)
 }

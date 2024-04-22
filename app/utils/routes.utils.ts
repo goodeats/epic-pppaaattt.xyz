@@ -103,6 +103,10 @@ import {
 	loader as apiV1DesignTypeStrokeValueLoader,
 	action as apiV1DesignTypeStrokeValueAction,
 } from '#app/routes/resources+/api.v1+/design.type.stroke.update.value'
+import {
+	loader as apiV1DesignTypeTemplateStyleLoader,
+	action as apiV1DesignTypeTemplateStyleAction,
+} from '#app/routes/resources+/api.v1+/design.type.template.update.style'
 import { type ExtractStringValues } from './typescript-helpers'
 
 export type RoutePath = ExtractStringValues<typeof Routes>
@@ -176,6 +180,11 @@ export const Routes = {
 								VALUE: `${pathBase}/design/type/rotate/update/value`,
 							},
 						},
+						TEMPLATE: {
+							UPDATE: {
+								STYLE: `${pathBase}/design/type/template/update/style`,
+							},
+						},
 					},
 				},
 			},
@@ -236,6 +245,8 @@ export interface ApiRouteLoaders {
 		.VALUE]: typeof apiV1DesignTypeRotateValueLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE
 		.BASIS]: typeof apiV1DesignTypeRotateBasisLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE
+		.STYLE]: typeof apiV1DesignTypeTemplateStyleLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -291,6 +302,8 @@ export const loaders: ApiRouteLoaders = {
 		apiV1DesignTypeRotateValueLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE.BASIS]:
 		apiV1DesignTypeRotateBasisLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE.STYLE]:
+		apiV1DesignTypeTemplateStyleLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -354,6 +367,8 @@ export interface ApiRouteActions {
 		.VALUE]: typeof apiV1DesignTypeRotateValueAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE
 		.BASIS]: typeof apiV1DesignTypeRotateBasisAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE
+		.STYLE]: typeof apiV1DesignTypeTemplateStyleAction
 }
 
 export const actions: ApiRouteActions = {
@@ -409,6 +424,8 @@ export const actions: ApiRouteActions = {
 		apiV1DesignTypeRotateValueAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE.BASIS]:
 		apiV1DesignTypeRotateBasisAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE.STYLE]:
+		apiV1DesignTypeTemplateStyleAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(

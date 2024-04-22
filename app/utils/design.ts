@@ -30,6 +30,7 @@ import { DashboardPanelUpdateDesignTypePaletteValuesStrategy } from '#app/strate
 import { DashboardPanelUpdateDesignTypeRotateValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.rotate'
 import { DashboardPanelUpdateDesignTypeSizeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.size'
 import { DashboardPanelUpdateDesignTypeStrokeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.stroke'
+import { DashboardPanelUpdateDesignTypeTemplateValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.template'
 import { orderLinkedItems } from './linked-list.utils'
 import { safelyAssignValue } from './typescript-helpers'
 
@@ -394,7 +395,7 @@ export const designsByTypeToPanelArray = ({
 		designLines,
 		designRotates,
 		designLayouts,
-		// designTemplates,
+		designTemplates,
 	} = designs
 
 	const strategyLayoutEntityValues =
@@ -411,6 +412,8 @@ export const designsByTypeToPanelArray = ({
 		new DashboardPanelUpdateDesignTypeLineValuesStrategy()
 	const strategyRotateEntityValues =
 		new DashboardPanelUpdateDesignTypeRotateValuesStrategy()
+	const strategyTemplateEntityValues =
+		new DashboardPanelUpdateDesignTypeTemplateValuesStrategy()
 
 	return [
 		{
@@ -448,11 +451,11 @@ export const designsByTypeToPanelArray = ({
 			designs: designRotates,
 			strategyEntityValues: strategyRotateEntityValues,
 		},
-		// {
-		// 	type: DesignTypeEnum.TEMPLATE,
-		// 	designs: designTemplates,
-		// 	strategyEntityValues,
-		// },
+		{
+			type: DesignTypeEnum.TEMPLATE,
+			designs: designTemplates,
+			strategyEntityValues: strategyTemplateEntityValues,
+		},
 	]
 }
 
