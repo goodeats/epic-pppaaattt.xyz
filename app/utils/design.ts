@@ -27,6 +27,7 @@ import { DashboardPanelUpdateDesignTypeFillValuesStrategy } from '#app/strategie
 import { DashboardPanelUpdateDesignTypeLayoutValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.layout'
 import { DashboardPanelUpdateDesignTypePaletteValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.palette'
 import { DashboardPanelUpdateDesignTypeSizeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.size'
+import { DashboardPanelUpdateDesignTypeStrokeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.stroke'
 import { orderLinkedItems } from './linked-list.utils'
 import { safelyAssignValue } from './typescript-helpers'
 
@@ -387,7 +388,7 @@ export const designsByTypeToPanelArray = ({
 		designPalettes,
 		designSizes,
 		designFills,
-		// designStrokes,
+		designStrokes,
 		// designLines,
 		// designRotates,
 		designLayouts,
@@ -402,6 +403,8 @@ export const designsByTypeToPanelArray = ({
 		new DashboardPanelUpdateDesignTypeSizeValuesStrategy()
 	const strategyFillEntityValues =
 		new DashboardPanelUpdateDesignTypeFillValuesStrategy()
+	const strategyStrokeEntityValues =
+		new DashboardPanelUpdateDesignTypeStrokeValuesStrategy()
 
 	return [
 		{
@@ -424,11 +427,11 @@ export const designsByTypeToPanelArray = ({
 			designs: designFills,
 			strategyEntityValues: strategyFillEntityValues,
 		},
-		// {
-		// 	type: DesignTypeEnum.STROKE,
-		// 	designs: designStrokes,
-		// 	strategyEntityValues,
-		// },
+		{
+			type: DesignTypeEnum.STROKE,
+			designs: designStrokes,
+			strategyEntityValues: strategyStrokeEntityValues,
+		},
 		// { type: DesignTypeEnum.LINE, designs: designLines, strategyEntityValues },
 		// {
 		// 	type: DesignTypeEnum.ROTATE,

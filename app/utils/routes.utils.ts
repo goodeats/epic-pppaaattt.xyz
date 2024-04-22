@@ -71,6 +71,18 @@ import {
 	loader as apiV1DesignTypeSizeValueLoader,
 	action as apiV1DesignTypeSizeValueAction,
 } from '#app/routes/resources+/api.v1+/design.type.size.update.value'
+import {
+	loader as apiV1DesignTypeStrokeBasisLoader,
+	action as apiV1DesignTypeStrokeBasisAction,
+} from '#app/routes/resources+/api.v1+/design.type.stroke.update.basis'
+import {
+	loader as apiV1DesignTypeStrokeStyleLoader,
+	action as apiV1DesignTypeStrokeStyleAction,
+} from '#app/routes/resources+/api.v1+/design.type.stroke.update.style'
+import {
+	loader as apiV1DesignTypeStrokeValueLoader,
+	action as apiV1DesignTypeStrokeValueAction,
+} from '#app/routes/resources+/api.v1+/design.type.stroke.update.value'
 import { type ExtractStringValues } from './typescript-helpers'
 
 export type RoutePath = ExtractStringValues<typeof Routes>
@@ -124,6 +136,13 @@ export const Routes = {
 								STYLE: `${pathBase}/design/type/fill/update/style`,
 							},
 						},
+						STROKE: {
+							UPDATE: {
+								BASIS: `${pathBase}/design/type/stroke/update/basis`,
+								VALUE: `${pathBase}/design/type/stroke/update/value`,
+								STYLE: `${pathBase}/design/type/stroke/update/style`,
+							},
+						},
 					},
 				},
 			},
@@ -168,6 +187,12 @@ export interface ApiRouteLoaders {
 		.BASIS]: typeof apiV1DesignTypeFillBasisLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
 		.STYLE]: typeof apiV1DesignTypeFillStyleLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
+		.VALUE]: typeof apiV1DesignTypeStrokeValueLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
+		.BASIS]: typeof apiV1DesignTypeStrokeBasisLoader
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
+		.STYLE]: typeof apiV1DesignTypeStrokeStyleLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -207,6 +232,12 @@ export const loaders: ApiRouteLoaders = {
 		apiV1DesignTypeFillBasisLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE.STYLE]:
 		apiV1DesignTypeFillStyleLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE.VALUE]:
+		apiV1DesignTypeStrokeValueLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE.BASIS]:
+		apiV1DesignTypeStrokeBasisLoader,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE.STYLE]:
+		apiV1DesignTypeStrokeStyleLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -254,6 +285,12 @@ export interface ApiRouteActions {
 		.BASIS]: typeof apiV1DesignTypeFillBasisAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
 		.STYLE]: typeof apiV1DesignTypeFillStyleAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
+		.VALUE]: typeof apiV1DesignTypeStrokeValueAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
+		.BASIS]: typeof apiV1DesignTypeStrokeBasisAction
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
+		.STYLE]: typeof apiV1DesignTypeStrokeStyleAction
 }
 
 export const actions: ApiRouteActions = {
@@ -293,6 +330,12 @@ export const actions: ApiRouteActions = {
 		apiV1DesignTypeFillBasisAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE.STYLE]:
 		apiV1DesignTypeFillStyleAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE.VALUE]:
+		apiV1DesignTypeStrokeValueAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE.BASIS]:
+		apiV1DesignTypeStrokeBasisAction,
+	[Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE.STYLE]:
+		apiV1DesignTypeStrokeStyleAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(
