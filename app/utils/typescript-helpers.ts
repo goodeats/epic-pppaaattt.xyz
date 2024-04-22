@@ -31,3 +31,8 @@ export function updateProperty<T, K extends keyof T>(
 ) {
 	obj[key] = value
 }
+
+// Utility type to extract all the string values from a nested object
+export type ExtractStringValues<T> = T extends object
+	? { [K in keyof T]: ExtractStringValues<T[K]> }[keyof T]
+	: T

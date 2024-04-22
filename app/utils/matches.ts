@@ -31,7 +31,7 @@ import {
 // ensure matches route loader data is available for meta
 // https://github.com/remix-run/remix/issues/7347 -- so good
 // eventually these route loaders should reference they are in the sketch+ route
-export interface RouteLoaders {
+interface RouteLoaders {
 	root: typeof rootLoader
 	[projectsLoaderRoute]: typeof projectsLoader
 	[projectLoaderRoute]: typeof projectLoader
@@ -50,7 +50,6 @@ export function routeLoaderMetaData<K extends keyof RouteLoaders>(
 	return match.data as SerializeFrom<RouteLoaders[K]>
 }
 
-// add a matches for this ??
 export function routeLoaderMatchData<K extends keyof RouteLoaders>(
 	matches: UIMatch[],
 	matchId: K,
