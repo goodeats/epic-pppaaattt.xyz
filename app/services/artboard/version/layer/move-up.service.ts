@@ -1,21 +1,21 @@
-import { type User } from '@prisma/client'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import {
 	findFirstLayer,
 	updateLayerRemoveNodes,
 	type ILayer,
 	updateLayerNodes,
 } from '#app/models/layer.server'
+import { type IUser } from '#app/models/user/user.server'
 import { prisma } from '#app/utils/db.server'
 
-export const artboardLayerMoveUpService = async ({
+export const artboardVersionLayerMoveUpService = async ({
 	userId,
 	id,
-	artboardId,
+	artboardVersionId,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: ILayer['id']
-	artboardId: IArtboard['id']
+	artboardVersionId: IArtboardVersion['id']
 }) => {
 	try {
 		const moveUpLayerPromises = []
@@ -59,8 +59,13 @@ export const artboardLayerMoveUpService = async ({
 
 		return { success: true }
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('artboardVersionLayerMoveUpService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }
 
@@ -69,7 +74,7 @@ const getLayer = async ({
 	userId,
 }: {
 	id: ILayer['id']
-	userId: User['id']
+	userId: IUser['id']
 }) => {
 	const layer = await findFirstLayer({
 		where: { id, ownerId: userId },
@@ -85,7 +90,7 @@ const getAdjacentLayers = async ({
 	prevPrevId,
 	nextId,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	prevPrevId: string | null
 	nextId: string | null
 }) => {

@@ -1,8 +1,8 @@
-import { type designParentTypeIdEnum } from '#app/schema/design'
 import {
 	type IEntityVisible,
 	type IEntity,
 	type IEntityParentType,
+	type entityParentIdTypeEnum,
 } from '#app/schema/entity'
 import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
@@ -23,7 +23,7 @@ export const PanelEntityRow = ({
 	children,
 }: {
 	entity: IEntity
-	parentTypeId: designParentTypeIdEnum
+	parentTypeId: entityParentIdTypeEnum
 	parent: IEntityParentType
 	entityCount: number
 	entityIndex: number

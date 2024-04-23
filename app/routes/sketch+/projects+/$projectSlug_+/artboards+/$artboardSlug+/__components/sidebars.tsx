@@ -2,6 +2,7 @@ import { Sidebar } from '#app/components/layout'
 import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
 import { PanelArtboardVersion } from './sidebars.panel.artboard-version'
+import { PanelArtboardVersionLayers } from './sidebars.panel.artboard-version.layers'
 
 export const SidebarLeft = ({
 	version,
@@ -12,8 +13,7 @@ export const SidebarLeft = ({
 		<Sidebar id="sidebar-left">
 			<SidebarTabs tabs={['display', 'assets']}>
 				<SidebarTabsContent value="display">
-					artboard layrs
-					{/* <PanelArtboardLayers version={version} layers={layers} /> */}
+					<PanelArtboardVersionLayers version={version} />
 				</SidebarTabsContent>
 				<SidebarTabsContent value="assets">
 					Add assets like images here

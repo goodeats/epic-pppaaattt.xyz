@@ -1,6 +1,6 @@
 import { type whereArgsType } from '#app/schema/layer'
 import { prisma } from '#app/utils/db.server'
-import { type ILayerWithDesigns } from '../layer.server'
+import { type ILayer, type ILayerWithDesigns } from '../layer.server'
 
 export const getLayersWithDesigns = async ({
 	where,
@@ -25,4 +25,15 @@ export const getLayersWithDesigns = async ({
 		},
 	})
 	return layers
+}
+
+export const getLayer = async ({
+	where,
+}: {
+	where: whereArgsType
+}): Promise<ILayer | null> => {
+	const layer = await prisma.layer.findFirst({
+		where,
+	})
+	return layer
 }

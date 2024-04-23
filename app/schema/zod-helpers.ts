@@ -7,5 +7,5 @@ export type defaultValueNumber = {
 	[key: string]: number
 }
 export type defaultValueStringOrNumber = {
-	[key: string]: string | number
+	[key: string]: string | number | null | undefined
 }

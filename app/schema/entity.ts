@@ -10,9 +10,22 @@ import { type ISize } from '#app/models/size.server'
 import { type IStroke } from '#app/models/stroke.server'
 import { type ITemplate } from '#app/models/template.server'
 import { type ObjectValues } from '#app/utils/typescript-helpers'
-import { type designTypeEnum } from './design'
+import {
+	type ReorderDesignSchemaType,
+	type NewDesignSchemaType,
+	type designTypeEnum,
+	type ToggleVisibleDesignSchemaType,
+	type DeleteDesignSchemaType,
+} from './design'
+import {
+	type ReorderLayerSchemaType,
+	type NewLayerSchemaType,
+	type ToggleVisibleLayerSchemaType,
+	type DeleteLayerSchemaType,
+} from './layer'
 
 export type IEntity =
+	| ILayer
 	| IDesign
 	| IDesignWithType
 	| IArtboardVersion
@@ -28,6 +41,7 @@ export type IEntity =
 export type IEntityVisible = IDesign | IDesignWithType | ILayer
 
 export type IEntityId =
+	| ILayer['id']
 	| IDesign['id']
 	| IDesignWithType['id']
 	| IArtboardVersion['id']
@@ -40,7 +54,7 @@ export type IEntityId =
 	| ILayout['id']
 	| ITemplate['id']
 
-export type IEntityType = designTypeEnum
+export type IEntityType = designTypeEnum | 'layer'
 
 export type IEntityParentType = IDesignWithType | IArtboardVersion
 
@@ -57,10 +71,12 @@ export type entityParentIdTypeEnum = ObjectValues<typeof EntityParentIdType>
 
 export const EntityFormType = {
 	HEX: 'hex',
+	TEXT: 'text',
 	NUMBER: 'number',
 	ICON: 'icon',
 	MOVE_ICON: 'move-icon',
 	SELECT: 'select',
+	TEXTAREA: 'textarea',
 	MULTIPLE: 'multiple',
 	// add more form types here
 } as const
@@ -69,3 +85,17 @@ export type entityFormTypeEnum = ObjectValues<typeof EntityFormType>
 export type IEntityEnumSelectOption = {
 	[x: string]: string
 }
+
+export type NewEntitySchemaType = NewDesignSchemaType | NewLayerSchemaType
+
+export type ReorderEntitySchemaType =
+	| ReorderDesignSchemaType
+	| ReorderLayerSchemaType
+
+export type ToggleVisibleEntitySchemaType =
+	| ToggleVisibleDesignSchemaType
+	| ToggleVisibleLayerSchemaType
+
+export type DeleteEntitySchemaType =
+	| DeleteDesignSchemaType
+	| DeleteLayerSchemaType

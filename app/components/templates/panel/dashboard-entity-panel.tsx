@@ -1,9 +1,9 @@
-import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { type IDesignWithType } from '#app/models/design.server'
 import {
-	type designParentTypeIdEnum,
-	type designTypeEnum,
-} from '#app/schema/design'
+	type IEntity,
+	type IEntityParentType,
+	type IEntityType,
+	type entityParentIdTypeEnum,
+} from '#app/schema/entity'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
@@ -13,10 +13,6 @@ import { SidebarPanel } from '..'
 import { PanelEntityHeader } from './dashboard-entity-panel.header'
 import { PanelEntityRow } from './dashboard-entity-panel.row'
 import { PanelEntityValues } from './dashboard-entity-panel.values'
-
-type PanelEntities = IDesignWithType[]
-type PanelEntityType = designTypeEnum
-type PanelEntityParent = IArtboardVersionWithDesignsAndLayers
 
 export const DashboardEntityPanel = ({
 	type,
@@ -29,10 +25,10 @@ export const DashboardEntityPanel = ({
 	strategyToggleVisible,
 	strategyEntityDelete,
 }: {
-	type: PanelEntityType
-	parentTypeId: designParentTypeIdEnum
-	parent: PanelEntityParent
-	entities: PanelEntities
+	type: IEntityType
+	parentTypeId: entityParentIdTypeEnum
+	parent: IEntityParentType
+	entities: IEntity[]
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy

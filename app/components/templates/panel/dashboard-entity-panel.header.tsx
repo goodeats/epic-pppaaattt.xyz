@@ -1,5 +1,8 @@
-import { type designParentTypeIdEnum } from '#app/schema/design'
-import { type IEntityParentType, type IEntityType } from '#app/schema/entity'
+import {
+	type entityParentIdTypeEnum,
+	type IEntityParentType,
+	type IEntityType,
+} from '#app/schema/entity'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { capitalize } from '#app/utils/string-formatting'
 import { SidebarPanelHeader, SidebarPanelRowActionsContainer } from '..'
@@ -12,7 +15,7 @@ export const PanelEntityHeader = ({
 	strategyEntityNew,
 }: {
 	type: IEntityType
-	parentTypeId: designParentTypeIdEnum
+	parentTypeId: entityParentIdTypeEnum
 	parent: IEntityParentType
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 }) => {

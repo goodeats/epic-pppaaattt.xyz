@@ -16,6 +16,22 @@ import {
 	action as apiV1ArtboardVersionDesignUpdateVisibleAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.design.update.visible'
 import {
+	loader as apiV1ArtboardVersionLayerCreateLoader,
+	action as apiV1ArtboardVersionLayerCreateAction,
+} from '#app/routes/resources+/api.v1+/artboard-version.layer.create'
+import {
+	loader as apiV1ArtboardVersionLayerDeleteLoader,
+	action as apiV1ArtboardVersionLayerDeleteAction,
+} from '#app/routes/resources+/api.v1+/artboard-version.layer.delete'
+import {
+	loader as apiV1ArtboardVersionLayerUpdateOrderLoader,
+	action as apiV1ArtboardVersionLayerUpdateOrderAction,
+} from '#app/routes/resources+/api.v1+/artboard-version.layer.update.order'
+import {
+	loader as apiV1ArtboardVersionLayerUpdateVisibleLoader,
+	action as apiV1ArtboardVersionLayerUpdateVisibleAction,
+} from '#app/routes/resources+/api.v1+/artboard-version.layer.update.visible'
+import {
 	loader as apiV1ArtboardVersionUpdateBackgroundLoader,
 	action as apiV1ArtboardVersionUpdateBackgroundAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.update.background'
@@ -107,6 +123,14 @@ import {
 	loader as apiV1DesignTypeTemplateStyleLoader,
 	action as apiV1DesignTypeTemplateStyleAction,
 } from '#app/routes/resources+/api.v1+/design.type.template.update.style'
+import {
+	loader as apiV1LayerUpdateDescriptionLoader,
+	action as apiV1LayerUpdateDescriptionAction,
+} from '#app/routes/resources+/api.v1+/layer.update.description'
+import {
+	loader as apiV1LayerUpdateNameLoader,
+	action as apiV1LayerUpdateNameAction,
+} from '#app/routes/resources+/api.v1+/layer.update.name'
 import { type ExtractStringValues } from './typescript-helpers'
 
 export type RoutePath = ExtractStringValues<typeof Routes>
@@ -128,6 +152,14 @@ export const Routes = {
 						UPDATE: {
 							VISIBLE: `${pathBase}/artboard-version/design/update/visible`,
 							ORDER: `${pathBase}/artboard-version/design/update/order`,
+						},
+					},
+					LAYER: {
+						CREATE: `${pathBase}/artboard-version/layer/create`,
+						DELETE: `${pathBase}/artboard-version/layer/delete`,
+						UPDATE: {
+							VISIBLE: `${pathBase}/artboard-version/layer/update/visible`,
+							ORDER: `${pathBase}/artboard-version/layer/update/order`,
 						},
 					},
 				},
@@ -187,6 +219,12 @@ export const Routes = {
 						},
 					},
 				},
+				LAYER: {
+					UPDATE: {
+						DESCRIPTION: `${pathBase}/layer/update/description`,
+						NAME: `${pathBase}/layer/update/name`,
+					},
+				},
 			},
 		},
 	},
@@ -207,6 +245,17 @@ export interface ApiRouteLoaders {
 		.VISIBLE]: typeof apiV1ArtboardVersionDesignUpdateVisibleLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE
 		.ORDER]: typeof apiV1ArtboardVersionDesignUpdateOrderLoader
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER
+		.CREATE]: typeof apiV1ArtboardVersionLayerCreateLoader
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER
+		.DELETE]: typeof apiV1ArtboardVersionLayerDeleteLoader
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE
+		.VISIBLE]: typeof apiV1ArtboardVersionLayerUpdateVisibleLoader
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE
+		.ORDER]: typeof apiV1ArtboardVersionLayerUpdateOrderLoader
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE
+		.DESCRIPTION]: typeof apiV1LayerUpdateDescriptionLoader
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: typeof apiV1LayerUpdateNameLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
 		.COUNT]: typeof apiV1DesignTypeLayoutCountLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
@@ -264,6 +313,17 @@ export const loaders: ApiRouteLoaders = {
 		apiV1ArtboardVersionDesignUpdateVisibleLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE.ORDER]:
 		apiV1ArtboardVersionDesignUpdateOrderLoader,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.CREATE]:
+		apiV1ArtboardVersionLayerCreateLoader,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.DELETE]:
+		apiV1ArtboardVersionLayerDeleteLoader,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.VISIBLE]:
+		apiV1ArtboardVersionLayerUpdateVisibleLoader,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.ORDER]:
+		apiV1ArtboardVersionLayerUpdateOrderLoader,
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.DESCRIPTION]:
+		apiV1LayerUpdateDescriptionLoader,
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: apiV1LayerUpdateNameLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT]:
 		apiV1DesignTypeLayoutCountLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.ROWS]:
@@ -329,6 +389,17 @@ export interface ApiRouteActions {
 		.VISIBLE]: typeof apiV1ArtboardVersionDesignUpdateVisibleAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE
 		.ORDER]: typeof apiV1ArtboardVersionDesignUpdateOrderAction
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER
+		.CREATE]: typeof apiV1ArtboardVersionLayerCreateAction
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER
+		.DELETE]: typeof apiV1ArtboardVersionLayerDeleteAction
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE
+		.VISIBLE]: typeof apiV1ArtboardVersionLayerUpdateVisibleAction
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE
+		.ORDER]: typeof apiV1ArtboardVersionLayerUpdateOrderAction
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE
+		.DESCRIPTION]: typeof apiV1LayerUpdateDescriptionAction
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: typeof apiV1LayerUpdateNameAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
 		.COUNT]: typeof apiV1DesignTypeLayoutCountAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
@@ -386,6 +457,17 @@ export const actions: ApiRouteActions = {
 		apiV1ArtboardVersionDesignUpdateVisibleAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE.ORDER]:
 		apiV1ArtboardVersionDesignUpdateOrderAction,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.CREATE]:
+		apiV1ArtboardVersionLayerCreateAction,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.DELETE]:
+		apiV1ArtboardVersionLayerDeleteAction,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.VISIBLE]:
+		apiV1ArtboardVersionLayerUpdateVisibleAction,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.ORDER]:
+		apiV1ArtboardVersionLayerUpdateOrderAction,
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.DESCRIPTION]:
+		apiV1LayerUpdateDescriptionAction,
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: apiV1LayerUpdateNameAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT]:
 		apiV1DesignTypeLayoutCountAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.ROWS]:

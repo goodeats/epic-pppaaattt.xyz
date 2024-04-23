@@ -1,21 +1,25 @@
-import { type User, type Layer, type Artboard } from '@prisma/client'
+import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import { type ILayerDeletedResponse } from '#app/models/layer/layer.delete.server'
 import {
 	findFirstLayer,
 	connectPrevAndNextLayers,
 	updateLayerToHead,
 	updateLayerToTail,
+	type ILayer,
 } from '#app/models/layer.server'
+import { type IUser } from '#app/models/user/user.server'
 import { prisma } from '#app/utils/db.server'
 
-export const artboardLayerDeleteService = async ({
+// TODO: move logic to direct layer service
+export const artboardVersionLayerDeleteService = async ({
 	userId,
 	id,
-	artboardId,
+	artboardVersionId,
 }: {
-	userId: User['id']
-	id: Layer['id']
-	artboardId: Artboard['id']
-}) => {
+	userId: IUser['id']
+	id: ILayer['id']
+	artboardVersionId: IArtboardVersion['id']
+}): Promise<ILayerDeletedResponse> => {
 	try {
 		// Step 1: get the layer
 		const layer = await getLayer({
@@ -45,8 +49,13 @@ export const artboardLayerDeleteService = async ({
 
 		return { success: true }
 	} catch (error) {
-		console.log(error)
-		return { error: true }
+		console.log('artboardVersionLayerDeleteService error:', error)
+		const errorType = error instanceof Error
+		const errorMessage = errorType ? error.message : 'An unknown error occurred'
+		return {
+			success: false,
+			message: errorMessage,
+		}
 	}
 }
 
@@ -54,8 +63,8 @@ const getLayer = async ({
 	id,
 	userId,
 }: {
-	id: Layer['id']
-	userId: User['id']
+	id: ILayer['id']
+	userId: IUser['id']
 }) => {
 	const layer = await findFirstLayer({
 		where: { id, ownerId: userId },
@@ -70,8 +79,8 @@ const getAdjacentLayers = async ({
 	userId,
 	layer,
 }: {
-	userId: User['id']
-	layer: Layer
+	userId: IUser['id']
+	layer: ILayer
 }) => {
 	const { nextId, prevId } = layer
 
@@ -92,7 +101,7 @@ const getAdjacentLayers = async ({
 	return { nextLayer, prevLayer }
 }
 
-const deleteLayer = ({ id }: { id: Layer['id'] }) => {
+const deleteLayer = ({ id }: { id: ILayer['id'] }) => {
 	return prisma.layer.delete({
 		where: { id },
 	})
@@ -106,9 +115,9 @@ const updateLayerNodes = ({
 	prevLayer,
 }: {
 	nextId: string | null
-	nextLayer: Layer | null
+	nextLayer: ILayer | null
 	prevId: string | null
-	prevLayer: Layer | null
+	prevLayer: ILayer | null
 }) => {
 	const updateLayerNodesPromises = []
 

@@ -1,5 +1,8 @@
-import { type designParentTypeIdEnum } from '#app/schema/design'
-import { type IEntityVisible, type IEntityParentType } from '#app/schema/entity'
+import {
+	type IEntityVisible,
+	type IEntityParentType,
+	type entityParentIdTypeEnum,
+} from '#app/schema/entity'
 import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
 import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
 import { SidebarPanelRowActionsContainer } from '..'
@@ -13,7 +16,7 @@ export const PanelEntityRowActions = ({
 	strategyEntityDelete,
 }: {
 	entity: IEntityVisible
-	parentTypeId: designParentTypeIdEnum
+	parentTypeId: entityParentIdTypeEnum
 	parent: IEntityParentType
 	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
 	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy

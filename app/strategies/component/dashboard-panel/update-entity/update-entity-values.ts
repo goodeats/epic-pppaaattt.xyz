@@ -16,8 +16,8 @@ export interface IPanelEntityFormArgs {
 	formType: entityFormTypeEnum
 	defaultValue: defaultValueStringOrNumber
 	entityId: IEntityId
-	parentId: IEntityParentId
-	parentTypeId: entityParentIdTypeEnum
+	parentId?: IEntityParentId
+	parentTypeId?: entityParentIdTypeEnum
 	formId: string
 	schema: z.ZodSchema<any>
 	label?: string
