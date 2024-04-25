@@ -1,9 +1,5 @@
 import { EntityFormType } from '#app/schema/entity'
 import {
-	type defaultValueString,
-	type defaultValueNumber,
-} from '#app/schema/zod-helpers'
-import {
 	type IPanelEntityFormArgsOptionalMultiple,
 	type IPanelEntityFormArgs,
 	type IPanelEntityFormArgsMultiple,
@@ -11,6 +7,7 @@ import {
 import { FormFetcherHex } from '../form/fetcher/hex'
 import { FormFetcherNumber } from '../form/fetcher/number'
 import { FormFetcherSelect } from '../form/fetcher/select'
+import { FormFetcherText } from '../form/fetcher/text'
 
 export const PanelEntityForm = ({
 	panelEntityForm,
@@ -19,110 +16,86 @@ export const PanelEntityForm = ({
 	panelEntityForm: IPanelEntityFormArgsOptionalMultiple
 	fromPopover?: boolean
 }) => {
-	switch (panelEntityForm.formType) {
-		case EntityFormType.HEX:
-			return (
-				<PanelEntityFormHex
-					panelEntityForm={panelEntityForm as IPanelEntityFormArgs}
-					fromPopover={fromPopover}
-				/>
-			)
-		case EntityFormType.NUMBER:
-			return (
-				<PanelEntityFormNumber
-					panelEntityForm={panelEntityForm as IPanelEntityFormArgs}
-					fromPopover={fromPopover}
-				/>
-			)
-		case EntityFormType.SELECT:
-			return (
-				<PanelEntityFormSelect
-					panelEntityForm={panelEntityForm as IPanelEntityFormArgs}
-					fromPopover={fromPopover}
-				/>
-			)
-		case EntityFormType.MULTIPLE:
-			const panelEntityFormMultiple =
-				panelEntityForm as IPanelEntityFormArgsMultiple
-			// multiple is good for pairs like rows and columns next to each other
-			return (
-				<div className="flex">
-					{panelEntityFormMultiple.forms.map((panelEntityForm, i) => (
-						<PanelEntityForm
-							key={i}
-							panelEntityForm={panelEntityForm}
-							fromPopover={fromPopover}
-						/>
-					))}
-				</div>
-			)
-		default:
-			return null
+	// map component to form type
+	const FormComponent =
+		formTypeComponents[
+			panelEntityForm.formType as keyof typeof formTypeComponents
+		]
+
+	// if no component, return null
+	if (!FormComponent) return null
+
+	// if multiple forms, render each form in div
+	if (panelEntityForm.formType === EntityFormType.MULTIPLE) {
+		const panelEntityFormMultiple =
+			panelEntityForm as IPanelEntityFormArgsMultiple
+		return (
+			<div className="flex">
+				{panelEntityFormMultiple.forms.map((form, index) => (
+					<PanelEntityForm
+						key={index}
+						panelEntityForm={form}
+						fromPopover={fromPopover}
+					/>
+				))}
+			</div>
+		)
 	}
+
+	return (
+		<FormComponent
+			panelEntityForm={panelEntityForm as IPanelEntityFormArgs}
+			fromPopover={fromPopover}
+		/>
+	)
 }
 
-export const PanelEntityFormNumber = ({
-	panelEntityForm,
-	fromPopover,
-}: {
+// Define a common interface for the props used by all fetcher components
+interface IFormFetcherProps {
 	panelEntityForm: IPanelEntityFormArgs
 	fromPopover?: boolean
-}) => (
-	<FormFetcherNumber
-		entityId={panelEntityForm.entityId}
-		defaultValue={panelEntityForm.defaultValue as defaultValueNumber}
-		parentId={panelEntityForm.parentId}
-		parentTypeId={panelEntityForm.parentTypeId}
-		route={panelEntityForm.route}
-		formId={`${panelEntityForm.formId}-${panelEntityForm.entityId}-${
-			fromPopover ? '-popover' : ''
-		}`}
-		schema={panelEntityForm.schema}
-		// label={panelEntityForm.label}
-	/>
-)
+}
 
-export const PanelEntityFormHex = ({
-	panelEntityForm,
-	fromPopover,
-}: {
-	panelEntityForm: IPanelEntityFormArgs
-	fromPopover?: boolean
-}) => (
-	<FormFetcherHex
-		entityId={panelEntityForm.entityId}
-		defaultValue={panelEntityForm.defaultValue as defaultValueString}
-		parentId={panelEntityForm.parentId}
-		parentTypeId={panelEntityForm.parentTypeId}
-		route={panelEntityForm.route}
-		formId={`${panelEntityForm.formId}-${panelEntityForm.entityId}-${
-			fromPopover ? '-popover' : ''
-		}`}
-		schema={panelEntityForm.schema}
-		// label={panelEntityForm.label}
-	/>
-)
-
-export const PanelEntityFormSelect = ({
-	panelEntityForm,
-	fromPopover,
-}: {
-	panelEntityForm: IPanelEntityFormArgs
-	fromPopover?: boolean
-}) => {
-	return (
-		<FormFetcherSelect
+// Factory function to generate form components
+const createFormComponent = (FetcherComponent: React.ComponentType<any>) => {
+	const Component = ({ panelEntityForm, fromPopover }: IFormFetcherProps) => (
+		<FetcherComponent
 			entityId={panelEntityForm.entityId}
 			defaultValue={panelEntityForm.defaultValue}
 			options={panelEntityForm.options || []}
 			parentId={panelEntityForm.parentId}
 			parentTypeId={panelEntityForm.parentTypeId}
 			route={panelEntityForm.route}
-			formId={`${panelEntityForm.formId}-${panelEntityForm.entityId}-${
+			formId={`${panelEntityForm.formId}-${panelEntityForm.entityId}${
 				fromPopover ? '-popover' : ''
 			}`}
 			schema={panelEntityForm.schema}
-			// label={panelEntityForm.label}
 		/>
 	)
+	Component.displayName = `FormComponent(${
+		FetcherComponent.displayName || FetcherComponent.name
+	})`
+	return Component
+}
+
+// Specific form components created using the factory function
+export const PanelEntityFormNumber = createFormComponent(
+	FormFetcherNumber as React.ComponentType<any>,
+)
+export const PanelEntityFormHex = createFormComponent(
+	FormFetcherHex as React.ComponentType<any>,
+)
+export const PanelEntityFormText = createFormComponent(
+	FormFetcherText as React.ComponentType<any>,
+)
+export const PanelEntityFormSelect = createFormComponent(
+	FormFetcherSelect as React.ComponentType<any>,
+)
+
+// Map form types to form components
+const formTypeComponents = {
+	[EntityFormType.HEX]: PanelEntityFormHex,
+	[EntityFormType.NUMBER]: PanelEntityFormNumber,
+	[EntityFormType.TEXT]: PanelEntityFormText,
+	[EntityFormType.SELECT]: PanelEntityFormSelect,
 }
