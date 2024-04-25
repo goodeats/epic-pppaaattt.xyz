@@ -6,7 +6,7 @@ import {
 import { redirectBack } from 'remix-utils/redirect-back'
 import { validateArtboardVersionDeleteLayerSubmission } from '#app/models/layer/layer.delete.server'
 import { validateNoJS } from '#app/schema/form-data'
-import { artboardVersionDesignDeleteService } from '#app/services/artboard/version/design/delete.service'
+import { artboardVersionLayerDeleteService } from '#app/services/artboard/version/layer/delete.service'
 import { requireUserId } from '#app/utils/auth.server'
 
 // https://www.epicweb.dev/full-stack-components
@@ -29,7 +29,7 @@ export async function action({ request }: DataFunctionArgs) {
 		})
 
 	if (status === 'success') {
-		const { success } = await artboardVersionDesignDeleteService({
+		const { success } = await artboardVersionLayerDeleteService({
 			userId,
 			...submission.value,
 		})

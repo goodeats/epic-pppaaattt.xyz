@@ -50,11 +50,6 @@ export const FormFetcherTextarea = ({
 		shouldValidate: 'onInput',
 		shouldRevalidate: 'onInput',
 		onValidate: ({ formData }) => {
-			// set hex chars to uppercase
-			const value = formData.get(defaultValueKey)
-			if (typeof value === 'string') {
-				formData.set(defaultValueKey, value.toUpperCase())
-			}
 			return parse(formData, { schema: schema })
 		},
 		onSubmit: async (event, { formData }) => {
