@@ -5,7 +5,7 @@ import { DesignParentTypeIdEnum } from '#app/schema/design'
 import { DashboardPanelCreateArtboardVersionLayerStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { DashboardPanelArtboardVersionLayerActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { DashboardPanelUpdateLayerValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.layer'
-import { DashboardPanelUpdateArtboardVersionLayerTypeOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
+import { DashboardPanelUpdateArtboardVersionLayerTypeOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 
 export const PanelArtboardVersionLayers = ({

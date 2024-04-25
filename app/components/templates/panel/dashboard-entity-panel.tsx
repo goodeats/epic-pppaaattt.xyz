@@ -8,11 +8,11 @@ import {
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
-import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
-import { SidebarPanel } from '..'
+import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
+import { SidebarPanel, SidebarPanelRow, SidebarPanelRowContainer } from '..'
 import { PanelEntityRowActions } from './dashboard-entity-panel.actions'
 import { PanelEntityHeader } from './dashboard-entity-panel.header'
-import { PanelEntityRow } from './dashboard-entity-panel.row'
+import { PanelEntityRowReorder } from './dashboard-entity-panel.reorder'
 import { PanelEntityValues } from './dashboard-entity-panel.values'
 
 export const DashboardEntityPanel = ({
@@ -46,26 +46,27 @@ export const DashboardEntityPanel = ({
 			/>
 			{entities.map((entity, index) => {
 				return (
-					<PanelEntityRow
-						key={index}
-						entity={entity}
-						parentTypeId={parentTypeId}
-						parent={parent}
-						entityCount={entityCount}
-						entityIndex={index}
-						strategyReorder={strategyReorder}
-					>
-						<PanelEntityValues
-							type={type}
+					<SidebarPanelRow key={index}>
+						<PanelEntityRowReorder
 							entity={entity}
-							strategyEntityValues={strategyEntityValues}
-						/>
-						<PanelEntityRowActions
-							entity={entity as IEntityVisible}
 							parent={parent}
-							strategyActions={strategyActions}
+							entityCount={entityCount}
+							entityIndex={index}
+							strategyReorder={strategyReorder}
 						/>
-					</PanelEntityRow>
+						<SidebarPanelRowContainer>
+							<PanelEntityValues
+								type={type}
+								entity={entity}
+								strategyEntityValues={strategyEntityValues}
+							/>
+							<PanelEntityRowActions
+								entity={entity as IEntityVisible}
+								parent={parent}
+								strategyActions={strategyActions}
+							/>
+						</SidebarPanelRowContainer>
+					</SidebarPanelRow>
 				)
 			})}
 		</SidebarPanel>

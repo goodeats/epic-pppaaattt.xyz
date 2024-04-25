@@ -3,7 +3,7 @@ import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-
 import { DesignParentTypeIdEnum } from '#app/schema/design'
 import { DashboardPanelCreateArtboardVersionDesignTypeStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { DashboardPanelArtboardVersionDesignActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
-import { DashboardPanelUpdateArtboardVersionDesignTypeOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
+import { DashboardPanelUpdateArtboardVersionDesignTypeOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
 import {
 	designsByTypeToPanelArray,
 	filterAndOrderDesignsByType,
