@@ -8,6 +8,7 @@ import { FormFetcherHex } from '../form/fetcher/hex'
 import { FormFetcherNumber } from '../form/fetcher/number'
 import { FormFetcherSelect } from '../form/fetcher/select'
 import { FormFetcherText } from '../form/fetcher/text'
+import { FormFetcherTextarea } from '../form/fetcher/textarea'
 
 export const PanelEntityForm = ({
 	panelEntityForm,
@@ -88,6 +89,9 @@ export const PanelEntityFormHex = createFormComponent(
 export const PanelEntityFormText = createFormComponent(
 	FormFetcherText as React.ComponentType<any>,
 )
+export const PanelEntityFormTextarea = createFormComponent(
+	FormFetcherTextarea as React.ComponentType<any>,
+)
 export const PanelEntityFormSelect = createFormComponent(
 	FormFetcherSelect as React.ComponentType<any>,
 )
@@ -97,5 +101,6 @@ const formTypeComponents = {
 	[EntityFormType.HEX]: PanelEntityFormHex,
 	[EntityFormType.NUMBER]: PanelEntityFormNumber,
 	[EntityFormType.TEXT]: PanelEntityFormText,
+	[EntityFormType.TEXTAREA]: PanelEntityFormTextarea,
 	[EntityFormType.SELECT]: PanelEntityFormSelect,
 }

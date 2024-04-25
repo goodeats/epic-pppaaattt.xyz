@@ -5,7 +5,7 @@ import { useRef } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { type z } from 'zod'
-import { Input } from '#app/components/ui/input'
+import { Textarea } from '#app/components/ui/textarea'
 import {
 	type IEntityParentId,
 	type IEntityId,
@@ -19,7 +19,7 @@ import {
 	getActionType,
 } from '#app/utils/routes.utils'
 
-export const FormFetcherText = ({
+export const FormFetcherTextarea = ({
 	entityId,
 	defaultValue,
 	parentId,
@@ -86,10 +86,10 @@ export const FormFetcherText = ({
 			<input type="hidden" name="id" value={entityId} />
 			{parentId && <input type="hidden" name={parentTypeId} value={parentId} />}
 
-			<Input
-				className="flex h-8"
+			<Textarea
+				className="flex"
 				disabled={isPending}
-				{...conform.input(formField, {
+				{...conform.textarea(formField, {
 					ariaAttributes: true,
 				})}
 			/>
