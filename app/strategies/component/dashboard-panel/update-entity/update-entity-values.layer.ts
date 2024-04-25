@@ -74,15 +74,15 @@ export class DashboardPanelUpdateLayerValuesStrategy
 		return [layerNameArgs, layerDescriptionArgs]
 	}
 
-	getPopoverTriggerColor({ entity }: { entity: ILayer }): undefined {
+	getPopoverTriggerColor(): undefined {
 		return undefined
 	}
 
-	getPanelFormatIcon({ entity }: { entity: ILayer }): undefined {
+	getPanelFormatIcon(): undefined {
 		return undefined
 	}
 
-	getPanelBasisIcon({ entity }: { entity: ILayer }): undefined {
+	getPanelBasisIcon(): undefined {
 		return undefined
 	}
 }

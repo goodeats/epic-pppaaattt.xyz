@@ -77,6 +77,7 @@ export const EntityFormType = {
 	MOVE_ICON: 'move-icon',
 	SELECT: 'select',
 	TEXTAREA: 'textarea',
+	BUTTON: 'button',
 	MULTIPLE: 'multiple',
 	// add more form types here
 } as const

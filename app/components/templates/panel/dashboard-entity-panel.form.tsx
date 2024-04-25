@@ -4,6 +4,7 @@ import {
 	type IPanelEntityFormArgs,
 	type IPanelEntityFormArgsMultiple,
 } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
+import { FormFetcherButton } from '../form/fetcher/button'
 import { FormFetcherHex } from '../form/fetcher/hex'
 import { FormFetcherNumber } from '../form/fetcher/number'
 import { FormFetcherSelect } from '../form/fetcher/select'
@@ -95,6 +96,9 @@ export const PanelEntityFormTextarea = createFormComponent(
 export const PanelEntityFormSelect = createFormComponent(
 	FormFetcherSelect as React.ComponentType<any>,
 )
+export const PanelEntityFormButton = createFormComponent(
+	FormFetcherButton as React.ComponentType<any>,
+)
 
 // Map form types to form components
 const formTypeComponents = {
@@ -103,4 +107,5 @@ const formTypeComponents = {
 	[EntityFormType.TEXT]: PanelEntityFormText,
 	[EntityFormType.TEXTAREA]: PanelEntityFormTextarea,
 	[EntityFormType.SELECT]: PanelEntityFormSelect,
+	[EntityFormType.BUTTON]: PanelEntityFormButton,
 }
