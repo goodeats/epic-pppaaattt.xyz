@@ -1,15 +1,16 @@
 import {
+	type IEntityVisible,
 	type IEntity,
 	type IEntityParentType,
 	type IEntityType,
 	type entityParentIdTypeEnum,
 } from '#app/schema/entity'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
-import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
+import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
-import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
 import { SidebarPanel } from '..'
+import { PanelEntityRowActions } from './dashboard-entity-panel.actions'
 import { PanelEntityHeader } from './dashboard-entity-panel.header'
 import { PanelEntityRow } from './dashboard-entity-panel.row'
 import { PanelEntityValues } from './dashboard-entity-panel.values'
@@ -22,8 +23,7 @@ export const DashboardEntityPanel = ({
 	strategyEntityNew,
 	strategyReorder,
 	strategyEntityValues,
-	strategyToggleVisible,
-	strategyEntityDelete,
+	strategyActions,
 }: {
 	type: IEntityType
 	parentTypeId: entityParentIdTypeEnum
@@ -32,8 +32,7 @@ export const DashboardEntityPanel = ({
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy
-	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
-	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
+	strategyActions: IDashboardPanelEntityActionStrategy
 }) => {
 	const entityCount = entities.length
 
@@ -55,13 +54,16 @@ export const DashboardEntityPanel = ({
 						entityCount={entityCount}
 						entityIndex={index}
 						strategyReorder={strategyReorder}
-						strategyToggleVisible={strategyToggleVisible}
-						strategyEntityDelete={strategyEntityDelete}
 					>
 						<PanelEntityValues
 							type={type}
 							entity={entity}
 							strategyEntityValues={strategyEntityValues}
+						/>
+						<PanelEntityRowActions
+							entity={entity as IEntityVisible}
+							parent={parent}
+							strategyActions={strategyActions}
 						/>
 					</PanelEntityRow>
 				)

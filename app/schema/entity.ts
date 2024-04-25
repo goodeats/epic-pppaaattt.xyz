@@ -93,6 +93,18 @@ export type ReorderEntitySchemaType =
 	| ReorderDesignSchemaType
 	| ReorderLayerSchemaType
 
+// actions that go at end of the panel
+export const EntityActionType = {
+	DELETE: 'delete',
+	TOGGLE_VISIBLE: 'toggle-visible',
+	// add more action types here
+} as const
+export type entityActionTypeEnum = ObjectValues<typeof EntityActionType>
+
+export type EntityActionType =
+	| ToggleVisibleEntitySchemaType
+	| DeleteEntitySchemaType
+
 export type ToggleVisibleEntitySchemaType =
 	| ToggleVisibleDesignSchemaType
 	| ToggleVisibleLayerSchemaType

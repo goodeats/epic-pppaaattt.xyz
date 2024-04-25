@@ -2,9 +2,8 @@ import { DashboardEntityPanel } from '#app/components/templates/panel/dashboard-
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
 import { DesignParentTypeIdEnum } from '#app/schema/design'
 import { DashboardPanelCreateArtboardVersionDesignTypeStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
-import { DashboardPanelDeleteArtboardVersionDesignTypeStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
+import { DashboardPanelArtboardVersionDesignActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { DashboardPanelUpdateArtboardVersionDesignTypeOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
-import { DashboardPanelUpdateArtboardVersionDesignTypeVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
 import {
 	designsByTypeToPanelArray,
 	filterAndOrderDesignsByType,
@@ -26,10 +25,8 @@ export const PanelArtboardVersionDesigns = ({
 		new DashboardPanelCreateArtboardVersionDesignTypeStrategy()
 	const strategyReorder =
 		new DashboardPanelUpdateArtboardVersionDesignTypeOrderStrategy()
-	const strategyToggleVisible =
-		new DashboardPanelUpdateArtboardVersionDesignTypeVisibleStrategy()
-	const strategyEntityDelete =
-		new DashboardPanelDeleteArtboardVersionDesignTypeStrategy()
+	const strategyActions =
+		new DashboardPanelArtboardVersionDesignActionStrategy()
 
 	return (
 		<div>
@@ -45,8 +42,7 @@ export const PanelArtboardVersionDesigns = ({
 						strategyEntityNew={strategyEntityNew}
 						strategyReorder={strategyReorder}
 						strategyEntityValues={strategyEntityValues}
-						strategyToggleVisible={strategyToggleVisible}
-						strategyEntityDelete={strategyEntityDelete}
+						strategyActions={strategyActions}
 					/>
 				)
 			})}

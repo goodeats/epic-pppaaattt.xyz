@@ -1,14 +1,10 @@
 import {
-	type IEntityVisible,
 	type IEntity,
 	type IEntityParentType,
 	type entityParentIdTypeEnum,
 } from '#app/schema/entity'
-import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
-import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
 import { SidebarPanelRow, SidebarPanelRowContainer } from '..'
-import { PanelEntityRowActions } from './dashboard-entity-panel.actions'
 import { PanelEntityRowReorder } from './dashboard-entity-panel.reorder'
 
 export const PanelEntityRow = ({
@@ -18,8 +14,6 @@ export const PanelEntityRow = ({
 	entityCount,
 	entityIndex,
 	strategyReorder,
-	strategyToggleVisible,
-	strategyEntityDelete,
 	children,
 }: {
 	entity: IEntity
@@ -28,8 +22,6 @@ export const PanelEntityRow = ({
 	entityCount: number
 	entityIndex: number
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
-	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
-	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
 	children: React.ReactNode
 }) => {
 	return (
@@ -42,16 +34,7 @@ export const PanelEntityRow = ({
 				entityIndex={entityIndex}
 				strategyReorder={strategyReorder}
 			/>
-			<SidebarPanelRowContainer>
-				{children}
-				<PanelEntityRowActions
-					entity={entity as IEntityVisible}
-					parentTypeId={parentTypeId}
-					parent={parent}
-					strategyToggleVisible={strategyToggleVisible}
-					strategyEntityDelete={strategyEntityDelete}
-				/>
-			</SidebarPanelRowContainer>
+			<SidebarPanelRowContainer>{children}</SidebarPanelRowContainer>
 		</SidebarPanelRow>
 	)
 }

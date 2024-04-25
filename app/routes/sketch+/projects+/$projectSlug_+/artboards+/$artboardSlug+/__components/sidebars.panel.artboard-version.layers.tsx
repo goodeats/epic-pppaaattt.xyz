@@ -3,10 +3,9 @@ import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-
 import { type ILayerWithDesigns } from '#app/models/layer.server'
 import { DesignParentTypeIdEnum } from '#app/schema/design'
 import { DashboardPanelCreateArtboardVersionLayerStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
-import { DashboardPanelDeleteArtboardVersionLayerStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
+import { DashboardPanelArtboardVersionLayerActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { DashboardPanelUpdateLayerValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.layer'
 import { DashboardPanelUpdateArtboardVersionLayerTypeOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-move.strategy'
-import { DashboardPanelUpdateArtboardVersionLayerTypeVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 
 export const PanelArtboardVersionLayers = ({
@@ -20,11 +19,8 @@ export const PanelArtboardVersionLayers = ({
 		new DashboardPanelCreateArtboardVersionLayerStrategy()
 	const strategyReorder =
 		new DashboardPanelUpdateArtboardVersionLayerTypeOrderStrategy()
-	const strategyToggleVisible =
-		new DashboardPanelUpdateArtboardVersionLayerTypeVisibleStrategy()
-	const strategyEntityDelete =
-		new DashboardPanelDeleteArtboardVersionLayerStrategy()
 	const strategyEntityValues = new DashboardPanelUpdateLayerValuesStrategy()
+	const strategyActions = new DashboardPanelArtboardVersionLayerActionStrategy()
 
 	return (
 		<div>
@@ -36,8 +32,7 @@ export const PanelArtboardVersionLayers = ({
 				strategyEntityNew={strategyEntityNew}
 				strategyReorder={strategyReorder}
 				strategyEntityValues={strategyEntityValues}
-				strategyToggleVisible={strategyToggleVisible}
-				strategyEntityDelete={strategyEntityDelete}
+				strategyActions={strategyActions}
 			/>
 		</div>
 	)

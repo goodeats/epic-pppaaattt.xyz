@@ -4,14 +4,17 @@ import {
 } from '#app/schema/design'
 import { ToggleVisibleArtboardVersionDesignSchema } from '#app/schema/design-artboard-version'
 import {
+	type entityActionTypeEnum,
 	type ToggleVisibleEntitySchemaType,
 	type entityParentIdTypeEnum,
+	EntityActionType,
 } from '#app/schema/entity'
 import { type ToggleVisibleLayerSchemaType } from '#app/schema/layer'
 import { ToggleVisibleArtboardVersionLayerSchema } from '#app/schema/layer-artboard-version'
 import { Routes, type RoutePath } from '#app/utils/routes.utils'
 
 export interface IDashboardPanelUpdateEntityVisibleStrategy {
+	actionType: entityActionTypeEnum
 	route: RoutePath
 	parentTypeId: entityParentIdTypeEnum
 	formId: string
@@ -19,9 +22,10 @@ export interface IDashboardPanelUpdateEntityVisibleStrategy {
 	iconText: string
 }
 
-export class DashboardPanelUpdateArtboardVersionDesignTypeVisibleStrategy
+export class DashboardPanelUpdateArtboardVersionDesignVisibleStrategy
 	implements IDashboardPanelUpdateEntityVisibleStrategy
 {
+	actionType: entityActionTypeEnum = EntityActionType.TOGGLE_VISIBLE
 	route: RoutePath =
 		Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.UPDATE.VISIBLE
 	parentTypeId: entityParentIdTypeEnum =
@@ -32,9 +36,10 @@ export class DashboardPanelUpdateArtboardVersionDesignTypeVisibleStrategy
 	iconText = 'Design'
 }
 
-export class DashboardPanelUpdateArtboardVersionLayerTypeVisibleStrategy
+export class DashboardPanelUpdateArtboardVersionLayerVisibleStrategy
 	implements IDashboardPanelUpdateEntityVisibleStrategy
 {
+	actionType: entityActionTypeEnum = EntityActionType.TOGGLE_VISIBLE
 	route: RoutePath =
 		Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.VISIBLE
 	parentTypeId: entityParentIdTypeEnum =
