@@ -128,6 +128,22 @@ import {
 	action as apiV1DesignTypeTemplateStyleAction,
 } from '#app/routes/resources+/api.v1+/design.type.template.update.style'
 import {
+	loader as apiV1LayerDesignCreateLoader,
+	action as apiV1LayerDesignCreateAction,
+} from '#app/routes/resources+/api.v1+/layer.design.create'
+import {
+	loader as apiV1LayerDesignDeleteLoader,
+	action as apiV1LayerDesignDeleteAction,
+} from '#app/routes/resources+/api.v1+/layer.design.delete'
+import {
+	loader as apiV1LayerDesignUpdateOrderLoader,
+	action as apiV1LayerDesignUpdateOrderAction,
+} from '#app/routes/resources+/api.v1+/layer.design.update.order'
+import {
+	loader as apiV1LayerDesignUpdateVisibleLoader,
+	action as apiV1LayerDesignUpdateVisibleAction,
+} from '#app/routes/resources+/api.v1+/layer.design.update.visible'
+import {
 	loader as apiV1LayerUpdateDescriptionLoader,
 	action as apiV1LayerUpdateDescriptionAction,
 } from '#app/routes/resources+/api.v1+/layer.update.description'
@@ -229,6 +245,14 @@ export const Routes = {
 						DESCRIPTION: `${pathBase}/layer/update/description`,
 						NAME: `${pathBase}/layer/update/name`,
 					},
+					DESIGN: {
+						CREATE: `${pathBase}/layer/design/create`,
+						DELETE: `${pathBase}/layer/design/delete`,
+						UPDATE: {
+							VISIBLE: `${pathBase}/layer/design/update/visible`,
+							ORDER: `${pathBase}/layer/design/update/order`,
+						},
+					},
 				},
 			},
 		},
@@ -260,9 +284,6 @@ export interface ApiRouteLoaders {
 		.ORDER]: typeof apiV1ArtboardVersionLayerUpdateOrderLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE
 		.SELECTED]: typeof apiV1ArtboardVersionLayerUpdateSelectedLoader
-	[Routes.RESOURCES.API.V1.LAYER.UPDATE
-		.DESCRIPTION]: typeof apiV1LayerUpdateDescriptionLoader
-	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: typeof apiV1LayerUpdateNameLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
 		.COUNT]: typeof apiV1DesignTypeLayoutCountLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
@@ -303,6 +324,17 @@ export interface ApiRouteLoaders {
 		.BASIS]: typeof apiV1DesignTypeRotateBasisLoader
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE
 		.STYLE]: typeof apiV1DesignTypeTemplateStyleLoader
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE
+		.DESCRIPTION]: typeof apiV1LayerUpdateDescriptionLoader
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: typeof apiV1LayerUpdateNameLoader
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN
+		.CREATE]: typeof apiV1LayerDesignCreateLoader
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN
+		.DELETE]: typeof apiV1LayerDesignDeleteLoader
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.UPDATE
+		.VISIBLE]: typeof apiV1LayerDesignUpdateVisibleLoader
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.UPDATE
+		.ORDER]: typeof apiV1LayerDesignUpdateOrderLoader
 }
 
 export const loaders: ApiRouteLoaders = {
@@ -330,9 +362,6 @@ export const loaders: ApiRouteLoaders = {
 		apiV1ArtboardVersionLayerUpdateOrderLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.SELECTED]:
 		apiV1ArtboardVersionLayerUpdateSelectedLoader,
-	[Routes.RESOURCES.API.V1.LAYER.UPDATE.DESCRIPTION]:
-		apiV1LayerUpdateDescriptionLoader,
-	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: apiV1LayerUpdateNameLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT]:
 		apiV1DesignTypeLayoutCountLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.ROWS]:
@@ -373,6 +402,15 @@ export const loaders: ApiRouteLoaders = {
 		apiV1DesignTypeRotateBasisLoader,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE.STYLE]:
 		apiV1DesignTypeTemplateStyleLoader,
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.DESCRIPTION]:
+		apiV1LayerUpdateDescriptionLoader,
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: apiV1LayerUpdateNameLoader,
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.CREATE]: apiV1LayerDesignCreateLoader,
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.DELETE]: apiV1LayerDesignDeleteLoader,
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.UPDATE.VISIBLE]:
+		apiV1LayerDesignUpdateVisibleLoader,
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.UPDATE.ORDER]:
+		apiV1LayerDesignUpdateOrderLoader,
 }
 
 export function getLoaderType<K extends keyof ApiRouteLoaders>(
@@ -408,9 +446,6 @@ export interface ApiRouteActions {
 		.ORDER]: typeof apiV1ArtboardVersionLayerUpdateOrderAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE
 		.SELECTED]: typeof apiV1ArtboardVersionLayerUpdateSelectedAction
-	[Routes.RESOURCES.API.V1.LAYER.UPDATE
-		.DESCRIPTION]: typeof apiV1LayerUpdateDescriptionAction
-	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: typeof apiV1LayerUpdateNameAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
 		.COUNT]: typeof apiV1DesignTypeLayoutCountAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
@@ -451,6 +486,17 @@ export interface ApiRouteActions {
 		.BASIS]: typeof apiV1DesignTypeRotateBasisAction
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE
 		.STYLE]: typeof apiV1DesignTypeTemplateStyleAction
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE
+		.DESCRIPTION]: typeof apiV1LayerUpdateDescriptionAction
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: typeof apiV1LayerUpdateNameAction
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN
+		.CREATE]: typeof apiV1LayerDesignCreateAction
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN
+		.DELETE]: typeof apiV1LayerDesignDeleteAction
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.UPDATE
+		.VISIBLE]: typeof apiV1LayerDesignUpdateVisibleAction
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.UPDATE
+		.ORDER]: typeof apiV1LayerDesignUpdateOrderAction
 }
 
 export const actions: ApiRouteActions = {
@@ -478,9 +524,6 @@ export const actions: ApiRouteActions = {
 		apiV1ArtboardVersionLayerUpdateOrderAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.SELECTED]:
 		apiV1ArtboardVersionLayerUpdateSelectedAction,
-	[Routes.RESOURCES.API.V1.LAYER.UPDATE.DESCRIPTION]:
-		apiV1LayerUpdateDescriptionAction,
-	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: apiV1LayerUpdateNameAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.COUNT]:
 		apiV1DesignTypeLayoutCountAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.ROWS]:
@@ -521,6 +564,15 @@ export const actions: ApiRouteActions = {
 		apiV1DesignTypeRotateBasisAction,
 	[Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE.STYLE]:
 		apiV1DesignTypeTemplateStyleAction,
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.DESCRIPTION]:
+		apiV1LayerUpdateDescriptionAction,
+	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: apiV1LayerUpdateNameAction,
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.CREATE]: apiV1LayerDesignCreateAction,
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.DELETE]: apiV1LayerDesignDeleteAction,
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.UPDATE.VISIBLE]:
+		apiV1LayerDesignUpdateVisibleAction,
+	[Routes.RESOURCES.API.V1.LAYER.DESIGN.UPDATE.ORDER]:
+		apiV1LayerDesignUpdateOrderAction,
 }
 
 export function getActionType<K extends keyof ApiRouteActions>(

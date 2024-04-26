@@ -29,7 +29,7 @@ export class ValidateArtboardVersionSubmissionStrategy
 		const artboardVersion = await getArtboardVersion({
 			where: { id, ownerId: userId },
 		})
-		if (!artboardVersion) ctx.addIssue(addNotFoundIssue('Artboard'))
+		if (!artboardVersion) ctx.addIssue(addNotFoundIssue('ArtboardVersion'))
 	}
 }
 
@@ -49,7 +49,7 @@ export class ValidateArtboardVersionParentSubmissionStrategy
 		const artboardVersion = await getArtboardVersion({
 			where: { id: artboardVersionId, ownerId: userId },
 		})
-		if (!artboardVersion) ctx.addIssue(addNotFoundIssue('Artboard'))
+		if (!artboardVersion) ctx.addIssue(addNotFoundIssue('ArtboardVersion'))
 	}
 }
 
@@ -89,6 +89,26 @@ export class ValidateLayerSubmissionStrategy
 		const layer = await getLayer({
 			where: { id, ownerId: userId },
 		})
-		if (!layer) ctx.addIssue(addNotFoundIssue('Artboard'))
+		if (!layer) ctx.addIssue(addNotFoundIssue('Layer'))
+	}
+}
+
+export class ValidateLayerParentSubmissionStrategy
+	implements IValidateSubmissionStrategy
+{
+	async validateFormDataEntity({
+		userId,
+		data,
+		ctx,
+	}: {
+		userId: User['id']
+		data: any
+		ctx: any
+	}): Promise<void> {
+		const { layerId } = data
+		const layer = await getLayer({
+			where: { id: layerId, ownerId: userId },
+		})
+		if (!layer) ctx.addIssue(addNotFoundIssue('Layer'))
 	}
 }

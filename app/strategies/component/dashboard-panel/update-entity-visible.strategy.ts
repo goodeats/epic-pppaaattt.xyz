@@ -3,6 +3,7 @@ import {
 	type ToggleVisibleDesignSchemaType,
 } from '#app/schema/design'
 import { ToggleVisibleArtboardVersionDesignSchema } from '#app/schema/design-artboard-version'
+import { ToggleVisibleLayerDesignSchema } from '#app/schema/design-layer'
 import {
 	type entityActionTypeEnum,
 	type ToggleVisibleEntitySchemaType,
@@ -46,5 +47,16 @@ export class DashboardPanelUpdateArtboardVersionLayerVisibleStrategy
 		DesignParentTypeIdEnum.ARTBOARD_VERSION_ID
 	formId: string = 'artboard-version-layer-update-visible'
 	schema: ToggleVisibleLayerSchemaType = ToggleVisibleArtboardVersionLayerSchema
+	iconText = 'Design'
+}
+
+export class DashboardPanelUpdateLayerDesignVisibleStrategy
+	implements IDashboardPanelUpdateEntityVisibleStrategy
+{
+	actionType: entityActionTypeEnum = EntityActionType.TOGGLE_VISIBLE
+	route: RoutePath = Routes.RESOURCES.API.V1.LAYER.DESIGN.UPDATE.VISIBLE
+	parentTypeId: entityParentIdTypeEnum = DesignParentTypeIdEnum.LAYER_ID
+	formId: string = 'layer-design-update-visible'
+	schema: ToggleVisibleDesignSchemaType = ToggleVisibleLayerDesignSchema
 	iconText = 'Design'
 }

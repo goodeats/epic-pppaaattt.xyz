@@ -3,6 +3,7 @@ import {
 	type ReorderDesignSchemaType,
 } from '#app/schema/design'
 import { ReorderArtboardVersionDesignSchema } from '#app/schema/design-artboard-version'
+import { ReorderLayerDesignSchema } from '#app/schema/design-layer'
 import {
 	type ReorderEntitySchemaType,
 	type entityParentIdTypeEnum,
@@ -39,5 +40,15 @@ export class DashboardPanelUpdateArtboardVersionLayerTypeOrderStrategy
 		DesignParentTypeIdEnum.ARTBOARD_VERSION_ID
 	formId: string = 'artboard-version-layer-update-order'
 	schema: ReorderLayerSchemaType = ReorderArtboardVersionLayerSchema
+	iconText = 'Move'
+}
+
+export class DashboardPanelUpdateLayerDesignTypeOrderStrategy
+	implements IDashboardPanelUpdateEntityOrderStrategy
+{
+	route: RoutePath = Routes.RESOURCES.API.V1.LAYER.DESIGN.UPDATE.ORDER
+	parentTypeId: entityParentIdTypeEnum = DesignParentTypeIdEnum.LAYER_ID
+	formId: string = 'layer-design-update-order'
+	schema: ReorderDesignSchemaType = ReorderLayerDesignSchema
 	iconText = 'Move'
 }

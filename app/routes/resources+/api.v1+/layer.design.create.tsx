@@ -4,9 +4,9 @@ import {
 	type DataFunctionArgs,
 } from '@remix-run/node'
 import { redirectBack } from 'remix-utils/redirect-back'
-import { validateArtboardVersionToggleVisibeDesignSubmission } from '#app/models/design-artboard-version/design-artboard-version.update.server'
+import { validateLayerNewDesignSubmission } from '#app/models/design-layer/design-layer.create.server'
 import { validateNoJS } from '#app/schema/form-data'
-import { artboardVersionDesignToggleVisibleService } from '#app/services/artboard/version/design/toggle-visible.service'
+import { layerDesignCreateService } from '#app/services/layer/design/create.service'
 import { requireUserId } from '#app/utils/auth.server'
 
 // https://www.epicweb.dev/full-stack-components
@@ -21,19 +21,18 @@ export async function action({ request }: DataFunctionArgs) {
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
 
-	let updateSuccess = false
-	const { status, submission } =
-		await validateArtboardVersionToggleVisibeDesignSubmission({
-			userId,
-			formData,
-		})
+	let createSuccess = false
+	const { status, submission } = await validateLayerNewDesignSubmission({
+		userId,
+		formData,
+	})
 
 	if (status === 'success') {
-		const { success } = await artboardVersionDesignToggleVisibleService({
+		const { success } = await layerDesignCreateService({
 			userId,
 			...submission.value,
 		})
-		updateSuccess = success
+		createSuccess = success
 	}
 
 	if (noJS) {
@@ -45,7 +44,7 @@ export async function action({ request }: DataFunctionArgs) {
 	return json(
 		{ status, submission },
 		{
-			status: status === 'error' || !updateSuccess ? 404 : 200,
+			status: status === 'error' || !createSuccess ? 422 : 201,
 		},
 	)
 }

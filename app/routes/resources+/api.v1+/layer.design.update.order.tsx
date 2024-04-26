@@ -4,9 +4,10 @@ import {
 	type DataFunctionArgs,
 } from '@remix-run/node'
 import { redirectBack } from 'remix-utils/redirect-back'
-import { validateArtboardVersionToggleVisibeDesignSubmission } from '#app/models/design-artboard-version/design-artboard-version.update.server'
+import { validateLayerReorderDesignSubmission } from '#app/models/design-layer/design-layer.update.server'
 import { validateNoJS } from '#app/schema/form-data'
-import { artboardVersionDesignToggleVisibleService } from '#app/services/artboard/version/design/toggle-visible.service'
+import { layerDesignMoveDownService } from '#app/services/layer/design/move-down.service'
+import { layerDesignMoveUpService } from '#app/services/layer/design/move-up.service'
 import { requireUserId } from '#app/utils/auth.server'
 
 // https://www.epicweb.dev/full-stack-components
@@ -22,17 +23,23 @@ export async function action({ request }: DataFunctionArgs) {
 	const noJS = validateNoJS({ formData })
 
 	let updateSuccess = false
-	const { status, submission } =
-		await validateArtboardVersionToggleVisibeDesignSubmission({
-			userId,
-			formData,
-		})
+	const { status, submission } = await validateLayerReorderDesignSubmission({
+		userId,
+		formData,
+	})
 
 	if (status === 'success') {
-		const { success } = await artboardVersionDesignToggleVisibleService({
-			userId,
-			...submission.value,
-		})
+		const { direction } = submission.value
+		const { success } =
+			direction === 'up'
+				? await layerDesignMoveUpService({
+						userId,
+						...submission.value,
+				  })
+				: await layerDesignMoveDownService({
+						userId,
+						...submission.value,
+				  })
 		updateSuccess = success
 	}
 

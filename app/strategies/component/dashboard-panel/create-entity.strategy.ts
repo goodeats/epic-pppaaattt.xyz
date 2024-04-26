@@ -3,6 +3,7 @@ import {
 	type NewDesignSchemaType,
 } from '#app/schema/design'
 import { NewArtboardVersionDesignSchema } from '#app/schema/design-artboard-version'
+import { NewLayerDesignSchema } from '#app/schema/design-layer'
 import {
 	type entityParentIdTypeEnum,
 	type NewEntitySchemaType,
@@ -39,4 +40,14 @@ export class DashboardPanelCreateArtboardVersionLayerStrategy
 	formId: string = 'artboard-version-layer-create'
 	schema: NewLayerSchemaType = NewArtboardVersionLayerSchema
 	iconText = 'Add New Layer'
+}
+
+export class DashboardPanelCreateLayerDesignTypeStrategy
+	implements IDashboardPanelCreateEntityStrategy
+{
+	route: RoutePath = Routes.RESOURCES.API.V1.LAYER.DESIGN.CREATE
+	parentTypeId: entityParentIdTypeEnum = DesignParentTypeIdEnum.LAYER_ID
+	formId: string = 'layer-design-create'
+	schema: NewDesignSchemaType = NewLayerDesignSchema
+	iconText = 'Add New Design'
 }

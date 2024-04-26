@@ -3,6 +3,7 @@ import {
 	DesignParentTypeIdEnum,
 } from '#app/schema/design'
 import { DeleteArtboardVersionDesignSchema } from '#app/schema/design-artboard-version'
+import { DeleteLayerDesignSchema } from '#app/schema/design-layer'
 import {
 	type entityParentIdTypeEnum,
 	type DeleteEntitySchemaType,
@@ -44,4 +45,15 @@ export class DashboardPanelDeleteArtboardVersionLayerStrategy
 	formId: string = 'artboard-version-layer-delete'
 	schema: DeleteLayerSchemaType = DeleteArtboardVersionLayerSchema
 	iconText = 'Delete Layer'
+}
+
+export class DashboardPanelDeleteLayerDesignStrategy
+	implements IDashboardPanelDeleteEntityStrategy
+{
+	actionType: entityActionTypeEnum = EntityActionType.DELETE
+	route: RoutePath = Routes.RESOURCES.API.V1.LAYER.DESIGN.DELETE
+	parentTypeId: entityParentIdTypeEnum = DesignParentTypeIdEnum.LAYER_ID
+	formId: string = 'layer-design-delete'
+	schema: DeleteDesignSchemaType = DeleteLayerDesignSchema
+	iconText = 'Delete Design'
 }

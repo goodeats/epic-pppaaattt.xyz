@@ -4,6 +4,7 @@ import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-
 import { type ILayerWithDesigns } from '#app/models/layer.server'
 import { PanelArtboardVersion } from './sidebars.panel.artboard-version'
 import { PanelArtboardVersionLayers } from './sidebars.panel.artboard-version.layers'
+import { PanelLayer } from './sidebars.panel.layer'
 
 export const SidebarLeft = ({
 	version,
@@ -35,8 +36,11 @@ export const SidebarRight = ({
 		<Sidebar id="sidebar-right">
 			<SidebarTabs tabs={['designs', 'actions']}>
 				<SidebarTabsContent value="designs">
-					{selectedLayer && <p>yo</p>}
-					<PanelArtboardVersion version={version} />
+					{selectedLayer ? (
+						<PanelLayer layer={selectedLayer} />
+					) : (
+						<PanelArtboardVersion version={version} />
+					)}
 				</SidebarTabsContent>
 				<SidebarTabsContent value="actions">Actions here</SidebarTabsContent>
 			</SidebarTabs>
