@@ -4,9 +4,9 @@ import {
 	type DataFunctionArgs,
 } from '@remix-run/node'
 import { redirectBack } from 'remix-utils/redirect-back'
-import { validateArtboardVersionToggleVisibeLayerSubmission } from '#app/models/layer-artboard-version/layer-artboard-version.update.server'
+import { validateArtboardVersionSelectLayerSubmission } from '#app/models/layer-artboard-version/layer-artboard-version.update.server'
 import { validateNoJS } from '#app/schema/form-data'
-import { artboardVersionLayerToggleVisibleService } from '#app/services/artboard/version/layer/toggle-visible.service'
+import { artboardVersionLayerSelectService } from '#app/services/artboard/version/layer/select.service'
 import { requireUserId } from '#app/utils/auth.server'
 
 // https://www.epicweb.dev/full-stack-components
@@ -23,13 +23,13 @@ export async function action({ request }: DataFunctionArgs) {
 
 	let updateSuccess = false
 	const { status, submission } =
-		await validateArtboardVersionToggleVisibeLayerSubmission({
+		await validateArtboardVersionSelectLayerSubmission({
 			userId,
 			formData,
 		})
 
 	if (status === 'success') {
-		const { success } = await artboardVersionLayerToggleVisibleService({
+		const { success } = await artboardVersionLayerSelectService({
 			userId,
 			...submission.value,
 		})

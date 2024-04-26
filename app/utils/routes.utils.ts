@@ -28,6 +28,10 @@ import {
 	action as apiV1ArtboardVersionLayerUpdateOrderAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.layer.update.order'
 import {
+	loader as apiV1ArtboardVersionLayerUpdateSelectedLoader,
+	action as apiV1ArtboardVersionLayerUpdateSelectedAction,
+} from '#app/routes/resources+/api.v1+/artboard-version.layer.update.selected'
+import {
 	loader as apiV1ArtboardVersionLayerUpdateVisibleLoader,
 	action as apiV1ArtboardVersionLayerUpdateVisibleAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.layer.update.visible'
@@ -160,6 +164,7 @@ export const Routes = {
 						UPDATE: {
 							VISIBLE: `${pathBase}/artboard-version/layer/update/visible`,
 							ORDER: `${pathBase}/artboard-version/layer/update/order`,
+							SELECTED: `${pathBase}/artboard-version/layer/update/selected`,
 						},
 					},
 				},
@@ -253,6 +258,8 @@ export interface ApiRouteLoaders {
 		.VISIBLE]: typeof apiV1ArtboardVersionLayerUpdateVisibleLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE
 		.ORDER]: typeof apiV1ArtboardVersionLayerUpdateOrderLoader
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE
+		.SELECTED]: typeof apiV1ArtboardVersionLayerUpdateSelectedLoader
 	[Routes.RESOURCES.API.V1.LAYER.UPDATE
 		.DESCRIPTION]: typeof apiV1LayerUpdateDescriptionLoader
 	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: typeof apiV1LayerUpdateNameLoader
@@ -321,6 +328,8 @@ export const loaders: ApiRouteLoaders = {
 		apiV1ArtboardVersionLayerUpdateVisibleLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.ORDER]:
 		apiV1ArtboardVersionLayerUpdateOrderLoader,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.SELECTED]:
+		apiV1ArtboardVersionLayerUpdateSelectedLoader,
 	[Routes.RESOURCES.API.V1.LAYER.UPDATE.DESCRIPTION]:
 		apiV1LayerUpdateDescriptionLoader,
 	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: apiV1LayerUpdateNameLoader,
@@ -397,6 +406,8 @@ export interface ApiRouteActions {
 		.VISIBLE]: typeof apiV1ArtboardVersionLayerUpdateVisibleAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE
 		.ORDER]: typeof apiV1ArtboardVersionLayerUpdateOrderAction
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE
+		.SELECTED]: typeof apiV1ArtboardVersionLayerUpdateSelectedAction
 	[Routes.RESOURCES.API.V1.LAYER.UPDATE
 		.DESCRIPTION]: typeof apiV1LayerUpdateDescriptionAction
 	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: typeof apiV1LayerUpdateNameAction
@@ -465,6 +476,8 @@ export const actions: ApiRouteActions = {
 		apiV1ArtboardVersionLayerUpdateVisibleAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.ORDER]:
 		apiV1ArtboardVersionLayerUpdateOrderAction,
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.UPDATE.SELECTED]:
+		apiV1ArtboardVersionLayerUpdateSelectedAction,
 	[Routes.RESOURCES.API.V1.LAYER.UPDATE.DESCRIPTION]:
 		apiV1LayerUpdateDescriptionAction,
 	[Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME]: apiV1LayerUpdateNameAction,

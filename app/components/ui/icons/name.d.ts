@@ -22,6 +22,8 @@ export type IconName =
 	| 'color-wheel'
 	| 'copy'
 	| 'cross-1'
+	| 'crosshair-1'
+	| 'crosshair-2'
 	| 'dimensions'
 	| 'dots-horizontal'
 	| 'download'

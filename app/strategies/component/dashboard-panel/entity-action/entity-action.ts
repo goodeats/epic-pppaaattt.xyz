@@ -2,6 +2,7 @@ import {
 	DashboardPanelDeleteArtboardVersionDesignStrategy,
 	type IDashboardPanelDeleteEntityStrategy,
 } from '../delete-entity.strategy'
+import { DashboardPanelSelectArtboardVersionLayerStrategy } from '../select-entity.strategy'
 import {
 	DashboardPanelUpdateArtboardVersionDesignVisibleStrategy,
 	DashboardPanelUpdateArtboardVersionLayerVisibleStrategy,
@@ -38,8 +39,11 @@ export class DashboardPanelArtboardVersionLayerActionStrategy
 		const strategyToggleVisible =
 			new DashboardPanelUpdateArtboardVersionLayerVisibleStrategy()
 
+		const strategySelect =
+			new DashboardPanelSelectArtboardVersionLayerStrategy()
+
 		// delete in popover so it's less easy to click accidentally from left sidebar
 
-		return [strategyToggleVisible]
+		return [strategyToggleVisible, strategySelect]
 	}
 }

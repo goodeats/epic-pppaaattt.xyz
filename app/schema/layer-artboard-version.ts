@@ -29,6 +29,11 @@ export const ToggleVisibleArtboardVersionLayerSchema = z.object({
 	artboardVersionId: z.string(),
 })
 
+export const SelectArtboardVersionLayerSchema = z.object({
+	id: z.string(),
+	artboardVersionId: z.string(),
+})
+
 export const ReorderArtboardVersionLayerSchema = z.object({
 	id: z.string(),
 	artboardVersionId: z.string(),

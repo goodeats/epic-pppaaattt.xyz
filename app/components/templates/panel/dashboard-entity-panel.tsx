@@ -4,6 +4,7 @@ import {
 	type IEntityParentType,
 	type IEntityType,
 	type entityParentIdTypeEnum,
+	type IEntitySelectable,
 } from '#app/schema/entity'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
@@ -61,7 +62,7 @@ export const DashboardEntityPanel = ({
 								strategyEntityValues={strategyEntityValues}
 							/>
 							<PanelEntityRowActions
-								entity={entity as IEntityVisible}
+								entity={entity as IEntityVisible | IEntitySelectable}
 								parent={parent}
 								strategyActions={strategyActions}
 							/>

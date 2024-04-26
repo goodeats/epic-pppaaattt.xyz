@@ -10,6 +10,7 @@ import {
 	type NewArtboardVersionLayerSchema,
 	type ToggleVisibleArtboardVersionLayerSchema,
 	type DeleteArtboardVersionLayerSchema,
+	type SelectArtboardVersionLayerSchema,
 } from './layer-artboard-version'
 
 type ObjectValues<T> = T[keyof T]
@@ -51,6 +52,8 @@ export type ToggleVisibleLayerSchemaType =
 export type DeleteLayerSchemaType =
 	| typeof DeleteArtboardLayerSchema
 	| typeof DeleteArtboardVersionLayerSchema
+
+export type SelectLayerSchemaType = typeof SelectArtboardVersionLayerSchema
 
 export type selectArgsType = z.infer<typeof selectArgs>
 const selectArgs = z.object({

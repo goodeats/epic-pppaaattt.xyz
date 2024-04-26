@@ -3,14 +3,7 @@ import {
 	EditLayerDescriptionSchema,
 	EditLayerNameSchema,
 } from '#app/schema/layer'
-import {
-	ReorderArtboardVersionLayerSchema,
-	ToggleVisibleArtboardVersionLayerSchema,
-} from '#app/schema/layer-artboard-version'
-import {
-	ValidateArtboardVersionParentSubmissionStrategy,
-	ValidateLayerSubmissionStrategy,
-} from '#app/strategies/validate-submission.strategy'
+import { ValidateLayerSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { findFirstLayerInstance } from '#app/utils/prisma-extensions-layer'
 import { type ILayer } from '../layer.server'
@@ -45,34 +38,6 @@ export const validateLayerDescriptionSubmission = async ({
 		userId,
 		formData,
 		schema: EditLayerDescriptionSchema,
-		strategy,
-	})
-}
-
-export const validateArtboardVersionToggleVisibeLayerSubmission = async ({
-	userId,
-	formData,
-}: IntentActionArgs) => {
-	const strategy = new ValidateArtboardVersionParentSubmissionStrategy()
-
-	return await validateEntitySubmission({
-		userId,
-		formData,
-		schema: ToggleVisibleArtboardVersionLayerSchema,
-		strategy,
-	})
-}
-
-export const validateArtboardVersionReorderLayerSubmission = async ({
-	userId,
-	formData,
-}: IntentActionArgs) => {
-	const strategy = new ValidateArtboardVersionParentSubmissionStrategy()
-
-	return await validateEntitySubmission({
-		userId,
-		formData,
-		schema: ReorderArtboardVersionLayerSchema,
 		strategy,
 	})
 }

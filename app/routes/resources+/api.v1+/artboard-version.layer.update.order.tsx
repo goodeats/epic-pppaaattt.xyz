@@ -4,7 +4,7 @@ import {
 	type DataFunctionArgs,
 } from '@remix-run/node'
 import { redirectBack } from 'remix-utils/redirect-back'
-import { validateArtboardVersionReorderLayerSubmission } from '#app/models/layer/layer.update.server'
+import { validateArtboardVersionReorderLayerSubmission } from '#app/models/layer-artboard-version/layer-artboard-version.update.server'
 import { validateNoJS } from '#app/schema/form-data'
 import { artboardVersionLayerMoveDownService } from '#app/services/artboard/version/layer/move-down.service'
 import { artboardVersionLayerMoveUpService } from '#app/services/artboard/version/layer/move-up.service'

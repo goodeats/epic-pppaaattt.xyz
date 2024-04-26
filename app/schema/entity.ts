@@ -22,6 +22,7 @@ import {
 	type NewLayerSchemaType,
 	type ToggleVisibleLayerSchemaType,
 	type DeleteLayerSchemaType,
+	type SelectLayerSchemaType,
 } from './layer'
 
 export type IEntity =
@@ -39,6 +40,7 @@ export type IEntity =
 	| ITemplate
 
 export type IEntityVisible = IDesign | IDesignWithType | ILayer
+export type IEntitySelectable = ILayer
 
 export type IEntityId =
 	| ILayer['id']
@@ -97,6 +99,7 @@ export type ReorderEntitySchemaType =
 export const EntityActionType = {
 	DELETE: 'delete',
 	TOGGLE_VISIBLE: 'toggle-visible',
+	SELECT: 'select',
 	// add more action types here
 } as const
 export type entityActionTypeEnum = ObjectValues<typeof EntityActionType>
@@ -112,3 +115,5 @@ export type ToggleVisibleEntitySchemaType =
 export type DeleteEntitySchemaType =
 	| DeleteDesignSchemaType
 	| DeleteLayerSchemaType
+
+export type SelectEntitySchemaType = SelectLayerSchemaType
