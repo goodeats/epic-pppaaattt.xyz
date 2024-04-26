@@ -29,6 +29,7 @@ export const FormFetcherIcon = ({
 	schema,
 	icon,
 	iconText,
+	className,
 }: {
 	entityId?: IEntityId
 	type?: IEntityType
@@ -39,6 +40,7 @@ export const FormFetcherIcon = ({
 	schema: z.ZodSchema<any>
 	icon: IconName
 	iconText: string
+	className?: string
 }) => {
 	const loader = getLoaderType(route)
 	const action = getActionType(route)
@@ -70,6 +72,7 @@ export const FormFetcherIcon = ({
 
 			<PanelIconButton
 				type="submit"
+				className={className}
 				iconName={icon}
 				iconText={iconText}
 				disabled={isPending}

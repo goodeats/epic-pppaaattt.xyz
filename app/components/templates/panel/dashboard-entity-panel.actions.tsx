@@ -143,6 +143,7 @@ export const PanelEntitySelectAction = ({
 	parent: IEntityParentType
 	strategyEntitySelect: IDashboardPanelSelectEntityStrategy
 }) => {
+	const { selected } = entity
 	return (
 		<FormFetcherIcon
 			entityId={entity.id}
@@ -151,8 +152,9 @@ export const PanelEntitySelectAction = ({
 			route={strategyEntitySelect.route}
 			formId={strategyEntitySelect.formId}
 			schema={strategyEntitySelect.schema}
-			icon={entity.selected ? 'crosshair-2' : 'crosshair-1'}
+			icon={selected ? 'crosshair-2' : 'crosshair-1'}
 			iconText={strategyEntitySelect.iconText}
+			className={selected ? 'bg-secondary text-secondary-foreground' : ''}
 		/>
 	)
 }
