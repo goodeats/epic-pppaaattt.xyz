@@ -243,6 +243,7 @@ model Layer {
   description String?
   slug       String?
   visible     Boolean @default(true)
+  selected    Boolean @default(false) // this is a UI helper for displaying the selected layer for editing
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -331,7 +332,7 @@ model Design {
   id         String @id @default(cuid())
   type      String // e.g. palette, size, fill, stroke, line, etc.
   visible   Boolean @default(true)
-  selected Boolean @default(false)
+  selected Boolean @default(false) // this is a work-around for finding the first in linked list that is visible
 
   createdAt DateTime @default(now())
 

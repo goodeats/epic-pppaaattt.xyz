@@ -1,9 +1,11 @@
+import { type IconName } from '#app/components/ui/icon'
 import { type ILayer } from '#app/models/layer.server'
 import { EntityFormType, EntityParentIdType } from '#app/schema/entity'
 import {
 	EditLayerDescriptionSchema,
 	EditLayerNameSchema,
 } from '#app/schema/layer'
+import { DeleteArtboardVersionLayerSchema } from '#app/schema/layer-artboard-version'
 import { Routes } from '#app/utils/routes.utils'
 import {
 	type IPanelEntityFormArgsOptionalMultiple,
@@ -28,6 +30,13 @@ const globalLayerDescriptionArgs = {
 	formId: 'layer-update-description',
 	schema: EditLayerDescriptionSchema,
 	label: 'Description',
+}
+const globalLayerDeleteArgs = {
+	route: Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.DELETE,
+	formType: EntityFormType.BUTTON,
+	formId: 'artboard-version-delete-layer',
+	schema: DeleteArtboardVersionLayerSchema,
+	label: 'Delete',
 }
 
 export class DashboardPanelUpdateLayerValuesStrategy
@@ -71,7 +80,24 @@ export class DashboardPanelUpdateLayerValuesStrategy
 			defaultValue: { description },
 		}
 
-		return [layerNameArgs, layerDescriptionArgs]
+		const layerDeleteArgs = {
+			...sharedEntityFormArgs,
+			...globalLayerDeleteArgs,
+			parentId: entity.artboardVersionId || undefined,
+			icon: 'trash' as IconName,
+			buttonText: 'Delete',
+			buttonVariant: 'destructive' as
+				| 'destructive'
+				| 'default'
+				| 'link'
+				| 'outline'
+				| 'secondary'
+				| 'ghost'
+				| null
+				| undefined,
+		}
+
+		return [layerNameArgs, layerDescriptionArgs, layerDeleteArgs]
 	}
 
 	getPopoverTriggerColor(): undefined {

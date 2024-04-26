@@ -28,8 +28,8 @@ export const FormFetcherButton = ({
 	formId,
 	schema,
 	icon,
-	iconText,
-	variant = 'default',
+	buttonText,
+	buttonVariant = 'default',
 }: {
 	entityId?: IEntityId
 	type?: IEntityType
@@ -39,8 +39,8 @@ export const FormFetcherButton = ({
 	formId: string
 	schema: z.ZodSchema<any>
 	icon: IconName
-	iconText: string
-	variant?:
+	buttonText: string
+	buttonVariant?:
 		| 'default'
 		| 'link'
 		| 'destructive'
@@ -80,12 +80,12 @@ export const FormFetcherButton = ({
 
 			<StatusButton
 				type="submit"
-				variant={variant}
+				variant={buttonVariant}
 				status={isPending ? 'pending' : actionData?.status ?? 'idle'}
 				disabled={isPending}
 			>
 				<Icon name={icon} className="scale-125 max-md:scale-150">
-					<span className="max-md:hidden">{iconText}</span>
+					<span className="max-md:hidden">{buttonText}</span>
 				</Icon>
 			</StatusButton>
 		</fetcher.Form>

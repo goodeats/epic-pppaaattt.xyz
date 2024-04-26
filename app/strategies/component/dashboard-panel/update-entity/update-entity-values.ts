@@ -14,7 +14,7 @@ import { type RoutePath } from '#app/utils/routes.utils'
 export interface IPanelEntityFormArgs {
 	route: RoutePath
 	formType: entityFormTypeEnum
-	defaultValue: defaultValueStringOrNumber
+	defaultValue?: defaultValueStringOrNumber
 	entityId: IEntityId
 	parentId?: IEntityParentId
 	parentTypeId?: entityParentIdTypeEnum
@@ -22,6 +22,17 @@ export interface IPanelEntityFormArgs {
 	schema: z.ZodSchema<any>
 	label?: string
 	options?: IEntityEnumSelectOption[]
+	icon?: IconName
+	buttonText?: string
+	buttonVariant?:
+		| 'default'
+		| 'link'
+		| 'destructive'
+		| 'outline'
+		| 'secondary'
+		| 'ghost'
+		| null
+		| undefined
 }
 
 export interface IPanelEntityFormArgsMultiple {

@@ -23,10 +23,10 @@ export class DashboardPanelArtboardVersionDesignActionStrategy
 	getPanelActions(): IPanelEntityActionStrategy[] {
 		const strategyToggleVisible =
 			new DashboardPanelUpdateArtboardVersionDesignVisibleStrategy()
-		const strategyEntityDelete =
+		const strategyDelete =
 			new DashboardPanelDeleteArtboardVersionDesignStrategy()
 
-		return [strategyToggleVisible, strategyEntityDelete]
+		return [strategyToggleVisible, strategyDelete]
 	}
 }
 
@@ -37,6 +37,8 @@ export class DashboardPanelArtboardVersionLayerActionStrategy
 	getPanelActions(): IPanelEntityActionStrategy[] {
 		const strategyToggleVisible =
 			new DashboardPanelUpdateArtboardVersionLayerVisibleStrategy()
+
+		// delete in popover so it's less easy to click accidentally from left sidebar
 
 		return [strategyToggleVisible]
 	}

@@ -19,6 +19,7 @@ export interface ILayer {
 	updatedAt: Date | string
 	ownerId: string
 	artboardId: string | null
+	artboardVersionId: string | null
 	nextId: string | null
 	prevId: string | null
 	parentId: string | null

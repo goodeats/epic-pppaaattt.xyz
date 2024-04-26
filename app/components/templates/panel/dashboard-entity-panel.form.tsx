@@ -72,6 +72,9 @@ const createFormComponent = (FetcherComponent: React.ComponentType<any>) => {
 				fromPopover ? '-popover' : ''
 			}`}
 			schema={panelEntityForm.schema}
+			icon={panelEntityForm.icon}
+			buttonText={panelEntityForm.buttonText}
+			buttonVariant={panelEntityForm.buttonVariant}
 		/>
 	)
 	Component.displayName = `FormComponent(${
