@@ -1,4 +1,6 @@
 import { z } from 'zod'
+import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
+import { type ILayerWithDesigns } from '#app/models/layer.server'
 import { type ObjectValues } from '#app/utils/typescript-helpers'
 import {
 	type ToggleVisibleArtboardDesignSchema,
@@ -31,6 +33,10 @@ export const DesignTypeEnum = {
 	// add more design types here
 } as const
 export type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
+
+export type DesignParentType =
+	| IArtboardVersionWithDesignsAndLayers
+	| ILayerWithDesigns
 
 export const DesignParentTypeIdEnum = {
 	ARTBOARD_VERSION_ID: 'artboardVersionId',

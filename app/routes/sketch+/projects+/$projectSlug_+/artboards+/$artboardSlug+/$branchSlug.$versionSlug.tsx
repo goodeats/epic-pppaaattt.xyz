@@ -29,14 +29,16 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	})
 	invariantResponse(version, 'Artboard Version not found', { status: 404 })
 
+	const selectedLayer = version.layers.find(layer => layer.selected)
+
 	const generator = await artboardVersionGeneratorBuildService({ version })
 
-	return json({ version, generator })
+	return json({ version, selectedLayer, generator })
 }
 
 export default function SketchProjectArtboardBranchRoute() {
 	const data = useLoaderData<typeof loader>()
-	const { version, generator } = data
+	const { version, selectedLayer, generator } = data
 
 	// had to consider sidebar from project route level
 	// the component names might need re-thinking, but works
@@ -47,7 +49,7 @@ export default function SketchProjectArtboardBranchRoute() {
 				<DashboardContent>
 					<CanvasContent generator={generator} />
 				</DashboardContent>
-				<SidebarRight version={version} />
+				<SidebarRight version={version} selectedLayer={selectedLayer} />
 			</DashboardBody>
 		</DashboardContentWrapper>
 	)

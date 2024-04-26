@@ -3,7 +3,6 @@ import {
 	type IEntity,
 	type IEntityParentType,
 	type IEntityType,
-	type entityParentIdTypeEnum,
 	type IEntitySelectable,
 } from '#app/schema/entity'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
@@ -18,7 +17,6 @@ import { PanelEntityValues } from './dashboard-entity-panel.values'
 
 export const DashboardEntityPanel = ({
 	type,
-	parentTypeId,
 	parent,
 	entities,
 	strategyEntityNew,
@@ -27,7 +25,6 @@ export const DashboardEntityPanel = ({
 	strategyActions,
 }: {
 	type: IEntityType
-	parentTypeId: entityParentIdTypeEnum
 	parent: IEntityParentType
 	entities: IEntity[]
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
@@ -41,7 +38,6 @@ export const DashboardEntityPanel = ({
 		<SidebarPanel>
 			<PanelEntityHeader
 				type={type}
-				parentTypeId={parentTypeId}
 				parent={parent}
 				strategyEntityNew={strategyEntityNew}
 			/>

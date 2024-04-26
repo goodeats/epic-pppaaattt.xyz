@@ -1,7 +1,6 @@
 import { DashboardEntityPanel } from '#app/components/templates/panel/dashboard-entity-panel'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
 import { type ILayerWithDesigns } from '#app/models/layer.server'
-import { DesignParentTypeIdEnum } from '#app/schema/design'
 import { DashboardPanelCreateArtboardVersionLayerStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { DashboardPanelArtboardVersionLayerActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { DashboardPanelUpdateLayerValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.layer'
@@ -26,7 +25,6 @@ export const PanelArtboardVersionLayers = ({
 		<div>
 			<DashboardEntityPanel
 				type="layer"
-				parentTypeId={DesignParentTypeIdEnum.ARTBOARD_VERSION_ID}
 				parent={version}
 				entities={orderedLayers}
 				strategyEntityNew={strategyEntityNew}

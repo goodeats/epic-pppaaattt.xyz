@@ -1,8 +1,4 @@
-import {
-	type entityParentIdTypeEnum,
-	type IEntityParentType,
-	type IEntityType,
-} from '#app/schema/entity'
+import { type IEntityParentType, type IEntityType } from '#app/schema/entity'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { capitalize } from '#app/utils/string-formatting'
 import { SidebarPanelHeader, SidebarPanelRowActionsContainer } from '..'
@@ -10,12 +6,10 @@ import { FormFetcherIcon } from '../form/fetcher/icon'
 
 export const PanelEntityHeader = ({
 	type,
-	parentTypeId,
 	parent,
 	strategyEntityNew,
 }: {
 	type: IEntityType
-	parentTypeId: entityParentIdTypeEnum
 	parent: IEntityParentType
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 }) => {
@@ -24,7 +18,7 @@ export const PanelEntityHeader = ({
 			<SidebarPanelRowActionsContainer>
 				<FormFetcherIcon
 					type={type}
-					parentTypeId={parentTypeId}
+					parentTypeId={strategyEntityNew.parentTypeId}
 					parentId={parent.id}
 					route={strategyEntityNew.route}
 					formId={strategyEntityNew.formId}

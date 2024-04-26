@@ -16,6 +16,7 @@ import {
 	type designTypeEnum,
 	type ToggleVisibleDesignSchemaType,
 	type DeleteDesignSchemaType,
+	type DesignParentType,
 } from './design'
 import {
 	type ReorderLayerSchemaType,
@@ -58,7 +59,10 @@ export type IEntityId =
 
 export type IEntityType = designTypeEnum | 'layer'
 
-export type IEntityParentType = IDesignWithType | IArtboardVersion
+export type IEntityParentType =
+	| IDesignWithType
+	| IArtboardVersion
+	| DesignParentType
 
 export type IEntityParentId = IDesignWithType['id'] | IArtboardVersion['id']
 
