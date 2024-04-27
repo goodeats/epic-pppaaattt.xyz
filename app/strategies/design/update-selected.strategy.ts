@@ -1,8 +1,8 @@
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type IArtboard } from '#app/models/artboard.server'
+import { findFirstVisibleArtboardVersionDesignByType } from '#app/models/design-artboard-version/design-artboard-version.get.server'
 import {
 	deselectArtboardVersionSelectedDesign,
-	findFirstVisibleArtboardVersionDesignByType,
 	updateArtboardVersionSelectedDesign,
 } from '#app/models/design-artboard-version.server'
 import {
@@ -10,9 +10,9 @@ import {
 	findFirstVisibleArtboardDesignByType,
 	updateArtboardSelectedDesign,
 } from '#app/models/design-artboard.server'
+import { findFirstVisibleLayerDesignByType } from '#app/models/design-layer/design-layer.get.server'
 import {
 	deselectLayerSelectedDesign,
-	findFirstVisibleLayerDesignByType,
 	updateLayerSelectedDesign,
 } from '#app/models/design-layer.server'
 import {

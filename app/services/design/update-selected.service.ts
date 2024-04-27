@@ -28,6 +28,7 @@ export const updateSelectedDesignService = async ({
 				targetEntityId,
 				type,
 			})
+
 			// if first visible design by type is found,
 			// update the selected design
 			if (firstVisibleDesign) {

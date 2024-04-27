@@ -18,18 +18,6 @@ export interface IDesignWithLayer extends IDesign {
 	layer: ILayer
 }
 
-export const findFirstVisibleLayerDesignByType = async ({
-	layerId,
-	type,
-}: {
-	layerId: ILayer['id']
-	type: designTypeEnum
-}): Promise<IDesign | null> => {
-	return await prisma.design.findFirst({
-		where: { layerId, type, visible: true },
-	})
-}
-
 export const updateLayerSelectedDesign = ({
 	layerId,
 	designId,

@@ -18,18 +18,6 @@ export interface IDesignWithArtboardVersion extends IDesign {
 	artboardVersion: IArtboardVersion
 }
 
-export const findFirstVisibleArtboardVersionDesignByType = async ({
-	artboardVersionId,
-	type,
-}: {
-	artboardVersionId: IArtboardVersion['id']
-	type: designTypeEnum
-}): Promise<IDesign | null> => {
-	return await prisma.design.findFirst({
-		where: { artboardVersionId, type, visible: true },
-	})
-}
-
 export const updateArtboardVersionSelectedDesign = ({
 	artboardVersionId,
 	designId,

@@ -52,6 +52,8 @@ export const FormFetcherNumber = ({
 		id: `${formId}-${parentId}-${entityId}`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission: actionData?.submission,
+		shouldValidate: 'onInput',
+		shouldRevalidate: 'onInput',
 		onValidate: ({ formData }) => {
 			return parse(formData, { schema: schema })
 		},
