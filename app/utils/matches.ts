@@ -50,7 +50,16 @@ export function routeLoaderMetaData<K extends keyof RouteLoaders>(
 	return match.data as SerializeFrom<RouteLoaders[K]>
 }
 
-export function routeLoaderMatchData<K extends keyof RouteLoaders>(
+export function useOptionalRouteLoaderMatchData<K extends keyof RouteLoaders>(
+	matches: UIMatch[],
+	matchId: K,
+): SerializeFrom<RouteLoaders[K]> | undefined {
+	const match = matches.find(({ id }) => id === matchId)
+	if (!match) return undefined
+	return match.data as SerializeFrom<RouteLoaders[K]>
+}
+
+export function useRouteLoaderMatchData<K extends keyof RouteLoaders>(
 	matches: UIMatch[],
 	matchId: K,
 ): SerializeFrom<RouteLoaders[K]> {
