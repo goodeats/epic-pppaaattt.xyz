@@ -2,6 +2,7 @@ import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import {
+	DashboardContentContainer,
 	DashboardContentHeading1,
 	DashboardContentHeading2,
 } from '#app/components/layout'
@@ -31,22 +32,24 @@ export default function SketchProjectsIndexRoute() {
 	const user = useUser()
 
 	return (
-		<div className="container">
-			<DashboardContentHeading1>Choose a project</DashboardContentHeading1>
+		<DashboardContentContainer>
 			<div className="container">
-				<DashboardContentHeading2>
-					<Link prefetch="intent" to="/sketch/projects">
-						Projects
-					</Link>
-				</DashboardContentHeading2>
-				<DashboardEntityCards
-					entities={projects}
-					type="Project"
-					parent="portfolio"
-					basePathEditor={`/users/${user.username}/projects`}
-					basePathView={'/sketch/projects'}
-				/>
+				<DashboardContentHeading1>Choose a project</DashboardContentHeading1>
+				<div className="container">
+					<DashboardContentHeading2>
+						<Link prefetch="intent" to="/sketch/projects">
+							Projects
+						</Link>
+					</DashboardContentHeading2>
+					<DashboardEntityCards
+						entities={projects}
+						type="Project"
+						parent="portfolio"
+						basePathEditor={`/users/${user.username}/projects`}
+						basePathView={'/sketch/projects'}
+					/>
+				</div>
 			</div>
-		</div>
+		</DashboardContentContainer>
 	)
 }

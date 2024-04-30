@@ -1,10 +1,13 @@
+import { type IArtboardBranch } from '#app/models/artboard-branch/artboard-branch.server'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import { type IArtboard } from '#app/models/artboard.server'
 import { type IDesignWithType, type IDesign } from '#app/models/design.server'
 import { type IFill } from '#app/models/fill.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type ILayout } from '#app/models/layout.server'
 import { type ILine } from '#app/models/line.server'
 import { type IPalette } from '#app/models/palette.server'
+import { type IProject } from '#app/models/project/project.server'
 import { type IRotate } from '#app/models/rotate.server'
 import { type ISize } from '#app/models/size.server'
 import { type IStroke } from '#app/models/stroke.server'
@@ -42,6 +45,11 @@ export type IEntity =
 
 export type IEntityVisible = IDesign | IDesignWithType | ILayer
 export type IEntitySelectable = ILayer
+export type IEntityWithSlug =
+	| IArtboard
+	| IArtboardBranch
+	| IArtboardVersion
+	| IProject
 
 export type IEntityId =
 	| ILayer['id']

@@ -8,7 +8,6 @@ import { Outlet, useLoaderData } from '@remix-run/react'
 import {
 	DashboardBody,
 	DashboardContent,
-	DashboardContentContainer,
 	DashboardContentWrapper,
 } from '#app/components/layout'
 import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
@@ -41,9 +40,7 @@ export default function SketchProjectsRoute() {
 			<ProjectsSidebar projects={projects} />
 			<DashboardContent id="sketch-dashboard-content">
 				<DashboardContentWrapper>
-					<DashboardContentContainer>
-						<Outlet />
-					</DashboardContentContainer>
+					<Outlet />
 				</DashboardContentWrapper>
 			</DashboardContent>
 		</DashboardBody>

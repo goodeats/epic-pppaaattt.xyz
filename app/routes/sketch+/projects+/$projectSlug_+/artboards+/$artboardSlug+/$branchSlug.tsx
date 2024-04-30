@@ -6,7 +6,7 @@ import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 
 export const artboardBranchLoaderRoute =
-	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/route'
+	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/$branchSlug'
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects slug artboards slug branch route')
 	const userId = await requireUserId(request)

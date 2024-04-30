@@ -3,6 +3,7 @@ import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import {
+	Dashboard,
 	DashboardBody,
 	DashboardContent,
 	DashboardContentWrapper,
@@ -12,10 +13,11 @@ import { getUserBasic } from '#app/models/user/user.get.server'
 import { artboardVersionGeneratorBuildService } from '#app/services/artboard/version/generator/build.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { CanvasContent } from './__components/canvas-content'
+import { ArtboardHeader } from './__components/header.artboard'
 import { SidebarLeft, SidebarRight } from './__components/sidebars'
 
 export const artboardVersionLoaderRoute =
-	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug_+/$branchSlug_+/$versionSlug_+/route'
+	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/$branchSlug.$versionSlug'
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	console.log('sketch+ projects slug artboards slug branch version route')
 	const userId = await requireUserId(request)
@@ -36,22 +38,25 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	return json({ version, selectedLayer, generator })
 }
 
-export default function SketchProjectArtboardBranchRoute() {
+export default function SketchProjectArtboardBranchVersionRoute() {
 	const data = useLoaderData<typeof loader>()
 	const { version, selectedLayer, generator } = data
 
 	// had to consider sidebar from project route level
 	// the component names might need re-thinking, but works
 	return (
-		<DashboardContentWrapper>
+		<Dashboard>
+			<ArtboardHeader />
 			<DashboardBody id="artboard-editor">
 				<SidebarLeft version={version} />
 				<DashboardContent>
-					<CanvasContent generator={generator} />
+					<DashboardContentWrapper>
+						<CanvasContent generator={generator} />
+					</DashboardContentWrapper>
 				</DashboardContent>
 				<SidebarRight version={version} selectedLayer={selectedLayer} />
 			</DashboardBody>
-		</DashboardContentWrapper>
+		</Dashboard>
 	)
 }
 
