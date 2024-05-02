@@ -1,5 +1,5 @@
 import { invariantResponse } from '@epic-web/invariant'
-import { type LoaderFunctionArgs, redirect } from '@remix-run/node'
+import { type LoaderFunctionArgs, redirectDocument } from '@remix-run/node'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import { getArtboardWithDefaultBranchAndLatestVersion } from '#app/models/artboard/artboard.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
@@ -25,7 +25,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	// ensure that data is loaded from the route
 	// redirect on index.tsx
-	return redirect(redirectPath)
+	// return redirect was working before and now I have to use return redirectDocument
+	// otherwise it will just stay on the current page... investigate later if necessary
+	return redirectDocument(redirectPath)
 }
 
 export function ErrorBoundary() {
