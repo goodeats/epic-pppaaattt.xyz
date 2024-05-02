@@ -1,12 +1,16 @@
 import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboardBranchWithVersions } from './artboard-branch.server'
+import {
+	type IArtboardBranch,
+	type IArtboardBranchWithVersions,
+} from './artboard-branch.server'
 
 export type queryArtboardBranchWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({
 	id: z.string().optional(),
 	ownerId: z.string().optional(),
 	slug: z.string().optional(),
+	artboardId: z.string().optional(),
 })
 
 // TODO: Add schemas for each type of query and parse with zod
@@ -22,6 +26,16 @@ const validateQueryWhereArgsPresent = (
 	}
 }
 
+export const getArtboardBranch = async ({
+	where,
+}: {
+	where: queryArtboardBranchWhereArgsType
+}): Promise<IArtboardBranch | null> => {
+	validateQueryWhereArgsPresent(where)
+	const branch = await prisma.artboardBranch.findFirst({ where })
+	return branch
+}
+
 export const getArtboardBranchWithVersions = async ({
 	where,
 }: {
@@ -33,7 +47,7 @@ export const getArtboardBranchWithVersions = async ({
 		include: {
 			versions: {
 				where: {
-					latest: true,
+					nextId: null,
 				},
 				take: 1,
 			},

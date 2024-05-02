@@ -1,5 +1,6 @@
 import { type User } from '@prisma/client'
 import { type z } from 'zod'
+import { getArtboardBranch } from '#app/models/artboard-branch/artboard-branch.get.server'
 import { getArtboardVersion } from '#app/models/artboard-version/artboard-version.get.server'
 import { getDesign } from '#app/models/design/design.get.server'
 import { getLayer } from '#app/models/layer/layer.get.server'
@@ -11,6 +12,26 @@ export interface IValidateSubmissionStrategy {
 		data: any
 		ctx: z.RefinementCtx
 	}): Promise<void>
+}
+
+export class ValidateArtboardBranchParentSubmissionStrategy
+	implements IValidateSubmissionStrategy
+{
+	async validateFormDataEntity({
+		userId,
+		data,
+		ctx,
+	}: {
+		userId: User['id']
+		data: any
+		ctx: any
+	}): Promise<void> {
+		const { artboardBranchId } = data
+		const artboardBranch = await getArtboardBranch({
+			where: { id: artboardBranchId, ownerId: userId },
+		})
+		if (!artboardBranch) ctx.addIssue(addNotFoundIssue('ArtboardBranch'))
+	}
 }
 
 export class ValidateArtboardVersionSubmissionStrategy

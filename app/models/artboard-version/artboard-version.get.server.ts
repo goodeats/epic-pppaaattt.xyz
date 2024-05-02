@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { zodStringOrNull } from '#app/schema/zod-helpers'
 import { prisma } from '#app/utils/db.server'
 import {
 	type IArtboardVersionWithDesignsAndLayers,
@@ -10,6 +11,9 @@ const whereArgs = z.object({
 	id: z.string().optional(),
 	ownerId: z.string().optional(),
 	slug: z.string().optional(),
+	branchId: z.string().optional(),
+	nextId: zodStringOrNull.optional(),
+	prevId: zodStringOrNull.optional(),
 })
 
 const includeDesigns = {
@@ -43,7 +47,7 @@ const includeDesignsAndLayers = {
 const validateQueryWhereArgsPresent = (
 	where: queryArtboardVersionWhereArgsType,
 ) => {
-	const nullValuesAllowed: string[] = []
+	const nullValuesAllowed: string[] = ['nextId', 'prevId']
 	const missingValues: Record<string, any> = {}
 	for (const [key, value] of Object.entries(where)) {
 		const valueIsNull = value === null || value === undefined
@@ -59,6 +63,17 @@ const validateQueryWhereArgsPresent = (
 			'Null or undefined values are not allowed in query parameters for artboard version.',
 		)
 	}
+}
+
+export const getArtboardVersions = async ({
+	where,
+}: {
+	where: queryArtboardVersionWhereArgsType
+}): Promise<IArtboardVersion[]> => {
+	validateQueryWhereArgsPresent(where)
+	return await prisma.artboardVersion.findMany({
+		where,
+	})
 }
 
 export const getArtboardVersion = async ({

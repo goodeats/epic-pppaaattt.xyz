@@ -33,8 +33,8 @@ export const FormFetcherIcon = ({
 }: {
 	entityId?: IEntityId
 	type?: IEntityType
-	parentTypeId: entityParentIdTypeEnum
-	parentId: IEntityParentId
+	parentTypeId?: entityParentIdTypeEnum
+	parentId?: IEntityParentId
 	route: RoutePath
 	formId: string
 	schema: z.ZodSchema<any>
@@ -67,7 +67,9 @@ export const FormFetcherIcon = ({
 
 			<input type="hidden" name="no-js" value={String(!isHydrated)} />
 			{entityId && <input type="hidden" name="id" value={entityId} />}
-			<input type="hidden" name={parentTypeId} value={parentId} />
+			{parentId && parentTypeId && (
+				<input type="hidden" name={parentTypeId} value={parentId} />
+			)}
 			{type && <input type="hidden" name="type" value={type} />}
 
 			<PanelIconButton

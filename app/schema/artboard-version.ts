@@ -58,3 +58,19 @@ export const ArtboardVersionSelectedDesignsSchema = z.object({
 export type ArtboardVersionSelectedDesignsType = z.infer<
 	typeof ArtboardVersionSelectedDesignsSchema
 >
+
+export const ArtboardVersionDataCreateSchema = z.object({
+	ownerId: z.string(),
+	branchId: z.string(),
+	name: z.string(),
+	slug: z.string(),
+	description: z.string(),
+	width: widthSchema.optional(),
+	height: heightSchema.optional(),
+	background: HexcodeSchema.optional(),
+})
+
+export const NewArtboardVersionSchema = z.object({
+	id: z.string(),
+	artboardBranchId: z.string(),
+})

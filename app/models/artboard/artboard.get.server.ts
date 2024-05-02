@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
 import {
+	type IArtboard,
 	type IArtboardWithBranchesAndVersions,
 	type IArtboardWithDesignsAndLayers,
 } from '../artboard.server'
@@ -61,6 +62,18 @@ export const getArtboardsWithDesignsAndLayers = async ({
 	return artboards
 }
 
+export const getArtboard = async ({
+	where,
+}: {
+	where: queryArtboardWhereArgsType
+}): Promise<IArtboard | null> => {
+	validateQueryWhereArgsPresent(where)
+	const artboard = await prisma.artboard.findFirst({
+		where,
+	})
+	return artboard
+}
+
 export const getArtboardWithDesignsAndLayers = async ({
 	where,
 }: {
@@ -73,6 +86,7 @@ export const getArtboardWithDesignsAndLayers = async ({
 	})
 	return artboard
 }
+
 export const getArtboardWithDefaultBranchAndLatestVersion = async ({
 	where,
 }: {
@@ -90,7 +104,7 @@ export const getArtboardWithDefaultBranchAndLatestVersion = async ({
 				include: {
 					versions: {
 						where: {
-							latest: true,
+							nextId: null,
 						},
 						take: 1,
 					},

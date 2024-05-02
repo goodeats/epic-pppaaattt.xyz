@@ -1,8 +1,17 @@
 import { useMatches } from '@remix-run/react'
-import { DashboardHeader, DashboardNav } from '#app/components/layout'
+import {
+	DashboardHeader,
+	DashboardNav,
+	NavbarButtonGroup,
+} from '#app/components/layout'
 import { ComboboxNav } from '#app/components/templates/combobox'
+import { FormFetcherIcon } from '#app/components/templates/form/fetcher/icon'
+import { NewArtboardVersionSchema } from '#app/schema/artboard-version'
+import { EntityParentIdType } from '#app/schema/entity'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
+import { Routes } from '#app/utils/routes.utils'
 import { artboardBranchLoaderRoute } from '../$branchSlug'
+import { artboardVersionLoaderRoute } from '../$branchSlug.$versionSlug'
 import { projectLoaderRoute } from '../../route'
 import { artboardLoaderRoute } from '../route'
 
@@ -11,6 +20,10 @@ export const ArtboardHeader = () => {
 	const { project } = useRouteLoaderMatchData(matches, projectLoaderRoute)
 	const { artboard } = useRouteLoaderMatchData(matches, artboardLoaderRoute)
 	const { branch } = useRouteLoaderMatchData(matches, artboardBranchLoaderRoute)
+	const { version } = useRouteLoaderMatchData(
+		matches,
+		artboardVersionLoaderRoute,
+	)
 
 	const baseUrl = `/sketch/projects/${project.slug}/artboards`
 
@@ -43,7 +56,24 @@ export const ArtboardHeader = () => {
 				/>
 			</DashboardNav>
 			<DashboardNav>
-				<p>nav actions</p>
+				<NavbarButtonGroup>
+					{/* <span>refresh</span> */}
+					{/* <span>star</span> */}
+					{/* <span>info a, ab, abv</span> */}
+					{/* <span>fork ab</span> */}
+					{/* <span>merge ab</span> */}
+					<FormFetcherIcon
+						entityId={version.id}
+						parentId={branch.id}
+						parentTypeId={EntityParentIdType.ARTBOARD_BRANCH_ID}
+						route={Routes.RESOURCES.API.V1.ARTBOARD_VERSION.CREATE}
+						formId="artboard-version-create"
+						schema={NewArtboardVersionSchema}
+						icon="disc"
+						iconText="New Version"
+					/>
+					<span>save av</span>
+				</NavbarButtonGroup>
 			</DashboardNav>
 		</DashboardHeader>
 	)

@@ -24,12 +24,6 @@ export const createDefaultArtboardBranchWithVersion = async ({
 			default: true,
 			versions: {
 				create: {
-					name: 'latest',
-					artboard: {
-						connect: {
-							id: artboard.id,
-						},
-					},
 					owner: {
 						connect: {
 							id: ownerId,

@@ -7,6 +7,7 @@ import {
 } from '#app/schema/artboard-version'
 import { ValidateArtboardVersionSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
+import { prisma } from '#app/utils/db.server'
 import { findFirstArtboardVersionInstance } from '#app/utils/prisma-extensions-artboard-version'
 import { type IArtboardVersion } from './artboard-version.server'
 
@@ -137,4 +138,22 @@ export const updateArtboardVersionBackground = async ({
 		console.error(error)
 		return { success: false }
 	}
+}
+
+export const connectPrevAndNext = ({
+	prevId,
+	nextId,
+}: {
+	prevId: IArtboardVersion['id']
+	nextId: IArtboardVersion['id']
+}) => {
+	const connectNextToPrev = prisma.artboardVersion.update({
+		where: { id: prevId },
+		data: { nextId },
+	})
+	const connectPrevToNext = prisma.artboardVersion.update({
+		where: { id: nextId },
+		data: { prevId },
+	})
+	return [connectNextToPrev, connectPrevToNext]
 }

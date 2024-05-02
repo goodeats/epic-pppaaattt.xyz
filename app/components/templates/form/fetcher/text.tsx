@@ -79,7 +79,9 @@ export const FormFetcherText = ({
 
 			<input type="hidden" name="no-js" value={String(!isHydrated)} />
 			<input type="hidden" name="id" value={entityId} />
-			{parentId && <input type="hidden" name={parentTypeId} value={parentId} />}
+			{parentId && parentTypeId && (
+				<input type="hidden" name={parentTypeId} value={parentId} />
+			)}
 
 			<Input
 				className="flex h-8"

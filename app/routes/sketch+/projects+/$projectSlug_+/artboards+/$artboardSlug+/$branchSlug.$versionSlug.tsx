@@ -8,6 +8,8 @@ import {
 	DashboardContent,
 	DashboardContentWrapper,
 } from '#app/components/layout'
+import { getArtboard } from '#app/models/artboard/artboard.get.server'
+import { getArtboardBranch } from '#app/models/artboard-branch/artboard-branch.get.server'
 import { getArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { artboardVersionGeneratorBuildService } from '#app/services/artboard/version/generator/build.service'
@@ -25,10 +27,23 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
 	// https://sergiodxa.com/tutorials/avoid-waterfalls-of-queries-in-remix-loaders
-	const { versionSlug } = params
-	const version = await getArtboardVersionWithDesignsAndLayers({
-		where: { slug: versionSlug, ownerId: owner.id },
+	const artboard = await getArtboard({
+		where: { slug: params.artboardSlug, ownerId: owner.id },
 	})
+	invariantResponse(artboard, 'Artboard not found', { status: 404 })
+
+	const branch = await getArtboardBranch({
+		where: { artboardId: artboard.id, slug: params.branchSlug },
+	})
+	invariantResponse(branch, 'Artboard Branch not found', { status: 404 })
+
+	const { versionSlug } = params
+	const where =
+		versionSlug === 'latest'
+			? { ownerId: owner.id, branchId: branch.id, nextId: null }
+			: { ownerId: owner.id, slug: versionSlug }
+
+	const version = await getArtboardVersionWithDesignsAndLayers({ where })
 	invariantResponse(version, 'Artboard Version not found', { status: 404 })
 
 	const selectedLayer = version.layers.find(layer => layer.selected)

@@ -220,7 +220,6 @@ model Artboard {
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId String
 
-  versions ArtboardVersion[]
   branches ArtboardBranch[]
   mergeRequests ArtboardMergeRequest[]
 
@@ -487,52 +486,6 @@ model Template {
   designId String @unique
 }
 
-model ArtboardVersion {
-  id        String @id @default(cuid())
-  name      String @default("latest")
-  slug       String @default("latest")
-  description String?
-  latest   Boolean @default(true)
-
-  // settings
-  // 9:16 aspect ratio (vertical)
-  width       Int @default(1080)
-  height      Int @default(1920)
-  background String @default("FFFFFF")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ownerId String
-
-  artboard Artboard @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artboardId String
-
-  branch ArtboardBranch @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  branchId String
-
-  next ArtboardVersion? @relation("ArtboardVersionDoublyLinkedList", fields: [nextId], references: [id])
-  nextId String? @unique
-
-  prev ArtboardVersion? @relation("ArtboardVersionDoublyLinkedList")
-  prevId String? @unique
-
-  layers Layer[]
-  designs Design[]
-
-  // non-unique foreign key
-  @@index([artboardId])
-  @@index([branchId])
-  @@index([ownerId])
-
-  // Constraints to ensure only one 'latest' version per branch
-  // and only one name 'latest' per branch
-  @@unique([branchId, latest])
-  @@unique([branchId, name])
-  @@unique([branchId, slug])
-}
-
 model ArtboardBranch {
   id        String @id @default(cuid())
   name      String @default("main")
@@ -567,6 +520,46 @@ model ArtboardBranch {
   @@unique([artboardId, default])
   @@unique([artboardId, name])
   @@unique([artboardId, slug])
+}
+
+model ArtboardVersion {
+  id        String @id @default(cuid())
+  name      String @default("v0")
+  slug       String @default("v0")
+  description String?
+
+  // settings
+  // 9:16 aspect ratio (vertical)
+  width       Int @default(1080)
+  height      Int @default(1920)
+  background String @default("FFFFFF")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  branch ArtboardBranch @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  branchId String
+
+  next ArtboardVersion? @relation("ArtboardVersionDoublyLinkedList", fields: [nextId], references: [id])
+  nextId String? @unique
+
+  prev ArtboardVersion? @relation("ArtboardVersionDoublyLinkedList")
+  prevId String? @unique
+
+  layers Layer[]
+  designs Design[]
+
+  // non-unique foreign key
+  @@index([branchId])
+  @@index([ownerId])
+
+  // Constraints to ensure only one 'latest' version per branch
+  // and only one name 'latest' per branch
+  @@unique([branchId, name])
+  @@unique([branchId, slug])
 }
 
 model ArtboardMergeRequest {

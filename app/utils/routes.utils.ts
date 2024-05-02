@@ -1,5 +1,9 @@
 import { invariant } from '@epic-web/invariant'
 import {
+	loader as apiV1ArtboardVersionCreateLoader,
+	action as apiV1ArtboardVersionCreateAction,
+} from '#app/routes/resources+/api.v1+/artboard-version.create'
+import {
 	loader as apiV1ArtboardVersionDesignCreateLoader,
 	action as apiV1ArtboardVersionDesignCreateAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.design.create'
@@ -161,6 +165,7 @@ export const Routes = {
 		API: {
 			V1: {
 				ARTBOARD_VERSION: {
+					CREATE: `${pathBase}/artboard-version/create`,
 					UPDATE: {
 						BACKGROUND: `${pathBase}/artboard-version/update/background`,
 						WIDTH: `${pathBase}/artboard-version/update/width`,
@@ -260,6 +265,8 @@ export const Routes = {
 } as const
 
 export interface ApiRouteLoaders {
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION
+		.CREATE]: typeof apiV1ArtboardVersionCreateLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE
 		.BACKGROUND]: typeof apiV1ArtboardVersionUpdateBackgroundLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE
@@ -338,6 +345,8 @@ export interface ApiRouteLoaders {
 }
 
 export const loaders: ApiRouteLoaders = {
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.CREATE]:
+		apiV1ArtboardVersionCreateLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE.BACKGROUND]:
 		apiV1ArtboardVersionUpdateBackgroundLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE.WIDTH]:
@@ -422,6 +431,8 @@ export function getLoaderType<K extends keyof ApiRouteLoaders>(
 }
 
 export interface ApiRouteActions {
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION
+		.CREATE]: typeof apiV1ArtboardVersionCreateAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE
 		.BACKGROUND]: typeof apiV1ArtboardVersionUpdateBackgroundAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE
@@ -500,6 +511,8 @@ export interface ApiRouteActions {
 }
 
 export const actions: ApiRouteActions = {
+	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.CREATE]:
+		apiV1ArtboardVersionCreateAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE.BACKGROUND]:
 		apiV1ArtboardVersionUpdateBackgroundAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE.WIDTH]:

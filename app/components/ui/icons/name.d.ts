@@ -25,6 +25,7 @@ export type IconName =
 	| 'crosshair-1'
 	| 'crosshair-2'
 	| 'dimensions'
+	| 'disc'
 	| 'dots-horizontal'
 	| 'download'
 	| 'envelope-closed'

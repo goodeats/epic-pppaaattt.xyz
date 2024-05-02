@@ -24,30 +24,28 @@ export const getCountOfAllEntities = async () => {
 }
 
 export const getFullStats = async () => {
-	await prisma.artboard.findMany({
-		include: {
-			designs: true,
-			layers: {
-				include: {
-					designs: true,
-				},
-			},
-			versions: {
-				include: {
-					designs: true,
-					layers: {
-						include: {
-							designs: true,
-						},
-					},
-				},
-			},
-		},
-	})
-
+	// await prisma.artboard.findMany({
+	// 	include: {
+	// 		designs: true,
+	// 		layers: {
+	// 			include: {
+	// 				designs: true,
+	// 			},
+	// 		},
+	// 		versions: {
+	// 			include: {
+	// 				designs: true,
+	// 				layers: {
+	// 					include: {
+	// 						designs: true,
+	// 					},
+	// 				},
+	// 			},
+	// 		},
+	// 	},
+	// })
 	// for (const artboard of artboards) {
 	// 	console.log('artboard: ', artboard.name)
-
 	// 	// let artboardLayerDesignCount = 0
 	// 	// for (const layer of artboard.layers) {
 	// 	// 	for (const designa of layer.designs) {
@@ -55,10 +53,8 @@ export const getFullStats = async () => {
 	// 	// 		artboardLayerDesignCount++
 	// 	// 	}
 	// 	// }
-
 	// 	// for (const version of artboard.versions) {
 	// 	// 	// console.log('version: ', version.name)
-
 	// 	// 	// let artboardVersionLayerDesignCount = 0
 	// 	// 	// for (const layer of version.layers) {
 	// 	// 	// 	console.log('layer: ', layer.name)
@@ -67,7 +63,6 @@ export const getFullStats = async () => {
 	// 	// 	// 		artboardVersionLayerDesignCount++
 	// 	// 	// 	}
 	// 	// 	// }
-
 	// 	// 	// console.log(`designs: artboard ${artboard.designs.length}`)
 	// 	// 	// console.log(`designs: version ${version.designs.length}`)
 	// 	// 	// console.log(`layers: artboard ${artboard.layers.length} `)
@@ -76,7 +71,6 @@ export const getFullStats = async () => {
 	// 	// 	// console.log(`layer designs: version ${artboardVersionLayerDesignCount}`)
 	// 	// }
 	// }
-
 	// const AdesignsCount = await prisma.design.count({
 	// 	where: { artboardId: { not: null } },
 	// })
@@ -89,7 +83,6 @@ export const getFullStats = async () => {
 	// const AVLayersCount = await prisma.layer.count({
 	// 	where: { artboardId: { not: null } },
 	// })
-
 	// console.log('AdesignsCount: ', AdesignsCount)
 	// console.log('AVesignsCount: ', AVesignsCount)
 	// console.log('AdLayersCount: ', AdLayersCount)

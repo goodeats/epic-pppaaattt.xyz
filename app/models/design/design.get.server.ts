@@ -1,9 +1,9 @@
 import { z } from 'zod'
 import { DesignTypeEnum } from '#app/schema/design'
+import { zodStringOrNull } from '#app/schema/zod-helpers'
 import { prisma } from '#app/utils/db.server'
 import { type IDesign, type IDesignWithType } from '../design.server'
 
-const zodStringOrNull = z.union([z.string(), z.null()])
 export type queryDesignWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({
 	id: z.string().optional(),
