@@ -15,38 +15,38 @@ import {
 	type IPanelEntityFormArgs,
 } from './update-entity-values'
 
-const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
-const globalEntityFormArgs = {
-	parentTypeId: EntityParentIdType.DESIGN_ID,
-}
-const globalLayoutCountArgs = {
-	route: baseRoute.COUNT,
-	formType: EntityFormType.NUMBER,
-	formId: 'design-type-update-layout-count',
-	schema: EditDesignLayoutCountSchema,
-	label: 'Count',
-}
-const globalLayoutRowsArgs = {
-	route: baseRoute.ROWS,
-	formType: EntityFormType.NUMBER,
-	formId: 'design-type-update-layout-rows',
-	schema: EditDesignLayoutRowsSchema,
-	label: 'Rows',
-}
-const globalLayoutColumnsArgs = {
-	route: baseRoute.COLUMNS,
-	formType: EntityFormType.NUMBER,
-	formId: 'design-type-update-layout-columns',
-	schema: EditDesignLayoutColumnsSchema,
-	label: 'Columns',
-}
-const globalLayoutStyleArgs = {
-	route: baseRoute.STYLE,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-layout-style',
-	schema: EditDesignLayoutStyleSchema,
-	label: 'Style',
-}
+// const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
+// const globalEntityFormArgs = {
+// 	parentTypeId: EntityParentIdType.DESIGN_ID,
+// }
+// const globalLayoutCountArgs = {
+// 	route: baseRoute.COUNT,
+// 	formType: EntityFormType.NUMBER,
+// 	formId: 'design-type-update-layout-count',
+// 	schema: EditDesignLayoutCountSchema,
+// 	label: 'Count',
+// }
+// const globalLayoutRowsArgs = {
+// 	route: baseRoute.ROWS,
+// 	formType: EntityFormType.NUMBER,
+// 	formId: 'design-type-update-layout-rows',
+// 	schema: EditDesignLayoutRowsSchema,
+// 	label: 'Rows',
+// }
+// const globalLayoutColumnsArgs = {
+// 	route: baseRoute.COLUMNS,
+// 	formType: EntityFormType.NUMBER,
+// 	formId: 'design-type-update-layout-columns',
+// 	schema: EditDesignLayoutColumnsSchema,
+// 	label: 'Columns',
+// }
+// const globalLayoutStyleArgs = {
+// 	route: baseRoute.STYLE,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-layout-style',
+// 	schema: EditDesignLayoutStyleSchema,
+// 	label: 'Style',
+// }
 
 export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 	implements IDashboardPanelUpdateEntityValuesStrategy
@@ -56,6 +56,32 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 	}: {
 		entity: IDesignWithLayout
 	}): IPanelEntityFormArgsOptionalMultiple {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalLayoutCountArgs = {
+			route: baseRoute.COUNT,
+			formType: EntityFormType.NUMBER,
+			formId: 'design-type-update-layout-count',
+			schema: EditDesignLayoutCountSchema,
+			label: 'Count',
+		}
+		const globalLayoutRowsArgs = {
+			route: baseRoute.ROWS,
+			formType: EntityFormType.NUMBER,
+			formId: 'design-type-update-layout-rows',
+			schema: EditDesignLayoutRowsSchema,
+			label: 'Rows',
+		}
+		const globalLayoutColumnsArgs = {
+			route: baseRoute.COLUMNS,
+			formType: EntityFormType.NUMBER,
+			formId: 'design-type-update-layout-columns',
+			schema: EditDesignLayoutColumnsSchema,
+			label: 'Columns',
+		}
+
 		const { layout } = entity
 		const { style } = layout
 
@@ -98,6 +124,39 @@ export class DashboardPanelUpdateDesignTypeLayoutValuesStrategy
 	}: {
 		entity: IDesignWithLayout
 	}): IPanelEntityFormArgs[] {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalLayoutCountArgs = {
+			route: baseRoute.COUNT,
+			formType: EntityFormType.NUMBER,
+			formId: 'design-type-update-layout-count',
+			schema: EditDesignLayoutCountSchema,
+			label: 'Count',
+		}
+		const globalLayoutRowsArgs = {
+			route: baseRoute.ROWS,
+			formType: EntityFormType.NUMBER,
+			formId: 'design-type-update-layout-rows',
+			schema: EditDesignLayoutRowsSchema,
+			label: 'Rows',
+		}
+		const globalLayoutColumnsArgs = {
+			route: baseRoute.COLUMNS,
+			formType: EntityFormType.NUMBER,
+			formId: 'design-type-update-layout-columns',
+			schema: EditDesignLayoutColumnsSchema,
+			label: 'Columns',
+		}
+		const globalLayoutStyleArgs = {
+			route: baseRoute.STYLE,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-layout-style',
+			schema: EditDesignLayoutStyleSchema,
+			label: 'Style',
+		}
+
 		const { layout } = entity
 		const sharedEntityFormArgs = {
 			...globalEntityFormArgs,

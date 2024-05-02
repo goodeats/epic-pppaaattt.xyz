@@ -15,31 +15,32 @@ import {
 	type IPanelEntityFormArgs,
 } from './update-entity-values'
 
-const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
-const globalEntityFormArgs = {
-	parentTypeId: EntityParentIdType.DESIGN_ID,
-}
-const globalFillValueArgs = {
-	route: baseRoute.VALUE,
-	formType: EntityFormType.HEX,
-	formId: 'design-type-update-fill-count',
-	schema: EditDesignFillValueSchema,
-	label: 'Value',
-}
-const globalFillBasisArgs = {
-	route: baseRoute.BASIS,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-fill-basis',
-	schema: EditDesignFillBasisSchema,
-	label: 'Basis',
-}
-const globalFillStyleArgs = {
-	route: baseRoute.STYLE,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-fill-style',
-	schema: EditDesignFillStyleSchema,
-	label: 'Style',
-}
+// console.log('Routes', Routes)
+// const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
+// const globalEntityFormArgs = {
+// 	parentTypeId: EntityParentIdType.DESIGN_ID,
+// }
+// const globalFillValueArgs = {
+// 	route: baseRoute.VALUE,
+// 	formType: EntityFormType.HEX,
+// 	formId: 'design-type-update-fill-count',
+// 	schema: EditDesignFillValueSchema,
+// 	label: 'Value',
+// }
+// const globalFillBasisArgs = {
+// 	route: baseRoute.BASIS,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-fill-basis',
+// 	schema: EditDesignFillBasisSchema,
+// 	label: 'Basis',
+// }
+// const globalFillStyleArgs = {
+// 	route: baseRoute.STYLE,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-fill-style',
+// 	schema: EditDesignFillStyleSchema,
+// 	label: 'Style',
+// }
 
 export class DashboardPanelUpdateDesignTypeFillValuesStrategy
 	implements IDashboardPanelUpdateEntityValuesStrategy
@@ -49,6 +50,32 @@ export class DashboardPanelUpdateDesignTypeFillValuesStrategy
 	}: {
 		entity: IDesignWithFill
 	}): IPanelEntityFormArgsOptionalMultiple {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalFillValueArgs = {
+			route: baseRoute.VALUE,
+			formType: EntityFormType.HEX,
+			formId: 'design-type-update-fill-count',
+			schema: EditDesignFillValueSchema,
+			label: 'Value',
+		}
+		const globalFillBasisArgs = {
+			route: baseRoute.BASIS,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-fill-basis',
+			schema: EditDesignFillBasisSchema,
+			label: 'Basis',
+		}
+		const globalFillStyleArgs = {
+			route: baseRoute.STYLE,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-fill-style',
+			schema: EditDesignFillStyleSchema,
+			label: 'Style',
+		}
+
 		const { fill } = entity
 		const { value, basis, style } = fill
 
@@ -102,6 +129,32 @@ export class DashboardPanelUpdateDesignTypeFillValuesStrategy
 	}: {
 		entity: IDesignWithFill
 	}): IPanelEntityFormArgs[] {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalFillValueArgs = {
+			route: baseRoute.VALUE,
+			formType: EntityFormType.HEX,
+			formId: 'design-type-update-fill-count',
+			schema: EditDesignFillValueSchema,
+			label: 'Value',
+		}
+		const globalFillBasisArgs = {
+			route: baseRoute.BASIS,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-fill-basis',
+			schema: EditDesignFillBasisSchema,
+			label: 'Basis',
+		}
+		const globalFillStyleArgs = {
+			route: baseRoute.STYLE,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-fill-style',
+			schema: EditDesignFillStyleSchema,
+			label: 'Style',
+		}
+
 		const { fill } = entity
 		const { value, basis, style } = fill
 		const sharedEntityFormArgs = {

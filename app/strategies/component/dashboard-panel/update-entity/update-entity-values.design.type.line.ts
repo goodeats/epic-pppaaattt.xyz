@@ -21,31 +21,31 @@ import {
 	type IDashboardPanelIcon,
 } from './update-entity-values'
 
-const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
-const globalEntityFormArgs = {
-	parentTypeId: EntityParentIdType.DESIGN_ID,
-}
-const globalLineWidthArgs = {
-	route: baseRoute.WIDTH,
-	formType: EntityFormType.NUMBER,
-	formId: 'design-type-update-line-width',
-	schema: EditDesignLineWidthSchema,
-	label: 'Width',
-}
-const globalLineBasisArgs = {
-	route: baseRoute.BASIS,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-line-basis',
-	schema: EditDesignLineBasisSchema,
-	label: 'Basis',
-}
-const globalLineFormatArgs = {
-	route: baseRoute.FORMAT,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-line-format',
-	schema: EditDesignLineFormatSchema,
-	label: 'Style',
-}
+// const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
+// const globalEntityFormArgs = {
+// 	parentTypeId: EntityParentIdType.DESIGN_ID,
+// }
+// const globalLineWidthArgs = {
+// 	route: baseRoute.WIDTH,
+// 	formType: EntityFormType.NUMBER,
+// 	formId: 'design-type-update-line-width',
+// 	schema: EditDesignLineWidthSchema,
+// 	label: 'Width',
+// }
+// const globalLineBasisArgs = {
+// 	route: baseRoute.BASIS,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-line-basis',
+// 	schema: EditDesignLineBasisSchema,
+// 	label: 'Basis',
+// }
+// const globalLineFormatArgs = {
+// 	route: baseRoute.FORMAT,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-line-format',
+// 	schema: EditDesignLineFormatSchema,
+// 	label: 'Style',
+// }
 
 export class DashboardPanelUpdateDesignTypeLineValuesStrategy
 	implements IDashboardPanelUpdateEntityValuesStrategy
@@ -55,6 +55,18 @@ export class DashboardPanelUpdateDesignTypeLineValuesStrategy
 	}: {
 		entity: IDesignWithLine
 	}): IPanelEntityFormArgsOptionalMultiple {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalLineWidthArgs = {
+			route: baseRoute.WIDTH,
+			formType: EntityFormType.NUMBER,
+			formId: 'design-type-update-line-width',
+			schema: EditDesignLineWidthSchema,
+			label: 'Width',
+		}
+
 		const { line } = entity
 		const { width } = line
 
@@ -77,6 +89,32 @@ export class DashboardPanelUpdateDesignTypeLineValuesStrategy
 	}: {
 		entity: IDesignWithLine
 	}): IPanelEntityFormArgs[] {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.LINE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalLineWidthArgs = {
+			route: baseRoute.WIDTH,
+			formType: EntityFormType.NUMBER,
+			formId: 'design-type-update-line-width',
+			schema: EditDesignLineWidthSchema,
+			label: 'Width',
+		}
+		const globalLineBasisArgs = {
+			route: baseRoute.BASIS,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-line-basis',
+			schema: EditDesignLineBasisSchema,
+			label: 'Basis',
+		}
+		const globalLineFormatArgs = {
+			route: baseRoute.FORMAT,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-line-format',
+			schema: EditDesignLineFormatSchema,
+			label: 'Style',
+		}
+
 		const { line } = entity
 		const { width, basis, format } = line
 		const sharedEntityFormArgs = {

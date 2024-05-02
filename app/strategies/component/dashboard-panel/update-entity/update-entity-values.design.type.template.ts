@@ -12,17 +12,17 @@ import {
 	type IPanelEntityFormArgs,
 } from './update-entity-values'
 
-const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE
-const globalEntityFormArgs = {
-	parentTypeId: EntityParentIdType.DESIGN_ID,
-}
-const globalTemplateStyleArgs = {
-	route: baseRoute.STYLE,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-template-style',
-	schema: EditDesignTemplateStyleSchema,
-	label: 'Style',
-}
+// const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE
+// const globalEntityFormArgs = {
+// 	parentTypeId: EntityParentIdType.DESIGN_ID,
+// }
+// const globalTemplateStyleArgs = {
+// 	route: baseRoute.STYLE,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-template-style',
+// 	schema: EditDesignTemplateStyleSchema,
+// 	label: 'Style',
+// }
 
 export class DashboardPanelUpdateDesignTypeTemplateValuesStrategy
 	implements IDashboardPanelUpdateEntityValuesStrategy
@@ -32,6 +32,18 @@ export class DashboardPanelUpdateDesignTypeTemplateValuesStrategy
 	}: {
 		entity: IDesignWithTemplate
 	}): IPanelEntityFormArgsOptionalMultiple {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalTemplateStyleArgs = {
+			route: baseRoute.STYLE,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-template-style',
+			schema: EditDesignTemplateStyleSchema,
+			label: 'Style',
+		}
+
 		const { template } = entity
 		const { style } = template
 
@@ -61,6 +73,18 @@ export class DashboardPanelUpdateDesignTypeTemplateValuesStrategy
 	}: {
 		entity: IDesignWithTemplate
 	}): IPanelEntityFormArgs[] {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.TEMPLATE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalTemplateStyleArgs = {
+			route: baseRoute.STYLE,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-template-style',
+			schema: EditDesignTemplateStyleSchema,
+			label: 'Style',
+		}
+
 		const { template } = entity
 		const { style } = template
 		const sharedEntityFormArgs = {

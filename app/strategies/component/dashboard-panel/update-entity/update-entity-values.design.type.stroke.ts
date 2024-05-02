@@ -15,31 +15,31 @@ import {
 	type IPanelEntityFormArgs,
 } from './update-entity-values'
 
-const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
-const globalEntityFormArgs = {
-	parentTypeId: EntityParentIdType.DESIGN_ID,
-}
-const globalStrokeValueArgs = {
-	route: baseRoute.VALUE,
-	formType: EntityFormType.HEX,
-	formId: 'design-type-update-stroke-count',
-	schema: EditDesignStrokeValueSchema,
-	label: 'Value',
-}
-const globalStrokeBasisArgs = {
-	route: baseRoute.BASIS,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-stroke-basis',
-	schema: EditDesignStrokeBasisSchema,
-	label: 'Basis',
-}
-const globalStrokeStyleArgs = {
-	route: baseRoute.STYLE,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-stroke-style',
-	schema: EditDesignStrokeStyleSchema,
-	label: 'Style',
-}
+// const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
+// const globalEntityFormArgs = {
+// 	parentTypeId: EntityParentIdType.DESIGN_ID,
+// }
+// const globalStrokeValueArgs = {
+// 	route: baseRoute.VALUE,
+// 	formType: EntityFormType.HEX,
+// 	formId: 'design-type-update-stroke-count',
+// 	schema: EditDesignStrokeValueSchema,
+// 	label: 'Value',
+// }
+// const globalStrokeBasisArgs = {
+// 	route: baseRoute.BASIS,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-stroke-basis',
+// 	schema: EditDesignStrokeBasisSchema,
+// 	label: 'Basis',
+// }
+// const globalStrokeStyleArgs = {
+// 	route: baseRoute.STYLE,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-stroke-style',
+// 	schema: EditDesignStrokeStyleSchema,
+// 	label: 'Style',
+// }
 
 export class DashboardPanelUpdateDesignTypeStrokeValuesStrategy
 	implements IDashboardPanelUpdateEntityValuesStrategy
@@ -49,6 +49,25 @@ export class DashboardPanelUpdateDesignTypeStrokeValuesStrategy
 	}: {
 		entity: IDesignWithStroke
 	}): IPanelEntityFormArgsOptionalMultiple {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalStrokeValueArgs = {
+			route: baseRoute.VALUE,
+			formType: EntityFormType.HEX,
+			formId: 'design-type-update-stroke-count',
+			schema: EditDesignStrokeValueSchema,
+			label: 'Value',
+		}
+		const globalStrokeBasisArgs = {
+			route: baseRoute.BASIS,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-stroke-basis',
+			schema: EditDesignStrokeBasisSchema,
+			label: 'Basis',
+		}
+
 		const { stroke } = entity
 		const { value, basis } = stroke
 
@@ -87,6 +106,32 @@ export class DashboardPanelUpdateDesignTypeStrokeValuesStrategy
 	}: {
 		entity: IDesignWithStroke
 	}): IPanelEntityFormArgs[] {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.STROKE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalStrokeValueArgs = {
+			route: baseRoute.VALUE,
+			formType: EntityFormType.HEX,
+			formId: 'design-type-update-stroke-count',
+			schema: EditDesignStrokeValueSchema,
+			label: 'Value',
+		}
+		const globalStrokeBasisArgs = {
+			route: baseRoute.BASIS,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-stroke-basis',
+			schema: EditDesignStrokeBasisSchema,
+			label: 'Basis',
+		}
+		const globalStrokeStyleArgs = {
+			route: baseRoute.STYLE,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-stroke-style',
+			schema: EditDesignStrokeStyleSchema,
+			label: 'Style',
+		}
+
 		const { stroke } = entity
 		const { value, basis, style } = stroke
 		const sharedEntityFormArgs = {

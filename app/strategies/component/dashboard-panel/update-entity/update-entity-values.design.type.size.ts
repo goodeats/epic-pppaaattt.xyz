@@ -21,31 +21,31 @@ import {
 	type IDashboardPanelIcon,
 } from './update-entity-values'
 
-const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.SIZE.UPDATE
-const globalEntityFormArgs = {
-	parentTypeId: EntityParentIdType.DESIGN_ID,
-}
-const globalSizeValueArgs = {
-	route: baseRoute.VALUE,
-	formType: EntityFormType.NUMBER,
-	formId: 'design-type-update-size-count',
-	schema: EditDesignSizeValueSchema,
-	label: 'Value',
-}
-const globalSizeBasisArgs = {
-	route: baseRoute.BASIS,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-size-basis',
-	schema: EditDesignSizeBasisSchema,
-	label: 'Basis',
-}
-const globalSizeFormatArgs = {
-	route: baseRoute.FORMAT,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-size-format',
-	schema: EditDesignSizeFormatSchema,
-	label: 'Format',
-}
+// const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.SIZE.UPDATE
+// const globalEntityFormArgs = {
+// 	parentTypeId: EntityParentIdType.DESIGN_ID,
+// }
+// const globalSizeValueArgs = {
+// 	route: baseRoute.VALUE,
+// 	formType: EntityFormType.NUMBER,
+// 	formId: 'design-type-update-size-count',
+// 	schema: EditDesignSizeValueSchema,
+// 	label: 'Value',
+// }
+// const globalSizeBasisArgs = {
+// 	route: baseRoute.BASIS,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-size-basis',
+// 	schema: EditDesignSizeBasisSchema,
+// 	label: 'Basis',
+// }
+// const globalSizeFormatArgs = {
+// 	route: baseRoute.FORMAT,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-size-format',
+// 	schema: EditDesignSizeFormatSchema,
+// 	label: 'Format',
+// }
 
 export class DashboardPanelUpdateDesignTypeSizeValuesStrategy
 	implements IDashboardPanelUpdateEntityValuesStrategy
@@ -55,6 +55,18 @@ export class DashboardPanelUpdateDesignTypeSizeValuesStrategy
 	}: {
 		entity: IDesignWithSize
 	}): IPanelEntityFormArgsOptionalMultiple {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.SIZE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalSizeValueArgs = {
+			route: baseRoute.VALUE,
+			formType: EntityFormType.NUMBER,
+			formId: 'design-type-update-size-count',
+			schema: EditDesignSizeValueSchema,
+			label: 'Value',
+		}
+
 		const { size } = entity
 		const { value } = size
 
@@ -78,6 +90,32 @@ export class DashboardPanelUpdateDesignTypeSizeValuesStrategy
 	}: {
 		entity: IDesignWithSize
 	}): IPanelEntityFormArgs[] {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.SIZE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalSizeValueArgs = {
+			route: baseRoute.VALUE,
+			formType: EntityFormType.NUMBER,
+			formId: 'design-type-update-size-count',
+			schema: EditDesignSizeValueSchema,
+			label: 'Value',
+		}
+		const globalSizeBasisArgs = {
+			route: baseRoute.BASIS,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-size-basis',
+			schema: EditDesignSizeBasisSchema,
+			label: 'Basis',
+		}
+		const globalSizeFormatArgs = {
+			route: baseRoute.FORMAT,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-size-format',
+			schema: EditDesignSizeFormatSchema,
+			label: 'Format',
+		}
+
 		const { size } = entity
 		const { value, basis, format } = size
 		const sharedEntityFormArgs = {

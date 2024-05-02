@@ -14,24 +14,24 @@ import {
 	type IDashboardPanelIcon,
 } from './update-entity-values'
 
-const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE
-const globalEntityFormArgs = {
-	parentTypeId: EntityParentIdType.DESIGN_ID,
-}
-const globalRotateValueArgs = {
-	route: baseRoute.VALUE,
-	formType: EntityFormType.HEX,
-	formId: 'design-type-update-rotate-count',
-	schema: EditDesignRotateValueSchema,
-	label: 'Value',
-}
-const globalRotateBasisArgs = {
-	route: baseRoute.BASIS,
-	formType: EntityFormType.SELECT,
-	formId: 'design-type-update-rotate-basis',
-	schema: EditDesignRotateBasisSchema,
-	label: 'Basis',
-}
+// const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE
+// const globalEntityFormArgs = {
+// 	parentTypeId: EntityParentIdType.DESIGN_ID,
+// }
+// const globalRotateValueArgs = {
+// 	route: baseRoute.VALUE,
+// 	formType: EntityFormType.HEX,
+// 	formId: 'design-type-update-rotate-count',
+// 	schema: EditDesignRotateValueSchema,
+// 	label: 'Value',
+// }
+// const globalRotateBasisArgs = {
+// 	route: baseRoute.BASIS,
+// 	formType: EntityFormType.SELECT,
+// 	formId: 'design-type-update-rotate-basis',
+// 	schema: EditDesignRotateBasisSchema,
+// 	label: 'Basis',
+// }
 
 export class DashboardPanelUpdateDesignTypeRotateValuesStrategy
 	implements IDashboardPanelUpdateEntityValuesStrategy
@@ -41,6 +41,25 @@ export class DashboardPanelUpdateDesignTypeRotateValuesStrategy
 	}: {
 		entity: IDesignWithRotate
 	}): IPanelEntityFormArgsOptionalMultiple {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalRotateValueArgs = {
+			route: baseRoute.VALUE,
+			formType: EntityFormType.HEX,
+			formId: 'design-type-update-rotate-count',
+			schema: EditDesignRotateValueSchema,
+			label: 'Value',
+		}
+		const globalRotateBasisArgs = {
+			route: baseRoute.BASIS,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-rotate-basis',
+			schema: EditDesignRotateBasisSchema,
+			label: 'Basis',
+		}
+
 		const { rotate } = entity
 		const { value, basis } = rotate
 
@@ -79,6 +98,25 @@ export class DashboardPanelUpdateDesignTypeRotateValuesStrategy
 	}: {
 		entity: IDesignWithRotate
 	}): IPanelEntityFormArgs[] {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.ROTATE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalRotateValueArgs = {
+			route: baseRoute.VALUE,
+			formType: EntityFormType.HEX,
+			formId: 'design-type-update-rotate-count',
+			schema: EditDesignRotateValueSchema,
+			label: 'Value',
+		}
+		const globalRotateBasisArgs = {
+			route: baseRoute.BASIS,
+			formType: EntityFormType.SELECT,
+			formId: 'design-type-update-rotate-basis',
+			schema: EditDesignRotateBasisSchema,
+			label: 'Basis',
+		}
+
 		const { rotate } = entity
 		const { value, basis } = rotate
 		const sharedEntityFormArgs = {

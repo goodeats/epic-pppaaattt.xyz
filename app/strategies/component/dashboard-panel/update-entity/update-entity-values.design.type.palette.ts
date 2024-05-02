@@ -8,17 +8,17 @@ import {
 	type IPanelEntityFormArgs,
 } from './update-entity-values'
 
-const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.PALETTE.UPDATE
-const globalEntityFormArgs = {
-	parentTypeId: EntityParentIdType.DESIGN_ID,
-}
-const globalPaletteValueArgs = {
-	route: baseRoute.VALUE,
-	formType: EntityFormType.HEX,
-	formId: 'design-type-update-palette-value',
-	schema: EditDesignPaletteValueSchema,
-	label: 'Hex',
-}
+// const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.PALETTE.UPDATE
+// const globalEntityFormArgs = {
+// 	parentTypeId: EntityParentIdType.DESIGN_ID,
+// }
+// const globalPaletteValueArgs = {
+// 	route: baseRoute.VALUE,
+// 	formType: EntityFormType.HEX,
+// 	formId: 'design-type-update-palette-value',
+// 	schema: EditDesignPaletteValueSchema,
+// 	label: 'Hex',
+// }
 
 export class DashboardPanelUpdateDesignTypePaletteValuesStrategy
 	implements IDashboardPanelUpdateEntityValuesStrategy
@@ -28,6 +28,18 @@ export class DashboardPanelUpdateDesignTypePaletteValuesStrategy
 	}: {
 		entity: IDesignWithPalette
 	}): IPanelEntityFormArgsOptionalMultiple {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.PALETTE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalPaletteValueArgs = {
+			route: baseRoute.VALUE,
+			formType: EntityFormType.HEX,
+			formId: 'design-type-update-palette-value',
+			schema: EditDesignPaletteValueSchema,
+			label: 'Hex',
+		}
+
 		const { palette } = entity
 		const { value } = palette
 
@@ -51,6 +63,18 @@ export class DashboardPanelUpdateDesignTypePaletteValuesStrategy
 	}: {
 		entity: IDesignWithPalette
 	}): IPanelEntityFormArgs[] {
+		const baseRoute = Routes.RESOURCES.API.V1.DESIGN.TYPE.PALETTE.UPDATE
+		const globalEntityFormArgs = {
+			parentTypeId: EntityParentIdType.DESIGN_ID,
+		}
+		const globalPaletteValueArgs = {
+			route: baseRoute.VALUE,
+			formType: EntityFormType.HEX,
+			formId: 'design-type-update-palette-value',
+			schema: EditDesignPaletteValueSchema,
+			label: 'Hex',
+		}
+
 		const { palette } = entity
 		const { value } = palette
 
