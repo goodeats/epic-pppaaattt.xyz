@@ -53,7 +53,7 @@ export const ArtboardHeader = () => {
 					entities={branch.versions}
 					entitySingular="version"
 					entityPlural="versions"
-					placeholder="Select a version..."
+					placeholder={version.name || 'Select a version...'}
 					slugParam="versionSlug"
 					baseUrl={`${baseUrl}/${artboard.slug}/${branch.slug}`}
 				/>
