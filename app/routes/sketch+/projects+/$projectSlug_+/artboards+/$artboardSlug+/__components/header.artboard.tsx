@@ -1,4 +1,4 @@
-import { Link, useMatches } from '@remix-run/react'
+import { useMatches } from '@remix-run/react'
 import {
 	DashboardHeader,
 	DashboardNav,
@@ -6,8 +6,7 @@ import {
 } from '#app/components/layout'
 import { ComboboxNav } from '#app/components/templates/combobox'
 import { FormFetcherIcon } from '#app/components/templates/form/fetcher/icon'
-import { Button } from '#app/components/ui/button'
-import { Icon } from '#app/components/ui/icon'
+import { IconLink } from '#app/components/templates/link'
 import { NewArtboardVersionSchema } from '#app/schema/artboard-version'
 import { EntityParentIdType } from '#app/schema/entity'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
@@ -73,10 +72,9 @@ export const ArtboardHeader = () => {
 						route={Routes.RESOURCES.API.V1.ARTBOARD_VERSION.CREATE}
 						formId="artboard-version-create"
 						schema={NewArtboardVersionSchema}
-						icon="disc"
+						icon="card-stack-plus"
 						iconText="New Version"
 					/>
-					<span>save av</span>
 				</NavbarButtonGroup>
 			</DashboardNav>
 		</DashboardHeader>
@@ -88,12 +86,11 @@ export const ArtboardHeader = () => {
 // - navigating to a previous artboard version
 const LatestArtboardVersionLink = () => {
 	return (
-		<Button asChild size="sm" variant="outline">
-			<Link to="../latest" prefetch="intent">
-				<Icon name="arrow-right" className="scale-125 max-md:scale-150">
-					<span className="max-md:hidden">Latest</span>
-				</Icon>
-			</Link>
-		</Button>
+		<IconLink
+			to="../latest"
+			icon="pin-right"
+			text="Latest"
+			tooltipText="View the latest version of this artboard"
+		/>
 	)
 }
