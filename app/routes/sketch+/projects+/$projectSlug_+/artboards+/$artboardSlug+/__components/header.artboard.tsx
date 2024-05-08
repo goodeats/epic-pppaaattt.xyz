@@ -83,6 +83,9 @@ export const ArtboardHeader = () => {
 	)
 }
 
+// this should be displayed when:
+// - creating a new artboard version
+// - navigating to a previous artboard version
 const LatestArtboardVersionLink = () => {
 	return (
 		<Button asChild size="sm" variant="outline">
