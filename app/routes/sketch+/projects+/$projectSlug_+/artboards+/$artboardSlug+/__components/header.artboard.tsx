@@ -6,6 +6,7 @@ import {
 } from '#app/components/layout'
 import { ComboboxNav } from '#app/components/templates/combobox'
 import { IconLink } from '#app/components/templates/link'
+import { TooltipIcon } from '#app/components/templates/navbar'
 import { NewArtboardVersionSchema } from '#app/schema/artboard-version'
 import { EntityParentIdType } from '#app/schema/entity'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
@@ -57,6 +58,11 @@ export const ArtboardHeader = () => {
 					placeholder={version.name || 'Select a version...'}
 					slugParam="versionSlug"
 					baseUrl={`${baseUrl}/${artboard.slug}/${branch.slug}`}
+				/>
+				<TooltipIcon
+					icon="info-circled"
+					text="Info"
+					tooltipText={version.description}
 				/>
 				{!onLatestVersion && (
 					// this should be displayed when:
