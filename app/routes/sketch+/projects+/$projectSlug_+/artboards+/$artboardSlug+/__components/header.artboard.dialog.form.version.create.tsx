@@ -1,6 +1,6 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint } from '@conform-to/zod'
-import { useFetcher } from '@remix-run/react'
+import { useFetcher, useNavigate, useParams } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { useHydrated } from 'remix-utils/use-hydrated'
@@ -61,6 +61,9 @@ export const DialogFormVersionCreate = ({
 	const action = getActionType(route)
 	const fetcher = useFetcher<typeof action>()
 	const isPending = useIsPending()
+	const params = useParams()
+	const navigate = useNavigate()
+
 	let isHydrated = useHydrated()
 	const [form, fields] = useForm({
 		id: `${formId}-${parentId || 'parent'}-${entityId || 'new'}`,
@@ -71,13 +74,19 @@ export const DialogFormVersionCreate = ({
 		},
 	})
 
-	// close dialog on successful submission
+	// actions on successful submission
 	// https://www.nico.fyi/blog/close-dialog-with-use-fetcher-remix
 	useEffect(() => {
 		if (fetcher.state === 'idle' && fetcher.data?.status === 'success') {
-			setOpen(false)
+			if (params.versionSlug !== 'latest') {
+				// navigate to latest version if not already there
+				navigate('../latest')
+			} else {
+				// close dialog if already on latest version
+				setOpen(false)
+			}
 		}
-	}, [fetcher])
+	}, [fetcher, params, navigate])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
