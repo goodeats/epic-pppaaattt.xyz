@@ -73,4 +73,5 @@ export const ArtboardVersionDataCreateSchema = z.object({
 export const NewArtboardVersionSchema = z.object({
 	id: z.string(),
 	artboardBranchId: z.string(),
+	description: z.string(),
 })

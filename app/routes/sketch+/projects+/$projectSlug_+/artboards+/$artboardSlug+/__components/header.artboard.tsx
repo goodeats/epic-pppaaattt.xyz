@@ -11,12 +11,14 @@ import { NewArtboardVersionSchema } from '#app/schema/artboard-version'
 import { EntityParentIdType } from '#app/schema/entity'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
 import { Routes } from '#app/utils/routes.utils'
+import { useUser } from '#app/utils/user'
 import { artboardBranchLoaderRoute } from '../$branchSlug'
 import { artboardVersionLoaderRoute } from '../$branchSlug.$versionSlug'
 import { projectLoaderRoute } from '../../route'
 import { artboardLoaderRoute } from '../route'
 
 export const ArtboardHeader = () => {
+	const user = useUser()
 	const matches = useMatches()
 	const { project } = useRouteLoaderMatchData(matches, projectLoaderRoute)
 	const { artboard } = useRouteLoaderMatchData(matches, artboardLoaderRoute)
@@ -75,6 +77,14 @@ export const ArtboardHeader = () => {
 						icon="card-stack-plus"
 						iconText="New Version"
 					/>
+					{/* TODO: make this have the same look as the form fetcher icon */}
+					<IconLink
+						to={`/users/${user.username}/artboards/${artboard.slug}`}
+						icon="pencil-1"
+						text="Latest"
+						tooltipText="View the artboard details"
+						buttonVariant="ghost"
+					/>
 				</NavbarButtonGroup>
 			</DashboardNav>
 		</DashboardHeader>
@@ -91,6 +101,7 @@ const LatestArtboardVersionLink = () => {
 			icon="pin-right"
 			text="Latest"
 			tooltipText="View the latest version of this artboard"
+			buttonVariant="secondary"
 		/>
 	)
 }

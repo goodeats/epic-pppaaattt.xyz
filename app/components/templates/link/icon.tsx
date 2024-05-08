@@ -13,17 +13,27 @@ const IconLink = ({
 	icon,
 	text,
 	tooltipText,
+	buttonVariant,
 }: {
 	to: string
 	icon: IconName
 	text: string
 	tooltipText: string
+	buttonVariant?:
+		| 'default'
+		| 'link'
+		| 'destructive'
+		| 'outline'
+		| 'secondary'
+		| 'ghost'
+		| null
+		| undefined
 }) => {
 	return (
 		<TooltipProvider>
 			<Tooltip>
 				<TooltipTrigger>
-					<Button asChild size="icon" variant="secondary">
+					<Button asChild size="icon" variant={buttonVariant}>
 						<Link to={to} prefetch="intent">
 							<Icon name={icon} className="scale-125 max-md:scale-150">
 								<span className="sr-only">{text}</span>
