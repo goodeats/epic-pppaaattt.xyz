@@ -41,7 +41,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const where =
 		versionSlug === 'latest'
 			? { ownerId: owner.id, branchId: branch.id, nextId: null }
-			: { ownerId: owner.id, slug: versionSlug }
+			: { ownerId: owner.id, branchId: branch.id, slug: versionSlug }
 
 	const version = await getArtboardVersionWithDesignsAndLayers({ where })
 	invariantResponse(version, 'Artboard Version not found', { status: 404 })

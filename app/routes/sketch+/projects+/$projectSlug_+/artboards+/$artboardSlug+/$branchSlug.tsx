@@ -1,6 +1,7 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
+import { getArtboard } from '#app/models/artboard/artboard.get.server'
 import { getArtboardBranchWithVersions } from '#app/models/artboard-branch/artboard-branch.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
@@ -14,9 +15,13 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
 	// https://sergiodxa.com/tutorials/avoid-waterfalls-of-queries-in-remix-loaders
-	const { branchSlug } = params
+	const artboard = await getArtboard({
+		where: { slug: params.artboardSlug, ownerId: owner.id },
+	})
+	invariantResponse(artboard, 'Artboard not found', { status: 404 })
+
 	const branch = await getArtboardBranchWithVersions({
-		where: { slug: branchSlug, ownerId: owner.id },
+		where: { artboardId: artboard.id, slug: params.branchSlug },
 	})
 	invariantResponse(branch, 'Artboard Branch not found', { status: 404 })
 

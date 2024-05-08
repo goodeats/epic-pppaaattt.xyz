@@ -24,7 +24,6 @@ export const ArtboardHeader = () => {
 		matches,
 		artboardVersionLoaderRoute,
 	)
-
 	const baseUrl = `/sketch/projects/${project.slug}/artboards`
 
 	return (

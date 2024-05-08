@@ -26,9 +26,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
 	// https://sergiodxa.com/tutorials/avoid-waterfalls-of-queries-in-remix-loaders
-	const { artboardSlug } = params
 	const artboard = await getArtboardWithDefaultBranchAndLatestVersion({
-		where: { slug: artboardSlug, ownerId: owner.id },
+		where: { slug: params.artboardSlug, ownerId: owner.id },
 	})
 	invariantResponse(artboard, 'Artboard not found', { status: 404 })
 

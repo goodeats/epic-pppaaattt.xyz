@@ -58,6 +58,9 @@ export const getArtboardsWithDesignsAndLayers = async ({
 	const artboards = await prisma.artboard.findMany({
 		where,
 		include: includeDesignsAndLayers,
+		orderBy: {
+			createdAt: 'asc',
+		},
 	})
 	return artboards
 }

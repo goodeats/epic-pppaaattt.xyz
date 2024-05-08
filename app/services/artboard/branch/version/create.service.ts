@@ -52,7 +52,7 @@ export const artboardVersionCreateService = async ({
 			branchId: artboardBranchId,
 			name: newName,
 			slug: newName,
-			description,
+			description: 'new version -- fix me to be the description passed in',
 			width,
 			height,
 			background,

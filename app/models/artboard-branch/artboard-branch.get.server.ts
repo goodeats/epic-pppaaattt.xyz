@@ -19,7 +19,18 @@ const whereArgs = z.object({
 const validateQueryWhereArgsPresent = (
 	where: queryArtboardBranchWhereArgsType,
 ) => {
-	if (Object.values(where).some(value => !value)) {
+	const nullValuesAllowed: string[] = ['nextId', 'prevId']
+	const missingValues: Record<string, any> = {}
+	for (const [key, value] of Object.entries(where)) {
+		const valueIsNull = value === null || value === undefined
+		const nullValueAllowed = nullValuesAllowed.includes(key)
+		if (valueIsNull && !nullValueAllowed) {
+			missingValues[key] = value
+		}
+	}
+
+	if (Object.keys(missingValues).length > 0) {
+		console.log('Missing values:', missingValues)
 		throw new Error(
 			'Null or undefined values are not allowed in query parameters for artboard branch.',
 		)
@@ -46,10 +57,9 @@ export const getArtboardBranchWithVersions = async ({
 		where,
 		include: {
 			versions: {
-				where: {
-					nextId: null,
+				orderBy: {
+					name: 'desc',
 				},
-				take: 1,
 			},
 		},
 	})
