@@ -42,6 +42,7 @@ export const DialogFormVersionCreate = ({
 	iconText,
 	title,
 	description,
+	warningDescription,
 }: {
 	entityId?: IEntityId
 	parentTypeId?: entityParentIdTypeEnum
@@ -53,6 +54,7 @@ export const DialogFormVersionCreate = ({
 	iconText: string
 	title: string
 	description: string
+	warningDescription?: string
 }) => {
 	const [open, setOpen] = useState(false)
 
@@ -109,6 +111,11 @@ export const DialogFormVersionCreate = ({
 							/>
 						</div>
 					</fetcher.Form>
+					{warningDescription && (
+						<p className="body-md pt-4 text-destructive">
+							{warningDescription}
+						</p>
+					)}
 				</div>
 				<DialogFooter>
 					<StatusButton

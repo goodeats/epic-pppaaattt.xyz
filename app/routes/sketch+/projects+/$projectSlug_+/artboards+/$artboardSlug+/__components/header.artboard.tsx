@@ -90,6 +90,11 @@ export const ArtboardHeader = () => {
 						iconText="New Version"
 						title="Create new version"
 						description="Save a new version of this artboard. Add a description to help understand the changes. Click save when you're done."
+						warningDescription={
+							onLatestVersion
+								? ''
+								: `Creating a new version will erase all versions after the current version.`
+						}
 					/>
 					<IconLink
 						to={`/users/${user.username}/artboards/${artboard.slug}`}
