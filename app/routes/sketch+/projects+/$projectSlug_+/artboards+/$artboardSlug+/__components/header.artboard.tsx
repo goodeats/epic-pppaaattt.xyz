@@ -1,4 +1,4 @@
-import { useMatches } from '@remix-run/react'
+import { Link, useMatches } from '@remix-run/react'
 import {
 	DashboardHeader,
 	DashboardNav,
@@ -6,6 +6,8 @@ import {
 } from '#app/components/layout'
 import { ComboboxNav } from '#app/components/templates/combobox'
 import { FormFetcherIcon } from '#app/components/templates/form/fetcher/icon'
+import { Button } from '#app/components/ui/button'
+import { Icon } from '#app/components/ui/icon'
 import { NewArtboardVersionSchema } from '#app/schema/artboard-version'
 import { EntityParentIdType } from '#app/schema/entity'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
@@ -25,6 +27,8 @@ export const ArtboardHeader = () => {
 		artboardVersionLoaderRoute,
 	)
 	const baseUrl = `/sketch/projects/${project.slug}/artboards`
+	const onLatestVersion =
+		version.slug === 'latest' || branch.versions[0].id === version.id
 
 	return (
 		<DashboardHeader id="dashboard-artboard-header">
@@ -53,6 +57,7 @@ export const ArtboardHeader = () => {
 					slugParam="versionSlug"
 					baseUrl={`${baseUrl}/${artboard.slug}/${branch.slug}`}
 				/>
+				{!onLatestVersion && <LatestArtboardVersionLink />}
 			</DashboardNav>
 			<DashboardNav>
 				<NavbarButtonGroup>
@@ -75,5 +80,17 @@ export const ArtboardHeader = () => {
 				</NavbarButtonGroup>
 			</DashboardNav>
 		</DashboardHeader>
+	)
+}
+
+const LatestArtboardVersionLink = () => {
+	return (
+		<Button asChild size="sm" variant="outline">
+			<Link to="../latest" prefetch="intent">
+				<Icon name="arrow-right" className="scale-125 max-md:scale-150">
+					<span className="max-md:hidden">Latest</span>
+				</Icon>
+			</Link>
+		</Button>
 	)
 }
