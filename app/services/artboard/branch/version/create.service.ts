@@ -58,11 +58,7 @@ export const artboardVersionCreateService = async ({
 			background,
 		})
 
-		// Step 3: create new artboard version
-		const createdArtboardVersion = await createArtboardVersion({ data })
-		invariant(createdArtboardVersion, 'New artboard version not created')
-
-		// Step 4: delete all artboard versions after the current artboard version
+		// Step 3: delete all artboard versions after the current artboard version
 		// getting multiple heads and tails on v1...
 		const artboardVersions = await getArtboardVersions({
 			where: { branchId: artboardBranchId },
@@ -72,6 +68,10 @@ export const artboardVersionCreateService = async ({
 			artboardVersions,
 		})
 		await prisma.$transaction([deleteArtboardVersionsPromise])
+
+		// Step 4: create new artboard version
+		const createdArtboardVersion = await createArtboardVersion({ data })
+		invariant(createdArtboardVersion, 'New artboard version not created')
 
 		// Step 5: connect created and current versions
 		const connectNodesPromise = connectPrevAndNext({
