@@ -52,7 +52,7 @@ export const artboardVersionCreateService = async ({
 			branchId: artboardBranchId,
 			name: newName,
 			slug: newName,
-			description: 'new version -- fix me to be the description passed in',
+			description: description || 'new version',
 			width,
 			height,
 			background,
@@ -63,6 +63,7 @@ export const artboardVersionCreateService = async ({
 		invariant(createdArtboardVersion, 'New artboard version not created')
 
 		// Step 4: delete all artboard versions after the current artboard version
+		// getting multiple heads and tails on v1...
 		const artboardVersions = await getArtboardVersions({
 			where: { branchId: artboardBranchId },
 		})

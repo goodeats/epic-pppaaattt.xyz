@@ -11,11 +11,13 @@ export const orderLinkedItems = <T extends ILinkedItem>(items: T[]): T[] => {
 	const heads = items.filter(item => !item.prevId)
 	if (heads.length > 1) {
 		console.warn('Multiple heads found in the linked list.')
+		console.log('heads', heads)
 	}
 
 	const tails = items.filter(item => !item.nextId)
 	if (tails.length > 1) {
 		console.warn('Multiple tails found in the linked list.')
+		console.log('tails', tails)
 	}
 
 	// Step 1: Find the head of the list

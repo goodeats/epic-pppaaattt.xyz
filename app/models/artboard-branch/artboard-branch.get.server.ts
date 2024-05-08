@@ -58,7 +58,7 @@ export const getArtboardBranchWithVersions = async ({
 		include: {
 			versions: {
 				orderBy: {
-					name: 'desc',
+					createdAt: 'desc',
 				},
 			},
 		},
