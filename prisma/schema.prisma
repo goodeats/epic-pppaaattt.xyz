@@ -517,7 +517,8 @@ model ArtboardBranch {
 
   // Constraints to ensure only one 'default' version per branch
   // and only unique name per branch
-  @@unique([artboardId, default])
+  // @@unique([artboardId, default])
+  // can't have unique constraint on boolean -- come back later to fix
   @@unique([artboardId, name])
   @@unique([artboardId, slug])
 }

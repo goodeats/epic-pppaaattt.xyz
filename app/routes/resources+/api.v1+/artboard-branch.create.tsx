@@ -21,18 +21,28 @@ export async function action({ request }: DataFunctionArgs) {
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
 
+	// this is starting to get messy
+	// but want to ensure no redirect if params are valid
+	// and service encounters an error
+	// ... had to revert back to the original code so fetcher button form doesn't break
+	// refactor this later
 	let createSuccess = false
+	let errorMessage = ''
+	// let responseStatus = ''
 	const { status, submission } = await validateNewArtboardBranchSubmission({
 		userId,
 		formData,
 	})
+	// responseStatus = status
 
 	if (status === 'success') {
-		const { success } = await artboardBranchCreateService({
+		const { success, message } = await artboardBranchCreateService({
 			userId,
 			...submission.value,
 		})
 		createSuccess = success
+		// responseStatus = success ? 'success' : 'error'
+		errorMessage = message || ''
 	}
 
 	if (noJS) {
@@ -42,7 +52,7 @@ export async function action({ request }: DataFunctionArgs) {
 	}
 
 	return json(
-		{ status, submission },
+		{ status, submission, message: errorMessage },
 		{
 			status: status === 'error' || !createSuccess ? 422 : 201,
 		},

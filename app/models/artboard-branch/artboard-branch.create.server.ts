@@ -36,14 +36,16 @@ export const createArtboardBranch = async ({
 	data: {
 		ownerId: IUser['id']
 		artboardId: IArtboard['id']
+		parentId?: IArtboardBranch['id']
 		name: string
 		slug: string
 		description: string | null | undefined
 	}
 }) => {
-	return await prisma.artboardBranch.create({
+	const artboardBranch = await prisma.artboardBranch.create({
 		data,
 	})
+	return artboardBranch
 }
 
 export const createDefaultArtboardBranchWithVersion = async ({

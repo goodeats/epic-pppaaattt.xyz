@@ -64,7 +64,6 @@ export const DialogFormBranchCreate = ({
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission: fetcher.data?.submission,
 		onValidate: ({ formData }) => {
-			console.log('sub', parse(formData, { schema }))
 			return parse(formData, { schema })
 		},
 		defaultValue: {
