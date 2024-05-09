@@ -1,11 +1,11 @@
 import { conform, useForm } from '@conform-to/react'
-import { getFieldsetConstraint } from '@conform-to/zod'
-import { useFetcher, useNavigate, useParams } from '@remix-run/react'
+import { getFieldsetConstraint, parse } from '@conform-to/zod'
+import { useFetcher, useNavigate } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { type z } from 'zod'
-import { TextareaField } from '#app/components/forms'
+import { Field, TextareaField } from '#app/components/forms'
 import {
 	Dialog,
 	DialogContent,
@@ -18,23 +18,18 @@ import {
 import { type IconName } from '#app/components/ui/icon'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { StatusButton } from '#app/components/ui/status-button'
-import {
-	type IEntityId,
-	type IEntityParentId,
-	type entityParentIdTypeEnum,
-} from '#app/schema/entity'
-import { useIsPending } from '#app/utils/misc'
+import { type IArtboardBranch } from '#app/models/artboard-branch/artboard-branch.server'
+import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import { type IArtboard } from '#app/models/artboard.server'
+import { stringToSlug, useIsPending } from '#app/utils/misc'
 import { getActionType, type RoutePath } from '#app/utils/routes.utils'
 
-// 3 things:
-// friendly reminder to change the form id when switching a fetcher.form icon to dialog
-// explore not needing actionData on other forms and fetcher is action, not loader
 // planning to revisit design system so not as much effort to make dialog dynamic like fetcher forms
 
-export const DialogFormVersionCreate = ({
-	entityId,
-	parentTypeId,
-	parentId,
+export const DialogFormBranchCreate = ({
+	branchId,
+	artboardId,
+	versionId,
 	route,
 	formId,
 	schema,
@@ -44,9 +39,9 @@ export const DialogFormVersionCreate = ({
 	description,
 	warningDescription,
 }: {
-	entityId?: IEntityId
-	parentTypeId?: entityParentIdTypeEnum
-	parentId?: IEntityParentId
+	branchId: IArtboardBranch['id']
+	artboardId: IArtboard['id']
+	versionId: IArtboardVersion['id']
 	route: RoutePath
 	formId: string
 	schema: z.ZodSchema<any>
@@ -61,35 +56,35 @@ export const DialogFormVersionCreate = ({
 	const action = getActionType(route)
 	const fetcher = useFetcher<typeof action>()
 	const isPending = useIsPending()
-	const params = useParams()
 	const navigate = useNavigate()
 
 	let isHydrated = useHydrated()
 	const [form, fields] = useForm({
-		id: `${formId}-${parentId || 'parent'}-${entityId || 'new'}`,
+		id: `${formId}-${artboardId}-${branchId}-${versionId}`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission: fetcher.data?.submission,
+		onValidate: ({ formData }) => {
+			console.log('sub', parse(formData, { schema }))
+			return parse(formData, { schema })
+		},
 		defaultValue: {
+			name: '',
 			description: '',
 		},
 	})
 
 	// actions on successful submission
-	// https://www.nico.fyi/blog/close-dialog-with-use-fetcher-remix
 	// I've enjoyed creating an api out of the resource routes,
 	// but maybe I should redirect from the action instead of
 	// waiting for the json response to redirect from the client
 	useEffect(() => {
 		if (fetcher.state === 'idle' && fetcher.data?.status === 'success') {
-			if (params.versionSlug !== 'latest') {
-				// navigate to latest version if not already there
-				navigate('../latest')
-			} else {
-				// close dialog if already on latest version
-				setOpen(false)
-			}
+			const newBranchName = fetcher.data.submission.value.name
+			const newBranchSlug = stringToSlug(newBranchName)
+			navigate(`../../${newBranchSlug}`)
+			setOpen(false)
 		}
-	}, [fetcher, params, navigate])
+	}, [fetcher, navigate])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -106,12 +101,19 @@ export const DialogFormVersionCreate = ({
 						<AuthenticityTokenInput />
 
 						<input type="hidden" name="no-js" value={String(!isHydrated)} />
-						<input type="hidden" name="id" value={entityId} />
-						{parentId && (
-							<input type="hidden" name={parentTypeId} value={parentId} />
-						)}
+						<input type="hidden" name="id" value={branchId} />
+						<input type="hidden" name="artboardId" value={artboardId} />
+						<input type="hidden" name="versionId" value={versionId} />
 
 						<div className="grid grid-cols-4 items-center gap-4">
+							<Field
+								labelProps={{ children: 'Name' }}
+								inputProps={{
+									autoFocus: true,
+									...conform.input(fields.name, { ariaAttributes: true }),
+								}}
+								errors={fields.name.errors}
+							/>
 							<TextareaField
 								labelProps={{ children: 'Description' }}
 								textareaProps={{

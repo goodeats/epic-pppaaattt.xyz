@@ -1,5 +1,9 @@
 import { invariant } from '@epic-web/invariant'
 import {
+	loader as apiV1ArtboardBranchCreateLoader,
+	action as apiV1ArtboardBranchCreateAction,
+} from '#app/routes/resources+/api.v1+/artboard-branch.create'
+import {
 	loader as apiV1ArtboardVersionCreateLoader,
 	action as apiV1ArtboardVersionCreateAction,
 } from '#app/routes/resources+/api.v1+/artboard-version.create'
@@ -164,6 +168,9 @@ export const Routes = {
 	RESOURCES: {
 		API: {
 			V1: {
+				ARTBOARD_BRANCH: {
+					CREATE: `${pathBase}/artboard-branch/create`,
+				},
 				ARTBOARD_VERSION: {
 					CREATE: `${pathBase}/artboard-version/create`,
 					UPDATE: {
@@ -265,6 +272,8 @@ export const Routes = {
 } as const
 
 export interface ApiRouteLoaders {
+	[Routes.RESOURCES.API.V1.ARTBOARD_BRANCH
+		.CREATE]: typeof apiV1ArtboardBranchCreateLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION
 		.CREATE]: typeof apiV1ArtboardVersionCreateLoader
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE
@@ -345,6 +354,8 @@ export interface ApiRouteLoaders {
 }
 
 export const loaders: ApiRouteLoaders = {
+	[Routes.RESOURCES.API.V1.ARTBOARD_BRANCH.CREATE]:
+		apiV1ArtboardBranchCreateLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.CREATE]:
 		apiV1ArtboardVersionCreateLoader,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE.BACKGROUND]:
@@ -431,6 +442,8 @@ export function getLoaderType<K extends keyof ApiRouteLoaders>(
 }
 
 export interface ApiRouteActions {
+	[Routes.RESOURCES.API.V1.ARTBOARD_BRANCH
+		.CREATE]: typeof apiV1ArtboardBranchCreateAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION
 		.CREATE]: typeof apiV1ArtboardVersionCreateAction
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE
@@ -511,6 +524,8 @@ export interface ApiRouteActions {
 }
 
 export const actions: ApiRouteActions = {
+	[Routes.RESOURCES.API.V1.ARTBOARD_BRANCH.CREATE]:
+		apiV1ArtboardBranchCreateAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.CREATE]:
 		apiV1ArtboardVersionCreateAction,
 	[Routes.RESOURCES.API.V1.ARTBOARD_VERSION.UPDATE.BACKGROUND]:

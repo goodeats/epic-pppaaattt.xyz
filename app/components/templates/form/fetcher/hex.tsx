@@ -55,7 +55,7 @@ export const FormFetcherHex = ({
 			if (typeof value === 'string') {
 				formData.set(defaultValueKey, value.toUpperCase())
 			}
-			return parse(formData, { schema: schema })
+			return parse(formData, { schema })
 		},
 		onSubmit: async (event, { formData }) => {
 			event.preventDefault()

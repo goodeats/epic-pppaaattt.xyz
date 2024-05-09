@@ -20,9 +20,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	})
 	invariantResponse(branch, 'Artboard Branch not found', { status: 404 })
 
-	const version = branch.versions[0]
+	// simply redirect to latest version
+	// when the branch path is visited
 	const { pathname } = new URL(request.url)
-	const redirectPath = `${pathname}/${version.slug}`
+	const redirectPath = `${pathname}/latest`
 
 	// ensure that data is loaded from the route
 	// redirect on index.tsx

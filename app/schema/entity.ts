@@ -75,8 +75,9 @@ export type IEntityParentType =
 export type IEntityParentId = IDesignWithType['id'] | IArtboardVersion['id']
 
 export const EntityParentIdType = {
+	PARENT_ID: 'parentId',
 	DESIGN_ID: 'designId',
-	// ARTBOARD_ID: 'artboardId',
+	ARTBOARD_ID: 'artboardId',
 	ARTBOARD_BRANCH_ID: 'artboardBranchId',
 	ARTBOARD_VERSION_ID: 'artboardVersionId',
 	LAYER_ID: 'layerId',

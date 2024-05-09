@@ -90,7 +90,7 @@ export const getArtboardWithDesignsAndLayers = async ({
 	return artboard
 }
 
-export const getArtboardWithDefaultBranchAndLatestVersion = async ({
+export const getArtboardWithBranchesAndVersions = async ({
 	where,
 }: {
 	where: queryArtboardWhereArgsType
@@ -100,17 +100,8 @@ export const getArtboardWithDefaultBranchAndLatestVersion = async ({
 		where,
 		include: {
 			branches: {
-				where: {
-					default: true,
-				},
-				take: 1,
 				include: {
-					versions: {
-						where: {
-							nextId: null,
-						},
-						take: 1,
-					},
+					versions: true,
 				},
 			},
 		},

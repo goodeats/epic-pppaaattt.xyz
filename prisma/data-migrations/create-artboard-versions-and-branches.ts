@@ -1,9 +1,9 @@
 import { getArtboardsWithDesignsAndLayers } from '#app/models/artboard/artboard.get.server'
+import { createDefaultArtboardBranchWithVersion } from '#app/models/artboard-branch/artboard-branch.create.server'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type IArtboardWithDesignsAndLayers } from '#app/models/artboard.server'
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
 import { LayerCloneSourceTypeEnum } from '#app/schema/layer'
-import { artboardBranchCreateService } from '#app/services/artboard/branch/create.service'
 import { artboardVersionCloneDesignsService } from '#app/services/artboard/version/clone-designs.service'
 import { artboardVersionCloneLayersService } from '#app/services/artboard/version/clone-layers.service'
 import { prisma } from '#app/utils/db.server'
@@ -95,7 +95,7 @@ const createArtboardBranchWithVersion = async ({
 }: {
 	artboard: IArtboardWithDesignsAndLayers
 }): Promise<IArtboardVersion[]> => {
-	const { artboardBranch } = await artboardBranchCreateService({
+	const artboardBranch = await createDefaultArtboardBranchWithVersion({
 		artboard,
 	})
 

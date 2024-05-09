@@ -33,9 +33,9 @@ export const createArtboardVersion = async ({
 	data: {
 		ownerId: IUser['id']
 		branchId: IArtboardBranch['id']
-		name: string
-		slug: string
-		description: string
+		name?: string
+		slug?: string
+		description?: string
 		width?: number
 		height?: number
 		background?: string

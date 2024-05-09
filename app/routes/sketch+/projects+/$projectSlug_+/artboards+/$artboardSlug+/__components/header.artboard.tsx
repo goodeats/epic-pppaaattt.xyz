@@ -7,6 +7,7 @@ import {
 import { ComboboxNav } from '#app/components/templates/combobox'
 import { IconLink } from '#app/components/templates/link'
 import { TooltipIcon } from '#app/components/templates/navbar'
+import { NewArtboardBranchSchema } from '#app/schema/artboard-branch'
 import { NewArtboardVersionSchema } from '#app/schema/artboard-version'
 import { EntityParentIdType } from '#app/schema/entity'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
@@ -16,6 +17,7 @@ import { artboardBranchLoaderRoute } from '../$branchSlug'
 import { artboardVersionLoaderRoute } from '../$branchSlug.$versionSlug'
 import { projectLoaderRoute } from '../../route'
 import { artboardLoaderRoute } from '../route'
+import { DialogFormBranchCreate } from './header.artboard.dialog.form.branch.create'
 import { DialogFormVersionCreate } from './header.artboard.dialog.form.version.create'
 
 export const ArtboardHeader = () => {
@@ -47,10 +49,17 @@ export const ArtboardHeader = () => {
 					entities={artboard.branches}
 					entitySingular="branch"
 					entityPlural="branches"
-					placeholder="Select a branch..."
+					placeholder={branch.name || 'Select a branch...'}
 					slugParam="branchSlug"
 					baseUrl={`${baseUrl}/${artboard.slug}`}
 				/>
+				{branch.description && (
+					<TooltipIcon
+						icon="info-circled"
+						text="Branch Info"
+						tooltipText={branch.description}
+					/>
+				)}
 				<ComboboxNav
 					entities={branch.versions}
 					entitySingular="version"
@@ -61,7 +70,7 @@ export const ArtboardHeader = () => {
 				/>
 				<TooltipIcon
 					icon="info-circled"
-					text="Info"
+					text="Version Info"
 					tooltipText={version.description}
 				/>
 				{!onLatestVersion && (
@@ -85,6 +94,18 @@ export const ArtboardHeader = () => {
 					{/* <span>info a, ab, abv</span> */}
 					{/* <span>fork ab</span> */}
 					{/* <span>merge ab</span> */}
+					<DialogFormBranchCreate
+						branchId={branch.id}
+						artboardId={artboard.id}
+						versionId={version.id}
+						route={Routes.RESOURCES.API.V1.ARTBOARD_BRANCH.CREATE}
+						formId="artboard-branch-create"
+						schema={NewArtboardBranchSchema}
+						icon="file-plus"
+						iconText="New Branch"
+						title="Create new branch"
+						description="Save a new branch of this artboard. Add a name and description to help understand the changes. Click save when you're done."
+					/>
 					<DialogFormVersionCreate
 						entityId={version.id}
 						parentId={branch.id}
