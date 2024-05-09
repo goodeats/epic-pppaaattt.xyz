@@ -8,7 +8,7 @@ import {
 	TooltipTrigger,
 } from '#app/components/ui/tooltip'
 
-const IconLink = ({
+export const TooltipIconLink = ({
 	to,
 	icon,
 	text,
@@ -46,5 +46,3 @@ const IconLink = ({
 		</TooltipProvider>
 	)
 }
-
-export { IconLink }

@@ -6,6 +6,7 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { type z } from 'zod'
 import { TextareaField } from '#app/components/forms'
+import { TooltipIconButton } from '#app/components/templates/navbar'
 import {
 	Dialog,
 	DialogContent,
@@ -16,7 +17,6 @@ import {
 	DialogTrigger,
 } from '#app/components/ui/dialog'
 import { type IconName } from '#app/components/ui/icon'
-import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { StatusButton } from '#app/components/ui/status-button'
 import {
 	type IEntityId,
@@ -94,7 +94,11 @@ export const DialogFormVersionCreate = ({
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<PanelIconButton iconName={icon} iconText={iconText} />
+				<TooltipIconButton
+					icon={icon}
+					text={iconText}
+					tooltipText="Save current changes to new version..."
+				/>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>

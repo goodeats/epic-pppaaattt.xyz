@@ -5,8 +5,7 @@ import {
 	NavbarButtonGroup,
 } from '#app/components/layout'
 import { ComboboxNav } from '#app/components/templates/combobox'
-import { IconLink } from '#app/components/templates/link'
-import { TooltipIcon } from '#app/components/templates/navbar'
+import { TooltipIcon, TooltipIconLink } from '#app/components/templates/navbar'
 import { NewArtboardBranchSchema } from '#app/schema/artboard-branch'
 import { NewArtboardVersionSchema } from '#app/schema/artboard-version'
 import { EntityParentIdType } from '#app/schema/entity'
@@ -77,7 +76,7 @@ export const ArtboardHeader = () => {
 					// this should be displayed when:
 					// - creating a new artboard version
 					// - navigating to a previous artboard version
-					<IconLink
+					<TooltipIconLink
 						to="../latest"
 						icon="pin-right"
 						text="Latest"
@@ -123,7 +122,7 @@ export const ArtboardHeader = () => {
 								: `Creating a new version will erase all versions after the current version.`
 						}
 					/>
-					<IconLink
+					<TooltipIconLink
 						to={`/users/${user.username}/artboards/${artboard.slug}`}
 						icon="pencil-1"
 						text="Latest"
