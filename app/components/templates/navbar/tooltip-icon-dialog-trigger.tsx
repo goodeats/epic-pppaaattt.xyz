@@ -1,3 +1,4 @@
+import { DialogTrigger } from '#app/components/ui/dialog'
 import { type IconName } from '#app/components/ui/icon'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import {
@@ -7,7 +8,7 @@ import {
 	TooltipTrigger,
 } from '#app/components/ui/tooltip'
 
-export const TooltipIconButton = ({
+export const TooltipIconDialogTrigger = ({
 	icon,
 	text,
 	tooltipText,
@@ -20,7 +21,9 @@ export const TooltipIconButton = ({
 		<TooltipProvider>
 			<Tooltip>
 				<TooltipTrigger>
-					<PanelIconButton iconName={icon} iconText={text} />
+					<DialogTrigger asChild>
+						<PanelIconButton iconName={icon} iconText={text} />
+					</DialogTrigger>
 				</TooltipTrigger>
 				<TooltipContent>{tooltipText}</TooltipContent>
 			</Tooltip>
