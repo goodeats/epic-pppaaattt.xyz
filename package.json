@@ -31,6 +31,9 @@
     "typecheck:watch": "tsc -w",
     "validate": "run-p \"test -- --run\" lint typecheck test:e2e:run",
     "data:migrate": "npx vite-node ./prisma/data-migrations/create-artboard-versions-and-branches.ts",
+    "fly:status": "./scripts/fly.io/app-status.sh",
+    "fly:console:prisma:studio": "./scripts/fly.io/app-console-prisma-studio.sh",
+    "fly:console:prisma:studio:proxy": "./scripts/fly.io/app-console-prisma-studio-proxy.sh",
     "prepare": "husky install"
   },
   "eslintIgnore": [
