@@ -3,7 +3,7 @@ import {
 	type ILayerCreateOverrides,
 	connectPrevAndNextLayers,
 	type ILayerEntityId,
-} from '#app/models/layer.server'
+} from '#app/models/layer/layer.server'
 import { type ICreateLayerStrategy } from '#app/strategies/layer/create.strategy'
 import { prisma } from '#app/utils/db.server'
 

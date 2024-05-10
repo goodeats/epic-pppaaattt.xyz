@@ -8,7 +8,7 @@ import {
 	type IDesignWithLine,
 	type IDesignWithRotate,
 	type IDesignWithTemplate,
-} from '#app/models/design.server'
+} from '#app/models/design/design.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { PanelDesignTypeRowValuesFill } from './panel-design-type-row-values-fill'
 import { PanelDesignTypeRowValuesLayout } from './panel-design-type-row-values-layout'

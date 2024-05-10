@@ -2,7 +2,7 @@ import {
 	SidebarPanelRowValuesContainer,
 	SidebarPanelRowValuesDisabled,
 } from '#app/components/templates'
-import { type IRotate } from '#app/models/rotate.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
 import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import { PanelFormDesignRotateEditValue } from '../../../forms/design/panel-form-design-rotate-edit-value'
 import { PanelPopoverDesignRotate } from '../../../popovers/design/panel-popover-design-rotate'

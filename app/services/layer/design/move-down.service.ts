@@ -1,7 +1,10 @@
 import { type User } from '@prisma/client'
+import {
+	type IDesign,
+	type IDesignIdOrNull,
+} from '#app/models/design/design.server'
 import { type IDesignUpdatedResponse } from '#app/models/design/design.update.server'
-import { type IDesign, type IDesignIdOrNull } from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { LayerUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { designMoveDownService } from '../../design/move-down.service'
 

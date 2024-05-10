@@ -1,12 +1,12 @@
 import { type User } from '@sentry/remix'
+import { type IDesign } from '#app/models/design/design.server'
+import { type IStroke } from '#app/models/design-type/stroke/stroke.server'
 import {
 	type IDesignTypeStrokeUpdatedResponse,
 	updateDesignTypeStrokeBasis,
 	updateDesignTypeStrokeStyle,
 	updateDesignTypeStrokeValue,
-} from '#app/models/design-type/design-type.update.stroke.server'
-import { type IDesign } from '#app/models/design.server'
-import { type IStroke } from '#app/models/stroke.server'
+} from '#app/models/design-type/stroke/stroke.update.server'
 
 export const updateDesignTypeStrokeValueService = async ({
 	userId,

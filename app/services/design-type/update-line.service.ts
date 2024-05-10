@@ -1,12 +1,12 @@
 import { type User } from '@sentry/remix'
+import { type IDesign } from '#app/models/design/design.server'
+import { type ILine } from '#app/models/design-type/line/line.server'
 import {
 	type IDesignTypeLineUpdatedResponse,
 	updateDesignTypeLineWidth,
 	updateDesignTypeLineBasis,
 	updateDesignTypeLineFormat,
-} from '#app/models/design-type/design-type.update.line.server'
-import { type IDesign } from '#app/models/design.server'
-import { type ILine } from '#app/models/line.server'
+} from '#app/models/design-type/line/line.update.server'
 
 export const updateDesignTypeLineWidthService = async ({
 	userId,

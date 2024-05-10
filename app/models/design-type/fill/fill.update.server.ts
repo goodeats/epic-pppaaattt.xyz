@@ -8,8 +8,8 @@ import {
 import { ValidateDesignParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { findFirstFillInstance } from '#app/utils/prisma-extensions-fill'
-import { type IDesign } from '../design.server'
-import { type IFill } from '../fill.server'
+import { type IDesign } from '../../design/design.server'
+import { type IFill } from './fill.server'
 
 export interface IDesignTypeFillUpdatedResponse {
 	success: boolean

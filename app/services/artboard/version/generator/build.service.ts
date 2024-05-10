@@ -5,6 +5,10 @@ import {
 } from '#app/definitions/artboard-generator'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
 import {
+	findManyDesignsWithType,
+	type IDesignWithType,
+} from '#app/models/design/design.server'
+import {
 	getArtboardVersionVisiblePalettes,
 	getArtboardVersionVisibleRotates,
 } from '#app/models/design-artboard-version/design-artboard-version.server'
@@ -12,12 +16,7 @@ import {
 	getLayerVisiblePalettes,
 	getLayerVisibleRotates,
 } from '#app/models/design-layer/design-layer.server'
-import {
-	findManyDesignsWithType,
-	type IDesignWithType,
-} from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
-import { type IRotate } from '#app/models/rotate.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
 import {
 	filterSelectedDesignTypes,
@@ -26,6 +25,7 @@ import {
 } from '#app/utils/design'
 import { filterLayersVisible } from '#app/utils/layer.utils'
 import { isArrayRotateBasisType } from '#app/utils/rotate'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
 
 // "build" since it is creating the version generator each time
 // later, if we like the generator, we can save it to the database

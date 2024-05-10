@@ -10,7 +10,7 @@ import {
 } from '#app/components/templates'
 import { Icon } from '#app/components/ui/icon'
 import { type IArtboard } from '#app/models/artboard/artboard.server'
-import { type ILayer } from '#app/models/layer.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { PanelFormArtboardLayerNew } from '../../forms/artboard/layer/panel-form-artboard-layer-new'
 import { PanelFormArtboardLayerReorder } from '../../forms/artboard/layer/panel-form-artboard-layer-reorder'
 import { PanelFormArtboardLayerToggleVisible } from '../../forms/artboard/layer/panel-form-artboard-layer-toggle-visible'

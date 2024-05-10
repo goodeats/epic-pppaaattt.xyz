@@ -1,6 +1,6 @@
 import { DashboardEntityPanel } from '#app/components/templates/panel/dashboard-entity-panel'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { type ILayerWithDesigns } from '#app/models/layer.server'
+import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
 import { DashboardPanelCreateArtboardVersionLayerStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { DashboardPanelArtboardVersionLayerActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { DashboardPanelUpdateLayerValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.layer'

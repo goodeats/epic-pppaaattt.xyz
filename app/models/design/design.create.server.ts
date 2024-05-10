@@ -4,8 +4,8 @@ import { NewArtboardVersionDesignSchema } from '#app/schema/design-artboard-vers
 import { prisma } from '#app/utils/db.server'
 import { type IArtboard } from '../artboard/artboard.server'
 import { type IArtboardVersion } from '../artboard-version/artboard-version.server'
-import { type IDesign } from '../design.server'
-import { type ILayer } from '../layer.server'
+import { type IDesign } from '../design/design.server'
+import { type ILayer } from '../layer/layer.server'
 
 export interface IDesignCreatedResponse {
 	success: boolean

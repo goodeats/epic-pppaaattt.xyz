@@ -7,7 +7,7 @@ import { redirectBack } from 'remix-utils/redirect-back'
 import {
 	updateDesignTypeRotateBasis,
 	validateDesignTypeUpdateRotateBasisSubmission,
-} from '#app/models/design-type/design-type.update.rotate.server'
+} from '#app/models/design-type/rotate/rotate.update.server'
 import { validateNoJS } from '#app/schema/form-data'
 import { requireUserId } from '#app/utils/auth.server'
 

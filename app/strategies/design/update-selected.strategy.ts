@@ -1,5 +1,10 @@
 import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import {
+	type IDesign,
+	type IDesignEntityId,
+	type IDesignIdOrNull,
+} from '#app/models/design/design.server'
 import { findFirstVisibleArtboardVersionDesignByType } from '#app/models/design-artboard-version/design-artboard-version.get.server'
 import {
 	deselectArtboardVersionSelectedDesign,
@@ -15,12 +20,7 @@ import {
 	deselectLayerSelectedDesign,
 	updateLayerSelectedDesign,
 } from '#app/models/design-layer/design-layer.server'
-import {
-	type IDesign,
-	type IDesignEntityId,
-	type IDesignIdOrNull,
-} from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 

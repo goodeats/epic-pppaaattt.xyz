@@ -10,8 +10,8 @@ import {
 	type IDesign,
 	type IDesignCreateOverrides,
 	type IDesignEntityId,
-} from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
+} from '#app/models/design/design.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { ArtboardDesignDataCreateSchema } from '#app/schema/design-artboard'
 import { LayerDesignDataCreateSchema } from '#app/schema/design-layer'

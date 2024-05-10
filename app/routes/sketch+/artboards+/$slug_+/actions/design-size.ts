@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type ISize } from '#app/models/size.server'
+import { type ISize } from '#app/models/design-type/size/size.server'
 import {
 	EditDesignSizeBasisSchema,
 	EditDesignSizeFormatSchema,

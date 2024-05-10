@@ -1,11 +1,11 @@
 import { type User } from '@sentry/remix'
+import { type IDesign } from '#app/models/design/design.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
 import {
 	type IDesignTypeRotateUpdatedResponse,
 	updateDesignTypeRotateValue,
 	updateDesignTypeRotateBasis,
-} from '#app/models/design-type/design-type.update.rotate.server'
-import { type IDesign } from '#app/models/design.server'
-import { type IRotate } from '#app/models/rotate.server'
+} from '#app/models/design-type/rotate/rotate.update.server'
 
 export const updateDesignTypeRotateValueService = async ({
 	userId,

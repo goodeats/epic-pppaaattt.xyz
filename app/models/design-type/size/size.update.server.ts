@@ -8,8 +8,8 @@ import {
 import { ValidateDesignParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { findFirstSizeInstance } from '#app/utils/prisma-extensions-size'
-import { type IDesign } from '../design.server'
-import { type ISize } from '../size.server'
+import { type IDesign } from '../../design/design.server'
+import { type ISize } from './size.server'
 
 export interface IDesignTypeSizeUpdatedResponse {
 	success: boolean

@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '#app/components/ui/select'
-import { type ILine } from '#app/models/line.server'
+import { type ILine } from '#app/models/design-type/line/line.server'
 import { EditDesignLineBasisSchema, LineBasisTypeEnum } from '#app/schema/line'
 import { useIsPending } from '#app/utils/misc'
 import { DESIGN_LINE_INTENT } from '../../../intent'

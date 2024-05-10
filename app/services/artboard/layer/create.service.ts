@@ -1,6 +1,6 @@
 import { type User, type Artboard } from '@prisma/client'
 import { type ILayerCreatedResponse } from '#app/models/layer/layer.create.server'
-import { type ILayerCreateOverrides } from '#app/models/layer.server'
+import { type ILayerCreateOverrides } from '#app/models/layer/layer.server'
 import { ArtboardCreateLayerStrategy } from '#app/strategies/layer/create.strategy'
 import { layerCreateService } from '../../layer/create.service'
 

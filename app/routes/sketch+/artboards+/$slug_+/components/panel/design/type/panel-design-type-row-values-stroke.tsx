@@ -2,7 +2,7 @@ import {
 	SidebarPanelRowValuesContainer,
 	SidebarPanelRowValuesDisabled,
 } from '#app/components/templates'
-import { type IStroke } from '#app/models/stroke.server'
+import { type IStroke } from '#app/models/design-type/stroke/stroke.server'
 import { PanelFormDesignStrokeEditValue } from '../../../forms/design/panel-form-design-stroke-edit-value'
 import { PanelPopoverDesignStroke } from '../../../popovers/design/panel-popover-design-stroke'
 

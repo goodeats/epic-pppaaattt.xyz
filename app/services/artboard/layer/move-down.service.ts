@@ -5,7 +5,7 @@ import {
 	updateLayerRemoveNodes,
 	type ILayer,
 	updateLayerNodes,
-} from '#app/models/layer.server'
+} from '#app/models/layer/layer.server'
 import { prisma } from '#app/utils/db.server'
 
 export const artboardLayerMoveDownService = async ({

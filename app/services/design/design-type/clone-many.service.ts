@@ -3,7 +3,7 @@ import {
 	type IDesignEntityId,
 	type IDesignCreateOverrides,
 	type IDesignWithType,
-} from '#app/models/design.server'
+} from '#app/models/design/design.server'
 import { type ICloneDesignsStrategy } from '#app/strategies/design/clone.strategy'
 import { type ICloneDesignTypeStrategy } from '#app/strategies/design-type/clone.strategy'
 

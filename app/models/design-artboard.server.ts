@@ -10,9 +10,9 @@ import {
 	type IDesignWithPalette,
 	type IDesign,
 	type IDesignWithRotate,
-} from './design.server'
-import { type IPalette } from './palette.server'
-import { type IRotate } from './rotate.server'
+} from './design/design.server'
+import { type IPalette } from './design-type/palette/palette.server'
+import { type IRotate } from './design-type/rotate/rotate.server'
 
 // this file may no longer be necessary
 

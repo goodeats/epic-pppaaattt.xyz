@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type ILayout } from '#app/models/layout.server'
+import { type ILayout } from '#app/models/design-type/layout/layout.server'
 import {
 	EditDesignLayoutCountSchema,
 	EditDesignLayoutColumnsSchema,

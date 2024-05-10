@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type ITemplate } from '#app/models/template.server'
+import { type ITemplate } from '#app/models/design-type/template/template.server'
 import { EditDesignTemplateStyleSchema } from '#app/schema/template'
 import {
 	notSubmissionResponse,

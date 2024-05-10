@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '#app/components/ui/select'
-import { type IRotate } from '#app/models/rotate.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
 import {
 	EditDesignRotateBasisSchema,
 	RotateBasisTypeEnum,

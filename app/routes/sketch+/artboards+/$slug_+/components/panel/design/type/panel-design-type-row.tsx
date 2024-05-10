@@ -3,8 +3,8 @@ import {
 	SidebarPanelRowContainer,
 } from '#app/components/templates'
 import { type IArtboard } from '#app/models/artboard/artboard.server'
-import { type IDesign, type IDesignIdOrNull } from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
+import { type IDesign, type IDesignIdOrNull } from '#app/models/design/design.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import {
 	DeleteArtboardDesignSchema,
 	ReorderArtboardDesignSchema,

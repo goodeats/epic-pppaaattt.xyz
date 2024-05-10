@@ -1,5 +1,5 @@
 import { SidebarPanelRowValuesContainer } from '#app/components/templates'
-import { type IPalette } from '#app/models/palette.server'
+import { type IPalette } from '#app/models/design-type/palette/palette.server'
 import { PanelFormDesignPaletteEditValue } from '../../../forms/design/panel-form-design-palette-edit-value'
 import { PanelPopoverDesignPalette } from '../../../popovers/design/panel-popover-design-palette'
 

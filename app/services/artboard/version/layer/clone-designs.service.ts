@@ -1,6 +1,6 @@
 import { type User } from '@prisma/client'
-import { type IDesignEntityId } from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
+import { type IDesignEntityId } from '#app/models/design/design.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { type designCloneSourceTypeEnum } from '#app/schema/design'
 import { CloneDesignToLayerStrategy } from '#app/strategies/design/clone.strategy'
 import { cloneDesignsService } from '../../../design/clone-many.service'

@@ -7,7 +7,7 @@ import { redirectBack } from 'remix-utils/redirect-back'
 import {
 	updateDesignTypeSizeFormat,
 	validateDesignTypeUpdateSizeFormatSubmission,
-} from '#app/models/design-type/design-type.update.size.server'
+} from '#app/models/design-type/size/size.update.server'
 import { validateNoJS } from '#app/schema/form-data'
 import { requireUserId } from '#app/utils/auth.server'
 

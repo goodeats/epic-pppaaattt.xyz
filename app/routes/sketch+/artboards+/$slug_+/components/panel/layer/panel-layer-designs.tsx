@@ -1,5 +1,5 @@
-import { type IDesignsByType } from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
+import { type IDesignsByType } from '#app/models/design/design.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { designsByTypeToPanelArray } from '#app/utils/design'
 import { PanelDesignType } from '../design/type/panel-design-type'
 

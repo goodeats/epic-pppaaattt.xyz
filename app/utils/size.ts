@@ -1,5 +1,5 @@
 import { type ILayerGeneratorContainer } from '#app/definitions/artboard-generator'
-import { type ISize } from '#app/models/size.server'
+import { type ISize } from '#app/models/design-type/size/size.server'
 import { SizeBasisTypeEnum } from '#app/schema/size'
 
 export const sizePercentToPixel = ({

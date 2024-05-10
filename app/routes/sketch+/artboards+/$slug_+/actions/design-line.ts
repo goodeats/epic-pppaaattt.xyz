@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type ILine } from '#app/models/line.server'
+import { type ILine } from '#app/models/design-type/line/line.server'
 import {
 	EditDesignLineBasisSchema,
 	EditDesignLineFormatSchema,

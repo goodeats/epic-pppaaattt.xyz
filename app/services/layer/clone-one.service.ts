@@ -3,7 +3,7 @@ import {
 	type ILayerWithDesigns,
 	type ILayerEntityId,
 	type ILayerCreateOverrides,
-} from '#app/models/layer.server'
+} from '#app/models/layer/layer.server'
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
 import { type ICloneLayersStrategy } from '#app/strategies/layer/clone.strategy'
 import { layerLayerCloneDesignsService } from './clone-designs.service'

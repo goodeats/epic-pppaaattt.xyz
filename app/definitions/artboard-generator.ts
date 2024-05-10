@@ -1,14 +1,14 @@
 import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
-import { type IFill } from '#app/models/fill.server'
-import { type ILayer } from '#app/models/layer.server'
-import { type ILayout } from '#app/models/layout.server'
-import { type ILine } from '#app/models/line.server'
-import { type IPalette } from '#app/models/palette.server'
-import { type IRotate } from '#app/models/rotate.server'
-import { type ISize } from '#app/models/size.server'
-import { type IStroke } from '#app/models/stroke.server'
-import { type ITemplate } from '#app/models/template.server'
+import { type IFill } from '#app/models/design-type/fill/fill.server'
+import { type ILayout } from '#app/models/design-type/layout/layout.server'
+import { type ILine } from '#app/models/design-type/line/line.server'
+import { type IPalette } from '#app/models/design-type/palette/palette.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
+import { type ISize } from '#app/models/design-type/size/size.server'
+import { type IStroke } from '#app/models/design-type/stroke/stroke.server'
+import { type ITemplate } from '#app/models/design-type/template/template.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 
 // object sent to the client
 // generator has final building blocks for the generation(s)

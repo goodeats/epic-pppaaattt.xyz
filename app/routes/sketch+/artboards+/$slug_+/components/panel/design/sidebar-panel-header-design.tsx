@@ -3,7 +3,7 @@ import {
 	SidebarPanelRowActionsContainer,
 } from '#app/components/templates'
 import { type IArtboard } from '#app/models/artboard/artboard.server'
-import { type ILayer } from '#app/models/layer.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import {
 	type NewDesignSchemaType,
 	type designTypeEnum,

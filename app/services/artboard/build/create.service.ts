@@ -5,6 +5,10 @@ import {
 } from '#app/definitions/artboard-generator'
 import { type IArtboard } from '#app/models/artboard/artboard.server'
 import {
+	type IDesignWithType,
+	findManyDesignsWithType,
+} from '#app/models/design/design.server'
+import {
 	getArtboardVisiblePalettes,
 	getArtboardVisibleRotates,
 } from '#app/models/design-artboard.server'
@@ -12,12 +16,8 @@ import {
 	getLayerVisiblePalettes,
 	getLayerVisibleRotates,
 } from '#app/models/design-layer/design-layer.server'
-import {
-	findManyDesignsWithType,
-	type IDesignWithType,
-} from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
-import { type IRotate } from '#app/models/rotate.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
 import {
 	filterSelectedDesignTypes,

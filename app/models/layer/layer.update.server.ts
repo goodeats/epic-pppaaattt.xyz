@@ -6,7 +6,7 @@ import {
 import { ValidateLayerSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { findFirstLayerInstance } from '#app/utils/prisma-extensions-layer'
-import { type ILayer } from '../layer.server'
+import { type ILayer } from '../layer/layer.server'
 
 export interface ILayerUpdatedResponse {
 	success: boolean

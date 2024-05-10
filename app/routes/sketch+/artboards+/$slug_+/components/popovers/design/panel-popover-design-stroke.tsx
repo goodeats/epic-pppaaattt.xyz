@@ -1,7 +1,7 @@
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { type IStroke } from '#app/models/stroke.server'
+import { type IStroke } from '#app/models/design-type/stroke/stroke.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import { StrokeBasisTypeEnum } from '#app/schema/stroke'
 import { PanelFormDesignStrokeEditBasis } from '../../forms/design/panel-form-design-stroke-edit-basis'

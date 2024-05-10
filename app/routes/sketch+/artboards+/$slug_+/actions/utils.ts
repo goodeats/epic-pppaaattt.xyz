@@ -5,8 +5,8 @@ import { getArtboard } from '#app/models/artboard/artboard.get.server'
 import {
 	findDesignByIdAndOwner,
 	findFirstDesign,
-} from '#app/models/design.server'
-import { findLayerByIdAndOwner } from '#app/models/layer.server'
+} from '#app/models/design/design.server'
+import { findLayerByIdAndOwner } from '#app/models/layer/layer.server'
 import { addNotFoundIssue } from '#app/utils/conform-utils'
 
 export const parseArtboardSubmission = async ({

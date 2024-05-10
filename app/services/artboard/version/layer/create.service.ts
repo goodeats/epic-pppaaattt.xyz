@@ -1,7 +1,7 @@
 import { type User } from '@prisma/client'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type ILayerCreatedResponse } from '#app/models/layer/layer.create.server'
-import { type ILayerCreateOverrides } from '#app/models/layer.server'
+import { type ILayerCreateOverrides } from '#app/models/layer/layer.server'
 import { ArtboardVersionCreateLayerStrategy } from '#app/strategies/layer/create.strategy'
 import { layerCreateService } from '../../../layer/create.service'
 

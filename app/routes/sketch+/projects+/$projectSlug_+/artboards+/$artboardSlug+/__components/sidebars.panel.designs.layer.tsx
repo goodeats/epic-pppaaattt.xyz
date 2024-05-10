@@ -1,4 +1,4 @@
-import { type ILayerWithDesigns } from '#app/models/layer.server'
+import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
 import { DashboardPanelCreateLayerDesignTypeStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { DashboardPanelLayerDesignActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { DashboardPanelUpdateLayerDesignTypeOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'

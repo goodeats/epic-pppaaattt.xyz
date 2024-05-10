@@ -1,4 +1,4 @@
-import { type ILayer } from '#app/models/layer.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 
 export const filterLayersVisible = ({
 	layers,

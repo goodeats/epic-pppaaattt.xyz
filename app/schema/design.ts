@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { type ILayerWithDesigns } from '#app/models/layer.server'
+import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
 import { type ObjectValues } from '#app/utils/typescript-helpers'
 import {
 	type ToggleVisibleArtboardDesignSchema,

@@ -1,6 +1,6 @@
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Label } from '#app/components/ui/label'
-import { type ITemplate } from '#app/models/template.server'
+import { type ITemplate } from '#app/models/design-type/template/template.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import { PanelFormDesignTemplateEditStyle } from '../../forms/design/panel-form-design-template-edit-style'
 import { PanelPopover } from '../panel-popover'

@@ -7,7 +7,7 @@ import {
 	type ILayer,
 	type ILayerCreateOverrides,
 	type ILayerEntityId,
-} from '#app/models/layer.server'
+} from '#app/models/layer/layer.server'
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
 import { ArtboardLayerDataCreateSchema } from '#app/schema/layer-artboard'
 import { ArtboardVersionLayerDataCreateSchema } from '#app/schema/layer-artboard-version'

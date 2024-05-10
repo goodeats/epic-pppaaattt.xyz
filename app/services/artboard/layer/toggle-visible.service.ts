@@ -4,7 +4,7 @@ import {
 	findFirstLayer,
 	updateLayerVisible,
 	type ILayer,
-} from '#app/models/layer.server'
+} from '#app/models/layer/layer.server'
 import { prisma } from '#app/utils/db.server'
 
 export const artboardLayerToggleVisibleService = async ({

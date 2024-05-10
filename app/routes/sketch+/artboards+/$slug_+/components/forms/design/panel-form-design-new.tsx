@@ -4,7 +4,7 @@ import { useActionData, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type IArtboard } from '#app/models/artboard/artboard.server'
-import { type ILayer } from '#app/models/layer.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import {
 	type NewDesignSchemaType,
 	type designTypeEnum,

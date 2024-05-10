@@ -3,7 +3,7 @@ import { getLayersWithDesigns } from '#app/models/layer/layer.get.server'
 import {
 	type ILayerWithDesigns,
 	type ILayerEntityId,
-} from '#app/models/layer.server'
+} from '#app/models/layer/layer.server'
 import {
 	LayerCloneSourceTypeEnum,
 	type layerCloneSourceTypeEnum,

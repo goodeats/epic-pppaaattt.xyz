@@ -3,8 +3,8 @@ import { type IArtboard } from '#app/models/artboard/artboard.server'
 import {
 	findManyDesignsWithType,
 	type IDesignsByType,
-} from '#app/models/design.server'
-import { findManyLayers, type ILayer } from '#app/models/layer.server'
+} from '#app/models/design/design.server'
+import { findManyLayers, type ILayer } from '#app/models/layer/layer.server'
 import { artboardBuildCreateService } from '#app/services/artboard/build/create.service'
 import { prisma } from '#app/utils/db.server'
 import { filterAndOrderDesignsByType } from '#app/utils/design'

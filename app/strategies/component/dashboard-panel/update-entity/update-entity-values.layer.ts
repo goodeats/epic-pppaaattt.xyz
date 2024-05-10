@@ -1,5 +1,5 @@
 import { type IconName } from '#app/components/ui/icon'
-import { type ILayer } from '#app/models/layer.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { EntityFormType, EntityParentIdType } from '#app/schema/entity'
 import {
 	EditLayerDescriptionSchema,

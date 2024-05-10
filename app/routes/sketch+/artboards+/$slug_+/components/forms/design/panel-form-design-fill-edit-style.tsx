@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '#app/components/ui/select'
-import { type IFill } from '#app/models/fill.server'
+import { type IFill } from '#app/models/design-type/fill/fill.server'
 import { EditDesignFillStyleSchema, FillStyleTypeEnum } from '#app/schema/fill'
 import { useIsPending } from '#app/utils/misc'
 import { DESIGN_FILL_INTENT } from '../../../intent'

@@ -2,7 +2,7 @@ import {
 	SidebarPanelRowValuesContainer,
 	SidebarPanelRowValuesDisabled,
 } from '#app/components/templates'
-import { type ILayout } from '#app/models/layout.server'
+import { type ILayout } from '#app/models/design-type/layout/layout.server'
 import { PanelFormDesignLayoutEditCount } from '../../../forms/design/panel-form-design-layout-edit-count'
 import { PanelPopoverDesignLayout } from '../../../popovers/design/panel-popover-design-layout'
 

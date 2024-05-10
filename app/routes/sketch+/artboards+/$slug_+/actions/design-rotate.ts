@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type IRotate } from '#app/models/rotate.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
 import {
 	EditDesignRotateValueSchema,
 	EditDesignRotateBasisSchema,

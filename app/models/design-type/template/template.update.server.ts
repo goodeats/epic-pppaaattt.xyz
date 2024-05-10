@@ -6,8 +6,8 @@ import {
 import { ValidateDesignParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { findFirstTemplateInstance } from '#app/utils/prisma-extensions-template'
-import { type IDesign } from '../design.server'
-import { type ITemplate } from '../template.server'
+import { type IDesign } from '../../design/design.server'
+import { type ITemplate } from './template.server'
 
 export interface IDesignTypeTemplateUpdatedResponse {
 	success: boolean

@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '#app/components/ui/select'
-import { type ITemplate } from '#app/models/template.server'
+import { type ITemplate } from '#app/models/design-type/template/template.server'
 import { EditDesignTemplateStyleSchema } from '#app/schema/template'
 import { useIsPending } from '#app/utils/misc'
 import { DESIGN_TEMPLATE_INTENT } from '../../../intent'

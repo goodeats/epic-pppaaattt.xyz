@@ -1,5 +1,5 @@
 import { type IArtboard } from '#app/models/artboard/artboard.server'
-import { type IDesignsByType } from '#app/models/design.server'
+import { type IDesignsByType } from '#app/models/design/design.server'
 import { designsByTypeToPanelArray } from '#app/utils/design'
 import { PanelDesignType } from '../design/type/panel-design-type'
 import { PanelArtboardBackground } from './panel-artboard-background'
