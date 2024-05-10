@@ -51,7 +51,7 @@ export const createArtboardBranch = async ({
 export const createDefaultArtboardBranchWithVersion = async ({
 	artboard,
 }: {
-	artboard: IArtboard
+	artboard: Pick<IArtboard, 'id' | 'ownerId'>
 }): Promise<IArtboardBranchWithVersions> => {
 	const { ownerId } = artboard
 
