@@ -5,7 +5,7 @@ import { type ChangeEvent, type FocusEvent } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { quickToast } from '#app/components/toaster'
 import { Input } from '#app/components/ui/input'
-import { type PickedArtboardType } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { ArtboardBackgroundColorSchema } from '#app/schema/artboard'
 import { stringToHexcode, validateStringIsHexcode } from '#app/utils/colors'
 import { useIsPending } from '#app/utils/misc'
@@ -15,7 +15,7 @@ import { type action } from '../../../route'
 export const PanelFormArtboardEditBackgroundColor = ({
 	artboard,
 }: {
-	artboard: Pick<PickedArtboardType, 'id' | 'backgroundColor'>
+	artboard: Pick<IArtboard, 'id' | 'backgroundColor'>
 }) => {
 	const fetcher = useFetcher<typeof action>()
 

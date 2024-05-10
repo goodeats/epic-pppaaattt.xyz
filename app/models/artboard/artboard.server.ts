@@ -6,10 +6,10 @@ import {
 	type whereArgsType,
 } from '#app/schema/artboard'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboardBranchWithVersions } from './artboard-branch/artboard-branch.server'
-import { type IDesignWithType } from './design.server'
-import { type ILayerWithDesigns } from './layer.server'
-import { type IProjectWithArtboards } from './project/project.server'
+import { type IArtboardBranchWithVersions } from '../artboard-branch/artboard-branch.server'
+import { type IDesignWithType } from '../design.server'
+import { type ILayerWithDesigns } from '../layer.server'
+import { type IProjectWithArtboards } from '../project/project.server'
 
 // Omitting 'createdAt' and 'updatedAt' from the Artboard interface
 // prisma query returns a string for these fields
@@ -29,24 +29,6 @@ export interface IArtboardWithDesignsAndLayers extends IArtboard {
 export interface IArtboardWithBranchesAndVersions extends IArtboard {
 	branches: IArtboardBranchWithVersions[]
 }
-
-export type PickedArtboardType = {
-	id: string
-	name: string
-	description: string | null
-	slug: string
-	width: number
-	height: number
-	backgroundColor: string
-	updatedAt: Date | string
-	project: {
-		id: string
-		name: string
-		slug: string
-	}
-}
-
-// use prisma extension to .save() or .delete()
 
 export const findFirstArtboard = async ({
 	where,

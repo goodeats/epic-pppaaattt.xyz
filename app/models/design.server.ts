@@ -9,7 +9,7 @@ import {
 	type IArtboardVersionWithDesignsAndLayers,
 	type IArtboardVersion,
 } from './artboard-version/artboard-version.server'
-import { type IArtboard } from './artboard.server'
+import { type IArtboard } from './artboard/artboard.server'
 import { type IFillCreateOverrides, type IFill } from './fill.server'
 import { type ILayoutCreateOverrides, type ILayout } from './layout.server'
 import { type ILineCreateOverrides, type ILine } from './line.server'

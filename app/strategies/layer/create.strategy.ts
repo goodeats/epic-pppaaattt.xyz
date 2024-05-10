@@ -1,6 +1,6 @@
 import { type User } from '@prisma/client'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { createLayer } from '#app/models/layer/layer.create.server'
 import {
 	findFirstLayer,

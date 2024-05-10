@@ -1,7 +1,7 @@
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Label } from '#app/components/ui/label'
 import { Separator } from '#app/components/ui/separator'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type ILayer } from '#app/models/layer.server'
 import { PanelFormArtboardLayerDelete } from '../../forms/artboard/layer/panel-form-artboard-layer-delete'
 import { PanelFormLayerEditDescription } from '../../forms/layer/panel-form-layer-edit-description'

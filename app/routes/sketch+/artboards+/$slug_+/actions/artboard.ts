@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import {
 	ArtboardBackgroundColorSchema,
 	ArtboardHeightSchema,

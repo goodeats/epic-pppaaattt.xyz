@@ -1,6 +1,6 @@
 import { Sidebar } from '#app/components/layout'
 import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
-import { type PickedArtboardType } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type IDesignsByType } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { PanelActions } from './panel/actions/panel-actions'
@@ -12,7 +12,7 @@ export const SidebarLeft = ({
 	artboard,
 	layers,
 }: {
-	artboard: PickedArtboardType
+	artboard: IArtboard
 	layers: ILayer[]
 }) => {
 	return (
@@ -35,7 +35,7 @@ export const SidebarRight = ({
 	layer,
 	layerDesigns,
 }: {
-	artboard: PickedArtboardType
+	artboard: IArtboard
 	artboardDesigns: IDesignsByType
 	layer: ILayer | null | undefined
 	layerDesigns: IDesignsByType | null | undefined

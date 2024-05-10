@@ -1,5 +1,5 @@
 import { SidebarPanel } from '#app/components/templates'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import {
 	type IDesignWithType,
 	type IDesignWithLayout,

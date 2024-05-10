@@ -6,7 +6,7 @@ import {
 	DashboardCardNone,
 	DashboardCardWrapper,
 } from '#app/components/layout'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type IProjectWithArtboards } from '#app/models/project/project.server'
 
 type DashboardCardEntitiesType = IProjectWithArtboards[] | IArtboard[]

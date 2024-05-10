@@ -1,5 +1,5 @@
 import { type User } from '@prisma/client'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type IDesignCreatedResponse } from '#app/models/design/design.create.server'
 import {
 	type IDesignCreateOverrides,

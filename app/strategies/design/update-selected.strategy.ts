@@ -1,5 +1,5 @@
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { findFirstVisibleArtboardVersionDesignByType } from '#app/models/design-artboard-version/design-artboard-version.get.server'
 import {
 	deselectArtboardVersionSelectedDesign,

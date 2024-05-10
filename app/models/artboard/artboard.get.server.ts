@@ -4,7 +4,7 @@ import {
 	type IArtboard,
 	type IArtboardWithBranchesAndVersions,
 	type IArtboardWithDesignsAndLayers,
-} from '../artboard.server'
+} from '../artboard/artboard.server'
 
 export type queryArtboardWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({

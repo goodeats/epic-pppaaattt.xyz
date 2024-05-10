@@ -3,10 +3,7 @@ import {
 	type IArtboardGenerator,
 	type ILayerGenerator,
 } from '#app/definitions/artboard-generator'
-import {
-	type PickedArtboardType,
-	type IArtboard,
-} from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import {
 	getArtboardVisiblePalettes,
 	getArtboardVisibleRotates,
@@ -34,7 +31,7 @@ export const artboardBuildCreateService = async ({
 	artboard,
 	layers,
 }: {
-	artboard: PickedArtboardType
+	artboard: IArtboard
 	layers: ILayer[]
 }): Promise<IArtboardGenerator> => {
 	try {
@@ -89,7 +86,7 @@ export const artboardBuildCreateService = async ({
 const verifyArtboardGeneratorDesigns = async ({
 	artboard,
 }: {
-	artboard: PickedArtboardType
+	artboard: IArtboard
 }): Promise<{
 	artboardGeneratorDesigns: IGeneratorDesigns | null
 	message: string
@@ -149,7 +146,7 @@ const buildGeneratorArtboardLayer = async ({
 	artboardGeneratorDesigns,
 }: {
 	artboardId: string
-	artboard: PickedArtboardType
+	artboard: IArtboard
 	artboardGeneratorDesigns: IGeneratorDesigns
 }): Promise<ILayerGenerator> => {
 	// get all visible palettes to use for fill or stroke
@@ -172,11 +169,7 @@ const buildGeneratorArtboardLayer = async ({
 	}
 }
 
-const getArtboardContainer = ({
-	artboard,
-}: {
-	artboard: PickedArtboardType
-}) => {
+const getArtboardContainer = ({ artboard }: { artboard: IArtboard }) => {
 	const { width, height } = artboard
 	return {
 		width,

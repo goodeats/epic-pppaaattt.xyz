@@ -1,4 +1,4 @@
-import { type PickedArtboardType } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type IDesignsByType } from '#app/models/design.server'
 import { designsByTypeToPanelArray } from '#app/utils/design'
 import { PanelDesignType } from '../design/type/panel-design-type'
@@ -9,7 +9,7 @@ export const PanelArtboardDesigns = ({
 	artboard,
 	designs,
 }: {
-	artboard: PickedArtboardType
+	artboard: IArtboard
 	designs: IDesignsByType
 }) => {
 	const artboardId = artboard.id

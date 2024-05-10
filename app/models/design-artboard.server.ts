@@ -4,7 +4,7 @@ import { prisma } from '#app/utils/db.server'
 import { filterVisibleDesigns } from '#app/utils/design'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { filterNonArrayRotates } from '#app/utils/rotate'
-import { type IArtboard } from './artboard.server'
+import { type IArtboard } from './artboard/artboard.server'
 import {
 	findManyDesignsWithType,
 	type IDesignWithPalette,

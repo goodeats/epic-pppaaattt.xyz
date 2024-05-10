@@ -1,7 +1,7 @@
 import { getArtboardsWithDesignsAndLayers } from '#app/models/artboard/artboard.get.server'
+import { type IArtboardWithDesignsAndLayers } from '#app/models/artboard/artboard.server'
 import { createDefaultArtboardBranchWithVersion } from '#app/models/artboard-branch/artboard-branch.create.server'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
-import { type IArtboardWithDesignsAndLayers } from '#app/models/artboard.server'
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
 import { LayerCloneSourceTypeEnum } from '#app/schema/layer'
 import { artboardVersionCloneDesignsService } from '#app/services/artboard/version/clone-designs.service'

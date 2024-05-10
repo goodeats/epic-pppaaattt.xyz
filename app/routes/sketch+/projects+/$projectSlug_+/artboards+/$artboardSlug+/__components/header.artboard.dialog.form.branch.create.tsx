@@ -19,7 +19,7 @@ import { type IconName } from '#app/components/ui/icon'
 import { StatusButton } from '#app/components/ui/status-button'
 import { type IArtboardBranch } from '#app/models/artboard-branch/artboard-branch.server'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { stringToSlug, useIsPending } from '#app/utils/misc'
 import { getActionType, type RoutePath } from '#app/utils/routes.utils'
 

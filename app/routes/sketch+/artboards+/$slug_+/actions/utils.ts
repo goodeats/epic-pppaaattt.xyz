@@ -1,7 +1,7 @@
 import { parse } from '@conform-to/zod'
 import { type z } from 'zod'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { findArtboardByIdAndOwner } from '#app/models/artboard.server'
+import { findArtboardByIdAndOwner } from '#app/models/artboard/artboard.server'
 import {
 	findDesignByIdAndOwner,
 	findFirstDesign,

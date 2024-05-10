@@ -1,5 +1,5 @@
 import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
-import { type PickedArtboardType } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import {
 	findManyDesignsWithType,
 	type IDesignsByType,
@@ -26,26 +26,9 @@ export const getOwner = async (userId: string) => {
 export const getArtboard = async (
 	userId: string,
 	slug: string,
-): Promise<PickedArtboardType | null> => {
+): Promise<IArtboard | null> => {
 	return await prisma.artboard.findFirst({
 		where: { slug: slug, ownerId: userId },
-		select: {
-			id: true,
-			name: true,
-			description: true,
-			slug: true,
-			width: true,
-			height: true,
-			backgroundColor: true,
-			updatedAt: true,
-			project: {
-				select: {
-					id: true,
-					name: true,
-					slug: true,
-				},
-			},
-		},
 	})
 }
 
@@ -79,7 +62,7 @@ export const getLayers = async ({
 export const getArtboardDesigns = async ({
 	artboard,
 }: {
-	artboard: PickedArtboardType
+	artboard: IArtboard
 }): Promise<IDesignsByType> => {
 	const designs = await findManyDesignsWithType({
 		where: { artboardId: artboard.id },
@@ -100,7 +83,7 @@ export const getLayerDesigns = async ({
 }
 
 export const getArtboardGenerator = async (
-	artboard: PickedArtboardType,
+	artboard: IArtboard,
 	layers: ILayer[],
 ): Promise<IArtboardGenerator> => {
 	const artboardBuild = await artboardBuildCreateService({ artboard, layers })

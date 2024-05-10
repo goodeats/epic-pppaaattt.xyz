@@ -1,5 +1,5 @@
 import { SidebarPanelRowReorderContainer } from '#app/components/templates'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type IDesignIdOrNull, type IDesign } from '#app/models/design.server'
 import { type ILayer } from '#app/models/layer.server'
 import { type ReorderDesignSchemaType } from '#app/schema/design'
