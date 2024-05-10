@@ -16,6 +16,7 @@ import {
 	getLayerVisiblePalettes,
 	getLayerVisibleRotates,
 } from '#app/models/design-layer/design-layer.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
 import { type ILayer } from '#app/models/layer/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
 import {
@@ -25,7 +26,6 @@ import {
 } from '#app/utils/design'
 import { filterLayersVisible } from '#app/utils/layer.utils'
 import { isArrayRotateBasisType } from '#app/utils/rotate'
-import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
 
 // "build" since it is creating the version generator each time
 // later, if we like the generator, we can save it to the database
