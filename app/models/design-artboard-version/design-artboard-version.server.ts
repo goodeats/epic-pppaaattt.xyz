@@ -4,15 +4,15 @@ import { prisma } from '#app/utils/db.server'
 import { filterVisibleDesigns } from '#app/utils/design'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { filterNonArrayRotates } from '#app/utils/rotate'
-import { type IArtboardVersion } from './artboard-version/artboard-version.server'
+import { type IArtboardVersion } from '../artboard-version/artboard-version.server'
 import {
 	findManyDesignsWithType,
 	type IDesignWithPalette,
 	type IDesign,
 	type IDesignWithRotate,
-} from './design.server'
-import { type IPalette } from './palette.server'
-import { type IRotate } from './rotate.server'
+} from '../design.server'
+import { type IPalette } from '../palette.server'
+import { type IRotate } from '../rotate.server'
 
 export interface IDesignWithArtboardVersion extends IDesign {
 	artboardVersion: IArtboardVersion

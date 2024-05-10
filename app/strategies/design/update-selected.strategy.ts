@@ -4,7 +4,7 @@ import { findFirstVisibleArtboardVersionDesignByType } from '#app/models/design-
 import {
 	deselectArtboardVersionSelectedDesign,
 	updateArtboardVersionSelectedDesign,
-} from '#app/models/design-artboard-version.server'
+} from '#app/models/design-artboard-version/design-artboard-version.server'
 import {
 	deselectArtboardSelectedDesign,
 	findFirstVisibleArtboardDesignByType,

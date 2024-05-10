@@ -7,7 +7,7 @@ import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-
 import {
 	getArtboardVersionVisiblePalettes,
 	getArtboardVersionVisibleRotates,
-} from '#app/models/design-artboard-version.server'
+} from '#app/models/design-artboard-version/design-artboard-version.server'
 import {
 	getLayerVisiblePalettes,
 	getLayerVisibleRotates,
