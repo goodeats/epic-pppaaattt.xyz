@@ -29,6 +29,11 @@ export const StrokeDataSchema = z.object({
 	basis: StrokeBasisSchema.optional(),
 })
 
+export type DesignStrokeUpdateSchemaType =
+	| typeof EditDesignStrokeValueSchema
+	| typeof EditDesignStrokeBasisSchema
+	| typeof EditDesignStrokeStyleSchema
+
 export const EditDesignStrokeValueSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

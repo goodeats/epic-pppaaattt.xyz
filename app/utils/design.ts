@@ -22,35 +22,45 @@ import { findFirstSizeInDesignArray } from '#app/models/size.server'
 import { findFirstStrokeInDesignArray } from '#app/models/stroke.server'
 import { findFirstTemplateInDesignArray } from '#app/models/template.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
+import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
+import { DashboardPanelUpdateDesignTypeFillValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.fill'
+import { DashboardPanelUpdateDesignTypeLayoutValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.layout'
+import { DashboardPanelUpdateDesignTypeLineValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.line'
+import { DashboardPanelUpdateDesignTypePaletteValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.palette'
+import { DashboardPanelUpdateDesignTypeRotateValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.rotate'
+import { DashboardPanelUpdateDesignTypeSizeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.size'
+import { DashboardPanelUpdateDesignTypeStrokeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.stroke'
+import { DashboardPanelUpdateDesignTypeTemplateValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.template'
+import { orderLinkedItems } from './linked-list.utils'
 import { safelyAssignValue } from './typescript-helpers'
 
-export const filterAndOrderArtboardDesignsByType = ({
+export const filterAndOrderDesignsByType = ({
 	designs,
 }: {
 	designs: IDesignWithType[]
 }): IDesignsByType => {
-	const designPalettes = orderLinkedDesigns(
+	const designPalettes = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'palette'),
 	) as IDesignWithPalette[]
-	const designSizes = orderLinkedDesigns(
+	const designSizes = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'size'),
 	) as IDesignWithSize[]
-	const designFills = orderLinkedDesigns(
+	const designFills = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'fill'),
 	) as IDesignWithFill[]
-	const designStrokes = orderLinkedDesigns(
+	const designStrokes = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'stroke'),
 	) as IDesignWithStroke[]
-	const designLines = orderLinkedDesigns(
+	const designLines = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'line'),
 	) as IDesignWithLine[]
-	const designRotates = orderLinkedDesigns(
+	const designRotates = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'rotate'),
 	) as IDesignWithRotate[]
-	const designLayouts = orderLinkedDesigns(
+	const designLayouts = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'layout'),
 	) as IDesignWithLayout[]
-	const designTemplates = orderLinkedDesigns(
+	const designTemplates = orderLinkedItems<IDesignType>(
 		filterDesignsByType(designs, 'template'),
 	) as IDesignWithTemplate[]
 
@@ -289,7 +299,7 @@ export const panelListVariablesDesignType = ({
 	// helps with disabling reorder buttons
 	const designCount = designs.length
 
-	// helps with resetting the selected design for artboard
+	// helps with resetting the selected design for entity
 	const visibleDesigns = filterVisibleDesigns(designs)
 	const visibleDesignIds = designsIdArray(visibleDesigns)
 
@@ -375,6 +385,7 @@ export const designsByTypeToPanelArray = ({
 }): {
 	type: designTypeEnum
 	designs: IDesignWithType[]
+	strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy
 }[] => {
 	const {
 		designPalettes,
@@ -387,15 +398,64 @@ export const designsByTypeToPanelArray = ({
 		designTemplates,
 	} = designs
 
+	const strategyLayoutEntityValues =
+		new DashboardPanelUpdateDesignTypeLayoutValuesStrategy()
+	const strategyPaletteEntityValues =
+		new DashboardPanelUpdateDesignTypePaletteValuesStrategy()
+	const strategySizeEntityValues =
+		new DashboardPanelUpdateDesignTypeSizeValuesStrategy()
+	const strategyFillEntityValues =
+		new DashboardPanelUpdateDesignTypeFillValuesStrategy()
+	const strategyStrokeEntityValues =
+		new DashboardPanelUpdateDesignTypeStrokeValuesStrategy()
+	const strategyLineEntityValues =
+		new DashboardPanelUpdateDesignTypeLineValuesStrategy()
+	const strategyRotateEntityValues =
+		new DashboardPanelUpdateDesignTypeRotateValuesStrategy()
+	const strategyTemplateEntityValues =
+		new DashboardPanelUpdateDesignTypeTemplateValuesStrategy()
+
 	return [
-		{ type: DesignTypeEnum.LAYOUT, designs: designLayouts },
-		{ type: DesignTypeEnum.PALETTE, designs: designPalettes },
-		{ type: DesignTypeEnum.SIZE, designs: designSizes },
-		{ type: DesignTypeEnum.FILL, designs: designFills },
-		{ type: DesignTypeEnum.STROKE, designs: designStrokes },
-		{ type: DesignTypeEnum.LINE, designs: designLines },
-		{ type: DesignTypeEnum.ROTATE, designs: designRotates },
-		{ type: DesignTypeEnum.TEMPLATE, designs: designTemplates },
+		{
+			type: DesignTypeEnum.LAYOUT,
+			designs: designLayouts,
+			strategyEntityValues: strategyLayoutEntityValues,
+		},
+		{
+			type: DesignTypeEnum.PALETTE,
+			designs: designPalettes,
+			strategyEntityValues: strategyPaletteEntityValues,
+		},
+		{
+			type: DesignTypeEnum.SIZE,
+			designs: designSizes,
+			strategyEntityValues: strategySizeEntityValues,
+		},
+		{
+			type: DesignTypeEnum.FILL,
+			designs: designFills,
+			strategyEntityValues: strategyFillEntityValues,
+		},
+		{
+			type: DesignTypeEnum.STROKE,
+			designs: designStrokes,
+			strategyEntityValues: strategyStrokeEntityValues,
+		},
+		{
+			type: DesignTypeEnum.LINE,
+			designs: designLines,
+			strategyEntityValues: strategyLineEntityValues,
+		},
+		{
+			type: DesignTypeEnum.ROTATE,
+			designs: designRotates,
+			strategyEntityValues: strategyRotateEntityValues,
+		},
+		{
+			type: DesignTypeEnum.TEMPLATE,
+			designs: designTemplates,
+			strategyEntityValues: strategyTemplateEntityValues,
+		},
 	]
 }
 

@@ -20,6 +20,12 @@ export const LayoutDataSchema = z.object({
 	columns: LayoutGridSchema.optional(),
 })
 
+export type DesignLayoutUpdateSchemaType =
+	| typeof EditDesignLayoutStyleSchema
+	| typeof EditDesignLayoutCountSchema
+	| typeof EditDesignLayoutRowsSchema
+	| typeof EditDesignLayoutColumnsSchema
+
 export const EditDesignLayoutStyleSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

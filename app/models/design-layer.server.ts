@@ -1,7 +1,8 @@
 import { type Design } from '@prisma/client'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
-import { filterVisibleDesigns, orderLinkedDesigns } from '#app/utils/design'
+import { filterVisibleDesigns } from '#app/utils/design'
+import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { filterNonArrayRotates } from '#app/utils/rotate'
 import {
 	findManyDesignsWithType,
@@ -15,18 +16,6 @@ import { type IRotate } from './rotate.server'
 
 export interface IDesignWithLayer extends IDesign {
 	layer: ILayer
-}
-
-export const findFirstVisibleLayerDesignByType = async ({
-	layerId,
-	type,
-}: {
-	layerId: ILayer['id']
-	type: designTypeEnum
-}): Promise<IDesign | null> => {
-	return await prisma.design.findFirst({
-		where: { layerId, type, visible: true },
-	})
 }
 
 export const updateLayerSelectedDesign = ({
@@ -72,7 +61,7 @@ export const getLayerVisiblePalettes = async ({
 	})) as IDesignWithPalette[]
 
 	const visibleDesignPalettes = filterVisibleDesigns(
-		orderLinkedDesigns(designPalettes),
+		orderLinkedItems<IDesignWithPalette>(designPalettes),
 	) as IDesignWithPalette[]
 
 	return visibleDesignPalettes.map(design => design.palette)
@@ -88,7 +77,7 @@ export const getLayerVisibleRotates = async ({
 	})) as IDesignWithRotate[]
 
 	const visibleDesignRotates = filterVisibleDesigns(
-		orderLinkedDesigns(designRotates),
+		orderLinkedItems<IDesignWithRotate>(designRotates),
 	) as IDesignWithRotate[]
 
 	return filterNonArrayRotates(

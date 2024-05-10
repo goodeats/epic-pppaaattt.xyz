@@ -6,15 +6,15 @@ import {
 	ReorderArtboardLayerSchema,
 	ToggleVisibleArtboardLayerSchema,
 } from '#app/schema/layer-artboard'
+import { artboardLayerCreateService } from '#app/services/artboard/layer/create.service'
+import { artboardLayerDeleteService } from '#app/services/artboard/layer/delete.service'
+import { artboardLayerMoveDownService } from '#app/services/artboard/layer/move-down.service'
+import { artboardLayerMoveUpService } from '#app/services/artboard/layer/move-up.service'
+import { artboardLayerToggleVisibleService } from '#app/services/artboard/layer/toggle-visible.service'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
-import { artboardLayerCreateService } from '../services/artboard/layer/create.service'
-import { artboardLayerDeleteService } from '../services/artboard/layer/delete.service'
-import { artboardLayerMoveDownService } from '../services/artboard/layer/move-down.service'
-import { artboardLayerMoveUpService } from '../services/artboard/layer/move-up.service'
-import { artboardLayerToggleVisibleService } from '../services/artboard/layer/toggle-visible.service'
 import {
 	parseArtboardLayerSubmission,
 	parseArtboardLayerUpdateSubmission,
@@ -60,12 +60,12 @@ export async function artboardLayerNewAction({
 	if (!isValid || !submission) return response
 
 	const { artboardId } = submission.value
-	const { success, error } = await artboardLayerCreateService({
+	const { success } = await artboardLayerCreateService({
 		userId,
 		artboardId,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }

@@ -43,6 +43,10 @@ export const RotateDataSchema = z.object({
 	basis: RotateBasisSchema.optional(),
 })
 
+export type DesignRotateUpdateSchemaType =
+	| typeof EditDesignRotateValueSchema
+	| typeof EditDesignRotateBasisSchema
+
 export const EditDesignRotateValueSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

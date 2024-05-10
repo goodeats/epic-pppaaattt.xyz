@@ -8,5 +8,5 @@ export const HexcodeSchema = z
 	.transform(val => removeWhitespace(val))
 	.transform(val => filterHexcodeChars(val))
 	.refine(validateStringIsHexcode, {
-		message: 'Value must be valid hexcode',
+		message: 'Must be a valid hexcode (0-9, A-F)',
 	})

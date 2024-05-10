@@ -1,4 +1,4 @@
-import { SidebarPanelPopoverFormContainer } from '#app/components/templates'
+import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
 import { type IRotate } from '#app/models/rotate.server'

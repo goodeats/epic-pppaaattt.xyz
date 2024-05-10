@@ -6,10 +6,10 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Icon } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
+import { type PickedArtboardType } from '#app/models/artboard.server'
 import { ArtboardWidthSchema } from '#app/schema/artboard'
 import { useIsPending } from '#app/utils/misc'
 import { ARTBOARD_INTENT } from '../../../intent'
-import { type PickedArtboardType } from '../../../queries'
 import { type action } from '../../../route'
 
 export const PanelFormArtboardEditWidth = ({

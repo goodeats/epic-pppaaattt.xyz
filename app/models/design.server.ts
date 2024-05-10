@@ -4,7 +4,11 @@ import {
 	type findDesignArgsType,
 	type whereArgsType,
 } from '#app/schema/design'
-import { type PrismaTransactionType, prisma } from '#app/utils/db.server'
+import { prisma } from '#app/utils/db.server'
+import {
+	type IArtboardVersionWithDesignsAndLayers,
+	type IArtboardVersion,
+} from './artboard-version/artboard-version.server'
 import { type IArtboard } from './artboard.server'
 import { type IFillCreateOverrides, type IFill } from './fill.server'
 import { type ILayoutCreateOverrides, type ILayout } from './layout.server'
@@ -22,7 +26,11 @@ export interface IDesign extends Design {}
 
 export type IDesignIdOrNull = IDesign['id'] | null | undefined
 
-export type IDesignEntityId = IArtboard['id'] | IDesign['id']
+export type IDesignEntityId =
+	| IArtboard['id']
+	| IDesign['id']
+	| IArtboardVersion['id']
+	| IArtboardVersionWithDesignsAndLayers['id']
 export type IDesignEntityIdOrNull = IDesignEntityId | null | undefined
 
 export interface IDesignCreateOverrides {
@@ -49,6 +57,7 @@ export interface IDesignWithType {
 	prevId: string | null
 	ownerId: string
 	artboardId: string | null
+	artboardVersionId: string | null
 	layerId: string | null
 	palette: IPalette | null
 	size: ISize | null
@@ -165,10 +174,11 @@ export const findFirstDesign = async ({
 	where,
 	select,
 }: findDesignArgsType): Promise<IDesign | null> => {
-	return await prisma.design.findFirst({
+	const design = await prisma.design.findFirst({
 		where,
 		select,
 	})
+	return design
 }
 
 export const findDesignByIdAndOwner = async ({
@@ -185,55 +195,6 @@ export const findDesignByIdAndOwner = async ({
 }
 
 // only use in transactions
-export const getTransactionDesign = async ({
-	id,
-	prisma,
-}: {
-	id: string
-	prisma: PrismaTransactionType
-}) => {
-	const designPromise = findDesignTransactionPromise({ id, prisma })
-	const design = await designPromise
-
-	// prevent any pending promises in the transaction
-	if (!design) throw new Error(`Design not found: ${id}`)
-
-	return design
-}
-
-export const findDesignTransactionPromise = ({
-	id,
-	prisma,
-}: {
-	id: string
-	prisma: PrismaTransactionType
-}) => {
-	return prisma.design.findFirst({
-		where: { id },
-	})
-}
-
-export const connectPrevAndNextDesignsPromise = ({
-	prevId,
-	nextId,
-	prisma,
-}: {
-	prevId: Design['id']
-	nextId: Design['id']
-	prisma: PrismaTransactionType
-}) => {
-	return [
-		prisma.design.update({
-			where: { id: prevId },
-			data: { nextId },
-		}),
-		prisma.design.update({
-			where: { id: nextId },
-			data: { prevId },
-		}),
-	]
-}
-
 export const connectPrevAndNextDesigns = ({
 	prevId,
 	nextId,
@@ -285,24 +246,5 @@ export const updateDesignNodes = ({
 	return prisma.design.update({
 		where: { id },
 		data: { prevId, nextId },
-	})
-}
-
-export const deleteDesign = ({ id }: { id: IDesign['id'] }) => {
-	return prisma.design.delete({
-		where: { id },
-	})
-}
-
-export const updateDesignVisible = ({
-	id,
-	visible,
-}: {
-	id: IDesign['id']
-	visible: boolean
-}) => {
-	return prisma.design.update({
-		where: { id },
-		data: { visible },
 	})
 }

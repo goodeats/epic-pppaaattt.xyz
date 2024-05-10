@@ -11,7 +11,7 @@ export const PanelIconButton = React.forwardRef<
 		iconName: IconName
 		iconText?: string | null
 		size?: 'panel' | 'panel-sm'
-		backgroundColor?: string
+		backgroundColor?: string | null | undefined
 	}
 >(
 	(

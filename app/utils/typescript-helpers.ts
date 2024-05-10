@@ -1,3 +1,7 @@
+// Defines a type that represents the values of an object T.
+// very useful for enums
+export type ObjectValues<T> = T[keyof T]
+
 /**
  * Safely assigns a value to a key on a target object, with an optional null check.
  * @param target The target object to which the value will be assigned.
@@ -18,3 +22,17 @@ export const safelyAssignValue = <
 		target[key] = value as TargetType[KeyType]
 	}
 }
+
+// Helper function to safely update properties
+export function updateProperty<T, K extends keyof T>(
+	obj: T,
+	key: K,
+	value: T[K],
+) {
+	obj[key] = value
+}
+
+// Utility type to extract all the string values from a nested object
+export type ExtractStringValues<T> = T extends object
+	? { [K in keyof T]: ExtractStringValues<T[K]> }[keyof T]
+	: T

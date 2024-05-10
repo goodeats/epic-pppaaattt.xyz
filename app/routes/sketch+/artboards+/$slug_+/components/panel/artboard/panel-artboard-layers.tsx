@@ -9,8 +9,8 @@ import {
 	SidebarPanelRowValuesContainer,
 } from '#app/components/templates'
 import { Icon } from '#app/components/ui/icon'
+import { type PickedArtboardType } from '#app/models/artboard.server'
 import { type ILayer } from '#app/models/layer.server'
-import { type PickedArtboardType } from '../../../queries'
 import { PanelFormArtboardLayerNew } from '../../forms/artboard/layer/panel-form-artboard-layer-new'
 import { PanelFormArtboardLayerReorder } from '../../forms/artboard/layer/panel-form-artboard-layer-reorder'
 import { PanelFormArtboardLayerToggleVisible } from '../../forms/artboard/layer/panel-form-artboard-layer-toggle-visible'

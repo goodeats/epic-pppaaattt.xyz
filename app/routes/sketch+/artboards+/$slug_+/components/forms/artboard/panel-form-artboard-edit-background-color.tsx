@@ -5,11 +5,11 @@ import { type ChangeEvent, type FocusEvent } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { quickToast } from '#app/components/toaster'
 import { Input } from '#app/components/ui/input'
+import { type PickedArtboardType } from '#app/models/artboard.server'
 import { ArtboardBackgroundColorSchema } from '#app/schema/artboard'
 import { stringToHexcode, validateStringIsHexcode } from '#app/utils/colors'
 import { useIsPending } from '#app/utils/misc'
 import { ARTBOARD_INTENT } from '../../../intent'
-import { type PickedArtboardType } from '../../../queries'
 import { type action } from '../../../route'
 
 export const PanelFormArtboardEditBackgroundColor = ({

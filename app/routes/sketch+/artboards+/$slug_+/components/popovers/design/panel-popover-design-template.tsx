@@ -1,4 +1,4 @@
-import { SidebarPanelPopoverFormContainer } from '#app/components/templates'
+import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Label } from '#app/components/ui/label'
 import { type ITemplate } from '#app/models/template.server'
 import { DesignTypeEnum } from '#app/schema/design'

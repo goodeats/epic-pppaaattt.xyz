@@ -6,15 +6,15 @@ import {
 	ReorderArtboardDesignSchema,
 	ToggleVisibleArtboardDesignSchema,
 } from '#app/schema/design-artboard'
+import { artboardDesignCreateService } from '#app/services/artboard/design/create.service'
+import { artboardDesignDeleteService } from '#app/services/artboard/design/delete.service'
+import { artboardDesignMoveDownService } from '#app/services/artboard/design/move-down.service'
+import { artboardDesignMoveUpService } from '#app/services/artboard/design/move-up.service'
+import { artboardDesignToggleVisibleService } from '#app/services/artboard/design/toggle-visible.service'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
-import { artboardDesignCreateService } from '../services/artboard/design/create.service'
-import { artboardDesignDeleteService } from '../services/artboard/design/delete.service'
-import { artboardDesignMoveDownService } from '../services/artboard/design/move-down.service'
-import { artboardDesignMoveUpService } from '../services/artboard/design/move-up.service'
-import { artboardDesignToggleVisibleService } from '../services/artboard/design/toggle-visible.service'
 import {
 	parseArtboardDesignSubmission,
 	parseArtboardDesignUpdateSubmission,
@@ -60,13 +60,13 @@ export async function artboardDesignNewAction({
 	if (!isValid || !submission) return response
 
 	const { artboardId, type } = submission.value
-	const { success, error } = await artboardDesignCreateService({
+	const { success } = await artboardDesignCreateService({
 		userId,
 		artboardId,
 		type,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }
@@ -90,12 +90,12 @@ export async function artboardDesignReorderAction({
 		updateSelectedDesignId,
 	}
 
-	const { success, error } =
+	const { success } =
 		direction === 'up'
 			? await artboardDesignMoveUpService(args)
 			: await artboardDesignMoveDownService(args)
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }
@@ -112,14 +112,14 @@ export async function artboardDesignToggleVisibilityAction({
 	if (!isValid || !submission) return response
 
 	const { id, artboardId, updateSelectedDesignId } = submission.value
-	const { success, error } = await artboardDesignToggleVisibleService({
+	const { success } = await artboardDesignToggleVisibleService({
 		userId,
 		id,
 		artboardId,
 		updateSelectedDesignId,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }
@@ -136,14 +136,14 @@ export async function artboardDesignDeleteAction({
 	if (!isValid || !submission) return response
 
 	const { id, artboardId, updateSelectedDesignId } = submission.value
-	const { success, error } = await artboardDesignDeleteService({
+	const { success } = await artboardDesignDeleteService({
 		userId,
 		id,
 		artboardId,
 		updateSelectedDesignId,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }

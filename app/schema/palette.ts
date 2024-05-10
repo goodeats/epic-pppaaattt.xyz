@@ -8,6 +8,8 @@ export const PaletteDataSchema = z.object({
 	opacity: z.number().optional(),
 })
 
+export type DesignPaletteUpdateSchemaType = typeof EditDesignPaletteValueSchema
+
 export const EditDesignPaletteValueSchema = z.object({
 	id: z.string(),
 	designId: z.string(),

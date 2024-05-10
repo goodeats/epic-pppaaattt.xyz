@@ -9,10 +9,13 @@ import {
 	BackgroundVariant,
 } from 'reactflow'
 import { ContainerIndex } from '#app/components/shared'
-import { type IArtboardGenerator } from '#app/definitions/artboard-generator'
-import { type PickedArtboardType } from '../queries'
-import { canvasDrawService } from '../services/canvas/draw.service'
+import {
+	type IArtboardVersionGenerator,
+	type IArtboardGenerator,
+} from '#app/definitions/artboard-generator'
 import 'reactflow/dist/style.css'
+import { type PickedArtboardType } from '#app/models/artboard.server'
+import { canvasDrawService } from '#app/services/canvas/draw.service'
 
 const initialNodes = [
 	{
@@ -30,14 +33,24 @@ export const CanvasContent = ({
 	artboard: PickedArtboardType
 	artboardGenerator: IArtboardGenerator | null
 }) => {
+	const { width, height, backgroundColor } = artboard
+	const generator = {
+		...artboardGenerator,
+		settings: {
+			width,
+			height,
+			background: backgroundColor,
+		},
+	} as IArtboardVersionGenerator
+
 	const Canvas = () => {
-		const { width, height, backgroundColor } = artboard
 		const canvasRef = useRef<HTMLCanvasElement>(null)
 
 		useEffect(() => {
 			const canvas = canvasRef.current
 			const canvasReady = canvas && artboardGenerator
-			canvasReady && canvasDrawService({ canvas, artboard, artboardGenerator })
+
+			canvasReady && canvasDrawService({ canvas, generator })
 		}, [canvasRef])
 
 		return (

@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { LayerNameSchema } from './layer'
 
 export interface LayerDataCreate {
 	name: string
@@ -6,10 +7,10 @@ export interface LayerDataCreate {
 	artboardId?: string
 }
 
-export const LayerDataCreateSchema = z.object({
-	name: z.string().min(1).max(40),
+export const ArtboardLayerDataCreateSchema = z.object({
+	name: LayerNameSchema,
 	ownerId: z.string(),
-	artboardId: z.string().optional(),
+	artboardId: z.string(),
 }) satisfies z.Schema<LayerDataCreate>
 
 export const NewArtboardLayerSchema = z.object({

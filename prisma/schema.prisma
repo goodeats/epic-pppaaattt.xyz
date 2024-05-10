@@ -28,6 +28,8 @@ model User {
   // added after epic-stack created
   projects    Project[]
   artboards   Artboard[]
+  artboardVersions ArtboardVersion[]
+  artboardBranches ArtboardBranch[]
   layers      Layer[]
   designs     Design[]
   assetImages AssetImage[]
@@ -218,6 +220,9 @@ model Artboard {
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId String
 
+  branches ArtboardBranch[]
+  mergeRequests ArtboardMergeRequest[]
+
   layers Layer[]
   designs Design[]
 
@@ -237,6 +242,7 @@ model Layer {
   description String?
   slug       String?
   visible     Boolean @default(true)
+  selected    Boolean @default(false) // this is a UI helper for displaying the selected layer for editing
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -246,6 +252,9 @@ model Layer {
 
   artboard Artboard? @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artboardId String?
+
+  artboardVersionId String?
+  artboardVersion   ArtboardVersion? @relation(fields: [artboardVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   next Layer? @relation("LayerDoublyLinkedList", fields: [nextId], references: [id])
   nextId String? @unique
@@ -262,11 +271,13 @@ model Layer {
 
   // non-unique foreign key
   @@index([ownerId])
+  @@index([artboardVersionId])
   @@index([parentId])
   // This helps our order by in the user search a LOT
   @@index([ownerId, updatedAt])
   // Unique constraint for slug scoped to ownerId
-  @@unique([slug, ownerId])
+  @@unique([slug, ownerId, artboardId])
+  @@unique([slug, ownerId, artboardVersionId])
 }
 
 model AssetImage {
@@ -320,7 +331,7 @@ model Design {
   id         String @id @default(cuid())
   type      String // e.g. palette, size, fill, stroke, line, etc.
   visible   Boolean @default(true)
-  selected Boolean @default(false)
+  selected Boolean @default(false) // this is a work-around for finding the first in linked list that is visible
 
   createdAt DateTime @default(now())
 
@@ -341,6 +352,9 @@ model Design {
   artboard Artboard? @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   artboardId String?
 
+  artboardVersionId String?
+  artboardVersion   ArtboardVersion? @relation(fields: [artboardVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
   layer Layer? @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   layerId String?
 
@@ -355,6 +369,8 @@ model Design {
 
   // non-unique foreign key
   @@index([ownerId])
+  @@index([layerId])
+  @@index([artboardVersionId])
 }
 
 model Palette {
@@ -468,4 +484,105 @@ model Template {
 
   design Design @relation(fields: [designId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   designId String @unique
+}
+
+model ArtboardBranch {
+  id        String @id @default(cuid())
+  name      String @default("main")
+  slug      String @default("main")
+  description String?
+  default   Boolean @default(false)
+  active    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  artboard Artboard @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artboardId String
+
+  parentId String?
+  parent ArtboardBranch? @relation("ParentChildArtboardBranch", fields: [parentId], references: [id])
+  children ArtboardBranch[] @relation("ParentChildArtboardBranch")
+
+  versions ArtboardVersion[]
+  mergeRequestsSource ArtboardMergeRequest[] @relation("ArtboardMergeRequestSourceBranch")
+  mergeRequestsTarget ArtboardMergeRequest[] @relation("ArtboardMergeRequestTargetBranch")
+
+  // non-unique foreign key
+  @@index([artboardId])
+  @@index([ownerId])
+
+  // Constraints to ensure only one 'default' version per branch
+  // and only unique name per branch
+  // @@unique([artboardId, default])
+  // can't have unique constraint on boolean -- come back later to fix
+  @@unique([artboardId, name])
+  @@unique([artboardId, slug])
+}
+
+model ArtboardVersion {
+  id        String @id @default(cuid())
+  name      String @default("v0")
+  slug       String @default("v0")
+  description String @default("initial version")
+
+  // settings
+  // 9:16 aspect ratio (vertical)
+  width       Int @default(1080)
+  height      Int @default(1920)
+  background String @default("FFFFFF")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  branch ArtboardBranch @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  branchId String
+
+  next ArtboardVersion? @relation("ArtboardVersionDoublyLinkedList", fields: [nextId], references: [id])
+  nextId String? @unique
+
+  prev ArtboardVersion? @relation("ArtboardVersionDoublyLinkedList")
+  prevId String? @unique
+
+  layers Layer[]
+  designs Design[]
+
+  // non-unique foreign key
+  @@index([branchId])
+  @@index([ownerId])
+
+  // Constraints to ensure only one 'latest' version per branch
+  // and only one name 'latest' per branch
+  @@unique([branchId, name])
+  @@unique([branchId, slug])
+}
+
+model ArtboardMergeRequest {
+  id       String @id @default(cuid())
+  status   String @default("open") // e.g. open, closed, merged
+  title    String
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  artboard Artboard @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artboardId String
+
+  sourceBranchId  String
+  sourceBranch   ArtboardBranch @relation(name: "ArtboardMergeRequestSourceBranch", fields: [sourceBranchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  targetBranchId  String
+  targetBranch   ArtboardBranch @relation(name: "ArtboardMergeRequestTargetBranch", fields: [targetBranchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // non-unique foreign key
+  @@index([artboardId])
+  @@index([sourceBranchId])
+  @@index([targetBranchId])
 }

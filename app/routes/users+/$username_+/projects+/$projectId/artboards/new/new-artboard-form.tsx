@@ -14,6 +14,7 @@ import {
 } from '#app/components/shared'
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
+import { createDefaultArtboardBranchWithVersion } from '#app/models/artboard-branch/artboard-branch.create.server'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import {
 	formatSringsToHex,
@@ -105,6 +106,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	const createdArtboard = await prisma.artboard.create({
 		select: {
+			id: true,
+			ownerId: true,
 			slug: true,
 			owner: { select: { username: true } },
 			project: { select: { slug: true } },
@@ -119,6 +122,10 @@ export async function action({ request }: ActionFunctionArgs) {
 			height,
 			backgroundColor: backgroundColor[0],
 		},
+	})
+
+	await createDefaultArtboardBranchWithVersion({
+		artboard: createdArtboard,
 	})
 
 	const { owner } = createdArtboard

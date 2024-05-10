@@ -6,15 +6,15 @@ import {
 	ReorderLayerDesignSchema,
 	ToggleVisibleLayerDesignSchema,
 } from '#app/schema/design-layer'
+import { layerDesignCreateService } from '#app/services/layer/design/create.service'
+import { layerDesignDeleteService } from '#app/services/layer/design/delete.service'
+import { layerDesignMoveDownService } from '#app/services/layer/design/move-down.service'
+import { layerDesignMoveUpService } from '#app/services/layer/design/move-up.service'
+import { layerDesignToggleVisibleService } from '#app/services/layer/design/toggle-visible.service'
 import {
 	notSubmissionResponse,
 	submissionErrorResponse,
 } from '#app/utils/conform-utils'
-import { layerDesignCreateService } from '../services/layer/design/create.service'
-import { layerDesignDeleteService } from '../services/layer/design/delete.service'
-import { layerDesignMoveDownService } from '../services/layer/design/move-down.service'
-import { layerDesignMoveUpService } from '../services/layer/design/move-up.service'
-import { layerDesignToggleVisibleService } from '../services/layer/design/toggle-visible.service'
 import {
 	parseLayerDesignSubmission,
 	parseLayerDesignUpdateSubmission,
@@ -60,13 +60,13 @@ export async function layerDesignNewAction({
 	if (!isValid || !submission) return response
 
 	const { layerId, type } = submission.value
-	const { success, error } = await layerDesignCreateService({
+	const { success } = await layerDesignCreateService({
 		userId,
 		layerId,
 		type,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }
@@ -90,12 +90,12 @@ export async function layerDesignReorderAction({
 		updateSelectedDesignId,
 	}
 
-	const { success, error } =
+	const { success } =
 		direction === 'up'
 			? await layerDesignMoveUpService(args)
 			: await layerDesignMoveDownService(args)
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }
@@ -112,14 +112,14 @@ export async function layerDesignToggleVisibleAction({
 	if (!isValid || !submission) return response
 
 	const { id, layerId, updateSelectedDesignId } = submission.value
-	const { success, error } = await layerDesignToggleVisibleService({
+	const { success } = await layerDesignToggleVisibleService({
 		userId,
 		id,
 		layerId,
 		updateSelectedDesignId,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }
@@ -136,14 +136,14 @@ export async function layerDesignDeleteAction({
 	if (!isValid || !submission) return response
 
 	const { id, layerId, updateSelectedDesignId } = submission.value
-	const { success, error } = await layerDesignDeleteService({
+	const { success } = await layerDesignDeleteService({
 		userId,
 		id,
 		layerId,
 		updateSelectedDesignId,
 	})
 
-	if (error) return submissionErrorResponse(submission)
+	if (!success) return submissionErrorResponse(submission)
 
 	return json({ status: 'success', submission, success } as const)
 }

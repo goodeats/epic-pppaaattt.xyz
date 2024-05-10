@@ -3,6 +3,7 @@ import { PrismaClient, type Prisma } from '@prisma/client'
 import { type DefaultArgs } from '@prisma/client/runtime/library'
 import chalk from 'chalk'
 import { ArtboardPrismaExtensions } from './prisma-extensions-artboard'
+import { ArtboardVersionPrismaExtensions } from './prisma-extensions-artboard-version'
 import {
 	DesignPrismaExtensions,
 	DesignPrismaQueryExtensions,
@@ -26,6 +27,7 @@ export type PrismaTransactionType = Omit<
 export const prismaExtended = remember('prisma', () => {
 	return new PrismaClient({})
 		.$extends(ArtboardPrismaExtensions)
+		.$extends(ArtboardVersionPrismaExtensions)
 		.$extends(DesignPrismaQueryExtensions)
 		.$extends(DesignPrismaExtensions)
 		.$extends(PalettePrismaExtensions)

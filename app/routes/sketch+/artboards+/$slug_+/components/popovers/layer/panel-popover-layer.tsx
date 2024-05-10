@@ -1,4 +1,4 @@
-import { SidebarPanelPopoverFormContainer } from '#app/components/templates'
+import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Label } from '#app/components/ui/label'
 import { Separator } from '#app/components/ui/separator'
 import { type IArtboard } from '#app/models/artboard.server'
