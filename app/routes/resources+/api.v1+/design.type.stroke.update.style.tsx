@@ -7,7 +7,7 @@ import { redirectBack } from 'remix-utils/redirect-back'
 import {
 	updateDesignTypeStrokeStyle,
 	validateDesignTypeUpdateStrokeStyleSubmission,
-} from '#app/models/design-type/design-type.update.stroke.server'
+} from '#app/models/design-type/stroke/stroke.update.server'
 import { validateNoJS } from '#app/schema/form-data'
 import { requireUserId } from '#app/utils/auth.server'
 

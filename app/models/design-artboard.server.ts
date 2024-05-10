@@ -4,15 +4,17 @@ import { prisma } from '#app/utils/db.server'
 import { filterVisibleDesigns } from '#app/utils/design'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { filterNonArrayRotates } from '#app/utils/rotate'
-import { type IArtboard } from './artboard.server'
+import { type IArtboard } from './artboard/artboard.server'
 import {
 	findManyDesignsWithType,
 	type IDesignWithPalette,
 	type IDesign,
 	type IDesignWithRotate,
-} from './design.server'
-import { type IPalette } from './palette.server'
-import { type IRotate } from './rotate.server'
+} from './design/design.server'
+import { type IPalette } from './design-type/palette/palette.server'
+import { type IRotate } from './design-type/rotate/rotate.server'
+
+// this file may no longer be necessary
 
 export interface IDesignWithArtboard extends IDesign {
 	artboard: IArtboard

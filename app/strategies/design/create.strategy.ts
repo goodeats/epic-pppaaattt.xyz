@@ -1,6 +1,6 @@
 import { type User } from '@prisma/client'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
-import { type IArtboard } from '#app/models/artboard.server'
 import {
 	createArtboardVersionDesign,
 	createDesign,
@@ -10,8 +10,8 @@ import {
 	type IDesign,
 	type IDesignCreateOverrides,
 	type IDesignEntityId,
-} from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
+} from '#app/models/design/design.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { ArtboardDesignDataCreateSchema } from '#app/schema/design-artboard'
 import { LayerDesignDataCreateSchema } from '#app/schema/design-layer'

@@ -1,5 +1,5 @@
 import { prisma } from '#app/utils/db.server'
-import { type IDesign } from '../design.server'
+import { type IDesign } from '../design/design.server'
 
 export interface IDesignUpdatedResponse {
 	success: boolean

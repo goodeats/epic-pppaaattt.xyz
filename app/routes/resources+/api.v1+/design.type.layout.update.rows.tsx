@@ -4,7 +4,7 @@ import {
 	type DataFunctionArgs,
 } from '@remix-run/node'
 import { redirectBack } from 'remix-utils/redirect-back'
-import { validateDesignTypeUpdateLayoutRowsSubmission } from '#app/models/design-type/design-type.update.layout.server'
+import { validateDesignTypeUpdateLayoutRowsSubmission } from '#app/models/design-type/layout/layout.update.server'
 import { validateNoJS } from '#app/schema/form-data'
 import { updateDesignTypeLayoutRowsService } from '#app/services/design-type/update-layout.service'
 import { requireUserId } from '#app/utils/auth.server'

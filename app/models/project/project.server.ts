@@ -1,6 +1,6 @@
 import { type Project } from '@prisma/client'
 import { type DateOrString } from '#app/definitions/prisma-helper'
-import { type IArtboard } from '../artboard.server'
+import { type IArtboard } from '../artboard/artboard.server'
 
 // Omitting 'createdAt' and 'updatedAt' from the Project interface
 // prisma query returns a string for these fields

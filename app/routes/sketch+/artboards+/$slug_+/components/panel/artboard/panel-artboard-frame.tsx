@@ -4,15 +4,11 @@ import {
 	SidebarPanelRow,
 	SidebarPanelRowContainer,
 } from '#app/components/templates'
-import { type PickedArtboardType } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { PanelFormArtboardEditHeight } from '../../forms/artboard/panel-form-artboard-edit-height'
 import { PanelFormArtboardEditWidth } from '../../forms/artboard/panel-form-artboard-edit-width'
 
-export const PanelArtboardFrame = ({
-	artboard,
-}: {
-	artboard: PickedArtboardType
-}) => {
+export const PanelArtboardFrame = ({ artboard }: { artboard: IArtboard }) => {
 	return (
 		<SidebarPanel>
 			<SidebarPanelHeader title="Frame" />

@@ -1,7 +1,7 @@
 import { type User } from '@prisma/client'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type IDesignDeletedResponse } from '#app/models/design/design.delete.server'
-import { type IDesignIdOrNull, type IDesign } from '#app/models/design.server'
+import { type IDesignIdOrNull, type IDesign } from '#app/models/design/design.server'
 import { ArtboardVersionUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { designDeleteService } from '../../../design/delete.service'
 

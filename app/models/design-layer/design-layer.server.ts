@@ -4,31 +4,31 @@ import { prisma } from '#app/utils/db.server'
 import { filterVisibleDesigns } from '#app/utils/design'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { filterNonArrayRotates } from '#app/utils/rotate'
-import { type IArtboardVersion } from './artboard-version/artboard-version.server'
 import {
 	findManyDesignsWithType,
 	type IDesignWithPalette,
 	type IDesign,
 	type IDesignWithRotate,
-} from './design.server'
-import { type IPalette } from './palette.server'
-import { type IRotate } from './rotate.server'
+} from '../design/design.server'
+import { type IPalette } from '../design-type/palette/palette.server'
+import { type IRotate } from '../design-type/rotate/rotate.server'
+import { type ILayer } from '../layer/layer.server'
 
-export interface IDesignWithArtboardVersion extends IDesign {
-	artboardVersion: IArtboardVersion
+export interface IDesignWithLayer extends IDesign {
+	layer: ILayer
 }
 
-export const updateArtboardVersionSelectedDesign = ({
-	artboardVersionId,
+export const updateLayerSelectedDesign = ({
+	layerId,
 	designId,
 	type,
 }: {
-	artboardVersionId: IArtboardVersion['id']
+	layerId: ILayer['id']
 	designId: Design['id']
 	type: designTypeEnum
 }) => {
-	const deselectDesign = deselectArtboardVersionSelectedDesign({
-		artboardVersionId,
+	const deselectDesign = deselectLayerSelectedDesign({
+		layerId,
 		type,
 	})
 	const selectDesign = prisma.design.update({
@@ -38,26 +38,26 @@ export const updateArtboardVersionSelectedDesign = ({
 	return [deselectDesign, selectDesign]
 }
 
-export const deselectArtboardVersionSelectedDesign = ({
-	artboardVersionId,
+export const deselectLayerSelectedDesign = ({
+	layerId,
 	type,
 }: {
-	artboardVersionId: IArtboardVersion['id']
+	layerId: ILayer['id']
 	type: designTypeEnum
 }) => {
 	return prisma.design.updateMany({
-		where: { artboardVersionId, type, selected: true },
+		where: { layerId, type, selected: true },
 		data: { selected: false },
 	})
 }
 
-export const getArtboardVersionVisiblePalettes = async ({
-	artboardVersionId,
+export const getLayerVisiblePalettes = async ({
+	layerId,
 }: {
-	artboardVersionId: IArtboardVersion['id']
+	layerId: ILayer['id']
 }): Promise<IPalette[]> => {
 	const designPalettes = (await findManyDesignsWithType({
-		where: { type: DesignTypeEnum.PALETTE, artboardVersionId },
+		where: { type: DesignTypeEnum.PALETTE, layerId },
 	})) as IDesignWithPalette[]
 
 	const visibleDesignPalettes = filterVisibleDesigns(
@@ -67,13 +67,13 @@ export const getArtboardVersionVisiblePalettes = async ({
 	return visibleDesignPalettes.map(design => design.palette)
 }
 
-export const getArtboardVersionVisibleRotates = async ({
-	artboardVersionId,
+export const getLayerVisibleRotates = async ({
+	layerId,
 }: {
-	artboardVersionId: IArtboardVersion['id']
+	layerId: ILayer['id']
 }): Promise<IRotate[]> => {
 	const designRotates = (await findManyDesignsWithType({
-		where: { type: DesignTypeEnum.ROTATE, artboardVersionId },
+		where: { type: DesignTypeEnum.ROTATE, layerId },
 	})) as IDesignWithRotate[]
 
 	const visibleDesignRotates = filterVisibleDesigns(

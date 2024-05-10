@@ -15,7 +15,7 @@ import {
 	sideNavLinkDefaultClassName,
 } from '#app/components/shared'
 import { Icon } from '#app/components/ui/icon'
-import { type IArtboardWithProject } from '#app/models/artboard.server'
+import { type IArtboardWithProject } from '#app/models/artboard/artboard.server'
 import { useBreadcrumbs } from '#app/utils/breadcrumbs'
 import { cn, getUserImgSrc } from '#app/utils/misc'
 import { useOptionalUser, useUser } from '#app/utils/user'

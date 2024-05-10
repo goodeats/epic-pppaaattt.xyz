@@ -1,13 +1,13 @@
 import { type User } from '@sentry/remix'
+import { type IDesign } from '#app/models/design/design.server'
+import { type ILayout } from '#app/models/design-type/layout/layout.server'
 import {
 	type IDesignTypeLayoutUpdatedResponse,
 	updateDesignTypeLayoutCount,
 	updateDesignTypeLayoutRows,
 	updateDesignTypeLayoutColumns,
 	updateDesignTypeLayoutStyle,
-} from '#app/models/design-type/design-type.update.layout.server'
-import { type IDesign } from '#app/models/design.server'
-import { type ILayout } from '#app/models/layout.server'
+} from '#app/models/design-type/layout/layout.update.server'
 
 export const updateDesignTypeLayoutCountService = async ({
 	userId,

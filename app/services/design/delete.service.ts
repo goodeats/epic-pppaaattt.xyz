@@ -11,7 +11,7 @@ import {
 	connectPrevAndNextDesigns,
 	type IDesignEntityId,
 	type IDesignIdOrNull,
-} from '#app/models/design.server'
+} from '#app/models/design/design.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { type IUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { prisma } from '#app/utils/db.server'

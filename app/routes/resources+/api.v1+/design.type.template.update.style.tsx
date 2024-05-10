@@ -7,7 +7,7 @@ import { redirectBack } from 'remix-utils/redirect-back'
 import {
 	updateDesignTypeTemplateStyle,
 	validateDesignTypeUpdateTemplateStyleSubmission,
-} from '#app/models/design-type/design-type.update.template.server'
+} from '#app/models/design-type/template/template.update.server'
 import { validateNoJS } from '#app/schema/form-data'
 import { requireUserId } from '#app/utils/auth.server'
 

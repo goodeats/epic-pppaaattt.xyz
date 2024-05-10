@@ -3,10 +3,11 @@ import {
 	type IArtboardGenerator,
 	type ILayerGenerator,
 } from '#app/definitions/artboard-generator'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import {
-	type PickedArtboardType,
-	type IArtboard,
-} from '#app/models/artboard.server'
+	type IDesignWithType,
+	findManyDesignsWithType,
+} from '#app/models/design/design.server'
 import {
 	getArtboardVisiblePalettes,
 	getArtboardVisibleRotates,
@@ -14,13 +15,9 @@ import {
 import {
 	getLayerVisiblePalettes,
 	getLayerVisibleRotates,
-} from '#app/models/design-layer.server'
-import {
-	findManyDesignsWithType,
-	type IDesignWithType,
-} from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
-import { type IRotate } from '#app/models/rotate.server'
+} from '#app/models/design-layer/design-layer.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
 import {
 	filterSelectedDesignTypes,
@@ -34,7 +31,7 @@ export const artboardBuildCreateService = async ({
 	artboard,
 	layers,
 }: {
-	artboard: PickedArtboardType
+	artboard: IArtboard
 	layers: ILayer[]
 }): Promise<IArtboardGenerator> => {
 	try {
@@ -89,7 +86,7 @@ export const artboardBuildCreateService = async ({
 const verifyArtboardGeneratorDesigns = async ({
 	artboard,
 }: {
-	artboard: PickedArtboardType
+	artboard: IArtboard
 }): Promise<{
 	artboardGeneratorDesigns: IGeneratorDesigns | null
 	message: string
@@ -149,7 +146,7 @@ const buildGeneratorArtboardLayer = async ({
 	artboardGeneratorDesigns,
 }: {
 	artboardId: string
-	artboard: PickedArtboardType
+	artboard: IArtboard
 	artboardGeneratorDesigns: IGeneratorDesigns
 }): Promise<ILayerGenerator> => {
 	// get all visible palettes to use for fill or stroke
@@ -172,11 +169,7 @@ const buildGeneratorArtboardLayer = async ({
 	}
 }
 
-const getArtboardContainer = ({
-	artboard,
-}: {
-	artboard: PickedArtboardType
-}) => {
+const getArtboardContainer = ({ artboard }: { artboard: IArtboard }) => {
 	const { width, height } = artboard
 	return {
 		width,

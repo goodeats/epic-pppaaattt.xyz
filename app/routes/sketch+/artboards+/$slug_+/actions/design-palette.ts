@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type IPalette } from '#app/models/palette.server'
+import { type IPalette } from '#app/models/design-type/palette/palette.server'
 import { EditDesignPaletteValueSchema } from '#app/schema/palette'
 import {
 	notSubmissionResponse,

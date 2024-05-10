@@ -1,6 +1,6 @@
 import { type User } from '@prisma/client'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
-import { type IDesignEntityId } from '#app/models/design.server'
+import { type IDesignEntityId } from '#app/models/design/design.server'
 import { type designCloneSourceTypeEnum } from '#app/schema/design'
 import { CloneDesignsToArtboardVersionStrategy } from '#app/strategies/design/clone.strategy'
 import { cloneDesignsService } from '../../design/clone-many.service'

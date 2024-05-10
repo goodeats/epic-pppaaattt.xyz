@@ -10,7 +10,7 @@ import {
 	type IDesignWithLayout,
 	type IDesignWithTemplate,
 	type IDesignsByType,
-} from '#app/models/design.server'
+} from '#app/models/design/design.server'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 
 export interface ICloneDesignTypeStrategy {

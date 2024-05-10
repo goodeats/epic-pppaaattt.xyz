@@ -1,7 +1,7 @@
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { type ILayout } from '#app/models/layout.server'
+import { type ILayout } from '#app/models/design-type/layout/layout.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import { PanelFormDesignLayoutEditColumns } from '../../forms/design/panel-form-design-layout-edit-columns'
 import { PanelFormDesignLayoutEditRows } from '../../forms/design/panel-form-design-layout-edit-rows'

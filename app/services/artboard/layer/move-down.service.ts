@@ -1,11 +1,11 @@
 import { type User } from '@prisma/client'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import {
 	findFirstLayer,
 	updateLayerRemoveNodes,
 	type ILayer,
 	updateLayerNodes,
-} from '#app/models/layer.server'
+} from '#app/models/layer/layer.server'
 import { prisma } from '#app/utils/db.server'
 
 export const artboardLayerMoveDownService = async ({

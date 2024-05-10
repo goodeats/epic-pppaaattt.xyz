@@ -1,7 +1,7 @@
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { type IFill } from '#app/models/fill.server'
+import { type IFill } from '#app/models/design-type/fill/fill.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import { FillBasisTypeEnum, FillStyleTypeEnum } from '#app/schema/fill'
 import { PanelFormDesignFillEditBasis } from '../../forms/design/panel-form-design-fill-edit-basis'

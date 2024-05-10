@@ -3,8 +3,8 @@ import { type IDesignCreatedResponse } from '#app/models/design/design.create.se
 import {
 	type IDesignCreateOverrides,
 	type IDesignTypeCreateOverrides,
-} from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
+} from '#app/models/design/design.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { LayerCreateDesignStrategy } from '#app/strategies/design/create.strategy'
 import { LayerUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'

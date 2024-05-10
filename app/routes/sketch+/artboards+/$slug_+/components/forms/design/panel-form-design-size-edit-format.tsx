@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '#app/components/ui/select'
-import { type ISize } from '#app/models/size.server'
+import { type ISize } from '#app/models/design-type/size/size.server'
 import {
 	EditDesignSizeFormatSchema,
 	SizeFormatTypeEnum,

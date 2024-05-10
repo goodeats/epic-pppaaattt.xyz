@@ -2,7 +2,7 @@ import { type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { type IArtboardVersion } from '../artboard-version/artboard-version.server'
-import { type IDesign } from '../design.server'
+import { type IDesign } from '../design/design.server'
 
 export const findFirstVisibleArtboardVersionDesignByType = async ({
 	artboardVersionId,

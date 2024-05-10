@@ -4,13 +4,13 @@ import {
 	SidebarPanelRow,
 	SidebarPanelRowContainer,
 } from '#app/components/templates'
-import { type PickedArtboardType } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { PanelFormArtboardEditBackgroundColor } from '../../forms/artboard/panel-form-artboard-edit-background-color'
 
 export const PanelArtboardBackground = ({
 	artboard,
 }: {
-	artboard: PickedArtboardType
+	artboard: IArtboard
 }) => {
 	return (
 		<SidebarPanel>

@@ -6,7 +6,7 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { Icon } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { type PickedArtboardType } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { ArtboardWidthSchema } from '#app/schema/artboard'
 import { useIsPending } from '#app/utils/misc'
 import { ARTBOARD_INTENT } from '../../../intent'
@@ -15,7 +15,7 @@ import { type action } from '../../../route'
 export const PanelFormArtboardEditWidth = ({
 	artboard,
 }: {
-	artboard: Pick<PickedArtboardType, 'id' | 'width'>
+	artboard: Pick<IArtboard, 'id' | 'width'>
 }) => {
 	const fetcher = useFetcher<typeof action>()
 

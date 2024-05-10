@@ -1,12 +1,12 @@
 import { type User } from '@sentry/remix'
+import { type IDesign } from '#app/models/design/design.server'
+import { type IFill } from '#app/models/design-type/fill/fill.server'
 import {
 	type IDesignTypeFillUpdatedResponse,
 	updateDesignTypeFillBasis,
 	updateDesignTypeFillValue,
 	updateDesignTypeFillStyle,
-} from '#app/models/design-type/design-type.update.fill.server'
-import { type IDesign } from '#app/models/design.server'
-import { type IFill } from '#app/models/fill.server'
+} from '#app/models/design-type/fill/fill.update.server'
 
 export const updateDesignTypeFillValueService = async ({
 	userId,

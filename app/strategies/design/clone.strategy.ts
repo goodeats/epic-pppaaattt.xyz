@@ -4,7 +4,7 @@ import {
 	type IDesignTypeCreateOverrides,
 	type IDesignCreateOverrides,
 	type IDesignEntityId,
-} from '#app/models/design.server'
+} from '#app/models/design/design.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { artboardVersionDesignCreateService } from '#app/services/artboard/version/design/create.service'
 import { layerDesignCreateService } from '#app/services/layer/design/create.service'

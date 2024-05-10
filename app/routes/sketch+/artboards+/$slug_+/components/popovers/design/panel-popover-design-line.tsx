@@ -1,7 +1,7 @@
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { type ILine } from '#app/models/line.server'
+import { type ILine } from '#app/models/design-type/line/line.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import { PanelFormDesignLineEditBasis } from '../../forms/design/panel-form-design-line-edit-basis'
 import { PanelFormDesignLineEditFormat } from '../../forms/design/panel-form-design-line-edit-format'

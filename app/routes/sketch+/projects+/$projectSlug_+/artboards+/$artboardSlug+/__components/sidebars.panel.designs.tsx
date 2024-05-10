@@ -1,5 +1,5 @@
 import { DashboardEntityPanel } from '#app/components/templates/panel/dashboard-entity-panel'
-import { type IDesignWithType } from '#app/models/design.server'
+import { type IDesignWithType } from '#app/models/design/design.server'
 import { type designTypeEnum, type DesignParentType } from '#app/schema/design'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'

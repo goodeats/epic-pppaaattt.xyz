@@ -1,5 +1,5 @@
 import { type IconName } from '#app/components/ui/icon'
-import { type IDesignWithSize } from '#app/models/design.server'
+import { type IDesignWithSize } from '#app/models/design/design.server'
 import { EntityFormType, EntityParentIdType } from '#app/schema/entity'
 import {
 	EditDesignSizeBasisSchema,

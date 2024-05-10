@@ -3,7 +3,7 @@ import { type ILayerCreatedResponse } from '#app/models/layer/layer.create.serve
 import {
 	type ILayerCreateOverrides,
 	type ILayerEntityId,
-} from '#app/models/layer.server'
+} from '#app/models/layer/layer.server'
 import { artboardVersionLayerCreateService } from '#app/services/artboard/version/layer/create.service'
 
 export interface ICloneLayersStrategy {

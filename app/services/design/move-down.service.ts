@@ -1,5 +1,4 @@
 import { type User } from '@prisma/client'
-import { type IDesignUpdatedResponse } from '#app/models/design/design.update.server'
 import {
 	type IDesign,
 	findFirstDesign,
@@ -7,7 +6,8 @@ import {
 	updateDesignNodes,
 	type IDesignIdOrNull,
 	type IDesignEntityId,
-} from '#app/models/design.server'
+} from '#app/models/design/design.server'
+import { type IDesignUpdatedResponse } from '#app/models/design/design.update.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { type IUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { prisma } from '#app/utils/db.server'

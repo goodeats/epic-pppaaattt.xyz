@@ -1,7 +1,7 @@
 import { Sidebar } from '#app/components/layout'
 import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
-import { type ILayerWithDesigns } from '#app/models/layer.server'
+import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
 import { PanelArtboardVersion } from './sidebars.panel.artboard-version'
 import { PanelArtboardVersionLayers } from './sidebars.panel.artboard-version.layers'
 import { PanelLayer } from './sidebars.panel.layer'

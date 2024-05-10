@@ -3,9 +3,9 @@ import { NewArtboardVersionLayerSchema } from '#app/schema/layer-artboard-versio
 import { ValidateArtboardVersionParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
+import { type IArtboard } from '../artboard/artboard.server'
 import { type IArtboardVersion } from '../artboard-version/artboard-version.server'
-import { type IArtboard } from '../artboard.server'
-import { type ILayer } from '../layer.server'
+import { type ILayer } from '../layer/layer.server'
 import { type IUser } from '../user/user.server'
 
 export interface ILayerCreatedResponse {

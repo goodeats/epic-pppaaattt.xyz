@@ -1,7 +1,7 @@
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { type IRotate } from '#app/models/rotate.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import { PanelFormDesignRotateEditBasis } from '../../forms/design/panel-form-design-rotate-edit-basis'
 import { PanelPopover } from '../panel-popover'

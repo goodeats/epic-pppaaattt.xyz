@@ -2,7 +2,7 @@ import {
 	SidebarPanelRowValuesContainer,
 	SidebarPanelRowValuesDisabled,
 } from '#app/components/templates'
-import { type IFill } from '#app/models/fill.server'
+import { type IFill } from '#app/models/design-type/fill/fill.server'
 import { PanelFormDesignFillEditValue } from '../../../forms/design/panel-form-design-fill-edit-value'
 import { PanelPopoverDesignFill } from '../../../popovers/design/panel-popover-design-fill'
 

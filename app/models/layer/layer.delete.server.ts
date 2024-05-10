@@ -3,7 +3,7 @@ import { DeleteArtboardVersionLayerSchema } from '#app/schema/layer-artboard-ver
 import { ValidateArtboardVersionParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
-import { type ILayer } from '../layer.server'
+import { type ILayer } from '../layer/layer.server'
 
 export interface ILayerDeletedResponse {
 	success: boolean

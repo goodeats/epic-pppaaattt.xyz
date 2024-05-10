@@ -3,7 +3,7 @@ import { NewArtboardBranchSchema } from '#app/schema/artboard-branch'
 import { ValidateArtboardParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboard } from '../artboard.server'
+import { type IArtboard } from '../artboard/artboard.server'
 import { type IUser } from '../user/user.server'
 import {
 	type IArtboardBranch,

@@ -1,6 +1,6 @@
 import { SidebarPanelRowValuesContainer } from '#app/components/templates'
 import { Icon } from '#app/components/ui/icon'
-import { type ILine } from '#app/models/line.server'
+import { type ILine } from '#app/models/design-type/line/line.server'
 import {
 	LineFormatTypeEnum,
 	lineBasisIcon,

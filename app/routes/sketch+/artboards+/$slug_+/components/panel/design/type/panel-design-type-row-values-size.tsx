@@ -1,6 +1,6 @@
 import { SidebarPanelRowValuesContainer } from '#app/components/templates'
 import { Icon } from '#app/components/ui/icon'
-import { type ISize } from '#app/models/size.server'
+import { type ISize } from '#app/models/design-type/size/size.server'
 import {
 	SizeFormatTypeEnum,
 	sizeBasisIcon,

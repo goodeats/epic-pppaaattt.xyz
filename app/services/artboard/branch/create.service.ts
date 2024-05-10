@@ -1,4 +1,5 @@
 import { invariant } from '@epic-web/invariant'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import {
 	createArtboardBranch,
 	type IArtboardBranchCreatedResponse,
@@ -8,7 +9,6 @@ import { type IArtboardBranch } from '#app/models/artboard-branch/artboard-branc
 import { createArtboardVersion } from '#app/models/artboard-version/artboard-version.create.server'
 import { getArtboardVersion } from '#app/models/artboard-version/artboard-version.get.server'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
-import { type IArtboard } from '#app/models/artboard.server'
 import { type IUser } from '#app/models/user/user.server'
 import { ArtboardBranchDataCreateSchema } from '#app/schema/artboard-branch'
 import { ArtboardVersionDataCreateSchema } from '#app/schema/artboard-version'

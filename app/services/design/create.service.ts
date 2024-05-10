@@ -1,20 +1,20 @@
 import { type User } from '@prisma/client'
 import { type IDesignCreatedResponse } from '#app/models/design/design.create.server'
 import {
-	type IDesignCreateOverrides,
 	connectPrevAndNextDesigns,
 	type IDesignTypeCreateOverrides,
 	type IDesign,
 	type IDesignEntityId,
-} from '#app/models/design.server'
-import { createDesignFill } from '#app/models/fill.server'
-import { createDesignLayout } from '#app/models/layout.server'
-import { createDesignLine } from '#app/models/line.server'
-import { createDesignPalette } from '#app/models/palette.server'
-import { createDesignRotate } from '#app/models/rotate.server'
-import { createDesignSize } from '#app/models/size.server'
-import { createDesignStroke } from '#app/models/stroke.server'
-import { createDesignTemplate } from '#app/models/template.server'
+	type IDesignCreateOverrides,
+} from '#app/models/design/design.server'
+import { createDesignFill } from '#app/models/design-type/fill/fill.create.server'
+import { createDesignLayout } from '#app/models/design-type/layout/layout.create.server'
+import { createDesignLine } from '#app/models/design-type/line/line.create.server'
+import { createDesignPalette } from '#app/models/design-type/palette/palette.create.server'
+import { createDesignRotate } from '#app/models/design-type/rotate/rotate.create.server'
+import { createDesignSize } from '#app/models/design-type/size/size.create.server'
+import { createDesignStroke } from '#app/models/design-type/stroke/stroke.create.server'
+import { createDesignTemplate } from '#app/models/design-type/template/template.create.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { type ICreateDesignStrategy } from '#app/strategies/design/create.strategy'
 import { type IUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'

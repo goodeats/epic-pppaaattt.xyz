@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '#app/components/ui/select'
-import { type IStroke } from '#app/models/stroke.server'
+import { type IStroke } from '#app/models/design-type/stroke/stroke.server'
 import {
 	EditDesignStrokeBasisSchema,
 	StrokeBasisTypeEnum,

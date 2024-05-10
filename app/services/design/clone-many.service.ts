@@ -4,7 +4,7 @@ import {
 	type IDesignWithType,
 	type IDesignsByType,
 	findManyDesignsWithType,
-} from '#app/models/design.server'
+} from '#app/models/design/design.server'
 import {
 	DesignCloneSourceTypeEnum,
 	type designCloneSourceTypeEnum,

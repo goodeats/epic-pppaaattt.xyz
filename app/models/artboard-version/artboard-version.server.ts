@@ -1,7 +1,7 @@
 import { type ArtboardVersion } from '@prisma/client'
 import { type DateOrString } from '#app/definitions/prisma-helper'
-import { type IDesignWithType } from '../design.server'
-import { type ILayerWithDesigns } from '../layer.server'
+import { type IDesignWithType } from '../design/design.server'
+import { type ILayerWithDesigns } from '../layer/layer.server'
 
 // Omitting 'createdAt' and 'updatedAt' from the ArtboardVersion interface
 // prisma query returns a string for these fields

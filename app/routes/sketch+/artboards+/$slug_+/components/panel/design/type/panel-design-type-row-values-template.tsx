@@ -2,7 +2,7 @@ import {
 	SidebarPanelRowValuesContainer,
 	SidebarPanelRowValuesDisabled,
 } from '#app/components/templates'
-import { type ITemplate } from '#app/models/template.server'
+import { type ITemplate } from '#app/models/design-type/template/template.server'
 import { PanelPopoverDesignTemplate } from '../../../popovers/design/panel-popover-design-template'
 
 export const PanelDesignTypeRowValuesTemplate = ({

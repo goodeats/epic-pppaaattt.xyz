@@ -1,7 +1,7 @@
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { type IPalette } from '#app/models/palette.server'
+import { type IPalette } from '#app/models/design-type/palette/palette.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import { PanelPopover } from '../panel-popover'
 

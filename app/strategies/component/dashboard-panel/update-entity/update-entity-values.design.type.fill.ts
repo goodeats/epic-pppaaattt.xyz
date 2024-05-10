@@ -1,4 +1,4 @@
-import { type IDesignWithFill } from '#app/models/design.server'
+import { type IDesignWithFill } from '#app/models/design/design.server'
 import { EntityFormType, EntityParentIdType } from '#app/schema/entity'
 import {
 	EditDesignFillBasisSchema,

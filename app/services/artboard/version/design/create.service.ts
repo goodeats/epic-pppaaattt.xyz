@@ -4,7 +4,7 @@ import { type IDesignCreatedResponse } from '#app/models/design/design.create.se
 import {
 	type IDesignCreateOverrides,
 	type IDesignTypeCreateOverrides,
-} from '#app/models/design.server'
+} from '#app/models/design/design.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { ArtboardVersionCreateDesignStrategy } from '#app/strategies/design/create.strategy'
 import { ArtboardVersionUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'

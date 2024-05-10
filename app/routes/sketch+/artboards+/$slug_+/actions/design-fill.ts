@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type IFill } from '#app/models/fill.server'
+import { type IFill } from '#app/models/design-type/fill/fill.server'
 import {
 	EditDesignFillValueSchema,
 	EditDesignFillBasisSchema,

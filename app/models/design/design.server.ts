@@ -5,22 +5,27 @@ import {
 	type whereArgsType,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
+import { type IArtboard } from '../artboard/artboard.server'
 import {
 	type IArtboardVersionWithDesignsAndLayers,
 	type IArtboardVersion,
-} from './artboard-version/artboard-version.server'
-import { type IArtboard } from './artboard.server'
-import { type IFillCreateOverrides, type IFill } from './fill.server'
-import { type ILayoutCreateOverrides, type ILayout } from './layout.server'
-import { type ILineCreateOverrides, type ILine } from './line.server'
-import { type IPaletteCreateOverrides, type IPalette } from './palette.server'
-import { type IRotateCreateOverrides, type IRotate } from './rotate.server'
-import { type ISizeCreateOverrides, type ISize } from './size.server'
-import { type IStrokeCreateOverrides, type IStroke } from './stroke.server'
-import {
-	type ITemplateCreateOverrides,
-	type ITemplate,
-} from './template.server'
+} from '../artboard-version/artboard-version.server'
+import { type IFillCreateOverrides } from '../design-type/fill/fill.create.server'
+import { type IFill } from '../design-type/fill/fill.server'
+import { type ILayoutCreateOverrides } from '../design-type/layout/layout.create.server'
+import { type ILayout } from '../design-type/layout/layout.server'
+import { type ILineCreateOverrides } from '../design-type/line/line.create.server'
+import { type ILine } from '../design-type/line/line.server'
+import { type IPaletteCreateOverrides } from '../design-type/palette/palette.create.server'
+import { type IPalette } from '../design-type/palette/palette.server'
+import { type IRotateCreateOverrides } from '../design-type/rotate/rotate.create.server'
+import { type IRotate } from '../design-type/rotate/rotate.server'
+import { type ISizeCreateOverrides } from '../design-type/size/size.create.server'
+import { type ISize } from '../design-type/size/size.server'
+import { type IStrokeCreateOverrides } from '../design-type/stroke/stroke.create.server'
+import { type IStroke } from '../design-type/stroke/stroke.server'
+import { type ITemplateCreateOverrides } from '../design-type/template/template.create.server'
+import { type ITemplate } from '../design-type/template/template.server'
 
 export interface IDesign extends Design {}
 

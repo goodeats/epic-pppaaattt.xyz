@@ -1,4 +1,4 @@
-import { type IRotate } from '#app/models/rotate.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
 import {
 	RotateArrayBasisTypeEnum,
 	RotateBasisTypeEnum,

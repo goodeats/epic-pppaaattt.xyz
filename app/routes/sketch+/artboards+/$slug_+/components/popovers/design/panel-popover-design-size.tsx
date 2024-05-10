@@ -1,7 +1,7 @@
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
-import { type ISize } from '#app/models/size.server'
+import { type ISize } from '#app/models/design-type/size/size.server'
 import { DesignTypeEnum } from '#app/schema/design'
 import { PanelFormDesignSizeEditBasis } from '../../forms/design/panel-form-design-size-edit-basis'
 import { PanelFormDesignSizeEditFormat } from '../../forms/design/panel-form-design-size-edit-format'

@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '#app/components/ui/select'
-import { type ILine } from '#app/models/line.server'
+import { type ILine } from '#app/models/design-type/line/line.server'
 import {
 	EditDesignLineFormatSchema,
 	LineFormatTypeEnum,

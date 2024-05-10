@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type IStroke } from '#app/models/stroke.server'
+import { type IStroke } from '#app/models/design-type/stroke/stroke.server'
 import {
 	EditDesignStrokeValueSchema,
 	EditDesignStrokeBasisSchema,

@@ -5,19 +5,19 @@ import {
 } from '#app/definitions/artboard-generator'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
 import {
+	findManyDesignsWithType,
+	type IDesignWithType,
+} from '#app/models/design/design.server'
+import {
 	getArtboardVersionVisiblePalettes,
 	getArtboardVersionVisibleRotates,
-} from '#app/models/design-artboard-version.server'
+} from '#app/models/design-artboard-version/design-artboard-version.server'
 import {
 	getLayerVisiblePalettes,
 	getLayerVisibleRotates,
-} from '#app/models/design-layer.server'
-import {
-	findManyDesignsWithType,
-	type IDesignWithType,
-} from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
-import { type IRotate } from '#app/models/rotate.server'
+} from '#app/models/design-layer/design-layer.server'
+import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
 import {
 	filterSelectedDesignTypes,

@@ -7,8 +7,8 @@ import {
 import { ValidateDesignParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { findFirstRotateInstance } from '#app/utils/prisma-extensions-rotate'
-import { type IDesign } from '../design.server'
-import { type IRotate } from '../rotate.server'
+import { type IDesign } from '../../design/design.server'
+import { type IRotate } from './rotate.server'
 
 export interface IDesignTypeRotateUpdatedResponse {
 	success: boolean

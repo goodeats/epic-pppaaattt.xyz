@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '#app/components/ui/select'
-import { type ILayout } from '#app/models/layout.server'
+import { type ILayout } from '#app/models/design-type/layout/layout.server'
 import { EditDesignLayoutStyleSchema } from '#app/schema/layout'
 import { useIsPending } from '#app/utils/misc'
 import { DESIGN_LAYOUT_INTENT } from '../../../intent'

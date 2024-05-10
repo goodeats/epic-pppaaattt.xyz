@@ -1,12 +1,12 @@
 import { parse } from '@conform-to/zod'
 import { type z } from 'zod'
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { findArtboardByIdAndOwner } from '#app/models/artboard.server'
+import { getArtboard } from '#app/models/artboard/artboard.get.server'
 import {
 	findDesignByIdAndOwner,
 	findFirstDesign,
-} from '#app/models/design.server'
-import { findLayerByIdAndOwner } from '#app/models/layer.server'
+} from '#app/models/design/design.server'
+import { findLayerByIdAndOwner } from '#app/models/layer/layer.server'
 import { addNotFoundIssue } from '#app/utils/conform-utils'
 
 export const parseArtboardSubmission = async ({
@@ -17,7 +17,7 @@ export const parseArtboardSubmission = async ({
 	return await parse(formData, {
 		schema: schema.superRefine(async (data, ctx) => {
 			const { id } = data
-			const artboard = await findArtboardByIdAndOwner({ id, ownerId: userId })
+			const artboard = await getArtboard({ where: { id, ownerId: userId } })
 			if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
 		}),
 		async: true,
@@ -32,9 +32,11 @@ export const parseArtboardDesignSubmission = async ({
 	return await parse(formData, {
 		schema: schema.superRefine(async (data, ctx) => {
 			const { artboardId } = data
-			const artboard = await findArtboardByIdAndOwner({
-				id: artboardId,
-				ownerId: userId,
+			const artboard = await getArtboard({
+				where: {
+					id: artboardId,
+					ownerId: userId,
+				},
 			})
 			if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
 		}),
@@ -51,9 +53,11 @@ export const parseArtboardDesignUpdateSubmission = async ({
 		schema: schema.superRefine(async (data, ctx) => {
 			const { artboardId, id } = data
 
-			const artboard = await findArtboardByIdAndOwner({
-				id: artboardId,
-				ownerId: userId,
+			const artboard = await getArtboard({
+				where: {
+					id: artboardId,
+					ownerId: userId,
+				},
 			})
 			if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
 
@@ -79,9 +83,11 @@ export const parseArtboardDesignTypeSubmission = async ({
 		schema: schema.superRefine(async (data, ctx) => {
 			const { artboardId, designId } = data
 
-			const artboard = await findArtboardByIdAndOwner({
-				id: artboardId,
-				ownerId: userId,
+			const artboard = await getArtboard({
+				where: {
+					id: artboardId,
+					ownerId: userId,
+				},
 			})
 			if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
 
@@ -103,9 +109,11 @@ export const parseArtboardLayerSubmission = async ({
 	return await parse(formData, {
 		schema: schema.superRefine(async (data, ctx) => {
 			const { artboardId } = data
-			const artboard = await findArtboardByIdAndOwner({
-				id: artboardId,
-				ownerId: userId,
+			const artboard = await getArtboard({
+				where: {
+					id: artboardId,
+					ownerId: userId,
+				},
 			})
 			if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
 		}),
@@ -137,9 +145,11 @@ export const parseArtboardLayerUpdateSubmission = async ({
 		schema: schema.superRefine(async (data, ctx) => {
 			const { artboardId, layerId } = data
 
-			const artboard = await findArtboardByIdAndOwner({
-				id: artboardId,
-				ownerId: userId,
+			const artboard = await getArtboard({
+				where: {
+					id: artboardId,
+					ownerId: userId,
+				},
 			})
 			if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
 

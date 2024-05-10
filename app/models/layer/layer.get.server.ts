@@ -1,6 +1,6 @@
 import { type whereArgsType } from '#app/schema/layer'
 import { prisma } from '#app/utils/db.server'
-import { type ILayer, type ILayerWithDesigns } from '../layer.server'
+import { type ILayer, type ILayerWithDesigns } from '../layer/layer.server'
 
 export const getLayersWithDesigns = async ({
 	where,

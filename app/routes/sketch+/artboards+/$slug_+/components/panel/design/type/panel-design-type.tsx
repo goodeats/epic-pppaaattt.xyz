@@ -1,10 +1,10 @@
 import { SidebarPanel } from '#app/components/templates'
-import { type IArtboard } from '#app/models/artboard.server'
+import { type IArtboard } from '#app/models/artboard/artboard.server'
 import {
 	type IDesignWithType,
 	type IDesignWithLayout,
-} from '#app/models/design.server'
-import { type ILayer } from '#app/models/layer.server'
+} from '#app/models/design/design.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { NewArtboardDesignSchema } from '#app/schema/design-artboard'
 import { NewLayerDesignSchema } from '#app/schema/design-layer'
