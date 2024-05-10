@@ -11,7 +11,7 @@ import {
 import {
 	getLayerVisiblePalettes,
 	getLayerVisibleRotates,
-} from '#app/models/design-layer.server'
+} from '#app/models/design-layer/design-layer.server'
 import {
 	findManyDesignsWithType,
 	type IDesignWithType,

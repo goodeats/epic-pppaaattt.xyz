@@ -14,7 +14,7 @@ import { findFirstVisibleLayerDesignByType } from '#app/models/design-layer/desi
 import {
 	deselectLayerSelectedDesign,
 	updateLayerSelectedDesign,
-} from '#app/models/design-layer.server'
+} from '#app/models/design-layer/design-layer.server'
 import {
 	type IDesign,
 	type IDesignEntityId,

@@ -9,10 +9,10 @@ import {
 	type IDesignWithPalette,
 	type IDesign,
 	type IDesignWithRotate,
-} from './design.server'
-import { type ILayer } from './layer.server'
-import { type IPalette } from './palette.server'
-import { type IRotate } from './rotate.server'
+} from '../design.server'
+import { type ILayer } from '../layer.server'
+import { type IPalette } from '../palette.server'
+import { type IRotate } from '../rotate.server'
 
 export interface IDesignWithLayer extends IDesign {
 	layer: ILayer

@@ -14,6 +14,8 @@ import {
 import { type IPalette } from './palette.server'
 import { type IRotate } from './rotate.server'
 
+// this file may no longer be necessary
+
 export interface IDesignWithArtboard extends IDesign {
 	artboard: IArtboard
 }
