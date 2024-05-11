@@ -6,6 +6,7 @@ import { useHydrated } from 'remix-utils/use-hydrated'
 import { type z } from 'zod'
 import { Icon, type IconName } from '#app/components/ui/icon'
 import { StatusButton } from '#app/components/ui/status-button'
+import { actions } from '#app/routes/resources+/api.v1+/routes.server'
 import {
 	type entityParentIdTypeEnum,
 	type IEntityParentId,
@@ -13,11 +14,7 @@ import {
 	type IEntityType,
 } from '#app/schema/entity'
 import { useIsPending } from '#app/utils/misc'
-import {
-	type RoutePath,
-	getLoaderType,
-	getActionType,
-} from '#app/utils/routes.utils'
+import { type RoutePath } from '#app/utils/routes.const'
 
 export const FormFetcherButton = ({
 	entityId,
@@ -50,9 +47,8 @@ export const FormFetcherButton = ({
 		| null
 		| undefined
 }) => {
-	const loader = getLoaderType(route)
-	const action = getActionType(route)
-	const fetcher = useFetcher<typeof loader>()
+	const action = actions[route]
+	const fetcher = useFetcher<typeof action>()
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()

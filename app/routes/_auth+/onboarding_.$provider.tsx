@@ -1,6 +1,5 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
-import { invariant } from '@epic-web/invariant'
 import {
 	json,
 	redirect,
@@ -33,7 +32,6 @@ import { authSessionStorage } from '#app/utils/session.server.ts'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { NameSchema, UsernameSchema } from '#app/utils/user-validation.ts'
 import { verifySessionStorage } from '#app/utils/verification.server.ts'
-import { type VerifyFunctionArgs } from './verify.tsx'
 
 export const onboardingEmailSessionKey = 'onboardingEmail'
 export const providerIdKey = 'providerId'
@@ -169,17 +167,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 		{ title: 'Welcome', description: 'Thanks for signing up!' },
 		{ headers },
 	)
-}
-
-export async function handleVerification({ submission }: VerifyFunctionArgs) {
-	invariant(submission.value, 'submission.value should be defined by now')
-	const verifySession = await verifySessionStorage.getSession()
-	verifySession.set(onboardingEmailSessionKey, submission.value.target)
-	return redirect('/onboarding', {
-		headers: {
-			'set-cookie': await verifySessionStorage.commitSession(verifySession),
-		},
-	})
 }
 
 export const meta: MetaFunction = () => {

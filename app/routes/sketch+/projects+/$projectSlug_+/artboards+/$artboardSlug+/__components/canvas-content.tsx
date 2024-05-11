@@ -61,6 +61,8 @@ export const CanvasContent = ({
 		)
 	}
 
+	return <p>yo</p>
+
 	return (
 		<ReactFlow
 			nodes={nodes}

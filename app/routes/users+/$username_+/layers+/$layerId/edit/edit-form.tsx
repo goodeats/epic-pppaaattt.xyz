@@ -1,12 +1,7 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
 import { type Layer } from '@prisma/client'
-import {
-	json,
-	redirect,
-	type ActionFunctionArgs,
-	type SerializeFrom,
-} from '@remix-run/node'
+import { type SerializeFrom } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
@@ -21,87 +16,19 @@ import {
 } from '#app/components/shared'
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
-import { requireUserId } from '#app/utils/auth.server.ts'
-import { validateCSRF } from '#app/utils/csrf.server.ts'
-import { prisma } from '#app/utils/db.server.ts'
-import { stringToSlug, useIsPending } from '#app/utils/misc.tsx'
-import { capitalizeFirstLetter } from '#app/utils/string-formatting'
+import { useIsPending } from '#app/utils/misc.tsx'
+import { type action } from './edit-form.server'
 
-const entityName = 'layer'
 const titleMinLength = 1
 const titleMaxLength = 100
 const descriptionMinLength = 1
 const descriptionMaxLength = 10000
 
-const LayerEditorSchema = z.object({
+export const LayerEditorSchema = z.object({
 	id: z.string().optional(),
 	name: z.string().min(titleMinLength).max(titleMaxLength),
 	description: z.string().min(descriptionMinLength).max(descriptionMaxLength),
 })
-
-export async function action({ request }: ActionFunctionArgs) {
-	const userId = await requireUserId(request)
-
-	const formData = await request.formData()
-	await validateCSRF(formData, request.headers)
-
-	const submission = await parse(formData, {
-		schema: LayerEditorSchema.superRefine(async (data, ctx) => {
-			if (!data.id) return
-
-			const layer = await prisma.layer.findUnique({
-				select: { id: true },
-				where: { id: data.id, ownerId: userId },
-			})
-			if (!layer) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: `${capitalizeFirstLetter(entityName)} not found`,
-				})
-			}
-
-			const slug = stringToSlug(data.name)
-			const entityWithSlug = await prisma.layer.findFirst({
-				select: { id: true },
-				where: { slug, ownerId: userId },
-			})
-			if (entityWithSlug && entityWithSlug.id !== data.id) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: `${capitalizeFirstLetter(
-						entityName,
-					)} with that name already exists`,
-				})
-			}
-		}),
-		async: true,
-	})
-
-	if (submission.intent !== 'submit') {
-		return json({ submission } as const)
-	}
-
-	if (!submission.value) {
-		return json({ submission } as const, { status: 400 })
-	}
-
-	const { id: layerId, name, description } = submission.value
-	const slug = stringToSlug(name)
-
-	const updatedEntity = await prisma.layer.update({
-		select: { slug: true, owner: { select: { username: true } } },
-		where: { id: layerId },
-		data: {
-			name,
-			description,
-			slug,
-		},
-	})
-
-	return redirect(
-		`/users/${updatedEntity.owner.username}/${entityName}s/${updatedEntity.slug}`,
-	)
-}
 
 export function EditForm({
 	layer,
@@ -112,7 +39,7 @@ export function EditForm({
 	const isPending = useIsPending()
 
 	const [form, fields] = useForm({
-		id: `edit-${entityName}-form`,
+		id: `edit-layer-form`,
 		constraint: getFieldsetConstraint(LayerEditorSchema),
 		lastSubmission: actionData?.submission,
 		onValidate({ formData }) {

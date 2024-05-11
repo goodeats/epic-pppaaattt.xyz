@@ -1,12 +1,7 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
 import { type Artboard } from '@prisma/client'
-import {
-	json,
-	redirect,
-	type ActionFunctionArgs,
-	type SerializeFrom,
-} from '@remix-run/node'
+import { type SerializeFrom } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
@@ -26,21 +21,18 @@ import {
 } from '#app/components/shared'
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
-import { requireUserId } from '#app/utils/auth.server.ts'
 import {
 	formatSringsToHex,
 	validateStringsAreHexcodes,
 } from '#app/utils/colors'
-import { validateCSRF } from '#app/utils/csrf.server.ts'
-import { prisma } from '#app/utils/db.server.ts'
-import { stringToSlug, useIsPending } from '#app/utils/misc.tsx'
+import { useIsPending } from '#app/utils/misc.tsx'
 import {
 	capitalize,
 	removeWhitespace,
 	trimSpacesInBetween,
 } from '#app/utils/string-formatting'
+import { type action } from './edit-form.server'
 
-const entityName = 'Artboard'
 const titleMinLength = 1
 const titleMaxLength = 100
 const descriptionMinLength = 1
@@ -50,7 +42,7 @@ const widthMaxLength = 10000
 const heightMinLength = 1
 const heightMaxLength = 10000
 
-const ArtboardEditorSchema = z.object({
+export const ArtboardEditorSchema = z.object({
 	id: z.string().optional(),
 	name: z.string().min(titleMinLength).max(titleMaxLength),
 	description: z.string().min(descriptionMinLength).max(descriptionMaxLength),
@@ -71,80 +63,6 @@ const ArtboardEditorSchema = z.object({
 			message: 'Values must be valid hexcodes',
 		}),
 })
-
-export async function action({ request }: ActionFunctionArgs) {
-	const userId = await requireUserId(request)
-
-	const formData = await request.formData()
-	await validateCSRF(formData, request.headers)
-
-	const submission = await parse(formData, {
-		schema: ArtboardEditorSchema.superRefine(async (data, ctx) => {
-			if (!data.id) return
-
-			const artboard = await prisma.artboard.findUnique({
-				select: { id: true },
-				where: { id: data.id, ownerId: userId },
-			})
-			if (!artboard) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: `${entityName} not found`,
-				})
-			}
-
-			const slug = stringToSlug(data.name)
-			const entityWithSlug = await prisma.artboard.findFirst({
-				select: { id: true },
-				where: { slug, ownerId: userId },
-			})
-			if (entityWithSlug && entityWithSlug.id !== data.id) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: `${entityName} with that name already exists`,
-				})
-			}
-		}),
-		async: true,
-	})
-
-	if (submission.intent !== 'submit') {
-		return json({ submission } as const)
-	}
-
-	if (!submission.value) {
-		return json({ submission } as const, { status: 400 })
-	}
-
-	const {
-		id: artboardId,
-		name,
-		description,
-		isVisible,
-		width,
-		height,
-		backgroundColor,
-	} = submission.value
-	const slug = stringToSlug(name)
-
-	const updatedArtboard = await prisma.artboard.update({
-		select: { slug: true, owner: { select: { username: true } } },
-		where: { id: artboardId },
-		data: {
-			name,
-			description,
-			isVisible: isVisible ?? false,
-			slug,
-			width,
-			height,
-			backgroundColor: backgroundColor[0],
-		},
-	})
-
-	return redirect(
-		`/users/${updatedArtboard.owner.username}/artboards/${updatedArtboard.slug}`,
-	)
-}
 
 export function EditForm({
 	artboard,

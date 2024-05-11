@@ -10,7 +10,7 @@ import {
 } from '#app/schema/entity'
 import { type NewLayerSchemaType } from '#app/schema/layer'
 import { NewArtboardVersionLayerSchema } from '#app/schema/layer-artboard-version'
-import { Routes, type RoutePath } from '#app/utils/routes.utils'
+import { Routes, type RoutePath } from '#app/utils/routes.const'
 
 export interface IDashboardPanelCreateEntityStrategy {
 	route: RoutePath

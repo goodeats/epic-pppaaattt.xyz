@@ -4,7 +4,7 @@ import {
 	EditDesignTemplateStyleSchema,
 	TemplateStyleTypeEnum,
 } from '#app/schema/template'
-import { Routes } from '#app/utils/routes.utils'
+import { Routes } from '#app/utils/routes.const'
 import { transformEntityEnumValueForSelect } from '#app/utils/string-formatting'
 import {
 	type IPanelEntityFormArgsOptionalMultiple,

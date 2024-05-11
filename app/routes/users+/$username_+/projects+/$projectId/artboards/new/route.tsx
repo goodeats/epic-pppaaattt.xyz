@@ -3,7 +3,8 @@ import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { type BreadcrumbHandle } from '#app/utils/breadcrumbs.tsx'
 import { prisma } from '#app/utils/db.server.ts'
-import { NewArtboardForm, action } from './new-artboard-form.tsx'
+import { action } from './new-artboard-form.server.ts'
+import { NewArtboardForm } from './new-artboard-form.tsx'
 
 export const handle: BreadcrumbHandle = {
 	breadcrumb: () => 'New',

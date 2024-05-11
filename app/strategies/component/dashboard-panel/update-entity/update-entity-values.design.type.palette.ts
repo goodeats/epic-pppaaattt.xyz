@@ -1,7 +1,7 @@
 import { type IDesignWithPalette } from '#app/models/design/design.server'
 import { EntityFormType, EntityParentIdType } from '#app/schema/entity'
 import { EditDesignPaletteValueSchema } from '#app/schema/palette'
-import { Routes } from '#app/utils/routes.utils'
+import { Routes } from '#app/utils/routes.const'
 import {
 	type IPanelEntityFormArgsOptionalMultiple,
 	type IDashboardPanelUpdateEntityValuesStrategy,

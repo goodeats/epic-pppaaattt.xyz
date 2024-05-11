@@ -17,13 +17,14 @@ import {
 } from '#app/components/ui/dialog'
 import { type IconName } from '#app/components/ui/icon'
 import { StatusButton } from '#app/components/ui/status-button'
+import { actions } from '#app/routes/resources+/api.v1+/routes.server'
 import {
 	type IEntityId,
 	type IEntityParentId,
 	type entityParentIdTypeEnum,
 } from '#app/schema/entity'
 import { useIsPending } from '#app/utils/misc'
-import { getActionType, type RoutePath } from '#app/utils/routes.utils'
+import { type RoutePath } from '#app/utils/routes.const'
 
 // 3 things:
 // friendly reminder to change the form id when switching a fetcher.form icon to dialog
@@ -57,7 +58,7 @@ export const DialogFormVersionCreate = ({
 }) => {
 	const [open, setOpen] = useState(false)
 
-	const action = getActionType(route)
+	const action = actions[route]
 	const fetcher = useFetcher<typeof action>()
 	const isPending = useIsPending()
 	const params = useParams()

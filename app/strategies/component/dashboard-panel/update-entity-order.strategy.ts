@@ -10,7 +10,7 @@ import {
 } from '#app/schema/entity'
 import { type ReorderLayerSchemaType } from '#app/schema/layer'
 import { ReorderArtboardVersionLayerSchema } from '#app/schema/layer-artboard-version'
-import { Routes, type RoutePath } from '#app/utils/routes.utils'
+import { Routes, type RoutePath } from '#app/utils/routes.const'
 
 export interface IDashboardPanelUpdateEntityOrderStrategy {
 	route: RoutePath

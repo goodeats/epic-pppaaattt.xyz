@@ -7,7 +7,7 @@ import {
 	EditDesignLayoutStyleSchema,
 	LayoutStyleTypeEnum,
 } from '#app/schema/layout'
-import { Routes } from '#app/utils/routes.utils'
+import { Routes } from '#app/utils/routes.const'
 import { transformEntityEnumValueForSelect } from '#app/utils/string-formatting'
 import {
 	type IPanelEntityFormArgsOptionalMultiple,

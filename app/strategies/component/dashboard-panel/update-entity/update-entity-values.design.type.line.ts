@@ -12,7 +12,7 @@ import {
 	lineFormatIcon,
 	type lineFormatTypeEnum,
 } from '#app/schema/line'
-import { Routes } from '#app/utils/routes.utils'
+import { Routes } from '#app/utils/routes.const'
 import { transformEntityEnumValueForSelect } from '#app/utils/string-formatting'
 import {
 	type IPanelEntityFormArgsOptionalMultiple,

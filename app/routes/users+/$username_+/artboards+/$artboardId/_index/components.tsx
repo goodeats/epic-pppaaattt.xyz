@@ -8,8 +8,7 @@ import {
 	FooterLinkButton,
 	FooterTimestamp,
 } from '#app/components/shared'
-import { userHasPermission } from '#app/utils/permissions'
-import { useOptionalUser } from '#app/utils/user'
+import { userHasPermission, useOptionalUser } from '#app/utils/user'
 import { DeletePermission } from './delete-artboard-form'
 import { type loader } from './route'
 

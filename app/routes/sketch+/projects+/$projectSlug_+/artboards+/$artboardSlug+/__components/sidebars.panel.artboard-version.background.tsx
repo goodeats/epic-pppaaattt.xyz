@@ -7,7 +7,7 @@ import {
 import { FormFetcherHex } from '#app/components/templates/form/fetcher/hex'
 import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
 import { ArtboardVersionBackgroundSchema } from '#app/schema/artboard-version'
-import { Routes } from '#app/utils/routes.utils'
+import { Routes } from '#app/utils/routes.const'
 
 export const PanelArtboardVersionBackground = ({
 	version,

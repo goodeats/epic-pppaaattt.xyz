@@ -12,7 +12,7 @@ import {
 } from '#app/schema/entity'
 import { type DeleteLayerSchemaType } from '#app/schema/layer'
 import { DeleteArtboardVersionLayerSchema } from '#app/schema/layer-artboard-version'
-import { Routes, type RoutePath } from '#app/utils/routes.utils'
+import { Routes, type RoutePath } from '#app/utils/routes.const'
 
 export interface IDashboardPanelDeleteEntityStrategy {
 	actionType: entityActionTypeEnum

@@ -7,7 +7,7 @@ import {
 } from '#app/schema/entity'
 import { type SelectLayerSchemaType } from '#app/schema/layer'
 import { SelectArtboardVersionLayerSchema } from '#app/schema/layer-artboard-version'
-import { Routes, type RoutePath } from '#app/utils/routes.utils'
+import { Routes, type RoutePath } from '#app/utils/routes.const'
 
 export interface IDashboardPanelSelectEntityStrategy {
 	actionType: entityActionTypeEnum

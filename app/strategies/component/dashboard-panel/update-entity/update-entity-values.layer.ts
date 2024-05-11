@@ -6,7 +6,7 @@ import {
 	EditLayerNameSchema,
 } from '#app/schema/layer'
 import { DeleteArtboardVersionLayerSchema } from '#app/schema/layer-artboard-version'
-import { Routes } from '#app/utils/routes.utils'
+import { Routes } from '#app/utils/routes.const'
 import {
 	type IPanelEntityFormArgsOptionalMultiple,
 	type IDashboardPanelUpdateEntityValuesStrategy,

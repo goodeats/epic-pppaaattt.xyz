@@ -9,7 +9,7 @@ import {
 	type IEntityEnumSelectOption,
 } from '#app/schema/entity'
 import { type defaultValueStringOrNumber } from '#app/schema/zod-helpers'
-import { type RoutePath } from '#app/utils/routes.utils'
+import { type RoutePath } from '#app/utils/routes.const'
 
 export interface IPanelEntityFormArgs {
 	route: RoutePath

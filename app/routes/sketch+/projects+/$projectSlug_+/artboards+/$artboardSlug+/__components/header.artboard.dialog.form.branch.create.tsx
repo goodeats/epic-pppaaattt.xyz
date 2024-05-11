@@ -20,8 +20,9 @@ import { StatusButton } from '#app/components/ui/status-button'
 import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type IArtboardBranch } from '#app/models/artboard-branch/artboard-branch.server'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import { actions } from '#app/routes/resources+/api.v1+/routes.server'
 import { stringToSlug, useIsPending } from '#app/utils/misc'
-import { getActionType, type RoutePath } from '#app/utils/routes.utils'
+import { type RoutePath } from '#app/utils/routes.const'
 
 // planning to revisit design system so not as much effort to make dialog dynamic like fetcher forms
 
@@ -52,7 +53,7 @@ export const DialogFormBranchCreate = ({
 }) => {
 	const [open, setOpen] = useState(false)
 
-	const action = getActionType(route)
+	const action = actions[route]
 	const fetcher = useFetcher<typeof action>()
 	const isPending = useIsPending()
 	const navigate = useNavigate()

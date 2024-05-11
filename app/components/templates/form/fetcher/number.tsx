@@ -8,6 +8,7 @@ import { type z } from 'zod'
 import { Icon, type IconName } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
 import { Label } from '#app/components/ui/label'
+import { actions } from '#app/routes/resources+/api.v1+/routes.server'
 import {
 	type IEntityId,
 	type IEntityParentId,
@@ -15,11 +16,7 @@ import {
 } from '#app/schema/entity'
 import { type defaultValueNumber } from '#app/schema/zod-helpers'
 import { useDebounce, useIsPending } from '#app/utils/misc'
-import {
-	type RoutePath,
-	getLoaderType,
-	getActionType,
-} from '#app/utils/routes.utils'
+import { type RoutePath } from '#app/utils/routes.const'
 
 export const FormFetcherNumber = ({
 	entityId,
@@ -42,9 +39,8 @@ export const FormFetcherNumber = ({
 	icon?: IconName
 	label?: string
 }) => {
-	const loader = getLoaderType(route)
-	const action = getActionType(route)
-	const fetcher = useFetcher<typeof loader>()
+	const action = actions[route]
+	const fetcher = useFetcher<typeof action>()
 	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()

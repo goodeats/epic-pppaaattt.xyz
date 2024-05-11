@@ -10,7 +10,7 @@ import {
 	ArtboardVersionHeightSchema,
 	ArtboardVersionWidthSchema,
 } from '#app/schema/artboard-version'
-import { Routes } from '#app/utils/routes.utils'
+import { Routes } from '#app/utils/routes.const'
 
 export const PanelArtboardVersionFrame = ({
 	version,

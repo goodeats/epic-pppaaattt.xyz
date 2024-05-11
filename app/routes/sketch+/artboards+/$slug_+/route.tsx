@@ -18,7 +18,7 @@ import {
 	getLayerDesigns,
 	getLayers,
 	getOwner,
-} from './queries'
+} from './queries.server.ts'
 
 export { action }
 
