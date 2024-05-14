@@ -77,6 +77,27 @@ export type IEntityParentType =
 
 export type IEntityParentId = IDesignWithType['id'] | IArtboardVersion['id']
 
+export const EntityType = {
+	DESIGN: 'design',
+	ARTBOARD: 'artboard',
+	ARTBOARD_BRANCH: 'artboardBranch',
+	ARTBOARD_VERSION: 'artboardVersion',
+	LAYER: 'layer',
+	// add more parent id types here
+} as const
+export type entityTypeEnum = ObjectValues<typeof EntityType>
+
+export const EntityParentType = {
+	PARENT: 'parent',
+	DESIGN: 'design',
+	ARTBOARD: 'artboard',
+	ARTBOARD_BRANCH: 'artboardBranch',
+	ARTBOARD_VERSION: 'artboardVersion',
+	LAYER: 'layer',
+	// add more parent types here
+} as const
+export type entityParentTypeEnum = ObjectValues<typeof EntityParentType>
+
 export const EntityParentIdType = {
 	PARENT_ID: 'parentId',
 	DESIGN_ID: 'designId',
