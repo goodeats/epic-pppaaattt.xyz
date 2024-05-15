@@ -1,9 +1,12 @@
+import { memo, useCallback } from 'react'
 import { ArtboardVersionDesignCreate } from '#app/routes/resources+/api.v1+/artboard-version.design.create'
 import { ArtboardVersionLayerCreate } from '#app/routes/resources+/api.v1+/artboard-version.layer.create'
 import { type designTypeEnum } from '#app/schema/design'
 import {
 	EntityParentType,
+	type entityParentTypeEnum,
 	EntityType,
+	type entityTypeEnum,
 	type IEntityParentType,
 	type IEntityType,
 } from '#app/schema/entity'
@@ -11,42 +14,21 @@ import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/compon
 import { capitalize } from '#app/utils/string-formatting'
 import { SidebarPanelHeader, SidebarPanelRowActionsContainer } from '..'
 
-export const PanelEntityHeader = ({
-	type,
-	parent,
-	strategyEntityNew,
-}: {
-	type: IEntityType
-	parent: IEntityParentType
-	strategyEntityNew: IDashboardPanelCreateEntityStrategy
-}) => {
-	const { entityType, parentType } = strategyEntityNew
+// the create forms ultimately lead to resource routes with fetchers and actions
+// this causes unnecessary rerenders
+// enter useCallback and memo
+// the create forms are now memoized and only rerendered when the parent type or entity type changes (shouldn't happen)
+// this also helps with readability and maintainability when more create forms are added
 
-	const CreateEntityForm = () => {
-		switch (parentType) {
-			case EntityParentType.ARTBOARD_VERSION:
-				return <ArtboardVersionCreateChildEntityForm />
-			case EntityParentType.LAYER:
-				return <LayerCreateChildEntityForm />
-			default:
-				console.log('unknown parent type', parentType)
-				return null
-			// return (
-			// 	<FormFetcherIcon
-			// 		type={type}
-			// 		parentTypeId={strategyEntityNew.parentTypeId}
-			// 		parentId={parent.id}
-			// 		route={strategyEntityNew.route}
-			// 		formId={strategyEntityNew.formId}
-			// 		schema={strategyEntityNew.schema}
-			// 		icon="plus"
-			// 		iconText={strategyEntityNew.iconText}
-			// 	/>
-			// )
-		}
-	}
+interface CreateChildEntityFormProps {
+	entityType: entityTypeEnum
+	parentType?: entityParentTypeEnum
+	type?: IEntityType
+	parent: { id: string }
+}
 
-	const ArtboardVersionCreateChildEntityForm = () => {
+const ArtboardVersionCreateChildEntityForm = memo(
+	({ entityType, type, parent }: CreateChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
 				return (
@@ -61,9 +43,13 @@ export const PanelEntityHeader = ({
 				console.log('unknown artboard version entity type', entityType)
 				return null
 		}
-	}
+	},
+)
+ArtboardVersionCreateChildEntityForm.displayName =
+	'ArtboardVersionCreateChildEntityForm'
 
-	const LayerCreateChildEntityForm = () => {
+const LayerCreateChildEntityForm = memo(
+	({ entityType, parent }: CreateChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
 				return 'layer design'
@@ -71,12 +57,60 @@ export const PanelEntityHeader = ({
 				console.log('unknown layer entity type', entityType)
 				return null
 		}
-	}
+	},
+)
+LayerCreateChildEntityForm.displayName = 'LayerCreateChildEntityForm'
+
+const CreateEntityForm = memo(
+	({ parentType, entityType, type, parent }: CreateChildEntityFormProps) => {
+		switch (parentType) {
+			case EntityParentType.ARTBOARD_VERSION:
+				return (
+					<ArtboardVersionCreateChildEntityForm
+						entityType={entityType}
+						type={type}
+						parent={parent}
+					/>
+				)
+			case EntityParentType.LAYER:
+				return (
+					<LayerCreateChildEntityForm entityType={entityType} parent={parent} />
+				)
+			default:
+				console.log('unknown parent type', parentType)
+				return null
+		}
+	},
+)
+CreateEntityForm.displayName = 'CreateEntityForm'
+
+export const PanelEntityHeader = ({
+	type,
+	parent,
+	strategyEntityNew,
+}: {
+	type: IEntityType
+	parent: IEntityParentType
+	strategyEntityNew: IDashboardPanelCreateEntityStrategy
+}) => {
+	const { entityType, parentType } = strategyEntityNew
+
+	const createEntityForm = useCallback(
+		() => (
+			<CreateEntityForm
+				parentType={parentType}
+				entityType={entityType}
+				type={type}
+				parent={parent}
+			/>
+		),
+		[parentType, entityType, type, parent],
+	)
 
 	return (
 		<SidebarPanelHeader title={capitalize(type)}>
 			<SidebarPanelRowActionsContainer>
-				<CreateEntityForm />
+				{createEntityForm()}
 			</SidebarPanelRowActionsContainer>
 		</SidebarPanelHeader>
 	)

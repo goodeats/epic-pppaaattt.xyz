@@ -30,8 +30,8 @@ export const ArtboardHeader = () => {
 	const onLatestVersion =
 		version.slug === 'latest' || branch.versions[0].id === version.id
 
-	return (
-		<DashboardHeader id="dashboard-artboard-header">
+	const NavComboboxes = () => {
+		return (
 			<DashboardNav className="sm:justify-start">
 				<ComboboxNav
 					entities={project.artboards}
@@ -82,6 +82,12 @@ export const ArtboardHeader = () => {
 					/>
 				)}
 			</DashboardNav>
+		)
+	}
+
+	const NavButtonGroup = () => {
+		return null
+		return (
 			<DashboardNav>
 				{/* TODO: make these have the same look as the form fetcher icon */}
 				<NavbarButtonGroup>
@@ -112,6 +118,13 @@ export const ArtboardHeader = () => {
 					/>
 				</NavbarButtonGroup>
 			</DashboardNav>
+		)
+	}
+
+	return (
+		<DashboardHeader id="dashboard-artboard-header">
+			<NavComboboxes />
+			<NavButtonGroup />
 		</DashboardHeader>
 	)
 }

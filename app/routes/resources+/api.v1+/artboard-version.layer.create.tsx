@@ -1,11 +1,7 @@
 import { useForm } from '@conform-to/react'
 import { getFieldsetConstraint } from '@conform-to/zod'
-import {
-	type LoaderFunctionArgs,
-	json,
-	type ActionFunctionArgs,
-} from '@remix-run/node'
-import { useActionData, useFetcher } from '@remix-run/react'
+import { json, type ActionFunctionArgs } from '@remix-run/node'
+import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
@@ -24,11 +20,6 @@ import { Routes } from '#app/utils/routes.const'
 
 const route = Routes.RESOURCES.API.V1.ARTBOARD_VERSION.LAYER.CREATE
 const schema = NewArtboardVersionLayerSchema
-
-export async function loader({ request }: LoaderFunctionArgs) {
-	await requireUserId(request)
-	return json({})
-}
 
 export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -70,13 +61,12 @@ export const ArtboardVersionLayerCreate = ({
 	versionId: IArtboardVersion['id']
 }) => {
 	const fetcher = useFetcher<typeof action>()
-	const actionData = useActionData<typeof action>()
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
 		id: `artboard-version-layer-create-${versionId}-new`,
 		constraint: getFieldsetConstraint(schema),
-		lastSubmission: actionData?.submission,
+		lastSubmission: fetcher.data?.submission,
 	})
 
 	return (
