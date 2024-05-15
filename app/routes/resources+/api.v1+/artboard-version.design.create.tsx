@@ -5,7 +5,7 @@ import {
 	json,
 	type ActionFunctionArgs,
 } from '@remix-run/node'
-import { useActionData, useFetcher } from '@remix-run/react'
+import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
@@ -73,13 +73,13 @@ export const ArtboardVersionDesignCreate = ({
 	versionId: IArtboardVersion['id']
 }) => {
 	const fetcher = useFetcher<typeof action>()
-	const actionData = useActionData<typeof action>()
+	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
 		id: `artboard-version-design-create-${versionId}-new`,
 		constraint: getFieldsetConstraint(schema),
-		lastSubmission: actionData?.submission,
+		lastSubmission,
 	})
 
 	return (

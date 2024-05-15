@@ -71,7 +71,7 @@ export default function SketchProjectArtboardBranchVersionRoute() {
 						<CanvasContent generator={generator} />
 					</DashboardContentWrapper>
 				</DashboardContent>
-				{/* <SidebarRight version={version} selectedLayer={selectedLayer} /> */}
+				<SidebarRight version={version} selectedLayer={selectedLayer} />
 			</DashboardBody>
 		</Dashboard>
 	)

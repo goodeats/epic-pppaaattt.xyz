@@ -61,12 +61,13 @@ export const ArtboardVersionLayerCreate = ({
 	versionId: IArtboardVersion['id']
 }) => {
 	const fetcher = useFetcher<typeof action>()
+	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
 		id: `artboard-version-layer-create-${versionId}-new`,
 		constraint: getFieldsetConstraint(schema),
-		lastSubmission: fetcher.data?.submission,
+		lastSubmission,
 	})
 
 	return (
