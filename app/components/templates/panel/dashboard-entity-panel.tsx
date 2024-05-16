@@ -43,12 +43,12 @@ export const DashboardEntityPanel = ({
 			/>
 			{entities.map((entity, index) => {
 				return (
-					<SidebarPanelRow key={index}>
+					<SidebarPanelRow key={entity.id}>
 						<PanelEntityRowReorder
 							entity={entity}
 							parent={parent}
-							entityCount={entityCount}
-							entityIndex={index}
+							atTop={index === 0}
+							atBottom={index === entityCount - 1}
 							strategyReorder={strategyReorder}
 						/>
 						<SidebarPanelRowContainer>
