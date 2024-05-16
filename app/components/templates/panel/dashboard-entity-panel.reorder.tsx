@@ -4,6 +4,7 @@ import { type IDesign } from '#app/models/design/design.server'
 import { type ILayer } from '#app/models/layer/layer.server'
 import { ArtboardVersionDesignReorder } from '#app/routes/resources+/api.v1+/artboard-version.design.update.order'
 import { ArtboardVersionLayerReorder } from '#app/routes/resources+/api.v1+/artboard-version.layer.update.order'
+import { LayerDesignReorder } from '#app/routes/resources+/api.v1+/layer.design.update.order'
 import {
 	EntityParentType,
 	type entityParentTypeEnum,
@@ -86,7 +87,22 @@ const LayerReorderChildEntityForm = memo(
 	}: ReorderChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
-				return 'LMD'
+				return (
+					<>
+						<LayerDesignReorder
+							design={entity as IDesign}
+							layer={parent as ILayer}
+							direction="up"
+							atTopOrBottom={atTop}
+						/>
+						<LayerDesignReorder
+							design={entity as IDesign}
+							layer={parent as ILayer}
+							direction="down"
+							atTopOrBottom={atBottom}
+						/>
+					</>
+				)
 			default:
 				console.log('unknown layer entity type', entityType)
 				return null
@@ -162,30 +178,9 @@ export const PanelEntityRowReorder = ({
 		[parentType, entityType, entity, parent, atTop, atBottom],
 	)
 
-	// return 'mv'
 	return (
 		<SidebarPanelRowReorderContainer>
 			{reorderEntityForm()}
-			{/* <FormFetcherMoveIcon
-				entityId={entity.id}
-				parentId={parent.id}
-				parentTypeId={strategyReorder.parentTypeId}
-				route={strategyReorder.route}
-				formId={strategyReorder.formId}
-				schema={strategyReorder.schema}
-				direction="up"
-				atTopOrBottom={atTop}
-			/>
-			<FormFetcherMoveIcon
-				entityId={entity.id}
-				parentId={parent.id}
-				parentTypeId={strategyReorder.parentTypeId}
-				route={strategyReorder.route}
-				formId={strategyReorder.formId}
-				schema={strategyReorder.schema}
-				direction="down"
-				atTopOrBottom={atBottom}
-			/> */}
 		</SidebarPanelRowReorderContainer>
 	)
 }
