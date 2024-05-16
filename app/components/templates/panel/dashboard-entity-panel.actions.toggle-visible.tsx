@@ -1,7 +1,9 @@
 import { memo, useCallback } from 'react'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type IDesign } from '#app/models/design/design.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { ArtboardVersionDesignToggleVisible } from '#app/routes/resources+/api.v1+/artboard-version.design.update.visible'
+import { ArtboardVersionLayerToggleVisible } from '#app/routes/resources+/api.v1+/artboard-version.layer.update.visible'
 import {
 	type entityParentTypeEnum,
 	type entityTypeEnum,
@@ -30,7 +32,12 @@ const ArtboardVersionToggleVisibleChildEntityForm = memo(
 					/>
 				)
 			case EntityType.LAYER:
-				return 'av l'
+				return (
+					<ArtboardVersionLayerToggleVisible
+						layer={entity as ILayer}
+						version={parent as IArtboardVersion}
+					/>
+				)
 			default:
 				console.log('unknown artboard version entity type', entityType)
 				return null
