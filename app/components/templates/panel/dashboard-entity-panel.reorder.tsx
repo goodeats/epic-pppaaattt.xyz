@@ -1,7 +1,9 @@
 import { memo, useCallback } from 'react'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { type IDesign } from '#app/models/design/design.server'
+import { type ILayer } from '#app/models/layer/layer.server'
 import { ArtboardVersionDesignReorder } from '#app/routes/resources+/api.v1+/artboard-version.design.update.order'
+import { ArtboardVersionLayerReorder } from '#app/routes/resources+/api.v1+/artboard-version.layer.update.order'
 import {
 	EntityParentType,
 	type entityParentTypeEnum,
@@ -49,8 +51,22 @@ const ArtboardVersionReorderChildEntityForm = memo(
 					</>
 				)
 			case EntityType.LAYER:
-				return 'AVML'
-			// return <ArtboardVersionLayerCreate versionId={parent.id} />
+				return (
+					<>
+						<ArtboardVersionLayerReorder
+							layer={entity as ILayer}
+							version={parent as IArtboardVersion}
+							direction="up"
+							atTopOrBottom={atTop}
+						/>
+						<ArtboardVersionLayerReorder
+							layer={entity as ILayer}
+							version={parent as IArtboardVersion}
+							direction="down"
+							atTopOrBottom={atBottom}
+						/>
+					</>
+				)
 			default:
 				console.log('unknown artboard version entity type', entityType)
 				return null

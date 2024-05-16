@@ -80,13 +80,14 @@ export const ArtboardVersionDesignReorder = ({
 	const designId = design.id
 	const icon = `chevron-${direction}`
 	const iconText = `Move ${direction}`
+	const formId = `artboard-version-design-reorder-${direction}-${versionId}-${designId}`
 
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
-		id: `artboard-version-design-reorder-${direction}-${version.id}-${design.id}`,
+		id: formId,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission,
 	})
