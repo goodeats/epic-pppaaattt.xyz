@@ -13,6 +13,7 @@ import { type IDashboardPanelSelectEntityStrategy } from '#app/strategies/compon
 import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies/component/dashboard-panel/update-entity-visible.strategy'
 import { SidebarPanelRowActionsContainer } from '..'
 import { FormFetcherIcon } from '../form/fetcher/icon'
+import { PanelEntityDeleteAction } from './dashboard-entity-panel.actions.delete'
 
 export const PanelEntityRowActions = ({
 	entity,
@@ -107,29 +108,6 @@ export const PanelEntityToggleVisbleAction = ({
 			iconText={`${entity.visible ? 'Hide' : 'Show'} ${
 				strategyToggleVisible.iconText
 			}`}
-		/>
-	)
-}
-
-export const PanelEntityDeleteAction = ({
-	entity,
-	parent,
-	strategyEntityDelete,
-}: {
-	entity: IEntityVisible
-	parent: IEntityParentType
-	strategyEntityDelete: IDashboardPanelDeleteEntityStrategy
-}) => {
-	return (
-		<FormFetcherIcon
-			entityId={entity.id}
-			parentId={parent.id}
-			parentTypeId={strategyEntityDelete.parentTypeId}
-			route={strategyEntityDelete.route}
-			formId={strategyEntityDelete.formId}
-			schema={strategyEntityDelete.schema}
-			icon="minus"
-			iconText={strategyEntityDelete.iconText}
 		/>
 	)
 }
