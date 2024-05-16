@@ -1,10 +1,6 @@
 import { DesignTypeEnum } from '#app/schema/design'
 import { type IEntity, type IEntityType } from '#app/schema/entity'
 import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
-import { SidebarPanelRowValuesContainer } from '..'
-import { PanelEntityForm } from './dashboard-entity-panel.form'
-import { PanelEntityIcon } from './dashboard-entity-panel.icons'
-import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 import { PanelEntityValuesDesignFill } from './dashboard-entity-panel.values.design.fill'
 import { PanelEntityValuesDesignLayout } from './dashboard-entity-panel.values.design.layout'
 import { PanelEntityValuesDesignLine } from './dashboard-entity-panel.values.design.line'
@@ -24,15 +20,15 @@ export const PanelEntityValues = ({
 	entity: IEntity
 	strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy
 }) => {
-	const panelEntityMainForm = strategyEntityValues.getMainPanelForm({
-		entity,
-	})
-	const panelEntityFormatIcon = strategyEntityValues.getPanelFormatIcon({
-		entity,
-	})
-	const panelEntityBasisIcon = strategyEntityValues.getPanelBasisIcon({
-		entity,
-	})
+	// const panelEntityMainForm = strategyEntityValues.getMainPanelForm({
+	// 	entity,
+	// })
+	// const panelEntityFormatIcon = strategyEntityValues.getPanelFormatIcon({
+	// 	entity,
+	// })
+	// const panelEntityBasisIcon = strategyEntityValues.getPanelBasisIcon({
+	// 	entity,
+	// })
 
 	if (type === 'layer') {
 		return <PanelEntityValuesLayer entity={entity} />
