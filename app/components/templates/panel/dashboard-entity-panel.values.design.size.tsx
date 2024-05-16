@@ -23,7 +23,7 @@ interface EntityProps {
 
 const EntityPopover = memo(({ entity }: EntityProps) => {
 	return (
-		<PanelEntityPopoverAlt name="Line">
+		<PanelEntityPopoverAlt name="Size">
 			<SidebarPanelPopoverFormContainer>
 				<span>Value</span>
 				<DesignTypeSizeValue
