@@ -4,6 +4,7 @@ import { type IDesign } from '#app/models/design/design.server'
 import { type ILayer } from '#app/models/layer/layer.server'
 import { ArtboardVersionDesignToggleVisible } from '#app/routes/resources+/api.v1+/artboard-version.design.update.visible'
 import { ArtboardVersionLayerToggleVisible } from '#app/routes/resources+/api.v1+/artboard-version.layer.update.visible'
+import { LayerDesignToggleVisible } from '#app/routes/resources+/api.v1+/layer.design.update.visible'
 import {
 	type entityParentTypeEnum,
 	type entityTypeEnum,
@@ -48,10 +49,15 @@ ArtboardVersionToggleVisibleChildEntityForm.displayName =
 	'ArtboardVersionToggleVisibleChildEntityForm'
 
 const LayerToggleVisibleChildEntityForm = memo(
-	({ entityType, parent }: ToggleVisibleChildEntityFormProps) => {
+	({ entityType, entity, parent }: ToggleVisibleChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
-				return 'l tv'
+				return (
+					<LayerDesignToggleVisible
+						design={entity as IDesign}
+						layer={parent as ILayer}
+					/>
+				)
 			default:
 				console.log('unknown layer entity type', entityType)
 				return null

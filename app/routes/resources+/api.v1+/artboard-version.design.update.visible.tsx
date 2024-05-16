@@ -74,7 +74,7 @@ export const ArtboardVersionDesignToggleVisible = ({
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
-		id: `artboard-version-design-toggle-visible-${versionId}-new`,
+		id: `artboard-version-design-toggle-visible-${versionId}-${designId}`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission,
 	})
