@@ -102,18 +102,5 @@ export const PanelEntityDeleteAction = ({
 		[parentType, entityType, entity, parent],
 	)
 
-	// return 'D'
 	return deleteEntityForm()
-	// return (
-	// 	<FormFetcherIcon
-	// 		entityId={entity.id}
-	// 		parentId={parent.id}
-	// 		parentTypeId={strategyEntityDelete.parentTypeId}
-	// 		route={strategyEntityDelete.route}
-	// 		formId={strategyEntityDelete.formId}
-	// 		schema={strategyEntityDelete.schema}
-	// 		icon="minus"
-	// 		iconText={strategyEntityDelete.iconText}
-	// 	/>
-	// )
 }

@@ -88,7 +88,6 @@ export const ArtboardVersionDesignDelete = ({
 
 			<input type="hidden" name="no-js" value={String(!isHydrated)} />
 			<input type="hidden" name="id" value={designId} />
-
 			<input
 				type="hidden"
 				name={EntityParentIdType.ARTBOARD_VERSION_ID}

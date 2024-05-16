@@ -14,6 +14,7 @@ import { type IDashboardPanelUpdateEntityVisibleStrategy } from '#app/strategies
 import { SidebarPanelRowActionsContainer } from '..'
 import { FormFetcherIcon } from '../form/fetcher/icon'
 import { PanelEntityDeleteAction } from './dashboard-entity-panel.actions.delete'
+import { PanelEntityToggleVisobleAction } from './dashboard-entity-panel.actions.toggle-visible'
 
 export const PanelEntityRowActions = ({
 	entity,
@@ -54,7 +55,7 @@ const PanelEntityAction = ({
 	switch (panelAction.actionType) {
 		case EntityActionType.TOGGLE_VISIBLE:
 			return (
-				<PanelEntityToggleVisbleAction
+				<PanelEntityToggleVisobleAction
 					entity={entity as IEntityVisible}
 					parent={parent}
 					strategyToggleVisible={
@@ -85,31 +86,6 @@ const PanelEntityAction = ({
 		default:
 			return null
 	}
-}
-
-export const PanelEntityToggleVisbleAction = ({
-	entity,
-	parent,
-	strategyToggleVisible,
-}: {
-	entity: IEntityVisible
-	parent: IEntityParentType
-	strategyToggleVisible: IDashboardPanelUpdateEntityVisibleStrategy
-}) => {
-	return (
-		<FormFetcherIcon
-			entityId={entity.id}
-			parentId={parent.id}
-			parentTypeId={strategyToggleVisible.parentTypeId}
-			route={strategyToggleVisible.route}
-			formId={strategyToggleVisible.formId}
-			schema={strategyToggleVisible.schema}
-			icon={entity.visible ? 'eye-open' : 'eye-closed'}
-			iconText={`${entity.visible ? 'Hide' : 'Show'} ${
-				strategyToggleVisible.iconText
-			}`}
-		/>
-	)
 }
 
 export const PanelEntitySelectAction = ({
