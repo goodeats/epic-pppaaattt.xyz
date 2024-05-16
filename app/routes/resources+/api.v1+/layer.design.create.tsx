@@ -55,8 +55,6 @@ export async function action({ request }: ActionFunctionArgs) {
 	)
 }
 
-// TODO: clean up IDashboardPanelCreateEntityStrategy of unnecessary values when here
-
 export const LayerDesignCreate = ({
 	type,
 	layerId,
