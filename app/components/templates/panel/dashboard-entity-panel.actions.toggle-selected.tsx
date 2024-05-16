@@ -10,7 +10,7 @@ import {
 	EntityType,
 	EntityParentType,
 } from '#app/schema/entity'
-import { type IDashboardPanelSelectEntityStrategy } from '#app/strategies/component/dashboard-panel/select-entity.strategy'
+import { type IDashboardPanelSelectEntityStrategy } from '#app/strategies/component/dashboard-panel/update-entity-selected.strategy'
 
 interface ToggleSelectedChildEntityFormProps {
 	entityType: entityTypeEnum
