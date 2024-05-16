@@ -80,8 +80,8 @@ export const DesignTypeLayoutStyle = ({
 	const formId = `design-type-layout-update-style-${designId}-${layoutId}${
 		formLocation ? `-${formLocation}` : ''
 	}`
-	const options = Object.values(LayoutStyleTypeEnum).map(layoutBasisEnum => ({
-		[layoutBasisEnum]: transformEntityEnumValueForSelect(layoutBasisEnum),
+	const options = Object.values(LayoutStyleTypeEnum).map(typeEnum => ({
+		[typeEnum]: transformEntityEnumValueForSelect(typeEnum),
 	}))
 
 	const fetcher = useFetcher<typeof action>()

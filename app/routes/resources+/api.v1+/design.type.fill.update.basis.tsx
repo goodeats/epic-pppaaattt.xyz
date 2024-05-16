@@ -77,8 +77,8 @@ export const DesignTypeFillBasis = ({
 	const formId = `design-type-fill-update-basis-${designId}-${fillId}${
 		formLocation ? `-${formLocation}` : ''
 	}`
-	const options = Object.values(FillBasisTypeEnum).map(fillBasisEnum => ({
-		[fillBasisEnum]: transformEntityEnumValueForSelect(fillBasisEnum),
+	const options = Object.values(FillBasisTypeEnum).map(typeEnum => ({
+		[typeEnum]: transformEntityEnumValueForSelect(typeEnum),
 	}))
 
 	const fetcher = useFetcher<typeof action>()
