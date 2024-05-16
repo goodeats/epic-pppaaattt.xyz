@@ -30,10 +30,10 @@ export const PanelDesigns = ({
 
 	return (
 		<div>
-			{designTypePanels.map((designTypePanel, index) => {
+			{designTypePanels.map(designTypePanel => {
 				return (
 					<PanelDesign
-						key={index}
+						key={designTypePanel.type}
 						parent={parent}
 						designTypePanel={designTypePanel}
 						strategyEntityNew={strategyEntityNew}

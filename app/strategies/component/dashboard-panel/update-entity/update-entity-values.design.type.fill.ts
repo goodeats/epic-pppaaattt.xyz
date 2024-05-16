@@ -140,6 +140,7 @@ export class DashboardPanelUpdateDesignTypeFillValuesStrategy
 			schema: EditDesignFillValueSchema,
 			label: 'Value',
 		}
+
 		const globalFillBasisArgs = {
 			route: baseRoute.BASIS,
 			formType: EntityFormType.SELECT,

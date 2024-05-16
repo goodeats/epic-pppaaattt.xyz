@@ -13,6 +13,7 @@ import { PanelEntityValuesDesignRotate } from './dashboard-entity-panel.values.d
 import { PanelEntityValuesDesignSize } from './dashboard-entity-panel.values.design.size'
 import { PanelEntityValuesDesignStroke } from './dashboard-entity-panel.values.design.stroke'
 import { PanelEntityValuesDesignTemplate } from './dashboard-entity-panel.values.design.template'
+import { PanelEntityValuesLayer } from './dashboard-entity-panel.values.layer'
 
 export const PanelEntityValues = ({
 	type,
@@ -34,22 +35,23 @@ export const PanelEntityValues = ({
 	})
 
 	if (type === 'layer') {
-		return (
-			<SidebarPanelRowValuesContainer>
-				<PanelEntityPopover
-					name={type}
-					entity={entity}
-					strategyEntityValues={strategyEntityValues}
-				/>
-				<PanelEntityForm panelEntityForm={panelEntityMainForm} />
-				{panelEntityFormatIcon && (
-					<PanelEntityIcon panelEntityIcon={panelEntityFormatIcon} />
-				)}
-				{panelEntityBasisIcon && (
-					<PanelEntityIcon panelEntityIcon={panelEntityBasisIcon} />
-				)}
-			</SidebarPanelRowValuesContainer>
-		)
+		return <PanelEntityValuesLayer entity={entity} />
+		// return (
+		// 	<SidebarPanelRowValuesContainer>
+		// 		<PanelEntityPopover
+		// 			name={type}
+		// 			entity={entity}
+		// 			strategyEntityValues={strategyEntityValues}
+		// 		/>
+		// 		<PanelEntityForm panelEntityForm={panelEntityMainForm} />
+		// 		{panelEntityFormatIcon && (
+		// 			<PanelEntityIcon panelEntityIcon={panelEntityFormatIcon} />
+		// 		)}
+		// 		{panelEntityBasisIcon && (
+		// 			<PanelEntityIcon panelEntityIcon={panelEntityBasisIcon} />
+		// 		)}
+		// 	</SidebarPanelRowValuesContainer>
+		// )
 	}
 
 	switch (type) {
