@@ -1,22 +1,28 @@
-import {
-	type LoaderFunctionArgs,
-	json,
-	type DataFunctionArgs,
-} from '@remix-run/node'
+import { useForm } from '@conform-to/react'
+import { getFieldsetConstraint } from '@conform-to/zod'
+import { json, type ActionFunctionArgs } from '@remix-run/node'
+import { useFetcher } from '@remix-run/react'
+import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
+import { useHydrated } from 'remix-utils/use-hydrated'
+import { PanelIconButton } from '#app/components/ui/panel-icon-button'
+import { type IDesign } from '#app/models/design/design.server'
 import { validateLayerDeleteDesignSubmission } from '#app/models/design-layer/design-layer.delete.server'
+import { type ILayer } from '#app/models/layer/layer.server'
+import { DeleteLayerDesignSchema } from '#app/schema/design-layer'
+import { EntityParentIdType } from '#app/schema/entity'
 import { validateNoJS } from '#app/schema/form-data'
 import { layerDesignDeleteService } from '#app/services/layer/design/delete.service'
 import { requireUserId } from '#app/utils/auth.server'
+import { useIsPending } from '#app/utils/misc'
+import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
 
-export async function loader({ request }: LoaderFunctionArgs) {
-	await requireUserId(request)
-	return json({})
-}
+const route = Routes.RESOURCES.API.V1.LAYER.DESIGN.DELETE
+const schema = DeleteLayerDesignSchema
 
-export async function action({ request }: DataFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
@@ -46,5 +52,40 @@ export async function action({ request }: DataFunctionArgs) {
 		{
 			status: status === 'error' || !deleteSuccess ? 404 : 200,
 		},
+	)
+}
+
+export const LayerDesignDelete = ({
+	designId,
+	layerId,
+}: {
+	designId: IDesign['id']
+	layerId: ILayer['id']
+}) => {
+	const fetcher = useFetcher<typeof action>()
+	const lastSubmission = fetcher.data?.submission
+	const isPending = useIsPending()
+	let isHydrated = useHydrated()
+	const [form] = useForm({
+		id: `layer-design-delete-${layerId}-${designId}`,
+		constraint: getFieldsetConstraint(schema),
+		lastSubmission,
+	})
+
+	return (
+		<fetcher.Form method="POST" action={route} {...form.props}>
+			<AuthenticityTokenInput />
+
+			<input type="hidden" name="no-js" value={String(!isHydrated)} />
+			<input type="hidden" name="id" value={designId} />
+			<input type="hidden" name={EntityParentIdType.LAYER_ID} value={layerId} />
+
+			<PanelIconButton
+				type="submit"
+				iconName="minus"
+				iconText="Delete design"
+				disabled={isPending}
+			/>
+		</fetcher.Form>
 	)
 }

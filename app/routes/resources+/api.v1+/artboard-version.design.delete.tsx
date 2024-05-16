@@ -1,10 +1,6 @@
 import { useForm } from '@conform-to/react'
 import { getFieldsetConstraint } from '@conform-to/zod'
-import {
-	type LoaderFunctionArgs,
-	json,
-	type ActionFunctionArgs,
-} from '@remix-run/node'
+import { json, type ActionFunctionArgs } from '@remix-run/node'
 import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
@@ -25,11 +21,6 @@ import { Routes } from '#app/utils/routes.const'
 
 const route = Routes.RESOURCES.API.V1.ARTBOARD_VERSION.DESIGN.DELETE
 const schema = DeleteArtboardVersionDesignSchema
-
-export async function loader({ request }: LoaderFunctionArgs) {
-	await requireUserId(request)
-	return json({})
-}
 
 export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -77,7 +68,7 @@ export const ArtboardVersionDesignDelete = ({
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
-		id: `artboard-version-design-delete-${versionId}-new`,
+		id: `artboard-version-design-delete-${versionId}-${designId}`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission,
 	})

@@ -1,5 +1,6 @@
 import { memo, useCallback } from 'react'
 import { ArtboardVersionDesignDelete } from '#app/routes/resources+/api.v1+/artboard-version.design.delete'
+import { LayerDesignDelete } from '#app/routes/resources+/api.v1+/layer.design.delete'
 import {
 	type entityParentTypeEnum,
 	type entityTypeEnum,
@@ -21,7 +22,6 @@ const ArtboardVersionDeleteChildEntityForm = memo(
 	({ entityType, entity, parent }: DeleteChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
-				// return 'av d'
 				return (
 					<ArtboardVersionDesignDelete
 						designId={entity.id}
@@ -40,10 +40,10 @@ ArtboardVersionDeleteChildEntityForm.displayName =
 	'ArtboardVersionDeleteChildEntityForm'
 
 const LayerDeleteChildEntityForm = memo(
-	({ entityType, parent }: DeleteChildEntityFormProps) => {
+	({ entityType, entity, parent }: DeleteChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
-				return 'l d'
+				return <LayerDesignDelete designId={entity.id} layerId={parent.id} />
 			default:
 				console.log('unknown layer entity type', entityType)
 				return null
