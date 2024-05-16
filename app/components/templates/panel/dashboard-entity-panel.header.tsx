@@ -1,6 +1,7 @@
 import { memo, useCallback } from 'react'
 import { ArtboardVersionDesignCreate } from '#app/routes/resources+/api.v1+/artboard-version.design.create'
 import { ArtboardVersionLayerCreate } from '#app/routes/resources+/api.v1+/artboard-version.layer.create'
+import { LayerDesignCreate } from '#app/routes/resources+/api.v1+/layer.design.create'
 import { type designTypeEnum } from '#app/schema/design'
 import {
 	EntityParentType,
@@ -49,10 +50,15 @@ ArtboardVersionCreateChildEntityForm.displayName =
 	'ArtboardVersionCreateChildEntityForm'
 
 const LayerCreateChildEntityForm = memo(
-	({ entityType, parent }: CreateChildEntityFormProps) => {
+	({ entityType, type, parent }: CreateChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
-				return 'layer design'
+				return (
+					<LayerDesignCreate
+						type={type as designTypeEnum}
+						layerId={parent.id}
+					/>
+				)
 			default:
 				console.log('unknown layer entity type', entityType)
 				return null
@@ -74,7 +80,11 @@ const CreateEntityForm = memo(
 				)
 			case EntityParentType.LAYER:
 				return (
-					<LayerCreateChildEntityForm entityType={entityType} parent={parent} />
+					<LayerCreateChildEntityForm
+						entityType={entityType}
+						type={type}
+						parent={parent}
+					/>
 				)
 			default:
 				console.log('unknown parent type', parentType)
