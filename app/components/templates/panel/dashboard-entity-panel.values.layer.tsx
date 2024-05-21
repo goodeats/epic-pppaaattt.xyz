@@ -1,6 +1,7 @@
 import { memo, useCallback } from 'react'
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { type ILayer } from '#app/models/layer/layer.server'
+import { LayerDescription } from '#app/routes/resources+/api.v1+/layer.update.description'
 import { LayerName } from '#app/routes/resources+/api.v1+/layer.update.name'
 import { type IEntity } from '#app/schema/entity'
 import { SidebarPanelRowValuesContainer } from '..'
@@ -16,6 +17,10 @@ const EntityPopover = memo(({ entity }: EntityProps) => {
 			<SidebarPanelPopoverFormContainer>
 				<span>Name</span>
 				<LayerName layer={entity as ILayer} formLocation="popover" />
+			</SidebarPanelPopoverFormContainer>
+			<SidebarPanelPopoverFormContainer>
+				<span>Description</span>
+				<LayerDescription layer={entity as ILayer} formLocation="popover" />
 			</SidebarPanelPopoverFormContainer>
 		</PanelEntityPopoverAlt>
 	)

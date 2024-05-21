@@ -1,10 +1,6 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
-import {
-	type LoaderFunctionArgs,
-	json,
-	type DataFunctionArgs,
-} from '@remix-run/node'
+import { json, type ActionFunctionArgs } from '@remix-run/node'
 import { useFetcher } from '@remix-run/react'
 import { useRef } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
@@ -27,12 +23,7 @@ import { Routes } from '#app/utils/routes.const'
 const route = Routes.RESOURCES.API.V1.LAYER.UPDATE.NAME
 const schema = EditLayerNameSchema
 
-export async function loader({ request }: LoaderFunctionArgs) {
-	await requireUserId(request)
-	return json({})
-}
-
-export async function action({ request }: DataFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
