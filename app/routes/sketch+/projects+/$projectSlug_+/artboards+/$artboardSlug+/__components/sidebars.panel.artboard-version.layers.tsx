@@ -3,7 +3,6 @@ import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-
 import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
 import { DashboardPanelCreateArtboardVersionLayerStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { DashboardPanelArtboardVersionLayerActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
-import { DashboardPanelUpdateLayerValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.layer'
 import { DashboardPanelUpdateArtboardVersionLayerTypeOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 
@@ -18,7 +17,6 @@ export const PanelArtboardVersionLayers = ({
 		new DashboardPanelCreateArtboardVersionLayerStrategy()
 	const strategyReorder =
 		new DashboardPanelUpdateArtboardVersionLayerTypeOrderStrategy()
-	const strategyEntityValues = new DashboardPanelUpdateLayerValuesStrategy()
 	const strategyActions = new DashboardPanelArtboardVersionLayerActionStrategy()
 
 	return (
@@ -29,7 +27,6 @@ export const PanelArtboardVersionLayers = ({
 				entities={orderedLayers}
 				strategyEntityNew={strategyEntityNew}
 				strategyReorder={strategyReorder}
-				strategyEntityValues={strategyEntityValues}
 				strategyActions={strategyActions}
 			/>
 		</div>

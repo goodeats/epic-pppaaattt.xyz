@@ -63,7 +63,7 @@ export const PanelDesign = ({
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyActions: IDashboardPanelEntityActionStrategy
 }) => {
-	const { type, designs, strategyEntityValues } = designTypePanel
+	const { type, designs } = designTypePanel
 	return (
 		<DashboardEntityPanel
 			key={type}
@@ -72,7 +72,6 @@ export const PanelDesign = ({
 			entities={designs}
 			strategyEntityNew={strategyEntityNew}
 			strategyReorder={strategyReorder}
-			strategyEntityValues={strategyEntityValues}
 			strategyActions={strategyActions}
 		/>
 	)
