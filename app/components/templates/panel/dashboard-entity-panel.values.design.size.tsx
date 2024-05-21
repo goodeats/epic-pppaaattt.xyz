@@ -14,7 +14,7 @@ import {
 	type sizeFormatTypeEnum,
 } from '#app/schema/size'
 import { SidebarPanelRowValuesContainer } from '..'
-import { PanelEntityIconAlt } from './dashboard-entity-panel.icons'
+import { PanelEntityIcon } from './dashboard-entity-panel.icons'
 import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
 interface EntityProps {
@@ -61,7 +61,7 @@ const EntityFormatIcon = memo(({ entity }: EntityProps) => {
 
 	const symbol = sizeFormatIcon(format as sizeFormatTypeEnum)
 
-	return <PanelEntityIconAlt symbol={symbol} text={`Size format: ${format}`} />
+	return <PanelEntityIcon symbol={symbol} text={`Size format: ${format}`} />
 })
 EntityFormatIcon.displayName = 'EntityFormatIcon'
 
@@ -72,7 +72,7 @@ const EntityBasisIcon = memo(({ entity }: EntityProps) => {
 	if (format === SizeFormatTypeEnum.PIXEL) return undefined
 	const icon = sizeBasisIcon(basis as sizeBasisTypeEnum) as IconName
 
-	return <PanelEntityIconAlt icon={icon} text={`Line basis: ${basis}`} />
+	return <PanelEntityIcon icon={icon} text={`Line basis: ${basis}`} />
 })
 EntityBasisIcon.displayName = 'EntityBasisIcon'
 

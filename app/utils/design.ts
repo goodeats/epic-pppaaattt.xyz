@@ -22,15 +22,6 @@ import { findFirstSizeInDesignArray } from '#app/models/design-type/size/size.ut
 import { findFirstStrokeInDesignArray } from '#app/models/design-type/stroke/stroke.util'
 import { findFirstTemplateInDesignArray } from '#app/models/design-type/template/template.util'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
-import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
-import { DashboardPanelUpdateDesignTypeFillValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.fill'
-import { DashboardPanelUpdateDesignTypeLayoutValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.layout'
-import { DashboardPanelUpdateDesignTypeLineValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.line'
-import { DashboardPanelUpdateDesignTypePaletteValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.palette'
-import { DashboardPanelUpdateDesignTypeRotateValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.rotate'
-import { DashboardPanelUpdateDesignTypeSizeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.size'
-import { DashboardPanelUpdateDesignTypeStrokeValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.stroke'
-import { DashboardPanelUpdateDesignTypeTemplateValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values.design.type.template'
 import { orderLinkedItems } from './linked-list.utils'
 import { safelyAssignValue } from './typescript-helpers'
 
@@ -153,10 +144,10 @@ export const selectedDesignToUpdateOnMoveUp = ({
 	return isSelectedDesign // if already was selected
 		? selectedDesignId // no change
 		: !visible // if not visible
-		  ? selectedDesignId // no change
-		  : selectedDesignId === prevDesignId // if prev design is selected
-		    ? id // set to self
-		    : selectedDesignId // no change, assumes selected is more than prev
+			? selectedDesignId // no change
+			: selectedDesignId === prevDesignId // if prev design is selected
+				? id // set to self
+				: selectedDesignId // no change, assumes selected is more than prev
 }
 
 export const selectedDesignToUpdateOnMoveDown = ({
@@ -179,10 +170,10 @@ export const selectedDesignToUpdateOnMoveDown = ({
 			? nextDesignId // set to next
 			: selectedDesignId // no change
 		: !visible // if not visible
-		  ? selectedDesignId // no change
-		  : nextDesignIsVisible // if next design is visible
-		    ? nextDesignId // set to next
-		    : selectedDesignId // no change
+			? selectedDesignId // no change
+			: nextDesignIsVisible // if next design is visible
+				? nextDesignId // set to next
+				: selectedDesignId // no change
 }
 
 export const selectedDesignToUpdateOnToggleVisible = ({
@@ -207,8 +198,8 @@ export const selectedDesignToUpdateOnToggleVisible = ({
 			? nextVisibleDesignId // if selected, set to next
 			: selectedDesignId // if not selected, don't change
 		: firstVisibleDesignId // if not visible to visible
-		  ? findFirstDesignIdInArray(orderedDesignIds, firstVisibleDesignId, id) // if first visible, set to first or self -- whichever is first
-		  : id // if no prev visible, set to self
+			? findFirstDesignIdInArray(orderedDesignIds, firstVisibleDesignId, id) // if first visible, set to first or self -- whichever is first
+			: id // if no prev visible, set to self
 }
 
 export const selectedDesignToUpdateOnDelete = ({
@@ -385,7 +376,6 @@ export const designsByTypeToPanelArray = ({
 }): {
 	type: designTypeEnum
 	designs: IDesignWithType[]
-	strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy
 }[] => {
 	const {
 		designPalettes,
@@ -398,63 +388,38 @@ export const designsByTypeToPanelArray = ({
 		designTemplates,
 	} = designs
 
-	const strategyLayoutEntityValues =
-		new DashboardPanelUpdateDesignTypeLayoutValuesStrategy()
-	const strategyPaletteEntityValues =
-		new DashboardPanelUpdateDesignTypePaletteValuesStrategy()
-	const strategySizeEntityValues =
-		new DashboardPanelUpdateDesignTypeSizeValuesStrategy()
-	const strategyFillEntityValues =
-		new DashboardPanelUpdateDesignTypeFillValuesStrategy()
-	const strategyStrokeEntityValues =
-		new DashboardPanelUpdateDesignTypeStrokeValuesStrategy()
-	const strategyLineEntityValues =
-		new DashboardPanelUpdateDesignTypeLineValuesStrategy()
-	const strategyRotateEntityValues =
-		new DashboardPanelUpdateDesignTypeRotateValuesStrategy()
-	const strategyTemplateEntityValues =
-		new DashboardPanelUpdateDesignTypeTemplateValuesStrategy()
-
 	return [
 		{
 			type: DesignTypeEnum.LAYOUT,
 			designs: designLayouts,
-			strategyEntityValues: strategyLayoutEntityValues,
 		},
 		{
 			type: DesignTypeEnum.PALETTE,
 			designs: designPalettes,
-			strategyEntityValues: strategyPaletteEntityValues,
 		},
 		{
 			type: DesignTypeEnum.SIZE,
 			designs: designSizes,
-			strategyEntityValues: strategySizeEntityValues,
 		},
 		{
 			type: DesignTypeEnum.FILL,
 			designs: designFills,
-			strategyEntityValues: strategyFillEntityValues,
 		},
 		{
 			type: DesignTypeEnum.STROKE,
 			designs: designStrokes,
-			strategyEntityValues: strategyStrokeEntityValues,
 		},
 		{
 			type: DesignTypeEnum.LINE,
 			designs: designLines,
-			strategyEntityValues: strategyLineEntityValues,
 		},
 		{
 			type: DesignTypeEnum.ROTATE,
 			designs: designRotates,
-			strategyEntityValues: strategyRotateEntityValues,
 		},
 		{
 			type: DesignTypeEnum.TEMPLATE,
 			designs: designTemplates,
-			strategyEntityValues: strategyTemplateEntityValues,
 		},
 	]
 }
