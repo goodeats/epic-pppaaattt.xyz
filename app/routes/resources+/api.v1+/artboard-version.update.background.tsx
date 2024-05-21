@@ -83,7 +83,7 @@ export const ArtboardVersionBackground = ({
 			})
 		},
 		defaultValue: {
-			value: version.background || '',
+			background: version.background || '',
 		},
 	})
 	const submitRef = useRef<HTMLButtonElement>(null)

@@ -6,7 +6,9 @@ import { useRef } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
+import { Icon } from '#app/components/ui/icon'
 import { Input } from '#app/components/ui/input'
+import { Label } from '#app/components/ui/label'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { validateArtboardVersionHeightSubmission } from '#app/models/artboard-version/artboard-version.update.server'
 import { ArtboardVersionHeightSchema } from '#app/schema/artboard-version'
@@ -99,6 +101,9 @@ export const ArtboardVersionHeight = ({
 			<input type="hidden" name="id" value={versionId} />
 
 			<div className="flex w-full items-center space-x-2">
+				<Label htmlFor={fields.height.id} className="w-5 flex-shrink-0">
+					<Icon name="height" className="h-5 w-5" />
+				</Label>
 				<Input
 					type="number"
 					// https://www.hyperui.dev/blog/remove-number-input-spinners-with-tailwindcss

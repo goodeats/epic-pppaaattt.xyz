@@ -23,22 +23,6 @@ export const PanelArtboardVersionFrame = ({
 						<ArtboardVersionWidth version={version} />
 						<ArtboardVersionHeight version={version} />
 					</SidebarPanelRowValuesContainer>
-					{/* <FormFetcherNumber
-						entityId={version.id}
-						defaultValue={{ width: version.width }}
-						route={routeWidth}
-						formId="panel-form-artboard-version-width"
-						schema={ArtboardVersionWidthSchema}
-						icon="width"
-					/>
-					<FormFetcherNumber
-						entityId={version.id}
-						defaultValue={{ height: version.height }}
-						route={routeHeight}
-						formId="panel-form-artboard-version-height"
-						schema={ArtboardVersionHeightSchema}
-						icon="height"
-					/> */}
 				</SidebarPanelRowContainer>
 			</SidebarPanelRow>
 		</SidebarPanel>
