@@ -1,6 +1,9 @@
 import { DesignTypeEnum } from '#app/schema/design'
-import { type IEntity, type IEntityType } from '#app/schema/entity'
-import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
+import {
+	type IEntityParentType,
+	type IEntity,
+	type IEntityType,
+} from '#app/schema/entity'
 import { PanelEntityValuesDesignFill } from './dashboard-entity-panel.values.design.fill'
 import { PanelEntityValuesDesignLayout } from './dashboard-entity-panel.values.design.layout'
 import { PanelEntityValuesDesignLine } from './dashboard-entity-panel.values.design.line'
@@ -14,40 +17,14 @@ import { PanelEntityValuesLayer } from './dashboard-entity-panel.values.layer'
 export const PanelEntityValues = ({
 	type,
 	entity,
-	strategyEntityValues,
+	parent,
 }: {
 	type: IEntityType
 	entity: IEntity
-	strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy
+	parent: IEntityParentType
 }) => {
-	// const panelEntityMainForm = strategyEntityValues.getMainPanelForm({
-	// 	entity,
-	// })
-	// const panelEntityFormatIcon = strategyEntityValues.getPanelFormatIcon({
-	// 	entity,
-	// })
-	// const panelEntityBasisIcon = strategyEntityValues.getPanelBasisIcon({
-	// 	entity,
-	// })
-
 	if (type === 'layer') {
-		return <PanelEntityValuesLayer entity={entity} />
-		// return (
-		// 	<SidebarPanelRowValuesContainer>
-		// 		<PanelEntityPopover
-		// 			name={type}
-		// 			entity={entity}
-		// 			strategyEntityValues={strategyEntityValues}
-		// 		/>
-		// 		<PanelEntityForm panelEntityForm={panelEntityMainForm} />
-		// 		{panelEntityFormatIcon && (
-		// 			<PanelEntityIcon panelEntityIcon={panelEntityFormatIcon} />
-		// 		)}
-		// 		{panelEntityBasisIcon && (
-		// 			<PanelEntityIcon panelEntityIcon={panelEntityBasisIcon} />
-		// 		)}
-		// 	</SidebarPanelRowValuesContainer>
-		// )
+		return <PanelEntityValuesLayer entity={entity} parent={parent} />
 	}
 
 	switch (type) {

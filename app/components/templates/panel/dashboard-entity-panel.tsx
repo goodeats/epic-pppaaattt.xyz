@@ -33,6 +33,7 @@ export const DashboardEntityPanel = ({
 	strategyActions: IDashboardPanelEntityActionStrategy
 }) => {
 	const entityCount = entities.length
+	if (type === 'layer') console.log('entityCount', entityCount)
 
 	return (
 		<SidebarPanel>
@@ -52,11 +53,7 @@ export const DashboardEntityPanel = ({
 							strategyReorder={strategyReorder}
 						/>
 						<SidebarPanelRowContainer>
-							<PanelEntityValues
-								type={type}
-								entity={entity}
-								strategyEntityValues={strategyEntityValues}
-							/>
+							<PanelEntityValues type={type} entity={entity} parent={parent} />
 							<PanelEntityRowActions
 								entity={entity as IEntityVisible | IEntitySelectable}
 								parent={parent}
