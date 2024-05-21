@@ -7,7 +7,7 @@ import { type IEntity } from '#app/schema/entity'
 import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import { SidebarPanelRowValuesContainer } from '..'
 import { PanelEntityIconAlt } from './dashboard-entity-panel.icons'
-import { PanelEntityPopoverAlt } from './dashboard-entity-panel.popover.alt'
+import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
 interface EntityProps {
 	entity: IEntity
@@ -15,7 +15,7 @@ interface EntityProps {
 
 const EntityPopover = memo(({ entity }: EntityProps) => {
 	return (
-		<PanelEntityPopoverAlt name="Rotate">
+		<PanelEntityPopover name="Rotate">
 			<SidebarPanelPopoverFormContainer>
 				<span>Value</span>
 				<DesignTypeRotateValue
@@ -30,7 +30,7 @@ const EntityPopover = memo(({ entity }: EntityProps) => {
 					formLocation="popover"
 				/>
 			</SidebarPanelPopoverFormContainer>
-		</PanelEntityPopoverAlt>
+		</PanelEntityPopover>
 	)
 })
 EntityPopover.displayName = 'EntityPopover'

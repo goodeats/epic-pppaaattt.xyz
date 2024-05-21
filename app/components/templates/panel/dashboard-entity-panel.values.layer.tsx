@@ -8,7 +8,7 @@ import { LayerDescription } from '#app/routes/resources+/api.v1+/layer.update.de
 import { LayerName } from '#app/routes/resources+/api.v1+/layer.update.name'
 import { type IEntityParentType, type IEntity } from '#app/schema/entity'
 import { SidebarPanelRowValuesContainer } from '..'
-import { PanelEntityPopoverAlt } from './dashboard-entity-panel.popover.alt'
+import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
 interface EntityProps {
 	entity: IEntity
@@ -17,7 +17,7 @@ interface EntityProps {
 
 const EntityPopover = memo(({ entity, parent }: EntityProps) => {
 	return (
-		<PanelEntityPopoverAlt name="Template">
+		<PanelEntityPopover name="Template">
 			<SidebarPanelPopoverFormContainer>
 				<span>Name</span>
 				<LayerName layer={entity as ILayer} formLocation="popover" />
@@ -35,7 +35,7 @@ const EntityPopover = memo(({ entity, parent }: EntityProps) => {
 					formLocation="popover"
 				/>
 			</SidebarPanelPopoverFormContainer>
-		</PanelEntityPopoverAlt>
+		</PanelEntityPopover>
 	)
 })
 EntityPopover.displayName = 'EntityPopover'

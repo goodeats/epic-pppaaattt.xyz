@@ -4,7 +4,7 @@ import { type IDesignWithTemplate } from '#app/models/design/design.server'
 import { DesignTypeTemplateStyle } from '#app/routes/resources+/api.v1+/design.type.template.update.style'
 import { type IEntity } from '#app/schema/entity'
 import { SidebarPanelRowValuesContainer } from '..'
-import { PanelEntityPopoverAlt } from './dashboard-entity-panel.popover.alt'
+import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
 interface EntityProps {
 	entity: IEntity
@@ -12,7 +12,7 @@ interface EntityProps {
 
 const EntityPopover = memo(({ entity }: EntityProps) => {
 	return (
-		<PanelEntityPopoverAlt name="Template">
+		<PanelEntityPopover name="Template">
 			<SidebarPanelPopoverFormContainer>
 				<span>Style</span>
 				<DesignTypeTemplateStyle
@@ -20,7 +20,7 @@ const EntityPopover = memo(({ entity }: EntityProps) => {
 					formLocation="popover"
 				/>
 			</SidebarPanelPopoverFormContainer>
-		</PanelEntityPopoverAlt>
+		</PanelEntityPopover>
 	)
 })
 EntityPopover.displayName = 'EntityPopover'

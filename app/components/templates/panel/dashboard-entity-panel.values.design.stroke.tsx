@@ -7,7 +7,7 @@ import { DesignTypeStrokeValue } from '#app/routes/resources+/api.v1+/design.typ
 import { type IEntity } from '#app/schema/entity'
 import { StrokeBasisTypeEnum, StrokeStyleTypeEnum } from '#app/schema/stroke'
 import { SidebarPanelRowValuesContainer } from '..'
-import { PanelEntityPopoverAlt } from './dashboard-entity-panel.popover.alt'
+import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
 interface EntityProps {
 	entity: IEntity
@@ -22,7 +22,7 @@ const EntityPopover = memo(({ entity }: EntityProps) => {
 	const backgroundColor = displayColor ? value : undefined
 
 	return (
-		<PanelEntityPopoverAlt name="Stroke" backgroundColor={backgroundColor}>
+		<PanelEntityPopover name="Stroke" backgroundColor={backgroundColor}>
 			<SidebarPanelPopoverFormContainer>
 				<span>Value</span>
 				<DesignTypeStrokeValue
@@ -44,7 +44,7 @@ const EntityPopover = memo(({ entity }: EntityProps) => {
 					formLocation="popover"
 				/>
 			</SidebarPanelPopoverFormContainer>
-		</PanelEntityPopoverAlt>
+		</PanelEntityPopover>
 	)
 })
 EntityPopover.displayName = 'EntityPopover'

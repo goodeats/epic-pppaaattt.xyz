@@ -4,7 +4,7 @@ import { type IDesignWithPalette } from '#app/models/design/design.server'
 import { DesignTypePaletteValue } from '#app/routes/resources+/api.v1+/design.type.palette.update.value'
 import { type IEntity } from '#app/schema/entity'
 import { SidebarPanelRowValuesContainer } from '..'
-import { PanelEntityPopoverAlt } from './dashboard-entity-panel.popover.alt'
+import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
 interface EntityProps {
 	entity: IEntity
@@ -14,7 +14,7 @@ const EntityPopover = memo(({ entity }: EntityProps) => {
 	const backgroundColor = (entity as IDesignWithPalette).palette.value
 
 	return (
-		<PanelEntityPopoverAlt name="Palette" backgroundColor={backgroundColor}>
+		<PanelEntityPopover name="Palette" backgroundColor={backgroundColor}>
 			<SidebarPanelPopoverFormContainer>
 				<span>Value</span>
 				<DesignTypePaletteValue
@@ -22,7 +22,7 @@ const EntityPopover = memo(({ entity }: EntityProps) => {
 					formLocation="popover"
 				/>
 			</SidebarPanelPopoverFormContainer>
-		</PanelEntityPopoverAlt>
+		</PanelEntityPopover>
 	)
 })
 EntityPopover.displayName = 'EntityPopover'

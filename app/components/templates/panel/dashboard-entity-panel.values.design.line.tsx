@@ -15,7 +15,7 @@ import {
 } from '#app/schema/line'
 import { SidebarPanelRowValuesContainer } from '..'
 import { PanelEntityIconAlt } from './dashboard-entity-panel.icons'
-import { PanelEntityPopoverAlt } from './dashboard-entity-panel.popover.alt'
+import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
 interface EntityProps {
 	entity: IEntity
@@ -23,7 +23,7 @@ interface EntityProps {
 
 const EntityPopover = memo(({ entity }: EntityProps) => {
 	return (
-		<PanelEntityPopoverAlt name="Line">
+		<PanelEntityPopover name="Line">
 			<SidebarPanelPopoverFormContainer>
 				<span>Width</span>
 				<DesignTypeLineWidth
@@ -45,7 +45,7 @@ const EntityPopover = memo(({ entity }: EntityProps) => {
 					formLocation="popover"
 				/>
 			</SidebarPanelPopoverFormContainer>
-		</PanelEntityPopoverAlt>
+		</PanelEntityPopover>
 	)
 })
 EntityPopover.displayName = 'EntityPopover'

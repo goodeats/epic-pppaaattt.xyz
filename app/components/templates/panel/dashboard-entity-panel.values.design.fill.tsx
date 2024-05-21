@@ -7,7 +7,7 @@ import { DesignTypeFillValue } from '#app/routes/resources+/api.v1+/design.type.
 import { type IEntity } from '#app/schema/entity'
 import { FillBasisTypeEnum, FillStyleTypeEnum } from '#app/schema/fill'
 import { SidebarPanelRowValuesContainer } from '..'
-import { PanelEntityPopoverAlt } from './dashboard-entity-panel.popover.alt'
+import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
 interface EntityProps {
 	entity: IEntity
@@ -22,7 +22,7 @@ const EntityPopover = memo(({ entity }: EntityProps) => {
 	const backgroundColor = displayColor ? value : undefined
 
 	return (
-		<PanelEntityPopoverAlt name="Fill" backgroundColor={backgroundColor}>
+		<PanelEntityPopover name="Fill" backgroundColor={backgroundColor}>
 			<SidebarPanelPopoverFormContainer>
 				<span>Value</span>
 				<DesignTypeFillValue
@@ -44,7 +44,7 @@ const EntityPopover = memo(({ entity }: EntityProps) => {
 					formLocation="popover"
 				/>
 			</SidebarPanelPopoverFormContainer>
-		</PanelEntityPopoverAlt>
+		</PanelEntityPopover>
 	)
 })
 EntityPopover.displayName = 'EntityPopover'
