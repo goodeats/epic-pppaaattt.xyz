@@ -57,8 +57,6 @@ export default function SketchProjectArtboardBranchVersionRoute() {
 	const data = useLoaderData<typeof loader>()
 	const { version, selectedLayer, generator } = data
 
-	console.log('reloaded')
-
 	// had to consider sidebar from project route level
 	// the component names might need re-thinking, but works
 	return (

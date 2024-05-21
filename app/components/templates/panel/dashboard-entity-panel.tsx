@@ -33,7 +33,6 @@ export const DashboardEntityPanel = ({
 	strategyActions: IDashboardPanelEntityActionStrategy
 }) => {
 	const entityCount = entities.length
-	if (type === 'layer') console.log('entityCount', entityCount)
 
 	return (
 		<SidebarPanel>
