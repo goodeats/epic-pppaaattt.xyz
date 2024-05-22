@@ -1,4 +1,6 @@
 import { memo, useCallback } from 'react'
+import { ArtworkVersionDesignCreate } from '#app/routes/resources+/api.v1+/artwork-version.design.create'
+import { ArtworkVersionLayerCreate } from '#app/routes/resources+/api.v1+/artwork-version.layer.create'
 import { LayerDesignCreate } from '#app/routes/resources+/api.v1+/layer.design.create'
 import { type designTypeEnum } from '#app/schema/design'
 import {
@@ -12,8 +14,6 @@ import {
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { capitalize } from '#app/utils/string-formatting'
 import { SidebarPanelHeader, SidebarPanelRowActionsContainer } from '..'
-import { ArtworkVersionDesignCreate } from '#app/routes/resources+/api.v1+/artwork-version.design.create'
-import { ArtworkVersionLayerCreate } from '#app/routes/resources+/api.v1+/artwork-version.layer.create'
 
 // the create forms ultimately lead to resource routes with fetchers and actions
 // this causes unnecessary rerenders

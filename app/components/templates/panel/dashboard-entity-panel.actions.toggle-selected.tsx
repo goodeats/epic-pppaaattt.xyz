@@ -1,6 +1,7 @@
 import { memo, useCallback } from 'react'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type ILayer } from '#app/models/layer/layer.server'
+import { ArtworkVersionLayerToggleSelected } from '#app/routes/resources+/api.v1+/artwork-version.layer.update.selected'
 import {
 	type entityParentTypeEnum,
 	type entityTypeEnum,
@@ -10,7 +11,6 @@ import {
 	EntityParentType,
 } from '#app/schema/entity'
 import { type IDashboardPanelSelectEntityStrategy } from '#app/strategies/component/dashboard-panel/update-entity-selected.strategy'
-import { ArtworkVersionLayerToggleSelected } from '#app/routes/resources+/api.v1+/artwork-version.layer.update.selected'
 
 interface ToggleSelectedChildEntityFormProps {
 	entityType: entityTypeEnum

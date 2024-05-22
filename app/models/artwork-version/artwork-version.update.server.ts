@@ -1,15 +1,15 @@
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { ValidateArtworkVersionSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
-import { validateEntitySubmission } from '#app/utils/conform-utils'
-import { prisma } from '#app/utils/db.server'
-import { type IArtworkVersion } from './artwork-version.server'
 import {
 	ArtworkVersionWidthSchema,
 	type ArtworkVersionUpdateSchemaType,
 	ArtworkVersionHeightSchema,
 	ArtworkVersionBackgroundSchema,
 } from '#app/schema/artwork-version'
+import { ValidateArtworkVersionSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
+import { validateEntitySubmission } from '#app/utils/conform-utils'
+import { prisma } from '#app/utils/db.server'
 import { findFirstArtworkVersionInstance } from '#app/utils/prisma-extensions-artwork-version'
+import { type IArtworkVersion } from './artwork-version.server'
 
 const validateUpdateSubmission = async ({
 	userId,

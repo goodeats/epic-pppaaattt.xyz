@@ -1,4 +1,5 @@
 import { memo, useCallback } from 'react'
+import { ArtworkVersionDesignDelete } from '#app/routes/resources+/api.v1+/artwork-version.design.delete'
 import { LayerDesignDelete } from '#app/routes/resources+/api.v1+/layer.design.delete'
 import {
 	type entityParentTypeEnum,
@@ -9,7 +10,6 @@ import {
 	EntityParentType,
 } from '#app/schema/entity'
 import { type IDashboardPanelDeleteEntityStrategy } from '#app/strategies/component/dashboard-panel/delete-entity.strategy'
-import { ArtworkVersionDesignDelete } from '#app/routes/resources+/api.v1+/artwork-version.design.delete'
 
 interface DeleteChildEntityFormProps {
 	entityType: entityTypeEnum

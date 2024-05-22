@@ -1,4 +1,5 @@
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
+import { NewArtworkBranchSchema } from '#app/schema/artwork-branch'
 import { ValidateArtworkParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
@@ -8,7 +9,6 @@ import {
 	type IArtworkBranch,
 	type IArtworkBranchWithVersions,
 } from './artwork-branch.server'
-import { NewArtworkBranchSchema } from '#app/schema/artwork-branch'
 
 export interface IArtworkBranchCreatedResponse {
 	success: boolean

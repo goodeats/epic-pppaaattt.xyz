@@ -1,11 +1,11 @@
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
+import { NewArtworkVersionSchema } from '#app/schema/artwork-version'
 import { ValidateArtworkBranchParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
 import { type IArtworkBranch } from '../artwork-branch/artwork-branch.server'
 import { type IUser } from '../user/user.server'
 import { type IArtworkVersion } from './artwork-version.server'
-import { NewArtworkVersionSchema } from '#app/schema/artwork-version'
 
 export interface IArtworkVersionCreatedResponse {
 	success: boolean

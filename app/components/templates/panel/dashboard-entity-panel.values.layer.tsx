@@ -3,12 +3,12 @@ import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover
 import { Separator } from '#app/components/ui/separator'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type ILayer } from '#app/models/layer/layer.server'
+import { ArtworkVersionLayerDelete } from '#app/routes/resources+/api.v1+/artwork-version.layer.delete'
 import { LayerDescription } from '#app/routes/resources+/api.v1+/layer.update.description'
 import { LayerName } from '#app/routes/resources+/api.v1+/layer.update.name'
 import { type IEntityParentType, type IEntity } from '#app/schema/entity'
 import { SidebarPanelRowValuesContainer } from '..'
 import { PanelEntityPopover } from './dashboard-entity-panel.popover'
-import { ArtworkVersionLayerDelete } from '#app/routes/resources+/api.v1+/artwork-version.layer.delete'
 
 interface EntityProps {
 	entity: IEntity

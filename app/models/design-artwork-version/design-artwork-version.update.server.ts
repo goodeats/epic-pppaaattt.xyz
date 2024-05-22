@@ -1,10 +1,10 @@
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { ValidateArtworkVersionParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
-import { validateEntitySubmission } from '#app/utils/conform-utils'
 import {
 	ReorderArtworkVersionDesignSchema,
 	ToggleVisibleArtworkVersionDesignSchema,
 } from '#app/schema/design-artwork-version'
+import { ValidateArtworkVersionParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
+import { validateEntitySubmission } from '#app/utils/conform-utils'
 
 export const validateArtworkVersionToggleVisibeDesignSubmission = async ({
 	userId,

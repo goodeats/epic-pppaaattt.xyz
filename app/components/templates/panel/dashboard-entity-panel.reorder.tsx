@@ -2,6 +2,8 @@ import { memo, useCallback } from 'react'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type IDesign } from '#app/models/design/design.server'
 import { type ILayer } from '#app/models/layer/layer.server'
+import { ArtworkVersionDesignReorder } from '#app/routes/resources+/api.v1+/artwork-version.design.update.order'
+import { ArtworkVersionLayerReorder } from '#app/routes/resources+/api.v1+/artwork-version.layer.update.order'
 import { LayerDesignReorder } from '#app/routes/resources+/api.v1+/layer.design.update.order'
 import {
 	EntityParentType,
@@ -13,8 +15,6 @@ import {
 } from '#app/schema/entity'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
 import { SidebarPanelRowReorderContainer } from '..'
-import { ArtworkVersionDesignReorder } from '#app/routes/resources+/api.v1+/artwork-version.design.update.order'
-import { ArtworkVersionLayerReorder } from '#app/routes/resources+/api.v1+/artwork-version.layer.update.order'
 
 interface ReorderChildEntityFormProps {
 	entityType: entityTypeEnum
