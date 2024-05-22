@@ -21,7 +21,7 @@ async function seed() {
 
 	console.time('🔑 Created permissions...')
 	// don't forget to update permissions.ts when adding entities
-	const entities = ['user', 'note', 'project', 'artboard', 'layer']
+	const entities = ['user', 'note', 'project', 'artwork', 'layer']
 	const actions = ['create', 'read', 'update', 'delete']
 	const accesses = ['own', 'any'] as const
 	for (const entity of entities) {
@@ -270,12 +270,12 @@ async function seed() {
 	})
 	console.timeEnd(`🐨 Created admin user "pat"`)
 
-	console.time(`🐨 Created artboard`)
-	await prisma.artboard.create({
+	console.time(`🐨 Created artwork`)
+	await prisma.artwork.create({
 		data: {
-			name: 'My First Artboard',
-			description: 'This is my first artboard. I am so excited to get started!',
-			slug: 'my-first-artboard',
+			name: 'My First Artwork',
+			description: 'This is my first artwork. I am so excited to get started!',
+			slug: 'my-first-artwork',
 			width: 1080,
 			height: 1920,
 			backgroundColor: 'F5F5F5',
@@ -283,7 +283,7 @@ async function seed() {
 			projectId: '1zxo9f8e', // Associate with the first project by hard-coded id
 		},
 	})
-	console.timeEnd(`🐨 Created artboard`)
+	console.timeEnd(`🐨 Created artwork`)
 
 	console.timeEnd(`🌱 Database has been seeded`)
 }

@@ -1,8 +1,8 @@
 import { type User } from '@prisma/client'
 import { type z } from 'zod'
-import { getArtboard } from '#app/models/artboard/artboard.get.server'
-import { getArtboardBranch } from '#app/models/artboard-branch/artboard-branch.get.server'
-import { getArtboardVersion } from '#app/models/artboard-version/artboard-version.get.server'
+import { getArtwork } from '#app/models/artwork/artwork.get.server'
+import { getArtworkBranch } from '#app/models/artwork-branch/artwork-branch.get.server'
+import { getArtworkVersion } from '#app/models/artwork-version/artwork-version.get.server'
 import { getDesign } from '#app/models/design/design.get.server'
 import { getLayer } from '#app/models/layer/layer.get.server'
 import { addNotFoundIssue } from '#app/utils/conform-utils'
@@ -15,7 +15,7 @@ export interface IValidateSubmissionStrategy {
 	}): Promise<void>
 }
 
-export class ValidateArtboardParentSubmissionStrategy
+export class ValidateArtworkParentSubmissionStrategy
 	implements IValidateSubmissionStrategy
 {
 	async validateFormDataEntity({
@@ -27,15 +27,15 @@ export class ValidateArtboardParentSubmissionStrategy
 		data: any
 		ctx: any
 	}): Promise<void> {
-		const { artboardId } = data
-		const artboard = await getArtboard({
-			where: { id: artboardId, ownerId: userId },
+		const { artworkId } = data
+		const artwork = await getArtwork({
+			where: { id: artworkId, ownerId: userId },
 		})
-		if (!artboard) ctx.addIssue(addNotFoundIssue('Artboard'))
+		if (!artwork) ctx.addIssue(addNotFoundIssue('Artwork'))
 	}
 }
 
-export class ValidateArtboardBranchParentSubmissionStrategy
+export class ValidateArtworkBranchParentSubmissionStrategy
 	implements IValidateSubmissionStrategy
 {
 	async validateFormDataEntity({
@@ -47,15 +47,15 @@ export class ValidateArtboardBranchParentSubmissionStrategy
 		data: any
 		ctx: any
 	}): Promise<void> {
-		const { artboardBranchId } = data
-		const artboardBranch = await getArtboardBranch({
-			where: { id: artboardBranchId, ownerId: userId },
+		const { artworkBranchId } = data
+		const artworkBranch = await getArtworkBranch({
+			where: { id: artworkBranchId, ownerId: userId },
 		})
-		if (!artboardBranch) ctx.addIssue(addNotFoundIssue('ArtboardBranch'))
+		if (!artworkBranch) ctx.addIssue(addNotFoundIssue('ArtworkBranch'))
 	}
 }
 
-export class ValidateArtboardVersionSubmissionStrategy
+export class ValidateArtworkVersionSubmissionStrategy
 	implements IValidateSubmissionStrategy
 {
 	async validateFormDataEntity({
@@ -68,14 +68,14 @@ export class ValidateArtboardVersionSubmissionStrategy
 		ctx: any
 	}): Promise<void> {
 		const { id } = data
-		const artboardVersion = await getArtboardVersion({
+		const artworkVersion = await getArtworkVersion({
 			where: { id, ownerId: userId },
 		})
-		if (!artboardVersion) ctx.addIssue(addNotFoundIssue('ArtboardVersion'))
+		if (!artworkVersion) ctx.addIssue(addNotFoundIssue('ArtworkVersion'))
 	}
 }
 
-export class ValidateArtboardVersionParentSubmissionStrategy
+export class ValidateArtworkVersionParentSubmissionStrategy
 	implements IValidateSubmissionStrategy
 {
 	async validateFormDataEntity({
@@ -87,11 +87,11 @@ export class ValidateArtboardVersionParentSubmissionStrategy
 		data: any
 		ctx: any
 	}): Promise<void> {
-		const { artboardVersionId } = data
-		const artboardVersion = await getArtboardVersion({
-			where: { id: artboardVersionId, ownerId: userId },
+		const { artworkVersionId } = data
+		const artworkVersion = await getArtworkVersion({
+			where: { id: artworkVersionId, ownerId: userId },
 		})
-		if (!artboardVersion) ctx.addIssue(addNotFoundIssue('ArtboardVersion'))
+		if (!artworkVersion) ctx.addIssue(addNotFoundIssue('ArtworkVersion'))
 	}
 }
 

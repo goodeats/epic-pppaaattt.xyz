@@ -1,4 +1,4 @@
-import { type ILayerGenerator } from '#app/definitions/artboard-generator'
+import { type ILayerGenerator } from '#app/definitions/artwork-generator'
 import { FillBasisTypeEnum } from '#app/schema/fill'
 import { LayoutStyleTypeEnum } from '#app/schema/layout'
 import { StrokeBasisTypeEnum } from '#app/schema/stroke'

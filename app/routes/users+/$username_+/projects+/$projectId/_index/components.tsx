@@ -10,7 +10,7 @@ import {
 } from '#app/components/shared'
 import { Separator } from '#app/components/ui/separator'
 import { userHasPermission, useOptionalUser } from '#app/utils/user'
-import { Artboards } from './artboards'
+import { Artworks } from './artworks'
 import { DeletePermission } from './delete-project-form'
 import { type loader } from './route'
 
@@ -46,7 +46,7 @@ export const Content = () => {
 			<ContainerP>Visible: {data.project.isVisible ? 'Yes' : 'No'}</ContainerP>
 			<ContainerP>{data.project.description}</ContainerP>
 			<Separator className="my-4" />
-			<Artboards />
+			<Artworks />
 		</ContainerContent>
 	)
 }

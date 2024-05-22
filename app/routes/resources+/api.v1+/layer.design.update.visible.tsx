@@ -74,7 +74,7 @@ export const LayerDesignToggleVisible = ({
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
-		id: `artboard-layer-design-toggle-visible-${layerId}-${designId}`,
+		id: `artwork-layer-design-toggle-visible-${layerId}-${designId}`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission,
 	})

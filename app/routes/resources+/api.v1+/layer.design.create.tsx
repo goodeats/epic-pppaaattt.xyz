@@ -67,7 +67,7 @@ export const LayerDesignCreate = ({
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
-		id: `artboard-layer-create-${layerId}-new`,
+		id: `artwork-layer-create-${layerId}-new`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission,
 	})

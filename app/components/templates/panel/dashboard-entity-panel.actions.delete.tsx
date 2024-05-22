@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { ArtboardVersionDesignDelete } from '#app/routes/resources+/api.v1+/artboard-version.design.delete'
+import { ArtworkVersionDesignDelete } from '#app/routes/resources+/api.v1+/artwork-version.design.delete'
 import { LayerDesignDelete } from '#app/routes/resources+/api.v1+/layer.design.delete'
 import {
 	type entityParentTypeEnum,
@@ -18,12 +18,12 @@ interface DeleteChildEntityFormProps {
 	parent: IEntityParentType
 }
 
-const ArtboardVersionDeleteChildEntityForm = memo(
+const ArtworkVersionDeleteChildEntityForm = memo(
 	({ entityType, entity, parent }: DeleteChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
 				return (
-					<ArtboardVersionDesignDelete
+					<ArtworkVersionDesignDelete
 						designId={entity.id}
 						versionId={parent.id}
 					/>
@@ -31,13 +31,13 @@ const ArtboardVersionDeleteChildEntityForm = memo(
 			case EntityType.LAYER:
 				return 'av l'
 			default:
-				console.log('unknown artboard version entity type', entityType)
+				console.log('unknown artwork version entity type', entityType)
 				return null
 		}
 	},
 )
-ArtboardVersionDeleteChildEntityForm.displayName =
-	'ArtboardVersionDeleteChildEntityForm'
+ArtworkVersionDeleteChildEntityForm.displayName =
+	'ArtworkVersionDeleteChildEntityForm'
 
 const LayerDeleteChildEntityForm = memo(
 	({ entityType, entity, parent }: DeleteChildEntityFormProps) => {
@@ -55,9 +55,9 @@ LayerDeleteChildEntityForm.displayName = 'LayerDeleteChildEntityForm'
 const DeleteEntityForm = memo(
 	({ parentType, entityType, entity, parent }: DeleteChildEntityFormProps) => {
 		switch (parentType) {
-			case EntityParentType.ARTBOARD_VERSION:
+			case EntityParentType.ARTWORK_VERSION:
 				return (
-					<ArtboardVersionDeleteChildEntityForm
+					<ArtworkVersionDeleteChildEntityForm
 						entityType={entityType}
 						entity={entity}
 						parent={parent}

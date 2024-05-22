@@ -1,20 +1,14 @@
-import { type IArtboard } from '#app/models/artboard/artboard.server'
-import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import {
 	type IDesign,
 	type IDesignEntityId,
 	type IDesignIdOrNull,
 } from '#app/models/design/design.server'
-import { findFirstVisibleArtboardVersionDesignByType } from '#app/models/design-artboard-version/design-artboard-version.get.server'
+import { findFirstVisibleArtworkVersionDesignByType } from '#app/models/design-artwork-version/design-artwork-version.get.server'
 import {
-	deselectArtboardVersionSelectedDesign,
-	updateArtboardVersionSelectedDesign,
-} from '#app/models/design-artboard-version/design-artboard-version.server'
-import {
-	deselectArtboardSelectedDesign,
-	findFirstVisibleArtboardDesignByType,
-	updateArtboardSelectedDesign,
-} from '#app/models/design-artboard.server'
+	deselectArtworkVersionSelectedDesign,
+	updateArtworkVersionSelectedDesign,
+} from '#app/models/design-artwork-version/design-artwork-version.server'
 import { findFirstVisibleLayerDesignByType } from '#app/models/design-layer/design-layer.get.server'
 import {
 	deselectLayerSelectedDesign,
@@ -88,7 +82,7 @@ export class LayerUpdateSelectedDesignStrategy
 	}
 }
 
-export class ArtboardVersionUpdateSelectedDesignStrategy
+export class ArtworkVersionUpdateSelectedDesignStrategy
 	implements IUpdateSelectedDesignStrategy
 {
 	async updateSelectedDesign({
@@ -96,12 +90,12 @@ export class ArtboardVersionUpdateSelectedDesignStrategy
 		designId,
 		type,
 	}: {
-		targetEntityId: IArtboardVersion['id']
+		targetEntityId: IArtworkVersion['id']
 		designId: IDesign['id']
 		type: designTypeEnum
 	}) {
-		const updateSelectedDesignPromise = updateArtboardVersionSelectedDesign({
-			artboardVersionId: targetEntityId,
+		const updateSelectedDesignPromise = updateArtworkVersionSelectedDesign({
+			artworkVersionId: targetEntityId,
 			designId,
 			type,
 		})
@@ -112,11 +106,11 @@ export class ArtboardVersionUpdateSelectedDesignStrategy
 		targetEntityId,
 		type,
 	}: {
-		targetEntityId: IArtboardVersion['id']
+		targetEntityId: IArtworkVersion['id']
 		type: designTypeEnum
 	}) {
-		return await findFirstVisibleArtboardVersionDesignByType({
-			artboardVersionId: targetEntityId,
+		return await findFirstVisibleArtworkVersionDesignByType({
+			artworkVersionId: targetEntityId,
 			type,
 		})
 	}
@@ -125,59 +119,11 @@ export class ArtboardVersionUpdateSelectedDesignStrategy
 		targetEntityId,
 		type,
 	}: {
-		targetEntityId: IArtboardVersion['id']
+		targetEntityId: IArtworkVersion['id']
 		type: designTypeEnum
 	}) {
-		const deselectDesignsPromise = deselectArtboardVersionSelectedDesign({
-			artboardVersionId: targetEntityId,
-			type,
-		})
-		await prisma.$transaction([deselectDesignsPromise])
-	}
-}
-
-export class ArtboardUpdateSelectedDesignStrategy
-	implements IUpdateSelectedDesignStrategy
-{
-	async updateSelectedDesign({
-		targetEntityId,
-		designId,
-		type,
-	}: {
-		targetEntityId: IArtboard['id']
-		designId: IDesign['id']
-		type: designTypeEnum
-	}) {
-		const updateSelectedDesignPromise = updateArtboardSelectedDesign({
-			artboardId: targetEntityId,
-			designId,
-			type,
-		})
-		await prisma.$transaction(updateSelectedDesignPromise)
-	}
-
-	async findFirstVisibleDesign({
-		targetEntityId,
-		type,
-	}: {
-		targetEntityId: IArtboard['id']
-		type: designTypeEnum
-	}) {
-		return await findFirstVisibleArtboardDesignByType({
-			artboardId: targetEntityId,
-			type,
-		})
-	}
-
-	async deselectDesign({
-		targetEntityId,
-		type,
-	}: {
-		targetEntityId: IArtboard['id']
-		type: designTypeEnum
-	}) {
-		const deselectDesignsPromise = deselectArtboardSelectedDesign({
-			artboardId: targetEntityId,
+		const deselectDesignsPromise = deselectArtworkVersionSelectedDesign({
+			artworkVersionId: targetEntityId,
 			type,
 		})
 		await prisma.$transaction([deselectDesignsPromise])

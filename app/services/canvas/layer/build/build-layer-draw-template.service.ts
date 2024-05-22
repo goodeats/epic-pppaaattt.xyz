@@ -1,4 +1,4 @@
-import { type ILayerGenerator } from '#app/definitions/artboard-generator'
+import { type ILayerGenerator } from '#app/definitions/artwork-generator'
 
 export const canvasBuildLayerDrawTemplateService = ({
 	layer,

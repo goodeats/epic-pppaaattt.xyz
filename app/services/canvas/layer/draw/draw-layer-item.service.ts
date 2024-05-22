@@ -1,4 +1,4 @@
-import { type IGenerationItem } from '#app/definitions/artboard-generator'
+import { type IGenerationItem } from '#app/definitions/artwork-generator'
 import { ctxBegin, ctxEnd } from '../../ctx.utils'
 import { drawLayerItemFillService } from './draw-layer-item-fill.service'
 import { drawLayerItemLineService } from './draw-layer-item-line.service'

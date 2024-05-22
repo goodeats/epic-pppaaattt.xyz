@@ -2,8 +2,8 @@ import { remember } from '@epic-web/remember'
 import { PrismaClient, type Prisma } from '@prisma/client'
 import { type DefaultArgs } from '@prisma/client/runtime/library'
 import chalk from 'chalk'
-import { ArtboardPrismaExtensions } from './prisma-extensions-artboard'
-import { ArtboardVersionPrismaExtensions } from './prisma-extensions-artboard-version'
+import { ArtworkPrismaExtensions } from './prisma-extensions-artwork'
+import { ArtworkVersionPrismaExtensions } from './prisma-extensions-artwork-version'
 import {
 	DesignPrismaExtensions,
 	DesignPrismaQueryExtensions,
@@ -26,8 +26,8 @@ export type PrismaTransactionType = Omit<
 
 export const prismaExtended = remember('prisma', () => {
 	return new PrismaClient({})
-		.$extends(ArtboardPrismaExtensions)
-		.$extends(ArtboardVersionPrismaExtensions)
+		.$extends(ArtworkPrismaExtensions)
+		.$extends(ArtworkVersionPrismaExtensions)
 		.$extends(DesignPrismaQueryExtensions)
 		.$extends(DesignPrismaExtensions)
 		.$extends(PalettePrismaExtensions)

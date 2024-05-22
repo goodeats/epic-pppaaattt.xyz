@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
-import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type ILayer } from '#app/models/layer/layer.server'
-import { ArtboardVersionLayerToggleSelected } from '#app/routes/resources+/api.v1+/artboard-version.layer.update.selected'
+import { ArtworkVersionLayerToggleSelected } from '#app/routes/resources+/api.v1+/artwork-version.layer.update.selected'
 import {
 	type entityParentTypeEnum,
 	type entityTypeEnum,
@@ -19,24 +19,24 @@ interface ToggleSelectedChildEntityFormProps {
 	parent: IEntityParentType
 }
 
-const ArtboardVersionToggleSelectedChildEntityForm = memo(
+const ArtworkVersionToggleSelectedChildEntityForm = memo(
 	({ entityType, entity, parent }: ToggleSelectedChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.LAYER:
 				return (
-					<ArtboardVersionLayerToggleSelected
+					<ArtworkVersionLayerToggleSelected
 						layer={entity as ILayer}
-						version={parent as IArtboardVersion}
+						version={parent as IArtworkVersion}
 					/>
 				)
 			default:
-				console.log('unknown artboard version entity type', entityType)
+				console.log('unknown artwork version entity type', entityType)
 				return null
 		}
 	},
 )
-ArtboardVersionToggleSelectedChildEntityForm.displayName =
-	'ArtboardVersionToggleSelectedChildEntityForm'
+ArtworkVersionToggleSelectedChildEntityForm.displayName =
+	'ArtworkVersionToggleSelectedChildEntityForm'
 
 const ToggleSelectedEntityForm = memo(
 	({
@@ -46,9 +46,9 @@ const ToggleSelectedEntityForm = memo(
 		parent,
 	}: ToggleSelectedChildEntityFormProps) => {
 		switch (parentType) {
-			case EntityParentType.ARTBOARD_VERSION:
+			case EntityParentType.ARTWORK_VERSION:
 				return (
-					<ArtboardVersionToggleSelectedChildEntityForm
+					<ArtworkVersionToggleSelectedChildEntityForm
 						entityType={entityType}
 						entity={entity}
 						parent={parent}

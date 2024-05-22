@@ -1,4 +1,4 @@
-import { type ILayerGeneratorContainer } from '#app/definitions/artboard-generator'
+import { type ILayerGeneratorContainer } from '#app/definitions/artwork-generator'
 import { type ILine } from '#app/models/design-type/line/line.server'
 import { type ISize } from '#app/models/design-type/size/size.server'
 import { LineBasisTypeEnum } from '#app/schema/line'

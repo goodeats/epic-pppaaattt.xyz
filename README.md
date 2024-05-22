@@ -20,11 +20,11 @@ To get started with this project, follow these steps:
 Please keep in mind this is a personal project, not yet intended for a wide audience
 
 - login as `adminUser` set from seeds in `prisma/seed.ts` (if you want to change this then run `npm run setup` again)
-- from user dropdown in upper right navigate to sketch and select `My First Artboard` (created from seed)
+- from user dropdown in upper right navigate to sketch and select `My First Artwork` (created from seed)
 - add at least one design attribute for each category
-- add a layer, which will adopt the artboard design attributes
+- add a layer, which will adopt the artwork design attributes
 - click on the layer name to select it and adjust the designs from there
-- move up/down, make visible/invisible, add/remove designs and layers to create different outputs on the artboard
+- move up/down, make visible/invisible, add/remove designs and layers to create different outputs on the artwork
 
 ## TECH STACK
 
@@ -42,7 +42,7 @@ Please keep in mind this is a personal project, not yet intended for a wide audi
 
 ## ROADMAP
 
-- version history to save instances of artboards if I like the designs
+- version history to save instances of artworks if I like the designs
 - connect to shopify products
 - migrate to [vite](https://remix.run/blog/remix-heart-vite)
 - import/export image assets to modify pixels into art

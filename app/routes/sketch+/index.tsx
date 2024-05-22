@@ -8,7 +8,7 @@ import {
 	DashboardContentHeading2,
 } from '#app/components/layout'
 import { DashboardEntityCards } from '#app/components/templates'
-import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
+import { getProjectsWithArtworks } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { useUser } from '#app/utils/user'
@@ -19,7 +19,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
-	const projects = await getProjectsWithArtboards({
+	const projects = await getProjectsWithArtworks({
 		where: { ownerId: userId },
 	})
 	return json({ projects })

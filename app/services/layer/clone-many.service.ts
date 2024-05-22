@@ -62,10 +62,10 @@ const getSourceEntityLayers = async ({
 	sourceEntityId: ILayerEntityId
 }): Promise<ILayerWithDesigns[]> => {
 	const where =
-		sourceEntityType === LayerCloneSourceTypeEnum.ARTBOARD
-			? { artboardId: sourceEntityId }
-			: LayerCloneSourceTypeEnum.ARTBOARD_VERSION
-			  ? { artboardVersionId: sourceEntityId }
+		sourceEntityType === LayerCloneSourceTypeEnum.ARtwork
+			? { artworkId: sourceEntityId }
+			: LayerCloneSourceTypeEnum.ARTWORK_VERSION
+			  ? { artworkVersionId: sourceEntityId }
 			  : { layerId: sourceEntityId }
 
 	const layers = await getLayersWithDesigns({ where })

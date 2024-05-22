@@ -1,8 +1,8 @@
 import {
-	type IArtboardVersionGenerator,
+	type IArtworkVersionGenerator,
 	type IGenerationItem,
 	type ILayerGenerator,
-} from '#app/definitions/artboard-generator'
+} from '#app/definitions/artwork-generator'
 import { canvasBuildLayerDrawCountService } from './build-layer-draw-count.service'
 import { canvasBuildLayerDrawFillService } from './build-layer-draw-fill.service'
 import { canvasBuildLayerDrawLineService } from './build-layer-draw-line.service'
@@ -17,7 +17,7 @@ export const canvasLayerBuildDrawLayersService = ({
 	generator,
 }: {
 	ctx: CanvasRenderingContext2D
-	generator: IArtboardVersionGenerator
+	generator: IArtworkVersionGenerator
 }): IGenerationItem[][] => {
 	const { layers } = generator
 

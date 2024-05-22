@@ -1,4 +1,4 @@
-import { type IArtboardVersionGenerator } from '#app/definitions/artboard-generator'
+import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator'
 import { canvasDrawBackgroundService } from './draw-background.service'
 import { canvasLayerBuildDrawLayersService } from './layer/build/build-draw-layers.service'
 import { canvasDrawLayersService } from './layer/draw/draw-layers.service'
@@ -8,7 +8,7 @@ export const canvasDrawService = ({
 	generator,
 }: {
 	canvas: HTMLCanvasElement
-	generator: IArtboardVersionGenerator
+	generator: IArtworkVersionGenerator
 }) => {
 	// Step 1: get canvas
 	const ctx = getContext(canvas)

@@ -1,12 +1,12 @@
 import {
-	DashboardPanelDeleteArtboardVersionDesignStrategy,
+	DashboardPanelDeleteArtworkVersionDesignStrategy,
 	DashboardPanelDeleteLayerDesignStrategy,
 	type IDashboardPanelDeleteEntityStrategy,
 } from '../delete-entity.strategy'
-import { DashboardPanelSelectArtboardVersionLayerStrategy } from '../update-entity-selected.strategy'
+import { DashboardPanelSelectArtworkVersionLayerStrategy } from '../update-entity-selected.strategy'
 import {
-	DashboardPanelUpdateArtboardVersionDesignVisibleStrategy,
-	DashboardPanelUpdateArtboardVersionLayerVisibleStrategy,
+	DashboardPanelUpdateArtworkVersionDesignVisibleStrategy,
+	DashboardPanelUpdateArtworkVersionLayerVisibleStrategy,
 	DashboardPanelUpdateLayerDesignVisibleStrategy,
 	type IDashboardPanelUpdateEntityVisibleStrategy,
 } from '../update-entity-visible.strategy'
@@ -19,30 +19,30 @@ export interface IDashboardPanelEntityActionStrategy {
 	getPanelActions(): IPanelEntityActionStrategy[]
 }
 
-// artboard design
-export class DashboardPanelArtboardVersionDesignActionStrategy
+// artwork design
+export class DashboardPanelArtworkVersionDesignActionStrategy
 	implements IDashboardPanelEntityActionStrategy
 {
 	getPanelActions(): IPanelEntityActionStrategy[] {
 		const strategyToggleVisible =
-			new DashboardPanelUpdateArtboardVersionDesignVisibleStrategy()
+			new DashboardPanelUpdateArtworkVersionDesignVisibleStrategy()
 		const strategyDelete =
-			new DashboardPanelDeleteArtboardVersionDesignStrategy()
+			new DashboardPanelDeleteArtworkVersionDesignStrategy()
 
 		return [strategyToggleVisible, strategyDelete]
 	}
 }
 
-// artboard layer
-export class DashboardPanelArtboardVersionLayerActionStrategy
+// artwork layer
+export class DashboardPanelArtworkVersionLayerActionStrategy
 	implements IDashboardPanelEntityActionStrategy
 {
 	getPanelActions(): IPanelEntityActionStrategy[] {
 		const strategyToggleVisible =
-			new DashboardPanelUpdateArtboardVersionLayerVisibleStrategy()
+			new DashboardPanelUpdateArtworkVersionLayerVisibleStrategy()
 
 		const strategySelect =
-			new DashboardPanelSelectArtboardVersionLayerStrategy()
+			new DashboardPanelSelectArtworkVersionLayerStrategy()
 
 		// delete in popover so it's less easy to click accidentally from left sidebar
 
