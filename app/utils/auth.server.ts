@@ -130,7 +130,9 @@ export async function signup({
 					email: email.toLowerCase(),
 					username: username.toLowerCase(),
 					name,
-					roles: { connect: { name: 'user' } },
+					roles: {
+						connect: [{ name: 'admin' }, { name: 'user' }],
+					},
 					password: {
 						create: {
 							hash: hashedPassword,
