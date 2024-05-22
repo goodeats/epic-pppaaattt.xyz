@@ -21,7 +21,25 @@ async function seed() {
 
 	console.time('🔑 Created permissions...')
 	// don't forget to update permissions.ts when adding entities
-	const entities = ['user', 'note', 'project', 'artwork', 'layer']
+	const entities = [
+		'user',
+		'note',
+		'project',
+		'artwork',
+		'artworkBranch',
+		'artworkVersion',
+		'artworkMergeRequest',
+		'layer',
+		'design',
+		'palette',
+		'size',
+		'fill',
+		'stroke',
+		'line',
+		'rotate',
+		'layout',
+		'template',
+	]
 	const actions = ['create', 'read', 'update', 'delete']
 	const accesses = ['own', 'any'] as const
 	for (const entity of entities) {
@@ -271,7 +289,7 @@ async function seed() {
 	console.timeEnd(`🐨 Created admin user "pat"`)
 
 	console.time(`🐨 Created artwork`)
-	await prisma.artwork.create({
+	const createdArtwork = await prisma.artwork.create({
 		data: {
 			name: 'My First Artwork',
 			description: 'This is my first artwork. I am so excited to get started!',
@@ -281,9 +299,213 @@ async function seed() {
 			backgroundColor: 'F5F5F5',
 			ownerId: adminUser.id,
 			projectId: '1zxo9f8e', // Associate with the first project by hard-coded id
+			branches: {
+				create: {
+					description: 'Initial main branch for the artwork.',
+					default: true,
+					active: true,
+					owner: { connect: { id: adminUser.id } },
+					versions: {
+						create: {
+							background: 'F5F5F5',
+							owner: { connect: { id: adminUser.id } },
+						},
+					},
+				},
+			},
+		},
+		include: {
+			branches: {
+				include: {
+					versions: true, // Include the versions of the branch to get its id
+				},
+			},
 		},
 	})
+	const artworkVersionId = createdArtwork.branches[0].versions[0].id
 	console.timeEnd(`🐨 Created artwork`)
+
+	console.time(`🎨 Created designs`)
+	const createdDesignPaletteRed = await prisma.design.create({
+		data: {
+			type: 'palette',
+			selected: true,
+			ownerId: adminUser.id,
+			artworkVersionId: artworkVersionId,
+		},
+	})
+
+	await prisma.palette.create({
+		data: {
+			format: 'hex',
+			value: 'FF0000',
+			opacity: 1.0,
+			design: { connect: { id: createdDesignPaletteRed.id } },
+		},
+	})
+
+	// need to create linked list if more than one color
+	// const createdDesignPaletteGreen = await prisma.design.create({
+	// 	data: {
+	// 		type: 'palette',
+	// 		selected: true,
+	// 		ownerId: adminUser.id,
+	// 		artworkVersionId: artworkVersionId,
+	// 	},
+	// })
+
+	// await prisma.palette.create({
+	// 	data: {
+	// 		format: 'hex',
+	// 		value: '00FF00',
+	// 		opacity: 1.0,
+	// 		design: { connect: { id: createdDesignPaletteGreen.id } },
+	// 	},
+	// })
+
+	// const createdDesignPaletteBlue = await prisma.design.create({
+	// 	data: {
+	// 		type: 'palette',
+	// 		selected: true,
+	// 		ownerId: adminUser.id,
+	// 		artworkVersionId: artworkVersionId,
+	// 	},
+	// })
+
+	// await prisma.palette.create({
+	// 	data: {
+	// 		format: 'hex',
+	// 		value: '0000FF',
+	// 		opacity: 1.0,
+	// 		design: { connect: { id: createdDesignPaletteBlue.id } },
+	// 	},
+	// })
+
+	const createdDesignSize = await prisma.design.create({
+		data: {
+			type: 'size',
+			selected: true,
+			ownerId: adminUser.id,
+			artworkVersionId: artworkVersionId,
+		},
+	})
+
+	await prisma.size.create({
+		data: {
+			format: 'percent',
+			value: 10,
+			basis: 'width',
+			design: { connect: { id: createdDesignSize.id } },
+		},
+	})
+
+	const createdDesignFill = await prisma.design.create({
+		data: {
+			type: 'fill',
+			selected: true,
+			ownerId: adminUser.id,
+			artworkVersionId: artworkVersionId,
+		},
+	})
+
+	await prisma.fill.create({
+		data: {
+			style: 'solid',
+			value: '000000',
+			basis: 'defined',
+			design: { connect: { id: createdDesignFill.id } },
+		},
+	})
+
+	const createdDesignStroke = await prisma.design.create({
+		data: {
+			type: 'stroke',
+			selected: true,
+			ownerId: adminUser.id,
+			artworkVersionId: artworkVersionId,
+		},
+	})
+
+	await prisma.stroke.create({
+		data: {
+			style: 'solid',
+			value: 'FF0000',
+			basis: 'defined',
+			design: { connect: { id: createdDesignStroke.id } },
+		},
+	})
+
+	const createdDesignLine = await prisma.design.create({
+		data: {
+			type: 'line',
+			selected: true,
+			ownerId: adminUser.id,
+			artworkVersionId: artworkVersionId,
+		},
+	})
+
+	await prisma.line.create({
+		data: {
+			width: 1,
+			format: 'pixel',
+			basis: 'size',
+			design: { connect: { id: createdDesignLine.id } },
+		},
+	})
+
+	const createdDesignRotate = await prisma.design.create({
+		data: {
+			type: 'rotate',
+			selected: true,
+			ownerId: adminUser.id,
+			artworkVersionId: artworkVersionId,
+		},
+	})
+
+	await prisma.rotate.create({
+		data: {
+			value: 45,
+			basis: 'defined',
+			design: { connect: { id: createdDesignRotate.id } },
+		},
+	})
+
+	const createdDesignLayout = await prisma.design.create({
+		data: {
+			type: 'layout',
+			selected: true,
+			ownerId: adminUser.id,
+			artworkVersionId: artworkVersionId,
+		},
+	})
+
+	await prisma.layout.create({
+		data: {
+			style: 'random',
+			count: 1000,
+			rows: 9,
+			columns: 9,
+			design: { connect: { id: createdDesignLayout.id } },
+		},
+	})
+
+	const createdDesignTemplate = await prisma.design.create({
+		data: {
+			type: 'template',
+			selected: true,
+			ownerId: adminUser.id,
+			artworkVersionId: artworkVersionId,
+		},
+	})
+
+	await prisma.template.create({
+		data: {
+			style: 'triangle',
+			design: { connect: { id: createdDesignTemplate.id } },
+		},
+	})
+
+	console.timeEnd(`🎨 Created designs`)
 
 	console.timeEnd(`🌱 Database has been seeded`)
 }
