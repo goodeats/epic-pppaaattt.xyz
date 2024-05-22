@@ -36,10 +36,10 @@ export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
 	const projectData = routeLoaderMetaData(matches, projectLoaderRoute)
 	const projectName = projectData?.project.name ?? params.slug
 	return [
-		{ title: `${projectName} | Sketchy | XYZ` },
+		{ title: `${projectName} | Sketch | XYZ` },
 		{
 			name: 'description',
-			content: `Sketchy dashboard for Project: ${projectName}`,
+			content: `Sketch dashboard for XYZ project: ${projectName}`,
 		},
 	]
 }

@@ -100,11 +100,11 @@ export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
 
 	return [
 		{
-			title: `${artboardName} | ${branchName} | ${versionName} | ${projectName} | Sketchy | XYZ`,
+			title: `${artboardName} | ${branchName} | ${versionName} | ${projectName} | Sketch | XYZ`,
 		},
 		{
 			name: 'description',
-			content: `Sketchy dashboard artboard project: ${artboardName} (${projectName})`,
+			content: `Sketch dashboard for XYZ artboard project: ${artboardName} (${projectName})`,
 		},
 	]
 }

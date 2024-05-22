@@ -25,10 +25,10 @@ export default function SketchRoute() {
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: 'Sketchy | XYZ' },
+		{ title: 'Sketch | XYZ' },
 		{
 			name: 'description',
-			content: 'Sketchy dashboard for XYZ',
+			content: 'Sketch dashboard for XYZ',
 		},
 	]
 }

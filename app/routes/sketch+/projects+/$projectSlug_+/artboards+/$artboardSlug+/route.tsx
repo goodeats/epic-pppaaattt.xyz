@@ -49,10 +49,10 @@ export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
 	const artboardData = routeLoaderMetaData(matches, artboardLoaderRoute)
 	const artboardName = artboardData?.artboard.name ?? params.artboardSlug
 	return [
-		{ title: `${artboardName} | ${projectName} | Sketchy | XYZ` },
+		{ title: `${artboardName} | ${projectName} | Sketch | XYZ` },
 		{
 			name: 'description',
-			content: `Sketchy dashboard artboard project: ${artboardName} (${projectName})`,
+			content: `Sketch dashboard for artboard project: ${artboardName} (${projectName})`,
 		},
 	]
 }

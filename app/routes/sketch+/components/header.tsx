@@ -11,7 +11,7 @@ export const Header = () => {
 		<DashboardHeader id="sketch-dashboard-header">
 			<DashboardTitle id="sketch-dashboard-title">
 				<Link prefetch="intent" to="/sketch">
-					Sketchy
+					Sketch
 				</Link>
 			</DashboardTitle>
 			<DashboardNav id="sketch-dashboard-nav">

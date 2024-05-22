@@ -48,11 +48,11 @@ export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
 	const branchName = branchData?.branch.name ?? params.branchSlug
 	return [
 		{
-			title: `${artboardName} | ${branchName} | ${projectName} | Sketchy | XYZ`,
+			title: `${artboardName} | ${branchName} | ${projectName} | Sketch | XYZ`,
 		},
 		{
 			name: 'description',
-			content: `Sketchy dashboard artboard project: ${artboardName} (${projectName})`,
+			content: `Sketch dashboard for XYZ artboard project: ${artboardName} (${projectName})`,
 		},
 	]
 }
