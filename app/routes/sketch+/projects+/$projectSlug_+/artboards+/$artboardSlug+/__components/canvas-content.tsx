@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { memo, useEffect, useMemo, useRef } from 'react'
 import {
 	ReactFlow,
 	type Node,
@@ -7,6 +7,7 @@ import {
 	Controls,
 	MiniMap,
 	useNodesState,
+	type NodeProps,
 } from 'reactflow'
 import { ContainerIndex } from '#app/components/shared'
 import { type IArtboardVersionGenerator } from '#app/definitions/artboard-generator'
@@ -22,20 +23,17 @@ const initialNodes = [
 	},
 ] satisfies Node[]
 
-export const CanvasContent = ({
-	generator,
-}: {
-	generator: IArtboardVersionGenerator
-}) => {
-	const { width, height, background } = generator.settings
-
-	const Canvas = () => {
+const ArtboardCanvas = memo(
+	({ generator }: { generator: IArtboardVersionGenerator }) => {
+		const { width, height, background } = generator.settings
 		const canvasRef = useRef<HTMLCanvasElement>(null)
 
 		useEffect(() => {
 			const canvas = canvasRef.current
-			canvas && canvasDrawService({ canvas, generator })
-		}, [canvasRef])
+			if (canvas) {
+				canvasDrawService({ canvas, generator })
+			}
+		}, [canvasRef, generator])
 
 		return (
 			<canvas
@@ -46,12 +44,25 @@ export const CanvasContent = ({
 				style={{ backgroundColor: `#${background}` }}
 			/>
 		)
-	}
+	},
+)
+ArtboardCanvas.displayName = 'ArtboardCanvas'
 
+export const CanvasContent = ({
+	generator,
+}: {
+	generator: IArtboardVersionGenerator
+}) => {
 	const [nodes, , onNodesChange] = useNodesState(initialNodes)
-	const nodeTypes = {
-		canvas: Canvas,
-	}
+
+	const nodeTypes = useMemo(
+		() => ({
+			canvas: (props: NodeProps) => (
+				<ArtboardCanvas {...props} generator={generator} />
+			),
+		}),
+		[generator],
+	)
 
 	if (!generator.success) {
 		return (
@@ -60,8 +71,6 @@ export const CanvasContent = ({
 			</ContainerIndex>
 		)
 	}
-
-	return <p>yo</p>
 
 	return (
 		<ReactFlow
