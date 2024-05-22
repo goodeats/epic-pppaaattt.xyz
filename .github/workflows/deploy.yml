@@ -136,7 +136,6 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-  uncomment when I feel that fly deploy is stable enough
   deploy:
     name: 🚀 Deploy
     runs-on: ubuntu-22.04

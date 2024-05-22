@@ -1,13 +1,16 @@
 # Documented example: https://github.com/superfly/litefs/blob/dec5a7353292068b830001bd2df4830e646f6a2f/cmd/litefs/etc/litefs.yml
+# https://fly.io/docs/litefs/config/#fuse-directory
 fuse:
   # Required. This is the mount directory that applications will
   # use to access their SQLite databases.
   dir: '${LITEFS_DIR}'
 
+# https://fly.io/docs/litefs/config/#internal-data-directory
 data:
   # Path to internal data storage.
   dir: '/data/litefs'
 
+# https://fly.io/docs/litefs/config/#http-proxy-server
 proxy:
   # matches the internal_port in fly.toml
   addr: ':${INTERNAL_PORT}'
@@ -18,18 +21,22 @@ proxy:
 # "consul" lease type so that our application can dynamically change the primary.
 #
 # These environment variables will be available in your Fly.io application.
+# https://fly.io/docs/litefs/config/#lease-management
 lease:
   type: 'consul'
   candidate: ${FLY_REGION == PRIMARY_REGION}
   promote: true
   advertise-url: 'http://${HOSTNAME}.vm.${FLY_APP_NAME}.internal:20202'
 
+  # https://fly.io/docs/litefs/config/#consul-leasing
   consul:
     url: '${FLY_CONSUL_URL}'
     key: 'epic-stack-litefs/${FLY_APP_NAME}'
 
+# https://fly.io/docs/litefs/config/#supervisor-exec
 exec:
-  - cmd: node ./other/setup-swap.js
+  - cmd: npx prisma migrate deploy
+    if-candidate: true
 
   # Set the journal mode for the database to WAL. This reduces concurrency deadlock issues
   - cmd: sqlite3 $DATABASE_PATH "PRAGMA journal_mode = WAL;"
@@ -39,7 +46,14 @@ exec:
   - cmd: sqlite3 $CACHE_DATABASE_PATH "PRAGMA journal_mode = WAL;"
     if-candidate: true
 
-  - cmd: npx prisma migrate deploy
-    if-candidate: true
-
   - cmd: npm start
+
+# https://fly.io/docs/litefs/config/#exit-on-error
+# If exit-on-error is set to true, the supervisor will exit if any of the exec commands fail.
+# I want to prevent this: "machine has reached its max restart count (10)" (from the fly.io app logs)
+# personally, I have seen that error message enough times when trying to deploy an epic-stack app to fly.io
+# it has led mainly to starting over from scratch
+# this is why the deploy action was commented out in deploy.yml for so long
+# going to try this out and see if it helps
+# enabling WAL mode for sqlite db may have had an effect on this, proceed to monitor
+exit-on-error: true
