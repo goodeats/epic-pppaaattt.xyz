@@ -25,7 +25,7 @@ export default function SketchProjectIndexRoute() {
 				entities={project.artboards}
 				type="Artboard"
 				parent={project.name}
-				basePathNew={`/users/${user.username}/projects/${project.name}/artboards`}
+				basePathNew={`/users/${user.username}/projects/${project.slug}/artboards`}
 				basePathEditor={`/users/${user.username}/artboards`}
 				basePathView="artboards"
 			/>

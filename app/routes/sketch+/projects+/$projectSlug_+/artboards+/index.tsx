@@ -38,7 +38,7 @@ export default function SketchProjectArtboardsIndexRoute() {
 			<DashboardContentHeading2>
 				<Link
 					prefetch="intent"
-					to={`/sketch/projects/${project.name}/artboards`}
+					to={`/sketch/projects/${project.slug}/artboards`}
 				>
 					Artboards
 				</Link>
@@ -47,9 +47,9 @@ export default function SketchProjectArtboardsIndexRoute() {
 				entities={project.artboards}
 				type="Artboard"
 				parent={project.name}
-				basePathNew={`/users/${user.username}/projects/${project.name}/artboards`}
+				basePathNew={`/users/${user.username}/projects/${project.slug}/artboards`}
 				basePathEditor={`/users/${user.username}/artboards`}
-				basePathView={`/sketch/projects/${project.name}/artboards`}
+				basePathView={`/sketch/projects/${project.slug}/artboards`}
 			/>
 		</div>
 	)
