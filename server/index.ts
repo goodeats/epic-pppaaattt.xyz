@@ -28,7 +28,7 @@ const viteDevServer = IS_PROD
 			vite.createServer({
 				server: { middlewareMode: true },
 			}),
-	  )
+		)
 
 const app = express()
 
@@ -120,7 +120,7 @@ app.use(
 			directives: {
 				'connect-src': [
 					MODE === 'development' ? 'ws:' : null,
-					process.env.SENTRY_DSN ? '*.ingest.sentry.io' : null,
+					process.env.SENTRY_DSN ? '*.sentry.io' : null,
 					"'self'",
 				].filter(Boolean),
 				'font-src': ["'self'"],
@@ -202,8 +202,8 @@ async function getBuild() {
 	const build = viteDevServer
 		? viteDevServer.ssrLoadModule('virtual:remix/server-build')
 		: // @ts-ignore this should exist before running the server
-		  // but it may not exist just yet.
-		  await import('#build/server/index.js')
+			// but it may not exist just yet.
+			await import('#build/server/index.js')
 	// not sure how to make this happy 🤷‍♂️
 	return build as unknown as ServerBuild
 }
@@ -236,8 +236,8 @@ const server = app.listen(portToUse, () => {
 		desiredPort === portToUse
 			? desiredPort
 			: addy && typeof addy === 'object'
-			  ? addy.port
-			  : 0
+				? addy.port
+				: 0
 
 	if (portUsed !== desiredPort) {
 		console.warn(
