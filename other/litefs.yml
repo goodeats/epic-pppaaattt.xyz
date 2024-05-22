@@ -55,4 +55,5 @@ exec:
 # it has led mainly to starting over from scratch
 # this is why the deploy action was commented out in deploy.yml for so long
 # going to try this out and see if it helps
+# enabling WAL mode for sqlite db may have had an effect on this, proceed to monitor
 exit-on-error: true
