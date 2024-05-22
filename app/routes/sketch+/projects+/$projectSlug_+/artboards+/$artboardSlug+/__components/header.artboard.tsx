@@ -6,18 +6,15 @@ import {
 } from '#app/components/layout'
 import { ComboboxNav } from '#app/components/templates/combobox'
 import { TooltipIcon, TooltipIconLink } from '#app/components/templates/navbar'
-import { NewArtboardBranchSchema } from '#app/schema/artboard-branch'
-import { NewArtboardVersionSchema } from '#app/schema/artboard-version'
+import { ArtboardBranchCreate } from '#app/routes/resources+/api.v1+/artboard-branch.create'
+import { ArtboardVersionCreate } from '#app/routes/resources+/api.v1+/artboard-version.create'
 import { EntityParentIdType } from '#app/schema/entity'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
-import { Routes } from '#app/utils/routes.utils'
 import { useUser } from '#app/utils/user'
 import { artboardBranchLoaderRoute } from '../$branchSlug'
 import { artboardVersionLoaderRoute } from '../$branchSlug.$versionSlug'
 import { projectLoaderRoute } from '../../route'
 import { artboardLoaderRoute } from '../route'
-import { DialogFormBranchCreate } from './header.artboard.dialog.form.branch.create'
-import { DialogFormVersionCreate } from './header.artboard.dialog.form.version.create'
 
 export const ArtboardHeader = () => {
 	const user = useUser()
@@ -33,8 +30,8 @@ export const ArtboardHeader = () => {
 	const onLatestVersion =
 		version.slug === 'latest' || branch.versions[0].id === version.id
 
-	return (
-		<DashboardHeader id="dashboard-artboard-header">
+	const NavComboboxes = () => {
+		return (
 			<DashboardNav className="sm:justify-start">
 				<ComboboxNav
 					entities={project.artboards}
@@ -85,6 +82,12 @@ export const ArtboardHeader = () => {
 					/>
 				)}
 			</DashboardNav>
+		)
+	}
+
+	const NavButtonGroup = () => {
+		return null
+		return (
 			<DashboardNav>
 				{/* TODO: make these have the same look as the form fetcher icon */}
 				<NavbarButtonGroup>
@@ -93,34 +96,18 @@ export const ArtboardHeader = () => {
 					{/* <span>info a, ab, abv</span> */}
 					{/* <span>fork ab</span> */}
 					{/* <span>merge ab</span> */}
-					<DialogFormBranchCreate
+					<ArtboardBranchCreate
 						branchId={branch.id}
 						artboardId={artboard.id}
 						versionId={version.id}
-						route={Routes.RESOURCES.API.V1.ARTBOARD_BRANCH.CREATE}
 						formId="artboard-branch-create"
-						schema={NewArtboardBranchSchema}
-						icon="file-plus"
-						iconText="New Branch"
-						title="Create new branch"
-						description="Save a new branch of this artboard. Add a name and description to help understand the changes. Click save when you're done."
 					/>
-					<DialogFormVersionCreate
+					<ArtboardVersionCreate
 						entityId={version.id}
 						parentId={branch.id}
 						parentTypeId={EntityParentIdType.ARTBOARD_BRANCH_ID}
-						route={Routes.RESOURCES.API.V1.ARTBOARD_VERSION.CREATE}
 						formId="artboard-version-create"
-						schema={NewArtboardVersionSchema}
-						icon="card-stack-plus"
-						iconText="New Version"
-						title="Create new version"
-						description="Save a new version of this artboard. Add a description to help understand the changes. Click save when you're done."
-						warningDescription={
-							onLatestVersion
-								? ''
-								: `Creating a new version will erase all versions after the current version.`
-						}
+						onOlderVersion={!onLatestVersion}
 					/>
 					<TooltipIconLink
 						to={`/users/${user.username}/artboards/${artboard.slug}`}
@@ -131,6 +118,13 @@ export const ArtboardHeader = () => {
 					/>
 				</NavbarButtonGroup>
 			</DashboardNav>
+		)
+	}
+
+	return (
+		<DashboardHeader id="dashboard-artboard-header">
+			<NavComboboxes />
+			<NavButtonGroup />
 		</DashboardHeader>
 	)
 }

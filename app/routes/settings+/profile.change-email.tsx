@@ -1,8 +1,6 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
-import { invariant } from '@epic-web/invariant'
 import { type SEOHandle } from '@nasa-gcn/remix-seo'
-import * as E from '@react-email/components'
 import {
 	json,
 	redirect,
@@ -15,19 +13,18 @@ import { z } from 'zod'
 import { ErrorList, Field } from '#app/components/forms.tsx'
 import { Icon } from '#app/components/ui/icon.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
-import {
-	prepareVerification,
-	requireRecentVerification,
-	type VerifyFunctionArgs,
-} from '#app/routes/_auth+/verify.tsx'
 import { requireUserId } from '#app/utils/auth.server.ts'
 import { validateCSRF } from '#app/utils/csrf.server.ts'
 import { prisma } from '#app/utils/db.server.ts'
 import { sendEmail } from '#app/utils/email.server.ts'
 import { useIsPending } from '#app/utils/misc.tsx'
-import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { EmailSchema } from '#app/utils/user-validation.ts'
 import { verifySessionStorage } from '#app/utils/verification.server.ts'
+import {
+	prepareVerification,
+	requireRecentVerification,
+} from '../_auth+/verify.server.ts'
+import { EmailChangeEmail } from './profile.change-email.server.tsx'
 import { type BreadcrumbHandle } from './profile.tsx'
 
 export const handle: BreadcrumbHandle & SEOHandle = {
@@ -35,55 +32,7 @@ export const handle: BreadcrumbHandle & SEOHandle = {
 	getSitemapEntries: () => null,
 }
 
-const newEmailAddressSessionKey = 'new-email-address'
-
-export async function handleVerification({
-	request,
-	submission,
-}: VerifyFunctionArgs) {
-	await requireRecentVerification(request)
-	invariant(submission.value, 'submission.value should be defined by now')
-
-	const verifySession = await verifySessionStorage.getSession(
-		request.headers.get('cookie'),
-	)
-	const newEmail = verifySession.get(newEmailAddressSessionKey)
-	if (!newEmail) {
-		submission.error[''] = [
-			'You must submit the code on the same device that requested the email change.',
-		]
-		return json({ status: 'error', submission } as const, { status: 400 })
-	}
-	const preUpdateUser = await prisma.user.findFirstOrThrow({
-		select: { email: true },
-		where: { id: submission.value.target },
-	})
-	const user = await prisma.user.update({
-		where: { id: submission.value.target },
-		select: { id: true, email: true, username: true },
-		data: { email: newEmail },
-	})
-
-	void sendEmail({
-		to: preUpdateUser.email,
-		subject: 'Epic Stack email changed',
-		react: <EmailChangeNoticeEmail userId={user.id} />,
-	})
-
-	return redirectWithToast(
-		'/settings/profile',
-		{
-			title: 'Email Changed',
-			type: 'success',
-			description: `Your email has been changed to ${user.email}`,
-		},
-		{
-			headers: {
-				'set-cookie': await verifySessionStorage.destroySession(verifySession),
-			},
-		},
-	)
-}
+export const newEmailAddressSessionKey = 'new-email-address'
 
 const ChangeEmailSchema = z.object({
 	email: EmailSchema,
@@ -154,61 +103,6 @@ export async function action({ request }: ActionFunctionArgs) {
 		submission.error[''] = [response.error.message]
 		return json({ status: 'error', submission } as const, { status: 500 })
 	}
-}
-
-export function EmailChangeEmail({
-	verifyUrl,
-	otp,
-}: {
-	verifyUrl: string
-	otp: string
-}) {
-	return (
-		<E.Html lang="en" dir="ltr">
-			<E.Container>
-				<h1>
-					<E.Text>Epic Notes Email Change</E.Text>
-				</h1>
-				<p>
-					<E.Text>
-						Here's your verification code: <strong>{otp}</strong>
-					</E.Text>
-				</p>
-				<p>
-					<E.Text>Or click the link:</E.Text>
-				</p>
-				<E.Link href={verifyUrl}>{verifyUrl}</E.Link>
-			</E.Container>
-		</E.Html>
-	)
-}
-
-export function EmailChangeNoticeEmail({ userId }: { userId: string }) {
-	return (
-		<E.Html lang="en" dir="ltr">
-			<E.Container>
-				<h1>
-					<E.Text>Your Epic Notes email has been changed</E.Text>
-				</h1>
-				<p>
-					<E.Text>
-						We're writing to let you know that your Epic Notes email has been
-						changed.
-					</E.Text>
-				</p>
-				<p>
-					<E.Text>
-						If you changed your email address, then you can safely ignore this.
-						But if you did not change your email address, then please contact
-						support immediately.
-					</E.Text>
-				</p>
-				<p>
-					<E.Text>Your Account ID: {userId}</E.Text>
-				</p>
-			</E.Container>
-		</E.Html>
-	)
 }
 
 export default function ChangeEmailIndex() {

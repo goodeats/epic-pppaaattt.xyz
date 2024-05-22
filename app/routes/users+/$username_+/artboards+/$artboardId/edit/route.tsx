@@ -6,7 +6,8 @@ import { requireUserId } from '#app/utils/auth.server.ts'
 import { type BreadcrumbHandle } from '#app/utils/breadcrumbs.tsx'
 import { prisma } from '#app/utils/db.server.ts'
 import { type loader as artboardsLoader } from '../../route.tsx'
-import { EditForm, action } from './edit-form.tsx'
+import { action } from './edit-form.server.ts'
+import { EditForm } from './edit-form.tsx'
 
 export { action }
 

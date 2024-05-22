@@ -1,6 +1,5 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
-import { json, redirect, type ActionFunctionArgs } from '@remix-run/node'
 import { Form, useActionData, useLoaderData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
@@ -14,20 +13,17 @@ import {
 } from '#app/components/shared'
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
-import { createDefaultArtboardBranchWithVersion } from '#app/models/artboard-branch/artboard-branch.create.server'
-import { requireUserId } from '#app/utils/auth.server.ts'
 import {
 	formatSringsToHex,
 	validateStringsAreHexcodes,
 } from '#app/utils/colors'
-import { validateCSRF } from '#app/utils/csrf.server.ts'
-import { prisma } from '#app/utils/db.server.ts'
-import { stringToSlug, useIsPending } from '#app/utils/misc.tsx'
+import { useIsPending } from '#app/utils/misc.tsx'
 import {
 	capitalize,
 	removeWhitespace,
 	trimSpacesInBetween,
 } from '#app/utils/string-formatting'
+import { type action } from './new-artboard-form.server'
 import { type loader } from './route'
 
 const titleMinLength = 1
@@ -39,7 +35,7 @@ const widthMaxLength = 10000
 const heightMinLength = 1
 const heightMaxLength = 10000
 
-const ArtboardEditorSchema = z.object({
+export const ArtboardEditorSchema = z.object({
 	projectId: z.string(),
 	name: z.string().min(titleMinLength).max(titleMaxLength),
 	description: z.string().min(descriptionMinLength).max(descriptionMaxLength),
@@ -57,80 +53,6 @@ const ArtboardEditorSchema = z.object({
 			message: 'Values must be valid hexcodes',
 		}),
 })
-
-export async function action({ request }: ActionFunctionArgs) {
-	const userId = await requireUserId(request)
-
-	const formData = await request.formData()
-	await validateCSRF(formData, request.headers)
-
-	const submission = await parse(formData, {
-		schema: ArtboardEditorSchema.superRefine(async (data, ctx) => {
-			const project = await prisma.project.findUnique({
-				select: { id: true },
-				where: { id: data.projectId, ownerId: userId },
-			})
-			if (!project) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: 'Project not found',
-				})
-			}
-
-			const slug = stringToSlug(data.name)
-			const artboardWithSlug = await prisma.artboard.findFirst({
-				select: { id: true },
-				where: { slug, ownerId: userId },
-			})
-			if (artboardWithSlug) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: 'Artboard with that name already exists',
-				})
-			}
-		}),
-		async: true,
-	})
-
-	if (submission.intent !== 'submit') {
-		return json({ submission } as const)
-	}
-
-	if (!submission.value) {
-		return json({ submission } as const, { status: 400 })
-	}
-
-	const { projectId, name, description, width, height, backgroundColor } =
-		submission.value
-	const slug = stringToSlug(name)
-
-	const createdArtboard = await prisma.artboard.create({
-		select: {
-			id: true,
-			ownerId: true,
-			slug: true,
-			owner: { select: { username: true } },
-			project: { select: { slug: true } },
-		},
-		data: {
-			ownerId: userId,
-			projectId,
-			name,
-			description,
-			slug,
-			width,
-			height,
-			backgroundColor: backgroundColor[0],
-		},
-	})
-
-	await createDefaultArtboardBranchWithVersion({
-		artboard: createdArtboard,
-	})
-
-	const { owner } = createdArtboard
-	return redirect(`/users/${owner.username}/artboards/${createdArtboard.slug}`)
-}
 
 export function NewArtboardForm() {
 	const data = useLoaderData<typeof loader>()

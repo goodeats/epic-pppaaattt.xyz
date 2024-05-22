@@ -3,7 +3,7 @@ import {
 	DashboardPanelDeleteLayerDesignStrategy,
 	type IDashboardPanelDeleteEntityStrategy,
 } from '../delete-entity.strategy'
-import { DashboardPanelSelectArtboardVersionLayerStrategy } from '../select-entity.strategy'
+import { DashboardPanelSelectArtboardVersionLayerStrategy } from '../update-entity-selected.strategy'
 import {
 	DashboardPanelUpdateArtboardVersionDesignVisibleStrategy,
 	DashboardPanelUpdateArtboardVersionLayerVisibleStrategy,

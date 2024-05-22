@@ -3,7 +3,6 @@ import { type IDesignWithType } from '#app/models/design/design.server'
 import { type designTypeEnum, type DesignParentType } from '#app/schema/design'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
-import { type IDashboardPanelUpdateEntityValuesStrategy } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
 import {
 	designsByTypeToPanelArray,
@@ -30,10 +29,10 @@ export const PanelDesigns = ({
 
 	return (
 		<div>
-			{designTypePanels.map((designTypePanel, index) => {
+			{designTypePanels.map(designTypePanel => {
 				return (
 					<PanelDesign
-						key={index}
+						key={designTypePanel.type}
 						parent={parent}
 						designTypePanel={designTypePanel}
 						strategyEntityNew={strategyEntityNew}
@@ -57,13 +56,12 @@ export const PanelDesign = ({
 	designTypePanel: {
 		type: designTypeEnum
 		designs: IDesignWithType[]
-		strategyEntityValues: IDashboardPanelUpdateEntityValuesStrategy
 	}
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyActions: IDashboardPanelEntityActionStrategy
 }) => {
-	const { type, designs, strategyEntityValues } = designTypePanel
+	const { type, designs } = designTypePanel
 	return (
 		<DashboardEntityPanel
 			key={type}
@@ -72,7 +70,6 @@ export const PanelDesign = ({
 			entities={designs}
 			strategyEntityNew={strategyEntityNew}
 			strategyReorder={strategyReorder}
-			strategyEntityValues={strategyEntityValues}
 			strategyActions={strategyActions}
 		/>
 	)

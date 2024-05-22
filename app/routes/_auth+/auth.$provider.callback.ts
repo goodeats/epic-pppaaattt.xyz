@@ -16,7 +16,7 @@ import {
 	redirectWithToast,
 } from '#app/utils/toast.server.ts'
 import { verifySessionStorage } from '#app/utils/verification.server.ts'
-import { handleNewSession } from './login.tsx'
+import { handleNewSession } from './login.server.ts'
 import {
 	onboardingEmailSessionKey,
 	prefilledProfileKey,

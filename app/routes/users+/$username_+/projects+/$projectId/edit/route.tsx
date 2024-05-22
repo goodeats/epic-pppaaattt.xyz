@@ -6,7 +6,8 @@ import { requireUserId } from '#app/utils/auth.server.ts'
 import { type BreadcrumbHandle } from '#app/utils/breadcrumbs.tsx'
 import { prisma } from '#app/utils/db.server.ts'
 import { type loader as projectsLoader } from '../../route.tsx'
-import { EditProjectForm, action } from './edit-project-form.tsx'
+import { action } from './edit-project-form.server.ts'
+import { EditProjectForm } from './edit-project-form.tsx'
 
 export { action }
 

@@ -34,7 +34,7 @@ export const SidebarRight = ({
 }) => {
 	return (
 		<Sidebar id="sidebar-right">
-			<SidebarTabs tabs={['designs', 'actions', 'history']}>
+			<SidebarTabs tabs={['designs', 'history']}>
 				<SidebarTabsContent value="designs">
 					{selectedLayer ? (
 						<PanelLayer layer={selectedLayer} />
@@ -42,7 +42,6 @@ export const SidebarRight = ({
 						<PanelArtboardVersion version={version} />
 					)}
 				</SidebarTabsContent>
-				<SidebarTabsContent value="actions">Actions here</SidebarTabsContent>
 				<SidebarTabsContent value="history">
 					branch, version, edit, etc. history here
 				</SidebarTabsContent>

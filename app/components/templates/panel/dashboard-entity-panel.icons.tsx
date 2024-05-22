@@ -1,12 +1,14 @@
-import { Icon } from '#app/components/ui/icon'
-import { type IDashboardPanelIcon } from '#app/strategies/component/dashboard-panel/update-entity/update-entity-values'
+import { Icon, type IconName } from '#app/components/ui/icon'
 
 export const PanelEntityIcon = ({
-	panelEntityIcon,
+	icon,
+	symbol,
+	text,
 }: {
-	panelEntityIcon: IDashboardPanelIcon
+	icon?: IconName
+	symbol?: string
+	text: string
 }) => {
-	const { icon, symbol, text } = panelEntityIcon
 	return (
 		<div className="m-2 mr-0 flex h-8 w-8 items-center justify-center">
 			{icon ? (

@@ -13,12 +13,9 @@ import { ContainerDetails } from '#app/components/shared/container.tsx'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import { prisma } from '#app/utils/db.server'
-import {
-	requireUserWithPermission,
-	userHasPermission,
-} from '#app/utils/permissions'
+import { requireUserWithPermission } from '#app/utils/permissions.server.ts'
 import { redirectWithToast } from '#app/utils/toast.server'
-import { useOptionalUser } from '#app/utils/user'
+import { useOptionalUser, userHasPermission } from '#app/utils/user'
 import { type loader as projectsLoader } from '../../route.tsx'
 import { Content, Footer, Header } from './components.tsx'
 

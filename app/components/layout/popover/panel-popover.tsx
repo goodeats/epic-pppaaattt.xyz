@@ -47,7 +47,7 @@ const SidebarPanelPopoverFormsContainer = createContainerComponent({
 
 const SidebarPanelPopoverFormContainer = createContainerComponent({
 	defaultTagName: 'div',
-	defaultClassName: 'grid grid-cols-3 items-center gap-4',
+	defaultClassName: 'grid grid-cols-2 items-center gap-4',
 	displayName: 'SidebarPanelPopoverFormContainer',
 })
 

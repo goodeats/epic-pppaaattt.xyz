@@ -1,6 +1,7 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { requireUserId } from '#app/utils/auth.server.ts'
-import { NoteEditor, action } from './__note-editor.tsx'
+import { action } from './__note-editor.server.ts'
+import { NoteEditor } from './__note-editor.tsx'
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	await requireUserId(request)

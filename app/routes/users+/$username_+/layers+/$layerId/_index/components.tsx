@@ -9,8 +9,7 @@ import {
 	FooterTimestamp,
 } from '#app/components/shared'
 import { Separator } from '#app/components/ui/separator'
-import { userHasPermission } from '#app/utils/permissions'
-import { useOptionalUser } from '#app/utils/user'
+import { userHasPermission, useOptionalUser } from '#app/utils/user'
 import { DeletePermission } from './delete-form'
 import { type loader } from './route'
 
