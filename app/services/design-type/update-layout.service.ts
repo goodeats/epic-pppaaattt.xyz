@@ -1,4 +1,3 @@
-import { type User } from '@sentry/remix'
 import { type IDesign } from '#app/models/design/design.server'
 import { type ILayout } from '#app/models/design-type/layout/layout.server'
 import {
@@ -8,6 +7,7 @@ import {
 	updateDesignTypeLayoutColumns,
 	updateDesignTypeLayoutStyle,
 } from '#app/models/design-type/layout/layout.update.server'
+import { type IUser } from '#app/models/user/user.server'
 
 export const updateDesignTypeLayoutCountService = async ({
 	userId,
@@ -15,7 +15,7 @@ export const updateDesignTypeLayoutCountService = async ({
 	designId,
 	count,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: ILayout['id']
 	designId: IDesign['id']
 	count: number
@@ -45,7 +45,7 @@ export const updateDesignTypeLayoutRowsService = async ({
 	designId,
 	rows,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: ILayout['id']
 	designId: IDesign['id']
 	rows: number
@@ -75,7 +75,7 @@ export const updateDesignTypeLayoutColumnsService = async ({
 	designId,
 	columns,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: ILayout['id']
 	designId: IDesign['id']
 	columns: number
@@ -105,7 +105,7 @@ export const updateDesignTypeLayoutStyleService = async ({
 	designId,
 	style,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: ILayout['id']
 	designId: IDesign['id']
 	style: number

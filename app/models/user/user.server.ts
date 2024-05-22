@@ -1,4 +1,4 @@
-import { type User } from '@sentry/remix'
+import { type User } from '@prisma/client'
 import { type DateOrString } from '#app/definitions/prisma-helper'
 
 // Omitting 'createdAt' and 'updatedAt' from the User interface

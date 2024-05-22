@@ -1,4 +1,3 @@
-import { type User } from '@sentry/remix'
 import { type IDesign } from '#app/models/design/design.server'
 import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
 import {
@@ -6,6 +5,7 @@ import {
 	updateDesignTypeRotateValue,
 	updateDesignTypeRotateBasis,
 } from '#app/models/design-type/rotate/rotate.update.server'
+import { type IUser } from '#app/models/user/user.server'
 
 export const updateDesignTypeRotateValueService = async ({
 	userId,
@@ -13,7 +13,7 @@ export const updateDesignTypeRotateValueService = async ({
 	designId,
 	value,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: IRotate['id']
 	designId: IDesign['id']
 	value: number
@@ -43,7 +43,7 @@ export const updateDesignTypeRotateBasisService = async ({
 	designId,
 	basis,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: IRotate['id']
 	designId: IDesign['id']
 	basis: string

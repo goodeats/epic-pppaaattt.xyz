@@ -1,10 +1,10 @@
-import { type User } from '@sentry/remix'
 import { type IDesign } from '#app/models/design/design.server'
 import { type IPalette } from '#app/models/design-type/palette/palette.server'
 import {
 	type IDesignTypePaletteUpdatedResponse,
 	updateDesignTypePaletteValue,
 } from '#app/models/design-type/palette/palette.update.server'
+import { type IUser } from '#app/models/user/user.server'
 
 export const updateDesignTypePaletteValueService = async ({
 	userId,
@@ -12,7 +12,7 @@ export const updateDesignTypePaletteValueService = async ({
 	designId,
 	value,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: IPalette['id']
 	designId: IDesign['id']
 	value: number
