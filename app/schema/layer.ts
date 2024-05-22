@@ -1,11 +1,5 @@
 import { z } from 'zod'
 import {
-	type ReorderArtboardLayerSchema,
-	type NewArtboardLayerSchema,
-	type ToggleVisibleArtboardLayerSchema,
-	type DeleteArtboardLayerSchema,
-} from './layer-artboard'
-import {
 	type ReorderArtboardVersionLayerSchema,
 	type NewArtboardVersionLayerSchema,
 	type ToggleVisibleArtboardVersionLayerSchema,
@@ -37,21 +31,14 @@ export const EditLayerDescriptionSchema = z.object({
 })
 
 // later there will be layer groups
-export type NewLayerSchemaType =
-	| typeof NewArtboardLayerSchema
-	| typeof NewArtboardVersionLayerSchema
+export type NewLayerSchemaType = typeof NewArtboardVersionLayerSchema
 
-export type ReorderLayerSchemaType =
-	| typeof ReorderArtboardLayerSchema
-	| typeof ReorderArtboardVersionLayerSchema
+export type ReorderLayerSchemaType = typeof ReorderArtboardVersionLayerSchema
 
 export type ToggleVisibleLayerSchemaType =
-	| typeof ToggleVisibleArtboardLayerSchema
-	| typeof ToggleVisibleArtboardVersionLayerSchema
+	typeof ToggleVisibleArtboardVersionLayerSchema
 
-export type DeleteLayerSchemaType =
-	| typeof DeleteArtboardLayerSchema
-	| typeof DeleteArtboardVersionLayerSchema
+export type DeleteLayerSchemaType = typeof DeleteArtboardVersionLayerSchema
 
 export type SelectLayerSchemaType = typeof SelectArtboardVersionLayerSchema
 

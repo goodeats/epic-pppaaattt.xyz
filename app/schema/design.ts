@@ -3,12 +3,6 @@ import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-
 import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
 import { type ObjectValues } from '#app/utils/typescript-helpers'
 import {
-	type ToggleVisibleArtboardDesignSchema,
-	type DeleteArtboardDesignSchema,
-	type NewArtboardDesignSchema,
-	type ReorderArtboardDesignSchema,
-} from './design-artboard'
-import {
 	type DeleteArtboardVersionDesignSchema,
 	type NewArtboardVersionDesignSchema,
 	type ReorderArtboardVersionDesignSchema,
@@ -46,7 +40,6 @@ export const DesignParentTypeIdEnum = {
 export type designParentTypeIdEnum = ObjectValues<typeof DesignParentTypeIdEnum>
 
 export const DesignCloneSourceTypeEnum = {
-	ARTBOARD: 'artboard',
 	ARTBOARD_VERSION: 'artboardVersion',
 	LAYER: 'layer',
 } as const
@@ -58,7 +51,6 @@ export interface Design {
 	type: designTypeEnum
 	ownerId: string
 	// one of these should be included
-	artboardId?: string
 	artboardVersionId?: string
 	layerId?: string
 }
@@ -67,7 +59,6 @@ export interface Design {
 export const designSchema = z.object({
 	type: z.nativeEnum(DesignTypeEnum),
 	ownerId: z.string(),
-	artboardId: z.string().optional(),
 	artboardVersionId: z.string().optional(),
 	layerId: z.string().optional(),
 	visible: z.boolean().optional(),
@@ -75,22 +66,18 @@ export const designSchema = z.object({
 }) satisfies z.Schema<Design>
 
 export type NewDesignSchemaType =
-	| typeof NewArtboardDesignSchema
 	| typeof NewArtboardVersionDesignSchema
 	| typeof NewLayerDesignSchema
 
 export type ReorderDesignSchemaType =
-	| typeof ReorderArtboardDesignSchema
 	| typeof ReorderArtboardVersionDesignSchema
 	| typeof ReorderLayerDesignSchema
 
 export type ToggleVisibleDesignSchemaType =
-	| typeof ToggleVisibleArtboardDesignSchema
 	| typeof ToggleVisibleArtboardVersionDesignSchema
 	| typeof ToggleVisibleLayerDesignSchema
 
 export type DeleteDesignSchemaType =
-	| typeof DeleteArtboardDesignSchema
 	| typeof DeleteArtboardVersionDesignSchema
 	| typeof DeleteLayerDesignSchema
 
@@ -108,7 +95,6 @@ const whereArgs = z.object({
 	visible: z.boolean().optional(),
 	selected: z.boolean().optional(),
 	ownerId: z.string().optional(),
-	artboardId: z.string().optional(),
 	artboardVersionId: z.string().optional(),
 	layerId: z.string().optional(),
 	prevId: zodStringOrNull.optional(),

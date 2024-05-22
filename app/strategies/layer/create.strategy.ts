@@ -1,5 +1,4 @@
 import { type User } from '@prisma/client'
-import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
 import { createLayer } from '#app/models/layer/layer.create.server'
 import {
@@ -9,9 +8,7 @@ import {
 	type ILayerEntityId,
 } from '#app/models/layer/layer.server'
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
-import { ArtboardLayerDataCreateSchema } from '#app/schema/layer-artboard'
 import { ArtboardVersionLayerDataCreateSchema } from '#app/schema/layer-artboard-version'
-import { artboardLayerCloneDesignsService } from '#app/services/artboard/layer/clone-designs.service'
 import { artboardVersionLayerCloneDesignsService } from '#app/services/artboard/version/layer/clone-designs.service'
 import { prisma } from '#app/utils/db.server'
 
@@ -87,62 +84,6 @@ export class ArtboardVersionCreateLayerStrategy
 		await artboardVersionLayerCloneDesignsService({
 			userId,
 			sourceEntityType: DesignCloneSourceTypeEnum.ARTBOARD_VERSION,
-			sourceEntityId,
-			targetEntityId,
-		})
-	}
-}
-
-export class ArtboardCreateLayerStrategy implements ICreateLayerStrategy {
-	async getEntityLayersTail({
-		targetEntityId,
-	}: {
-		targetEntityId: IArtboard['id']
-	}): Promise<ILayer | null> {
-		return await findFirstLayer({
-			where: { artboardId: targetEntityId, nextId: null },
-		})
-	}
-
-	async createEntityLayer({
-		userId,
-		targetEntityId,
-		layerOverrides,
-	}: {
-		userId: User['id']
-		targetEntityId: IArtboard['id']
-		layerOverrides: ILayerCreateOverrides
-	}): Promise<ILayer> {
-		const data = ArtboardLayerDataCreateSchema.parse({
-			ownerId: userId,
-			artboardId: targetEntityId,
-			...layerOverrides,
-		})
-		return await createLayer({ data })
-	}
-
-	async getEntityLayersCount({
-		targetEntityId,
-	}: {
-		targetEntityId: IArtboard['id']
-	}): Promise<number> {
-		return await prisma.layer.count({
-			where: { artboardId: targetEntityId },
-		})
-	}
-
-	async layerCloneDesignsService({
-		userId,
-		sourceEntityId,
-		targetEntityId,
-	}: {
-		userId: User['id']
-		sourceEntityId: ILayerEntityId
-		targetEntityId: ILayerEntityId
-	}) {
-		await artboardLayerCloneDesignsService({
-			userId,
-			sourceEntityType: DesignCloneSourceTypeEnum.ARTBOARD,
 			sourceEntityId,
 			targetEntityId,
 		})

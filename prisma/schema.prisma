@@ -223,9 +223,6 @@ model Artboard {
   branches ArtboardBranch[]
   mergeRequests ArtboardMergeRequest[]
 
-  layers Layer[]
-  designs Design[]
-
   // non-unique foreign key
   @@index([projectId])
   @@index([ownerId])
@@ -250,9 +247,6 @@ model Layer {
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId String
 
-  artboard Artboard? @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artboardId String?
-
   artboardVersionId String?
   artboardVersion   ArtboardVersion? @relation(fields: [artboardVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -276,7 +270,6 @@ model Layer {
   // This helps our order by in the user search a LOT
   @@index([ownerId, updatedAt])
   // Unique constraint for slug scoped to ownerId
-  @@unique([slug, ownerId, artboardId])
   @@unique([slug, ownerId, artboardVersionId])
 }
 
@@ -348,9 +341,6 @@ model Design {
 
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId String
-
-  artboard Artboard? @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artboardId String?
 
   artboardVersionId String?
   artboardVersion   ArtboardVersion? @relation(fields: [artboardVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)

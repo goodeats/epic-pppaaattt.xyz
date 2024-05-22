@@ -67,11 +67,9 @@ const getSourceEntityDesigns = async ({
 	sourceEntityId: IDesignEntityId
 }): Promise<IDesignWithType[]> => {
 	const where =
-		sourceEntityType === DesignCloneSourceTypeEnum.ARTBOARD
-			? { artboardId: sourceEntityId }
-			: sourceEntityType === DesignCloneSourceTypeEnum.ARTBOARD_VERSION
-			  ? { artboardVersionId: sourceEntityId }
-			  : { layerId: sourceEntityId }
+		sourceEntityType === DesignCloneSourceTypeEnum.ARTBOARD_VERSION
+			? { artboardVersionId: sourceEntityId }
+			: { layerId: sourceEntityId }
 
 	return await findManyDesignsWithType({ where })
 }

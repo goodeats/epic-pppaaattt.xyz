@@ -5,7 +5,6 @@ import {
 	type whereArgsType,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboard } from '../artboard/artboard.server'
 import {
 	type IArtboardVersionWithDesignsAndLayers,
 	type IArtboardVersion,
@@ -32,7 +31,6 @@ export interface IDesign extends Design {}
 export type IDesignIdOrNull = IDesign['id'] | null | undefined
 
 export type IDesignEntityId =
-	| IArtboard['id']
 	| IDesign['id']
 	| IArtboardVersion['id']
 	| IArtboardVersionWithDesignsAndLayers['id']
@@ -61,7 +59,6 @@ export interface IDesignWithType {
 	nextId: string | null
 	prevId: string | null
 	ownerId: string
-	artboardId: string | null
 	artboardVersionId: string | null
 	layerId: string | null
 	palette: IPalette | null
