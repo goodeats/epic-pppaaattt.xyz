@@ -1,4 +1,3 @@
-import { type User } from '@sentry/remix'
 import { type IDesign } from '#app/models/design/design.server'
 import { type IFill } from '#app/models/design-type/fill/fill.server'
 import {
@@ -7,6 +6,7 @@ import {
 	updateDesignTypeFillValue,
 	updateDesignTypeFillStyle,
 } from '#app/models/design-type/fill/fill.update.server'
+import { type IUser } from '#app/models/user/user.server'
 
 export const updateDesignTypeFillValueService = async ({
 	userId,
@@ -14,7 +14,7 @@ export const updateDesignTypeFillValueService = async ({
 	designId,
 	value,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: IFill['id']
 	designId: IDesign['id']
 	value: number
@@ -44,7 +44,7 @@ export const updateDesignTypeFillBasisService = async ({
 	designId,
 	basis,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: IFill['id']
 	designId: IDesign['id']
 	basis: string
@@ -74,7 +74,7 @@ export const updateDesignTypeFillStyleService = async ({
 	designId,
 	style,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: IFill['id']
 	designId: IDesign['id']
 	style: string

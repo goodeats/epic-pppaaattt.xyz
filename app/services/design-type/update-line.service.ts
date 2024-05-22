@@ -1,4 +1,3 @@
-import { type User } from '@sentry/remix'
 import { type IDesign } from '#app/models/design/design.server'
 import { type ILine } from '#app/models/design-type/line/line.server'
 import {
@@ -7,6 +6,7 @@ import {
 	updateDesignTypeLineBasis,
 	updateDesignTypeLineFormat,
 } from '#app/models/design-type/line/line.update.server'
+import { type IUser } from '#app/models/user/user.server'
 
 export const updateDesignTypeLineWidthService = async ({
 	userId,
@@ -14,7 +14,7 @@ export const updateDesignTypeLineWidthService = async ({
 	designId,
 	width,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: ILine['id']
 	designId: IDesign['id']
 	width: number
@@ -44,7 +44,7 @@ export const updateDesignTypeLineBasisService = async ({
 	designId,
 	basis,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: ILine['id']
 	designId: IDesign['id']
 	basis: string
@@ -74,7 +74,7 @@ export const updateDesignTypeLineFormatService = async ({
 	designId,
 	format,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: ILine['id']
 	designId: IDesign['id']
 	format: string

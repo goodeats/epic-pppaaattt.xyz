@@ -1,4 +1,3 @@
-import { type User } from '@sentry/remix'
 import { type IDesign } from '#app/models/design/design.server'
 import { type IStroke } from '#app/models/design-type/stroke/stroke.server'
 import {
@@ -7,6 +6,7 @@ import {
 	updateDesignTypeStrokeStyle,
 	updateDesignTypeStrokeValue,
 } from '#app/models/design-type/stroke/stroke.update.server'
+import { type IUser } from '#app/models/user/user.server'
 
 export const updateDesignTypeStrokeValueService = async ({
 	userId,
@@ -14,7 +14,7 @@ export const updateDesignTypeStrokeValueService = async ({
 	designId,
 	value,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: IStroke['id']
 	designId: IDesign['id']
 	value: number
@@ -44,7 +44,7 @@ export const updateDesignTypeStrokeBasisService = async ({
 	designId,
 	basis,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: IStroke['id']
 	designId: IDesign['id']
 	basis: string
@@ -74,7 +74,7 @@ export const updateDesignTypeStrokeStyleService = async ({
 	designId,
 	style,
 }: {
-	userId: User['id']
+	userId: IUser['id']
 	id: IStroke['id']
 	designId: IDesign['id']
 	style: string
