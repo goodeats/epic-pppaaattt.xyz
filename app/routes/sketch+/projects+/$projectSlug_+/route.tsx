@@ -6,7 +6,7 @@ import {
 } from '@remix-run/node'
 import { Outlet } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
-import { getProjectWithArtboards } from '#app/models/project/project.get.server'
+import { getProjectWithArtworks } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { routeLoaderMetaData } from '#app/utils/matches'
@@ -19,7 +19,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
 	const { projectSlug } = params
-	const project = await getProjectWithArtboards({
+	const project = await getProjectWithArtworks({
 		where: { slug: projectSlug, ownerId: owner.id },
 	})
 	invariantResponse(project, 'Project not found', { status: 404 })

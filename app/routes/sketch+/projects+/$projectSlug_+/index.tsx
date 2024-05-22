@@ -17,17 +17,17 @@ export default function SketchProjectIndexRoute() {
 		<div className="container">
 			<DashboardContentHeading1>{project.name}</DashboardContentHeading1>
 			<DashboardContentHeading2>
-				<Link prefetch="intent" to="artboards">
-					Artboards
+				<Link prefetch="intent" to="artworks">
+					Artworks
 				</Link>
 			</DashboardContentHeading2>
 			<DashboardEntityCards
-				entities={project.artboards}
-				type="Artboard"
+				entities={project.artworks}
+				type="Artwork"
 				parent={project.name}
-				basePathNew={`/users/${user.username}/projects/${project.slug}/artboards`}
-				basePathEditor={`/users/${user.username}/artboards`}
-				basePathView="artboards"
+				basePathNew={`/users/${user.username}/projects/${project.slug}/artworks`}
+				basePathEditor={`/users/${user.username}/artworks`}
+				basePathView="artworks"
 			/>
 		</div>
 	)

@@ -6,12 +6,12 @@ import {
 	DashboardCardNone,
 	DashboardCardWrapper,
 } from '#app/components/layout'
-import { type IArtboard } from '#app/models/artboard/artboard.server'
-import { type IProjectWithArtboards } from '#app/models/project/project.server'
+import { type IArtwork } from '#app/models/artwork/artwork.server'
+import { type IProjectWithArtworks } from '#app/models/project/project.server'
 
-type DashboardCardEntitiesType = IProjectWithArtboards[] | IArtboard[]
-type DashboardCardEntityType = IProjectWithArtboards | IArtboard
-type DashboardCardType = 'Project' | 'Artboard'
+type DashboardCardEntitiesType = IProjectWithArtworks[] | IArtwork[]
+type DashboardCardEntityType = IProjectWithArtworks | IArtwork
+type DashboardCardType = 'Project' | 'Artwork'
 
 export const DashboardEntityCards = ({
 	entities,
@@ -150,14 +150,14 @@ const ExistingEntityCardContent = ({
 }) => {
 	switch (type) {
 		case 'Project':
-			const project = item as IProjectWithArtboards
-			const artboardNames = project.artboards
-				.map(artboard => artboard.name)
+			const project = item as IProjectWithArtworks
+			const artworkNames = project.artworks
+				.map(artwork => artwork.name)
 				.join(', ')
-			return artboardNames.length === 0 ? 'No artboards' : artboardNames
-		case 'Artboard':
-			const artboard = item as IArtboard
-			return `Visible: ${artboard.isVisible ? 'Yes' : 'No'}`
+			return artworkNames.length === 0 ? 'No artworks' : artworkNames
+		case 'Artwork':
+			const artwork = item as IArtwork
+			return `Visible: ${artwork.isVisible ? 'Yes' : 'No'}`
 		default:
 			return 'No details available'
 	}

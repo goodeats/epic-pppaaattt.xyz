@@ -1,4 +1,4 @@
-import { type IGenerationItem } from '#app/definitions/artboard-generator'
+import { type IGenerationItem } from '#app/definitions/artwork-generator'
 import { drawTemplateTriangleService } from './templates/draw-layer-item-template-triangle.service'
 
 export const drawLayerItemTemplateService = ({

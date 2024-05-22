@@ -6,7 +6,7 @@ import {
 	type IDesignEntityId,
 } from '#app/models/design/design.server'
 import { type designTypeEnum } from '#app/schema/design'
-import { artboardVersionDesignCreateService } from '#app/services/artboard/version/design/create.service'
+import { artworkVersionDesignCreateService } from '#app/services/artwork/version/design/create.service'
 import { layerDesignCreateService } from '#app/services/layer/design/create.service'
 
 export interface ICloneDesignsStrategy {
@@ -43,7 +43,7 @@ export class CloneDesignToLayerStrategy implements ICloneDesignsStrategy {
 	}
 }
 
-export class CloneDesignsToArtboardVersionStrategy
+export class CloneDesignsToArtworkVersionStrategy
 	implements ICloneDesignsStrategy
 {
 	async createEntityDesignService({
@@ -59,9 +59,9 @@ export class CloneDesignsToArtboardVersionStrategy
 		designOverrides?: IDesignCreateOverrides
 		designTypeOverrides?: IDesignTypeCreateOverrides
 	}): Promise<IDesignCreatedResponse> {
-		return await artboardVersionDesignCreateService({
+		return await artworkVersionDesignCreateService({
 			userId,
-			artboardVersionId: targetEntityId,
+			artworkVersionId: targetEntityId,
 			type,
 			designOverrides,
 			designTypeOverrides,

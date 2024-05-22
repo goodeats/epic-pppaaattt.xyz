@@ -1,6 +1,6 @@
-import { type IArtboard } from '#app/models/artboard/artboard.server'
-import { type IArtboardBranch } from '#app/models/artboard-branch/artboard-branch.server'
-import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import { type IArtwork } from '#app/models/artwork/artwork.server'
+import { type IArtworkBranch } from '#app/models/artwork-branch/artwork-branch.server'
+import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import {
 	type IDesignWithType,
 	type IDesign,
@@ -36,7 +36,7 @@ export type IEntity =
 	| ILayer
 	| IDesign
 	| IDesignWithType
-	| IArtboardVersion
+	| IArtworkVersion
 	| IPalette
 	| ISize
 	| IFill
@@ -49,16 +49,16 @@ export type IEntity =
 export type IEntityVisible = IDesign | IDesignWithType | ILayer
 export type IEntitySelectable = ILayer
 export type IEntityWithSlug =
-	| IArtboard
-	| IArtboardBranch
-	| IArtboardVersion
+	| IArtwork
+	| IArtworkBranch
+	| IArtworkVersion
 	| IProject
 
 export type IEntityId =
 	| ILayer['id']
 	| IDesign['id']
 	| IDesignWithType['id']
-	| IArtboardVersion['id']
+	| IArtworkVersion['id']
 	| IPalette['id']
 	| ISize['id']
 	| IFill['id']
@@ -72,16 +72,16 @@ export type IEntityType = designTypeEnum | 'layer'
 
 export type IEntityParentType =
 	| IDesignWithType
-	| IArtboardVersion
+	| IArtworkVersion
 	| DesignParentType
 
-export type IEntityParentId = IDesignWithType['id'] | IArtboardVersion['id']
+export type IEntityParentId = IDesignWithType['id'] | IArtworkVersion['id']
 
 export const EntityType = {
 	DESIGN: 'design',
-	ARTBOARD: 'artboard',
-	ARTBOARD_BRANCH: 'artboardBranch',
-	ARTBOARD_VERSION: 'artboardVersion',
+	ARtwork: 'artwork',
+	ARTWORK_BRANCH: 'artworkBranch',
+	ARTWORK_VERSION: 'artworkVersion',
 	LAYER: 'layer',
 	// add more parent id types here
 } as const
@@ -90,9 +90,9 @@ export type entityTypeEnum = ObjectValues<typeof EntityType>
 export const EntityParentType = {
 	PARENT: 'parent',
 	DESIGN: 'design',
-	ARTBOARD: 'artboard',
-	ARTBOARD_BRANCH: 'artboardBranch',
-	ARTBOARD_VERSION: 'artboardVersion',
+	ARtwork: 'artwork',
+	ARTWORK_BRANCH: 'artworkBranch',
+	ARTWORK_VERSION: 'artworkVersion',
 	LAYER: 'layer',
 	// add more parent types here
 } as const
@@ -101,9 +101,9 @@ export type entityParentTypeEnum = ObjectValues<typeof EntityParentType>
 export const EntityParentIdType = {
 	PARENT_ID: 'parentId',
 	DESIGN_ID: 'designId',
-	ARTBOARD_ID: 'artboardId',
-	ARTBOARD_BRANCH_ID: 'artboardBranchId',
-	ARTBOARD_VERSION_ID: 'artboardVersionId',
+	ARTWORK_ID: 'artworkId',
+	ARTWORK_BRANCH_ID: 'artworkBranchId',
+	ARTWORK_VERSION_ID: 'artworkVersionId',
 	LAYER_ID: 'layerId',
 	// add more parent id types here
 } as const

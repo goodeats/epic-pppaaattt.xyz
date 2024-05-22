@@ -30,7 +30,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 			isVisible: true,
 			ownerId: true,
 			updatedAt: true,
-			artboards: {
+			artworks: {
 				select: {
 					name: true,
 					description: true,

@@ -1,9 +1,9 @@
 import { type User } from '@prisma/client'
 import { type designTypeEnum } from '#app/schema/design'
-import { NewArtboardVersionDesignSchema } from '#app/schema/design-artboard-version'
+import { NewArtworkVersionDesignSchema } from '#app/schema/design-artwork-version'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboard } from '../artboard/artboard.server'
-import { type IArtboardVersion } from '../artboard-version/artboard-version.server'
+import { type IArtwork } from '../artwork/artwork.server'
+import { type IArtworkVersion } from '../artwork-version/artwork-version.server'
 import { type IDesign } from '../design/design.server'
 import { type ILayer } from '../layer/layer.server'
 
@@ -19,8 +19,8 @@ export const createDesign = async ({
 	data: {
 		ownerId: User['id']
 		type: designTypeEnum
-		artboardId?: IArtboard['id']
-		artboardVersionId?: IArtboardVersion['id']
+		artworkId?: IArtwork['id']
+		artworkVersionId?: IArtworkVersion['id']
 		layerId?: ILayer['id']
 		visible?: boolean
 		selected?: boolean
@@ -30,19 +30,19 @@ export const createDesign = async ({
 	return createdDesign
 }
 
-export const createArtboardVersionDesign = async ({
+export const createArtworkVersionDesign = async ({
 	data,
 }: {
 	data: {
 		ownerId: User['id']
 		type: designTypeEnum
-		artboardVersionId: IArtboardVersion['id']
+		artworkVersionId: IArtworkVersion['id']
 		visible?: boolean
 		selected?: boolean
 	}
 }): Promise<IDesign | null> => {
 	const { ownerId } = data
-	const parsedData = NewArtboardVersionDesignSchema.parse(data)
+	const parsedData = NewArtworkVersionDesignSchema.parse(data)
 	const createdDesign = await createDesign({ data: { ownerId, ...parsedData } })
 	return createdDesign
 }

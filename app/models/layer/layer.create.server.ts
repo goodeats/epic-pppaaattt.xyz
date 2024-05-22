@@ -1,10 +1,10 @@
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { NewArtboardVersionLayerSchema } from '#app/schema/layer-artboard-version'
-import { ValidateArtboardVersionParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
+import { NewArtworkVersionLayerSchema } from '#app/schema/layer-artwork-version'
+import { ValidateArtworkVersionParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboard } from '../artboard/artboard.server'
-import { type IArtboardVersion } from '../artboard-version/artboard-version.server'
+import { type IArtwork } from '../artwork/artwork.server'
+import { type IArtworkVersion } from '../artwork-version/artwork-version.server'
 import { type ILayer } from '../layer/layer.server'
 import { type IUser } from '../user/user.server'
 
@@ -14,16 +14,16 @@ export interface ILayerCreatedResponse {
 	createdLayer?: ILayer
 }
 
-export const validateArtboardVersionNewLayerSubmission = async ({
+export const validateArtworkVersionNewLayerSubmission = async ({
 	userId,
 	formData,
 }: IntentActionArgs) => {
-	const strategy = new ValidateArtboardVersionParentSubmissionStrategy()
+	const strategy = new ValidateArtworkVersionParentSubmissionStrategy()
 
 	return await validateEntitySubmission({
 		userId,
 		formData,
-		schema: NewArtboardVersionLayerSchema,
+		schema: NewArtworkVersionLayerSchema,
 		strategy,
 	})
 }
@@ -34,8 +34,8 @@ export const createLayer = async ({
 	data: {
 		ownerId: IUser['id']
 		name: string
-		artboardId?: IArtboard['id']
-		artboardVersionId?: IArtboardVersion['id']
+		artworkId?: IArtwork['id']
+		artworkVersionId?: IArtworkVersion['id']
 		description?: string | undefined
 		slug?: string | undefined
 		visible?: boolean

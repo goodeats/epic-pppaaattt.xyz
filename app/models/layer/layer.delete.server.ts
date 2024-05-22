@@ -1,6 +1,6 @@
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { DeleteArtboardVersionLayerSchema } from '#app/schema/layer-artboard-version'
-import { ValidateArtboardVersionParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
+import { DeleteArtworkVersionLayerSchema } from '#app/schema/layer-artwork-version'
+import { ValidateArtworkVersionParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
 import { type ILayer } from '../layer/layer.server'
@@ -10,16 +10,16 @@ export interface ILayerDeletedResponse {
 	message?: string
 }
 
-export const validateArtboardVersionDeleteLayerSubmission = async ({
+export const validateArtworkVersionDeleteLayerSubmission = async ({
 	userId,
 	formData,
 }: IntentActionArgs) => {
-	const strategy = new ValidateArtboardVersionParentSubmissionStrategy()
+	const strategy = new ValidateArtworkVersionParentSubmissionStrategy()
 
 	return await validateEntitySubmission({
 		userId,
 		formData,
-		schema: DeleteArtboardVersionLayerSchema,
+		schema: DeleteArtworkVersionLayerSchema,
 		strategy,
 	})
 }

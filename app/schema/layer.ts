@@ -1,16 +1,16 @@
 import { z } from 'zod'
 import {
-	type ReorderArtboardVersionLayerSchema,
-	type NewArtboardVersionLayerSchema,
-	type ToggleVisibleArtboardVersionLayerSchema,
-	type DeleteArtboardVersionLayerSchema,
-	type SelectArtboardVersionLayerSchema,
-} from './layer-artboard-version'
+	type ReorderArtworkVersionLayerSchema,
+	type NewArtworkVersionLayerSchema,
+	type ToggleVisibleArtworkVersionLayerSchema,
+	type DeleteArtworkVersionLayerSchema,
+	type SelectArtworkVersionLayerSchema,
+} from './layer-artwork-version'
 
 type ObjectValues<T> = T[keyof T]
 export const LayerCloneSourceTypeEnum = {
-	ARTBOARD: 'artboard',
-	ARTBOARD_VERSION: 'artboardVersion',
+	ARtwork: 'artwork',
+	ARTWORK_VERSION: 'artworkVersion',
 	LAYER: 'layer',
 } as const
 export type layerCloneSourceTypeEnum = ObjectValues<
@@ -31,16 +31,16 @@ export const EditLayerDescriptionSchema = z.object({
 })
 
 // later there will be layer groups
-export type NewLayerSchemaType = typeof NewArtboardVersionLayerSchema
+export type NewLayerSchemaType = typeof NewArtworkVersionLayerSchema
 
-export type ReorderLayerSchemaType = typeof ReorderArtboardVersionLayerSchema
+export type ReorderLayerSchemaType = typeof ReorderArtworkVersionLayerSchema
 
 export type ToggleVisibleLayerSchemaType =
-	typeof ToggleVisibleArtboardVersionLayerSchema
+	typeof ToggleVisibleArtworkVersionLayerSchema
 
-export type DeleteLayerSchemaType = typeof DeleteArtboardVersionLayerSchema
+export type DeleteLayerSchemaType = typeof DeleteArtworkVersionLayerSchema
 
-export type SelectLayerSchemaType = typeof SelectArtboardVersionLayerSchema
+export type SelectLayerSchemaType = typeof SelectArtworkVersionLayerSchema
 
 export type selectArgsType = z.infer<typeof selectArgs>
 const selectArgs = z.object({
@@ -52,8 +52,8 @@ const zodStringOrNull = z.union([z.string(), z.null()])
 const whereArgs = z.object({
 	id: z.string().optional(),
 	ownerId: z.string().optional(),
-	artboardId: z.string().optional(),
-	artboardVersionId: z.string().optional(),
+	artworkId: z.string().optional(),
+	artworkVersionId: z.string().optional(),
 	prevId: zodStringOrNull.optional(),
 	nextId: zodStringOrNull.optional(),
 })

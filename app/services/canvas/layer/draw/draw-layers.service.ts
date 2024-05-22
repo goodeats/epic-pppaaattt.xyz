@@ -1,4 +1,4 @@
-import { type IGenerationItem } from '#app/definitions/artboard-generator'
+import { type IGenerationItem } from '#app/definitions/artwork-generator'
 import { drawLayerItemService } from './draw-layer-item.service'
 
 export const canvasDrawLayersService = ({

@@ -1,13 +1,13 @@
 import { Sidebar } from '#app/components/layout'
 import { type NavItem, NestedEntityNavSidebar } from '#app/components/templates'
-import { type IProjectWithArtboards } from '#app/models/project/project.server'
+import { type IProjectWithArtworks } from '#app/models/project/project.server'
 
 export const ProjectsSidebar = ({
 	projects,
 }: {
-	projects: IProjectWithArtboards[]
+	projects: IProjectWithArtworks[]
 }) => {
-	// prepare the projects and artboards for the sidebar
+	// prepare the projects and artworks for the sidebar
 	// nested entity nav sidebar expects an array of items
 	// each item should have an id, name, path
 	// and optionally an icon and children
@@ -16,10 +16,10 @@ export const ProjectsSidebar = ({
 		name: project.name,
 		path: project.slug,
 		icon: 'stack',
-		children: project.artboards.map(artboard => ({
-			id: artboard.id,
-			name: artboard.name,
-			path: `${project.slug}/artboards/${artboard.slug}`,
+		children: project.artworks.map(artwork => ({
+			id: artwork.id,
+			name: artwork.name,
+			path: `${project.slug}/artworks/${artwork.slug}`,
 			icon: 'file',
 		})),
 	}))

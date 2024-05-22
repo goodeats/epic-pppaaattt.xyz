@@ -13,10 +13,10 @@ export interface IDashboardPanelSelectEntityStrategy {
 	parentType: entityParentTypeEnum
 }
 
-export class DashboardPanelSelectArtboardVersionLayerStrategy
+export class DashboardPanelSelectArtworkVersionLayerStrategy
 	implements IDashboardPanelSelectEntityStrategy
 {
 	actionType: entityActionTypeEnum = EntityActionType.SELECT
 	entityType: entityTypeEnum = EntityType.LAYER
-	parentType: entityParentTypeEnum = EntityParentType.ARTBOARD_VERSION
+	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
 }

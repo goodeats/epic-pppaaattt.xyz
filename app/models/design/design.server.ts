@@ -6,9 +6,9 @@ import {
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 import {
-	type IArtboardVersionWithDesignsAndLayers,
-	type IArtboardVersion,
-} from '../artboard-version/artboard-version.server'
+	type IArtworkVersionWithDesignsAndLayers,
+	type IArtworkVersion,
+} from '../artwork-version/artwork-version.server'
 import { type IFillCreateOverrides } from '../design-type/fill/fill.create.server'
 import { type IFill } from '../design-type/fill/fill.server'
 import { type ILayoutCreateOverrides } from '../design-type/layout/layout.create.server'
@@ -32,8 +32,8 @@ export type IDesignIdOrNull = IDesign['id'] | null | undefined
 
 export type IDesignEntityId =
 	| IDesign['id']
-	| IArtboardVersion['id']
-	| IArtboardVersionWithDesignsAndLayers['id']
+	| IArtworkVersion['id']
+	| IArtworkVersionWithDesignsAndLayers['id']
 export type IDesignEntityIdOrNull = IDesignEntityId | null | undefined
 
 export interface IDesignCreateOverrides {
@@ -59,7 +59,7 @@ export interface IDesignWithType {
 	nextId: string | null
 	prevId: string | null
 	ownerId: string
-	artboardVersionId: string | null
+	artworkVersionId: string | null
 	layerId: string | null
 	palette: IPalette | null
 	size: ISize | null

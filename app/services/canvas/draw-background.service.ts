@@ -1,11 +1,11 @@
-import { type IArtboardVersionGenerator } from '#app/definitions/artboard-generator'
+import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator'
 
 export const canvasDrawBackgroundService = ({
 	ctx,
 	generator,
 }: {
 	ctx: CanvasRenderingContext2D
-	generator: IArtboardVersionGenerator
+	generator: IArtworkVersionGenerator
 }) => {
 	const { width, height, background } = generator.settings
 

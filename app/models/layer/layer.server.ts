@@ -5,8 +5,8 @@ import {
 	type whereArgsType,
 } from '#app/schema/layer'
 import { prisma } from '#app/utils/db.server'
-import { type IArtboard } from '../artboard/artboard.server'
-import { type IArtboardVersion } from '../artboard-version/artboard-version.server'
+import { type IArtwork } from '../artwork/artwork.server'
+import { type IArtworkVersion } from '../artwork-version/artwork-version.server'
 import { type IDesignWithType } from '../design/design.server'
 
 export interface ILayer {
@@ -19,7 +19,7 @@ export interface ILayer {
 	createdAt: Date | string
 	updatedAt: Date | string
 	ownerId: string
-	artboardVersionId: string | null
+	artworkVersionId: string | null
 	nextId: string | null
 	prevId: string | null
 	parentId: string | null
@@ -27,7 +27,7 @@ export interface ILayer {
 	// designs: IDesignWithType[]
 }
 
-export type ILayerEntityId = IArtboard['id'] | IArtboardVersion['id']
+export type ILayerEntityId = IArtwork['id'] | IArtworkVersion['id']
 export interface ILayerWithDesigns extends ILayer {
 	designs: IDesignWithType[]
 }

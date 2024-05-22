@@ -27,9 +27,9 @@ model User {
   connections Connection[]
   // added after epic-stack created
   projects    Project[]
-  artboards   Artboard[]
-  artboardVersions ArtboardVersion[]
-  artboardBranches ArtboardBranch[]
+  artworks   Artwork[]
+  artworkVersions ArtworkVersion[]
+  artworkBranches ArtworkBranch[]
   layers      Layer[]
   designs     Design[]
   assetImages AssetImage[]
@@ -191,7 +191,7 @@ model Project {
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId String
 
-  artboards Artboard[]
+  artworks Artwork[]
 
   // non-unique foreign key
   @@index([ownerId])
@@ -201,7 +201,7 @@ model Project {
   @@unique([slug, ownerId])
 }
 
-model Artboard {
+model Artwork {
   id          String @id @default(cuid())
   name        String
   description String?
@@ -220,8 +220,8 @@ model Artboard {
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId String
 
-  branches ArtboardBranch[]
-  mergeRequests ArtboardMergeRequest[]
+  branches ArtworkBranch[]
+  mergeRequests ArtworkMergeRequest[]
 
   // non-unique foreign key
   @@index([projectId])
@@ -247,8 +247,8 @@ model Layer {
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId String
 
-  artboardVersionId String?
-  artboardVersion   ArtboardVersion? @relation(fields: [artboardVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artworkVersionId String?
+  artworkVersion   ArtworkVersion? @relation(fields: [artworkVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   next Layer? @relation("LayerDoublyLinkedList", fields: [nextId], references: [id])
   nextId String? @unique
@@ -265,12 +265,12 @@ model Layer {
 
   // non-unique foreign key
   @@index([ownerId])
-  @@index([artboardVersionId])
+  @@index([artworkVersionId])
   @@index([parentId])
   // This helps our order by in the user search a LOT
   @@index([ownerId, updatedAt])
   // Unique constraint for slug scoped to ownerId
-  @@unique([slug, ownerId, artboardVersionId])
+  @@unique([slug, ownerId, artworkVersionId])
 }
 
 model AssetImage {
@@ -342,8 +342,8 @@ model Design {
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId String
 
-  artboardVersionId String?
-  artboardVersion   ArtboardVersion? @relation(fields: [artboardVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artworkVersionId String?
+  artworkVersion   ArtworkVersion? @relation(fields: [artworkVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   layer Layer? @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   layerId String?
@@ -360,7 +360,7 @@ model Design {
   // non-unique foreign key
   @@index([ownerId])
   @@index([layerId])
-  @@index([artboardVersionId])
+  @@index([artworkVersionId])
 }
 
 model Palette {
@@ -476,7 +476,7 @@ model Template {
   designId String @unique
 }
 
-model ArtboardBranch {
+model ArtworkBranch {
   id        String @id @default(cuid())
   name      String @default("main")
   slug      String @default("main")
@@ -490,30 +490,30 @@ model ArtboardBranch {
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId String
 
-  artboard Artboard @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artboardId String
+  artwork Artwork @relation(fields: [artworkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artworkId String
 
   parentId String?
-  parent ArtboardBranch? @relation("ParentChildArtboardBranch", fields: [parentId], references: [id])
-  children ArtboardBranch[] @relation("ParentChildArtboardBranch")
+  parent ArtworkBranch? @relation("ParentChildArtworkBranch", fields: [parentId], references: [id])
+  children ArtworkBranch[] @relation("ParentChildArtworkBranch")
 
-  versions ArtboardVersion[]
-  mergeRequestsSource ArtboardMergeRequest[] @relation("ArtboardMergeRequestSourceBranch")
-  mergeRequestsTarget ArtboardMergeRequest[] @relation("ArtboardMergeRequestTargetBranch")
+  versions ArtworkVersion[]
+  mergeRequestsSource ArtworkMergeRequest[] @relation("ArtworkMergeRequestSourceBranch")
+  mergeRequestsTarget ArtworkMergeRequest[] @relation("ArtworkMergeRequestTargetBranch")
 
   // non-unique foreign key
-  @@index([artboardId])
+  @@index([artworkId])
   @@index([ownerId])
 
   // Constraints to ensure only one 'default' version per branch
   // and only unique name per branch
-  // @@unique([artboardId, default])
+  // @@unique([artworkId, default])
   // can't have unique constraint on boolean -- come back later to fix
-  @@unique([artboardId, name])
-  @@unique([artboardId, slug])
+  @@unique([artworkId, name])
+  @@unique([artworkId, slug])
 }
 
-model ArtboardVersion {
+model ArtworkVersion {
   id        String @id @default(cuid())
   name      String @default("v0")
   slug       String @default("v0")
@@ -531,13 +531,13 @@ model ArtboardVersion {
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId String
 
-  branch ArtboardBranch @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  branch ArtworkBranch @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   branchId String
 
-  next ArtboardVersion? @relation("ArtboardVersionDoublyLinkedList", fields: [nextId], references: [id])
+  next ArtworkVersion? @relation("ArtworkVersionDoublyLinkedList", fields: [nextId], references: [id])
   nextId String? @unique
 
-  prev ArtboardVersion? @relation("ArtboardVersionDoublyLinkedList")
+  prev ArtworkVersion? @relation("ArtworkVersionDoublyLinkedList")
   prevId String? @unique
 
   layers Layer[]
@@ -553,7 +553,7 @@ model ArtboardVersion {
   @@unique([branchId, slug])
 }
 
-model ArtboardMergeRequest {
+model ArtworkMergeRequest {
   id       String @id @default(cuid())
   status   String @default("open") // e.g. open, closed, merged
   title    String
@@ -562,17 +562,17 @@ model ArtboardMergeRequest {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  artboard Artboard @relation(fields: [artboardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artboardId String
+  artwork Artwork @relation(fields: [artworkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artworkId String
 
   sourceBranchId  String
-  sourceBranch   ArtboardBranch @relation(name: "ArtboardMergeRequestSourceBranch", fields: [sourceBranchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sourceBranch   ArtworkBranch @relation(name: "ArtworkMergeRequestSourceBranch", fields: [sourceBranchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   targetBranchId  String
-  targetBranch   ArtboardBranch @relation(name: "ArtboardMergeRequestTargetBranch", fields: [targetBranchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  targetBranch   ArtworkBranch @relation(name: "ArtworkMergeRequestTargetBranch", fields: [targetBranchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   // non-unique foreign key
-  @@index([artboardId])
+  @@index([artworkId])
   @@index([sourceBranchId])
   @@index([targetBranchId])
 }

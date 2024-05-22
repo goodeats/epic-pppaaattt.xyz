@@ -1,5 +1,5 @@
 import { type User } from '@prisma/client'
-import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { createLayer } from '#app/models/layer/layer.create.server'
 import {
 	findFirstLayer,
@@ -8,8 +8,8 @@ import {
 	type ILayerEntityId,
 } from '#app/models/layer/layer.server'
 import { DesignCloneSourceTypeEnum } from '#app/schema/design'
-import { ArtboardVersionLayerDataCreateSchema } from '#app/schema/layer-artboard-version'
-import { artboardVersionLayerCloneDesignsService } from '#app/services/artboard/version/layer/clone-designs.service'
+import { ArtworkVersionLayerDataCreateSchema } from '#app/schema/layer-artwork-version'
+import { artworkVersionLayerCloneDesignsService } from '#app/services/artwork/version/layer/clone-designs.service'
 import { prisma } from '#app/utils/db.server'
 
 export interface ICreateLayerStrategy {
@@ -31,16 +31,16 @@ export interface ICreateLayerStrategy {
 	}): Promise<void>
 }
 
-export class ArtboardVersionCreateLayerStrategy
+export class ArtworkVersionCreateLayerStrategy
 	implements ICreateLayerStrategy
 {
 	async getEntityLayersTail({
 		targetEntityId,
 	}: {
-		targetEntityId: IArtboardVersion['id']
+		targetEntityId: IArtworkVersion['id']
 	}): Promise<ILayer | null> {
 		return await findFirstLayer({
-			where: { artboardVersionId: targetEntityId, nextId: null },
+			where: { artworkVersionId: targetEntityId, nextId: null },
 		})
 	}
 
@@ -50,12 +50,12 @@ export class ArtboardVersionCreateLayerStrategy
 		layerOverrides,
 	}: {
 		userId: User['id']
-		targetEntityId: IArtboardVersion['id']
+		targetEntityId: IArtworkVersion['id']
 		layerOverrides: ILayerCreateOverrides
 	}): Promise<ILayer> {
-		const data = ArtboardVersionLayerDataCreateSchema.parse({
+		const data = ArtworkVersionLayerDataCreateSchema.parse({
 			ownerId: userId,
-			artboardVersionId: targetEntityId,
+			artworkVersionId: targetEntityId,
 			...layerOverrides,
 		})
 		const createdLayer = await createLayer({ data })
@@ -65,10 +65,10 @@ export class ArtboardVersionCreateLayerStrategy
 	async getEntityLayersCount({
 		targetEntityId,
 	}: {
-		targetEntityId: IArtboardVersion['id']
+		targetEntityId: IArtworkVersion['id']
 	}): Promise<number> {
 		return await prisma.layer.count({
-			where: { artboardVersionId: targetEntityId },
+			where: { artworkVersionId: targetEntityId },
 		})
 	}
 
@@ -81,9 +81,9 @@ export class ArtboardVersionCreateLayerStrategy
 		sourceEntityId: ILayerEntityId
 		targetEntityId: ILayerEntityId
 	}) {
-		await artboardVersionLayerCloneDesignsService({
+		await artworkVersionLayerCloneDesignsService({
 			userId,
-			sourceEntityType: DesignCloneSourceTypeEnum.ARTBOARD_VERSION,
+			sourceEntityType: DesignCloneSourceTypeEnum.ARTWORK_VERSION,
 			sourceEntityId,
 			targetEntityId,
 		})

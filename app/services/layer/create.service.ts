@@ -51,7 +51,7 @@ export const layerCreateService = async ({
 			await prisma.$transaction(connectLayersPromise)
 		}
 
-		// Step 4: copy designs from artboard to created layer
+		// Step 4: copy designs from artwork to created layer
 		// skip likely from cloning a layer
 		// need to wait for it to be created
 		if (!skipCloneDesigns) {

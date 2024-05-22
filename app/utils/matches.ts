@@ -4,21 +4,21 @@ import { type UIMatch } from '@remix-run/react'
 import { type MetaMatches } from '@remix-run/react/dist/routeModules'
 import { type loader as rootLoader } from '#app/root.tsx'
 import {
-	type artboardstLoaderRoute,
-	type loader as artboardsLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+'
+	type artworkstLoaderRoute,
+	type loader as artworksLoader,
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artworks+'
 import {
-	type artboardBranchLoaderRoute,
-	type loader as artboardBranchLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/$branchSlug'
+	type artworkBranchLoaderRoute,
+	type loader as artworkBranchLoader,
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artworks+/$artworkSlug+/$branchSlug'
 import {
-	type artboardVersionLoaderRoute,
-	type loader as artboardVersionLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/$branchSlug.$versionSlug'
+	type artworkVersionLoaderRoute,
+	type loader as artworkVersionLoader,
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artworks+/$artworkSlug+/$branchSlug.$versionSlug'
 import {
-	type artboardLoaderRoute,
-	type loader as artboardLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/route'
+	type artworkLoaderRoute,
+	type loader as artworkLoader,
+} from '#app/routes/sketch+/projects+/$projectSlug_+/artworks+/$artworkSlug+/route'
 import {
 	type projectLoaderRoute,
 	type loader as projectLoader,
@@ -35,10 +35,10 @@ interface RouteLoaders {
 	root: typeof rootLoader
 	[projectsLoaderRoute]: typeof projectsLoader
 	[projectLoaderRoute]: typeof projectLoader
-	[artboardstLoaderRoute]: typeof artboardsLoader
-	[artboardLoaderRoute]: typeof artboardLoader
-	[artboardBranchLoaderRoute]: typeof artboardBranchLoader
-	[artboardVersionLoaderRoute]: typeof artboardVersionLoader
+	[artworkstLoaderRoute]: typeof artworksLoader
+	[artworkLoaderRoute]: typeof artworkLoader
+	[artworkBranchLoaderRoute]: typeof artworkBranchLoader
+	[artworkVersionLoaderRoute]: typeof artworkVersionLoader
 }
 
 export function routeLoaderMetaData<K extends keyof RouteLoaders>(

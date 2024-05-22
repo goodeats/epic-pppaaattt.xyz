@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
-import { type IProjectWithArtboards } from './project.server'
+import { type IProjectWithArtworks } from './project.server'
 
 export type queryProjectWhereArgsType = z.infer<typeof queryWhereArgs>
 const queryWhereArgs = z.object({
@@ -15,21 +15,21 @@ const queryWhereArgs = z.object({
 const validateQueryWhereArgsPresent = (where: queryProjectWhereArgsType) => {
 	if (Object.values(where).some(value => !value)) {
 		throw new Error(
-			'Null or undefined values are not allowed in query parameters for artboard.',
+			'Null or undefined values are not allowed in query parameters for artwork.',
 		)
 	}
 }
 
-export const getProjectsWithArtboards = async ({
+export const getProjectsWithArtworks = async ({
 	where,
 }: {
 	where: queryProjectWhereArgsType
-}): Promise<IProjectWithArtboards[]> => {
+}): Promise<IProjectWithArtworks[]> => {
 	validateQueryWhereArgsPresent(where)
 	const projects = await prisma.project.findMany({
 		where,
 		include: {
-			artboards: {
+			artworks: {
 				orderBy: {
 					createdAt: 'desc',
 				},
@@ -42,16 +42,16 @@ export const getProjectsWithArtboards = async ({
 	return projects
 }
 
-export const getProjectWithArtboards = async ({
+export const getProjectWithArtworks = async ({
 	where,
 }: {
 	where: queryProjectWhereArgsType
-}): Promise<IProjectWithArtboards | null> => {
+}): Promise<IProjectWithArtworks | null> => {
 	validateQueryWhereArgsPresent(where)
 	const project = await prisma.project.findFirst({
 		where,
 		include: {
-			artboards: {
+			artworks: {
 				orderBy: {
 					createdAt: 'desc',
 				},

@@ -1,6 +1,4 @@
 import { memo, useCallback } from 'react'
-import { ArtboardVersionDesignCreate } from '#app/routes/resources+/api.v1+/artboard-version.design.create'
-import { ArtboardVersionLayerCreate } from '#app/routes/resources+/api.v1+/artboard-version.layer.create'
 import { LayerDesignCreate } from '#app/routes/resources+/api.v1+/layer.design.create'
 import { type designTypeEnum } from '#app/schema/design'
 import {
@@ -14,6 +12,8 @@ import {
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { capitalize } from '#app/utils/string-formatting'
 import { SidebarPanelHeader, SidebarPanelRowActionsContainer } from '..'
+import { ArtworkVersionDesignCreate } from '#app/routes/resources+/api.v1+/artwork-version.design.create'
+import { ArtworkVersionLayerCreate } from '#app/routes/resources+/api.v1+/artwork-version.layer.create'
 
 // the create forms ultimately lead to resource routes with fetchers and actions
 // this causes unnecessary rerenders
@@ -28,26 +28,26 @@ interface CreateChildEntityFormProps {
 	parent: { id: string }
 }
 
-const ArtboardVersionCreateChildEntityForm = memo(
+const ArtworkVersionCreateChildEntityForm = memo(
 	({ entityType, type, parent }: CreateChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
 				return (
-					<ArtboardVersionDesignCreate
+					<ArtworkVersionDesignCreate
 						type={type as designTypeEnum}
 						versionId={parent.id}
 					/>
 				)
 			case EntityType.LAYER:
-				return <ArtboardVersionLayerCreate versionId={parent.id} />
+				return <ArtworkVersionLayerCreate versionId={parent.id} />
 			default:
-				console.log('unknown artboard version entity type', entityType)
+				console.log('unknown artwork version entity type', entityType)
 				return null
 		}
 	},
 )
-ArtboardVersionCreateChildEntityForm.displayName =
-	'ArtboardVersionCreateChildEntityForm'
+ArtworkVersionCreateChildEntityForm.displayName =
+	'ArtworkVersionCreateChildEntityForm'
 
 const LayerCreateChildEntityForm = memo(
 	({ entityType, type, parent }: CreateChildEntityFormProps) => {
@@ -70,9 +70,9 @@ LayerCreateChildEntityForm.displayName = 'LayerCreateChildEntityForm'
 const CreateEntityForm = memo(
 	({ parentType, entityType, type, parent }: CreateChildEntityFormProps) => {
 		switch (parentType) {
-			case EntityParentType.ARTBOARD_VERSION:
+			case EntityParentType.ARTWORK_VERSION:
 				return (
-					<ArtboardVersionCreateChildEntityForm
+					<ArtworkVersionCreateChildEntityForm
 						entityType={entityType}
 						type={type}
 						parent={parent}

@@ -1,9 +1,9 @@
 import { memo, useCallback } from 'react'
-import { type IArtboardVersion } from '#app/models/artboard-version/artboard-version.server'
+import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type IDesign } from '#app/models/design/design.server'
 import { type ILayer } from '#app/models/layer/layer.server'
-import { ArtboardVersionDesignToggleVisible } from '#app/routes/resources+/api.v1+/artboard-version.design.update.visible'
-import { ArtboardVersionLayerToggleVisible } from '#app/routes/resources+/api.v1+/artboard-version.layer.update.visible'
+import { ArtworkVersionDesignToggleVisible } from '#app/routes/resources+/api.v1+/artwork-version.design.update.visible'
+import { ArtworkVersionLayerToggleVisible } from '#app/routes/resources+/api.v1+/artwork-version.layer.update.visible'
 import { LayerDesignToggleVisible } from '#app/routes/resources+/api.v1+/layer.design.update.visible'
 import {
 	type entityParentTypeEnum,
@@ -22,31 +22,31 @@ interface ToggleVisibleChildEntityFormProps {
 	parent: IEntityParentType
 }
 
-const ArtboardVersionToggleVisibleChildEntityForm = memo(
+const ArtworkVersionToggleVisibleChildEntityForm = memo(
 	({ entityType, entity, parent }: ToggleVisibleChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
 				return (
-					<ArtboardVersionDesignToggleVisible
+					<ArtworkVersionDesignToggleVisible
 						design={entity as IDesign}
-						version={parent as IArtboardVersion}
+						version={parent as IArtworkVersion}
 					/>
 				)
 			case EntityType.LAYER:
 				return (
-					<ArtboardVersionLayerToggleVisible
+					<ArtworkVersionLayerToggleVisible
 						layer={entity as ILayer}
-						version={parent as IArtboardVersion}
+						version={parent as IArtworkVersion}
 					/>
 				)
 			default:
-				console.log('unknown artboard version entity type', entityType)
+				console.log('unknown artwork version entity type', entityType)
 				return null
 		}
 	},
 )
-ArtboardVersionToggleVisibleChildEntityForm.displayName =
-	'ArtboardVersionToggleVisibleChildEntityForm'
+ArtworkVersionToggleVisibleChildEntityForm.displayName =
+	'ArtworkVersionToggleVisibleChildEntityForm'
 
 const LayerToggleVisibleChildEntityForm = memo(
 	({ entityType, entity, parent }: ToggleVisibleChildEntityFormProps) => {
@@ -75,9 +75,9 @@ const ToggleVisibleEntityForm = memo(
 		parent,
 	}: ToggleVisibleChildEntityFormProps) => {
 		switch (parentType) {
-			case EntityParentType.ARTBOARD_VERSION:
+			case EntityParentType.ARTWORK_VERSION:
 				return (
-					<ArtboardVersionToggleVisibleChildEntityForm
+					<ArtworkVersionToggleVisibleChildEntityForm
 						entityType={entityType}
 						entity={entity}
 						parent={parent}

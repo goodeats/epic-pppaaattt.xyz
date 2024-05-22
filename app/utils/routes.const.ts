@@ -7,31 +7,31 @@ export const Routes = {
 	RESOURCES: {
 		API: {
 			V1: {
-				ARTBOARD_BRANCH: {
-					CREATE: `${pathBase}/artboard-branch/create`,
+				ARTWORK_BRANCH: {
+					CREATE: `${pathBase}/artwork-branch/create`,
 				},
-				ARTBOARD_VERSION: {
-					CREATE: `${pathBase}/artboard-version/create`,
+				ARTWORK_VERSION: {
+					CREATE: `${pathBase}/artwork-version/create`,
 					UPDATE: {
-						BACKGROUND: `${pathBase}/artboard-version/update/background`,
-						WIDTH: `${pathBase}/artboard-version/update/width`,
-						HEIGHT: `${pathBase}/artboard-version/update/height`,
+						BACKGROUND: `${pathBase}/artwork-version/update/background`,
+						WIDTH: `${pathBase}/artwork-version/update/width`,
+						HEIGHT: `${pathBase}/artwork-version/update/height`,
 					},
 					DESIGN: {
-						CREATE: `${pathBase}/artboard-version/design/create`,
-						DELETE: `${pathBase}/artboard-version/design/delete`,
+						CREATE: `${pathBase}/artwork-version/design/create`,
+						DELETE: `${pathBase}/artwork-version/design/delete`,
 						UPDATE: {
-							VISIBLE: `${pathBase}/artboard-version/design/update/visible`,
-							ORDER: `${pathBase}/artboard-version/design/update/order`,
+							VISIBLE: `${pathBase}/artwork-version/design/update/visible`,
+							ORDER: `${pathBase}/artwork-version/design/update/order`,
 						},
 					},
 					LAYER: {
-						CREATE: `${pathBase}/artboard-version/layer/create`,
-						DELETE: `${pathBase}/artboard-version/layer/delete`,
+						CREATE: `${pathBase}/artwork-version/layer/create`,
+						DELETE: `${pathBase}/artwork-version/layer/delete`,
 						UPDATE: {
-							VISIBLE: `${pathBase}/artboard-version/layer/update/visible`,
-							ORDER: `${pathBase}/artboard-version/layer/update/order`,
-							SELECTED: `${pathBase}/artboard-version/layer/update/selected`,
+							VISIBLE: `${pathBase}/artwork-version/layer/update/visible`,
+							ORDER: `${pathBase}/artwork-version/layer/update/order`,
+							SELECTED: `${pathBase}/artwork-version/layer/update/selected`,
 						},
 					},
 				},

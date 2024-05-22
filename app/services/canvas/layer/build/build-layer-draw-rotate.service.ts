@@ -1,4 +1,4 @@
-import { type ILayerGenerator } from '#app/definitions/artboard-generator'
+import { type ILayerGenerator } from '#app/definitions/artwork-generator'
 import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import {
 	getCircularItemInArray,

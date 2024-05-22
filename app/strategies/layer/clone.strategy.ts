@@ -4,7 +4,7 @@ import {
 	type ILayerCreateOverrides,
 	type ILayerEntityId,
 } from '#app/models/layer/layer.server'
-import { artboardVersionLayerCreateService } from '#app/services/artboard/version/layer/create.service'
+import { artworkVersionLayerCreateService } from '#app/services/artwork/version/layer/create.service'
 
 export interface ICloneLayersStrategy {
 	createEntityLayerService(args: {
@@ -14,7 +14,7 @@ export interface ICloneLayersStrategy {
 	}): Promise<ILayerCreatedResponse>
 }
 
-export class CloneLayersToArtboardVersionStrategy
+export class CloneLayersToArtworkVersionStrategy
 	implements ICloneLayersStrategy
 {
 	async createEntityLayerService({
@@ -26,9 +26,9 @@ export class CloneLayersToArtboardVersionStrategy
 		targetEntityId: ILayerEntityId
 		layerOverrides?: ILayerCreateOverrides
 	}): Promise<ILayerCreatedResponse> {
-		return await artboardVersionLayerCreateService({
+		return await artworkVersionLayerCreateService({
 			userId,
-			artboardVersionId: targetEntityId,
+			artworkVersionId: targetEntityId,
 			layerOverrides,
 			// need to create layer before cloning designs
 			// later, perhaps pass designs along

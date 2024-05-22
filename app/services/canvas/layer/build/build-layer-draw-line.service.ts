@@ -1,4 +1,4 @@
-import { type ILayerGenerator } from '#app/definitions/artboard-generator'
+import { type ILayerGenerator } from '#app/definitions/artwork-generator'
 import { LineFormatTypeEnum } from '#app/schema/line'
 import { linePercentToPixel } from '#app/utils/line'
 

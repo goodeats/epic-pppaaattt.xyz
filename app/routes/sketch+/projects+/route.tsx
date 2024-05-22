@@ -10,7 +10,7 @@ import {
 	DashboardContent,
 	DashboardContentWrapper,
 } from '#app/components/layout'
-import { getProjectsWithArtboards } from '#app/models/project/project.get.server'
+import { getProjectsWithArtworks } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { ProjectsSidebar } from './components/projects-sidebar'
@@ -21,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
-	const projects = await getProjectsWithArtboards({
+	const projects = await getProjectsWithArtworks({
 		where: { ownerId: userId },
 	})
 	return json({ projects })

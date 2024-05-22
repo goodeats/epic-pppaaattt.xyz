@@ -1,13 +1,13 @@
 import { z } from 'zod'
-import { type IArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-version/artboard-version.server'
+import { type IArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.server'
 import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
 import { type ObjectValues } from '#app/utils/typescript-helpers'
 import {
-	type DeleteArtboardVersionDesignSchema,
-	type NewArtboardVersionDesignSchema,
-	type ReorderArtboardVersionDesignSchema,
-	type ToggleVisibleArtboardVersionDesignSchema,
-} from './design-artboard-version'
+	type DeleteArtworkVersionDesignSchema,
+	type NewArtworkVersionDesignSchema,
+	type ReorderArtworkVersionDesignSchema,
+	type ToggleVisibleArtworkVersionDesignSchema,
+} from './design-artwork-version'
 import {
 	type ToggleVisibleLayerDesignSchema,
 	type DeleteLayerDesignSchema,
@@ -29,18 +29,18 @@ export const DesignTypeEnum = {
 export type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
 
 export type DesignParentType =
-	| IArtboardVersionWithDesignsAndLayers
+	| IArtworkVersionWithDesignsAndLayers
 	| ILayerWithDesigns
 
 export const DesignParentTypeIdEnum = {
-	ARTBOARD_VERSION_ID: 'artboardVersionId',
+	ARTWORK_VERSION_ID: 'artworkVersionId',
 	LAYER_ID: 'layerId',
 	// add more design types here
 } as const
 export type designParentTypeIdEnum = ObjectValues<typeof DesignParentTypeIdEnum>
 
 export const DesignCloneSourceTypeEnum = {
-	ARTBOARD_VERSION: 'artboardVersion',
+	ARTWORK_VERSION: 'artworkVersion',
 	LAYER: 'layer',
 } as const
 export type designCloneSourceTypeEnum = ObjectValues<
@@ -51,7 +51,7 @@ export interface Design {
 	type: designTypeEnum
 	ownerId: string
 	// one of these should be included
-	artboardVersionId?: string
+	artworkVersionId?: string
 	layerId?: string
 }
 
@@ -59,26 +59,26 @@ export interface Design {
 export const designSchema = z.object({
 	type: z.nativeEnum(DesignTypeEnum),
 	ownerId: z.string(),
-	artboardVersionId: z.string().optional(),
+	artworkVersionId: z.string().optional(),
 	layerId: z.string().optional(),
 	visible: z.boolean().optional(),
 	selected: z.boolean().optional(),
 }) satisfies z.Schema<Design>
 
 export type NewDesignSchemaType =
-	| typeof NewArtboardVersionDesignSchema
+	| typeof NewArtworkVersionDesignSchema
 	| typeof NewLayerDesignSchema
 
 export type ReorderDesignSchemaType =
-	| typeof ReorderArtboardVersionDesignSchema
+	| typeof ReorderArtworkVersionDesignSchema
 	| typeof ReorderLayerDesignSchema
 
 export type ToggleVisibleDesignSchemaType =
-	| typeof ToggleVisibleArtboardVersionDesignSchema
+	| typeof ToggleVisibleArtworkVersionDesignSchema
 	| typeof ToggleVisibleLayerDesignSchema
 
 export type DeleteDesignSchemaType =
-	| typeof DeleteArtboardVersionDesignSchema
+	| typeof DeleteArtworkVersionDesignSchema
 	| typeof DeleteLayerDesignSchema
 
 export type selectArgsType = z.infer<typeof selectArgs>
@@ -95,7 +95,7 @@ const whereArgs = z.object({
 	visible: z.boolean().optional(),
 	selected: z.boolean().optional(),
 	ownerId: z.string().optional(),
-	artboardVersionId: z.string().optional(),
+	artworkVersionId: z.string().optional(),
 	layerId: z.string().optional(),
 	prevId: zodStringOrNull.optional(),
 	nextId: zodStringOrNull.optional(),

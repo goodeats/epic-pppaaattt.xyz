@@ -424,8 +424,8 @@ export const designsByTypeToPanelArray = ({
 	]
 }
 
-// used from artboard create service
-// get all selected designs by type for artboard and each layer
+// used from artwork create service
+// get all selected designs by type for artwork and each layer
 // then separate them by type here
 export const findFirstDesignsByTypeInArray = ({
 	designs,
@@ -453,8 +453,8 @@ export const findFirstDesignsByTypeInArray = ({
 	}
 }
 
-// used from artboard generator create service
-// verify artboard has all design types
+// used from artwork generator create service
+// verify artwork has all design types
 // or canvas shouldn't be displayed
 export const verifySelectedDesignTypesAllPresent = ({
 	selectedDesignTypes,
@@ -478,7 +478,7 @@ export const verifySelectedDesignTypesAllPresent = ({
 			// indicating that the design type is missing
 			return {
 				success: false,
-				message: `Please make a ${designType} design available for the artboard.`,
+				message: `Please make a ${designType} design available for the artwork.`,
 			}
 		}
 	}
@@ -487,8 +487,8 @@ export const verifySelectedDesignTypesAllPresent = ({
 	return { success: true, message: 'All selected designs are present' }
 }
 
-// used from artboard generator create service
-// layer generators will have artboard generator designs as default
+// used from artwork generator create service
+// layer generators will have artwork generator designs as default
 // so only return the selected designs for layer to merge and override
 export const filterSelectedDesignTypes = ({
 	selectedDesignTypes,
