@@ -1,17 +1,12 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint } from '@conform-to/zod'
-import {
-	type LoaderFunctionArgs,
-	json,
-	type DataFunctionArgs,
-} from '@remix-run/node'
+import { json, type ActionFunctionArgs } from '@remix-run/node'
 import { useFetcher, useNavigate, useParams } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { TextareaField } from '#app/components/forms'
-import { TooltipIconDialogTrigger } from '#app/components/templates/navbar'
 import {
 	Dialog,
 	DialogContent,
@@ -19,7 +14,9 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
+	DialogTrigger,
 } from '#app/components/ui/dialog'
+import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { StatusButton } from '#app/components/ui/status-button'
 import { validateNewArtboardVersionSubmission } from '#app/models/artboard-version/artboard-version.create.server'
 import { NewArtboardVersionSchema } from '#app/schema/artboard-version'
@@ -32,17 +29,14 @@ import { validateNoJS } from '#app/schema/form-data'
 import { artboardVersionCreateService } from '#app/services/artboard/branch/version/create.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { useIsPending } from '#app/utils/misc'
+import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
 
+const route = Routes.RESOURCES.API.V1.ARTBOARD_VERSION.CREATE
 const schema = NewArtboardVersionSchema
 
-export async function loader({ request }: LoaderFunctionArgs) {
-	await requireUserId(request)
-	return json({})
-}
-
-export async function action({ request }: DataFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
@@ -79,26 +73,14 @@ export const ArtboardVersionCreate = ({
 	entityId,
 	parentTypeId,
 	parentId,
-	// route,
-	formId, // schema,
-	onOlderVersion, // iconText,
-	// title,
-} // icon,
-// description,
-// warningDescription,
-: {
+	formId,
+	onOlderVersion,
+}: {
 	entityId?: IEntityId
 	parentTypeId?: entityParentIdTypeEnum
 	parentId?: IEntityParentId
-	// route: RoutePath
 	formId: string
 	onOlderVersion: boolean
-	// schema: z.ZodSchema<any>
-	// icon: IconName
-	// iconText: string
-	// title: string
-	// description: string
-	// warningDescription?: string
 }) => {
 	const [open, setOpen] = useState(false)
 
@@ -117,11 +99,6 @@ export const ArtboardVersionCreate = ({
 		},
 	})
 
-	// actions on successful submission
-	// https://www.nico.fyi/blog/close-dialog-with-use-fetcher-remix
-	// I've enjoyed creating an api out of the resource routes,
-	// but maybe I should redirect from the action instead of
-	// waiting for the json response to redirect from the client
 	useEffect(() => {
 		if (fetcher.state === 'idle' && fetcher.data?.status === 'success') {
 			if (params.versionSlug !== 'latest') {
@@ -136,11 +113,33 @@ export const ArtboardVersionCreate = ({
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<TooltipIconDialogTrigger
+			{/* Warning: Expected server HTML to contain a matching <button> in <button>. */}
+			{/* <TooltipIconDialogTrigger
 				icon="card-stack-plus"
 				text="New Version"
 				tooltipText="Save current changes to new version..."
-			/>
+			/> */}
+
+			{/* Tooltip on dialog is not a priority right now */}
+			<DialogTrigger asChild>
+				<PanelIconButton iconName="card-stack-plus" iconText="New Version" />
+			</DialogTrigger>
+
+			{/* <TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger>
+						<DialogTrigger asChild>
+							<PanelIconButton
+								iconName="card-stack-plus"
+								iconText="New Version"
+							/>
+						</DialogTrigger>
+					</TooltipTrigger>
+					<TooltipContent>
+						Save current changes to new version...
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider> */}
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
 					<DialogTitle>Create new version</DialogTitle>
@@ -150,8 +149,7 @@ export const ArtboardVersionCreate = ({
 					</DialogDescription>
 				</DialogHeader>
 				<div className="grid gap-4 py-4">
-					<fetcher.Form method="POST" {...form.props}>
-						{/* <fetcher.Form method="POST" action={route} {...form.props}> */}
+					<fetcher.Form method="POST" action={route} {...form.props}>
 						<AuthenticityTokenInput />
 
 						<input type="hidden" name="no-js" value={String(!isHydrated)} />
