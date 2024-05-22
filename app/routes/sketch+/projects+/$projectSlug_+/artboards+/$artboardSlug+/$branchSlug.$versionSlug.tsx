@@ -1,5 +1,9 @@
 import { invariantResponse } from '@epic-web/invariant'
-import { type LoaderFunctionArgs, json } from '@remix-run/node'
+import {
+	type LoaderFunctionArgs,
+	json,
+	type MetaFunction,
+} from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import {
@@ -14,9 +18,13 @@ import { getArtboardVersionWithDesignsAndLayers } from '#app/models/artboard-ver
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { artboardVersionGeneratorBuildService } from '#app/services/artboard/version/generator/build.service'
 import { requireUserId } from '#app/utils/auth.server'
+import { routeLoaderMetaData } from '#app/utils/matches'
+import { projectLoaderRoute } from '../route'
+import { artboardBranchLoaderRoute } from './$branchSlug'
 import { CanvasContent } from './__components/canvas-content'
 import { ArtboardHeader } from './__components/header.artboard'
 import { SidebarLeft, SidebarRight } from './__components/sidebars'
+import { artboardLoaderRoute } from './route'
 
 export const artboardVersionLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/$branchSlug.$versionSlug'
@@ -75,6 +83,30 @@ export default function SketchProjectArtboardBranchVersionRoute() {
 			</DashboardBody>
 		</Dashboard>
 	)
+}
+
+export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
+	const projectData = routeLoaderMetaData(matches, projectLoaderRoute)
+	const projectName = projectData?.project.name ?? params.projectSlug
+
+	const artboardData = routeLoaderMetaData(matches, artboardLoaderRoute)
+	const artboardName = artboardData?.artboard.name ?? params.artboardSlug
+
+	const branchData = routeLoaderMetaData(matches, artboardBranchLoaderRoute)
+	const branchName = branchData?.branch.name ?? params.branchSlug
+
+	const versionData = routeLoaderMetaData(matches, artboardVersionLoaderRoute)
+	const versionName = versionData?.version.name ?? params.versionSlug
+
+	return [
+		{
+			title: `${artboardName} | ${branchName} | ${versionName} | ${projectName} | Sketchy | XYZ`,
+		},
+		{
+			name: 'description',
+			content: `Sketchy dashboard artboard project: ${artboardName} (${projectName})`,
+		},
+	]
 }
 
 export function ErrorBoundary() {
