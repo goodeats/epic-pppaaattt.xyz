@@ -9,7 +9,6 @@ import { requireUserId } from '#app/utils/auth.server'
 import { Header } from './components/header'
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	console.log('sketch+ route')
 	await requireUserId(request)
 	return json({})
 }
@@ -25,10 +24,10 @@ export default function SketchRoute() {
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: 'Sketchy | XYZ' },
+		{ title: 'Sketch | XYZ' },
 		{
 			name: 'description',
-			content: 'Sketchy dashboard for XYZ',
+			content: 'Sketch dashboard for XYZ',
 		},
 	]
 }

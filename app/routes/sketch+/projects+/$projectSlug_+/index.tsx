@@ -15,7 +15,7 @@ export default function SketchProjectIndexRoute() {
 
 	return (
 		<div className="container">
-			<DashboardContentHeading1>{project.name}!</DashboardContentHeading1>
+			<DashboardContentHeading1>{project.name}</DashboardContentHeading1>
 			<DashboardContentHeading2>
 				<Link prefetch="intent" to="artboards">
 					Artboards
@@ -25,7 +25,7 @@ export default function SketchProjectIndexRoute() {
 				entities={project.artboards}
 				type="Artboard"
 				parent={project.name}
-				basePathNew={`/users/${user.username}/projects/${project.name}/artboards`}
+				basePathNew={`/users/${user.username}/projects/${project.slug}/artboards`}
 				basePathEditor={`/users/${user.username}/artboards`}
 				basePathView="artboards"
 			/>

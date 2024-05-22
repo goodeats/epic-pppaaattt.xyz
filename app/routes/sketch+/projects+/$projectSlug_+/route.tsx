@@ -14,7 +14,6 @@ import { routeLoaderMetaData } from '#app/utils/matches'
 export const projectLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	console.log('sketch+ projects $slug route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
@@ -36,10 +35,10 @@ export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
 	const projectData = routeLoaderMetaData(matches, projectLoaderRoute)
 	const projectName = projectData?.project.name ?? params.slug
 	return [
-		{ title: `${projectName} | Sketchy | XYZ` },
+		{ title: `${projectName} | Sketch | XYZ` },
 		{
 			name: 'description',
-			content: `Sketchy dashboard for Project: ${projectName}`,
+			content: `Sketch dashboard for XYZ project: ${projectName}`,
 		},
 	]
 }

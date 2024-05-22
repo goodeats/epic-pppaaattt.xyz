@@ -1,9 +1,15 @@
 import { invariantResponse } from '@epic-web/invariant'
-import { type LoaderFunctionArgs, json } from '@remix-run/node'
+import {
+	type LoaderFunctionArgs,
+	json,
+	type MetaFunction,
+} from '@remix-run/node'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import { getArtboardWithBranchesAndVersions } from '#app/models/artboard/artboard.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
+import { routeLoaderMetaData } from '#app/utils/matches'
+import { projectLoaderRoute } from '../route'
 
 // starting the flat routes here in this directory
 // since the artboard will redirect to the branch and version route
@@ -20,7 +26,6 @@ import { requireUserId } from '#app/utils/auth.server'
 export const artboardLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	console.log('sketch+ projects slug artboards slug route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
@@ -34,6 +39,21 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	// ensure that data is loaded from the route
 	// redirect on index.tsx
 	return json({ artboard })
+}
+
+export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
+	const projectData = routeLoaderMetaData(matches, projectLoaderRoute)
+	const projectName = projectData?.project.name ?? params.projectSlug
+
+	const artboardData = routeLoaderMetaData(matches, artboardLoaderRoute)
+	const artboardName = artboardData?.artboard.name ?? params.artboardSlug
+	return [
+		{ title: `${artboardName} | ${projectName} | Sketch | XYZ` },
+		{
+			name: 'description',
+			content: `Sketch dashboard for artboard project: ${artboardName} (${projectName})`,
+		},
+	]
 }
 
 export function ErrorBoundary() {
