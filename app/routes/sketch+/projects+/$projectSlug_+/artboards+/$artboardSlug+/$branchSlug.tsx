@@ -16,7 +16,6 @@ import { artboardLoaderRoute } from './route'
 export const artboardBranchLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/$branchSlug'
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	console.log('sketch+ projects slug artboards slug branch route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })

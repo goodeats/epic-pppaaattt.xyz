@@ -29,7 +29,6 @@ import { artboardLoaderRoute } from './route'
 export const artboardVersionLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/artboards+/$artboardSlug+/$branchSlug.$versionSlug'
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	console.log('sketch+ projects slug artboards slug branch version route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
@@ -64,8 +63,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 export default function SketchProjectArtboardBranchVersionRoute() {
 	const data = useLoaderData<typeof loader>()
 	const { version, selectedLayer, generator } = data
-
-	console.log('reloaded')
 
 	// had to consider sidebar from project route level
 	// the component names might need re-thinking, but works

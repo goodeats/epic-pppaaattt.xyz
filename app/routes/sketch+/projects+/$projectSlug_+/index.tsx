@@ -15,7 +15,7 @@ export default function SketchProjectIndexRoute() {
 
 	return (
 		<div className="container">
-			<DashboardContentHeading1>{project.name}!</DashboardContentHeading1>
+			<DashboardContentHeading1>{project.name}</DashboardContentHeading1>
 			<DashboardContentHeading2>
 				<Link prefetch="intent" to="artboards">
 					Artboards

@@ -13,7 +13,6 @@ import { routeLoaderMetaData } from '#app/utils/matches'
 export const projectLoaderRoute =
 	'routes/sketch+/projects+/$projectSlug_+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	console.log('sketch+ projects slug artboards route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })

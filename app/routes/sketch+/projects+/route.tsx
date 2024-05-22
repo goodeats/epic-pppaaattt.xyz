@@ -17,7 +17,6 @@ import { ProjectsSidebar } from './components/projects-sidebar'
 
 export const projectsLoaderRoute = 'routes/sketch+/projects+/route'
 export async function loader({ request }: LoaderFunctionArgs) {
-	console.log('sketch+ projects route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
