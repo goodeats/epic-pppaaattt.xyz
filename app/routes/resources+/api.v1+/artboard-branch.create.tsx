@@ -1,17 +1,12 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
-import {
-	type LoaderFunctionArgs,
-	json,
-	type DataFunctionArgs,
-} from '@remix-run/node'
+import { json, type ActionFunctionArgs } from '@remix-run/node'
 import { useFetcher, useNavigate } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { Field, TextareaField } from '#app/components/forms'
-import { TooltipIconDialogTrigger } from '#app/components/templates/navbar'
 import {
 	Dialog,
 	DialogContent,
@@ -19,7 +14,9 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
+	DialogTrigger,
 } from '#app/components/ui/dialog'
+import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { StatusButton } from '#app/components/ui/status-button'
 import { type IArtboard } from '#app/models/artboard/artboard.server'
 import { validateNewArtboardBranchSubmission } from '#app/models/artboard-branch/artboard-branch.create.server'
@@ -30,34 +27,24 @@ import { validateNoJS } from '#app/schema/form-data'
 import { artboardBranchCreateService } from '#app/services/artboard/branch/create.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { stringToSlug, useIsPending } from '#app/utils/misc'
+import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
 
+const route = Routes.RESOURCES.API.V1.ARTBOARD_BRANCH.CREATE
 const schema = NewArtboardBranchSchema
 
-export async function loader({ request }: LoaderFunctionArgs) {
-	await requireUserId(request)
-	return json({})
-}
-
-export async function action({ request }: DataFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
 
-	// this is starting to get messy
-	// but want to ensure no redirect if params are valid
-	// and service encounters an error
-	// ... had to revert back to the original code so fetcher button form doesn't break
-	// refactor this later
 	let createSuccess = false
 	let errorMessage = ''
-	// let responseStatus = ''
 	const { status, submission } = await validateNewArtboardBranchSubmission({
 		userId,
 		formData,
 	})
-	// responseStatus = status
 
 	if (status === 'success') {
 		const { success, message } = await artboardBranchCreateService({
@@ -65,7 +52,6 @@ export async function action({ request }: DataFunctionArgs) {
 			...submission.value,
 		})
 		createSuccess = success
-		// responseStatus = success ? 'success' : 'error'
 		errorMessage = message || ''
 	}
 
@@ -87,25 +73,12 @@ export const ArtboardBranchCreate = ({
 	branchId,
 	artboardId,
 	versionId,
-	// route,
-	formId, // schema,
-	// iconText,
-} // icon,
-// title,
-// description,
-// warningDescription,
-: {
+	formId,
+}: {
 	branchId: IArtboardBranch['id']
 	artboardId: IArtboard['id']
 	versionId: IArtboardVersion['id']
-	// route: RoutePath
 	formId: string
-	// schema: z.ZodSchema<any>
-	// icon: IconName
-	// iconText: string
-	// title: string
-	// description: string
-	// warningDescription?: string
 }) => {
 	const [open, setOpen] = useState(false)
 
@@ -127,10 +100,6 @@ export const ArtboardBranchCreate = ({
 		},
 	})
 
-	// actions on successful submission
-	// I've enjoyed creating an api out of the resource routes,
-	// but maybe I should redirect from the action instead of
-	// waiting for the json response to redirect from the client
 	useEffect(() => {
 		if (fetcher.state === 'idle' && fetcher.data?.status === 'success') {
 			const newBranchName = fetcher.data.submission.value.name
@@ -142,11 +111,16 @@ export const ArtboardBranchCreate = ({
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<TooltipIconDialogTrigger
+			{/* Warning: Expected server HTML to contain a matching <button> in <button>. */}
+			{/* <TooltipIconDialogTrigger
 				icon="file-plus"
 				text="New Branch"
 				tooltipText="Create a new branch from current branch and version..."
-			/>
+			/> */}
+			{/* Tooltip on dialog is not a priority right now */}
+			<DialogTrigger asChild>
+				<PanelIconButton iconName="file-plus" iconText="New Branch" />
+			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
 					<DialogTitle>Create a new branch</DialogTitle>
@@ -156,8 +130,7 @@ export const ArtboardBranchCreate = ({
 					</DialogDescription>
 				</DialogHeader>
 				<div className="grid gap-4 py-4">
-					{/* <fetcher.Form method="POST" action={route} {...form.props}> */}
-					<fetcher.Form method="POST" {...form.props}>
+					<fetcher.Form method="POST" action={route} {...form.props}>
 						<AuthenticityTokenInput />
 
 						<input type="hidden" name="no-js" value={String(!isHydrated)} />
