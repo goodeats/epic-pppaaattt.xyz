@@ -29,6 +29,7 @@ export type ArtworkVersionUpdateSchemaType =
 	| typeof ArtworkVersionHeightSchema
 	| typeof ArtworkVersionBackgroundSchema
 	| typeof ArtworkVersionStarredSchema
+	| typeof ArtworkVersionPublishedSchema
 
 export const ArtworkVersionWidthSchema = z.object({
 	id: z.string(),
@@ -46,6 +47,10 @@ export const ArtworkVersionBackgroundSchema = z.object({
 })
 
 export const ArtworkVersionStarredSchema = z.object({
+	id: z.string(),
+})
+
+export const ArtworkVersionPublishedSchema = z.object({
 	id: z.string(),
 })
 

@@ -17,18 +17,18 @@ import {
 	TooltipTrigger,
 } from '#app/components/ui/tooltip'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
-import { validateArtworkVersionStarredSubmission } from '#app/models/artwork-version/artwork-version.update.server'
-import { ArtworkVersionStarredSchema } from '#app/schema/artwork-version'
+import { validateArtworkVersionPublishedSubmission } from '#app/models/artwork-version/artwork-version.update.server'
+import { ArtworkVersionPublishedSchema } from '#app/schema/artwork-version'
 import { validateNoJS } from '#app/schema/form-data'
-import { updateArtworkVersionStarredService } from '#app/services/artwork/version/update.service'
+import { updateArtworkVersionPublishedService } from '#app/services/artwork/version/update.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { useIsPending } from '#app/utils/misc'
 import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
 
-const route = Routes.RESOURCES.API.V1.ARTWORK_VERSION.UPDATE.STARRED
-const schema = ArtworkVersionStarredSchema
+const route = Routes.RESOURCES.API.V1.ARTWORK_VERSION.UPDATE.PUBLISHED
+const schema = ArtworkVersionPublishedSchema
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	await requireUserId(request)
@@ -41,13 +41,14 @@ export async function action({ request }: ActionFunctionArgs) {
 	const noJS = validateNoJS({ formData })
 
 	let createSuccess = false
-	const { status, submission } = await validateArtworkVersionStarredSubmission({
-		userId,
-		formData,
-	})
+	const { status, submission } =
+		await validateArtworkVersionPublishedSubmission({
+			userId,
+			formData,
+		})
 
 	if (status === 'success') {
-		const { success } = await updateArtworkVersionStarredService({
+		const { success } = await updateArtworkVersionPublishedService({
 			userId,
 			...submission.value,
 		})
@@ -68,22 +69,23 @@ export async function action({ request }: ActionFunctionArgs) {
 	)
 }
 
-export const ArtworkVersionToggleStarred = ({
+export const ArtworkVersionTogglePublished = ({
 	version,
 }: {
 	version: IArtworkVersion
 }) => {
 	const versionId = version.id
-	const isStarred = version.starred
-	const icon = isStarred ? 'star-filled' : 'star'
-	const iconText = isStarred ? 'Unstar version' : 'Star version'
+	const isPublished = version.published
+	// these icons 😂
+	const icon = isPublished ? 'crumpled-paper' : 'rocket'
+	const iconText = isPublished ? 'Unpublish version' : 'Publish version'
 
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
-		id: `artwork-version-toggle-starred-${versionId}`,
+		id: `artwork-version-toggle-published-${versionId}`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission,
 	})

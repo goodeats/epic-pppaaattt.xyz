@@ -5,6 +5,7 @@ import {
 	ArtworkVersionHeightSchema,
 	ArtworkVersionBackgroundSchema,
 	ArtworkVersionStarredSchema,
+	ArtworkVersionPublishedSchema,
 } from '#app/schema/artwork-version'
 import { ValidateArtworkVersionSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
@@ -62,6 +63,15 @@ export async function validateArtworkVersionStarredSubmission(
 	return validateUpdateSubmission({
 		...args,
 		schema: ArtworkVersionStarredSchema,
+	})
+}
+
+export async function validateArtworkVersionPublishedSubmission(
+	args: IntentActionArgs,
+) {
+	return validateUpdateSubmission({
+		...args,
+		schema: ArtworkVersionPublishedSchema,
 	})
 }
 
@@ -149,6 +159,7 @@ export const updateArtworkVersionBackground = async ({
 	}
 }
 
+// unstarring should also unpublish
 export const updateArtworkVersionStarred = async ({
 	id,
 }: {
@@ -158,7 +169,36 @@ export const updateArtworkVersionStarred = async ({
 	if (!artworkVersion) return { success: false }
 
 	try {
-		artworkVersion.starred = !artworkVersion.starred
+		const isUnstarring = !artworkVersion.starred
+		artworkVersion.starred = isUnstarring
+		if (isUnstarring) {
+			artworkVersion.published = false
+			artworkVersion.publishedAt = null
+		}
+		artworkVersion.updatedAt = new Date()
+		await artworkVersion.save()
+
+		return { success: true }
+	} catch (error) {
+		// consider how to handle this error where this is called
+		console.error(error)
+		return { success: false }
+	}
+}
+
+// unpublishing should not impact starred status
+export const updateArtworkVersionPublished = async ({
+	id,
+}: {
+	id: IArtworkVersion['id']
+}) => {
+	const artworkVersion = await getArtworkVersionInstance({ id })
+	if (!artworkVersion) return { success: false }
+
+	try {
+		const isUnpublishing = !artworkVersion.published
+		artworkVersion.published = isUnpublishing
+		artworkVersion.publishedAt = isUnpublishing ? null : new Date()
 		artworkVersion.updatedAt = new Date()
 		await artworkVersion.save()
 

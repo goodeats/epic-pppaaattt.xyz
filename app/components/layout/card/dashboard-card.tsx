@@ -9,6 +9,7 @@ import {
 	CardTitle,
 } from '#app/components/ui/card'
 import { Icon, type IconName } from '#app/components/ui/icon'
+import { cn } from '#app/utils/misc'
 import { createContainerComponent } from '../utils'
 
 const DashboardCardWrapper = createContainerComponent({
@@ -34,17 +35,19 @@ const DashboardCard = ({
 	title,
 	description,
 	children,
+	className,
 }: {
 	title: string
 	description: string
 	children: React.ReactNode
+	className?: string
 }) => {
 	// - fixed width to indicate a smaller card
 	// - more space between cards on larger screens
-	const className = 'mb-2 w-80 lg:mb-6'
+	const cardClassName = cn('mb-2 w-80 lg:mb-6', className)
 
 	return (
-		<Card className={className}>
+		<Card className={cardClassName}>
 			<CardHeader>
 				<CardTitle>{title}</CardTitle>
 				<CardDescription>{description}</CardDescription>
