@@ -48,6 +48,25 @@ const MarketingSocialLinksList = createContainerComponent({
 	displayName: 'MarketingSocialLinksList',
 })
 
+const MarketingImagesGrid = createContainerComponent({
+	defaultTagName: 'div',
+	defaultClassName:
+		'mt-16 flex max-w-3xl flex-wrap gap-8 xl:mt-0 xl:grid xl:grid-flow-col xl:grid-cols-2 xl:grid-rows-2',
+	displayName: 'MarketingImagesGrid',
+})
+
+const MarketingImageContainer = createContainerComponent({
+	defaultTagName: 'div',
+	defaultClassName: 'relative',
+	displayName: 'MarketingImageContainer',
+})
+
+const MarketingImage = createContainerComponent({
+	defaultTagName: 'img',
+	defaultClassName: 'relative left-0 top-0 h-full w-full object-cover',
+	displayName: 'MarketingImage',
+})
+
 export {
 	MarketingMainLayout,
 	MarketingContentSection,
@@ -56,4 +75,7 @@ export {
 	MarketingHeader,
 	MarketingContent,
 	MarketingSocialLinksList,
+	MarketingImagesGrid,
+	MarketingImageContainer,
+	MarketingImage,
 }

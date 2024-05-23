@@ -1,3 +1,8 @@
+import {
+	MarketingImage,
+	MarketingImageContainer,
+	MarketingImagesGrid,
+} from '#app/components/layout/marketing'
 import { cn } from '#app/utils/misc.tsx'
 import { images } from '../images/images'
 
@@ -20,25 +25,17 @@ const rowClasses: Record<(typeof images)[number]['row'], string> = {
 
 export const ImagesGrid = () => {
 	return (
-		<div className="mt-16 flex max-w-3xl flex-wrap gap-8 xl:mt-0 xl:grid xl:grid-flow-col xl:grid-cols-2 xl:grid-rows-2">
-			{images.map((image, index) => {
+		<MarketingImagesGrid>
+			{images.map(image => {
 				return (
-					<div
-						key={index}
-						className={cn(
-							columnClasses[image.column],
-							rowClasses[image.row],
-							'relative',
-						)}
+					<MarketingImageContainer
+						key={image.src}
+						className={cn(columnClasses[image.column], rowClasses[image.row])}
 					>
-						<img
-							src={image.src}
-							alt={image.alt}
-							className="relative left-0 top-0 h-full w-full object-cover"
-						/>
-					</div>
+						<MarketingImage src={image.src} alt={image.alt} />
+					</MarketingImageContainer>
 				)
 			})}
-		</div>
+		</MarketingImagesGrid>
 	)
 }
