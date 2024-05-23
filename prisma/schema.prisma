@@ -523,6 +523,8 @@ model ArtworkVersion {
   name      String @default("v0")
   slug       String @default("v0")
   description String @default("initial version")
+  starred   Boolean @default(false)
+  published Boolean @default(false)
 
   // settings
   // 9:16 aspect ratio (vertical)

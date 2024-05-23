@@ -28,6 +28,7 @@ export type ArtworkVersionUpdateSchemaType =
 	| typeof ArtworkVersionWidthSchema
 	| typeof ArtworkVersionHeightSchema
 	| typeof ArtworkVersionBackgroundSchema
+	| typeof ArtworkVersionStarredSchema
 
 export const ArtworkVersionWidthSchema = z.object({
 	id: z.string(),
@@ -42,6 +43,10 @@ export const ArtworkVersionHeightSchema = z.object({
 export const ArtworkVersionBackgroundSchema = z.object({
 	id: z.string(),
 	background: HexcodeSchema,
+})
+
+export const ArtworkVersionStarredSchema = z.object({
+	id: z.string(),
 })
 
 export const ArtworkVersionSelectedDesignsSchema = z.object({

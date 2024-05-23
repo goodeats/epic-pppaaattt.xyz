@@ -4,6 +4,7 @@ import {
 	type ArtworkVersionUpdateSchemaType,
 	ArtworkVersionHeightSchema,
 	ArtworkVersionBackgroundSchema,
+	ArtworkVersionStarredSchema,
 } from '#app/schema/artwork-version'
 import { ValidateArtworkVersionSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
@@ -52,6 +53,15 @@ export async function validateArtworkVersionBackgroundSubmission(
 	return validateUpdateSubmission({
 		...args,
 		schema: ArtworkVersionBackgroundSchema,
+	})
+}
+
+export async function validateArtworkVersionStarredSubmission(
+	args: IntentActionArgs,
+) {
+	return validateUpdateSubmission({
+		...args,
+		schema: ArtworkVersionStarredSchema,
 	})
 }
 
@@ -126,9 +136,29 @@ export const updateArtworkVersionBackground = async ({
 	if (!artworkVersion) return { success: false }
 
 	try {
-		console.log('background', background)
 		const data = ArtworkVersionBackgroundSchema.parse({ id, background })
 		artworkVersion.background = data.background
+		artworkVersion.updatedAt = new Date()
+		await artworkVersion.save()
+
+		return { success: true }
+	} catch (error) {
+		// consider how to handle this error where this is called
+		console.error(error)
+		return { success: false }
+	}
+}
+
+export const updateArtworkVersionStarred = async ({
+	id,
+}: {
+	id: IArtworkVersion['id']
+}) => {
+	const artworkVersion = await getArtworkVersionInstance({ id })
+	if (!artworkVersion) return { success: false }
+
+	try {
+		artworkVersion.starred = !artworkVersion.starred
 		artworkVersion.updatedAt = new Date()
 		await artworkVersion.save()
 

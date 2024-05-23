@@ -2,6 +2,7 @@ import { type IArtworkVersion } from '#app/models/artwork-version/artwork-versio
 import {
 	updateArtworkVersionBackground,
 	updateArtworkVersionHeight,
+	updateArtworkVersionStarred,
 	updateArtworkVersionWidth,
 } from '#app/models/artwork-version/artwork-version.update.server'
 
@@ -56,6 +57,22 @@ export async function updateArtworkVersionBackgroundService({
 		const updatedArtworkVersion = await updateArtworkVersionBackground({
 			id,
 			background,
+		})
+		return { success: true, artworkVersion: updatedArtworkVersion }
+	} catch (error) {
+		console.error(error)
+		return { success: false }
+	}
+}
+
+export async function updateArtworkVersionStarredService({
+	id,
+}: {
+	id: IArtworkVersion['id']
+}) {
+	try {
+		const updatedArtworkVersion = await updateArtworkVersionStarred({
+			id,
 		})
 		return { success: true, artworkVersion: updatedArtworkVersion }
 	} catch (error) {

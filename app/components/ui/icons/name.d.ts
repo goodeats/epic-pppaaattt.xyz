@@ -60,6 +60,8 @@ export type IconName =
 	| 'ruler-square'
 	| 'size'
 	| 'stack'
+	| 'star-filled'
+	| 'star'
 	| 'stretch-horizontally'
 	| 'stretch-vertically'
 	| 'sun'
