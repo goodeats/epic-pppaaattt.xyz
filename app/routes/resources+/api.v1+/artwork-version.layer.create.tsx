@@ -1,6 +1,10 @@
 import { useForm } from '@conform-to/react'
 import { getFieldsetConstraint } from '@conform-to/zod'
-import { json, type ActionFunctionArgs } from '@remix-run/node'
+import {
+	json,
+	type ActionFunctionArgs,
+	type LoaderFunctionArgs,
+} from '@remix-run/node'
 import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
@@ -20,6 +24,11 @@ import { Routes } from '#app/utils/routes.const'
 
 const route = Routes.RESOURCES.API.V1.ARTWORK_VERSION.LAYER.CREATE
 const schema = NewArtworkVersionLayerSchema
+
+export async function loader({ request }: LoaderFunctionArgs) {
+	await requireUserId(request)
+	return json({})
+}
 
 export async function action({ request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request)

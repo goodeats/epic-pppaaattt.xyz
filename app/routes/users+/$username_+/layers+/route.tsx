@@ -10,15 +10,18 @@ import {
 	SideNavWrapper,
 } from '#app/components/shared'
 import { Separator } from '#app/components/ui/separator'
+import { requireUserId } from '#app/utils/auth.server'
 import { type BreadcrumbHandle } from '#app/utils/breadcrumbs'
 import { prisma } from '#app/utils/db.server.ts'
-import { Breadcrumbs, Header, List } from './components'
+import { Breadcrumbs, Header, List } from './__components'
 
 export const handle: BreadcrumbHandle = {
 	breadcrumb: () => 'Layers',
 }
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
+	await requireUserId(request)
+
 	const owner = await prisma.user.findFirst({
 		select: {
 			id: true,
