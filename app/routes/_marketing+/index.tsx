@@ -1,4 +1,16 @@
-import { type MetaFunction } from '@remix-run/node'
+import { invariantResponse } from '@epic-web/invariant'
+import {
+	type LoaderFunctionArgs,
+	json,
+	type MetaFunction,
+} from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
+import {
+	MarketingContentSection,
+	MarketingDetailsSection,
+	MarketingMainLayout,
+} from '#app/components/layout/marketing.tsx'
+import { getFirstUser } from '#app/models/user/user.get.server.ts'
 import {
 	ContentBody,
 	ContentContact,
@@ -6,6 +18,35 @@ import {
 	ContentLogo,
 } from './components/content.tsx'
 import { ImagesGrid } from './components/images-grid.tsx'
+
+export async function loader({ params, request }: LoaderFunctionArgs) {
+	const user = await getFirstUser()
+	invariantResponse(user, 'Nothing to show today', { status: 404 })
+
+	return json({
+		user,
+	})
+}
+
+export default function Index() {
+	const data = useLoaderData<typeof loader>()
+	const { user } = data
+	console.log(user)
+
+	return (
+		<MarketingMainLayout>
+			<MarketingContentSection>
+				<MarketingDetailsSection>
+					<ContentLogo />
+					<ContentHeader />
+					<ContentBody bio={user.bio} />
+					<ContentContact ig={user.sm_url_instagram} gh={user.sm_url_github} />
+				</MarketingDetailsSection>
+				<ImagesGrid />
+			</MarketingContentSection>
+		</MarketingMainLayout>
+	)
+}
 
 export const meta: MetaFunction = () => {
 	const title = 'PPPAAATTT'
@@ -57,20 +98,4 @@ export const meta: MetaFunction = () => {
 				'generative art, digital gallery, triangles, algorithms, art, digital art, pppaaattt',
 		},
 	]
-}
-
-export default function Index() {
-	return (
-		<main className="font-poppins grid h-full place-items-center">
-			<div className="grid place-items-center px-4 py-16 xl:grid-cols-2 xl:gap-4">
-				<div className="mb-4 flex max-w-lg flex-col items-center text-left xl:order-2 xl:mt-16 xl:items-start xl:self-start">
-					<ContentLogo />
-					<ContentHeader />
-					<ContentBody />
-					<ContentContact />
-				</div>
-				<ImagesGrid />
-			</div>
-		</main>
-	)
 }

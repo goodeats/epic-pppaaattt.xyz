@@ -10,7 +10,7 @@ import {
 import { Link, useFetcher, useLoaderData } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { z } from 'zod'
-import { ErrorList, Field } from '#app/components/forms.tsx'
+import { ErrorList, Field, TextareaField } from '#app/components/forms.tsx'
 import { Button } from '#app/components/ui/button.tsx'
 import { Icon } from '#app/components/ui/icon.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
@@ -30,6 +30,9 @@ export const handle: SEOHandle = {
 const ProfileFormSchema = z.object({
 	name: NameSchema.optional(),
 	username: UsernameSchema,
+	bio: z.string().max(500).optional(),
+	sm_url_instagram: z.string().optional(),
+	sm_url_github: z.string().optional(),
 })
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -41,6 +44,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			name: true,
 			username: true,
 			email: true,
+			bio: true,
+			sm_url_instagram: true,
+			sm_url_github: true,
 			image: {
 				select: { id: true },
 			},
@@ -211,6 +217,9 @@ async function profileUpdateAction({ userId, formData }: ProfileActionArgs) {
 		data: {
 			name: data.name,
 			username: data.username,
+			bio: data.bio,
+			sm_url_instagram: data.sm_url_instagram,
+			sm_url_github: data.sm_url_github,
 		},
 	})
 
@@ -233,6 +242,9 @@ function UpdateProfile() {
 			username: data.user.username,
 			name: data.user.name ?? '',
 			email: data.user.email,
+			bio: data.user.bio ?? '',
+			sm_url_instagram: data.user.sm_url_instagram ?? '',
+			sm_url_github: data.user.sm_url_github ?? '',
 		},
 	})
 
@@ -254,6 +266,39 @@ function UpdateProfile() {
 					labelProps={{ htmlFor: fields.name.id, children: 'Name' }}
 					inputProps={conform.input(fields.name)}
 					errors={fields.name.errors}
+				/>
+			</div>
+
+			<div className="grid grid-cols-1">
+				<TextareaField
+					labelProps={{ children: 'Bio' }}
+					textareaProps={{
+						...conform.textarea(fields.bio, {
+							ariaAttributes: true,
+						}),
+					}}
+					errors={fields.bio.errors}
+				/>
+			</div>
+
+			<div className="grid grid-cols-6 gap-x-10">
+				<Field
+					className="col-span-3"
+					labelProps={{
+						htmlFor: fields.sm_url_instagram.id,
+						children: 'Instagram URL',
+					}}
+					inputProps={conform.input(fields.sm_url_instagram)}
+					errors={fields.sm_url_instagram.errors}
+				/>
+				<Field
+					className="col-span-3"
+					labelProps={{
+						htmlFor: fields.sm_url_github.id,
+						children: 'Github URL',
+					}}
+					inputProps={conform.input(fields.sm_url_github)}
+					errors={fields.sm_url_github.errors}
 				/>
 			</div>
 
