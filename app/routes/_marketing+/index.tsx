@@ -42,7 +42,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 export default function Index() {
 	const data = useLoaderData<typeof loader>()
 	const { user } = data
-	console.log(user)
 
 	return (
 		<MarketingMainLayout>

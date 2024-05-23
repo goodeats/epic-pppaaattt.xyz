@@ -1,6 +1,7 @@
 import { Link } from '@remix-run/react'
 import { useOptionalUser } from '#app/utils/user'
 import Logo from '../logo'
+import { ThemeSwitch } from '../theme-switch'
 import { Button } from '../ui/button'
 import { UserDropdown } from '../user-dropdown'
 
@@ -12,13 +13,7 @@ const PageHeader = () => {
 			<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
 				<Logo />
 				<div className="flex items-center gap-10">
-					{user ? (
-						<UserDropdown />
-					) : (
-						<Button asChild variant="default" size="lg">
-							<Link to="/">Coming Soon</Link>
-						</Button>
-					)}
+					{user ? <UserDropdown /> : <ThemeSwitch />}
 				</div>
 			</nav>
 		</header>
