@@ -8,19 +8,30 @@ import { useLoaderData } from '@remix-run/react'
 import {
 	MarketingContentSection,
 	MarketingDetailsSection,
+	MarketingLogoImage,
+	MarketingLogoLink,
 	MarketingMainLayout,
 } from '#app/components/layout/marketing.tsx'
-import { getFirstUser } from '#app/models/user/user.get.server.ts'
+import { prisma } from '#app/utils/db.server.ts'
+import { getUserImgSrc } from '#app/utils/misc.tsx'
 import {
 	ContentBody,
 	ContentContact,
 	ContentHeader,
-	ContentLogo,
 } from './components/content.tsx'
 import { ImagesGrid } from './components/images-grid.tsx'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	const user = await getFirstUser()
+	const user = await await prisma.user.findFirst({
+		select: {
+			name: true,
+			username: true,
+			bio: true,
+			sm_url_instagram: true,
+			sm_url_github: true,
+			image: { select: { id: true } },
+		},
+	})
 	invariantResponse(user, 'Nothing to show today', { status: 404 })
 
 	return json({
@@ -37,7 +48,16 @@ export default function Index() {
 		<MarketingMainLayout>
 			<MarketingContentSection>
 				<MarketingDetailsSection>
-					<ContentLogo />
+					<MarketingLogoLink
+						href="https://github.com/goodeats/epic-pppaaattt.xyz"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<MarketingLogoImage
+							alt="Pat Needham"
+							src={getUserImgSrc(user.image?.id)}
+						/>
+					</MarketingLogoLink>
 					<ContentHeader />
 					<ContentBody bio={user.bio} />
 					<ContentContact ig={user.sm_url_instagram} gh={user.sm_url_github} />
