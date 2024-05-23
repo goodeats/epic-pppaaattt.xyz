@@ -30,7 +30,7 @@ export const handle: SEOHandle = {
 const ProfileFormSchema = z.object({
 	name: NameSchema.optional(),
 	username: UsernameSchema,
-	bio: z.string().max(500).optional(),
+	bio: z.string().max(1000).optional(),
 	sm_url_instagram: z.string().optional(),
 	sm_url_github: z.string().optional(),
 })

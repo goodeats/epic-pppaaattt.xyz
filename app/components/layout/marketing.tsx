@@ -27,6 +27,12 @@ const MarketingLogoLink = createContainerComponent({
 	displayName: 'MarketingLogoLink',
 })
 
+const MarketingLogoImage = createContainerComponent({
+	defaultTagName: 'img',
+	defaultClassName: 'h-52 w-52 rounded-full object-cover',
+	displayName: 'MarketingLogoImage',
+})
+
 const MarketingHeader = createContainerComponent({
 	defaultTagName: 'h1',
 	defaultClassName:
@@ -72,6 +78,7 @@ export {
 	MarketingContentSection,
 	MarketingDetailsSection,
 	MarketingLogoLink,
+	MarketingLogoImage,
 	MarketingHeader,
 	MarketingContent,
 	MarketingSocialLinksList,
