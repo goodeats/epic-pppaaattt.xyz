@@ -27,6 +27,8 @@ import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
 
+// TODO: prevent starring if artwork doesn't have all design types set
+
 const route = Routes.RESOURCES.API.V1.ARTWORK_VERSION.UPDATE.STARRED
 const schema = ArtworkVersionStarredSchema
 

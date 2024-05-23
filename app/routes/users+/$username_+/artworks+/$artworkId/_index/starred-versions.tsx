@@ -5,6 +5,17 @@ import {
 	DashboardCardWrapper,
 } from '#app/components/layout'
 import { ContainerContent, ContainerP } from '#app/components/shared'
+import { ArtworkCanvas } from '#app/components/templates/canvas'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '#app/components/ui/dialog'
+import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import {
 	Table,
 	TableBody,
@@ -14,14 +25,14 @@ import {
 	TableHeader,
 	TableRow,
 } from '#app/components/ui/table'
-import { type IArtworkVersionWithBranch } from '#app/models/artwork-version/artwork-version.server'
+import { type IArtworkVersionWithGenerator } from '#app/models/artwork-version/artwork-version.server'
 import { ArtworkVersionTogglePublished } from '#app/routes/resources+/api.v1+/artwork-version.update.published'
 import { ArtworkVersionToggleStarred } from '#app/routes/resources+/api.v1+/artwork-version.update.starred'
 
 export const StarredVersions = ({
 	versions,
 }: {
-	versions: IArtworkVersionWithBranch[]
+	versions: IArtworkVersionWithGenerator[]
 }) => {
 	if (versions.length === 0) {
 		return (
@@ -60,7 +71,10 @@ export const StarredVersions = ({
 										published,
 										publishedAt,
 										branch,
+										generator,
 									} = version
+
+									const branchName = branch?.name || 'No branch found'
 
 									const timeAgo = publishedAt
 										? formatDistanceToNow(new Date(publishedAt))
@@ -68,9 +82,31 @@ export const StarredVersions = ({
 
 									return (
 										<TableRow key={id}>
+											<TableCell>
+												<Dialog>
+													<DialogTrigger asChild>
+														<PanelIconButton
+															iconName="eye-open"
+															iconText="View canvas"
+														/>
+													</DialogTrigger>
+													<DialogContent className="sm:max-w-[425px]">
+														<DialogHeader>
+															<DialogTitle>
+																{branchName} - {name}
+															</DialogTitle>
+															<DialogDescription>
+																{description}
+															</DialogDescription>
+														</DialogHeader>
+														<ArtworkCanvas generator={generator} />
+														<DialogFooter>footer</DialogFooter>
+													</DialogContent>
+												</Dialog>
+											</TableCell>
 											<TableCell>{name}</TableCell>
 											<TableCell>{description}</TableCell>
-											<TableCell>{branch.name}</TableCell>
+											<TableCell>{branchName}</TableCell>
 											<TableCell>
 												{published ? 'published' : 'not published'}
 											</TableCell>

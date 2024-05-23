@@ -4,7 +4,6 @@ import { prisma } from '#app/utils/db.server'
 import {
 	type IArtworkVersionWithDesignsAndLayers,
 	type IArtworkVersion,
-	type IArtworkVersionWithBranch,
 } from './artwork-version.server'
 
 export type queryArtworkVersionWhereArgsType = z.infer<typeof whereArgs>
@@ -107,7 +106,7 @@ export const getStarredArtworkVersions = async ({
 	artworkId,
 }: {
 	artworkId: string
-}): Promise<IArtworkVersionWithBranch[]> => {
+}): Promise<IArtworkVersionWithDesignsAndLayers[]> => {
 	const starredVersions = await prisma.artworkVersion.findMany({
 		where: {
 			branch: {
@@ -116,6 +115,7 @@ export const getStarredArtworkVersions = async ({
 			starred: true,
 		},
 		include: {
+			...includeDesignsAndLayers,
 			branch: true,
 		},
 		orderBy: {

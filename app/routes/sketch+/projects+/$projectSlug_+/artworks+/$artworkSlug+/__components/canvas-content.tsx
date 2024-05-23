@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import {
 	ReactFlow,
 	type Node,
@@ -10,8 +10,8 @@ import {
 	type NodeProps,
 } from 'reactflow'
 import { ContainerIndex } from '#app/components/shared'
+import { ArtworkCanvas } from '#app/components/templates/canvas'
 import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator'
-import { canvasDrawService } from '#app/services/canvas/draw.service'
 import 'reactflow/dist/style.css'
 
 const initialNodes = [
@@ -22,31 +22,6 @@ const initialNodes = [
 		data: { label: 'artwork-canvas' },
 	},
 ] satisfies Node[]
-
-const ArtworkCanvas = memo(
-	({ generator }: { generator: IArtworkVersionGenerator }) => {
-		const { width, height, background } = generator.settings
-		const canvasRef = useRef<HTMLCanvasElement>(null)
-
-		useEffect(() => {
-			const canvas = canvasRef.current
-			if (canvas) {
-				canvasDrawService({ canvas, generator })
-			}
-		}, [canvasRef, generator])
-
-		return (
-			<canvas
-				id="canvas-editor"
-				ref={canvasRef}
-				width={width}
-				height={height}
-				style={{ backgroundColor: `#${background}` }}
-			/>
-		)
-	},
-)
-ArtworkCanvas.displayName = 'ArtworkCanvas'
 
 export const CanvasContent = ({
 	generator,
