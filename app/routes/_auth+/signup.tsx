@@ -23,12 +23,21 @@ import { prisma } from '#app/utils/db.server.ts'
 import { sendEmail } from '#app/utils/email.server.ts'
 import { checkHoneypot } from '#app/utils/honeypot.server.ts'
 import { useIsPending } from '#app/utils/misc.tsx'
+import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { EmailSchema } from '#app/utils/user-validation.ts'
 import { prepareVerification } from './verify.server.ts'
 
 const SignupSchema = z.object({
 	email: EmailSchema,
 })
+
+export async function loader() {
+	return redirectWithToast('/', {
+		type: 'error',
+		title: 'Access Denied',
+		description: 'No new users at this time.',
+	})
+}
 
 export async function action({ request }: ActionFunctionArgs) {
 	const formData = await request.formData()
