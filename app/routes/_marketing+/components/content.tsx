@@ -1,11 +1,14 @@
+import {
+	MarketingContent,
+	MarketingHeader,
+	MarketingLogoLink,
+	MarketingSocialLinksList,
+} from '#app/components/layout/marketing'
 import { Icon } from '#app/components/ui/icon'
 
 export const ContentLogo = () => {
 	return (
-		<a
-			href="https://github.com/goodeats/epic-pppaaattt.xyz"
-			className="animate-slide-top [animation-fill-mode:backwards] xl:animate-slide-left xl:[animation-delay:0.5s] xl:[animation-fill-mode:backwards]"
-		>
+		<MarketingLogoLink href="https://github.com/goodeats/epic-pppaaattt.xyz">
 			<svg
 				className="size-20 text-foreground xl:-mt-4"
 				xmlns="http://www.w3.org/2000/svg"
@@ -19,48 +22,39 @@ export const ContentLogo = () => {
 					points="52.5,64.33 40.5,44.66 64.5,44.66"
 				/>
 			</svg>
-		</a>
+		</MarketingLogoLink>
 	)
 }
 
 export const ContentHeader = () => {
 	return (
-		<h1
-			data-heading
-			className="mt-8 animate-slide-top text-4xl font-medium text-foreground [animation-fill-mode:backwards] [animation-delay:0.3s] md:text-5xl xl:mt-4 xl:animate-slide-left xl:text-6xl xl:[animation-fill-mode:backwards] xl:[animation-delay:0.8s]"
-		>
+		<MarketingHeader data-heading>
 			<a href="https://github.com/goodeats/epic-pppaaattt.xyz">PPPAAATTT</a>
-		</h1>
+		</MarketingHeader>
 	)
 }
 
 export const ContentBody = () => {
 	return (
 		<div>
-			<p
-				data-paragraph
-				className="mt-6 animate-slide-top text-xl/7 text-muted-foreground [animation-fill-mode:backwards] [animation-delay:0.8s] xl:mt-8 xl:animate-slide-left xl:text-xl/6 xl:leading-10 xl:[animation-fill-mode:backwards] xl:[animation-delay:1s]"
-			>
+			<MarketingContent data-paragraph>
 				Welcome to my digital gallery. My name is Pat and I am a software
 				engineer turned generative artist from Maine, now living in New York
 				City.
-			</p>
-			<p
-				data-paragraph
-				className="mt-6 animate-slide-top text-xl/7 text-muted-foreground [animation-fill-mode:backwards] [animation-delay:0.8s] xl:mt-8 xl:animate-slide-left xl:text-xl/6 xl:leading-10 xl:[animation-fill-mode:backwards] xl:[animation-delay:1s]"
-			>
+			</MarketingContent>
+			<MarketingContent data-paragraph>
 				My art consists of bridging the gap between the precision of programming
 				and the boundless world of art. It is a celebration of simplicity and
 				complexity, where equilateral triangles become the building blocks for a
 				series of algorithms that produce mesmerizing visual displays.
-			</p>
+			</MarketingContent>
 		</div>
 	)
 }
 
 export const ContentContact = () => {
 	return (
-		<ul className="mt-6 flex animate-slide-top space-x-6 [animation-fill-mode:backwards] [animation-delay:1.2s] xl:mt-8 xl:animate-slide-left xl:[animation-fill-mode:backwards] xl:[animation-delay:1.2s]">
+		<MarketingSocialLinksList>
 			<li>
 				<a
 					href="https://www.instagram.com/pppaaattt.xyz"
@@ -79,6 +73,6 @@ export const ContentContact = () => {
 					<Icon name="github-logo" size="xl" />
 				</a>
 			</li>
-		</ul>
+		</MarketingSocialLinksList>
 	)
 }

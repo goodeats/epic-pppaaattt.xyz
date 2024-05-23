@@ -1,5 +1,10 @@
 import { type MetaFunction } from '@remix-run/node'
 import {
+	MarketingContentSection,
+	MarketingDetailsSection,
+	MarketingMainLayout,
+} from '#app/components/layout/marketing.tsx'
+import {
 	ContentBody,
 	ContentContact,
 	ContentHeader,
@@ -61,16 +66,16 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
 	return (
-		<main className="font-poppins grid h-full place-items-center">
-			<div className="grid place-items-center px-4 py-16 xl:grid-cols-2 xl:gap-4">
-				<div className="mb-4 flex max-w-lg flex-col items-center text-left xl:order-2 xl:mt-16 xl:items-start xl:self-start">
+		<MarketingMainLayout>
+			<MarketingContentSection>
+				<MarketingDetailsSection>
 					<ContentLogo />
 					<ContentHeader />
 					<ContentBody />
 					<ContentContact />
-				</div>
+				</MarketingDetailsSection>
 				<ImagesGrid />
-			</div>
-		</main>
+			</MarketingContentSection>
+		</MarketingMainLayout>
 	)
 }
