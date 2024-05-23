@@ -76,7 +76,7 @@ async function seed() {
 	})
 	console.timeEnd('👑 Created roles...')
 
-	const totalUsers = 5
+	const totalUsers = 0
 	console.time(`👤 Created ${totalUsers} users...`)
 	const noteImages = await getNoteImages()
 	const userImages = await getUserImages()
@@ -159,6 +159,7 @@ async function seed() {
 			email: 'pat@patn.xyz',
 			username: 'pat',
 			name: 'Pat',
+			bio: 'Welcome to my digital gallery of generative art built with triangles and algorithms.',
 			image: { create: patImages.patUser },
 			password: { create: createPassword('kodylovesyou') },
 			connections: {

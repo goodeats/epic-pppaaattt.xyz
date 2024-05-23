@@ -15,6 +15,11 @@ model User {
   email    String  @unique
   username String  @unique
   name     String?
+  bio      String @default("")
+
+  // TODO: OAuth2 later, quick and dirty to paste strings since it's just me
+  sm_url_instagram String?
+  sm_url_github String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

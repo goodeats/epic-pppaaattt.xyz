@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
-import { type IUserBasic } from './user.server'
+import { type IUser, type IUserBasic } from './user.server'
 
 export type queryWhereArgsType = z.infer<typeof queryWhereArgs>
 const queryWhereArgs = z.object({
@@ -32,4 +32,25 @@ export const getUserBasic = async ({
 		...user,
 		image,
 	}
+}
+
+export const getFirstUser = async (): Promise<Pick<
+	IUser,
+	| 'name'
+	| 'username'
+	| 'bio'
+	| 'sm_url_instagram'
+	| 'sm_url_github'
+	| 'createdAt'
+> | null> => {
+	return await prisma.user.findFirst({
+		select: {
+			name: true,
+			username: true,
+			bio: true,
+			sm_url_instagram: true,
+			sm_url_github: true,
+			createdAt: true,
+		},
+	})
 }

@@ -34,45 +34,40 @@ export const ContentHeader = () => {
 	)
 }
 
-export const ContentBody = () => {
-	return (
-		<div>
-			<MarketingContent data-paragraph>
-				Welcome to my digital gallery. My name is Pat and I am a software
-				engineer turned generative artist from Maine, now living in New York
-				City.
-			</MarketingContent>
-			<MarketingContent data-paragraph>
-				My art consists of bridging the gap between the precision of programming
-				and the boundless world of art. It is a celebration of simplicity and
-				complexity, where equilateral triangles become the building blocks for a
-				series of algorithms that produce mesmerizing visual displays.
-			</MarketingContent>
-		</div>
-	)
+export const ContentBody = ({ bio }: { bio: string }) => {
+	const bioParagraphs = bio.split('\n').map((paragraph, index) => (
+		<MarketingContent key={index} data-paragraph>
+			{paragraph}
+		</MarketingContent>
+	))
+	return <div>{bioParagraphs.map(paragraph => paragraph)}</div>
 }
 
-export const ContentContact = () => {
+// quick and dirty solution to add social links from strings
+// will add OAuth2 later
+export const ContentContact = ({
+	ig,
+	gh,
+}: {
+	ig: string | null
+	gh: string | null
+}) => {
 	return (
 		<MarketingSocialLinksList>
-			<li>
-				<a
-					href="https://www.instagram.com/pppaaattt.xyz"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Icon name="instagram-logo" size="xl" />
-				</a>
-			</li>
-			<li>
-				<a
-					href="https://github.com/goodeats"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Icon name="github-logo" size="xl" />
-				</a>
-			</li>
+			{ig && (
+				<li>
+					<a href={ig} target="_blank" rel="noopener noreferrer">
+						<Icon name="instagram-logo" size="xl" />
+					</a>
+				</li>
+			)}
+			{gh && (
+				<li>
+					<a href={gh} target="_blank" rel="noopener noreferrer">
+						<Icon name="github-logo" size="xl" />
+					</a>
+				</li>
+			)}
 		</MarketingSocialLinksList>
 	)
 }
