@@ -1,8 +1,6 @@
 # [Epic PPPAAATTT](https://github.com/goodeats/epic-pppaaattt)
 
-Drawing generative geometric shapes on a canvas
-
-Progress: 🚧 Constructing MVP... 🚧
+A generative art generator with various product-building demonstrations of web development
 
 ## GETTING STARTED
 
@@ -25,10 +23,12 @@ Please keep in mind this is a personal project, not yet intended for a wide audi
 - add a layer, which will adopt the artwork design attributes
 - click on the layer name to select it and adjust the designs from there
 - move up/down, make visible/invisible, add/remove designs and layers to create different outputs on the artwork
+- creating a new version will save your progress
+- creating a new branch will allow you to explore a different creative pursuit
 
 ## TECH STACK
 
-- Framework (full-stack): [Remix Run](https://remix.run/) | [Epic Stack](https://github.com/epicweb-dev/epic-stack)
+- Framework (full-stack): [Remix Run](https://remix.run/) | [Epic Stack](https://github.com/epicweb-dev/epic-stack) | [Vite](https://remix.run/blog/remix-heart-vite)
 - DB: [SQLite](https://www.sqlite.org/index.html)
 - ORM: [Prisma](https://www.prisma.io/)
 - UI: [tailwindcss](https://tailwindcss.com/) | [Radix](https://www.radix-ui.com/) | [shadcn/ui](https://ui.shadcn.com/)
@@ -38,13 +38,11 @@ Please keep in mind this is a personal project, not yet intended for a wide audi
 
 - this is a project built for personal use in developing a project to achieve my artistic goals: rapid development and deployment of unique artistic projects in the marketplace
 - foregoing tests a bit to get the MVP out
-- I recently discovered the Figma UI and feel that dashboard is a good representation of how I want to build this
+- I took inspiration from the Figma dashboard UI for setting up how I want to build art generators
 
 ## ROADMAP
 
-- version history to save instances of artworks if I like the designs
 - connect to shopify products
-- migrate to [vite](https://remix.run/blog/remix-heart-vite)
 - import/export image assets to modify pixels into art
 - import/export design types and layers
 - shareable links -- use [v0](v0.dev) as a guide
