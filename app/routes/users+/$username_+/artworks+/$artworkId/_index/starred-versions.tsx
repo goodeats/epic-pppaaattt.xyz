@@ -64,7 +64,7 @@ export const StarredVersions = ({
 
 									const timeAgo = publishedAt
 										? formatDistanceToNow(new Date(publishedAt))
-										: 'never'
+										: 'never' // I'm keeping "never ago"
 
 									return (
 										<TableRow key={id}>

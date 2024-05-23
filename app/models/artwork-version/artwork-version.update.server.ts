@@ -196,10 +196,11 @@ export const updateArtworkVersionPublished = async ({
 	if (!artworkVersion) return { success: false }
 
 	try {
-		const isUnpublishing = !artworkVersion.published
-		artworkVersion.published = isUnpublishing
-		artworkVersion.publishedAt = isUnpublishing ? null : new Date()
+		const isPublishing = !artworkVersion.published
+		artworkVersion.published = isPublishing
+		artworkVersion.publishedAt = isPublishing ? new Date() : null
 		artworkVersion.updatedAt = new Date()
+		console.log('artwork new', artworkVersion)
 		await artworkVersion.save()
 
 		return { success: true }
