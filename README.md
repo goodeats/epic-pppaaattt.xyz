@@ -31,18 +31,28 @@ Please keep in mind this is a personal project, not yet intended for a wide audi
 - Framework (full-stack): [Remix Run](https://remix.run/) | [Epic Stack](https://github.com/epicweb-dev/epic-stack) | [Vite](https://remix.run/blog/remix-heart-vite)
 - DB: [SQLite](https://www.sqlite.org/index.html)
 - ORM: [Prisma](https://www.prisma.io/)
+- Deployment: [Fly.io](https://fly.io/) | [LiteFS](https://fly.io/docs/litefs/)
 - UI: [tailwindcss](https://tailwindcss.com/) | [Radix](https://www.radix-ui.com/) | [shadcn/ui](https://ui.shadcn.com/)
-- Forms: [Zod](https://zod.dev/) | [Conform](https://conform.guide/)
+- Validation: [Zod](https://zod.dev/) | [Conform](https://conform.guide/)
+- Monitoring: [Sentry](https://sentry.io/auth/login/pantastic/)
+- Other:
+  - [Reactflow](https://reactflow.dev/): canvas as interactive node in editor (inspired by Figma)
 
 ## NOTES
 
-- this is a project built for personal use in developing a project to achieve my artistic goals: rapid development and deployment of unique artistic projects in the marketplace
-- foregoing tests a bit to get the MVP out
-- I took inspiration from the Figma dashboard UI for setting up how I want to build art generators
+- This was created as a personal project to achieve my goal of rapid development and deployment of scalable artistic projects in the marketplace
+- This was also created for personal development as a software engineer
+- Foregoing tests a bit to get the MVP out
+- Sketch dashboard inspired by Figma dashboard UI
 
 ## ROADMAP
 
+- blog about code, art, why I'm doing this
+- demo video
+- rwd review
+- upload image assets to modify pixels into art (I've done this with former versions)
 - connect to shopify products
-- import/export image assets to modify pixels into art
-- import/export design types and layers
-- shareable links -- use [v0](v0.dev) as a guide
+- open app to many users
+- shareable links to artworks -- use [v0](v0.dev) as a guide
+- import/export design types and layers to use interchangeably with other artworks
+- user collaboration
