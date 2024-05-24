@@ -102,7 +102,7 @@ export const getArtworkVersionWithDesignsAndLayers = async ({
 	return artworkVersion
 }
 
-export const getStarredArtworkVersions = async ({
+export const getStarredArtworkVersionsByArtworkId = async ({
 	artworkId,
 }: {
 	artworkId: string
@@ -120,6 +120,21 @@ export const getStarredArtworkVersions = async ({
 		},
 		orderBy: {
 			updatedAt: 'desc',
+		},
+	})
+	return starredVersions
+}
+
+export const getAllPublishedArtworkVersions = async (): Promise<
+	IArtworkVersionWithDesignsAndLayers[]
+> => {
+	const starredVersions = await prisma.artworkVersion.findMany({
+		where: {
+			published: true,
+		},
+		include: includeDesignsAndLayers,
+		orderBy: {
+			publishedAt: 'desc',
 		},
 	})
 	return starredVersions

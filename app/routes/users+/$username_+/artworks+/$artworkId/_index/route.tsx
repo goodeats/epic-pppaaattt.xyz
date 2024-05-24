@@ -11,7 +11,7 @@ import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { ContainerDetails } from '#app/components/shared/container.tsx'
 import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator.ts'
-import { getStarredArtworkVersions } from '#app/models/artwork-version/artwork-version.get.server.ts'
+import { getStarredArtworkVersionsByArtworkId } from '#app/models/artwork-version/artwork-version.get.server.ts'
 import {
 	type IArtworkVersionWithGenerator,
 	type IArtworkVersionWithDesignsAndLayers,
@@ -35,7 +35,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	// get all starred versions for this artwork
 	const starredVersions: IArtworkVersionWithDesignsAndLayers[] =
-		await getStarredArtworkVersions({
+		await getStarredArtworkVersionsByArtworkId({
 			artworkId: artwork.id,
 		})
 
