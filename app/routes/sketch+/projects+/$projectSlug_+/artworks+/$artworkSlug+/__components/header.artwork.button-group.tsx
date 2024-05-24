@@ -6,6 +6,7 @@ import { type IArtworkBranch } from '#app/models/artwork-branch/artwork-branch.s
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { ArtworkBranchCreate } from '#app/routes/resources+/api.v1+/artwork-branch.create'
 import { ArtworkVersionCreate } from '#app/routes/resources+/api.v1+/artwork-version.create'
+import { ArtworkVersionToggleStarred } from '#app/routes/resources+/api.v1+/artwork-version.update.starred'
 import { EntityParentIdType } from '#app/schema/entity'
 import { useUser } from '#app/utils/user'
 
@@ -32,6 +33,7 @@ export const NavActionsButtonGroup = memo(
 					{/* <span>info a, ab, abv</span> */}
 					{/* <span>fork ab</span> */}
 					{/* <span>merge ab</span> */}
+					<ArtworkVersionToggleStarred version={version} />
 					<ArtworkBranchCreate
 						branchId={branch.id}
 						artworkId={artwork.id}

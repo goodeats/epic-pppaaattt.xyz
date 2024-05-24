@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
 import {
+	type IArtworkWithProject,
 	type IArtwork,
 	type IArtworkWithBranchesAndVersions,
 } from '../artwork/artwork.server'
@@ -47,6 +48,25 @@ export const getArtworkWithBranchesAndVersions = async ({
 			branches: {
 				include: {
 					versions: true,
+				},
+			},
+		},
+	})
+	return artwork
+}
+
+export const getArtworkWithProject = async ({
+	where,
+}: {
+	where: queryArtworkWhereArgsType
+}): Promise<IArtworkWithProject | null> => {
+	validateQueryWhereArgsPresent(where)
+	const artwork = await prisma.artwork.findFirst({
+		where,
+		include: {
+			project: {
+				include: {
+					artworks: true,
 				},
 			},
 		},

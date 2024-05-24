@@ -23,9 +23,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 			name: true,
 			description: true,
 			isVisible: true,
-			width: true,
-			height: true,
-			backgroundColor: true,
 			project: {
 				select: {
 					name: true,

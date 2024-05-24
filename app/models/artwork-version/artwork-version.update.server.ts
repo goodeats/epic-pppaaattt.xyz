@@ -4,6 +4,8 @@ import {
 	type ArtworkVersionUpdateSchemaType,
 	ArtworkVersionHeightSchema,
 	ArtworkVersionBackgroundSchema,
+	ArtworkVersionStarredSchema,
+	ArtworkVersionPublishedSchema,
 } from '#app/schema/artwork-version'
 import { ValidateArtworkVersionSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
@@ -52,6 +54,24 @@ export async function validateArtworkVersionBackgroundSubmission(
 	return validateUpdateSubmission({
 		...args,
 		schema: ArtworkVersionBackgroundSchema,
+	})
+}
+
+export async function validateArtworkVersionStarredSubmission(
+	args: IntentActionArgs,
+) {
+	return validateUpdateSubmission({
+		...args,
+		schema: ArtworkVersionStarredSchema,
+	})
+}
+
+export async function validateArtworkVersionPublishedSubmission(
+	args: IntentActionArgs,
+) {
+	return validateUpdateSubmission({
+		...args,
+		schema: ArtworkVersionPublishedSchema,
 	})
 }
 
@@ -126,10 +146,61 @@ export const updateArtworkVersionBackground = async ({
 	if (!artworkVersion) return { success: false }
 
 	try {
-		console.log('background', background)
 		const data = ArtworkVersionBackgroundSchema.parse({ id, background })
 		artworkVersion.background = data.background
 		artworkVersion.updatedAt = new Date()
+		await artworkVersion.save()
+
+		return { success: true }
+	} catch (error) {
+		// consider how to handle this error where this is called
+		console.error(error)
+		return { success: false }
+	}
+}
+
+// unstarring should also unpublish
+export const updateArtworkVersionStarred = async ({
+	id,
+}: {
+	id: IArtworkVersion['id']
+}) => {
+	const artworkVersion = await getArtworkVersionInstance({ id })
+	if (!artworkVersion) return { success: false }
+
+	try {
+		const isUnstarring = !artworkVersion.starred
+		artworkVersion.starred = isUnstarring
+		if (isUnstarring) {
+			artworkVersion.published = false
+			artworkVersion.publishedAt = null
+		}
+		artworkVersion.updatedAt = new Date()
+		await artworkVersion.save()
+
+		return { success: true }
+	} catch (error) {
+		// consider how to handle this error where this is called
+		console.error(error)
+		return { success: false }
+	}
+}
+
+// unpublishing should not impact starred status
+export const updateArtworkVersionPublished = async ({
+	id,
+}: {
+	id: IArtworkVersion['id']
+}) => {
+	const artworkVersion = await getArtworkVersionInstance({ id })
+	if (!artworkVersion) return { success: false }
+
+	try {
+		const isPublishing = !artworkVersion.published
+		artworkVersion.published = isPublishing
+		artworkVersion.publishedAt = isPublishing ? new Date() : null
+		artworkVersion.updatedAt = new Date()
+		console.log('artwork new', artworkVersion)
 		await artworkVersion.save()
 
 		return { success: true }

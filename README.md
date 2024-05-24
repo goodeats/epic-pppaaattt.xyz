@@ -9,7 +9,7 @@ To get started with this project, follow these steps:
 1. Clone the repository to your local machine.
 2. Navigate to the project directory.
 3. Run `npm install` to install the necessary dependencies.
-4. Copy environment variables `cp .env.example .env`
+4. Copy environment variables `cp .env.example .env` (make changes to ADMIN env variables to your suiting, for instance GitGuardian won't let me commit a fake password)
 5. Run `npm run setup`
 6. Start the development server by running `npm run dev`.
 

@@ -1,3 +1,4 @@
+import { cn } from '#app/utils/misc'
 import { createContainerComponent } from './utils'
 
 const MarketingMainLayout = createContainerComponent({
@@ -54,23 +55,19 @@ const MarketingSocialLinksList = createContainerComponent({
 	displayName: 'MarketingSocialLinksList',
 })
 
-const MarketingImagesGrid = createContainerComponent({
+// experimenting with constructing class names
+// separately by category and breakpoint
+// possibly more readable and maintainable
+const MarketingCanvasGrid = createContainerComponent({
 	defaultTagName: 'div',
-	defaultClassName:
-		'mt-16 flex max-w-3xl flex-wrap gap-8 xl:mt-0 xl:grid xl:grid-flow-col xl:grid-cols-2 xl:grid-rows-2',
-	displayName: 'MarketingImagesGrid',
-})
-
-const MarketingImageContainer = createContainerComponent({
-	defaultTagName: 'div',
-	defaultClassName: 'relative',
-	displayName: 'MarketingImageContainer',
-})
-
-const MarketingImage = createContainerComponent({
-	defaultTagName: 'img',
-	defaultClassName: 'relative left-0 top-0 h-full w-full object-cover',
-	displayName: 'MarketingImage',
+	defaultClassName: cn(
+		'mt-16 xl:mt-0',
+		'py-16 px-4 lg:px-8 xl:px-16',
+		'grid place-items-center',
+		'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+		'gap-8',
+	),
+	displayName: 'MarketingCanvasGrid',
 })
 
 export {
@@ -82,7 +79,5 @@ export {
 	MarketingHeader,
 	MarketingContent,
 	MarketingSocialLinksList,
-	MarketingImagesGrid,
-	MarketingImageContainer,
-	MarketingImage,
+	MarketingCanvasGrid,
 }

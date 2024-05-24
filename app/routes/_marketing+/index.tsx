@@ -7,22 +7,30 @@ import {
 import { useLoaderData } from '@remix-run/react'
 import {
 	MarketingContentSection,
-	MarketingDetailsSection,
-	MarketingLogoImage,
-	MarketingLogoLink,
 	MarketingMainLayout,
 } from '#app/components/layout/marketing.tsx'
-import { prisma } from '#app/utils/db.server.ts'
-import { getUserImgSrc } from '#app/utils/misc.tsx'
+import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator.ts'
+import { getAllPublishedArtworkVersions } from '#app/models/artwork-version/artwork-version.get.server.ts'
 import {
-	ContentBody,
-	ContentContact,
-	ContentHeader,
-} from './components/content.tsx'
-import { ImagesGrid } from './components/images-grid.tsx'
+	type IArtworkVersionWithDesignsAndLayers,
+	type IArtworkVersionWithGenerator,
+} from '#app/models/artwork-version/artwork-version.server.ts'
+import { artworkVersionGeneratorBuildService } from '#app/services/artwork/version/generator/build.service.ts'
+import { prisma } from '#app/utils/db.server.ts'
+import { CanvasGrid } from './components/canvas-grid.tsx'
+import { UserDetails } from './components/user-details.tsx'
+
+export interface IUserMarketing {
+	name: string | null
+	username: string
+	bio: string
+	sm_url_instagram: string | null
+	sm_url_github: string | null
+	image: { id: string | null } | null
+}
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	const user = await await prisma.user.findFirst({
+	const user: IUserMarketing | null = await prisma.user.findFirst({
 		select: {
 			name: true,
 			username: true,
@@ -34,8 +42,28 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	})
 	invariantResponse(user, 'Nothing to show today', { status: 404 })
 
+	// get all starred versions
+	// will eventually want to limit by user, but just one for now
+	const publishedVersions: IArtworkVersionWithDesignsAndLayers[] =
+		await getAllPublishedArtworkVersions()
+
+	// get all generators for these versions
+	const generators: IArtworkVersionGenerator[] = await Promise.all(
+		publishedVersions.map(version =>
+			artworkVersionGeneratorBuildService({ version }),
+		),
+	)
+
+	// combine versions and generators
+	const versionsWithGenerators: IArtworkVersionWithGenerator[] =
+		publishedVersions.map((version, index) => ({
+			...version,
+			generator: generators[index],
+		}))
+
 	return json({
 		user,
+		versionsWithGenerators,
 	})
 }
 
@@ -45,24 +73,10 @@ export default function Index() {
 
 	return (
 		<MarketingMainLayout>
-			<MarketingContentSection>
-				<MarketingDetailsSection>
-					<MarketingLogoLink
-						href="https://github.com/goodeats/epic-pppaaattt.xyz"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<MarketingLogoImage
-							alt="Pat Needham"
-							src={getUserImgSrc(user.image?.id)}
-						/>
-					</MarketingLogoLink>
-					<ContentHeader />
-					<ContentBody bio={user.bio} />
-					<ContentContact ig={user.sm_url_instagram} gh={user.sm_url_github} />
-				</MarketingDetailsSection>
-				<ImagesGrid />
+			<MarketingContentSection className="xl:grid-cols-1">
+				<UserDetails user={user} />
 			</MarketingContentSection>
+			<CanvasGrid versions={data.versionsWithGenerators} />
 		</MarketingMainLayout>
 	)
 }

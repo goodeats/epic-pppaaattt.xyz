@@ -60,22 +60,13 @@ const ArtworksTable = () => {
 				<TableRow>
 					<TableHead>Name</TableHead>
 					<TableHead>Visible</TableHead>
-					<TableHead>Dimensions</TableHead>
 					<TableHead className="text-right">Last Updated</TableHead>
 					<TableHead></TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
 				{artworks.map(artwork => {
-					const {
-						name,
-						description,
-						isVisible,
-						slug,
-						width,
-						height,
-						updatedAt,
-					} = artwork
+					const { name, description, isVisible, slug, updatedAt } = artwork
 
 					const date = new Date(updatedAt)
 					const timeAgo = formatDistanceToNow(date)
@@ -97,9 +88,6 @@ const ArtworksTable = () => {
 								<ArtworkToolTip />
 							</TableCell>
 							<TableCell>{isVisible ? 'visible' : 'not visible'}</TableCell>
-							<TableCell>
-								{width}x{height}
-							</TableCell>
 							<TableCell className="text-right">{timeAgo} ago</TableCell>
 							<TableCell className="text-right">
 								<LinkButton to={`/users/${user.username}/artworks/${slug}`}>

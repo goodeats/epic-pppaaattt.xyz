@@ -16,6 +16,8 @@ export const Routes = {
 						BACKGROUND: `${pathBase}/artwork-version/update/background`,
 						WIDTH: `${pathBase}/artwork-version/update/width`,
 						HEIGHT: `${pathBase}/artwork-version/update/height`,
+						PUBLISHED: `${pathBase}/artwork-version/update/published`,
+						STARRED: `${pathBase}/artwork-version/update/starred`,
 					},
 					DESIGN: {
 						CREATE: `${pathBase}/artwork-version/design/create`,

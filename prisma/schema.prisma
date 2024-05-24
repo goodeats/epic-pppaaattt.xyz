@@ -212,9 +212,6 @@ model Artwork {
   description String?
   isVisible   Boolean @default(true)
   slug       String
-  width       Int
-  height      Int
-  backgroundColor String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -523,6 +520,8 @@ model ArtworkVersion {
   name      String @default("v0")
   slug       String @default("v0")
   description String @default("initial version")
+  starred   Boolean @default(false)
+  published Boolean @default(false)
 
   // settings
   // 9:16 aspect ratio (vertical)
@@ -532,6 +531,7 @@ model ArtworkVersion {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  publishedAt DateTime?
 
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId String

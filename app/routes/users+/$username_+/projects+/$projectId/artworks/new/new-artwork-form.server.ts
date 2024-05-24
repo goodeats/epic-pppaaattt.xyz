@@ -50,8 +50,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const { projectId, name, description, width, height, backgroundColor } =
-		submission.value
+	const { projectId, name, description } = submission.value
 	const slug = stringToSlug(name)
 
 	const createdArtwork = await prisma.artwork.create({
@@ -68,9 +67,6 @@ export async function action({ request }: ActionFunctionArgs) {
 			name,
 			description,
 			slug,
-			width,
-			height,
-			backgroundColor: backgroundColor[0],
 		},
 	})
 

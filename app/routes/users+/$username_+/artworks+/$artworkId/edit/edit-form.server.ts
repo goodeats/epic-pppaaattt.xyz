@@ -51,15 +51,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ submission } as const, { status: 400 })
 	}
 
-	const {
-		id: artworkId,
-		name,
-		description,
-		isVisible,
-		width,
-		height,
-		backgroundColor,
-	} = submission.value
+	const { id: artworkId, name, description, isVisible } = submission.value
 	const slug = stringToSlug(name)
 
 	const updatedArtwork = await prisma.artwork.update({
@@ -70,9 +62,6 @@ export async function action({ request }: ActionFunctionArgs) {
 			description,
 			isVisible: isVisible ?? false,
 			slug,
-			width,
-			height,
-			backgroundColor: backgroundColor[0],
 		},
 	})
 
