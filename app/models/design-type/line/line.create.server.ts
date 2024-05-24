@@ -7,6 +7,8 @@ import { prisma } from '#app/utils/db.server'
 
 export interface ILineCreateOverrides {
 	width?: number
+	basis?: string
+	format?: string
 }
 
 export const createDesignLine = ({

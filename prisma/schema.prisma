@@ -212,9 +212,6 @@ model Artwork {
   description String?
   isVisible   Boolean @default(true)
   slug       String
-  width       Int
-  height      Int
-  backgroundColor String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

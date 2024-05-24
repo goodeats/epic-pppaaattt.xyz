@@ -11,6 +11,7 @@ import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { ContainerDetails } from '#app/components/shared/container.tsx'
 import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator.ts'
+import { getArtworkWithProject } from '#app/models/artwork/artwork.get.server.ts'
 import { getStarredArtworkVersionsByArtworkId } from '#app/models/artwork-version/artwork-version.get.server.ts'
 import {
 	type IArtworkVersionWithGenerator,
@@ -25,12 +26,16 @@ import { redirectWithToast } from '#app/utils/toast.server'
 import { userHasPermission, useOptionalUser } from '#app/utils/user'
 import { type loader as artworksLoader } from '../../route.tsx'
 import { Content, Footer, Header } from './components.tsx'
-import { getArtwork } from './queries.ts'
 import { StarredVersions } from './starred-versions.tsx'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	const artwork = await getArtwork(userId, params.artworkId as string)
+	const artwork = await getArtworkWithProject({
+		where: {
+			ownerId: userId,
+			id: params.artworkId,
+		},
+	})
 	invariantResponse(artwork, 'Not found', { status: 404 })
 
 	// get all starred versions for this artwork
