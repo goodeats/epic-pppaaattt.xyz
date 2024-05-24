@@ -17,7 +17,10 @@ import {
 	getLayerVisibleRotates,
 } from '#app/models/design-layer/design-layer.server'
 import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
-import { type ILayer } from '#app/models/layer/layer.server'
+import {
+	type ILayerWithDesigns,
+	type ILayer,
+} from '#app/models/layer/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
 import {
 	filterSelectedDesignTypes,
@@ -25,6 +28,7 @@ import {
 	verifySelectedDesignTypesAllPresent,
 } from '#app/utils/design'
 import { filterLayersVisible } from '#app/utils/layer.utils'
+import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { isArrayRotateBasisType } from '#app/utils/rotate'
 
 // "build" since it is creating the version generator each time
@@ -65,8 +69,11 @@ export const artworkVersionGeneratorBuildService = async ({
 
 		// Step 4: build the generator layers
 		// each layer can override any of the global settings
+		const orderedLayers = await orderLinkedItems<ILayerWithDesigns>(
+			version.layers,
+		)
 		const generatorLayers = await buildGeneratorLayers({
-			layers: version.layers,
+			layers: orderedLayers,
 			defaultGeneratorLayer,
 		})
 
