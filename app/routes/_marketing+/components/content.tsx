@@ -5,11 +5,9 @@ import {
 } from '#app/components/layout/marketing'
 import { Icon } from '#app/components/ui/icon'
 
-export const ContentHeader = () => {
+export const ContentHeader = ({ username }: { username: string }) => {
 	return (
-		<MarketingHeader data-heading>
-			<a href="https://github.com/goodeats/epic-pppaaattt.xyz">PPPAAATTT</a>
-		</MarketingHeader>
+		<MarketingHeader data-heading>{username.toUpperCase()}</MarketingHeader>
 	)
 }
 
