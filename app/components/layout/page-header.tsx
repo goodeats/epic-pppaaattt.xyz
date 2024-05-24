@@ -1,5 +1,6 @@
 import { Link } from '@remix-run/react'
 import { useOptionalUser } from '#app/utils/user'
+import { GithubProjectLink } from '../github-project-link'
 import Logo from '../logo'
 import { ThemeSwitch } from '../theme-switch'
 import { Button } from '../ui/button'
@@ -13,7 +14,14 @@ const PageHeader = () => {
 			<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
 				<Logo />
 				<div className="flex items-center gap-10">
-					{user ? <UserDropdown /> : <ThemeSwitch />}
+					{user ? (
+						<UserDropdown />
+					) : (
+						<div className="flex gap-4">
+							<GithubProjectLink />
+							<ThemeSwitch />
+						</div>
+					)}
 				</div>
 			</nav>
 		</header>
