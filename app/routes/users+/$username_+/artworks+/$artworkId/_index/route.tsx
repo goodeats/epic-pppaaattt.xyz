@@ -10,6 +10,14 @@ import { formatDistanceToNow } from 'date-fns'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import { ContainerDetails } from '#app/components/shared/container.tsx'
+import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator.ts'
+import { getArtworkWithProject } from '#app/models/artwork/artwork.get.server.ts'
+import { getStarredArtworkVersionsByArtworkId } from '#app/models/artwork-version/artwork-version.get.server.ts'
+import {
+	type IArtworkVersionWithGenerator,
+	type IArtworkVersionWithDesignsAndLayers,
+} from '#app/models/artwork-version/artwork-version.server.ts'
+import { artworkVersionGeneratorBuildService } from '#app/services/artwork/version/generator/build.service.ts'
 import { requireUserId } from '#app/utils/auth.server'
 import { validateCSRF } from '#app/utils/csrf.server'
 import { prisma } from '#app/utils/db.server'
@@ -18,19 +26,44 @@ import { redirectWithToast } from '#app/utils/toast.server'
 import { userHasPermission, useOptionalUser } from '#app/utils/user'
 import { type loader as artworksLoader } from '../../route.tsx'
 import { Content, Footer, Header } from './components.tsx'
-import { getArtwork } from './queries.ts'
+import { StarredVersions } from './starred-versions.tsx'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	const artwork = await getArtwork(userId, params.artworkId as string)
-
+	const artwork = await getArtworkWithProject({
+		where: {
+			ownerId: userId,
+			slug: params.artworkId,
+		},
+	})
 	invariantResponse(artwork, 'Not found', { status: 404 })
+
+	// get all starred versions for this artwork
+	const starredVersions: IArtworkVersionWithDesignsAndLayers[] =
+		await getStarredArtworkVersionsByArtworkId({
+			artworkId: artwork.id,
+		})
+
+	// get all generators for these versions
+	const generators: IArtworkVersionGenerator[] = await Promise.all(
+		starredVersions.map(version =>
+			artworkVersionGeneratorBuildService({ version }),
+		),
+	)
+
+	// combine versions and generators
+	const versionsWithGenerators: IArtworkVersionWithGenerator[] =
+		starredVersions.map((version, index) => ({
+			...version,
+			generator: generators[index],
+		}))
 
 	const date = new Date(artwork.updatedAt)
 	const timeAgo = formatDistanceToNow(date)
 
 	return json({
 		artwork,
+		versionsWithGenerators,
 		timeAgo,
 		breadcrumb: artwork.name,
 		project: artwork.project,
@@ -91,7 +124,6 @@ export async function action({ request }: ActionFunctionArgs) {
 		{
 			type: 'success',
 			title: 'Success',
-			// description: 'Your artwork has been deleted.',
 			description: `Deleted artwork: "${name}"`,
 		},
 	)
@@ -111,6 +143,7 @@ export default function ArtworkDetailsRoute() {
 		<ContainerDetails>
 			<Header />
 			<Content />
+			<StarredVersions versions={data.versionsWithGenerators} />
 			{displayBar ? <Footer /> : null}
 		</ContainerDetails>
 	)

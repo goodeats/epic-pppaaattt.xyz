@@ -1,5 +1,4 @@
-import { conform, useForm } from '@conform-to/react'
-import { getFieldsetConstraint, parse } from '@conform-to/zod'
+import { parse } from '@conform-to/zod'
 import {
 	json,
 	redirect,
@@ -7,27 +6,16 @@ import {
 	type ActionFunctionArgs,
 	type MetaFunction,
 } from '@remix-run/node'
-import {
-	Form,
-	useActionData,
-	useLoaderData,
-	useSearchParams,
-	type Params,
-} from '@remix-run/react'
+import { type Params } from '@remix-run/react'
 import { safeRedirect } from 'remix-utils/safe-redirect'
 import { z } from 'zod'
-import { CheckboxField, ErrorList, Field } from '#app/components/forms.tsx'
-import { Spacer } from '#app/components/spacer.tsx'
-import { StatusButton } from '#app/components/ui/status-button.tsx'
 import {
-	authenticator,
 	requireAnonymous,
 	sessionKey,
 	signupWithConnection,
 } from '#app/utils/auth.server.ts'
 import { ProviderNameSchema } from '#app/utils/connections.tsx'
 import { prisma } from '#app/utils/db.server.ts'
-import { useIsPending } from '#app/utils/misc.tsx'
 import { authSessionStorage } from '#app/utils/session.server.ts'
 import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { NameSchema, UsernameSchema } from '#app/utils/user-validation.ts'
@@ -77,28 +65,33 @@ async function requireData({
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-	const { email } = await requireData({ request, params })
-	const authSession = await authSessionStorage.getSession(
-		request.headers.get('cookie'),
-	)
-	const verifySession = await verifySessionStorage.getSession(
-		request.headers.get('cookie'),
-	)
-	const prefilledProfile = verifySession.get(prefilledProfileKey)
-
-	const formError = authSession.get(authenticator.sessionErrorKey)
-
-	return json({
-		email,
-		status: 'idle',
-		submission: {
-			intent: '',
-			payload: (prefilledProfile ?? {}) as Record<string, unknown>,
-			error: {
-				'': typeof formError === 'string' ? [formError] : [],
-			},
-		},
+	return redirectWithToast('/', {
+		type: 'error',
+		title: 'Access Denied',
+		description: 'No new users at this time.',
 	})
+	// const { email } = await requireData({ request, params })
+	// const authSession = await authSessionStorage.getSession(
+	// 	request.headers.get('cookie'),
+	// )
+	// const verifySession = await verifySessionStorage.getSession(
+	// 	request.headers.get('cookie'),
+	// )
+	// const prefilledProfile = verifySession.get(prefilledProfileKey)
+
+	// const formError = authSession.get(authenticator.sessionErrorKey)
+
+	// return json({
+	// 	email,
+	// 	status: 'idle',
+	// 	submission: {
+	// 		intent: '',
+	// 		payload: (prefilledProfile ?? {}) as Record<string, unknown>,
+	// 		error: {
+	// 			'': typeof formError === 'string' ? [formError] : [],
+	// 		},
+	// 	},
+	// })
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -173,108 +166,108 @@ export const meta: MetaFunction = () => {
 	return [{ title: 'Setup Epic Notes Account' }]
 }
 
-export default function SignupRoute() {
-	const data = useLoaderData<typeof loader>()
-	const actionData = useActionData<typeof action>()
-	const isPending = useIsPending()
-	const [searchParams] = useSearchParams()
-	const redirectTo = searchParams.get('redirectTo')
+// export default function SignupRoute() {
+// 	const data = useLoaderData<typeof loader>()
+// 	const actionData = useActionData<typeof action>()
+// 	const isPending = useIsPending()
+// 	const [searchParams] = useSearchParams()
+// 	const redirectTo = searchParams.get('redirectTo')
 
-	const [form, fields] = useForm({
-		id: 'onboarding-provider-form',
-		constraint: getFieldsetConstraint(SignupFormSchema),
-		lastSubmission: actionData?.submission ?? data.submission,
-		onValidate({ formData }) {
-			return parse(formData, { schema: SignupFormSchema })
-		},
-		shouldRevalidate: 'onBlur',
-	})
+// 	const [form, fields] = useForm({
+// 		id: 'onboarding-provider-form',
+// 		constraint: getFieldsetConstraint(SignupFormSchema),
+// 		lastSubmission: actionData?.submission ?? data.submission,
+// 		onValidate({ formData }) {
+// 			return parse(formData, { schema: SignupFormSchema })
+// 		},
+// 		shouldRevalidate: 'onBlur',
+// 	})
 
-	return (
-		<div className="container flex min-h-full flex-col justify-center pb-32 pt-20">
-			<div className="mx-auto w-full max-w-lg">
-				<div className="flex flex-col gap-3 text-center">
-					<h1 className="text-h1">Welcome aboard {data.email}!</h1>
-					<p className="text-body-md text-muted-foreground">
-						Please enter your details.
-					</p>
-				</div>
-				<Spacer size="xs" />
-				<Form
-					method="POST"
-					className="mx-auto min-w-full max-w-sm sm:min-w-[368px]"
-					{...form.props}
-				>
-					{fields.imageUrl.defaultValue ? (
-						<div className="mb-4 flex flex-col items-center justify-center gap-4">
-							<img
-								src={fields.imageUrl.defaultValue}
-								alt="Profile"
-								className="h-24 w-24 rounded-full"
-							/>
-							<p className="text-body-sm text-muted-foreground">
-								You can change your photo later
-							</p>
-							<input {...conform.input(fields.imageUrl, { type: 'hidden' })} />
-						</div>
-					) : null}
-					<Field
-						labelProps={{ htmlFor: fields.username.id, children: 'Username' }}
-						inputProps={{
-							...conform.input(fields.username),
-							autoComplete: 'username',
-							className: 'lowercase',
-						}}
-						errors={fields.username.errors}
-					/>
-					<Field
-						labelProps={{ htmlFor: fields.name.id, children: 'Name' }}
-						inputProps={{
-							...conform.input(fields.name),
-							autoComplete: 'name',
-						}}
-						errors={fields.name.errors}
-					/>
+// 	return (
+// 		<div className="container flex min-h-full flex-col justify-center pb-32 pt-20">
+// 			<div className="mx-auto w-full max-w-lg">
+// 				<div className="flex flex-col gap-3 text-center">
+// 					<h1 className="text-h1">Welcome aboard {data.email}!</h1>
+// 					<p className="text-body-md text-muted-foreground">
+// 						Please enter your details.
+// 					</p>
+// 				</div>
+// 				<Spacer size="xs" />
+// 				<Form
+// 					method="POST"
+// 					className="mx-auto min-w-full max-w-sm sm:min-w-[368px]"
+// 					{...form.props}
+// 				>
+// 					{fields.imageUrl.defaultValue ? (
+// 						<div className="mb-4 flex flex-col items-center justify-center gap-4">
+// 							<img
+// 								src={fields.imageUrl.defaultValue}
+// 								alt="Profile"
+// 								className="h-24 w-24 rounded-full"
+// 							/>
+// 							<p className="text-body-sm text-muted-foreground">
+// 								You can change your photo later
+// 							</p>
+// 							<input {...conform.input(fields.imageUrl, { type: 'hidden' })} />
+// 						</div>
+// 					) : null}
+// 					<Field
+// 						labelProps={{ htmlFor: fields.username.id, children: 'Username' }}
+// 						inputProps={{
+// 							...conform.input(fields.username),
+// 							autoComplete: 'username',
+// 							className: 'lowercase',
+// 						}}
+// 						errors={fields.username.errors}
+// 					/>
+// 					<Field
+// 						labelProps={{ htmlFor: fields.name.id, children: 'Name' }}
+// 						inputProps={{
+// 							...conform.input(fields.name),
+// 							autoComplete: 'name',
+// 						}}
+// 						errors={fields.name.errors}
+// 					/>
 
-					<CheckboxField
-						labelProps={{
-							htmlFor: fields.agreeToTermsOfServiceAndPrivacyPolicy.id,
-							children:
-								'Do you agree to our Terms of Service and Privacy Policy?',
-						}}
-						buttonProps={conform.input(
-							fields.agreeToTermsOfServiceAndPrivacyPolicy,
-							{ type: 'checkbox' },
-						)}
-						errors={fields.agreeToTermsOfServiceAndPrivacyPolicy.errors}
-					/>
-					<CheckboxField
-						labelProps={{
-							htmlFor: fields.remember.id,
-							children: 'Remember me',
-						}}
-						buttonProps={conform.input(fields.remember, { type: 'checkbox' })}
-						errors={fields.remember.errors}
-					/>
+// 					<CheckboxField
+// 						labelProps={{
+// 							htmlFor: fields.agreeToTermsOfServiceAndPrivacyPolicy.id,
+// 							children:
+// 								'Do you agree to our Terms of Service and Privacy Policy?',
+// 						}}
+// 						buttonProps={conform.input(
+// 							fields.agreeToTermsOfServiceAndPrivacyPolicy,
+// 							{ type: 'checkbox' },
+// 						)}
+// 						errors={fields.agreeToTermsOfServiceAndPrivacyPolicy.errors}
+// 					/>
+// 					<CheckboxField
+// 						labelProps={{
+// 							htmlFor: fields.remember.id,
+// 							children: 'Remember me',
+// 						}}
+// 						buttonProps={conform.input(fields.remember, { type: 'checkbox' })}
+// 						errors={fields.remember.errors}
+// 					/>
 
-					{redirectTo ? (
-						<input type="hidden" name="redirectTo" value={redirectTo} />
-					) : null}
+// 					{redirectTo ? (
+// 						<input type="hidden" name="redirectTo" value={redirectTo} />
+// 					) : null}
 
-					<ErrorList errors={form.errors} id={form.errorId} />
+// 					<ErrorList errors={form.errors} id={form.errorId} />
 
-					<div className="flex items-center justify-between gap-6">
-						<StatusButton
-							className="w-full"
-							status={isPending ? 'pending' : actionData?.status ?? 'idle'}
-							type="submit"
-							disabled={isPending}
-						>
-							Create an account
-						</StatusButton>
-					</div>
-				</Form>
-			</div>
-		</div>
-	)
-}
+// 					<div className="flex items-center justify-between gap-6">
+// 						<StatusButton
+// 							className="w-full"
+// 							status={isPending ? 'pending' : actionData?.status ?? 'idle'}
+// 							type="submit"
+// 							disabled={isPending}
+// 						>
+// 							Create an account
+// 						</StatusButton>
+// 					</div>
+// 				</Form>
+// 			</div>
+// 		</div>
+// 	)
+// }

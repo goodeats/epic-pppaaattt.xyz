@@ -14,6 +14,7 @@ const whereArgs = z.object({
 	branchId: z.string().optional(),
 	nextId: zodStringOrNull.optional(),
 	prevId: zodStringOrNull.optional(),
+	starred: z.boolean().optional(),
 })
 
 const includeDesigns = {
@@ -99,4 +100,42 @@ export const getArtworkVersionWithDesignsAndLayers = async ({
 		include: includeDesignsAndLayers,
 	})
 	return artworkVersion
+}
+
+export const getStarredArtworkVersionsByArtworkId = async ({
+	artworkId,
+}: {
+	artworkId: string
+}): Promise<IArtworkVersionWithDesignsAndLayers[]> => {
+	const starredVersions = await prisma.artworkVersion.findMany({
+		where: {
+			branch: {
+				artworkId: artworkId,
+			},
+			starred: true,
+		},
+		include: {
+			...includeDesignsAndLayers,
+			branch: true,
+		},
+		orderBy: {
+			updatedAt: 'desc',
+		},
+	})
+	return starredVersions
+}
+
+export const getAllPublishedArtworkVersions = async (): Promise<
+	IArtworkVersionWithDesignsAndLayers[]
+> => {
+	const starredVersions = await prisma.artworkVersion.findMany({
+		where: {
+			published: true,
+		},
+		include: includeDesignsAndLayers,
+		orderBy: {
+			publishedAt: 'desc',
+		},
+	})
+	return starredVersions
 }

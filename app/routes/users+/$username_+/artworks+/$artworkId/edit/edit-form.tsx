@@ -21,26 +21,13 @@ import {
 } from '#app/components/shared'
 import { Button } from '#app/components/ui/button.tsx'
 import { StatusButton } from '#app/components/ui/status-button.tsx'
-import {
-	formatSringsToHex,
-	validateStringsAreHexcodes,
-} from '#app/utils/colors'
 import { useIsPending } from '#app/utils/misc.tsx'
-import {
-	capitalize,
-	removeWhitespace,
-	trimSpacesInBetween,
-} from '#app/utils/string-formatting'
 import { type action } from './edit-form.server'
 
 const titleMinLength = 1
 const titleMaxLength = 100
 const descriptionMinLength = 1
 const descriptionMaxLength = 10000
-const widthMinLength = 1
-const widthMaxLength = 10000
-const heightMinLength = 1
-const heightMaxLength = 10000
 
 export const ArtworkEditorSchema = z.object({
 	id: z.string().optional(),
@@ -49,35 +36,13 @@ export const ArtworkEditorSchema = z.object({
 	// if unchecked isVisble will not be included in the submission
 	// so set to false if so
 	isVisible: z.boolean().optional(),
-	width: z.number().min(widthMinLength).max(widthMaxLength),
-	height: z.number().min(heightMinLength).max(heightMaxLength),
-	// backgroundColor: z.string(),
-	// HexcodeStringSchema,
-	backgroundColor: z
-		.string()
-		.transform(val => removeWhitespace(val))
-		.transform(val => capitalize(val))
-		.transform(val => trimSpacesInBetween(val))
-		.transform(val => formatSringsToHex(val.split(',')))
-		.refine(validateStringsAreHexcodes, {
-			message: 'Values must be valid hexcodes',
-		}),
 })
 
 export function EditForm({
 	artwork,
 }: {
 	artwork: SerializeFrom<
-		Pick<
-			Artwork,
-			| 'id'
-			| 'name'
-			| 'description'
-			| 'isVisible'
-			| 'width'
-			| 'height'
-			| 'backgroundColor'
-		>
+		Pick<Artwork, 'id' | 'name' | 'description' | 'isVisible'>
 	>
 }) {
 	const actionData = useActionData<typeof action>()
@@ -94,9 +59,6 @@ export function EditForm({
 			name: artwork.name ?? '',
 			description: artwork.description ?? '',
 			isVisible: artwork.isVisible ?? false,
-			width: artwork.width ?? 1080, // 9:16
-			height: artwork.height ?? 1920,
-			backgroundColor: artwork.backgroundColor ?? '#FFFFFF',
 		},
 	})
 
@@ -137,50 +99,6 @@ export function EditForm({
 				})}
 				defaultChecked={!!fields.isVisible.defaultValue}
 				errors={fields.isVisible.errors}
-			/>
-		)
-	}
-
-	const FormWidth = () => {
-		return (
-			<Field
-				labelProps={{ children: 'Width' }}
-				inputProps={{
-					...conform.input(fields.width, {
-						ariaAttributes: true,
-						type: 'number',
-					}),
-				}}
-				errors={fields.width.errors}
-			/>
-		)
-	}
-
-	const FormHeight = () => {
-		return (
-			<Field
-				labelProps={{ children: 'Height' }}
-				inputProps={{
-					...conform.input(fields.height, {
-						ariaAttributes: true,
-						type: 'number',
-					}),
-				}}
-				errors={fields.height.errors}
-			/>
-		)
-	}
-
-	const FormBackgroundColor = () => {
-		return (
-			<Field
-				labelProps={{ children: 'Background Color' }}
-				inputProps={{
-					...conform.input(fields.backgroundColor, {
-						ariaAttributes: true,
-					}),
-				}}
-				errors={fields.backgroundColor.errors}
 			/>
 		)
 	}
@@ -226,9 +144,6 @@ export function EditForm({
 					<FormName />
 					<FormDescription />
 					<FormIsVisible />
-					<FormWidth />
-					<FormHeight />
-					<FormBackgroundColor />
 				</FormFieldsContainer>
 				<ErrorList id={form.errorId} errors={form.errors} />
 			</Form>

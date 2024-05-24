@@ -31,10 +31,6 @@ export const Content = () => {
 		<ContainerContent displayBar={displayBar}>
 			<ContainerP>Visible: {artwork.isVisible ? 'Yes' : 'No'}</ContainerP>
 			<ContainerP>{artwork.description}</ContainerP>
-			<ContainerP>
-				{artwork.width}x{artwork.height}
-			</ContainerP>
-			<ContainerP>{artwork.backgroundColor}</ContainerP>
 		</ContainerContent>
 	)
 }

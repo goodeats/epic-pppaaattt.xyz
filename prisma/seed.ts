@@ -10,6 +10,7 @@ import {
 	img,
 } from '#tests/db-utils.ts'
 import { insertGitHubUser } from '#tests/mocks/github.ts'
+import { seedArtwork } from './seed-artwork'
 
 async function seed() {
 	console.log('🌱 Seeding...')
@@ -76,7 +77,7 @@ async function seed() {
 	})
 	console.timeEnd('👑 Created roles...')
 
-	const totalUsers = 5
+	const totalUsers = 0
 	console.time(`👤 Created ${totalUsers} users...`)
 	const noteImages = await getNoteImages()
 	const userImages = await getUserImages()
@@ -156,11 +157,18 @@ async function seed() {
 	const adminUser = await prisma.user.create({
 		select: { id: true },
 		data: {
-			email: 'pat@patn.xyz',
-			username: 'pat',
-			name: 'Pat',
+			email: process.env.ADMIN_EMAIL || 'pat@patn.xyz',
+			username: process.env.ADMIN_USERNAME || 'pppaaattt',
+			name: process.env.ADMIN_NAME,
+			bio: process.env.ADMIN_BIO,
+			sm_url_instagram: process.env.ADMIN_SM_INSTAGRAM_URL,
+			sm_url_github: process.env.ADMIN_SM_GITHUB_URL,
 			image: { create: patImages.patUser },
-			password: { create: createPassword('kodylovesyou') },
+			password: {
+				// 'kodylovesyou' is the default password from the epic stack XD
+				// GitGuardian will flag this as a security risk if I change it here
+				create: createPassword(process.env.ADMIN_PASSWORD || 'kodylovesyou'),
+			},
 			connections: {
 				create: { providerName: 'github', providerId: githubUser.profile.id },
 			},
@@ -288,224 +296,7 @@ async function seed() {
 	})
 	console.timeEnd(`🐨 Created admin user "pat"`)
 
-	console.time(`🐨 Created artwork`)
-	const createdArtwork = await prisma.artwork.create({
-		data: {
-			name: 'My First Artwork',
-			description: 'This is my first artwork. I am so excited to get started!',
-			slug: 'my-first-artwork',
-			width: 1080,
-			height: 1920,
-			backgroundColor: 'F5F5F5',
-			ownerId: adminUser.id,
-			projectId: '1zxo9f8e', // Associate with the first project by hard-coded id
-			branches: {
-				create: {
-					description: 'Initial main branch for the artwork.',
-					default: true,
-					active: true,
-					owner: { connect: { id: adminUser.id } },
-					versions: {
-						create: {
-							background: 'F5F5F5',
-							owner: { connect: { id: adminUser.id } },
-						},
-					},
-				},
-			},
-		},
-		include: {
-			branches: {
-				include: {
-					versions: true, // Include the versions of the branch to get its id
-				},
-			},
-		},
-	})
-	const artworkVersionId = createdArtwork.branches[0].versions[0].id
-	console.timeEnd(`🐨 Created artwork`)
-
-	console.time(`🎨 Created designs`)
-	const createdDesignPaletteRed = await prisma.design.create({
-		data: {
-			type: 'palette',
-			selected: true,
-			ownerId: adminUser.id,
-			artworkVersionId: artworkVersionId,
-		},
-	})
-
-	await prisma.palette.create({
-		data: {
-			format: 'hex',
-			value: 'FF0000',
-			opacity: 1.0,
-			design: { connect: { id: createdDesignPaletteRed.id } },
-		},
-	})
-
-	// need to create linked list if more than one color
-	// const createdDesignPaletteGreen = await prisma.design.create({
-	// 	data: {
-	// 		type: 'palette',
-	// 		selected: true,
-	// 		ownerId: adminUser.id,
-	// 		artworkVersionId: artworkVersionId,
-	// 	},
-	// })
-
-	// await prisma.palette.create({
-	// 	data: {
-	// 		format: 'hex',
-	// 		value: '00FF00',
-	// 		opacity: 1.0,
-	// 		design: { connect: { id: createdDesignPaletteGreen.id } },
-	// 	},
-	// })
-
-	// const createdDesignPaletteBlue = await prisma.design.create({
-	// 	data: {
-	// 		type: 'palette',
-	// 		selected: true,
-	// 		ownerId: adminUser.id,
-	// 		artworkVersionId: artworkVersionId,
-	// 	},
-	// })
-
-	// await prisma.palette.create({
-	// 	data: {
-	// 		format: 'hex',
-	// 		value: '0000FF',
-	// 		opacity: 1.0,
-	// 		design: { connect: { id: createdDesignPaletteBlue.id } },
-	// 	},
-	// })
-
-	const createdDesignSize = await prisma.design.create({
-		data: {
-			type: 'size',
-			selected: true,
-			ownerId: adminUser.id,
-			artworkVersionId: artworkVersionId,
-		},
-	})
-
-	await prisma.size.create({
-		data: {
-			format: 'percent',
-			value: 10,
-			basis: 'width',
-			design: { connect: { id: createdDesignSize.id } },
-		},
-	})
-
-	const createdDesignFill = await prisma.design.create({
-		data: {
-			type: 'fill',
-			selected: true,
-			ownerId: adminUser.id,
-			artworkVersionId: artworkVersionId,
-		},
-	})
-
-	await prisma.fill.create({
-		data: {
-			style: 'solid',
-			value: '000000',
-			basis: 'defined',
-			design: { connect: { id: createdDesignFill.id } },
-		},
-	})
-
-	const createdDesignStroke = await prisma.design.create({
-		data: {
-			type: 'stroke',
-			selected: true,
-			ownerId: adminUser.id,
-			artworkVersionId: artworkVersionId,
-		},
-	})
-
-	await prisma.stroke.create({
-		data: {
-			style: 'solid',
-			value: 'FF0000',
-			basis: 'defined',
-			design: { connect: { id: createdDesignStroke.id } },
-		},
-	})
-
-	const createdDesignLine = await prisma.design.create({
-		data: {
-			type: 'line',
-			selected: true,
-			ownerId: adminUser.id,
-			artworkVersionId: artworkVersionId,
-		},
-	})
-
-	await prisma.line.create({
-		data: {
-			width: 1,
-			format: 'pixel',
-			basis: 'size',
-			design: { connect: { id: createdDesignLine.id } },
-		},
-	})
-
-	const createdDesignRotate = await prisma.design.create({
-		data: {
-			type: 'rotate',
-			selected: true,
-			ownerId: adminUser.id,
-			artworkVersionId: artworkVersionId,
-		},
-	})
-
-	await prisma.rotate.create({
-		data: {
-			value: 45,
-			basis: 'defined',
-			design: { connect: { id: createdDesignRotate.id } },
-		},
-	})
-
-	const createdDesignLayout = await prisma.design.create({
-		data: {
-			type: 'layout',
-			selected: true,
-			ownerId: adminUser.id,
-			artworkVersionId: artworkVersionId,
-		},
-	})
-
-	await prisma.layout.create({
-		data: {
-			style: 'random',
-			count: 1000,
-			rows: 9,
-			columns: 9,
-			design: { connect: { id: createdDesignLayout.id } },
-		},
-	})
-
-	const createdDesignTemplate = await prisma.design.create({
-		data: {
-			type: 'template',
-			selected: true,
-			ownerId: adminUser.id,
-			artworkVersionId: artworkVersionId,
-		},
-	})
-
-	await prisma.template.create({
-		data: {
-			style: 'triangle',
-			design: { connect: { id: createdDesignTemplate.id } },
-		},
-	})
-
-	console.timeEnd(`🎨 Created designs`)
+	await seedArtwork({ ownerId: adminUser.id, projectId: '1zxo9f8e' })
 
 	console.timeEnd(`🌱 Database has been seeded`)
 }

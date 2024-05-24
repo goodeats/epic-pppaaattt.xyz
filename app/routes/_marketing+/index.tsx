@@ -1,11 +1,85 @@
-import { type MetaFunction } from '@remix-run/node'
+import { invariantResponse } from '@epic-web/invariant'
 import {
-	ContentBody,
-	ContentContact,
-	ContentHeader,
-	ContentLogo,
-} from './components/content.tsx'
-import { ImagesGrid } from './components/images-grid.tsx'
+	type LoaderFunctionArgs,
+	json,
+	type MetaFunction,
+} from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
+import {
+	MarketingContentSection,
+	MarketingMainLayout,
+} from '#app/components/layout/marketing.tsx'
+import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator.ts'
+import { getAllPublishedArtworkVersions } from '#app/models/artwork-version/artwork-version.get.server.ts'
+import {
+	type IArtworkVersionWithDesignsAndLayers,
+	type IArtworkVersionWithGenerator,
+} from '#app/models/artwork-version/artwork-version.server.ts'
+import { artworkVersionGeneratorBuildService } from '#app/services/artwork/version/generator/build.service.ts'
+import { prisma } from '#app/utils/db.server.ts'
+import { CanvasGrid } from './components/canvas-grid.tsx'
+import { UserDetails } from './components/user-details.tsx'
+
+export interface IUserMarketing {
+	name: string | null
+	username: string
+	bio: string
+	sm_url_instagram: string | null
+	sm_url_github: string | null
+	image: { id: string | null } | null
+}
+
+export async function loader({ params, request }: LoaderFunctionArgs) {
+	const user: IUserMarketing | null = await prisma.user.findFirst({
+		select: {
+			name: true,
+			username: true,
+			bio: true,
+			sm_url_instagram: true,
+			sm_url_github: true,
+			image: { select: { id: true } },
+		},
+	})
+	invariantResponse(user, 'Nothing to show today', { status: 404 })
+
+	// get all starred versions
+	// will eventually want to limit by user, but just one for now
+	const publishedVersions: IArtworkVersionWithDesignsAndLayers[] =
+		await getAllPublishedArtworkVersions()
+
+	// get all generators for these versions
+	const generators: IArtworkVersionGenerator[] = await Promise.all(
+		publishedVersions.map(version =>
+			artworkVersionGeneratorBuildService({ version }),
+		),
+	)
+
+	// combine versions and generators
+	const versionsWithGenerators: IArtworkVersionWithGenerator[] =
+		publishedVersions.map((version, index) => ({
+			...version,
+			generator: generators[index],
+		}))
+
+	return json({
+		user,
+		versionsWithGenerators,
+	})
+}
+
+export default function Index() {
+	const data = useLoaderData<typeof loader>()
+	const { user } = data
+
+	return (
+		<MarketingMainLayout>
+			<MarketingContentSection className="xl:grid-cols-1">
+				<UserDetails user={user} />
+			</MarketingContentSection>
+			<CanvasGrid versions={data.versionsWithGenerators} />
+		</MarketingMainLayout>
+	)
+}
 
 export const meta: MetaFunction = () => {
 	const title = 'PPPAAATTT'
@@ -57,20 +131,4 @@ export const meta: MetaFunction = () => {
 				'generative art, digital gallery, triangles, algorithms, art, digital art, pppaaattt',
 		},
 	]
-}
-
-export default function Index() {
-	return (
-		<main className="font-poppins grid h-full place-items-center">
-			<div className="grid place-items-center px-4 py-16 xl:grid-cols-2 xl:gap-4">
-				<div className="mb-4 flex max-w-lg flex-col items-center text-left xl:order-2 xl:mt-16 xl:items-start xl:self-start">
-					<ContentLogo />
-					<ContentHeader />
-					<ContentBody />
-					<ContentContact />
-				</div>
-				<ImagesGrid />
-			</div>
-		</main>
-	)
 }
