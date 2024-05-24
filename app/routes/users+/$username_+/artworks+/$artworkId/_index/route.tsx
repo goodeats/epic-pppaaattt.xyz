@@ -33,7 +33,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	const artwork = await getArtworkWithProject({
 		where: {
 			ownerId: userId,
-			id: params.artworkId,
+			slug: params.artworkId,
 		},
 	})
 	invariantResponse(artwork, 'Not found', { status: 404 })
