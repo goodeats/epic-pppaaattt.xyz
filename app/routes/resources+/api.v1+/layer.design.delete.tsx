@@ -9,6 +9,7 @@ import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type IDesign } from '#app/models/design/design.server'
 import { validateLayerDeleteDesignSubmission } from '#app/models/design-layer/design-layer.delete.server'
@@ -65,16 +66,20 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export const LayerDesignDelete = ({
-	designId,
+	design,
 	layerId,
 }: {
-	designId: IDesign['id']
+	design: IDesign
 	layerId: ILayer['id']
 }) => {
+	const designId = design.id
+	const iconText = `Delete ${design.type}`
+
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
+
 	const [form] = useForm({
 		id: `layer-design-delete-${layerId}-${designId}`,
 		constraint: getFieldsetConstraint(schema),
@@ -89,12 +94,14 @@ export const LayerDesignDelete = ({
 			<input type="hidden" name="id" value={designId} />
 			<input type="hidden" name={EntityParentIdType.LAYER_ID} value={layerId} />
 
-			<PanelIconButton
-				type="submit"
-				iconName="minus"
-				iconText="Delete design"
-				disabled={isPending}
-			/>
+			<TooltipHydrated tooltipText={iconText} isHydrated={isHydrated}>
+				<PanelIconButton
+					type="submit"
+					iconName="minus"
+					iconText={iconText}
+					disabled={isPending}
+				/>
+			</TooltipHydrated>
 		</fetcher.Form>
 	)
 }

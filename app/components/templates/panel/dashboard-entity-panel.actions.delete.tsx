@@ -49,7 +49,9 @@ const LayerDeleteChildEntityForm = memo(
 	({ entityType, entity, parent }: DeleteChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.DESIGN:
-				return <LayerDesignDelete designId={entity.id} layerId={parent.id} />
+				return (
+					<LayerDesignDelete design={entity as IDesign} layerId={parent.id} />
+				)
 			default:
 				console.log('unknown layer entity type', entityType)
 				return null
