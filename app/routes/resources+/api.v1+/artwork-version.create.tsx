@@ -15,6 +15,7 @@ import {
 	DialogContentGrid,
 	DialogFormsContainer,
 } from '#app/components/layout/dialog'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
 import {
 	Dialog,
 	DialogContent,
@@ -26,12 +27,6 @@ import {
 } from '#app/components/ui/dialog'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { StatusButton } from '#app/components/ui/status-button'
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from '#app/components/ui/tooltip'
 import { type IArtworkBranch } from '#app/models/artwork-branch/artwork-branch.server'
 import { validateNewArtworkVersionSubmission } from '#app/models/artwork-version/artwork-version.create.server'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
@@ -125,26 +120,11 @@ export const ArtworkVersionCreate = ({
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			{isHydrated ? (
-				<TooltipProvider>
-					<Tooltip>
-						<TooltipTrigger asChild>
-							<DialogTrigger asChild>
-								<PanelIconButton
-									iconName="card-stack-plus"
-									iconText="New Version"
-								/>
-							</DialogTrigger>
-						</TooltipTrigger>
-						<TooltipContent>Save version...</TooltipContent>
-					</Tooltip>
-				</TooltipProvider>
-			) : (
+			<TooltipHydrated tooltipText="Save version..." isHydrated={isHydrated}>
 				<DialogTrigger asChild>
 					<PanelIconButton iconName="card-stack-plus" iconText="New Version" />
 				</DialogTrigger>
-			)}
-
+			</TooltipHydrated>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
 					<DialogTitle>Save version</DialogTitle>

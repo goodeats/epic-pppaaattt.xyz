@@ -9,14 +9,9 @@ import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
 import { type IconName } from '#app/components/ui/icon'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from '#app/components/ui/tooltip'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type IDesign } from '#app/models/design/design.server'
 import { validateArtworkVersionReorderDesignSubmission } from '#app/models/design-artwork-version/design-artwork-version.update.server'
@@ -120,23 +115,7 @@ export const ArtworkVersionDesignReorder = ({
 			/>
 			<input type="hidden" name="direction" value={direction} />
 
-			{isHydrated ? (
-				<TooltipProvider>
-					<Tooltip>
-						<TooltipTrigger asChild>
-							<PanelIconButton
-								type="submit"
-								iconName={icon as IconName}
-								iconText={iconText}
-								size="panel-sm"
-								disabled={atTopOrBottom || isPending}
-								className="my-0"
-							/>
-						</TooltipTrigger>
-						<TooltipContent>{iconText}</TooltipContent>
-					</Tooltip>
-				</TooltipProvider>
-			) : (
+			<TooltipHydrated tooltipText={iconText} isHydrated={isHydrated}>
 				<PanelIconButton
 					type="submit"
 					iconName={icon as IconName}
@@ -145,7 +124,7 @@ export const ArtworkVersionDesignReorder = ({
 					disabled={atTopOrBottom || isPending}
 					className="my-0"
 				/>
-			)}
+			</TooltipHydrated>
 		</fetcher.Form>
 	)
 }

@@ -15,6 +15,7 @@ import {
 	DialogContentGrid,
 	DialogFormsContainer,
 } from '#app/components/layout/dialog'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
 import {
 	Dialog,
 	DialogContent,
@@ -26,12 +27,6 @@ import {
 } from '#app/components/ui/dialog'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { StatusButton } from '#app/components/ui/status-button'
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from '#app/components/ui/tooltip'
 import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { validateNewArtworkBranchSubmission } from '#app/models/artwork-branch/artwork-branch.create.server'
 import { type IArtworkBranch } from '#app/models/artwork-branch/artwork-branch.server'
@@ -128,22 +123,11 @@ export const ArtworkBranchCreate = ({
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			{isHydrated ? (
-				<TooltipProvider>
-					<Tooltip>
-						<TooltipTrigger asChild>
-							<DialogTrigger asChild>
-								<PanelIconButton iconName="file-plus" iconText="New Branch" />
-							</DialogTrigger>
-						</TooltipTrigger>
-						<TooltipContent>New branch...</TooltipContent>
-					</Tooltip>
-				</TooltipProvider>
-			) : (
+			<TooltipHydrated tooltipText="New branch..." isHydrated={isHydrated}>
 				<DialogTrigger asChild>
 					<PanelIconButton iconName="file-plus" iconText="New Branch" />
 				</DialogTrigger>
-			)}
+			</TooltipHydrated>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
 					<DialogTitle>Create a new branch</DialogTitle>
