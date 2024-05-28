@@ -1,3 +1,4 @@
+import { PanelRowIconContainer } from '#app/components/layout'
 import { Icon, type IconName } from '#app/components/ui/icon'
 
 export const PanelEntityIcon = ({
@@ -10,7 +11,7 @@ export const PanelEntityIcon = ({
 	text: string
 }) => {
 	return (
-		<div className="m-2 mr-0 flex h-8 w-8 items-center justify-center">
+		<PanelRowIconContainer>
 			{icon ? (
 				<Icon name={icon}>
 					<span className="sr-only">{text}</span>
@@ -18,6 +19,6 @@ export const PanelEntityIcon = ({
 			) : symbol ? (
 				<span className="text-body-xs leading-none">{symbol}</span>
 			) : null}
-		</div>
+		</PanelRowIconContainer>
 	)
 }

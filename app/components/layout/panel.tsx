@@ -64,6 +64,12 @@ const PanelRowValuesContainer = createContainerComponent({
 	displayName: 'PanelRowValuesContainer',
 })
 
+const PanelRowIconContainer = createContainerComponent({
+	defaultTagName: 'div',
+	defaultClassName: 'm-2 mr-0 flex h-8 w-8 items-center justify-center',
+	displayName: 'PanelRowIconContainer',
+})
+
 // similar to a <nav> for the panel,
 // but no page navigation is occurring so just div
 // flex shrink to let values take up remaining space
@@ -81,5 +87,6 @@ export {
 	PanelTitle,
 	PanelRowReorderContainer,
 	PanelRowValuesContainer,
+	PanelRowIconContainer,
 	PanelRowActionsContainer,
 }
