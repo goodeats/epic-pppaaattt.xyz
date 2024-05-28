@@ -9,6 +9,7 @@ import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type ILayer } from '#app/models/layer/layer.server'
@@ -76,7 +77,8 @@ export const ArtworkVersionLayerToggleSelected = ({
 	const layerId = layer.id
 	const isSelected = layer.selected
 	const icon = isSelected ? 'crosshair-2' : 'crosshair-1'
-	const iconText = isSelected ? 'Deselect layer' : 'Select layer'
+	const iconText = `${isSelected ? 'Deselect' : 'Select'} layer`
+	const tooltipText = `Edit ${isSelected ? 'artwork' : layer.name} designs`
 	const className = isSelected ? 'bg-primary text-primary-foreground' : ''
 
 	const fetcher = useFetcher<typeof action>()
@@ -101,13 +103,15 @@ export const ArtworkVersionLayerToggleSelected = ({
 				value={versionId}
 			/>
 
-			<PanelIconButton
-				type="submit"
-				iconName={icon}
-				iconText={iconText}
-				disabled={isPending}
-				className={className}
-			/>
+			<TooltipHydrated tooltipText={tooltipText} isHydrated={isHydrated}>
+				<PanelIconButton
+					type="submit"
+					iconName={icon}
+					iconText={iconText}
+					disabled={isPending}
+					className={className}
+				/>
+			</TooltipHydrated>
 		</fetcher.Form>
 	)
 }
