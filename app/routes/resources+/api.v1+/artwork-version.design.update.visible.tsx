@@ -10,6 +10,12 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '#app/components/ui/tooltip'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type IDesign } from '#app/models/design/design.server'
 import { validateArtworkVersionToggleVisibeDesignSubmission } from '#app/models/design-artwork-version/design-artwork-version.update.server'
@@ -76,7 +82,7 @@ export const ArtworkVersionDesignToggleVisible = ({
 	const designId = design.id
 	const isVisible = design.visible
 	const icon = isVisible ? 'eye-open' : 'eye-closed'
-	const iconText = isVisible ? 'Hide design' : 'Show design'
+	const iconText = `${isVisible ? 'Hide' : 'Show'} ${design.type}`
 
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
@@ -100,12 +106,28 @@ export const ArtworkVersionDesignToggleVisible = ({
 				value={versionId}
 			/>
 
-			<PanelIconButton
-				type="submit"
-				iconName={icon}
-				iconText={iconText}
-				disabled={isPending}
-			/>
+			{isHydrated ? (
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<PanelIconButton
+								type="submit"
+								iconName={icon}
+								iconText={iconText}
+								disabled={isPending}
+							/>
+						</TooltipTrigger>
+						<TooltipContent>{iconText}</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+			) : (
+				<PanelIconButton
+					type="submit"
+					iconName={icon}
+					iconText={iconText}
+					disabled={isPending}
+				/>
+			)}
 		</fetcher.Form>
 	)
 }
