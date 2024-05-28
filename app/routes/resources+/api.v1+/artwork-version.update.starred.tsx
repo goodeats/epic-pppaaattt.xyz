@@ -79,6 +79,9 @@ export const ArtworkVersionToggleStarred = ({
 	const isStarred = version.starred
 	const icon = isStarred ? 'star-filled' : 'star'
 	const iconText = isStarred ? 'Unstar version' : 'Star version'
+	const tooltipText = isStarred
+		? 'Remove from starred versions'
+		: 'Add to starred versions'
 
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
@@ -89,7 +92,6 @@ export const ArtworkVersionToggleStarred = ({
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission,
 	})
-
 	return (
 		<fetcher.Form method="POST" action={route} {...form.props}>
 			<AuthenticityTokenInput />
@@ -108,10 +110,17 @@ export const ArtworkVersionToggleStarred = ({
 								disabled={isPending}
 							/>
 						</TooltipTrigger>
-						<TooltipContent>{iconText}</TooltipContent>
+						<TooltipContent>{tooltipText}</TooltipContent>
 					</Tooltip>
 				</TooltipProvider>
-			) : null}
+			) : (
+				<PanelIconButton
+					type="submit"
+					iconName={icon}
+					iconText={iconText}
+					disabled={isPending}
+				/>
+			)}
 		</fetcher.Form>
 	)
 }
