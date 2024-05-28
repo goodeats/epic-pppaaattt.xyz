@@ -10,6 +10,12 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '#app/components/ui/tooltip'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { validateArtworkVersionNewLayerSubmission } from '#app/models/layer/layer.create.server'
 import { EntityParentIdType } from '#app/schema/entity'
@@ -70,6 +76,8 @@ export const ArtworkVersionLayerCreate = ({
 }: {
 	versionId: IArtworkVersion['id']
 }) => {
+	const iconText = 'Add new layer'
+
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
@@ -91,12 +99,28 @@ export const ArtworkVersionLayerCreate = ({
 				value={versionId}
 			/>
 
-			<PanelIconButton
-				type="submit"
-				iconName="plus"
-				iconText="Add new layer"
-				disabled={isPending}
-			/>
+			{isHydrated ? (
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<PanelIconButton
+								type="submit"
+								iconName="plus"
+								iconText={iconText}
+								disabled={isPending}
+							/>
+						</TooltipTrigger>
+						<TooltipContent>{iconText}</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+			) : (
+				<PanelIconButton
+					type="submit"
+					iconName="plus"
+					iconText={iconText}
+					disabled={isPending}
+				/>
+			)}
 		</fetcher.Form>
 	)
 }
