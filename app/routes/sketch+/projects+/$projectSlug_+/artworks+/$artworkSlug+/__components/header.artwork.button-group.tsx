@@ -38,7 +38,6 @@ export const NavActionsButtonGroup = memo(
 						branchId={branch.id}
 						artworkId={artwork.id}
 						versionId={version.id}
-						formId="artwork-branch-create"
 					/>
 					<ArtworkVersionCreate
 						entityId={version.id}
