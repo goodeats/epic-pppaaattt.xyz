@@ -26,12 +26,12 @@ import { artworkVersionCloneLayersService } from '../../version/clone-layers.ser
 export const artworkVersionCreateService = async ({
 	userId,
 	id,
-	artworkBranchId,
+	branchId,
 	description,
 }: {
 	userId: User['id']
 	id: IArtworkVersion['id']
-	artworkBranchId: IArtworkBranch['id']
+	branchId: IArtworkBranch['id']
 	description: string
 }): Promise<IArtworkVersionCreatedResponse> => {
 	try {
@@ -49,7 +49,7 @@ export const artworkVersionCreateService = async ({
 		const newName = incrementVersionNameString(name)
 		const data = ArtworkVersionDataCreateSchema.parse({
 			ownerId: userId,
-			branchId: artworkBranchId,
+			branchId,
 			name: newName,
 			slug: newName,
 			description: description || 'new version',
@@ -61,7 +61,7 @@ export const artworkVersionCreateService = async ({
 		// Step 3: delete all artwork versions after the current artwork version
 		// getting multiple heads and tails on v1...
 		const artworkVersions = await getArtworkVersions({
-			where: { branchId: artworkBranchId },
+			where: { branchId },
 		})
 		const deleteArtworkVersionsPromise = deleteArtworkVersionsAfterCurrent({
 			id,

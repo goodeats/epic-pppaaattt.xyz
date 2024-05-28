@@ -47,9 +47,9 @@ export class ValidateArtworkBranchParentSubmissionStrategy
 		data: any
 		ctx: any
 	}): Promise<void> {
-		const { artworkBranchId } = data
+		const { branchId } = data
 		const artworkBranch = await getArtworkBranch({
-			where: { id: artworkBranchId, ownerId: userId },
+			where: { id: branchId, ownerId: userId },
 		})
 		if (!artworkBranch) ctx.addIssue(addNotFoundIssue('ArtworkBranch'))
 	}

@@ -12,6 +12,10 @@ import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { TextareaField } from '#app/components/forms'
 import {
+	DialogContentGrid,
+	DialogFormsContainer,
+} from '#app/components/layout/dialog'
+import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
@@ -22,13 +26,16 @@ import {
 } from '#app/components/ui/dialog'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { StatusButton } from '#app/components/ui/status-button'
-import { validateNewArtworkVersionSubmission } from '#app/models/artwork-version/artwork-version.create.server'
-import { NewArtworkVersionSchema } from '#app/schema/artwork-version'
 import {
-	type IEntityId,
-	type IEntityParentId,
-	type entityParentIdTypeEnum,
-} from '#app/schema/entity'
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '#app/components/ui/tooltip'
+import { type IArtworkBranch } from '#app/models/artwork-branch/artwork-branch.server'
+import { validateNewArtworkVersionSubmission } from '#app/models/artwork-version/artwork-version.create.server'
+import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
+import { NewArtworkVersionSchema } from '#app/schema/artwork-version'
 import { validateNoJS } from '#app/schema/form-data'
 import { artworkVersionCreateService } from '#app/services/artwork/branch/version/create.service'
 import { requireUserId } from '#app/utils/auth.server'
@@ -79,16 +86,12 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export const ArtworkVersionCreate = ({
-	entityId,
-	parentTypeId,
-	parentId,
-	formId,
+	branchId,
+	versionId,
 	onOlderVersion,
 }: {
-	entityId?: IEntityId
-	parentTypeId?: entityParentIdTypeEnum
-	parentId?: IEntityParentId
-	formId: string
+	branchId: IArtworkBranch['id']
+	versionId: IArtworkVersion['id']
 	onOlderVersion: boolean
 }) => {
 	const [open, setOpen] = useState(false)
@@ -97,10 +100,10 @@ export const ArtworkVersionCreate = ({
 	const isPending = useIsPending()
 	const params = useParams()
 	const navigate = useNavigate()
-
 	let isHydrated = useHydrated()
+
 	const [form, fields] = useForm({
-		id: `${formId}-${parentId || 'parent'}-${entityId || 'new'}`,
+		id: `artwork-version-create-${branchId || 'parent'}-${versionId || 'new'}`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission: fetcher.data?.submission,
 		defaultValue: {
@@ -122,52 +125,44 @@ export const ArtworkVersionCreate = ({
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			{/* Warning: Expected server HTML to contain a matching <button> in <button>. */}
-			{/* <TooltipIconDialogTrigger
-				icon="card-stack-plus"
-				text="New Version"
-				tooltipText="Save current changes to new version..."
-			/> */}
+			{isHydrated ? (
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<DialogTrigger asChild>
+								<PanelIconButton
+									iconName="card-stack-plus"
+									iconText="New Version"
+								/>
+							</DialogTrigger>
+						</TooltipTrigger>
+						<TooltipContent>Save version...</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+			) : (
+				<DialogTrigger asChild>
+					<PanelIconButton iconName="card-stack-plus" iconText="New Version" />
+				</DialogTrigger>
+			)}
 
-			{/* Tooltip on dialog is not a priority right now */}
-			<DialogTrigger asChild>
-				<PanelIconButton iconName="card-stack-plus" iconText="New Version" />
-			</DialogTrigger>
-
-			{/* <TooltipProvider>
-				<Tooltip>
-					<TooltipTrigger>
-						<DialogTrigger asChild>
-							<PanelIconButton
-								iconName="card-stack-plus"
-								iconText="New Version"
-							/>
-						</DialogTrigger>
-					</TooltipTrigger>
-					<TooltipContent>
-						Save current changes to new version...
-					</TooltipContent>
-				</Tooltip>
-			</TooltipProvider> */}
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Create new version</DialogTitle>
+					<DialogTitle>Save version</DialogTitle>
 					<DialogDescription>
-						Save a new version of this artwork. Add a description to help
-						understand the changes. Click save when you're done.
+						Save current settings of this artwork to a version. Add a
+						description to help understand the changes. A new version will be
+						created from here.
 					</DialogDescription>
 				</DialogHeader>
-				<div className="grid gap-4 py-4">
+				<DialogContentGrid>
 					<fetcher.Form method="POST" action={route} {...form.props}>
 						<AuthenticityTokenInput />
 
 						<input type="hidden" name="no-js" value={String(!isHydrated)} />
-						<input type="hidden" name="id" value={entityId} />
-						{parentId && (
-							<input type="hidden" name={parentTypeId} value={parentId} />
-						)}
+						<input type="hidden" name="id" value={versionId} />
+						<input type="hidden" name="branchId" value={branchId} />
 
-						<div className="grid grid-cols-4 items-center gap-4">
+						<DialogFormsContainer>
 							<TextareaField
 								labelProps={{ children: 'Description' }}
 								textareaProps={{
@@ -177,15 +172,22 @@ export const ArtworkVersionCreate = ({
 								}}
 								errors={fields.description.errors}
 							/>
-						</div>
+						</DialogFormsContainer>
 					</fetcher.Form>
-					{onOlderVersion && (
+					{onOlderVersion ? (
 						<p className="body-md pt-4 text-destructive">
-							Creating a new version will erase all versions after the current
-							version.
+							WARNING: Saving the version before "latest" will erase all
+							versions after the current version. Consider creating a new branch
+							instead if you want to keep the existing versions.
+						</p>
+					) : (
+						<p className="body-md pt-4">
+							To undo version history, just save a version from the last desired
+							version before the "latest" and all existing versions after that
+							will be replaced.
 						</p>
 					)}
-				</div>
+				</DialogContentGrid>
 				<DialogFooter>
 					<StatusButton
 						form={form.id}

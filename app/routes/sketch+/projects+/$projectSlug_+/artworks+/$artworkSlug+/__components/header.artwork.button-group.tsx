@@ -7,7 +7,6 @@ import { type IArtworkVersion } from '#app/models/artwork-version/artwork-versio
 import { ArtworkBranchCreate } from '#app/routes/resources+/api.v1+/artwork-branch.create'
 import { ArtworkVersionCreate } from '#app/routes/resources+/api.v1+/artwork-version.create'
 import { ArtworkVersionToggleStarred } from '#app/routes/resources+/api.v1+/artwork-version.update.starred'
-import { EntityParentIdType } from '#app/schema/entity'
 import { useUser } from '#app/utils/user'
 
 export const NavActionsButtonGroup = memo(
@@ -40,10 +39,8 @@ export const NavActionsButtonGroup = memo(
 						versionId={version.id}
 					/>
 					<ArtworkVersionCreate
-						entityId={version.id}
-						parentId={branch.id}
-						parentTypeId={EntityParentIdType.ARTWORK_BRANCH_ID}
-						formId="artwork-version-create"
+						branchId={branch.id}
+						versionId={version.id}
 						onOlderVersion={!onLatestVersion}
 					/>
 					<TooltipIconLink

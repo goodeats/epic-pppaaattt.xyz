@@ -82,6 +82,6 @@ export const ArtworkVersionDataCreateSchema = z.object({
 
 export const NewArtworkVersionSchema = z.object({
 	id: z.string(),
-	artworkBranchId: z.string(),
+	branchId: z.string(),
 	description: z.string(),
 })

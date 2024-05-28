@@ -89,12 +89,12 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export const ArtworkBranchCreate = ({
-	branchId,
 	artworkId,
+	branchId,
 	versionId,
 }: {
-	branchId: IArtworkBranch['id']
 	artworkId: IArtwork['id']
+	branchId: IArtworkBranch['id']
 	versionId: IArtworkVersion['id']
 }) => {
 	const [open, setOpen] = useState(false)
