@@ -9,6 +9,7 @@ import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type IDesign } from '#app/models/design/design.server'
 import { validateLayerToggleVisibeDesignSubmission } from '#app/models/design-layer/design-layer.update.server'
@@ -76,7 +77,7 @@ export const LayerDesignToggleVisible = ({
 	const designId = design.id
 	const isVisible = design.visible
 	const icon = isVisible ? 'eye-open' : 'eye-closed'
-	const iconText = isVisible ? 'Hide design' : 'Show design'
+	const iconText = `${isVisible ? 'Hide' : 'Show'} ${design.type}`
 
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
@@ -96,12 +97,14 @@ export const LayerDesignToggleVisible = ({
 			<input type="hidden" name="id" value={designId} />
 			<input type="hidden" name={EntityParentIdType.LAYER_ID} value={layerId} />
 
-			<PanelIconButton
-				type="submit"
-				iconName={icon}
-				iconText={iconText}
-				disabled={isPending}
-			/>
+			<TooltipHydrated tooltipText={iconText} isHydrated={isHydrated}>
+				<PanelIconButton
+					type="submit"
+					iconName={icon}
+					iconText={iconText}
+					disabled={isPending}
+				/>
+			</TooltipHydrated>
 		</fetcher.Form>
 	)
 }
