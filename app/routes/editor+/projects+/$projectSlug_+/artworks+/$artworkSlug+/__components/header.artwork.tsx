@@ -1,6 +1,6 @@
 import { useMatches } from '@remix-run/react'
 import { useCallback } from 'react'
-import { DashboardHeader } from '#app/components/layout'
+import { FlexRow } from '#app/components/layout'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
 import { artworkBranchLoaderRoute } from '../$branchSlug'
 import { artworkVersionLoaderRoute } from '../$branchSlug.$versionSlug'
@@ -47,9 +47,9 @@ export const ArtworkHeader = () => {
 	)
 
 	return (
-		<DashboardHeader id="dashboard-artwork-header">
+		<FlexRow className="justify-between">
 			{navComboboxes()}
 			{navActionsButtonGroup()}
-		</DashboardHeader>
+		</FlexRow>
 	)
 }

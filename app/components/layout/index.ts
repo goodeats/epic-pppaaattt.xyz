@@ -1,5 +1,6 @@
 export * from './card'
 export * from './dashboard'
+export * from './flex'
 export * from './navbar'
 export * from './page-footer'
 export * from './page-header'

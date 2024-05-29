@@ -37,7 +37,7 @@ const DashboardNav = createContainerComponent({
 // - <main> to include sidebars since they are important for the layout and ux
 const DashboardBody = createContainerComponent({
 	defaultTagName: 'main',
-	defaultClassName: 'relative flex flex-1 bg-accent',
+	defaultClassName: 'relative flex flex-1',
 	displayName: 'DashboardBody',
 })
 

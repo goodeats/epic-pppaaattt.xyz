@@ -12,7 +12,7 @@ export const SidebarLeft = ({
 	version: IArtworkVersionWithDesignsAndLayers
 }) => {
 	return (
-		<Sidebar id="sidebar-left">
+		<Sidebar className="hidden bg-muted lg:flex">
 			<SidebarTabs tabs={['display', 'assets']}>
 				<SidebarTabsContent value="display">
 					<PanelArtworkVersionLayers version={version} />
@@ -33,7 +33,7 @@ export const SidebarRight = ({
 	selectedLayer: ILayerWithDesigns | undefined
 }) => {
 	return (
-		<Sidebar id="sidebar-right">
+		<Sidebar className="hidden bg-muted lg:flex">
 			<SidebarTabs tabs={['designs', 'history']}>
 				<SidebarTabsContent value="designs">
 					{selectedLayer ? (

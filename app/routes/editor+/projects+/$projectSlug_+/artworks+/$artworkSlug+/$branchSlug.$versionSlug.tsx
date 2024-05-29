@@ -7,10 +7,10 @@ import {
 import { useLoaderData } from '@remix-run/react'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import {
-	Dashboard,
-	DashboardBody,
 	DashboardContent,
 	DashboardContentWrapper,
+	FlexColumn,
+	FlexRow,
 } from '#app/components/layout'
 import { getArtwork } from '#app/models/artwork/artwork.get.server'
 import { getArtworkBranch } from '#app/models/artwork-branch/artwork-branch.get.server'
@@ -67,18 +67,18 @@ export default function EditorProjectArtworkBranchVersionRoute() {
 	// had to consider sidebar from project route level
 	// the component names might need re-thinking, but works
 	return (
-		<Dashboard>
+		<FlexColumn className="flex-1 gap-3 rounded-md bg-accent p-4">
 			<ArtworkHeader />
-			<DashboardBody id="artwork-editor">
+			<FlexRow className="flex-1 rounded-md border">
 				<SidebarLeft version={version} />
-				<DashboardContent>
+				<DashboardContent className="border">
 					<DashboardContentWrapper>
 						<CanvasContent generator={generator} />
 					</DashboardContentWrapper>
 				</DashboardContent>
 				<SidebarRight version={version} selectedLayer={selectedLayer} />
-			</DashboardBody>
-		</Dashboard>
+			</FlexRow>
+		</FlexColumn>
 	)
 }
 

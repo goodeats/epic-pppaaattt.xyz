@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react'
+import { Link, useMatches } from '@remix-run/react'
 import { useRootLoaderData } from '#app/root'
 import { cn } from '#app/utils/misc'
 import { useOptionalUser } from '#app/utils/user'
@@ -46,6 +46,9 @@ export const PageHeader = () => {
 	const env = data.ENV
 	const isProduction = env.MODE === 'production'
 
+	const matches = useMatches()
+	const isEditorDashboard = matches.some(m => m.id.includes('editor+'))
+
 	return (
 		<PageHeaderComponent>
 			<PageHeaderNav>
@@ -54,7 +57,10 @@ export const PageHeader = () => {
 				</PageHeaderNavSection>
 				<PageHeaderNavSection>
 					{user ? (
-						<UserDropdown />
+						<>
+							{isEditorDashboard && <ThemeSwitch />}
+							<UserDropdown />
+						</>
 					) : isProduction ? (
 						<ThemeSwitch />
 					) : (

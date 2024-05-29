@@ -59,7 +59,7 @@ export function ComboboxNav({
 					/>
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-[300px] p-0">
+			<PopoverContent className="w-[200px] p-0">
 				<Command>
 					<CommandInput placeholder={`Search ${entityPlural}...`} />
 					<CommandEmpty>No {entityPlural} found.</CommandEmpty>

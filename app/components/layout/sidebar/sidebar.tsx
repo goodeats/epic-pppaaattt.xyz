@@ -8,7 +8,7 @@ import { createContainerComponent } from '../utils'
 // - vertical scrolling: overflow-y-scroll
 const Sidebar = createContainerComponent({
 	defaultTagName: 'aside',
-	defaultClassName: 'relative flex w-64 flex-col overflow-y-scroll bg-muted',
+	defaultClassName: 'relative flex w-64 flex-col overflow-y-scroll',
 	displayName: 'Sidebar',
 })
 

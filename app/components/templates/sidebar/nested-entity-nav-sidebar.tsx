@@ -10,15 +10,8 @@ import {
 	navSidebarLinkClassNameDefault,
 } from '#app/components/layout'
 import { Icon, type IconName } from '#app/components/ui/icon'
+import { type NavItem } from '#app/definitions/nav-item'
 import { cn } from '#app/utils/misc'
-
-export interface NavItem {
-	id: string
-	name: string
-	path: string
-	icon?: IconName // Optional icon name if needed
-	children?: NavItem[] // Optional children items
-}
 
 export const NestedEntityNavSidebar = ({
 	items,
@@ -52,7 +45,7 @@ export const NavList = ({
 	basePath: string
 }) => {
 	return (
-		<NavSidebarList>
+		<NavSidebarList className="pl-2">
 			{items.map(item => (
 				<NavListItem key={item.id} item={item} basePath={basePath} />
 			))}

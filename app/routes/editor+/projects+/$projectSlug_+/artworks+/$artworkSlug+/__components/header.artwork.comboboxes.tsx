@@ -25,54 +25,56 @@ export const NavComboboxes = memo(
 
 		return (
 			<DashboardNav className="sm:justify-start">
-				<ComboboxNav
-					entities={project.artworks}
-					entitySingular="artwork"
-					entityPlural="artworks"
-					placeholder="Select an artwork..."
-					slugParam="artworkSlug"
-					baseUrl={baseUrl}
-				/>
-				<ComboboxNav
-					entities={artwork.branches}
-					entitySingular="branch"
-					entityPlural="branches"
-					placeholder={branch.name || 'Select a branch...'}
-					slugParam="branchSlug"
-					baseUrl={`${baseUrl}/${artwork.slug}`}
-				/>
-				{branch.description && (
+				<div className="flex flex-1 gap-4">
+					<ComboboxNav
+						entities={project.artworks}
+						entitySingular="artwork"
+						entityPlural="artworks"
+						placeholder="Select an artwork..."
+						slugParam="artworkSlug"
+						baseUrl={baseUrl}
+					/>
+					<ComboboxNav
+						entities={artwork.branches}
+						entitySingular="branch"
+						entityPlural="branches"
+						placeholder={branch.name || 'Select a branch...'}
+						slugParam="branchSlug"
+						baseUrl={`${baseUrl}/${artwork.slug}`}
+					/>
+					{branch.description && (
+						<TooltipIcon
+							icon="info-circled"
+							text="Branch Info"
+							tooltipText={branch.description}
+						/>
+					)}
+					<ComboboxNav
+						entities={branch.versions}
+						entitySingular="version"
+						entityPlural="versions"
+						placeholder={version.name || 'Select a version...'}
+						slugParam="versionSlug"
+						baseUrl={`${baseUrl}/${artwork.slug}/${branch.slug}`}
+					/>
 					<TooltipIcon
 						icon="info-circled"
-						text="Branch Info"
-						tooltipText={branch.description}
+						text="Version Info"
+						tooltipText={version.description}
 					/>
-				)}
-				<ComboboxNav
-					entities={branch.versions}
-					entitySingular="version"
-					entityPlural="versions"
-					placeholder={version.name || 'Select a version...'}
-					slugParam="versionSlug"
-					baseUrl={`${baseUrl}/${artwork.slug}/${branch.slug}`}
-				/>
-				<TooltipIcon
-					icon="info-circled"
-					text="Version Info"
-					tooltipText={version.description}
-				/>
-				{!onLatestVersion && (
-					// this should be displayed when:
-					// - creating a new artwork version
-					// - navigating to a previous artwork version
-					<TooltipIconLink
-						to="../latest"
-						icon="pin-right"
-						text="Latest"
-						tooltipText="View the latest version of this artwork"
-						buttonVariant="secondary"
-					/>
-				)}
+					{!onLatestVersion && (
+						// this should be displayed when:
+						// - creating a new artwork version
+						// - navigating to a previous artwork version
+						<TooltipIconLink
+							to="../latest"
+							icon="pin-right"
+							text="Latest"
+							tooltipText="View the latest version of this artwork"
+							buttonVariant="secondary"
+						/>
+					)}
+				</div>
 			</DashboardNav>
 		)
 	},
