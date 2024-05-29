@@ -9,6 +9,7 @@ import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { validateArtworkVersionNewLayerSubmission } from '#app/models/layer/layer.create.server'
@@ -70,6 +71,8 @@ export const ArtworkVersionLayerCreate = ({
 }: {
 	versionId: IArtworkVersion['id']
 }) => {
+	const iconText = 'Add new layer'
+
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
@@ -91,12 +94,14 @@ export const ArtworkVersionLayerCreate = ({
 				value={versionId}
 			/>
 
-			<PanelIconButton
-				type="submit"
-				iconName="plus"
-				iconText="Add new layer"
-				disabled={isPending}
-			/>
+			<TooltipHydrated tooltipText={iconText} isHydrated={isHydrated}>
+				<PanelIconButton
+					type="submit"
+					iconName="plus"
+					iconText={iconText}
+					disabled={isPending}
+				/>
+			</TooltipHydrated>
 		</fetcher.Form>
 	)
 }

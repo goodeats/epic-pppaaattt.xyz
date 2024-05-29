@@ -12,6 +12,11 @@ import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { Field, TextareaField } from '#app/components/forms'
 import {
+	DialogContentGrid,
+	DialogFormsContainer,
+} from '#app/components/layout/dialog'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
+import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
@@ -79,25 +84,23 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export const ArtworkBranchCreate = ({
-	branchId,
 	artworkId,
+	branchId,
 	versionId,
-	formId,
 }: {
-	branchId: IArtworkBranch['id']
 	artworkId: IArtwork['id']
+	branchId: IArtworkBranch['id']
 	versionId: IArtworkVersion['id']
-	formId: string
 }) => {
 	const [open, setOpen] = useState(false)
 
 	const fetcher = useFetcher<typeof action>()
 	const isPending = useIsPending()
 	const navigate = useNavigate()
-
 	let isHydrated = useHydrated()
+
 	const [form, fields] = useForm({
-		id: `${formId}-${artworkId}-${branchId}-${versionId}`,
+		id: `artwork-branch-create-${artworkId}-${branchId}-${versionId}`,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission: fetcher.data?.submission,
 		onValidate: ({ formData }) => {
@@ -120,25 +123,20 @@ export const ArtworkBranchCreate = ({
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			{/* Warning: Expected server HTML to contain a matching <button> in <button>. */}
-			{/* <TooltipIconDialogTrigger
-				icon="file-plus"
-				text="New Branch"
-				tooltipText="Create a new branch from current branch and version..."
-			/> */}
-			{/* Tooltip on dialog is not a priority right now */}
-			<DialogTrigger asChild>
-				<PanelIconButton iconName="file-plus" iconText="New Branch" />
-			</DialogTrigger>
+			<TooltipHydrated tooltipText="New branch..." isHydrated={isHydrated}>
+				<DialogTrigger asChild>
+					<PanelIconButton iconName="file-plus" iconText="New Branch" />
+				</DialogTrigger>
+			</TooltipHydrated>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
 					<DialogTitle>Create a new branch</DialogTitle>
 					<DialogDescription>
-						Save a new branch of this artwork. Add a name and description to
-						help understand the changes. Click save when you're done.
+						Start a new branch for this artwork off the current settings. Add a
+						name and description to help understand the changes.
 					</DialogDescription>
 				</DialogHeader>
-				<div className="grid gap-4 py-4">
+				<DialogContentGrid>
 					<fetcher.Form method="POST" action={route} {...form.props}>
 						<AuthenticityTokenInput />
 
@@ -147,7 +145,7 @@ export const ArtworkBranchCreate = ({
 						<input type="hidden" name="artworkId" value={artworkId} />
 						<input type="hidden" name="versionId" value={versionId} />
 
-						<div className="grid grid-cols-4 items-center gap-4">
+						<DialogFormsContainer>
 							<Field
 								labelProps={{ children: 'Name' }}
 								inputProps={{
@@ -165,9 +163,9 @@ export const ArtworkBranchCreate = ({
 								}}
 								errors={fields.description.errors}
 							/>
-						</div>
+						</DialogFormsContainer>
 					</fetcher.Form>
-				</div>
+				</DialogContentGrid>
 				<DialogFooter>
 					<StatusButton
 						form={form.id}

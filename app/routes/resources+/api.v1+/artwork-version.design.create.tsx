@@ -9,6 +9,7 @@ import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { validateArtworkVersionNewDesignSubmission } from '#app/models/design-artwork-version/design-artwork-version.create.server'
@@ -72,10 +73,13 @@ export const ArtworkVersionDesignCreate = ({
 	type: designTypeEnum
 	versionId: IArtworkVersion['id']
 }) => {
+	const iconText = `Add new ${type}`
+
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
+
 	const [form] = useForm({
 		id: `artwork-version-design-create-${versionId}-new`,
 		constraint: getFieldsetConstraint(schema),
@@ -94,12 +98,14 @@ export const ArtworkVersionDesignCreate = ({
 			/>
 			<input type="hidden" name="type" value={type} />
 
-			<PanelIconButton
-				type="submit"
-				iconName="plus"
-				iconText={`Add new ${type}`}
-				disabled={isPending}
-			/>
+			<TooltipHydrated tooltipText={iconText} isHydrated={isHydrated}>
+				<PanelIconButton
+					type="submit"
+					iconName="plus"
+					iconText={iconText}
+					disabled={isPending}
+				/>
+			</TooltipHydrated>
 		</fetcher.Form>
 	)
 }

@@ -6,6 +6,7 @@ import { DesignTypeRotateValue } from '#app/routes/resources+/api.v1+/design.typ
 import { type IEntity } from '#app/schema/entity'
 import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import { SidebarPanelRowValuesContainer } from '..'
+import { TooltipForContent } from '../tooltip'
 import { PanelEntityIcon } from './dashboard-entity-panel.icons'
 import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
@@ -53,8 +54,13 @@ const EntityBasisIcon = memo(({ entity }: EntityProps) => {
 
 	if (basis !== RotateBasisTypeEnum.DEFINED) return null
 	const symbol = '°'
+	const tooltipText = 'Degrees'
 
-	return <PanelEntityIcon symbol={symbol} text={`Rotate basis: ${basis}`} />
+	return (
+		<TooltipForContent tooltipText={tooltipText}>
+			<PanelEntityIcon symbol={symbol} text={`Rotate basis: ${basis}`} />
+		</TooltipForContent>
+	)
 })
 EntityBasisIcon.displayName = 'EntityBasisIcon'
 

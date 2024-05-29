@@ -83,6 +83,7 @@ export const ArtworkVersionLayerDelete = ({
 
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
+	const isDeleted = fetcher.data?.status === 'success'
 	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 	const [form] = useForm({
@@ -117,7 +118,9 @@ export const ArtworkVersionLayerDelete = ({
 				disabled={isPending}
 			>
 				<Icon name="trash" className="scale-125 max-md:scale-150">
-					<span className="max-md:hidden">Delete layer</span>
+					<span className="max-md:hidden">
+						{isDeleted ? 'Deleted' : 'Delete layer'}
+					</span>
 				</Icon>
 			</StatusButton>
 		</fetcher.Form>

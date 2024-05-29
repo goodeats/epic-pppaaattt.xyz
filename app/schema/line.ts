@@ -50,14 +50,13 @@ export const EditDesignLineFormatSchema = z.object({
 })
 
 export const lineFormatIcon = (format: lineFormatTypeEnum) => {
-	switch (format) {
-		case LineFormatTypeEnum.PERCENT:
-			return '%'
-		case LineFormatTypeEnum.PIXEL:
-			return 'px'
-		default:
-			return '%'
-	}
+	return format === LineFormatTypeEnum.PERCENT ? '%' : 'px'
+}
+
+export const lineFormatIconTooltip = (format: lineFormatTypeEnum) => {
+	return format === LineFormatTypeEnum.PERCENT
+		? 'Line width is a percentage of the basis'
+		: 'Line width is a fixed pixel value'
 }
 
 export const lineBasisIcon = (basis: lineBasisTypeEnum) => {
@@ -74,5 +73,22 @@ export const lineBasisIcon = (basis: lineBasisTypeEnum) => {
 			return 'stretch-vertically'
 		default:
 			return 'width'
+	}
+}
+
+export const lineBasisIconTooltip = (basis: lineBasisTypeEnum) => {
+	switch (basis) {
+		case LineBasisTypeEnum.SIZE:
+			return 'Line width is based on the design size'
+		case LineBasisTypeEnum.WIDTH:
+			return 'Line width is based on the layer width'
+		case LineBasisTypeEnum.HEIGHT:
+			return 'Line width is based on the layer height'
+		case LineBasisTypeEnum.CANVAS_WIDTH:
+			return 'Line width is based on the canvas width'
+		case LineBasisTypeEnum.CANVAS_HEIGHT:
+			return 'Line width is based on the canvas height'
+		default:
+			return 'Line width is based on the layer width'
 	}
 }

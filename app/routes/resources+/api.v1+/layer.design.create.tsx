@@ -9,6 +9,7 @@ import { useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { validateLayerNewDesignSubmission } from '#app/models/design-layer/design-layer.create.server'
 import { type ILayer } from '#app/models/layer/layer.server'
@@ -71,6 +72,8 @@ export const LayerDesignCreate = ({
 	type: designTypeEnum
 	layerId: ILayer['id']
 }) => {
+	const iconText = `Add new ${type}`
+
 	const fetcher = useFetcher<typeof action>()
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
@@ -89,12 +92,14 @@ export const LayerDesignCreate = ({
 			<input type="hidden" name={EntityParentIdType.LAYER_ID} value={layerId} />
 			<input type="hidden" name="type" value={type} />
 
-			<PanelIconButton
-				type="submit"
-				iconName="plus"
-				iconText={`Add new ${type}`}
-				disabled={isPending}
-			/>
+			<TooltipHydrated tooltipText={iconText} isHydrated={isHydrated}>
+				<PanelIconButton
+					type="submit"
+					iconName="plus"
+					iconText={iconText}
+					disabled={isPending}
+				/>
+			</TooltipHydrated>
 		</fetcher.Form>
 	)
 }

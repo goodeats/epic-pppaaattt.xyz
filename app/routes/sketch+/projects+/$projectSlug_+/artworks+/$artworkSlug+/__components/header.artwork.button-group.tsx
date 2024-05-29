@@ -7,7 +7,6 @@ import { type IArtworkVersion } from '#app/models/artwork-version/artwork-versio
 import { ArtworkBranchCreate } from '#app/routes/resources+/api.v1+/artwork-branch.create'
 import { ArtworkVersionCreate } from '#app/routes/resources+/api.v1+/artwork-version.create'
 import { ArtworkVersionToggleStarred } from '#app/routes/resources+/api.v1+/artwork-version.update.starred'
-import { EntityParentIdType } from '#app/schema/entity'
 import { useUser } from '#app/utils/user'
 
 export const NavActionsButtonGroup = memo(
@@ -38,20 +37,17 @@ export const NavActionsButtonGroup = memo(
 						branchId={branch.id}
 						artworkId={artwork.id}
 						versionId={version.id}
-						formId="artwork-branch-create"
 					/>
 					<ArtworkVersionCreate
-						entityId={version.id}
-						parentId={branch.id}
-						parentTypeId={EntityParentIdType.ARTWORK_BRANCH_ID}
-						formId="artwork-version-create"
+						branchId={branch.id}
+						versionId={version.id}
 						onOlderVersion={!onLatestVersion}
 					/>
 					<TooltipIconLink
 						to={`/users/${user.username}/artworks/${artwork.slug}`}
-						icon="pencil-1"
+						icon="exit"
 						text="Latest"
-						tooltipText="View the artwork details"
+						tooltipText={`Go to ${artwork.name} page`}
 						buttonVariant="ghost"
 					/>
 				</NavbarButtonGroup>

@@ -54,6 +54,12 @@ export const sizeFormatIcon = (format: sizeFormatTypeEnum) => {
 	return format === SizeFormatTypeEnum.PERCENT ? '%' : 'px'
 }
 
+export const sizeFormatIconTooltip = (format: sizeFormatTypeEnum) => {
+	return format === SizeFormatTypeEnum.PERCENT
+		? 'Size is a percentage of the basis'
+		: 'Size is a fixed pixel value'
+}
+
 export const sizeBasisIcon = (basis: sizeBasisTypeEnum) => {
 	switch (basis) {
 		case SizeBasisTypeEnum.WIDTH:
@@ -66,5 +72,20 @@ export const sizeBasisIcon = (basis: sizeBasisTypeEnum) => {
 			return 'stretch-vertically'
 		default:
 			return 'width'
+	}
+}
+
+export const sizeBasisIconTooltip = (basis: sizeBasisTypeEnum) => {
+	switch (basis) {
+		case SizeBasisTypeEnum.WIDTH:
+			return 'Size is based on the layer width'
+		case SizeBasisTypeEnum.HEIGHT:
+			return 'Size is based on the layer height'
+		case SizeBasisTypeEnum.CANVAS_WIDTH:
+			return 'Size is based on the canvas width'
+		case SizeBasisTypeEnum.CANVAS_HEIGHT:
+			return 'Size is based on the canvas height'
+		default:
+			return 'Size is based on the layer width'
 	}
 }
