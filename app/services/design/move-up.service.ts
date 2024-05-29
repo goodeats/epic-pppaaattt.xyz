@@ -68,7 +68,6 @@ export const designMoveUpService = async ({
 
 		// Step 7: update the layer selected design for its type, if necessary
 		// reorder is more complicated than just going by the current design state
-		// look for selectedDesignToUpdateOnMoveUp in design utils
 		await updateSelectedDesignService({
 			targetEntityId,
 			designId: updateSelectedDesignId,
@@ -117,7 +116,7 @@ const getAdjacentDesigns = async ({
 		? await getDesign({
 				id: prevPrevId,
 				userId,
-		  })
+			})
 		: null
 
 	const nextDesign = nextId ? await getDesign({ id: nextId, userId }) : null
