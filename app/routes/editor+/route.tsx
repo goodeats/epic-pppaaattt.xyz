@@ -13,9 +13,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	return json({})
 }
 
-export default function SketchRoute() {
+export default function EditorRoute() {
 	return (
-		<Dashboard id="sketch-dashboard">
+		<Dashboard>
 			<Header />
 			<Outlet />
 		</Dashboard>
@@ -24,10 +24,10 @@ export default function SketchRoute() {
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: 'Sketch | XYZ' },
+		{ title: 'Editor | XYZ' },
 		{
 			name: 'description',
-			content: 'Sketch dashboard for XYZ',
+			content: 'Editor dashboard for XYZ',
 		},
 	]
 }

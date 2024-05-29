@@ -18,7 +18,7 @@ To get started with this project, follow these steps:
 Please keep in mind this is a personal project, not yet intended for a wide audience
 
 - login as `adminUser` set from seeds in `prisma/seed.ts` (if you want to change this then run `npm run setup` again)
-- from user dropdown in upper right navigate to sketch and select `My First Artwork` (created from seed)
+- from user dropdown in upper right navigate to Editor and select `My First Artwork` (created from seed)
 - add at least one design attribute for each category
 - add a layer, which will adopt the artwork design attributes
 - click on the layer name to select it and adjust the designs from there
@@ -43,7 +43,7 @@ Please keep in mind this is a personal project, not yet intended for a wide audi
 - This was created as a personal project to achieve my goal of rapid development and deployment of scalable artistic projects in the marketplace
 - This was also created for personal development as a software engineer
 - Foregoing tests a bit to get the MVP out
-- Sketch dashboard inspired by Figma dashboard UI
+- Editor dashboard inspired by Figma dashboard UI
 
 ## ROADMAP
 

@@ -27,7 +27,7 @@ import { SidebarLeft, SidebarRight } from './__components/sidebars'
 import { artworkLoaderRoute } from './route'
 
 export const artworkVersionLoaderRoute =
-	'routes/sketch+/projects+/$projectSlug_+/artworks+/$artworkSlug+/$branchSlug.$versionSlug'
+	'routes/editor+/projects+/$projectSlug_+/artworks+/$artworkSlug+/$branchSlug.$versionSlug'
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
@@ -60,7 +60,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	return json({ version, selectedLayer, generator })
 }
 
-export default function SketchProjectArtworkBranchVersionRoute() {
+export default function EditorProjectArtworkBranchVersionRoute() {
 	const data = useLoaderData<typeof loader>()
 	const { version, selectedLayer, generator } = data
 
@@ -97,11 +97,11 @@ export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
 
 	return [
 		{
-			title: `${artworkName} | ${branchName} | ${versionName} | ${projectName} | Sketch | XYZ`,
+			title: `${artworkName} | ${branchName} | ${versionName} | ${projectName} | Editor | XYZ`,
 		},
 		{
 			name: 'description',
-			content: `Sketch dashboard for XYZ artwork project: ${artworkName} (${projectName})`,
+			content: `Editor dashboard for XYZ artwork project: ${artworkName} (${projectName})`,
 		},
 	]
 }

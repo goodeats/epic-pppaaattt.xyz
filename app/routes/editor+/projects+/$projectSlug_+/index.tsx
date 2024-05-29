@@ -8,7 +8,7 @@ import { useRouteLoaderMatchData } from '#app/utils/matches'
 import { useUser } from '#app/utils/user'
 import { projectLoaderRoute } from './route'
 
-export default function SketchProjectIndexRoute() {
+export default function EditorProjectIndexRoute() {
 	const user = useUser()
 	const matches = useMatches()
 	const { project } = useRouteLoaderMatchData(matches, projectLoaderRoute)

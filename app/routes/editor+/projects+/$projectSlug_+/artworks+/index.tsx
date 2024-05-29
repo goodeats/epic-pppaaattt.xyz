@@ -12,7 +12,7 @@ import { requireUserId } from '#app/utils/auth.server'
 import { useUser } from '#app/utils/user'
 
 export const artworkstLoaderRoute =
-	'routes/sketch+/projects+/$projectSlug_+/artworks+/route'
+	'routes/editor+/projects+/$projectSlug_+/artworks+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
@@ -27,7 +27,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	return json({ project })
 }
 
-export default function SketchProjectArtworksIndexRoute() {
+export default function EditorProjectArtworksIndexRoute() {
 	const data = useLoaderData<typeof loader>()
 	const { project } = data
 	const user = useUser()
@@ -38,7 +38,7 @@ export default function SketchProjectArtworksIndexRoute() {
 			<DashboardContentHeading2>
 				<Link
 					prefetch="intent"
-					to={`/sketch/projects/${project.slug}/artworks`}
+					to={`/editor/projects/${project.slug}/artworks`}
 				>
 					Artworks
 				</Link>
@@ -49,7 +49,7 @@ export default function SketchProjectArtworksIndexRoute() {
 				parent={project.name}
 				basePathNew={`/users/${user.username}/projects/${project.slug}/artworks`}
 				basePathEditor={`/users/${user.username}/artworks`}
-				basePathView={`/sketch/projects/${project.slug}/artworks`}
+				basePathView={`/editor/projects/${project.slug}/artworks`}
 			/>
 		</div>
 	)

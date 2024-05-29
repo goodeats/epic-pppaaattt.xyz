@@ -87,8 +87,8 @@ export default function ProfileRoute() {
 									</Link>
 								</Button>
 								<Button asChild>
-									<Link to="/sketch" prefetch="intent">
-										Sketch
+									<Link to="/editor" prefetch="intent">
+										Editor
 									</Link>
 								</Button>
 								<Button asChild>

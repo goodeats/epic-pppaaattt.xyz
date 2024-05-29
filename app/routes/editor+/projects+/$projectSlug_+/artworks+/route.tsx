@@ -11,7 +11,7 @@ import { requireUserId } from '#app/utils/auth.server'
 import { routeLoaderMetaData } from '#app/utils/matches'
 
 export const projectLoaderRoute =
-	'routes/sketch+/projects+/$projectSlug_+/route'
+	'routes/editor+/projects+/$projectSlug_+/route'
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
@@ -26,7 +26,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	return json({ project })
 }
 
-export default function SketchProjectArtworksRoute() {
+export default function EditorProjectArtworksRoute() {
 	return <Outlet />
 }
 
@@ -34,10 +34,10 @@ export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
 	const projectData = routeLoaderMetaData(matches, projectLoaderRoute)
 	const projectName = projectData?.project.name ?? params.slug
 	return [
-		{ title: `Artworks | ${projectName} | Sketch | XYZ` },
+		{ title: `Artworks | ${projectName} | Editor | XYZ` },
 		{
 			name: 'description',
-			content: `Sketch dashboard for XYZ project artworks: ${projectName}`,
+			content: `Editor dashboard for XYZ project artworks: ${projectName}`,
 		},
 	]
 }

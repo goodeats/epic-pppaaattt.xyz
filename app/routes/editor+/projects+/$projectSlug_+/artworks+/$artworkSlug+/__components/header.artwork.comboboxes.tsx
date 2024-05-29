@@ -21,7 +21,7 @@ export const NavComboboxes = memo(
 		version: IArtworkVersion
 		onLatestVersion: boolean
 	}) => {
-		const baseUrl = `/sketch/projects/${project.slug}/artworks`
+		const baseUrl = `/editor/projects/${project.slug}/artworks`
 
 		return (
 			<DashboardNav className="sm:justify-start">
