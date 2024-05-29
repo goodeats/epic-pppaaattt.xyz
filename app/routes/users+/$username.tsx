@@ -82,13 +82,8 @@ export default function ProfileRoute() {
 									</Link>
 								</Button>
 								<Button asChild>
-									<Link to="layers" prefetch="intent">
-										My layers
-									</Link>
-								</Button>
-								<Button asChild>
-									<Link to="/editor" prefetch="intent">
-										Editor
+									<Link to="/sketch" prefetch="intent">
+										Sketch
 									</Link>
 								</Button>
 								<Button asChild>
