@@ -1,6 +1,13 @@
 import { z } from 'zod'
-import { filterHexcodeChars, validateStringIsHexcode } from '#app/utils/colors'
 import { removeWhitespace } from '#app/utils/string-formatting'
+
+const filterHexcodeChars = (input: string): string => {
+	return input.replace(/[^0-9A-Fa-f]/g, '')
+}
+
+function validateStringIsHexcode(input: string): boolean {
+	return /^#?[0-9A-Fa-f]{6}$/.test(input)
+}
 
 export const HexcodeSchema = z
 	.string()

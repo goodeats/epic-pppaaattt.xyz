@@ -220,11 +220,11 @@ const AppBody = () => {
 	const env = data.ENV
 	const isProduction = env.MODE === 'production'
 	const matches = useMatches()
-	const isSketchDashboard = matches.some(m => m.id.includes('sketch'))
+	const isEditorDashboard = matches.some(m => m.id.includes('editor+'))
 
 	return (
 		<div className="flex h-screen flex-col justify-between">
-			{!isSketchDashboard ? (
+			{!isEditorDashboard ? (
 				isProduction ? (
 					<PageHeader />
 				) : (
@@ -236,7 +236,7 @@ const AppBody = () => {
 				<Outlet />
 			</div>
 
-			{!isSketchDashboard ? <PageFooter /> : null}
+			{!isEditorDashboard ? <PageFooter /> : null}
 		</div>
 	)
 }

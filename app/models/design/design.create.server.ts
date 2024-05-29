@@ -1,6 +1,5 @@
 import { type User } from '@prisma/client'
 import { type designTypeEnum } from '#app/schema/design'
-import { NewArtworkVersionDesignSchema } from '#app/schema/design-artwork-version'
 import { prisma } from '#app/utils/db.server'
 import { type IArtwork } from '../artwork/artwork.server'
 import { type IArtworkVersion } from '../artwork-version/artwork-version.server'
@@ -27,22 +26,5 @@ export const createDesign = async ({
 	}
 }): Promise<IDesign | null> => {
 	const createdDesign = await prisma.design.create({ data })
-	return createdDesign
-}
-
-export const createArtworkVersionDesign = async ({
-	data,
-}: {
-	data: {
-		ownerId: User['id']
-		type: designTypeEnum
-		artworkVersionId: IArtworkVersion['id']
-		visible?: boolean
-		selected?: boolean
-	}
-}): Promise<IDesign | null> => {
-	const { ownerId } = data
-	const parsedData = NewArtworkVersionDesignSchema.parse(data)
-	const createdDesign = await createDesign({ data: { ownerId, ...parsedData } })
 	return createdDesign
 }

@@ -1,9 +1,6 @@
 import { type User } from '@prisma/client'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
-import {
-	createArtworkVersionDesign,
-	createDesign,
-} from '#app/models/design/design.create.server'
+import { createDesign } from '#app/models/design/design.create.server'
 import { getDesign } from '#app/models/design/design.get.server'
 import {
 	type IDesign,
@@ -12,6 +9,7 @@ import {
 } from '#app/models/design/design.server'
 import { type ILayer } from '#app/models/layer/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
+import { ArtworkVersionDesignDataCreateSchema } from '#app/schema/design-artwork-version'
 import { LayerDesignDataCreateSchema } from '#app/schema/design-layer'
 import { prisma } from '#app/utils/db.server'
 
@@ -106,15 +104,14 @@ export class ArtworkVersionCreateDesignStrategy
 		type: designTypeEnum
 		designOverrides: IDesignCreateOverrides
 	}): Promise<IDesign | null> {
-		const data = {
-			ownerId: userId,
+		const data = ArtworkVersionDesignDataCreateSchema.parse({
 			type,
+			ownerId: userId,
 			artworkVersionId: targetEntityId,
 			...designOverrides,
-		}
-		return await createArtworkVersionDesign({
-			data,
 		})
+
+		return await createDesign({ data })
 	}
 
 	async visibleDesignsByTypeCount({
