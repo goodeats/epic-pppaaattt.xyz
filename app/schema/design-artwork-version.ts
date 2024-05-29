@@ -1,8 +1,6 @@
 import { z } from 'zod'
 import { DesignTypeEnum, type designTypeEnum } from './design'
 
-// copied from ./design.ts
-// may not be necessary?
 export interface DesignArtworkVersion {
 	type: designTypeEnum
 	ownerId: string

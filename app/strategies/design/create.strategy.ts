@@ -1,9 +1,6 @@
 import { type User } from '@prisma/client'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
-import {
-	createArtworkVersionDesign,
-	createDesign,
-} from '#app/models/design/design.create.server'
+import { createDesign } from '#app/models/design/design.create.server'
 import { getDesign } from '#app/models/design/design.get.server'
 import {
 	type IDesign,
@@ -114,9 +111,7 @@ export class ArtworkVersionCreateDesignStrategy
 			...designOverrides,
 		})
 
-		return await createArtworkVersionDesign({
-			data,
-		})
+		return await createDesign({ data })
 	}
 
 	async visibleDesignsByTypeCount({
