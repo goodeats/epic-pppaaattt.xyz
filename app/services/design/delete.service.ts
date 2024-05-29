@@ -10,7 +10,6 @@ import {
 	updateDesignToTail,
 	connectPrevAndNextDesigns,
 	type IDesignEntityId,
-	type IDesignIdOrNull,
 } from '#app/models/design/design.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { type IUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
@@ -21,13 +20,11 @@ export const designDeleteService = async ({
 	userId,
 	id,
 	targetEntityId,
-	updateSelectedDesignId,
 	updateSelectedDesignStrategy,
 }: {
 	userId: User['id']
 	id: IDesign['id']
 	targetEntityId: IDesignEntityId
-	updateSelectedDesignId?: IDesignIdOrNull
 	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
 }): Promise<IDesignDeletedResponse> => {
 	try {
@@ -64,7 +61,6 @@ export const designDeleteService = async ({
 		if (selected) {
 			await updateSelectedDesignService({
 				targetEntityId,
-				designId: updateSelectedDesignId,
 				type,
 				strategy: updateSelectedDesignStrategy,
 			})
@@ -111,14 +107,14 @@ const getAdjacentDesigns = async ({
 		? await getDesign({
 				userId,
 				id: nextId,
-		  })
+			})
 		: null
 
 	const prevDesign = prevId
 		? await getDesign({
 				userId,
 				id: prevId,
-		  })
+			})
 		: null
 
 	return { nextDesign, prevDesign }

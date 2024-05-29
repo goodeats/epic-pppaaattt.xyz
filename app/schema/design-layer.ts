@@ -26,18 +26,15 @@ export const NewLayerDesignSchema = z.object({
 export const DeleteLayerDesignSchema = z.object({
 	id: z.string(),
 	layerId: z.string(),
-	updateSelectedDesignId: z.string().optional(),
 })
 
 export const ToggleVisibleLayerDesignSchema = z.object({
 	id: z.string(),
 	layerId: z.string(),
-	updateSelectedDesignId: z.string().optional(),
 })
 
 export const ReorderLayerDesignSchema = z.object({
 	id: z.string(),
 	layerId: z.string(),
 	direction: z.enum(['up', 'down']),
-	updateSelectedDesignId: z.string().optional(),
 })

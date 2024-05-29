@@ -1,8 +1,5 @@
 import { type User } from '@prisma/client'
-import {
-	type IDesignIdOrNull,
-	type IDesign,
-} from '#app/models/design/design.server'
+import { type IDesign } from '#app/models/design/design.server'
 import { type IDesignUpdatedResponse } from '#app/models/design/design.update.server'
 import { type ILayer } from '#app/models/layer/layer.server'
 import { LayerUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
@@ -12,12 +9,10 @@ export const layerDesignMoveUpService = async ({
 	userId,
 	id,
 	layerId,
-	updateSelectedDesignId,
 }: {
 	userId: User['id']
 	id: IDesign['id']
 	layerId: ILayer['id']
-	updateSelectedDesignId?: IDesignIdOrNull
 }): Promise<IDesignUpdatedResponse> => {
 	try {
 		const updateSelectedDesignStrategy = new LayerUpdateSelectedDesignStrategy()
@@ -25,7 +20,6 @@ export const layerDesignMoveUpService = async ({
 			userId,
 			id,
 			targetEntityId: layerId,
-			updateSelectedDesignId,
 			updateSelectedDesignStrategy,
 		})
 	} catch (error) {
