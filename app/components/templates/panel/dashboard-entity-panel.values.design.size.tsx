@@ -12,8 +12,11 @@ import {
 	type sizeBasisTypeEnum,
 	sizeFormatIcon,
 	type sizeFormatTypeEnum,
+	sizeFormatIconTooltip,
+	sizeBasisIconTooltip,
 } from '#app/schema/size'
 import { SidebarPanelRowValuesContainer } from '..'
+import { TooltipForContent } from '../tooltip'
 import { PanelEntityIcon } from './dashboard-entity-panel.icons'
 import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
@@ -60,8 +63,13 @@ const EntityFormatIcon = memo(({ entity }: EntityProps) => {
 	const { format } = size
 
 	const symbol = sizeFormatIcon(format as sizeFormatTypeEnum)
+	const tooltipText = sizeFormatIconTooltip(format as sizeFormatTypeEnum)
 
-	return <PanelEntityIcon symbol={symbol} text={`Size format: ${format}`} />
+	return (
+		<TooltipForContent tooltipText={tooltipText}>
+			<PanelEntityIcon symbol={symbol} text={`Size format: ${format}`} />
+		</TooltipForContent>
+	)
 })
 EntityFormatIcon.displayName = 'EntityFormatIcon'
 
@@ -71,8 +79,13 @@ const EntityBasisIcon = memo(({ entity }: EntityProps) => {
 
 	if (format === SizeFormatTypeEnum.PIXEL) return undefined
 	const icon = sizeBasisIcon(basis as sizeBasisTypeEnum) as IconName
+	const tooltipText = sizeBasisIconTooltip(basis as sizeBasisTypeEnum)
 
-	return <PanelEntityIcon icon={icon} text={`Line basis: ${basis}`} />
+	return (
+		<TooltipForContent tooltipText={tooltipText}>
+			<PanelEntityIcon icon={icon} text={`Line basis: ${basis}`} />
+		</TooltipForContent>
+	)
 })
 EntityBasisIcon.displayName = 'EntityBasisIcon'
 

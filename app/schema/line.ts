@@ -50,21 +50,13 @@ export const EditDesignLineFormatSchema = z.object({
 })
 
 export const lineFormatIcon = (format: lineFormatTypeEnum) => {
-	switch (format) {
-		case LineFormatTypeEnum.PIXEL:
-			return 'px'
-		default:
-			return '%'
-	}
+	return format === LineFormatTypeEnum.PERCENT ? '%' : 'px'
 }
 
 export const lineFormatIconTooltip = (format: lineFormatTypeEnum) => {
-	switch (format) {
-		case LineFormatTypeEnum.PIXEL:
-			return 'Line width is a fixed pixel value'
-		default:
-			return 'Line width is a percentage of the basis'
-	}
+	return format === LineFormatTypeEnum.PERCENT
+		? 'Line width is a percentage of the basis'
+		: 'Line width is a fixed pixel value'
 }
 
 export const lineBasisIcon = (basis: lineBasisTypeEnum) => {
