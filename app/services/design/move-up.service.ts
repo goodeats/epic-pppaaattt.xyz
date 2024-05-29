@@ -4,7 +4,6 @@ import {
 	findFirstDesign,
 	updateDesignRemoveNodes,
 	updateDesignNodes,
-	type IDesignIdOrNull,
 	type IDesignEntityId,
 } from '#app/models/design/design.server'
 import { type IDesignUpdatedResponse } from '#app/models/design/design.update.server'
@@ -17,13 +16,11 @@ export const designMoveUpService = async ({
 	userId,
 	id,
 	targetEntityId,
-	updateSelectedDesignId,
 	updateSelectedDesignStrategy,
 }: {
 	userId: User['id']
 	id: IDesign['id']
 	targetEntityId: IDesignEntityId
-	updateSelectedDesignId?: IDesignIdOrNull
 	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
 }): Promise<IDesignUpdatedResponse> => {
 	try {
@@ -70,7 +67,6 @@ export const designMoveUpService = async ({
 		// reorder is more complicated than just going by the current design state
 		await updateSelectedDesignService({
 			targetEntityId,
-			designId: updateSelectedDesignId,
 			type,
 			strategy: updateSelectedDesignStrategy,
 		})

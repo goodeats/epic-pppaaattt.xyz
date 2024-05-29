@@ -3,7 +3,6 @@ import {
 	findFirstDesign,
 	type IDesign,
 	type IDesignEntityId,
-	type IDesignIdOrNull,
 } from '#app/models/design/design.server'
 import {
 	updateDesignVisible,
@@ -18,13 +17,11 @@ export const designToggleVisibleService = async ({
 	userId,
 	id,
 	targetEntityId,
-	updateSelectedDesignId,
 	updateSelectedDesignStrategy,
 }: {
 	userId: User['id']
 	id: IDesign['id']
 	targetEntityId: IDesignEntityId
-	updateSelectedDesignId?: IDesignIdOrNull
 	updateSelectedDesignStrategy: IUpdateSelectedDesignStrategy
 }): Promise<IDesignUpdatedResponse> => {
 	try {
@@ -46,7 +43,6 @@ export const designToggleVisibleService = async ({
 		// visibility is more complicated than just going by the current design state
 		await updateSelectedDesignService({
 			targetEntityId,
-			designId: updateSelectedDesignId,
 			type,
 			strategy: updateSelectedDesignStrategy,
 		})

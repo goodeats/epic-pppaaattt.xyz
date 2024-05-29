@@ -1,7 +1,7 @@
 import { type User } from '@prisma/client'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type IDesignDeletedResponse } from '#app/models/design/design.delete.server'
-import { type IDesignIdOrNull, type IDesign } from '#app/models/design/design.server'
+import { type IDesign } from '#app/models/design/design.server'
 import { ArtworkVersionUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { designDeleteService } from '../../../design/delete.service'
 
@@ -9,12 +9,10 @@ export const artworkVersionDesignDeleteService = async ({
 	userId,
 	id,
 	artworkVersionId,
-	updateSelectedDesignId,
 }: {
 	userId: User['id']
 	id: IDesign['id']
 	artworkVersionId: IArtworkVersion['id']
-	updateSelectedDesignId: IDesignIdOrNull
 }): Promise<IDesignDeletedResponse> => {
 	try {
 		const updateSelectedDesignStrategy =
@@ -23,7 +21,6 @@ export const artworkVersionDesignDeleteService = async ({
 			userId,
 			id,
 			targetEntityId: artworkVersionId,
-			updateSelectedDesignId,
 			updateSelectedDesignStrategy,
 		})
 	} catch (error) {
