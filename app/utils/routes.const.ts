@@ -1,6 +1,3 @@
-import { type ExtractStringValues } from './typescript-helpers'
-
-export type RoutePath = ExtractStringValues<typeof Routes>
 const pathBase = '/resources/api/v1'
 
 export const Routes = {

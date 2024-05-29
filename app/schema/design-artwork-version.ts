@@ -20,24 +20,20 @@ export const ArtworkVersionDesignDataCreateSchema = z.object({
 export const NewArtworkVersionDesignSchema = z.object({
 	artworkVersionId: z.string(),
 	type: z.nativeEnum(DesignTypeEnum),
-	visibleDesignsCount: z.number().optional(),
 })
 
 export const DeleteArtworkVersionDesignSchema = z.object({
 	id: z.string(),
 	artworkVersionId: z.string(),
-	updateSelectedDesignId: z.string().optional(),
 })
 
 export const ToggleVisibleArtworkVersionDesignSchema = z.object({
 	id: z.string(),
 	artworkVersionId: z.string(),
-	updateSelectedDesignId: z.string().optional(),
 })
 
 export const ReorderArtworkVersionDesignSchema = z.object({
 	id: z.string(),
 	artworkVersionId: z.string(),
 	direction: z.enum(['up', 'down']),
-	updateSelectedDesignId: z.string().optional(),
 })
