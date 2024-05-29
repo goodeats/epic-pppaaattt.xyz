@@ -44,7 +44,6 @@ export const designToggleVisibleService = async ({
 
 		// Step 3: update the selected design for its type, if necessary
 		// visibility is more complicated than just going by the current design state
-		// look for selectedDesignToUpdateOnToggleVisible in design utils
 		await updateSelectedDesignService({
 			targetEntityId,
 			designId: updateSelectedDesignId,
