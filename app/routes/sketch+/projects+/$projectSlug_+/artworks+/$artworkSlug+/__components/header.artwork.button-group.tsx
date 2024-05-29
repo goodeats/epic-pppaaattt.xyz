@@ -45,9 +45,9 @@ export const NavActionsButtonGroup = memo(
 					/>
 					<TooltipIconLink
 						to={`/users/${user.username}/artworks/${artwork.slug}`}
-						icon="pencil-1"
+						icon="exit"
 						text="Latest"
-						tooltipText="View the artwork details"
+						tooltipText={`Go to ${artwork.name} page`}
 						buttonVariant="ghost"
 					/>
 				</NavbarButtonGroup>
