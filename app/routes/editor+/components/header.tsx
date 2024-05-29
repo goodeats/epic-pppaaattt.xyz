@@ -8,13 +8,13 @@ import { UserDropdown } from '#app/components/user-dropdown'
 
 export const Header = () => {
 	return (
-		<DashboardHeader id="sketch-dashboard-header">
-			<DashboardTitle id="sketch-dashboard-title">
-				<Link prefetch="intent" to="/sketch">
-					Sketch
+		<DashboardHeader>
+			<DashboardTitle>
+				<Link prefetch="intent" to="/editor">
+					Editor
 				</Link>
 			</DashboardTitle>
-			<DashboardNav id="sketch-dashboard-nav">
+			<DashboardNav>
 				<UserDropdown />
 			</DashboardNav>
 		</DashboardHeader>

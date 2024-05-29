@@ -14,7 +14,6 @@ import { useUser } from '#app/utils/user'
 import { type loader as projectsLoader } from './route'
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	console.log('sketch+ projects index route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
@@ -25,7 +24,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	return json({ projects })
 }
 
-export default function SketchProjectsIndexRoute() {
+export default function EditorProjectsIndexRoute() {
 	const data = useLoaderData<typeof projectsLoader>()
 	console.log('data', data)
 	const { projects } = data
@@ -37,7 +36,7 @@ export default function SketchProjectsIndexRoute() {
 				<DashboardContentHeading1>Choose a project</DashboardContentHeading1>
 				<div className="container">
 					<DashboardContentHeading2>
-						<Link prefetch="intent" to="/sketch/projects">
+						<Link prefetch="intent" to="/editor/projects">
 							Projects
 						</Link>
 					</DashboardContentHeading2>
@@ -46,7 +45,7 @@ export default function SketchProjectsIndexRoute() {
 						type="Project"
 						parent="portfolio"
 						basePathEditor={`/users/${user.username}/projects`}
-						basePathView={'/sketch/projects'}
+						basePathView={'/editor/projects'}
 					/>
 				</div>
 			</div>

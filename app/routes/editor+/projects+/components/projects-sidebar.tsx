@@ -25,10 +25,10 @@ export const ProjectsSidebar = ({
 	}))
 
 	return (
-		<Sidebar id="sketch-sidebar-left">
+		<Sidebar>
 			<NestedEntityNavSidebar
 				items={items}
-				basePath="/sketch/projects"
+				basePath="/editor/projects"
 				headerTitle="Projects"
 			/>
 		</Sidebar>

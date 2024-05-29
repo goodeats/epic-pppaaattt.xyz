@@ -14,7 +14,6 @@ import { requireUserId } from '#app/utils/auth.server'
 import { useUser } from '#app/utils/user'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-	console.log('sketch+ index route')
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
@@ -25,15 +24,15 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	return json({ projects })
 }
 
-export default function SketchIndexRoute() {
+export default function EditorIndexRoute() {
 	const data = useLoaderData<typeof loader>()
 	const user = useUser()
 
 	return (
-		<DashboardBody id="sketch-dashboard-body">
-			<DashboardContent id="sketch-dashboard-content">
+		<DashboardBody>
+			<DashboardContent>
 				<div className="container">
-					<DashboardContentHeading1>Sketch Dashboard</DashboardContentHeading1>
+					<DashboardContentHeading1>Editor</DashboardContentHeading1>
 				</div>
 				<div className="container">
 					<DashboardContentHeading2>

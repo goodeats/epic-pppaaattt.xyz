@@ -15,7 +15,7 @@ import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { ProjectsSidebar } from './components/projects-sidebar'
 
-export const projectsLoaderRoute = 'routes/sketch+/projects+/route'
+export const projectsLoaderRoute = 'routes/editor+/projects+/route'
 export async function loader({ request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
@@ -27,7 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	return json({ projects })
 }
 
-export default function SketchProjectsRoute() {
+export default function EditorProjectsRoute() {
 	const data = useLoaderData<typeof loader>()
 	const { projects } = data
 
@@ -35,9 +35,9 @@ export default function SketchProjectsRoute() {
 	// so that the index file will fill the content and not crash the dashboard ui
 	// want to set up the projects sidebar here at this level
 	return (
-		<DashboardBody id="sketch-dashboard-body">
+		<DashboardBody>
 			<ProjectsSidebar projects={projects} />
-			<DashboardContent id="sketch-dashboard-content">
+			<DashboardContent>
 				<DashboardContentWrapper>
 					<Outlet />
 				</DashboardContentWrapper>
@@ -48,10 +48,10 @@ export default function SketchProjectsRoute() {
 
 export const meta: MetaFunction = () => {
 	return [
-		{ title: 'Projects | Sketch | XYZ' },
+		{ title: 'Projects | Editor | XYZ' },
 		{
 			name: 'description',
-			content: 'Sketch dashboard for XYZ - Projects',
+			content: 'Editor dashboard for XYZ - Projects',
 		},
 	]
 }

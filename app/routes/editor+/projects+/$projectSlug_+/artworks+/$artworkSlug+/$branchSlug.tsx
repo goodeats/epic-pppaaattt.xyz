@@ -5,40 +5,35 @@ import {
 	type MetaFunction,
 } from '@remix-run/node'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
-import { getArtworkWithBranchesAndVersions } from '#app/models/artwork/artwork.get.server'
+import { getArtwork } from '#app/models/artwork/artwork.get.server'
+import { getArtworkBranchWithVersions } from '#app/models/artwork-branch/artwork-branch.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
 import { routeLoaderMetaData } from '#app/utils/matches'
 import { projectLoaderRoute } from '../route'
+import { artworkLoaderRoute } from './route'
 
-// starting the flat routes here in this directory
-// since the artwork will redirect to the branch and version route
-// there could be more added to the parent routes on their pages
-
-// the value of the flat routes appears to be in the IDE
-// where there are numerous nested folders
-// that make it more challenging to know which is the file you're looking for
-
-// super awesome routing vizualizer
-// https://interactive-remix-routing-v2.netlify.app/
-// docs: https://remix.run/docs/en/main/file-conventions/routes
-
-export const artworkLoaderRoute =
-	'routes/sketch+/projects+/$projectSlug_+/artworks+/$artworkSlug+/route'
+export const artworkBranchLoaderRoute =
+	'routes/editor+/projects+/$projectSlug_+/artworks+/$artworkSlug+/$branchSlug'
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
 	const owner = await getUserBasic({ where: { id: userId } })
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
 	// https://sergiodxa.com/tutorials/avoid-waterfalls-of-queries-in-remix-loaders
-	const artwork = await getArtworkWithBranchesAndVersions({
+	const artwork = await getArtwork({
 		where: { slug: params.artworkSlug, ownerId: owner.id },
 	})
 	invariantResponse(artwork, 'Artwork not found', { status: 404 })
 
+	const branch = await getArtworkBranchWithVersions({
+		where: { artworkId: artwork.id, slug: params.branchSlug },
+	})
+	invariantResponse(branch, 'Artwork Branch not found', { status: 404 })
+
 	// ensure that data is loaded from the route
 	// redirect on index.tsx
-	return json({ artwork })
+	return json({ branch })
 }
 
 export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
@@ -47,11 +42,16 @@ export const meta: MetaFunction<typeof loader> = ({ params, matches }) => {
 
 	const artworkData = routeLoaderMetaData(matches, artworkLoaderRoute)
 	const artworkName = artworkData?.artwork.name ?? params.artworkSlug
+
+	const branchData = routeLoaderMetaData(matches, artworkBranchLoaderRoute)
+	const branchName = branchData?.branch.name ?? params.branchSlug
 	return [
-		{ title: `${artworkName} | ${projectName} | Sketch | XYZ` },
+		{
+			title: `${artworkName} | ${branchName} | ${projectName} | Editor | XYZ`,
+		},
 		{
 			name: 'description',
-			content: `Sketch dashboard for artwork project: ${artworkName} (${projectName})`,
+			content: `Editor dashboard for XYZ artwork project: ${artworkName} (${projectName})`,
 		},
 	]
 }
@@ -60,9 +60,9 @@ export function ErrorBoundary() {
 	return (
 		<GeneralErrorBoundary
 			statusHandlers={{
-				404: ({ params }) => (
-					<p>No artwork with the name "{params.artworkSlug}" exists</p>
-				),
+				404: ({ params }) => {
+					return <p>No branch with the name "{params.branchSlug}" exists</p>
+				},
 			}}
 		/>
 	)

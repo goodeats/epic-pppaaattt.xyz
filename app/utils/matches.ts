@@ -6,31 +6,31 @@ import { type loader as rootLoader } from '#app/root.tsx'
 import {
 	type artworkstLoaderRoute,
 	type loader as artworksLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artworks+'
+} from '#app/routes/editor+/projects+/$projectSlug_+/artworks+'
 import {
 	type artworkBranchLoaderRoute,
 	type loader as artworkBranchLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artworks+/$artworkSlug+/$branchSlug'
+} from '#app/routes/editor+/projects+/$projectSlug_+/artworks+/$artworkSlug+/$branchSlug'
 import {
 	type artworkVersionLoaderRoute,
 	type loader as artworkVersionLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artworks+/$artworkSlug+/$branchSlug.$versionSlug'
+} from '#app/routes/editor+/projects+/$projectSlug_+/artworks+/$artworkSlug+/$branchSlug.$versionSlug'
 import {
 	type artworkLoaderRoute,
 	type loader as artworkLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/artworks+/$artworkSlug+/route'
+} from '#app/routes/editor+/projects+/$projectSlug_+/artworks+/$artworkSlug+/route'
 import {
 	type projectLoaderRoute,
 	type loader as projectLoader,
-} from '#app/routes/sketch+/projects+/$projectSlug_+/route'
+} from '#app/routes/editor+/projects+/$projectSlug_+/route'
 import {
 	type projectsLoaderRoute,
 	type loader as projectsLoader,
-} from '#app/routes/sketch+/projects+/route'
+} from '#app/routes/editor+/projects+/route'
 
 // ensure matches route loader data is available for meta
 // https://github.com/remix-run/remix/issues/7347 -- so good
-// eventually these route loaders should reference they are in the sketch+ route
+// eventually these route loaders should reference they are in the editor+ route
 interface RouteLoaders {
 	root: typeof rootLoader
 	[projectsLoaderRoute]: typeof projectsLoader

@@ -54,10 +54,10 @@ export const Footer = () => {
 					Edit
 				</FooterLinkButton>
 				<FooterLinkButton
-					to={`/sketch/projects/${artwork.project.slug}/artworks/${artwork.slug}`}
+					to={`/editor/projects/${artwork.project.slug}/artworks/${artwork.slug}`}
 					icon="magic-wand"
 				>
-					Sketch
+					Editor
 				</FooterLinkButton>
 			</FooterActions>
 		</FooterContainer>
