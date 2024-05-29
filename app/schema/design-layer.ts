@@ -20,7 +20,6 @@ export const LayerDesignDataCreateSchema = z.object({
 export const NewLayerDesignSchema = z.object({
 	layerId: z.string(),
 	type: z.nativeEnum(DesignTypeEnum),
-	visibleDesignsCount: z.number().optional(),
 })
 
 export const DeleteLayerDesignSchema = z.object({

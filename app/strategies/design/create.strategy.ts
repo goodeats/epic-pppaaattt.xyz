@@ -12,6 +12,7 @@ import {
 } from '#app/models/design/design.server'
 import { type ILayer } from '#app/models/layer/layer.server'
 import { type designTypeEnum } from '#app/schema/design'
+import { ArtworkVersionDesignDataCreateSchema } from '#app/schema/design-artwork-version'
 import { LayerDesignDataCreateSchema } from '#app/schema/design-layer'
 import { prisma } from '#app/utils/db.server'
 
@@ -106,12 +107,13 @@ export class ArtworkVersionCreateDesignStrategy
 		type: designTypeEnum
 		designOverrides: IDesignCreateOverrides
 	}): Promise<IDesign | null> {
-		const data = {
-			ownerId: userId,
+		const data = ArtworkVersionDesignDataCreateSchema.parse({
 			type,
+			ownerId: userId,
 			artworkVersionId: targetEntityId,
 			...designOverrides,
-		}
+		})
+
 		return await createArtworkVersionDesign({
 			data,
 		})

@@ -20,7 +20,6 @@ export const ArtworkVersionDesignDataCreateSchema = z.object({
 export const NewArtworkVersionDesignSchema = z.object({
 	artworkVersionId: z.string(),
 	type: z.nativeEnum(DesignTypeEnum),
-	visibleDesignsCount: z.number().optional(),
 })
 
 export const DeleteArtworkVersionDesignSchema = z.object({
