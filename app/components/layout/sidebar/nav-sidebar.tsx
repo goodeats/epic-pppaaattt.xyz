@@ -32,7 +32,7 @@ const NavSidebarList = createContainerComponent({
 // - padding on x-axis
 const NavSidebarListItem = createContainerComponent({
 	defaultTagName: 'li',
-	defaultClassName: 'flex flex-col w-full items-center px-2 mb-1',
+	defaultClassName: 'flex flex-col w-full items-center space-y-1',
 	displayName: 'NavSidebarListItem',
 })
 
@@ -51,7 +51,7 @@ const NavSidebarListItemContainer = createContainerComponent({
 const NavSidebarListItemLinkContainer = createContainerComponent({
 	defaultTagName: 'div',
 	defaultClassName:
-		'flex items-center flex-1 h-8 w-full self-center truncate pl-2',
+		'flex items-center flex-1 h-8 w-full self-center truncate px-2',
 	displayName: 'NavSidebarListItemLinkContainer',
 })
 

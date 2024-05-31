@@ -1,6 +1,6 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
-import { Link, useLoaderData } from '@remix-run/react'
+import { Link, useMatches } from '@remix-run/react'
 import {
 	DashboardContentContainer,
 	DashboardContentHeading1,
@@ -10,8 +10,9 @@ import { DashboardEntityCards } from '#app/components/templates'
 import { getProjectsWithArtworks } from '#app/models/project/project.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { requireUserId } from '#app/utils/auth.server'
+import { useRouteLoaderMatchData } from '#app/utils/matches'
 import { useUser } from '#app/utils/user'
-import { type loader as projectsLoader } from './route'
+import { editorLoaderRoute } from '../route'
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
@@ -25,9 +26,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function EditorProjectsIndexRoute() {
-	const data = useLoaderData<typeof projectsLoader>()
-	console.log('data', data)
-	const { projects } = data
+	const matches = useMatches()
+	const { projects } = useRouteLoaderMatchData(matches, editorLoaderRoute)
 	const user = useUser()
 
 	return (

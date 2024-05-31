@@ -30,14 +30,15 @@ const DashboardTitle = createContainerComponent({
 // - margin left auto to push content to the right in flex layout
 const DashboardNav = createContainerComponent({
 	defaultTagName: 'nav',
-	defaultClassName: 'ml-auto flex w-full items-center space-x-4 sm:justify-end',
+	defaultClassName:
+		'ml-auto flex w-full items-center lg:space-x-4 sm:justify-end',
 	displayName: 'DashboardNav',
 })
 
 // - <main> to include sidebars since they are important for the layout and ux
 const DashboardBody = createContainerComponent({
 	defaultTagName: 'main',
-	defaultClassName: 'relative flex flex-1 bg-accent',
+	defaultClassName: 'relative flex flex-1',
 	displayName: 'DashboardBody',
 })
 

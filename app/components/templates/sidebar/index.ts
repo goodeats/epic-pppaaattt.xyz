@@ -1,4 +1,6 @@
 export * from './nested-entity-nav-sidebar'
+export * from './sidebar-collapsible'
+export * from './sidebar-mobile'
 export * from './sidebar-tabs'
 export * from './sidebar-panel-forms'
 export * from './sidebar-panel-popover'

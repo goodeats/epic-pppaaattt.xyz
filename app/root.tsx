@@ -15,7 +15,6 @@ import {
 	Scripts,
 	ScrollRestoration,
 	useLoaderData,
-	useMatches,
 	useRouteLoaderData,
 } from '@remix-run/react'
 import { withSentry } from '@sentry/remix'
@@ -23,7 +22,7 @@ import { AuthenticityTokenProvider } from 'remix-utils/csrf/react'
 import { HoneypotProvider } from 'remix-utils/honeypot/react'
 import { GeneralErrorBoundary } from './components/error-boundary.tsx'
 import { PageFooter } from './components/layout/page-footer.tsx'
-import { PageHeader, PageHeaderDev } from './components/layout/page-header.tsx'
+import { PageHeader } from './components/layout/page-header.tsx'
 import { EpicProgress } from './components/progress-bar.tsx'
 import { useToast } from './components/toaster.tsx'
 import { href as iconsHref } from './components/ui/icon.tsx'
@@ -216,27 +215,15 @@ function Document({
 }
 
 const AppBody = () => {
-	const data = useLoaderData<typeof loader>()
-	const env = data.ENV
-	const isProduction = env.MODE === 'production'
-	const matches = useMatches()
-	const isEditorDashboard = matches.some(m => m.id.includes('editor+'))
-
 	return (
 		<div className="flex h-screen flex-col justify-between">
-			{!isEditorDashboard ? (
-				isProduction ? (
-					<PageHeader />
-				) : (
-					<PageHeaderDev />
-				)
-			) : null}
+			<PageHeader />
 
 			<div className="flex-1">
 				<Outlet />
 			</div>
 
-			{!isEditorDashboard ? <PageFooter /> : null}
+			<PageFooter />
 		</div>
 	)
 }

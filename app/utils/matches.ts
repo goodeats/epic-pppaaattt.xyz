@@ -27,12 +27,17 @@ import {
 	type projectsLoaderRoute,
 	type loader as projectsLoader,
 } from '#app/routes/editor+/projects+/route'
+import {
+	type editorLoaderRoute,
+	type loader as editorLoader,
+} from '#app/routes/editor+/route'
 
 // ensure matches route loader data is available for meta
 // https://github.com/remix-run/remix/issues/7347 -- so good
 // eventually these route loaders should reference they are in the editor+ route
 interface RouteLoaders {
 	root: typeof rootLoader
+	[editorLoaderRoute]: typeof editorLoader
 	[projectsLoaderRoute]: typeof projectsLoader
 	[projectLoaderRoute]: typeof projectLoader
 	[artworkstLoaderRoute]: typeof artworksLoader
