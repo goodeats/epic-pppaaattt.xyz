@@ -5,6 +5,7 @@ import {
 	type MetaFunction,
 } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { useHydrated } from 'remix-utils/use-hydrated'
 import { GeneralErrorBoundary } from '#app/components/error-boundary'
 import {
 	DashboardContent,
@@ -19,6 +20,7 @@ import { getUserBasic } from '#app/models/user/user.get.server'
 import { artworkVersionGeneratorBuildService } from '#app/services/artwork/version/generator/build.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { routeLoaderMetaData } from '#app/utils/matches'
+import { logTailwindBreakpoints } from '#app/utils/tailwind-helpers'
 import { projectLoaderRoute } from '../route'
 import { artworkBranchLoaderRoute } from './$branchSlug'
 import { CanvasContent } from './__components/canvas-content'
@@ -64,8 +66,9 @@ export default function EditorProjectArtworkBranchVersionRoute() {
 	const data = useLoaderData<typeof loader>()
 	const { version, selectedLayer, generator } = data
 
-	// had to consider sidebar from project route level
-	// the component names might need re-thinking, but works
+	let isHydrated = useHydrated()
+	if (isHydrated) logTailwindBreakpoints()
+
 	return (
 		<FlexColumn className="flex-1 gap-3 rounded-md bg-accent p-4">
 			<ArtworkHeader />

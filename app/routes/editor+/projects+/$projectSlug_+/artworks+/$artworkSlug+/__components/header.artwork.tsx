@@ -1,6 +1,7 @@
 import { useMatches } from '@remix-run/react'
 import { useCallback } from 'react'
-import { FlexRow } from '#app/components/layout'
+import { DashboardNav, FlexRow } from '#app/components/layout'
+import { SidebarMobile } from '#app/components/templates'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
 import { artworkBranchLoaderRoute } from '../$branchSlug'
 import { artworkVersionLoaderRoute } from '../$branchSlug.$versionSlug'
@@ -48,8 +49,18 @@ export const ArtworkHeader = () => {
 
 	return (
 		<FlexRow className="justify-between">
-			{navComboboxes()}
-			{navActionsButtonGroup()}
+			<DashboardNav className="sm:justify-start">
+				<div className="hidden md:flex">{navComboboxes()}</div>
+				<div className="flex md:hidden">
+					<SidebarMobile>
+						<div>
+							<h1>Editor Options:</h1>
+							{navComboboxes()}
+						</div>
+					</SidebarMobile>
+				</div>
+			</DashboardNav>
+			<DashboardNav>{navActionsButtonGroup()}</DashboardNav>
 		</FlexRow>
 	)
 }

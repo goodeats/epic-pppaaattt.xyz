@@ -40,6 +40,7 @@ export type IconName =
 	| 'file'
 	| 'gear'
 	| 'github-logo'
+	| 'hamburger-menu'
 	| 'height'
 	| 'info-circled'
 	| 'instagram-logo'

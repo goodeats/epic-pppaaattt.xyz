@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { DashboardNav, NavbarButtonGroup } from '#app/components/layout'
+import { NavbarButtonGroup } from '#app/components/layout'
 import { TooltipIconLink } from '#app/components/templates/navbar'
 import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { type IArtworkBranch } from '#app/models/artwork-branch/artwork-branch.server'
@@ -23,35 +23,33 @@ export const NavActionsButtonGroup = memo(
 	}) => {
 		const user = useUser()
 
+		// TODO: make these have the same look as the form fetcher icon */}
 		return (
-			<DashboardNav>
-				{/* TODO: make these have the same look as the form fetcher icon */}
-				<NavbarButtonGroup>
-					{/* <span>refresh</span> */}
-					{/* <span>star</span> */}
-					{/* <span>info a, ab, abv</span> */}
-					{/* <span>fork ab</span> */}
-					{/* <span>merge ab</span> */}
-					<ArtworkVersionToggleStarred version={version} />
-					<ArtworkBranchCreate
-						branchId={branch.id}
-						artworkId={artwork.id}
-						versionId={version.id}
-					/>
-					<ArtworkVersionCreate
-						branchId={branch.id}
-						versionId={version.id}
-						onOlderVersion={!onLatestVersion}
-					/>
-					<TooltipIconLink
-						to={`/users/${user.username}/artworks/${artwork.slug}`}
-						icon="exit"
-						text="Latest"
-						tooltipText={`Go to ${artwork.name} page`}
-						buttonVariant="ghost"
-					/>
-				</NavbarButtonGroup>
-			</DashboardNav>
+			<NavbarButtonGroup>
+				{/* <span>refresh</span> */}
+				{/* <span>star</span> */}
+				{/* <span>info a, ab, abv</span> */}
+				{/* <span>fork ab</span> */}
+				{/* <span>merge ab</span> */}
+				<ArtworkVersionToggleStarred version={version} />
+				<ArtworkBranchCreate
+					branchId={branch.id}
+					artworkId={artwork.id}
+					versionId={version.id}
+				/>
+				<ArtworkVersionCreate
+					branchId={branch.id}
+					versionId={version.id}
+					onOlderVersion={!onLatestVersion}
+				/>
+				<TooltipIconLink
+					to={`/users/${user.username}/artworks/${artwork.slug}`}
+					icon="exit"
+					text="Latest"
+					tooltipText={`Go to ${artwork.name} page`}
+					buttonVariant="ghost"
+				/>
+			</NavbarButtonGroup>
 		)
 	},
 )

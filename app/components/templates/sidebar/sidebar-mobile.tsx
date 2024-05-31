@@ -1,15 +1,18 @@
 import { Button } from '#app/components/ui/button'
+import { Icon } from '#app/components/ui/icon'
 import { Sheet, SheetContent, SheetTrigger } from '#app/components/ui/sheet'
 
-export const SidebarMobile = () => {
+export const SidebarMobile = ({ children }: { children: JSX.Element }) => {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Button variant="outline">Open</Button>
+				<Button variant="outline">
+					<Icon name="hamburger-menu">
+						<span className="sr-only">Open</span>
+					</Icon>
+				</Button>
 			</SheetTrigger>
-			<SheetContent>
-				<div>mobile sidebar</div>
-			</SheetContent>
+			<SheetContent side="left">{children}</SheetContent>
 		</Sheet>
 	)
 }
