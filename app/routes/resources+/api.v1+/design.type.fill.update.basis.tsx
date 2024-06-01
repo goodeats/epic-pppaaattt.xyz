@@ -10,6 +10,7 @@ import { useRef } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
+import { TooltipHydrated } from '#app/components/templates/tooltip'
 import {
 	Select,
 	SelectContent,
@@ -124,6 +125,7 @@ export const DesignTypeFillBasis = ({
 			action={route}
 			onChange={e => handleChangeSubmit(e.currentTarget)}
 			{...form.props}
+			className="flex-1"
 		>
 			<AuthenticityTokenInput />
 
@@ -135,28 +137,28 @@ export const DesignTypeFillBasis = ({
 				value={designId}
 			/>
 
-			<div className="flex w-full items-center space-x-2">
-				<Select disabled={isPending} {...conform.input(fields.basis)}>
-					<SelectTrigger>
+			<Select disabled={isPending} {...conform.input(fields.basis)}>
+				<TooltipHydrated tooltipText="Fill basis" isHydrated={isHydrated}>
+					<SelectTrigger className="flex h-8 w-full text-left">
 						<SelectValue placeholder="Select a basis" />
 					</SelectTrigger>
-					<SelectContent>
-						{options.map((option, index) => {
-							const [value, label] = Object.entries(option)[0]
-							return (
-								<SelectItem key={index} value={value}>
-									{label}
-								</SelectItem>
-							)
-						})}
-					</SelectContent>
-				</Select>
+				</TooltipHydrated>
+				<SelectContent>
+					{options.map((option, index) => {
+						const [value, label] = Object.entries(option)[0]
+						return (
+							<SelectItem key={index} value={value}>
+								{label}
+							</SelectItem>
+						)
+					})}
+				</SelectContent>
+			</Select>
 
-				{/* form onChange click this to trigger useForm */}
-				<button type="submit" ref={submitRef} style={{ display: 'none' }}>
-					Submit
-				</button>
-			</div>
+			{/* form onChange click this to trigger useForm */}
+			<button type="submit" ref={submitRef} style={{ display: 'none' }}>
+				Submit
+			</button>
 		</fetcher.Form>
 	)
 }
