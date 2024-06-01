@@ -101,9 +101,11 @@ class CloneLineDesignStrategy implements ICloneDesignTypeStrategy {
 		design: IDesignWithLine
 	}): IDesignTypeCreateOverrides {
 		const { line } = design
-		const { width } = line
+		const { width, basis, format } = line
 		return {
 			width,
+			basis,
+			format,
 		}
 	}
 }
