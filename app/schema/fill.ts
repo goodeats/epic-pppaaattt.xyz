@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { type ObjectValues } from '#app/utils/typescript-helpers'
 import { HexcodeSchema } from './colors'
 
 export const FillBasisTypeEnum = {
@@ -16,7 +17,6 @@ export const FillStyleTypeEnum = {
 	NONE: 'none', // no fill
 	// add more styles here, like gradient, pattern, etc.
 } as const
-type ObjectValues<T> = T[keyof T]
 export type fillBasisTypeEnum = ObjectValues<typeof FillBasisTypeEnum>
 export type fillStyleTypeEnum = ObjectValues<typeof FillStyleTypeEnum>
 

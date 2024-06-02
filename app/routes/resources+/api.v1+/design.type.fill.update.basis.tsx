@@ -1,23 +1,12 @@
-import { conform, useForm } from '@conform-to/react'
-import { getFieldsetConstraint, parse } from '@conform-to/zod'
 import {
 	json,
 	type ActionFunctionArgs,
 	type LoaderFunctionArgs,
 } from '@remix-run/node'
 import { useFetcher } from '@remix-run/react'
-import { useRef } from 'react'
-import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
-import { TooltipHydrated } from '#app/components/templates/tooltip'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '#app/components/ui/select'
+import { FetcherSelect } from '#app/components/templates/form/fetcher-select'
 import { type IDesignWithFill } from '#app/models/design/design.server'
 import {
 	updateDesignTypeFillBasis,
@@ -27,15 +16,15 @@ import { EntityParentIdType } from '#app/schema/entity'
 import { EditDesignFillBasisSchema, FillBasisTypeEnum } from '#app/schema/fill'
 import { validateNoJS } from '#app/schema/form-data'
 import { requireUserId } from '#app/utils/auth.server'
-import { useDebounce, useIsPending } from '#app/utils/misc'
+import { schemaEnumToSelectOptions } from '#app/utils/forms'
 import { Routes } from '#app/utils/routes.const'
-import { transformEntityEnumValueForSelect } from '#app/utils/string-formatting'
 
 // https://www.epicweb.dev/full-stack-components
 
 const route = Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE.BASIS
 const schema = EditDesignFillBasisSchema
 
+// auth GET request to endpoint
 export async function loader({ request }: LoaderFunctionArgs) {
 	await requireUserId(request)
 	return json({})
@@ -87,78 +76,32 @@ export const DesignTypeFillBasis = ({
 	const formId = `design-type-fill-update-basis-${designId}-${fillId}${
 		formLocation ? `-${formLocation}` : ''
 	}`
-	const options = Object.values(FillBasisTypeEnum).map(typeEnum => ({
-		[typeEnum]: transformEntityEnumValueForSelect(typeEnum),
-	}))
-
-	const fetcher = useFetcher<typeof action>()
-	const lastSubmission = fetcher.data?.submission
-	const isPending = useIsPending()
+	const options = schemaEnumToSelectOptions(FillBasisTypeEnum)
+	const defaultValue = { basis: design.fill.basis || '' }
 	let isHydrated = useHydrated()
-	const [form, fields] = useForm({
-		id: formId,
-		constraint: getFieldsetConstraint(schema),
-		lastSubmission,
-		onValidate: ({ formData }) => {
-			return parse(formData, { schema: schema })
-		},
-		onSubmit: async (event, { formData }) => {
-			event.preventDefault()
-			fetcher.submit(formData, {
-				method: 'POST',
-				action: route,
-			})
-		},
-		defaultValue: {
-			basis: design.fill.basis || '',
-		},
-	})
-	const submitRef = useRef<HTMLButtonElement>(null)
-
-	const handleChangeSubmit = useDebounce((f: HTMLFormElement) => {
-		submitRef.current?.click()
-	}, 400)
+	const fetcher = useFetcher<typeof action>()
 
 	return (
-		<fetcher.Form
-			method="POST"
-			action={route}
-			onChange={e => handleChangeSubmit(e.currentTarget)}
-			{...form.props}
-			className="flex-1"
+		<FetcherSelect
+			fetcher={fetcher}
+			isHydrated={isHydrated}
+			schema={schema}
+			route={route}
+			formId={formId}
+			defaultValue={defaultValue}
+			options={options}
+			tooltipText="Fill basis"
+			placeholder="Select a basis"
+			selectName="basis"
 		>
-			<AuthenticityTokenInput />
-
-			<input type="hidden" name="no-js" value={String(!isHydrated)} />
-			<input type="hidden" name="id" value={fillId} />
-			<input
-				type="hidden"
-				name={EntityParentIdType.DESIGN_ID}
-				value={designId}
-			/>
-
-			<Select disabled={isPending} {...conform.input(fields.basis)}>
-				<TooltipHydrated tooltipText="Fill basis" isHydrated={isHydrated}>
-					<SelectTrigger className="flex h-8 w-full text-left">
-						<SelectValue placeholder="Select a basis" />
-					</SelectTrigger>
-				</TooltipHydrated>
-				<SelectContent>
-					{options.map((option, index) => {
-						const [value, label] = Object.entries(option)[0]
-						return (
-							<SelectItem key={index} value={value}>
-								{label}
-							</SelectItem>
-						)
-					})}
-				</SelectContent>
-			</Select>
-
-			{/* form onChange click this to trigger useForm */}
-			<button type="submit" ref={submitRef} style={{ display: 'none' }}>
-				Submit
-			</button>
-		</fetcher.Form>
+			<div className="hidden">
+				<input type="hidden" name="id" value={fillId} />
+				<input
+					type="hidden"
+					name={EntityParentIdType.DESIGN_ID}
+					value={designId}
+				/>
+			</div>
+		</FetcherSelect>
 	)
 }
