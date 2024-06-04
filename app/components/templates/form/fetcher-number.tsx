@@ -4,20 +4,12 @@ import { type FetcherWithComponents } from '@remix-run/react'
 import { useRef } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { type z } from 'zod'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '#app/components/ui/select'
+import { Input } from '#app/components/ui/input'
 import { useOptimisticValue } from '#app/utils/forms'
-import { useDebounce, useIsPending } from '#app/utils/misc'
+import { cn, useDebounce, useIsPending } from '#app/utils/misc'
 import { TooltipHydrated } from '../tooltip'
 
-type Options = { [key: string]: string }[]
-
-export const FetcherSelect = ({
+export const FetcherNumber = ({
 	fetcher,
 	fetcherKey,
 	route,
@@ -25,7 +17,6 @@ export const FetcherSelect = ({
 	formId,
 	selectName,
 	selectValue,
-	options,
 	placeholder,
 	tooltipText,
 	isHydrated,
@@ -37,8 +28,7 @@ export const FetcherSelect = ({
 	schema: z.ZodSchema<any>
 	formId: string
 	selectName: string
-	selectValue: string
-	options: Options
+	selectValue: number
 	placeholder: string
 	tooltipText: string
 	isHydrated: boolean
@@ -87,23 +77,22 @@ export const FetcherSelect = ({
 			{/* hidden field values */}
 			{children}
 
-			<Select disabled={isPending} {...conform.input(fields[selectName])}>
-				<TooltipHydrated tooltipText={tooltipText} isHydrated={isHydrated}>
-					<SelectTrigger className="flex h-8 flex-1 text-left">
-						<SelectValue placeholder={placeholder} />
-					</SelectTrigger>
-				</TooltipHydrated>
-				<SelectContent>
-					{options.map(option => {
-						const [value, label] = Object.entries(option)[0]
-						return (
-							<SelectItem key={label} value={value}>
-								{label as string}
-							</SelectItem>
-						)
+			<TooltipHydrated tooltipText={tooltipText} isHydrated={isHydrated}>
+				<Input
+					type="number"
+					className={cn(
+						'flex h-8',
+						// https://www.hyperui.dev/blog/remove-number-input-spinners-with-tailwindcss
+						'[-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none',
+					)}
+					autoComplete="off"
+					placeholder={placeholder}
+					disabled={isPending}
+					{...conform.input(fields[selectName], {
+						ariaAttributes: true,
 					})}
-				</SelectContent>
-			</Select>
+				/>
+			</TooltipHydrated>
 
 			<button type="submit" ref={submitRef} className="hidden">
 				Submit

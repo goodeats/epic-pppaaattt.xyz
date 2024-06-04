@@ -1,3 +1,6 @@
+import { parse } from '@conform-to/zod'
+import { useFetcher } from '@remix-run/react'
+import { type z } from 'zod'
 import {
 	type FillStyleTypeEnum,
 	type FillBasisTypeEnum,
@@ -36,4 +39,24 @@ export const schemaEnumToSelectOptions = (enumSchema: EnumSchema) => {
 	return Object.values(enumSchema).map(optionEnum => ({
 		[optionEnum]: transformEntityEnumValueForSelect(optionEnum),
 	}))
+}
+
+export const useOptimisticValue = (
+	fetcherKey: string,
+	schema: z.ZodSchema<any>,
+	selectName: string,
+) => {
+	const fetcher = useFetcher({ key: fetcherKey })
+	const { formData } = fetcher
+
+	if (fetcher && formData) {
+		const submission = schema.safeParse(formData)
+
+		if (submission.success) {
+			return submission.data[selectName]
+		} else {
+			const parsed = parse(formData, { schema })
+			return parsed.value[selectName]
+		}
+	}
 }
