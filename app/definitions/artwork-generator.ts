@@ -1,3 +1,5 @@
+import { type IArtwork } from '#app/models/artwork/artwork.server'
+import { type IArtworkBranch } from '#app/models/artwork-branch/artwork-branch.server'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type IFill } from '#app/models/design-type/fill/fill.server'
 import { type ILayout } from '#app/models/design-type/layout/layout.server'
@@ -8,6 +10,8 @@ import { type ISize } from '#app/models/design-type/size/size.server'
 import { type IStroke } from '#app/models/design-type/stroke/stroke.server'
 import { type ITemplate } from '#app/models/design-type/template/template.server'
 import { type ILayer } from '#app/models/layer/layer.server'
+import { type IProject } from '#app/models/project/project.server'
+import { type IUser } from '#app/models/user/user.server'
 
 // object sent to the client
 // generator has final building blocks for the generation(s)
@@ -21,8 +25,31 @@ export interface IArtworkVersionGenerator {
 	}
 	layers: ILayerGenerator[]
 	watermark?: IGeneratorWatermark | null
+	metadata?: IArtworkVersionGeneratorMetadata
 	success: boolean
 	message: string
+}
+
+export interface IArtworkVersionGeneratorMetadata {
+	versionId: IArtworkVersion['id']
+	versionName: IArtworkVersion['name']
+	versionSlug: IArtworkVersion['slug']
+	versionDescription: IArtworkVersion['description']
+	branchId: IArtworkBranch['id']
+	branchName: IArtworkBranch['name']
+	branchSlug: IArtworkBranch['slug']
+	branchDescription: IArtworkBranch['description']
+	artworkId: IArtwork['id']
+	artworkName: IArtwork['name']
+	artworkSlug: IArtwork['slug']
+	artworkDescription: IArtwork['description']
+	projectId: IArtwork['projectId']
+	projectName: IProject['name']
+	projectSlug: IProject['slug']
+	projectDescription: IProject['description']
+	ownerId: IUser['id']
+	ownerName: IUser['name']
+	ownerUsername: IUser['username']
 }
 
 // layer can override or default to artwork version design types
