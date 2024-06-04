@@ -16,6 +16,7 @@ export const Routes = {
 						PUBLISHED: `${pathBase}/artwork-version/update/published`,
 						STARRED: `${pathBase}/artwork-version/update/starred`,
 						WATERMARK: `${pathBase}/artwork-version/update/watermark`,
+						WATERMARK_COLOR: `${pathBase}/artwork-version/update/watermark-color`,
 					},
 					DESIGN: {
 						CREATE: `${pathBase}/artwork-version/design/create`,

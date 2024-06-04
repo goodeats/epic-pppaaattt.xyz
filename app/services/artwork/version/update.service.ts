@@ -5,6 +5,7 @@ import {
 	updateArtworkVersionPublished,
 	updateArtworkVersionStarred,
 	updateArtworkVersionWatermark,
+	updateArtworkVersionWatermarkColor,
 	updateArtworkVersionWidth,
 } from '#app/models/artwork-version/artwork-version.update.server'
 
@@ -107,6 +108,25 @@ export async function updateArtworkVersionWatermarkService({
 	try {
 		const updatedArtworkVersion = await updateArtworkVersionWatermark({
 			id,
+		})
+		return { success: true, artworkVersion: updatedArtworkVersion }
+	} catch (error) {
+		console.error(error)
+		return { success: false }
+	}
+}
+
+export async function updateArtworkVersionWatermarkColorService({
+	id,
+	watermarkColor,
+}: {
+	id: IArtworkVersion['id']
+	watermarkColor: string
+}) {
+	try {
+		const updatedArtworkVersion = await updateArtworkVersionWatermarkColor({
+			id,
+			watermarkColor,
 		})
 		return { success: true, artworkVersion: updatedArtworkVersion }
 	} catch (error) {

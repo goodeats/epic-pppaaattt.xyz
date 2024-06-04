@@ -7,6 +7,7 @@ import {
 	ArtworkVersionStarredSchema,
 	ArtworkVersionPublishedSchema,
 	ArtworkVersionWatermarkSchema,
+	ArtworkVersionWatermarkColorSchema,
 } from '#app/schema/artwork-version'
 import { ValidateArtworkVersionSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
@@ -82,6 +83,15 @@ export async function validateArtworkVersionWatermarkSubmission(
 	return validateUpdateSubmission({
 		...args,
 		schema: ArtworkVersionWatermarkSchema,
+	})
+}
+
+export async function validateArtworkVersionWatermarkColorSubmission(
+	args: IntentActionArgs,
+) {
+	return validateUpdateSubmission({
+		...args,
+		schema: ArtworkVersionWatermarkColorSchema,
 	})
 }
 
@@ -230,6 +240,33 @@ export const updateArtworkVersionWatermark = async ({
 
 	try {
 		artworkVersion.watermark = !artworkVersion.watermark
+		artworkVersion.updatedAt = new Date()
+		await artworkVersion.save()
+
+		return { success: true }
+	} catch (error) {
+		// consider how to handle this error where this is called
+		console.error(error)
+		return { success: false }
+	}
+}
+
+export const updateArtworkVersionWatermarkColor = async ({
+	id,
+	watermarkColor,
+}: {
+	id: IArtworkVersion['id']
+	watermarkColor: string
+}) => {
+	const artworkVersion = await getArtworkVersionInstance({ id })
+	if (!artworkVersion) return { success: false }
+
+	try {
+		const data = ArtworkVersionWatermarkColorSchema.parse({
+			id,
+			watermarkColor,
+		})
+		artworkVersion.watermarkColor = data.watermarkColor
 		artworkVersion.updatedAt = new Date()
 		await artworkVersion.save()
 

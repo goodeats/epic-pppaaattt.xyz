@@ -523,6 +523,7 @@ model ArtworkVersion {
   starred   Boolean @default(false)
   published Boolean @default(false)
   watermark Boolean @default(true)
+  watermarkColor String @default("000000")
 
   // settings
   // 9:16 aspect ratio (vertical)

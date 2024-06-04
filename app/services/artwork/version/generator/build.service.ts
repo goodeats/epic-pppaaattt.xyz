@@ -23,7 +23,6 @@ import {
 	type ILayer,
 } from '#app/models/layer/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
-import { colorRandomHex } from '#app/utils/colors'
 import { prisma } from '#app/utils/db.server'
 import {
 	filterSelectedDesignTypes,
@@ -354,6 +353,6 @@ const buildGeneratorWatermark = async ({
 
 	return {
 		text,
-		color: colorRandomHex(),
+		color: version.watermarkColor,
 	}
 }
