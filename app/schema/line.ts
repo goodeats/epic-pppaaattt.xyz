@@ -24,6 +24,8 @@ const LineWidthSchema = z.number().positive()
 export const LineDataSchema = z.object({
 	designId: z.string(),
 	width: LineWidthSchema.optional(),
+	basis: LineBasisSchema.optional(),
+	format: LineFormatSchema.optional(),
 })
 
 export type DesignLineUpdateSchemaType =

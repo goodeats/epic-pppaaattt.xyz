@@ -6,17 +6,17 @@ import {
 import { useFetcher } from '@remix-run/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
-import { FetcherNumber } from '#app/components/templates/form/fetcher-number'
+import { FetcherHex } from '#app/components/templates/form/fetcher-hex'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
-import { validateArtworkVersionWidthSubmission } from '#app/models/artwork-version/artwork-version.update.server'
-import { ArtworkVersionWidthSchema } from '#app/schema/artwork-version'
+import { validateArtworkVersionWatermarkColorSubmission } from '#app/models/artwork-version/artwork-version.update.server'
+import { ArtworkVersionWatermarkColorSchema } from '#app/schema/artwork-version'
 import { validateNoJS } from '#app/schema/form-data'
-import { updateArtworkVersionWidthService } from '#app/services/artwork/version/update.service'
+import { updateArtworkVersionWatermarkColorService } from '#app/services/artwork/version/update.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { Routes } from '#app/utils/routes.const'
 
-const route = Routes.RESOURCES.API.V1.ARTWORK_VERSION.UPDATE.WIDTH
-const schema = ArtworkVersionWidthSchema
+const route = Routes.RESOURCES.API.V1.ARTWORK_VERSION.UPDATE.WATERMARK_COLOR
+const schema = ArtworkVersionWatermarkColorSchema
 
 // auth GET request to endpoint
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -29,13 +29,14 @@ export async function action({ request }: ActionFunctionArgs) {
 	const formData = await request.formData()
 	const noJS = validateNoJS({ formData })
 
-	const { status, submission } = await validateArtworkVersionWidthSubmission({
-		userId,
-		formData,
-	})
+	const { status, submission } =
+		await validateArtworkVersionWatermarkColorSubmission({
+			userId,
+			formData,
+		})
 	let updateSucess = false
 	if (status === 'success') {
-		const { success } = await updateArtworkVersionWidthService({
+		const { success } = await updateArtworkVersionWatermarkColorService({
 			...submission.value,
 		})
 		updateSucess = success
@@ -53,13 +54,13 @@ export async function action({ request }: ActionFunctionArgs) {
 	)
 }
 
-export const ArtworkVersionWidth = ({
+export const ArtworkVersionWatermarkColor = ({
 	version,
 }: {
 	version: IArtworkVersion
 }) => {
 	const versionId = version.id
-	const field = 'width'
+	const field = 'watermarkColor'
 	const fetcherKey = `artwork-version-update-${field}-${versionId}`
 	const formId = `${fetcherKey}`
 	const value = version[field]
@@ -70,7 +71,7 @@ export const ArtworkVersionWidth = ({
 	})
 
 	return (
-		<FetcherNumber
+		<FetcherHex
 			fetcher={fetcher}
 			fetcherKey={fetcherKey}
 			route={route}
@@ -78,14 +79,13 @@ export const ArtworkVersionWidth = ({
 			formId={formId}
 			fieldName={field}
 			fieldValue={value}
-			tooltipText={`Artwork ${field}`}
+			tooltipText={`Artwork watermark color`}
 			isHydrated={isHydrated}
-			placeholder={`Set ${field}`}
-			icon="width"
+			placeholder={`Set watermark color`}
 		>
 			<div className="hidden">
 				<input type="hidden" name="id" value={versionId} />
 			</div>
-		</FetcherNumber>
+		</FetcherHex>
 	)
 }

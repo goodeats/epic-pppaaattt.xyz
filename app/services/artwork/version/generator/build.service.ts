@@ -1,7 +1,10 @@
+import { invariant } from '@epic-web/invariant'
 import {
 	type IGeneratorDesigns,
 	type ILayerGenerator,
 	type IArtworkVersionGenerator,
+	type IGeneratorWatermark,
+	type IArtworkVersionGeneratorMetadata,
 } from '#app/definitions/artwork-generator'
 import { type IArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.server'
 import {
@@ -22,6 +25,7 @@ import {
 	type ILayer,
 } from '#app/models/layer/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
+import { prisma } from '#app/utils/db.server'
 import {
 	filterSelectedDesignTypes,
 	findFirstDesignsByTypeInArray,
@@ -77,6 +81,12 @@ export const artworkVersionGeneratorBuildService = async ({
 			defaultGeneratorLayer,
 		})
 
+		// Step 5: build the watermark if present
+		const watermark = await buildGeneratorWatermark({ version })
+
+		// Step 6: build the metadata
+		const metadata = await buildGeneratorMetadata({ version })
+
 		return {
 			id: version.id,
 			settings: {
@@ -85,6 +95,8 @@ export const artworkVersionGeneratorBuildService = async ({
 				background: version.background,
 			},
 			layers: generatorLayers,
+			watermark,
+			metadata,
 			success: true,
 			message: 'Artwork version generator created successfully.',
 		}
@@ -321,4 +333,105 @@ const getRotates = async ({
 		}
 	}
 	return []
+}
+
+const buildGeneratorWatermark = async ({
+	version,
+}: {
+	version: IArtworkVersionWithDesignsAndLayers
+}): Promise<IGeneratorWatermark | null> => {
+	if (!version.watermark) return null
+
+	const userInstagramUrl = await prisma.artworkBranch
+		.findUnique({
+			where: { id: version.branchId },
+			select: {
+				owner: {
+					select: { sm_url_instagram: true },
+				},
+			},
+		})
+		.then(branch => branch?.owner?.sm_url_instagram)
+
+	const text = userInstagramUrl
+		? `@${userInstagramUrl.split('/').pop()}`
+		: 'PPPAAATTT'
+
+	return {
+		text,
+		color: version.watermarkColor,
+	}
+}
+
+const buildGeneratorMetadata = async ({
+	version,
+}: {
+	version: IArtworkVersionWithDesignsAndLayers
+}): Promise<IArtworkVersionGeneratorMetadata> => {
+	const branch = await prisma.artworkBranch.findUnique({
+		where: { id: version.branchId },
+		select: {
+			id: true,
+			name: true,
+			slug: true,
+			description: true,
+			artwork: {
+				select: {
+					id: true,
+					name: true,
+					slug: true,
+					description: true,
+					project: {
+						select: {
+							id: true,
+							name: true,
+							slug: true,
+							description: true,
+						},
+					},
+					owner: {
+						select: {
+							id: true,
+							name: true,
+							username: true,
+						},
+					},
+				},
+			},
+		},
+	})
+	invariant(branch, `Branch not found for version ${version.id}`)
+	const artwork = branch.artwork
+	invariant(artwork, `Artwork not found for branch ${branch.id}`)
+	const project = artwork.project
+	invariant(project, `Project not found for artwork ${artwork.id}`)
+	const owner = artwork.owner
+	invariant(owner, `Owner not found for artwork ${artwork.id}`)
+
+	return {
+		// version
+		versionId: version.id,
+		versionName: version.name,
+		versionSlug: version.slug,
+		versionDescription: version.description,
+		// branch
+		branchId: version.branchId,
+		branchName: branch.name,
+		branchSlug: branch.slug,
+		branchDescription: branch.description,
+		// artwork
+		artworkId: artwork.id,
+		artworkName: artwork.name,
+		artworkSlug: artwork.slug,
+		artworkDescription: artwork.description,
+		// project
+		projectId: project.id,
+		projectName: project.name,
+		projectSlug: project.slug,
+		projectDescription: project.description,
+		// owner
+		ownerId: owner.id,
+		ownerName: owner.name,
+		ownerUsername: owner.username,
+	}
 }

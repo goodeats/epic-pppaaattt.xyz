@@ -1,16 +1,12 @@
-import { conform, useForm } from '@conform-to/react'
-import { getFieldsetConstraint, parse } from '@conform-to/zod'
 import {
 	json,
 	type ActionFunctionArgs,
 	type LoaderFunctionArgs,
 } from '@remix-run/node'
 import { useFetcher } from '@remix-run/react'
-import { useRef } from 'react'
-import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
-import { Input } from '#app/components/ui/input'
+import { FetcherNumber } from '#app/components/templates/form/fetcher-number'
 import { type IDesignWithLayout } from '#app/models/design/design.server'
 import { validateDesignTypeUpdateLayoutRowsSubmission } from '#app/models/design-type/layout/layout.update.server'
 import { EntityParentIdType } from '#app/schema/entity'
@@ -18,7 +14,6 @@ import { validateNoJS } from '#app/schema/form-data'
 import { EditDesignLayoutRowsSchema } from '#app/schema/layout'
 import { updateDesignTypeLayoutRowsService } from '#app/services/design-type/update-layout.service'
 import { requireUserId } from '#app/utils/auth.server'
-import { useDebounce, useIsPending } from '#app/utils/misc'
 import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
@@ -26,6 +21,7 @@ import { Routes } from '#app/utils/routes.const'
 const route = Routes.RESOURCES.API.V1.DESIGN.TYPE.LAYOUT.UPDATE.ROWS
 const schema = EditDesignLayoutRowsSchema
 
+// auth GET request to endpoint
 export async function loader({ request }: LoaderFunctionArgs) {
 	await requireUserId(request)
 	return json({})
@@ -74,74 +70,37 @@ export const DesignTypeLayoutRows = ({
 }) => {
 	const designId = design.id
 	const layoutId = design.layout.id
-	const formId = `design-type-layout-update-rows-${designId}-${layoutId}${
-		formLocation ? `-${formLocation}` : ''
-	}`
+	const field = 'rows'
+	const fetcherKey = `design-type-layout-update-${field}-${designId}-${layoutId}`
+	const formId = `${fetcherKey}${formLocation ? `-${formLocation}` : ''}`
+	const value = design.layout[field]
 
-	const fetcher = useFetcher<typeof action>()
-	const lastSubmission = fetcher.data?.submission
-	const isPending = useIsPending()
 	let isHydrated = useHydrated()
-	const [form, fields] = useForm({
-		id: formId,
-		constraint: getFieldsetConstraint(schema),
-		lastSubmission,
-		shouldValidate: 'onInput',
-		shouldRevalidate: 'onInput',
-		onValidate: ({ formData }) => {
-			return parse(formData, { schema: schema })
-		},
-		onSubmit: async (event, { formData }) => {
-			event.preventDefault()
-			fetcher.submit(formData, {
-				method: 'POST',
-				action: route,
-			})
-		},
-		defaultValue: {
-			rows: design.layout.rows || '',
-		},
+	const fetcher = useFetcher<typeof action>({
+		key: fetcherKey,
 	})
-	const submitRef = useRef<HTMLButtonElement>(null)
-
-	const handleChangeSubmit = useDebounce((f: HTMLFormElement) => {
-		submitRef.current?.click()
-	}, 400)
 
 	return (
-		<fetcher.Form
-			method="POST"
-			action={route}
-			onChange={e => handleChangeSubmit(e.currentTarget)}
-			{...form.props}
+		<FetcherNumber
+			fetcher={fetcher}
+			fetcherKey={fetcherKey}
+			route={route}
+			schema={schema}
+			formId={formId}
+			fieldName={field}
+			fieldValue={value}
+			tooltipText={`Layout ${field}`}
+			isHydrated={isHydrated}
+			placeholder={`Set ${field}`}
 		>
-			<AuthenticityTokenInput />
-
-			<input type="hidden" name="no-js" value={String(!isHydrated)} />
-			<input type="hidden" name="id" value={layoutId} />
-			<input
-				type="hidden"
-				name={EntityParentIdType.DESIGN_ID}
-				value={designId}
-			/>
-
-			<div className="flex w-full items-center space-x-2">
-				<Input
-					type="number"
-					// https://www.hyperui.dev/blog/remove-number-input-spinners-with-tailwindcss
-					className="flex h-8 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-					autoComplete="off"
-					disabled={isPending}
-					{...conform.input(fields.rows, {
-						ariaAttributes: true,
-					})}
+			<div className="hidden">
+				<input type="hidden" name="id" value={layoutId} />
+				<input
+					type="hidden"
+					name={EntityParentIdType.DESIGN_ID}
+					value={designId}
 				/>
-
-				{/* form onChange click this to trigger useForm */}
-				<button type="submit" ref={submitRef} style={{ display: 'none' }}>
-					Submit
-				</button>
 			</div>
-		</fetcher.Form>
+		</FetcherNumber>
 	)
 }

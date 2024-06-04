@@ -1,6 +1,6 @@
 import { currentDateString } from './dates'
 
-const CONST_FILE_NAME = 'pppaaattt'
+const CONST_FILE_NAME = 'pppaaattt_xyz'
 
 export const downloadCanvasToImg = ({
 	canvas,
