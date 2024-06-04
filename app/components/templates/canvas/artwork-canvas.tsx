@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useHydrated } from 'remix-utils/use-hydrated'
-import { FlexRow } from '#app/components/layout'
+import { FlexColumn, FlexRow } from '#app/components/layout'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { PanelIconLink } from '#app/components/ui/panel-icon-link'
 import {
@@ -81,7 +81,7 @@ export const ArtworkCanvas = memo(
 		}
 
 		return (
-			<div className="relative h-full w-full">
+			<FlexColumn className="gap-2">
 				<canvas
 					id="canvas-editor"
 					ref={canvasRef}
@@ -90,7 +90,7 @@ export const ArtworkCanvas = memo(
 					style={{ backgroundColor: `#${background}` }}
 					className="h-full w-full"
 				/>
-				<FlexRow className="mt-2 gap-2">
+				<FlexRow className="gap-2">
 					<TooltipHydrated tooltipText="Reload" isHydrated={isHydrated}>
 						<PanelIconButton
 							iconName="reload"
@@ -107,7 +107,7 @@ export const ArtworkCanvas = memo(
 					</TooltipHydrated>
 					{generator.metadata && linkToEditor()}
 				</FlexRow>
-			</div>
+			</FlexColumn>
 		)
 	},
 )
