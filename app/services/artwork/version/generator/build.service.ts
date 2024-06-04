@@ -2,6 +2,7 @@ import {
 	type IGeneratorDesigns,
 	type ILayerGenerator,
 	type IArtworkVersionGenerator,
+	type IGeneratorWatermark,
 } from '#app/definitions/artwork-generator'
 import { type IArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.server'
 import {
@@ -22,6 +23,8 @@ import {
 	type ILayer,
 } from '#app/models/layer/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
+import { colorRandomHex } from '#app/utils/colors'
+import { prisma } from '#app/utils/db.server'
 import {
 	filterSelectedDesignTypes,
 	findFirstDesignsByTypeInArray,
@@ -77,6 +80,9 @@ export const artworkVersionGeneratorBuildService = async ({
 			defaultGeneratorLayer,
 		})
 
+		// Step 5: build the watermark if present
+		const watermark = await buildGeneratorWatermark({ version })
+
 		return {
 			id: version.id,
 			settings: {
@@ -85,6 +91,7 @@ export const artworkVersionGeneratorBuildService = async ({
 				background: version.background,
 			},
 			layers: generatorLayers,
+			watermark,
 			success: true,
 			message: 'Artwork version generator created successfully.',
 		}
@@ -321,4 +328,32 @@ const getRotates = async ({
 		}
 	}
 	return []
+}
+
+const buildGeneratorWatermark = async ({
+	version,
+}: {
+	version: IArtworkVersionWithDesignsAndLayers
+}): Promise<IGeneratorWatermark | null> => {
+	if (!version.watermark) return null
+
+	const userInstagramUrl = await prisma.artworkBranch
+		.findUnique({
+			where: { id: version.branchId },
+			select: {
+				owner: {
+					select: { sm_url_instagram: true },
+				},
+			},
+		})
+		.then(branch => branch?.owner?.sm_url_instagram)
+
+	const text = userInstagramUrl
+		? `@${userInstagramUrl.split('/').pop()}`
+		: 'PPPAAATTT'
+
+	return {
+		text,
+		color: colorRandomHex(),
+	}
 }

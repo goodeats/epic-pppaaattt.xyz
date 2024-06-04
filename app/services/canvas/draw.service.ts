@@ -1,5 +1,6 @@
 import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator'
 import { canvasDrawBackgroundService } from './draw-background.service'
+import { canvasDrawWatermarkService } from './draw-watermark.service'
 import { canvasLayerBuildDrawLayersService } from './layer/build/build-draw-layers.service'
 import { canvasDrawLayersService } from './layer/draw/draw-layers.service'
 
@@ -24,6 +25,9 @@ export const canvasDrawService = ({
 
 	// Step 4: draw layers to canvas
 	canvasDrawLayersService({ ctx, drawLayers })
+
+	// Step 5: draw watermark
+	canvasDrawWatermarkService({ ctx, generator })
 }
 
 const getContext = (canvas: HTMLCanvasElement) => {

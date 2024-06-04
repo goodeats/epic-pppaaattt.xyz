@@ -1,4 +1,3 @@
-import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { type IFill } from '#app/models/design-type/fill/fill.server'
 import { type ILayout } from '#app/models/design-type/layout/layout.server'
@@ -12,12 +11,7 @@ import { type ILayer } from '#app/models/layer/layer.server'
 
 // object sent to the client
 // generator has final building blocks for the generation(s)
-export interface IArtworkGenerator {
-	id: IArtwork['id']
-	layers: ILayerGenerator[]
-	success: boolean
-	message: string
-}
+
 export interface IArtworkVersionGenerator {
 	id: IArtworkVersion['id']
 	settings: {
@@ -26,6 +20,7 @@ export interface IArtworkVersionGenerator {
 		background: string
 	}
 	layers: ILayerGenerator[]
+	watermark?: IGeneratorWatermark | null
 	success: boolean
 	message: string
 }
@@ -83,4 +78,9 @@ export interface IGenerationItem {
 	size: number
 	strokeStyle: string
 	template: string
+}
+
+export interface IGeneratorWatermark {
+	text: string
+	color?: string
 }
