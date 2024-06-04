@@ -54,6 +54,15 @@ export const ArtworkVersionPublishedSchema = z.object({
 	id: z.string(),
 })
 
+export const ArtworkVersionWatermarkSchema = z.object({
+	id: z.string(),
+})
+
+export const ArtworkVersionWatermarkColorSchema = z.object({
+	id: z.string(),
+	watermarkColor: HexcodeSchema,
+})
+
 export const ArtworkVersionSelectedDesignsSchema = z.object({
 	paletteId: z.string().optional(),
 	sizeId: z.string().optional(),
