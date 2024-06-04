@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useHydrated } from 'remix-utils/use-hydrated'
-import { FlexRow } from '#app/components/layout'
+import { FlexColumn, FlexRow } from '#app/components/layout'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { PanelIconLink } from '#app/components/ui/panel-icon-link'
 import {
@@ -8,9 +8,9 @@ import {
 	type IArtworkVersionGenerator,
 } from '#app/definitions/artwork-generator'
 import { canvasDrawService } from '#app/services/canvas/draw.service'
-import { downloadCanvasToImg } from '#app/utils/download'
 import { useOptionalUser } from '#app/utils/user'
 import { TooltipHydrated } from '../tooltip'
+import { DownloadCanvas, ShareCanvas } from '.'
 
 const LinkToEditor = memo(
 	({
@@ -73,15 +73,8 @@ export const ArtworkCanvas = memo(
 			setRefresh(prev => prev + 1)
 		}
 
-		const handleDownload = () => {
-			const canvas = canvasRef.current
-
-			if (!canvas) return
-			downloadCanvasToImg({ canvas })
-		}
-
 		return (
-			<div className="relative h-full w-full">
+			<FlexColumn className="gap-2">
 				<canvas
 					id="canvas-editor"
 					ref={canvasRef}
@@ -90,7 +83,7 @@ export const ArtworkCanvas = memo(
 					style={{ backgroundColor: `#${background}` }}
 					className="h-full w-full"
 				/>
-				<FlexRow className="mt-2 gap-2">
+				<FlexRow className="gap-2">
 					<TooltipHydrated tooltipText="Reload" isHydrated={isHydrated}>
 						<PanelIconButton
 							iconName="reload"
@@ -98,16 +91,11 @@ export const ArtworkCanvas = memo(
 							onClick={handleRefresh}
 						/>
 					</TooltipHydrated>
-					<TooltipHydrated tooltipText="Download" isHydrated={isHydrated}>
-						<PanelIconButton
-							iconName="download"
-							iconText="Download"
-							onClick={handleDownload}
-						/>
-					</TooltipHydrated>
+					<DownloadCanvas canvasRef={canvasRef} isHydrated={isHydrated} />
+					<ShareCanvas canvasRef={canvasRef} isHydrated={isHydrated} />
 					{generator.metadata && linkToEditor()}
 				</FlexRow>
-			</div>
+			</FlexColumn>
 		)
 	},
 )
