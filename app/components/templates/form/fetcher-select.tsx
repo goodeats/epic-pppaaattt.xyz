@@ -12,7 +12,7 @@ import {
 	SelectValue,
 } from '#app/components/ui/select'
 import { useOptimisticValue } from '#app/utils/forms'
-import { useDebounce, useIsPending } from '#app/utils/misc'
+import { useIsPending } from '#app/utils/misc'
 import { TooltipHydrated } from '../tooltip'
 
 type Options = { [key: string]: string }[]
@@ -70,9 +70,9 @@ export const FetcherSelect = ({
 	// hack to submit select form on change
 	// through conform-to and fetcher
 	const submitRef = useRef<HTMLButtonElement>(null)
-	const handleChangeSubmit = useDebounce((f: HTMLFormElement) => {
+	const handleChangeSubmit = (f: HTMLFormElement) => {
 		submitRef.current?.click()
-	}, 400)
+	}
 
 	return (
 		<fetcher.Form
