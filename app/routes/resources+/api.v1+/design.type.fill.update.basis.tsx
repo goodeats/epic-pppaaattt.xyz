@@ -73,10 +73,10 @@ export const DesignTypeFillBasis = ({
 }) => {
 	const designId = design.id
 	const fillId = design.fill.id
-	const fetcherKey = `design-type-fill-update-basis-${designId}-${fillId}`
+	const field = 'basis'
+	const fetcherKey = `design-type-fill-update-${field}-${designId}-${fillId}`
 	const formId = `${fetcherKey}${formLocation ? `-${formLocation}` : ''}`
-	const name = 'basis'
-	const value = design.fill.basis
+	const value = design.fill[field]
 	const options = schemaEnumToSelectOptions(FillBasisTypeEnum)
 
 	let isHydrated = useHydrated()
@@ -91,12 +91,12 @@ export const DesignTypeFillBasis = ({
 			route={route}
 			schema={schema}
 			formId={formId}
-			selectName={name}
+			selectName={field}
 			selectValue={value}
 			options={options}
-			tooltipText={`Fill ${name}`}
+			tooltipText={`Fill ${field}`}
 			isHydrated={isHydrated}
-			placeholder={`Select a ${name}`}
+			placeholder={`Select a ${field}`}
 		>
 			<div className="hidden">
 				<input type="hidden" name="id" value={fillId} />
