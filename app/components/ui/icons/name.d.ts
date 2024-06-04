@@ -58,6 +58,7 @@ export type IconName =
 	| 'pin-right'
 	| 'plus'
 	| 'question-mark-circled'
+	| 'reload'
 	| 'reset'
 	| 'rocket'
 	| 'ruler-square'
