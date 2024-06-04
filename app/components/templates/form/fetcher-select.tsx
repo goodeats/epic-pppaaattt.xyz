@@ -23,8 +23,8 @@ export const FetcherSelect = ({
 	route,
 	schema,
 	formId,
-	selectName,
-	selectValue,
+	fieldName,
+	fieldValue,
 	options,
 	placeholder,
 	tooltipText,
@@ -36,16 +36,16 @@ export const FetcherSelect = ({
 	route: string
 	schema: z.ZodSchema<any>
 	formId: string
-	selectName: string
-	selectValue: string
+	fieldName: string
+	fieldValue: string
 	options: Options
 	placeholder: string
 	tooltipText: string
 	isHydrated: boolean
 	children: JSX.Element
 }) => {
-	const optimisticValue = useOptimisticValue(fetcherKey, schema, selectName)
-	const value = optimisticValue ?? selectValue ?? ''
+	const optimisticValue = useOptimisticValue(fetcherKey, schema, fieldName)
+	const value = optimisticValue ?? fieldValue ?? ''
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
 	const [form, fields] = useForm({
@@ -63,7 +63,7 @@ export const FetcherSelect = ({
 			})
 		},
 		defaultValue: {
-			[selectName]: value,
+			[fieldName]: value,
 		},
 	})
 
@@ -87,7 +87,7 @@ export const FetcherSelect = ({
 			{/* hidden field values */}
 			{children}
 
-			<Select disabled={isPending} {...conform.input(fields[selectName])}>
+			<Select disabled={isPending} {...conform.input(fields[fieldName])}>
 				<TooltipHydrated tooltipText={tooltipText} isHydrated={isHydrated}>
 					<SelectTrigger className="flex h-8 flex-1 text-left">
 						<SelectValue placeholder={placeholder} />

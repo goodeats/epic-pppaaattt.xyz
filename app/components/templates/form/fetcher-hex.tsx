@@ -15,8 +15,8 @@ export const FetcherHex = ({
 	route,
 	schema,
 	formId,
-	selectName,
-	selectValue,
+	fieldName,
+	fieldValue,
 	placeholder,
 	tooltipText,
 	isHydrated,
@@ -27,15 +27,15 @@ export const FetcherHex = ({
 	route: string
 	schema: z.ZodSchema<any>
 	formId: string
-	selectName: string
-	selectValue: string
+	fieldName: string
+	fieldValue: string
 	placeholder: string
 	tooltipText: string
 	isHydrated: boolean
 	children: JSX.Element
 }) => {
-	const optimisticValue = useOptimisticValue(fetcherKey, schema, selectName)
-	const value = optimisticValue ?? selectValue ?? 0
+	const optimisticValue = useOptimisticValue(fetcherKey, schema, fieldName)
+	const value = optimisticValue ?? fieldValue ?? 0
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
 	const [form, fields] = useForm({
@@ -46,9 +46,9 @@ export const FetcherHex = ({
 		shouldRevalidate: 'onInput',
 		onValidate: ({ formData }) => {
 			// set hex chars to uppercase
-			const value = formData.get(selectName)
+			const value = formData.get(fieldName)
 			if (typeof value === 'string') {
-				formData.set(selectName, value.toUpperCase())
+				formData.set(fieldName, value.toUpperCase())
 			}
 			return parse(formData, { schema })
 		},
@@ -60,7 +60,7 @@ export const FetcherHex = ({
 			})
 		},
 		defaultValue: {
-			[selectName]: value,
+			[fieldName]: value,
 		},
 	})
 
@@ -97,7 +97,7 @@ export const FetcherHex = ({
 					onInput={e => handleInput(e.currentTarget)}
 					placeholder={placeholder}
 					disabled={isPending}
-					{...conform.input(fields[selectName], {
+					{...conform.input(fields[fieldName], {
 						ariaAttributes: true,
 					})}
 				/>

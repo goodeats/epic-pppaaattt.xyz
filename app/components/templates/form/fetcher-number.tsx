@@ -17,8 +17,8 @@ export const FetcherNumber = ({
 	route,
 	schema,
 	formId,
-	selectName,
-	selectValue,
+	fieldName,
+	fieldValue,
 	placeholder,
 	tooltipText,
 	isHydrated,
@@ -30,16 +30,16 @@ export const FetcherNumber = ({
 	route: string
 	schema: z.ZodSchema<any>
 	formId: string
-	selectName: string
-	selectValue: number
+	fieldName: string
+	fieldValue: number
 	placeholder: string
 	tooltipText: string
 	isHydrated: boolean
 	children: JSX.Element
 	icon?: IconName
 }) => {
-	const optimisticValue = useOptimisticValue(fetcherKey, schema, selectName)
-	const value = optimisticValue ?? selectValue ?? 0
+	const optimisticValue = useOptimisticValue(fetcherKey, schema, fieldName)
+	const value = optimisticValue ?? fieldValue ?? 0
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
 	const [form, fields] = useForm({
@@ -59,7 +59,7 @@ export const FetcherNumber = ({
 			})
 		},
 		defaultValue: {
-			[selectName]: value,
+			[fieldName]: value,
 		},
 	})
 
@@ -87,7 +87,7 @@ export const FetcherNumber = ({
 			<div className="flex w-full items-center space-x-2">
 				{/* icon might be for artwork height, width */}
 				{icon && (
-					<Label htmlFor={fields[selectName].id} className="w-5 flex-shrink-0">
+					<Label htmlFor={fields[fieldName].id} className="w-5 flex-shrink-0">
 						<Icon name={icon} className="h-5 w-5" />
 					</Label>
 				)}
@@ -102,7 +102,7 @@ export const FetcherNumber = ({
 						autoComplete="off"
 						placeholder={placeholder}
 						disabled={isPending}
-						{...conform.input(fields[selectName], {
+						{...conform.input(fields[fieldName], {
 							ariaAttributes: true,
 						})}
 					/>
