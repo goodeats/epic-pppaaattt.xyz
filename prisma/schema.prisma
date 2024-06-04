@@ -522,6 +522,7 @@ model ArtworkVersion {
   description String @default("initial version")
   starred   Boolean @default(false)
   published Boolean @default(false)
+  watermark Boolean @default(true)
 
   // settings
   // 9:16 aspect ratio (vertical)

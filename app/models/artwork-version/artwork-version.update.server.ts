@@ -6,6 +6,7 @@ import {
 	ArtworkVersionBackgroundSchema,
 	ArtworkVersionStarredSchema,
 	ArtworkVersionPublishedSchema,
+	ArtworkVersionWatermarkSchema,
 } from '#app/schema/artwork-version'
 import { ValidateArtworkVersionSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntitySubmission } from '#app/utils/conform-utils'
@@ -72,6 +73,15 @@ export async function validateArtworkVersionPublishedSubmission(
 	return validateUpdateSubmission({
 		...args,
 		schema: ArtworkVersionPublishedSchema,
+	})
+}
+
+export async function validateArtworkVersionWatermarkSubmission(
+	args: IntentActionArgs,
+) {
+	return validateUpdateSubmission({
+		...args,
+		schema: ArtworkVersionWatermarkSchema,
 	})
 }
 
@@ -200,7 +210,27 @@ export const updateArtworkVersionPublished = async ({
 		artworkVersion.published = isPublishing
 		artworkVersion.publishedAt = isPublishing ? new Date() : null
 		artworkVersion.updatedAt = new Date()
-		console.log('artwork new', artworkVersion)
+		await artworkVersion.save()
+
+		return { success: true }
+	} catch (error) {
+		// consider how to handle this error where this is called
+		console.error(error)
+		return { success: false }
+	}
+}
+
+export const updateArtworkVersionWatermark = async ({
+	id,
+}: {
+	id: IArtworkVersion['id']
+}) => {
+	const artworkVersion = await getArtworkVersionInstance({ id })
+	if (!artworkVersion) return { success: false }
+
+	try {
+		artworkVersion.watermark = !artworkVersion.watermark
+		artworkVersion.updatedAt = new Date()
 		await artworkVersion.save()
 
 		return { success: true }

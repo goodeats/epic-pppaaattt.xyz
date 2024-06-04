@@ -15,6 +15,7 @@ export const Routes = {
 						HEIGHT: `${pathBase}/artwork-version/update/height`,
 						PUBLISHED: `${pathBase}/artwork-version/update/published`,
 						STARRED: `${pathBase}/artwork-version/update/starred`,
+						WATERMARK: `${pathBase}/artwork-version/update/watermark`,
 					},
 					DESIGN: {
 						CREATE: `${pathBase}/artwork-version/design/create`,

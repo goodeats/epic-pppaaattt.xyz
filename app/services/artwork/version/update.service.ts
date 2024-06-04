@@ -4,6 +4,7 @@ import {
 	updateArtworkVersionHeight,
 	updateArtworkVersionPublished,
 	updateArtworkVersionStarred,
+	updateArtworkVersionWatermark,
 	updateArtworkVersionWidth,
 } from '#app/models/artwork-version/artwork-version.update.server'
 
@@ -89,6 +90,22 @@ export async function updateArtworkVersionPublishedService({
 }) {
 	try {
 		const updatedArtworkVersion = await updateArtworkVersionPublished({
+			id,
+		})
+		return { success: true, artworkVersion: updatedArtworkVersion }
+	} catch (error) {
+		console.error(error)
+		return { success: false }
+	}
+}
+
+export async function updateArtworkVersionWatermarkService({
+	id,
+}: {
+	id: IArtworkVersion['id']
+}) {
+	try {
+		const updatedArtworkVersion = await updateArtworkVersionWatermark({
 			id,
 		})
 		return { success: true, artworkVersion: updatedArtworkVersion }
