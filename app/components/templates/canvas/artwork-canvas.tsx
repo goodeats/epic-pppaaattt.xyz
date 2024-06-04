@@ -1,8 +1,10 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { useHydrated } from 'remix-utils/use-hydrated'
+import { FlexRow } from '#app/components/layout'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator'
 import { canvasDrawService } from '#app/services/canvas/draw.service'
+import { downloadCanvasToImg } from '#app/utils/download'
 import { TooltipHydrated } from '../tooltip'
 
 // The ArtworkCanvas component is wrapped in React.memo to optimize performance by memoizing the component.
@@ -27,6 +29,13 @@ export const ArtworkCanvas = memo(
 			setRefresh(prev => prev + 1)
 		}
 
+		const handleDownload = () => {
+			const canvas = canvasRef.current
+
+			if (!canvas) return
+			downloadCanvasToImg({ canvas })
+		}
+
 		return (
 			<div className="relative h-full w-full">
 				<canvas
@@ -37,7 +46,7 @@ export const ArtworkCanvas = memo(
 					style={{ backgroundColor: `#${background}` }}
 					className="h-full w-full"
 				/>
-				<div className="mt-2">
+				<FlexRow className="mt-2 gap-2">
 					<TooltipHydrated tooltipText="Reload" isHydrated={isHydrated}>
 						<PanelIconButton
 							iconName="reload"
@@ -45,7 +54,14 @@ export const ArtworkCanvas = memo(
 							onClick={handleRefresh}
 						/>
 					</TooltipHydrated>
-				</div>
+					<TooltipHydrated tooltipText="Download" isHydrated={isHydrated}>
+						<PanelIconButton
+							iconName="download"
+							iconText="Download"
+							onClick={handleDownload}
+						/>
+					</TooltipHydrated>
+				</FlexRow>
 			</div>
 		)
 	},
