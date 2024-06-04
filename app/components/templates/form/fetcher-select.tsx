@@ -1,6 +1,6 @@
 import { useForm, conform } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
-import { type FetcherWithComponents } from '@remix-run/react'
+import { useFetcher, type FetcherWithComponents } from '@remix-run/react'
 import { useRef } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { type z } from 'zod'
@@ -14,16 +14,16 @@ import {
 import { useDebounce, useIsPending } from '#app/utils/misc'
 import { TooltipHydrated } from '../tooltip'
 
-type DefaultValue = Record<string, string>
 type Options = { [key: string]: string }[]
 
-export const FetcherSelect = <T extends DefaultValue>({
+export const FetcherSelect = ({
 	fetcher,
+	fetcherKey,
 	route,
 	schema,
 	formId,
 	selectName,
-	defaultValue,
+	selectValue,
 	options,
 	placeholder,
 	tooltipText,
@@ -31,17 +31,20 @@ export const FetcherSelect = <T extends DefaultValue>({
 	children,
 }: {
 	fetcher: FetcherWithComponents<any>
+	fetcherKey: string
 	route: string
 	schema: z.ZodSchema<any>
 	formId: string
-	selectName: keyof T
-	defaultValue: T
+	selectName: string
+	selectValue: string
 	options: Options
 	placeholder: string
 	tooltipText: string
 	isHydrated: boolean
 	children: JSX.Element
 }) => {
+	const optimisticValue = useOptimisticValue(fetcherKey, schema, selectName)
+	const value = optimisticValue ?? selectValue ?? ''
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
 	const [form, fields] = useForm({
@@ -58,7 +61,9 @@ export const FetcherSelect = <T extends DefaultValue>({
 				action: route,
 			})
 		},
-		defaultValue,
+		defaultValue: {
+			[selectName]: value,
+		},
 	})
 
 	// hack to submit select form on change
@@ -104,4 +109,24 @@ export const FetcherSelect = <T extends DefaultValue>({
 			</button>
 		</fetcher.Form>
 	)
+}
+
+function useOptimisticValue(
+	fetcherKey: string,
+	schema: z.ZodSchema<any>,
+	selectName: string,
+) {
+	const fetcher = useFetcher({ key: fetcherKey })
+	const { formData } = fetcher
+
+	if (fetcher && formData) {
+		const submission = schema.safeParse(formData)
+
+		if (submission.success) {
+			return submission.data[selectName]
+		} else {
+			const parsed = parse(formData, { schema })
+			return parsed.value[selectName]
+		}
+	}
 }
