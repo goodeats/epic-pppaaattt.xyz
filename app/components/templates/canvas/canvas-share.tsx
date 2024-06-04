@@ -19,22 +19,44 @@ export const ShareCanvas = memo(
 				const canvas = canvasRef.current
 				if (!canvas) return false
 
-				canvas.toBlob(blob => {
-					if (!blob) return
-					const file = new File([blob], downloadImageFileName(), {
-						type: 'image/png',
-					})
+				const ctx = canvas.getContext('2d')
+				if (!ctx) return false
 
-					if (navigator.canShare && navigator.canShare({ files: [file] })) {
-						setCanShare(true)
-						setFileToShare(file)
-					} else {
-						setCanShare(false)
-					}
-				}, 'image/png')
+				// Check if the canvas is not blank
+				const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+				const isNotBlank = imageData.data.some(value => value !== 0)
+
+				if (isNotBlank) {
+					canvas.toBlob(blob => {
+						if (!blob) return
+						const file = new File([blob], downloadImageFileName(), {
+							type: 'image/png',
+						})
+
+						if (navigator.canShare && navigator.canShare({ files: [file] })) {
+							setCanShare(true)
+							setFileToShare(file)
+						} else {
+							setCanShare(false)
+						}
+					}, 'image/png')
+				} else {
+					// Canvas is blank, retry after a short delay
+					setTimeout(checkShareCapability, 100)
+				}
 			}
 
-			checkShareCapability()
+			const canvas = canvasRef.current
+			if (!canvas) return
+
+			const handleCanvasLoad = () => {
+				checkShareCapability()
+			}
+
+			canvas.addEventListener('load', handleCanvasLoad)
+			return () => {
+				canvas.removeEventListener('load', handleCanvasLoad)
+			}
 		}, [canvasRef])
 
 		const handleShare = () => {
