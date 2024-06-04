@@ -11,9 +11,9 @@ export const PanelArtworkVersion = ({
 }) => {
 	return (
 		<div>
-			<PanelArtworkVersionWatermark version={version} />
 			<PanelArtworkVersionFrame version={version} />
 			<PanelArtworkVersionBackground version={version} />
+			<PanelArtworkVersionWatermark version={version} />
 			<PanelArtworkVersionDesigns version={version} />
 		</div>
 	)
