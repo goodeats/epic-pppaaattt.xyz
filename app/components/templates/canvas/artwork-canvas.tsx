@@ -8,9 +8,9 @@ import {
 	type IArtworkVersionGenerator,
 } from '#app/definitions/artwork-generator'
 import { canvasDrawService } from '#app/services/canvas/draw.service'
-import { downloadCanvasToImg } from '#app/utils/download'
 import { useOptionalUser } from '#app/utils/user'
 import { TooltipHydrated } from '../tooltip'
+import { DownloadCanvas, ShareCanvas } from '.'
 
 const LinkToEditor = memo(
 	({
@@ -73,13 +73,6 @@ export const ArtworkCanvas = memo(
 			setRefresh(prev => prev + 1)
 		}
 
-		const handleDownload = () => {
-			const canvas = canvasRef.current
-
-			if (!canvas) return
-			downloadCanvasToImg({ canvas })
-		}
-
 		return (
 			<FlexColumn className="gap-2">
 				<canvas
@@ -98,13 +91,8 @@ export const ArtworkCanvas = memo(
 							onClick={handleRefresh}
 						/>
 					</TooltipHydrated>
-					<TooltipHydrated tooltipText="Download" isHydrated={isHydrated}>
-						<PanelIconButton
-							iconName="download"
-							iconText="Download"
-							onClick={handleDownload}
-						/>
-					</TooltipHydrated>
+					<DownloadCanvas canvasRef={canvasRef} isHydrated={isHydrated} />
+					<ShareCanvas canvasRef={canvasRef} isHydrated={isHydrated} />
 					{generator.metadata && linkToEditor()}
 				</FlexRow>
 			</FlexColumn>
