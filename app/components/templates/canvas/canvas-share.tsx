@@ -12,62 +12,60 @@ export const ShareCanvas = memo(
 		isHydrated: boolean
 	}) => {
 		const [canShare, setCanShare] = useState(false)
-		const [fileToShare, setFileToShare] = useState<File | null>(null)
+		// const [fileToShare, setFileToShare] = useState<File | null>(null)
 
 		useEffect(() => {
 			const checkShareCapability = () => {
 				const canvas = canvasRef.current
 				if (!canvas) return false
 
-				const ctx = canvas.getContext('2d')
-				if (!ctx) return false
+				canvas.toBlob(blob => {
+					if (!blob) return
+					const file = new File([blob], downloadImageFileName(), {
+						type: 'image/png',
+					})
 
-				// Check if the canvas is not blank
-				const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-				const isNotBlank = imageData.data.some(value => value !== 0)
-
-				if (isNotBlank) {
-					canvas.toBlob(blob => {
-						if (!blob) return
-						const file = new File([blob], downloadImageFileName(), {
-							type: 'image/png',
-						})
-
-						if (navigator.canShare && navigator.canShare({ files: [file] })) {
-							setCanShare(true)
-							setFileToShare(file)
-						} else {
-							setCanShare(false)
-						}
-					}, 'image/png')
-				} else {
-					// Canvas is blank, retry after a short delay
-					setTimeout(checkShareCapability, 100)
-				}
+					if (navigator.canShare && navigator.canShare({ files: [file] })) {
+						setCanShare(true)
+						// setFileToShare(file)
+					} else {
+						setCanShare(false)
+					}
+				}, 'image/png')
 			}
 
 			const canvas = canvasRef.current
 			if (!canvas) return
 
-			const handleCanvasLoad = () => {
-				checkShareCapability()
-			}
-
-			canvas.addEventListener('load', handleCanvasLoad)
-			return () => {
-				canvas.removeEventListener('load', handleCanvasLoad)
-			}
+			checkShareCapability()
 		}, [canvasRef])
 
-		const handleShare = () => {
-			if (!fileToShare) return
+		const handleShare = async () => {
+			// if (!fileToShare) return
 
-			navigator
-				.share({
-					files: [fileToShare],
-					title: 'Share this artwork from PPPAAATTTT',
-				})
-				.catch(error => console.error('Error sharing', error))
+			// navigator
+			// 	.share({
+			// 		files: [fileToShare],
+			// 		title: 'Share this artwork from PPPAAATTTT',
+			// 	})
+			// 	.catch(error => console.error('Error sharing', error))
+
+			// quick and dirty hack before meetup
+			// https://github.com/benkaiser/web-share-images/blob/master/src/examples/WebShareCanvas.tsx
+			const dataUrl = canvasRef.current!.toDataURL()
+			const blob = await (await fetch(dataUrl)).blob()
+			const filesArray: File[] = [
+				new File([blob], `${downloadImageFileName()}.png`, {
+					type: blob.type,
+					lastModified: new Date().getTime(),
+				}),
+			]
+			const shareData = {
+				files: filesArray,
+			}
+			navigator.share(shareData as any).then(() => {
+				console.log('Shared successfully')
+			})
 		}
 
 		if (!canShare) return null
