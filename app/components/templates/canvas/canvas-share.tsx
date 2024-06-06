@@ -55,8 +55,8 @@ export const ShareCanvas = memo(
 			const dataUrl = canvasRef.current!.toDataURL()
 			const blob = await (await fetch(dataUrl)).blob()
 			const filesArray: File[] = [
-				new File([blob], `${downloadImageFileName()}.png`, {
-					type: blob.type,
+				new File([blob], downloadImageFileName(), {
+					type: 'image/png',
 					lastModified: new Date().getTime(),
 				}),
 			]
