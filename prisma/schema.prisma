@@ -37,7 +37,6 @@ model User {
   artworkBranches ArtworkBranch[]
   layers      Layer[]
   designs     Design[]
-  assetImages AssetImage[]
 }
 
 model Note {
@@ -225,6 +224,8 @@ model Artwork {
   branches ArtworkBranch[]
   mergeRequests ArtworkMergeRequest[]
 
+  images ArtworkImage[]
+
   // non-unique foreign key
   @@index([projectId])
   @@index([ownerId])
@@ -233,6 +234,22 @@ model Artwork {
   @@index([ownerId, updatedAt])
   // Unique constraint for slug scoped to ownerId
   @@unique([slug, ownerId])
+}
+
+model ArtworkImage {
+  id          String  @id @default(cuid())
+  altText     String?
+  contentType String
+  blob        Bytes
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  artwork   Artwork   @relation(fields: [artworkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artworkId String
+
+  // non-unique foreign key
+  @@index([artworkId])
 }
 
 model Layer {
@@ -263,7 +280,7 @@ model Layer {
   children Layer[] @relation("ParentChildLayer")
 
   designs Design[]
-  assetImages AssetImagesOnLayers[]
+  images LayerImage[]
 
   // non-unique foreign key
   @@index([ownerId])
@@ -275,10 +292,10 @@ model Layer {
   @@unique([slug, ownerId, artworkVersionId])
 }
 
-model AssetImage {
-  id          String @id @default(cuid())
-  name        String
-  slug       String
+// refactor image structure later to use a single table for all images
+// mayber follow design type architecture
+model LayerImage {
+  id          String  @id @default(cuid())
   altText     String?
   contentType String
   blob        Bytes
@@ -286,40 +303,11 @@ model AssetImage {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ownerId String
-
-  layers AssetImagesOnLayers[]
-
-  // non-unique foreign key
-  @@index([ownerId])
-  // This helps our order by in the user search a LOT
-  @@index([ownerId, updatedAt])
-  // Unique constraint for slug scoped to ownerId
-  @@unique([slug, ownerId])
-}
-
-model AssetImagesOnLayers {
-  id          String @id @default(cuid())
-  isVisible   Boolean @default(true)
-  // order of asset images in the layer
-  // considered linked lists, but not worth complexity unless I'm adding many asset images to a layer
-  order       Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  assetImage AssetImage @relation(fields: [assetImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  assetImageId String
-
-  layer Layer @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  layer   Layer   @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   layerId String
 
   // non-unique foreign key
-  @@index([assetImageId])
   @@index([layerId])
-  // This helps our order by in the user search a LOT
-  @@index([assetImageId, layerId])
 }
 
 model Design {

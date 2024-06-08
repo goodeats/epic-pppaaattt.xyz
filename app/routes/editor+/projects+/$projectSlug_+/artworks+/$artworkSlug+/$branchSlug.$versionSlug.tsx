@@ -12,7 +12,7 @@ import {
 	FlexColumn,
 	FlexRow,
 } from '#app/components/layout'
-import { getArtwork } from '#app/models/artwork/artwork.get.server'
+import { getArtworkWithImages } from '#app/models/artwork/artwork.get.server'
 import { getArtworkBranch } from '#app/models/artwork-branch/artwork-branch.get.server'
 import { getArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
@@ -34,7 +34,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	invariantResponse(owner, 'Owner not found', { status: 404 })
 
 	// https://sergiodxa.com/tutorials/avoid-waterfalls-of-queries-in-remix-loaders
-	const artwork = await getArtwork({
+	const artwork = await getArtworkWithImages({
 		where: { slug: params.artworkSlug, ownerId: owner.id },
 	})
 	invariantResponse(artwork, 'Artwork not found', { status: 404 })
@@ -57,7 +57,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	const generator = await artworkVersionGeneratorBuildService({ version })
 
-	return json({ version, selectedLayer, generator })
+	return json({ artwork, version, selectedLayer, generator })
 }
 
 export default function EditorProjectArtworkBranchVersionRoute() {

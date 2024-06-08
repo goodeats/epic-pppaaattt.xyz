@@ -63,3 +63,59 @@ export async function parseEntitySubmission({
 		async: true,
 	})
 }
+
+export async function validateEntityImageSubmission({
+	userId,
+	formData,
+	schema,
+	strategy,
+}: {
+	userId: string
+	formData: FormData
+	schema: z.ZodSchema<any>
+	strategy: IValidateSubmissionStrategy
+}) {
+	const submission = await parseEntityImageSubmission({
+		userId,
+		formData,
+		schema,
+		strategy,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+	return submissionSuccessResponse(submission)
+}
+
+export async function parseEntityImageSubmission({
+	userId,
+	formData,
+	schema,
+	strategy,
+}: {
+	userId: string
+	formData: FormData
+	schema: z.ZodSchema<any>
+	strategy: IValidateSubmissionStrategy
+}) {
+	return await parse(formData, {
+		schema: schema
+			.superRefine(async (data, ctx) => {
+				strategy.validateFormDataEntity({ userId, data, ctx })
+			})
+
+			.transform(async data => {
+				const file: File = data.file
+				if (file.size <= 0) return z.NEVER
+				return {
+					...data,
+					contentType: file.type as string,
+					blob: Buffer.from(await file.arrayBuffer()),
+				}
+			}),
+		async: true,
+	})
+}

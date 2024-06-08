@@ -4,6 +4,7 @@ import {
 	type IArtworkWithProject,
 	type IArtwork,
 	type IArtworkWithBranchesAndVersions,
+	type IArtworkWithImages,
 } from '../artwork/artwork.server'
 
 export type queryArtworkWhereArgsType = z.infer<typeof whereArgs>
@@ -69,6 +70,21 @@ export const getArtworkWithProject = async ({
 					artworks: true,
 				},
 			},
+		},
+	})
+	return artwork
+}
+
+export const getArtworkWithImages = async ({
+	where,
+}: {
+	where: queryArtworkWhereArgsType
+}): Promise<IArtworkWithImages | null> => {
+	validateQueryWhereArgsPresent(where)
+	const artwork = await prisma.artwork.findFirst({
+		where,
+		include: {
+			images: true,
 		},
 	})
 	return artwork

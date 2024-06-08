@@ -4,6 +4,11 @@ export const Routes = {
 	RESOURCES: {
 		API: {
 			V1: {
+				ARTWORK: {
+					IMAGE: {
+						CREATE: `${pathBase}/artwork/image/create`,
+					},
+				},
 				ARTWORK_BRANCH: {
 					CREATE: `${pathBase}/artwork-branch/create`,
 				},
