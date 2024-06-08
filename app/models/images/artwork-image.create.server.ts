@@ -31,6 +31,7 @@ export const createArtworkImage = async ({
 }: {
 	data: {
 		artworkId: IArtwork['id']
+		name: string
 		altText: string | null
 		contentType: string
 		blob: Buffer

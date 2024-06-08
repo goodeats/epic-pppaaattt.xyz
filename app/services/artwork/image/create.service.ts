@@ -13,12 +13,14 @@ export const artworkImageCreateService = async ({
 	artworkId,
 	blob,
 	contentType,
+	name,
 	altText,
 }: {
 	userId: IUser['id']
 	artworkId: IArtwork['id']
 	blob: Buffer
 	contentType: string
+	name: string
 	altText: string | null
 }): Promise<IArtworkImageCreatedResponse> => {
 	try {
@@ -29,9 +31,12 @@ export const artworkImageCreateService = async ({
 		invariant(artwork, 'Artwork not found')
 
 		// Step 2: create image
+		// zod schema for blob Buffer/File is not working
+		// pass in separately from validation
 		const imageData = ArtworkImageDataCreateSchema.parse({
 			artworkId,
 			contentType,
+			name,
 			altText,
 		})
 

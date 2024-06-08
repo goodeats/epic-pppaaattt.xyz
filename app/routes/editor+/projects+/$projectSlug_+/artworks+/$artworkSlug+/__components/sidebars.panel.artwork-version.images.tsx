@@ -1,6 +1,11 @@
 import { useMatches } from '@remix-run/react'
 import { memo, useCallback } from 'react'
-import { ImageSidebar } from '#app/components/layout'
+import { ImagePreview } from '#app/components/image'
+import {
+	ImageSidebar,
+	ImageSidebarList,
+	ImageSidebarListItem,
+} from '#app/components/layout'
 import {
 	SidebarPanel,
 	SidebarPanelHeader,
@@ -9,6 +14,7 @@ import {
 import { type IArtworkWithImages } from '#app/models/artwork/artwork.server'
 import { ArtworkImageCreate } from '#app/routes/resources+/api.v1+/artwork.image.create'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
+import { getArtworkImgSrc } from '#app/utils/misc'
 import { artworkVersionLoaderRoute } from '../$branchSlug.$versionSlug'
 
 const ImageCreate = memo(({ artwork }: { artwork: IArtworkWithImages }) => {
@@ -38,7 +44,17 @@ export const PanelArtworkVersionImages = ({}: {}) => {
 				</SidebarPanelHeader>
 			</SidebarPanel>
 			<ImageSidebar>
-				<p>{artwork.images.length} image(s)</p>
+				<ImageSidebarList>
+					{artwork.images.map(image => (
+						<ImageSidebarListItem key={image.id}>
+							<ImagePreview
+								src={getArtworkImgSrc(image.id)}
+								alt={image.altText ?? ''}
+							/>
+							<div>{image.name}</div>
+						</ImageSidebarListItem>
+					))}
+				</ImageSidebarList>
 			</ImageSidebar>
 		</div>
 	)

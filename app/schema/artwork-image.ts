@@ -1,5 +1,8 @@
 import { z } from 'zod'
 
+const MAX_NAME_LENGTH = 240
+const NameSchema = z.string().max(MAX_NAME_LENGTH)
+
 const MAX_ALT_TEXT_LENGTH = 240
 const AltTextSchema = z.string().max(MAX_ALT_TEXT_LENGTH)
 
@@ -28,6 +31,15 @@ const FileSchema = z
 export const NewArtworkImageSchema = z.object({
 	artworkId: z.string(),
 	file: FileSchema,
+	name: NameSchema,
+	altText: AltTextSchema.optional(),
+})
+
+export const EditArtworkImageSchema = z.object({
+	id: z.string(),
+	artworkId: z.string(),
+	file: FileSchema,
+	name: NameSchema,
 	altText: AltTextSchema.optional(),
 })
 
@@ -52,5 +64,6 @@ export const ArtworkImageDataCreateSchema = z.object({
 	// 	message: 'stream must be defined',
 	// }),
 	contentType: z.string(),
+	name: NameSchema,
 	altText: AltTextSchema,
 })

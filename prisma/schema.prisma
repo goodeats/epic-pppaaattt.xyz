@@ -238,6 +238,7 @@ model Artwork {
 
 model ArtworkImage {
   id          String  @id @default(cuid())
+  name        String @default("image")
   altText     String?
   contentType String
   blob        Bytes
