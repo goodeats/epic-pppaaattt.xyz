@@ -41,6 +41,12 @@ const ImageUploadInput = createContainerComponent({
 	displayName: 'ImageUploadInput',
 })
 
+const ImageFull = createContainerComponent({
+	defaultTagName: 'img',
+	defaultClassName: 'w-full object-contain',
+	displayName: 'ImageFull',
+})
+
 export {
 	ImagePreviewContainer,
 	ImagePreviewWrapper,
@@ -49,4 +55,5 @@ export {
 	noImagePreviewClassName,
 	ImagePreviewSkeleton,
 	ImageUploadInput,
+	ImageFull,
 }

@@ -38,7 +38,7 @@ export const artworkImageCreateService = async ({
 			artworkId,
 			contentType,
 			name,
-			altText: altText || 'No description',
+			altText: altText || 'No alt text provided.',
 		})
 
 		// Step 3: create the artwork image via promise

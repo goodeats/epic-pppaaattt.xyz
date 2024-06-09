@@ -15,7 +15,7 @@ const ImageSidebarList = createContainerComponent({
 
 const ImageSidebarListItem = createContainerComponent({
 	defaultTagName: 'li',
-	defaultClassName: 'flex flex-col px-2',
+	defaultClassName: 'flex flex-col',
 	displayName: 'ImageSidebarListItem',
 })
 

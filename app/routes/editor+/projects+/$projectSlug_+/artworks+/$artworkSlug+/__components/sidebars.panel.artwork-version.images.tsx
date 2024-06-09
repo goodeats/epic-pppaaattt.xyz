@@ -1,6 +1,6 @@
 import { useMatches } from '@remix-run/react'
 import { memo, useCallback } from 'react'
-import { ImagePreview } from '#app/components/image'
+import { ImageFull, ImagePreview } from '#app/components/image'
 import {
 	FlexRow,
 	ImageSidebar,
@@ -12,6 +12,14 @@ import {
 	SidebarPanelHeader,
 	SidebarPanelRowActionsContainer,
 } from '#app/components/templates'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '#app/components/ui/dialog'
 import {
 	type IArtwork,
 	type IArtworkWithImages,
@@ -50,10 +58,25 @@ const ImageListItem = memo(
 					<ImageUpdate image={image} />
 					<ImageDelete image={image} artwork={artwork} />
 				</FlexRow>
-				<ImagePreview
-					src={getArtworkImgSrc(image.id)}
-					alt={image.altText ?? ''}
-				/>
+
+				<Dialog>
+					<DialogTrigger>
+						<ImagePreview
+							src={getArtworkImgSrc(image.id)}
+							alt={image.altText ?? ''}
+						/>
+					</DialogTrigger>
+					<DialogContent className="sm:max-w-[425px]">
+						<DialogHeader>
+							<DialogTitle>{image.name}</DialogTitle>
+							<DialogDescription>{image.altText}</DialogDescription>
+						</DialogHeader>
+						<ImageFull
+							src={getArtworkImgSrc(image.id)}
+							alt={image.altText ?? ''}
+						/>
+					</DialogContent>
+				</Dialog>
 			</ImageSidebarListItem>
 		)
 	},
