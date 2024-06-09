@@ -236,6 +236,8 @@ model Artwork {
   @@unique([slug, ownerId])
 }
 
+// consider a service
+// https://github.com/epicweb-dev/epic-stack/blob/main/docs/decisions/018-images.md
 model ArtworkImage {
   id          String  @id @default(cuid())
   name        String @default("image")

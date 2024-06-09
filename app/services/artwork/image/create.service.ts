@@ -7,6 +7,7 @@ import {
 } from '#app/models/images/artwork-image.create.server'
 import { type IUser } from '#app/models/user/user.server'
 import { ArtworkImageDataCreateSchema } from '#app/schema/artwork-image'
+import { prisma } from '#app/utils/db.server'
 
 export const artworkImageCreateService = async ({
 	userId,
@@ -30,19 +31,27 @@ export const artworkImageCreateService = async ({
 		})
 		invariant(artwork, 'Artwork not found')
 
-		// Step 2: create image
+		// Step 2: validate image data
 		// zod schema for blob Buffer/File is not working
 		// pass in separately from validation
 		const imageData = ArtworkImageDataCreateSchema.parse({
 			artworkId,
 			contentType,
 			name,
-			altText,
+			altText: altText || 'No description',
 		})
 
-		const createdArtworkImage = await createArtworkImage({
+		// Step 3: create the artwork image via promise
+		const createArtworkImagePromises = []
+
+		const createArtworkImagePromise = createArtworkImage({
 			data: { ...imageData, blob },
 		})
+		createArtworkImagePromises.push(createArtworkImagePromise)
+
+		const [createdArtworkImage] = await prisma.$transaction(
+			createArtworkImagePromises,
+		)
 
 		return {
 			createdArtworkImage,

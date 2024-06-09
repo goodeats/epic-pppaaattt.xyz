@@ -37,8 +37,8 @@ export const NewArtworkImageSchema = z.object({
 
 export const EditArtworkImageSchema = z.object({
 	id: z.string(),
-	artworkId: z.string(),
-	file: FileSchema,
+	artworkId: z.string().optional(),
+	file: FileSchema.optional(),
 	name: NameSchema,
 	altText: AltTextSchema.optional(),
 })
@@ -66,4 +66,16 @@ export const ArtworkImageDataCreateSchema = z.object({
 	contentType: z.string(),
 	name: NameSchema,
 	altText: AltTextSchema,
+})
+
+export const ArtworkImageDataUpdateSchema = z.object({
+	id: z.string(),
+	contentType: z.string().optional(),
+	name: NameSchema,
+	altText: AltTextSchema,
+})
+
+export const DeleteArtworkImageSchema = z.object({
+	id: z.string(),
+	artworkId: z.string(),
 })

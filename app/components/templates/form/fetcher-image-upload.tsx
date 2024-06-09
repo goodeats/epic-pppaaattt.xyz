@@ -1,5 +1,5 @@
 import { useForm, conform } from '@conform-to/react'
-import { getFieldsetConstraint, parse } from '@conform-to/zod'
+import { getFieldsetConstraint } from '@conform-to/zod'
 import { type FetcherWithComponents } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
@@ -64,6 +64,8 @@ export const FetcherImageUpload = ({
 	children: JSX.Element
 }) => {
 	const [open, setOpen] = useState(false)
+	const [name, setName] = useState(image?.name ?? '')
+	const [altText, setAltText] = useState(image?.altText ?? '')
 
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
@@ -71,23 +73,17 @@ export const FetcherImageUpload = ({
 		id: formId,
 		constraint: getFieldsetConstraint(schema),
 		lastSubmission,
-		shouldValidate: 'onInput',
-		shouldRevalidate: 'onInput',
-		onValidate: ({ formData }) => {
-			return parse(formData, { schema })
-		},
 		defaultValue: {
 			id: image?.id ?? '',
-			name: image?.name ?? '',
-			altText: image?.altText ?? '',
+			name,
+			altText,
 		},
 	})
 
 	const [previewImage, setPreviewImage] = useState<string | null>(
-		// TODO: get image to strategy
+		// TODO: get image to strategy for other image types when needed
 		fields.id.defaultValue ? getArtworkImgSrc(fields.id.defaultValue) : null,
 	)
-	const [altText, setAltText] = useState(fields.altText.defaultValue ?? '')
 
 	// close after successful submission
 	useEffect(() => {
@@ -141,14 +137,6 @@ export const FetcherImageUpload = ({
 													<Icon name="plus" />
 												</ImagePreviewSkeleton>
 											)}
-											{image ? (
-												<input
-													{...conform.input(fields.id, {
-														type: 'hidden',
-														ariaAttributes: true,
-													})}
-												/>
-											) : null}
 											<ImageUploadInput
 												aria-label="Image"
 												onChange={(
@@ -162,8 +150,10 @@ export const FetcherImageUpload = ({
 															setPreviewImage(reader.result as string)
 														}
 														reader.readAsDataURL(file)
+														setName(file.name)
 													} else {
 														setPreviewImage(null)
+														setName('')
 													}
 												}}
 												accept="image/*"
@@ -186,6 +176,7 @@ export const FetcherImageUpload = ({
 									inputProps={{
 										autoFocus: true,
 										...conform.input(fields.name, { ariaAttributes: true }),
+										onChange: e => setName(e.currentTarget.value),
 									}}
 									errors={fields.name.errors}
 								/>

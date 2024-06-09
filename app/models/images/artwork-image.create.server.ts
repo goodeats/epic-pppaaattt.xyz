@@ -26,7 +26,7 @@ export const validateNewArtworkImageSubmission = async ({
 	})
 }
 
-export const createArtworkImage = async ({
+export const createArtworkImage = ({
 	data,
 }: {
 	data: {
@@ -37,8 +37,7 @@ export const createArtworkImage = async ({
 		blob: Buffer
 	}
 }) => {
-	const artworkImage = await prisma.artworkImage.create({
+	return prisma.artworkImage.create({
 		data,
 	})
-	return artworkImage
 }

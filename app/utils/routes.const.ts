@@ -7,6 +7,8 @@ export const Routes = {
 				ARTWORK: {
 					IMAGE: {
 						CREATE: `${pathBase}/artwork/image/create`,
+						DELETE: `${pathBase}/artwork/image/delete`,
+						UPDATE: `${pathBase}/artwork/image/update`,
 					},
 				},
 				ARTWORK_BRANCH: {

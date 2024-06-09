@@ -3,6 +3,7 @@ import { PrismaClient, type Prisma } from '@prisma/client'
 import { type DefaultArgs } from '@prisma/client/runtime/library'
 import chalk from 'chalk'
 import { ArtworkPrismaExtensions } from './prisma-extensions-artwork'
+import { ArtworkImagePrismaExtensions } from './prisma-extensions-artwork-image'
 import { ArtworkVersionPrismaExtensions } from './prisma-extensions-artwork-version'
 import {
 	DesignPrismaExtensions,
@@ -27,6 +28,7 @@ export type PrismaTransactionType = Omit<
 export const prismaExtended = remember('prisma', () => {
 	return new PrismaClient({})
 		.$extends(ArtworkPrismaExtensions)
+		.$extends(ArtworkImagePrismaExtensions)
 		.$extends(ArtworkVersionPrismaExtensions)
 		.$extends(DesignPrismaQueryExtensions)
 		.$extends(DesignPrismaExtensions)
@@ -62,12 +64,12 @@ export const prisma = remember('prisma', () => {
 			e.duration < logThreshold * 1.1
 				? 'green'
 				: e.duration < logThreshold * 1.2
-				  ? 'blue'
-				  : e.duration < logThreshold * 1.3
-				    ? 'yellow'
-				    : e.duration < logThreshold * 1.4
-				      ? 'redBright'
-				      : 'red'
+					? 'blue'
+					: e.duration < logThreshold * 1.3
+						? 'yellow'
+						: e.duration < logThreshold * 1.4
+							? 'redBright'
+							: 'red'
 		const dur = chalk[color](`${e.duration}ms`)
 		console.info(`prisma:query - ${dur} - ${e.query}`)
 	})
