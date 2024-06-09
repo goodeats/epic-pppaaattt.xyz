@@ -1,16 +1,12 @@
-import { useForm } from '@conform-to/react'
-import { getFieldsetConstraint, parse } from '@conform-to/zod'
 import {
 	json,
 	type ActionFunctionArgs,
 	type LoaderFunctionArgs,
 } from '@remix-run/node'
 import { useFetcher } from '@remix-run/react'
-import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
-import { TooltipHydrated } from '#app/components/templates/tooltip'
-import { PanelIconButton } from '#app/components/ui/panel-icon-button'
+import { FetcherIconConfirm } from '#app/components/templates/form/fetcher-icon-confirm'
 import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { validateArtworkImageDeleteSubmission } from '#app/models/images/artwork-image.delete.server'
 import { type IArtworkImage } from '#app/models/images/artwork-image.server'
@@ -19,7 +15,6 @@ import { EntityParentIdType } from '#app/schema/entity'
 import { validateNoJS } from '#app/schema/form-data'
 import { artworkImageDeleteService } from '#app/services/artwork/image/delete.service'
 import { requireUserId } from '#app/utils/auth.server'
-import { useIsPending } from '#app/utils/misc'
 import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
@@ -77,44 +72,33 @@ export const ArtworkImageDelete = ({
 	artwork: IArtwork
 }) => {
 	const imageId = image.id
-	const iconText = `Delete image`
+	const iconText = `Delete Image...`
+	const formId = `artwork-image-delete-${imageId}`
 
 	const fetcher = useFetcher<typeof action>()
-	const lastSubmission = fetcher.data?.submission
-	const isPending = useIsPending()
 	let isHydrated = useHydrated()
 
-	const [form] = useForm({
-		id: `artwork-image-delete-${imageId}`,
-		constraint: getFieldsetConstraint(schema),
-		lastSubmission,
-		onValidate: ({ formData }) => {
-			const parsed = parse(formData, { schema })
-			console.log('parsed', parsed)
-			return parse(formData, { schema })
-		},
-	})
-
 	return (
-		<fetcher.Form method="POST" action={route} {...form.props}>
-			<AuthenticityTokenInput />
-
-			<input type="hidden" name="no-js" value={String(!isHydrated)} />
-			<input type="hidden" name="id" value={imageId} />
-			<input
-				type="hidden"
-				name={EntityParentIdType.ARTWORK_ID}
-				value={artwork.id}
-			/>
-
-			<TooltipHydrated tooltipText={iconText} isHydrated={isHydrated}>
-				<PanelIconButton
-					type="submit"
-					iconName="trash"
-					iconText={iconText}
-					disabled={isPending}
+		<FetcherIconConfirm
+			fetcher={fetcher}
+			route={route}
+			schema={schema}
+			formId={formId}
+			icon="trash"
+			iconText={iconText}
+			tooltipText={iconText}
+			dialogTitle="Delete image"
+			dialogDescription="Are you sure you want to delete this image? This action cannot be undone."
+			isHydrated={isHydrated}
+		>
+			<div className="hidden">
+				<input type="hidden" name="id" value={imageId} />
+				<input
+					type="hidden"
+					name={EntityParentIdType.ARTWORK_ID}
+					value={artwork.id}
 				/>
-			</TooltipHydrated>
-		</fetcher.Form>
+			</div>
+		</FetcherIconConfirm>
 	)
 }
