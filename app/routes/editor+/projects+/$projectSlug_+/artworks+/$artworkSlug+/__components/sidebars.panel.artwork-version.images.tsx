@@ -55,28 +55,31 @@ const ImageListItem = memo(
 			<ImageSidebarListItem key={image.id}>
 				<FlexRow className="items-center">
 					<div className="flex-1 truncate">{image.name}</div>
-					<ImageUpdate image={image} />
-					<ImageDelete image={image} artwork={artwork} />
 				</FlexRow>
-
-				<Dialog>
-					<DialogTrigger>
-						<ImagePreview
-							src={getArtworkImgSrc(image.id)}
-							alt={image.altText ?? ''}
-						/>
-					</DialogTrigger>
-					<DialogContent className="sm:max-w-[425px]">
-						<DialogHeader>
-							<DialogTitle>{image.name}</DialogTitle>
-							<DialogDescription>{image.altText}</DialogDescription>
-						</DialogHeader>
-						<ImageFull
-							src={getArtworkImgSrc(image.id)}
-							alt={image.altText ?? ''}
-						/>
-					</DialogContent>
-				</Dialog>
+				<FlexRow className="mt-2 items-start justify-between">
+					<Dialog>
+						<DialogTrigger>
+							<ImagePreview
+								src={getArtworkImgSrc(image.id)}
+								alt={image.altText ?? ''}
+							/>
+						</DialogTrigger>
+						<DialogContent className="sm:max-w-[425px]">
+							<DialogHeader>
+								<DialogTitle>{image.name}</DialogTitle>
+								<DialogDescription>{image.altText}</DialogDescription>
+							</DialogHeader>
+							<ImageFull
+								src={getArtworkImgSrc(image.id)}
+								alt={image.altText ?? ''}
+							/>
+						</DialogContent>
+					</Dialog>
+					<FlexRow className="gap-2">
+						<ImageUpdate image={image} />
+						<ImageDelete image={image} artwork={artwork} />
+					</FlexRow>
+				</FlexRow>
 			</ImageSidebarListItem>
 		)
 	},
