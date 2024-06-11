@@ -37,6 +37,7 @@ model User {
   artworkBranches ArtworkBranch[]
   layers      Layer[]
   designs     Design[]
+  assets      Asset[]
 }
 
 model Note {
@@ -225,6 +226,7 @@ model Artwork {
   mergeRequests ArtworkMergeRequest[]
 
   images ArtworkImage[]
+  assets      Asset[]
 
   // non-unique foreign key
   @@index([projectId])
@@ -284,6 +286,7 @@ model Layer {
 
   designs Design[]
   images LayerImage[]
+  assets      Asset[]
 
   // non-unique foreign key
   @@index([ownerId])
@@ -540,6 +543,7 @@ model ArtworkVersion {
 
   layers Layer[]
   designs Design[]
+  assets      Asset[]
 
   // non-unique foreign key
   @@index([branchId])
@@ -573,4 +577,34 @@ model ArtworkMergeRequest {
   @@index([artworkId])
   @@index([sourceBranchId])
   @@index([targetBranchId])
+}
+
+model Asset {
+  id          String @id @default(cuid())
+  name        String
+  description String?
+  slug       String
+  type        String // e.g. image, media, palette, gradient, shapes, etc.
+  attributes  String @default("{}") // json string of attributes specific to the type
+  blob        Bytes?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  artworkId String?
+  artwork   Artwork? @relation(fields: [artworkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  artworkVersionId String?
+  artworkVersion   ArtworkVersion? @relation(fields: [artworkVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  layer Layer? @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  layerId String?
+
+  // non-unique foreign key
+  @@index([ownerId])
+  // Unique constraint for slug scoped to ownerId
+  @@unique([slug, ownerId])
 }
