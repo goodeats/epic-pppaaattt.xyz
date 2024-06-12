@@ -4,6 +4,8 @@ import { AssetDescriptionSchema, AssetNameSchema } from './__shared'
 const MAX_ALT_TEXT_LENGTH = 240
 const AltTextSchema = z.string().max(MAX_ALT_TEXT_LENGTH).optional()
 
+const DimensionsSchema = z.number().int().positive()
+
 const MAX_MEGABYTES = 6
 export const MAX_UPLOAD_SIZE = 1024 * 1024 * MAX_MEGABYTES
 const ACCEPTED_IMAGE_TYPES = [
@@ -29,9 +31,17 @@ const FileSchema = z
 // asset image validation before saving to db
 
 // use this to (de)serealize data to/from the db
+// when adding attributes to an asset type,
+// make sure it starts as optional or is set to a default value
+// for when parsing the asset from the deserializer
 export const AssetAttributesImageSchema = z.object({
 	altText: AltTextSchema,
 	contentType: z.string(),
+	height: DimensionsSchema,
+	width: DimensionsSchema,
+	size: z.number(),
+	lastModified: z.number().optional(),
+	filename: z.string(),
 })
 
 // zod schema for blob Buffer/File is not working

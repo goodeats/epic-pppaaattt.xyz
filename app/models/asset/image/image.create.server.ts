@@ -1,13 +1,16 @@
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import { type IArtwork } from '#app/models/artwork/artwork.server'
-import { type IUser } from '#app/models/user/user.server'
 import { type AssetTypeEnum } from '#app/schema/asset'
 import { NewAssetImageArtworkSchema } from '#app/schema/asset/image'
 import { ValidateArtworkParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { stringifyAssetImageAttributes } from '#app/utils/asset/image'
 import { validateEntityImageSubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
-import { type IAsset } from '../asset.server'
+import { type IAssetCreateData, type IAsset } from '../asset.server'
+import {
+	type IAssetImageSubmission,
+	type IAssetAttributesImage,
+} from './image.server'
 
 export interface IAssetImageCreatedResponse {
 	success: boolean
@@ -29,21 +32,29 @@ export const validateNewAssetImageArtworkSubmission = async ({
 	})
 }
 
+export interface IAssetImageCreateSubmission extends IAssetImageSubmission {
+	blob: Buffer
+}
+
+export interface IAssetImageArtworkCreateSubmission
+	extends IAssetImageCreateSubmission {
+	artworkId: IArtwork['id']
+}
+
+interface IAssetImageCreateData extends IAssetCreateData {
+	type: typeof AssetTypeEnum.IMAGE
+	attributes: IAssetAttributesImage
+	blob: Buffer
+}
+
+interface IAssetImageArtworkCreateData extends IAssetImageCreateData {
+	artworkId: IArtwork['id']
+}
+
 export const createAssetImageArtwork = ({
 	data,
 }: {
-	data: {
-		ownerId: IUser['id']
-		artworkId: IArtwork['id']
-		name: string
-		description?: string
-		type: typeof AssetTypeEnum.IMAGE
-		attributes: {
-			contentType: string
-			altText?: string
-		}
-		blob: Buffer
-	}
+	data: IAssetImageArtworkCreateData
 }) => {
 	const { attributes, ...rest } = data
 	const jsonAttributes = stringifyAssetImageAttributes(attributes)

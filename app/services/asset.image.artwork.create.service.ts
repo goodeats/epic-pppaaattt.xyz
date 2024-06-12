@@ -1,11 +1,10 @@
 import { invariant } from '@epic-web/invariant'
 import { getArtwork } from '#app/models/artwork/artwork.get.server'
-import { type IArtwork } from '#app/models/artwork/artwork.server'
 import {
 	type IAssetImageCreatedResponse,
 	createAssetImageArtwork,
+	type IAssetImageArtworkCreateSubmission,
 } from '#app/models/asset/image/image.create.server'
-import { type IUser } from '#app/models/user/user.server'
 import { AssetTypeEnum } from '#app/schema/asset'
 import { AssetImageArtworkDataSchema } from '#app/schema/asset/image'
 import { prisma } from '#app/utils/db.server'
@@ -15,18 +14,15 @@ export const assetImageArtworkCreateService = async ({
 	artworkId,
 	name,
 	description,
-	contentType,
-	altText,
 	blob,
-}: {
-	userId: IUser['id']
-	artworkId: IArtwork['id']
-	name: string
-	description?: string
-	contentType: string
-	altText: string | null
-	blob: Buffer
-}): Promise<IAssetImageCreatedResponse> => {
+	altText,
+	contentType,
+	height,
+	width,
+	size,
+	lastModified,
+	filename,
+}: IAssetImageArtworkCreateSubmission): Promise<IAssetImageCreatedResponse> => {
 	try {
 		// Step 1: verify the artwork exists
 		const artwork = await getArtwork({
@@ -42,8 +38,13 @@ export const assetImageArtworkCreateService = async ({
 			description,
 			type: AssetTypeEnum.IMAGE,
 			attributes: {
-				contentType,
 				altText: altText || 'No alt text provided.',
+				contentType,
+				height,
+				width,
+				size,
+				lastModified,
+				filename,
 			},
 			ownerId: userId,
 			artworkId,

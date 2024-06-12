@@ -1,10 +1,16 @@
+import ExifReader from 'exifreader'
 import { z } from 'zod'
+import { type IAssetImageFileData } from '#app/models/asset/image/image.server'
 
 type FormDataWithId = {
 	id?: string
 	file?: File
 	name?: string
 	altText?: string
+}
+
+interface FileData extends IAssetImageFileData {
+	blob: Buffer
 }
 
 export async function transformAssetImageData(data: FormDataWithId) {
@@ -30,26 +36,35 @@ async function transformAssetImageDataCreate(data: FormDataWithId) {
 		const fileData = await transformFileData(data.file)
 		return {
 			...data,
-			...fileData,
+			...(fileData || {}),
 		}
 	} else {
 		return z.NEVER
 	}
 }
 
-function getImageUpdateData(
-	data: FormDataWithId,
-	fileData?: { contentType: string; blob: Buffer },
-) {
+function getImageUpdateData(data: FormDataWithId, fileData?: FileData) {
 	return {
 		...data,
 		...(fileData && fileData),
 	}
 }
 
-async function transformFileData(file: File) {
+async function transformFileData(file: File): Promise<FileData> {
+	const arrayBuffer = await file.arrayBuffer()
+	const buffer = Buffer.from(arrayBuffer)
+
+	const metadata = await ExifReader.load(buffer)
+	const height = metadata?.['Image Height']?.value ?? 0
+	const width = metadata?.['Image Width']?.value ?? 0
+
 	return {
-		contentType: file.type as string,
-		blob: Buffer.from(await file.arrayBuffer()),
+		contentType: file.type,
+		blob: buffer,
+		height,
+		width,
+		size: file.size,
+		lastModified: file.lastModified,
+		filename: file.name,
 	}
 }

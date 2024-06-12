@@ -1,6 +1,7 @@
 import { type Asset } from '@prisma/client'
 import { type DateOrString } from '#app/definitions/prisma-helper'
 import { type assetTypeEnum } from '#app/schema/asset'
+import { type IUser } from '../user/user.server'
 import {
 	type IAssetImage,
 	type IAssetAttributesImage,
@@ -19,6 +20,9 @@ export interface IAsset extends BaseAsset {
 	updatedAt: DateOrString
 }
 
+// when adding attributes to an asset type,
+// make sure it starts as optional or is set to a default value
+// for when parsing the asset from the deserializer
 export type IAssetAttributes = IAssetAttributesImage
 
 export interface IAssetParsed extends BaseAsset {
@@ -29,3 +33,22 @@ export interface IAssetParsed extends BaseAsset {
 }
 
 export type IAssetType = IAssetImage
+
+interface IAssetData {
+	name: string
+	description?: string
+}
+
+export interface IAssetSubmission extends IAssetData {
+	userId: IUser['id']
+}
+
+export interface IAssetCreateData extends IAssetData {
+	ownerId: IUser['id']
+	type: assetTypeEnum
+	attributes: IAssetAttributes
+}
+
+export interface IAssetUpdateData extends IAssetData {
+	attributes: IAssetAttributes
+}

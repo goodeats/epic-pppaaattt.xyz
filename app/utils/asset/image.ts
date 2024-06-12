@@ -37,3 +37,7 @@ export const stringifyAssetImageAttributes = (
 		}
 	}
 }
+
+export const sizeInMB = (sizeInBytes: number) => {
+	return (sizeInBytes / 1024 / 1024).toFixed(2)
+}

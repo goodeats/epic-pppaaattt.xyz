@@ -5,8 +5,12 @@ import { ValidateAssetSubmissionStrategy } from '#app/strategies/validate-submis
 import { stringifyAssetImageAttributes } from '#app/utils/asset/image'
 import { validateEntityImageSubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
-import { type IAsset } from '../asset.server'
-import { type IAssetImage } from './image.server'
+import { type IAssetUpdateData, type IAsset } from '../asset.server'
+import {
+	type IAssetImageSubmission,
+	type IAssetAttributesImage,
+	type IAssetImage,
+} from './image.server'
 
 export interface IAssetImageUpdatedResponse {
 	success: boolean
@@ -28,20 +32,30 @@ export const validateEditAssetImageArtworkSubmission = async ({
 	})
 }
 
+export interface IAssetImageUpdateSubmission extends IAssetImageSubmission {
+	id: IAssetImage['id']
+	blob?: Buffer
+}
+
+export interface IAssetImageArtworkUpdateSubmission
+	extends IAssetImageUpdateSubmission {
+	artworkId: IArtwork['id']
+}
+
+interface IAssetImageUpdateData extends IAssetUpdateData {
+	attributes: IAssetAttributesImage
+}
+
+interface IAssetImageArtworkUpdateData extends IAssetImageUpdateData {
+	artworkId: IArtwork['id']
+}
+
 export const updateAssetImageArtwork = ({
 	id,
 	data,
 }: {
 	id: IAssetImage['id']
-	data: {
-		artworkId: IArtwork['id']
-		name: string
-		description?: string
-		attributes: {
-			contentType: string
-			altText?: string
-		}
-	}
+	data: IAssetImageArtworkUpdateData
 }) => {
 	const { attributes, ...rest } = data
 	const jsonAttributes = stringifyAssetImageAttributes(attributes)

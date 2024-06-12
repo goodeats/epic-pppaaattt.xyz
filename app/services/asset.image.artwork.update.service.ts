@@ -1,14 +1,12 @@
 import { invariant } from '@epic-web/invariant'
-import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { createAssetImageArtwork } from '#app/models/asset/image/image.create.server'
 import { deleteAssetImage } from '#app/models/asset/image/image.delete.server'
 import { getAssetImage } from '#app/models/asset/image/image.get.server'
-import { type IAssetImage } from '#app/models/asset/image/image.server'
 import {
 	type IAssetImageUpdatedResponse,
 	updateAssetImageArtwork,
+	type IAssetImageArtworkUpdateSubmission,
 } from '#app/models/asset/image/image.update.server'
-import { type IUser } from '#app/models/user/user.server'
 import { AssetTypeEnum } from '#app/schema/asset'
 import { AssetImageArtworkDataSchema } from '#app/schema/asset/image'
 import { prisma } from '#app/utils/db.server'
@@ -20,24 +18,21 @@ export const assetImageArtworkUpdateService = async ({
 	name,
 	description,
 	blob,
-	contentType,
 	altText,
-}: {
-	userId: IUser['id']
-	id: IAssetImage['id']
-	artworkId: IArtwork['id']
-	name: string
-	description?: string
-	blob: Buffer
-	contentType: string
-	altText: string | null
-}): Promise<IAssetImageUpdatedResponse> => {
+	contentType,
+	height,
+	width,
+	size,
+	lastModified,
+	filename,
+}: IAssetImageArtworkUpdateSubmission): Promise<IAssetImageUpdatedResponse> => {
 	try {
 		// Step 1: verify the asset image exists
 		const assetImage = await getAssetImage({
 			where: { id, artworkId, ownerId: userId },
 		})
 		invariant(assetImage, 'Asset Image not found')
+		const { attributes: assetImageAttributes } = assetImage
 
 		// Step 2: validate asset image data
 		const data = {
@@ -45,8 +40,13 @@ export const assetImageArtworkUpdateService = async ({
 			description,
 			type: AssetTypeEnum.IMAGE,
 			attributes: {
-				contentType: contentType ?? assetImage.attributes.contentType,
 				altText: altText || 'No alt text provided.',
+				contentType: contentType ?? assetImageAttributes.contentType,
+				height: height ?? assetImageAttributes.height,
+				width: width ?? assetImageAttributes.width,
+				size: size ?? assetImageAttributes.size,
+				lastModified: lastModified ?? assetImageAttributes.lastModified,
+				filename: filename ?? assetImageAttributes.filename,
 			},
 			ownerId: assetImage.ownerId,
 			artworkId: assetImage.artworkId,

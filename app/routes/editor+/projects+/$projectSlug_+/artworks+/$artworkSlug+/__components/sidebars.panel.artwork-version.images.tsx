@@ -2,6 +2,7 @@ import { useMatches } from '@remix-run/react'
 import { memo, useCallback } from 'react'
 import { ImageFull, ImagePreview } from '#app/components/image'
 import {
+	FlexColumn,
 	FlexRow,
 	ImageSidebar,
 	ImageSidebarList,
@@ -27,6 +28,7 @@ import { AssetImageArtworkDelete } from '#app/routes/resources+/api.v1+/asset.im
 import { AssetImageArtworkUpdate } from '#app/routes/resources+/api.v1+/asset.image.artwork.update'
 import { AssetTypeEnum } from '#app/schema/asset'
 import { filterAssetType } from '#app/utils/asset'
+import { sizeInMB } from '#app/utils/asset/image'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
 import { getArtworkImgSrc } from '#app/utils/misc'
 import { artworkVersionLoaderRoute } from '../$branchSlug.$versionSlug'
@@ -53,14 +55,14 @@ ImageDelete.displayName = 'ImageDelete'
 const ImageListItem = memo(
 	({ image, artwork }: { image: IAssetImage; artwork: IArtworkWithAssets }) => {
 		const { id, name, attributes } = image
-		const { altText } = attributes
+		const { altText, height, width, size } = attributes
 
 		return (
 			<ImageSidebarListItem key={id}>
 				<FlexRow className="items-center">
 					<div className="flex-1 truncate">{name}</div>
 				</FlexRow>
-				<FlexRow className="mt-2 items-start justify-between">
+				<FlexRow className="mt-2 justify-between gap-4">
 					<Dialog>
 						<DialogTrigger>
 							<ImagePreview src={getArtworkImgSrc(id)} alt={altText ?? ''} />
@@ -73,9 +75,21 @@ const ImageListItem = memo(
 							<ImageFull src={getArtworkImgSrc(id)} alt={altText ?? ''} />
 						</DialogContent>
 					</Dialog>
-					<FlexRow className="gap-2">
-						<ImageUpdate image={image} artwork={artwork} />
-						<ImageDelete image={image} artwork={artwork} />
+					<FlexRow>
+						<FlexColumn className="h-full flex-1 items-center justify-between">
+							<FlexRow className="w-full justify-end gap-2">
+								<ImageUpdate image={image} artwork={artwork} />
+								<ImageDelete image={image} artwork={artwork} />
+							</FlexRow>
+							<FlexColumn className="self-end">
+								<FlexRow className="justify-end">
+									{width}x{height}
+								</FlexRow>
+								<FlexRow className="justify-end">
+									<div>{sizeInMB(size)} MB</div>
+								</FlexRow>
+							</FlexColumn>
+						</FlexColumn>
 					</FlexRow>
 				</FlexRow>
 			</ImageSidebarListItem>
