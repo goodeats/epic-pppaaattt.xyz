@@ -1,9 +1,12 @@
+import { invariant } from '@epic-web/invariant'
 import { z } from 'zod'
 import { zodStringOrNull } from '#app/schema/zod-helpers'
+import { deserializeAssets } from '#app/utils/asset'
 import { prisma } from '#app/utils/db.server'
 import {
 	type IArtworkVersionWithDesignsAndLayers,
 	type IArtworkVersion,
+	type IArtworkVersionWithChildren,
 } from './artwork-version.server'
 
 export type queryArtworkVersionWhereArgsType = z.infer<typeof whereArgs>
@@ -29,12 +32,14 @@ const includeDesigns = {
 }
 
 // no ordering for now since these are linked lists
-const includeDesignsAndLayers = {
+const artworkVersionChildren = {
+	assets: true,
 	designs: {
 		include: includeDesigns,
 	},
 	layers: {
 		include: {
+			assets: true,
 			designs: {
 				include: includeDesigns,
 			},
@@ -89,17 +94,20 @@ export const getArtworkVersion = async ({
 	return artworkVersion
 }
 
-export const getArtworkVersionWithDesignsAndLayers = async ({
+export const getArtworkVersionWithChildren = async ({
 	where,
 }: {
 	where: queryArtworkVersionWhereArgsType
-}): Promise<IArtworkVersionWithDesignsAndLayers | null> => {
+}): Promise<IArtworkVersionWithChildren | null> => {
 	validateQueryWhereArgsPresent(where)
 	const artworkVersion = await prisma.artworkVersion.findFirst({
 		where,
-		include: includeDesignsAndLayers,
+		include: artworkVersionChildren,
 	})
-	return artworkVersion
+	invariant(artworkVersion, 'Artwork Version not found')
+
+	const validatedAssets = deserializeAssets({ assets: artworkVersion.assets })
+	return { ...artworkVersion, assets: validatedAssets }
 }
 
 export const getStarredArtworkVersionsByArtworkId = async ({
@@ -115,7 +123,7 @@ export const getStarredArtworkVersionsByArtworkId = async ({
 			starred: true,
 		},
 		include: {
-			...includeDesignsAndLayers,
+			...artworkVersionChildren,
 			branch: true,
 		},
 		orderBy: {
@@ -132,7 +140,7 @@ export const getAllPublishedArtworkVersions = async (): Promise<
 		where: {
 			published: true,
 		},
-		include: includeDesignsAndLayers,
+		include: artworkVersionChildren,
 		orderBy: {
 			publishedAt: 'desc',
 		},

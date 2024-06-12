@@ -14,7 +14,7 @@ import {
 } from '#app/components/layout'
 import { getArtworkWithAssets } from '#app/models/artwork/artwork.get.server'
 import { getArtworkBranch } from '#app/models/artwork-branch/artwork-branch.get.server'
-import { getArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.get.server'
+import { getArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.get.server'
 import { getUserBasic } from '#app/models/user/user.get.server'
 import { artworkVersionGeneratorBuildService } from '#app/services/artwork/version/generator/build.service'
 import { requireUserId } from '#app/utils/auth.server'
@@ -50,7 +50,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 			? { ownerId: owner.id, branchId: branch.id, nextId: null }
 			: { ownerId: owner.id, branchId: branch.id, slug: versionSlug }
 
-	const version = await getArtworkVersionWithDesignsAndLayers({ where })
+	const version = await getArtworkVersionWithChildren({ where })
 	invariantResponse(version, 'Artwork Version not found', { status: 404 })
 
 	const selectedLayer = version.layers.find(layer => layer.selected)

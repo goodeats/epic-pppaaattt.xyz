@@ -11,7 +11,12 @@ import {
 // prisma query returns a string for these fields
 // omit type string to ensure type safety with assetTypeEnum
 // omit attributes string so that extended asset types can insert their own attributes
-type BaseAsset = Omit<Asset, 'type' | 'attributes' | 'createdAt' | 'updatedAt'>
+// omit blob to speed up queries and reduce memory usage
+// asset image blobs are requested via resource routes for example
+type BaseAsset = Omit<
+	Asset,
+	'type' | 'attributes' | 'blob' | 'createdAt' | 'updatedAt'
+>
 
 export interface IAsset extends BaseAsset {
 	type: string

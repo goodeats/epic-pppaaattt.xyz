@@ -2,9 +2,9 @@ import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/ar
 import { DashboardPanelCreateArtworkVersionDesignTypeStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { DashboardPanelArtworkVersionDesignActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { DashboardPanelUpdateArtworkVersionDesignTypeOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
-import { PanelDesigns } from './sidebars.panel.designs'
+import { PanelAssets } from './sidebars.panel.assets'
 
-export const PanelArtworkVersionDesigns = ({
+export const PanelArtworkVersionAssets = ({
 	version,
 }: {
 	version: IArtworkVersionWithChildren
@@ -16,7 +16,7 @@ export const PanelArtworkVersionDesigns = ({
 	const strategyActions = new DashboardPanelArtworkVersionDesignActionStrategy()
 
 	return (
-		<PanelDesigns
+		<PanelAssets
 			parent={version}
 			strategyEntityNew={strategyEntityNew}
 			strategyReorder={strategyReorder}
