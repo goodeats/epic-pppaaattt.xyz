@@ -3,7 +3,10 @@ import {
 	type IAssetParsed,
 	type IAsset,
 	type IAssetType,
+	type IAssetByType,
+	type IAssetsByTypeWithType,
 } from '#app/models/asset/asset.server'
+import { type IAssetImage } from '#app/models/asset/image/image.server'
 import { AssetTypeEnum, type assetTypeEnum } from '#app/schema/asset'
 import { parseAssetImageAttributes } from './asset/image'
 
@@ -70,4 +73,34 @@ export const filterAssetType = ({
 	type: assetTypeEnum
 }): IAssetType[] => {
 	return assets.filter(asset => asset.type === type)
+}
+
+export const filterAssetsByType = ({
+	assets,
+}: {
+	assets: IAssetParsed[]
+}): IAssetByType => {
+	const assetImages = filterAssetType({
+		assets,
+		type: AssetTypeEnum.IMAGE,
+	}) as IAssetImage[]
+
+	return {
+		assetImages,
+	}
+}
+
+export const assetsByTypeToPanelArray = ({
+	assets,
+}: {
+	assets: IAssetByType
+}): IAssetsByTypeWithType[] => {
+	const { assetImages } = assets
+
+	return [
+		{
+			type: AssetTypeEnum.IMAGE,
+			assets: assetImages,
+		},
+	]
 }

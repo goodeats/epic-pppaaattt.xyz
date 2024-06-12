@@ -38,6 +38,13 @@ export interface IAssetParsed extends BaseAsset {
 }
 
 export type IAssetType = IAssetImage
+export type IAssetByType = {
+	assetImages: IAssetImage[]
+}
+export interface IAssetsByTypeWithType {
+	type: assetTypeEnum
+	assets: IAssetType[]
+}
 
 interface IAssetData {
 	name: string

@@ -12,6 +12,7 @@ import {
 	type IDesignsByType,
 	type ISelectedDesigns,
 	type ISelectedDesignsFiltered,
+	type IDesignsByTypeWithType,
 } from '#app/models/design/design.server'
 import { findFirstFillInDesignArray } from '#app/models/design-type/fill/fill.util'
 import { findFirstLayoutInDesignArray } from '#app/models/design-type/layout/layout.util'
@@ -128,10 +129,7 @@ export const designsByTypeToPanelArray = ({
 	designs,
 }: {
 	designs: IDesignsByType
-}): {
-	type: designTypeEnum
-	designs: IDesignWithType[]
-}[] => {
+}): IDesignsByTypeWithType[] => {
 	const {
 		designPalettes,
 		designSizes,

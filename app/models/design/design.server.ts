@@ -3,6 +3,7 @@ import {
 	type selectArgsType,
 	type findDesignArgsType,
 	type whereArgsType,
+	type designTypeEnum,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 import {
@@ -80,6 +81,10 @@ export interface IDesignsByType {
 	designRotates: IDesignWithRotate[]
 	designLayouts: IDesignWithLayout[]
 	designTemplates: IDesignWithTemplate[]
+}
+export interface IDesignsByTypeWithType {
+	type: designTypeEnum
+	designs: IDesignWithType[]
 }
 
 export interface IDesignWithPalette extends IDesignWithType {

@@ -1,13 +1,10 @@
 import { DashboardEntityPanel } from '#app/components/templates/panel/dashboard-entity-panel'
-import { type IDesignWithType } from '#app/models/design/design.server'
-import { type designTypeEnum, type DesignParentType } from '#app/schema/design'
+import { type IAssetsByTypeWithType } from '#app/models/asset/asset.server'
+import { type AssetParentType } from '#app/schema/asset'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
-import {
-	designsByTypeToPanelArray,
-	filterAndOrderDesignsByType,
-} from '#app/utils/design'
+import { assetsByTypeToPanelArray, filterAssetsByType } from '#app/utils/asset'
 
 export const PanelAssets = ({
 	parent,
@@ -15,26 +12,26 @@ export const PanelAssets = ({
 	strategyReorder,
 	strategyActions,
 }: {
-	parent: DesignParentType
+	parent: AssetParentType
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyActions: IDashboardPanelEntityActionStrategy
 }) => {
-	const orderedDesigns = filterAndOrderDesignsByType({
-		designs: parent.designs,
+	const assetsByType = filterAssetsByType({
+		assets: parent.assets,
 	})
-	const designTypePanels = designsByTypeToPanelArray({
-		designs: orderedDesigns,
+	const assetTypePanels = assetsByTypeToPanelArray({
+		assets: assetsByType,
 	})
 
 	return (
 		<div>
-			{designTypePanels.map(designTypePanel => {
+			{assetTypePanels.map(assetTypePanel => {
 				return (
-					<PanelDesign
-						key={designTypePanel.type}
+					<PanelAsset
+						key={assetTypePanel.type}
 						parent={parent}
-						designTypePanel={designTypePanel}
+						assetTypePanel={assetTypePanel}
 						strategyEntityNew={strategyEntityNew}
 						strategyReorder={strategyReorder}
 						strategyActions={strategyActions}
@@ -45,29 +42,26 @@ export const PanelAssets = ({
 	)
 }
 
-export const PanelDesign = ({
+export const PanelAsset = ({
 	parent,
-	designTypePanel,
+	assetTypePanel,
 	strategyEntityNew,
 	strategyReorder,
 	strategyActions,
 }: {
-	parent: DesignParentType
-	designTypePanel: {
-		type: designTypeEnum
-		designs: IDesignWithType[]
-	}
+	parent: AssetParentType
+	assetTypePanel: IAssetsByTypeWithType
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyActions: IDashboardPanelEntityActionStrategy
 }) => {
-	const { type, designs } = designTypePanel
+	const { type, assets } = assetTypePanel
 	return (
 		<DashboardEntityPanel
 			key={type}
 			type={type}
 			parent={parent}
-			entities={designs}
+			entities={assets}
 			strategyEntityNew={strategyEntityNew}
 			strategyReorder={strategyReorder}
 			strategyActions={strategyActions}

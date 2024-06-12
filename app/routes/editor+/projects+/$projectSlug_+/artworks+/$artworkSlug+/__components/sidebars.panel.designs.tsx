@@ -1,6 +1,6 @@
 import { DashboardEntityPanel } from '#app/components/templates/panel/dashboard-entity-panel'
-import { type IDesignWithType } from '#app/models/design/design.server'
-import { type designTypeEnum, type DesignParentType } from '#app/schema/design'
+import { type IDesignsByTypeWithType } from '#app/models/design/design.server'
+import { type DesignParentType } from '#app/schema/design'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
@@ -53,10 +53,7 @@ export const PanelDesign = ({
 	strategyActions,
 }: {
 	parent: DesignParentType
-	designTypePanel: {
-		type: designTypeEnum
-		designs: IDesignWithType[]
-	}
+	designTypePanel: IDesignsByTypeWithType
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyActions: IDashboardPanelEntityActionStrategy

@@ -1,6 +1,7 @@
 import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { type IArtworkBranch } from '#app/models/artwork-branch/artwork-branch.server'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
+import { type IAssetType } from '#app/models/asset/asset.server'
 import {
 	type IDesignWithType,
 	type IDesign,
@@ -16,6 +17,7 @@ import { type ITemplate } from '#app/models/design-type/template/template.server
 import { type ILayer } from '#app/models/layer/layer.server'
 import { type IProject } from '#app/models/project/project.server'
 import { type ObjectValues } from '#app/utils/typescript-helpers'
+import { type assetTypeEnum } from './asset'
 import {
 	type ReorderDesignSchemaType,
 	type NewDesignSchemaType,
@@ -45,6 +47,7 @@ export type IEntity =
 	| IRotate
 	| ILayout
 	| ITemplate
+	| IAssetType
 
 export type IEntityVisible = IDesign | IDesignWithType | ILayer
 export type IEntitySelectable = ILayer
@@ -68,7 +71,7 @@ export type IEntityId =
 	| ILayout['id']
 	| ITemplate['id']
 
-export type IEntityType = designTypeEnum | 'layer'
+export type IEntityType = designTypeEnum | assetTypeEnum | 'layer'
 
 export type IEntityParentType =
 	| IDesignWithType
