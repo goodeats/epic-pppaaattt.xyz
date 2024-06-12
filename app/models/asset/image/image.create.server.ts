@@ -4,6 +4,7 @@ import { type IUser } from '#app/models/user/user.server'
 import { type AssetTypeEnum } from '#app/schema/asset'
 import { NewAssetImageArtworkSchema } from '#app/schema/asset/image'
 import { ValidateArtworkParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
+import { stringifyAssetImageAttributes } from '#app/utils/asset/image'
 import { validateEntityImageSubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
 import { type IAsset } from '../asset.server'
@@ -45,8 +46,7 @@ export const createAssetImageArtwork = ({
 	}
 }) => {
 	const { attributes, ...rest } = data
-	const jsonAttributes = JSON.stringify(attributes)
-	console.log('about to create...', jsonAttributes)
+	const jsonAttributes = stringifyAssetImageAttributes(attributes)
 	return prisma.asset.create({
 		data: {
 			...rest,

@@ -19,3 +19,21 @@ export const parseAssetImageAttributes = (
 		}
 	}
 }
+
+export const stringifyAssetImageAttributes = (
+	attributes: IAssetAttributesImage,
+): string => {
+	try {
+		return JSON.stringify(AssetAttributesImageSchema.parse(attributes))
+	} catch (error: any) {
+		if (error instanceof ZodError) {
+			throw new Error(
+				`Validation failed for asset image: ${error.errors.map(e => e.message).join(', ')}`,
+			)
+		} else {
+			throw new Error(
+				`Unexpected error during validation for asset image: ${error.message}`,
+			)
+		}
+	}
+}

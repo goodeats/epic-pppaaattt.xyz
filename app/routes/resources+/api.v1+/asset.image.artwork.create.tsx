@@ -45,14 +45,12 @@ export async function action({ request }: ActionFunctionArgs) {
 		userId,
 		formData,
 	})
-	console.log('validation:', status, submission)
 
 	if (status === 'success') {
 		const { success, message } = await assetImageArtworkCreateService({
 			userId,
 			...submission.value,
 		})
-		console.log('service:', success, message)
 
 		createSuccess = success
 		errorMessage = message || ''
