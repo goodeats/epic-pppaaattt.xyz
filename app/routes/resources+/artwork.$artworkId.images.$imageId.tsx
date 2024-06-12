@@ -1,12 +1,16 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { type LoaderFunctionArgs } from '@remix-run/node'
-import { prisma } from '#app/utils/db.server.ts'
+import { getAssetImageArtworkSrc } from '#app/models/asset/image/image.get.server'
+import { requireUserId } from '#app/utils/auth.server'
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
+	const userId = await requireUserId(request)
+	invariantResponse(params.artworkId, 'Artwork ID is required', { status: 400 })
 	invariantResponse(params.imageId, 'Image ID is required', { status: 400 })
-	const image = await prisma.artworkImage.findUnique({
-		where: { id: params.imageId },
-		select: { contentType: true, blob: true },
+	const image = await getAssetImageArtworkSrc({
+		id: params.imageId,
+		artworkId: params.artworkId,
+		ownerId: userId,
 	})
 
 	invariantResponse(image, 'Not found', { status: 404 })

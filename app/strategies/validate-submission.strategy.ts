@@ -3,8 +3,8 @@ import { type z } from 'zod'
 import { getArtwork } from '#app/models/artwork/artwork.get.server'
 import { getArtworkBranch } from '#app/models/artwork-branch/artwork-branch.get.server'
 import { getArtworkVersion } from '#app/models/artwork-version/artwork-version.get.server'
+import { getAsset } from '#app/models/asset/asset.get.server'
 import { getDesign } from '#app/models/design/design.get.server'
-import { getArtworkImage } from '#app/models/images/artwork-image.get.server'
 import { getLayer } from '#app/models/layer/layer.get.server'
 import { addNotFoundIssue } from '#app/utils/conform-utils'
 
@@ -156,7 +156,7 @@ export class ValidateLayerParentSubmissionStrategy
 	}
 }
 
-export class ValidateArtworkImageSubmissionStrategy
+export class ValidateAssetSubmissionStrategy
 	implements IValidateSubmissionStrategy
 {
 	async validateFormDataEntity({
@@ -169,18 +169,9 @@ export class ValidateArtworkImageSubmissionStrategy
 		ctx: any
 	}): Promise<void> {
 		const { id } = data
-		// check for image
-		const image = await getArtworkImage({
-			where: { id },
+		const asset = await getAsset({
+			where: { id, ownerId: userId },
 		})
-		if (!image) ctx.addIssue(addNotFoundIssue('Image'))
-
-		if (image) {
-			// check that image belongs to artwork that belongs to user
-			const artwork = await getArtwork({
-				where: { id: image.artworkId, ownerId: userId },
-			})
-			if (!artwork) ctx.addIssue(addNotFoundIssue('Image'))
-		}
+		if (!asset) ctx.addIssue(addNotFoundIssue('Asset'))
 	}
 }

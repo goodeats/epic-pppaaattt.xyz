@@ -32,8 +32,8 @@ import { Icon, type IconName } from '#app/components/ui/icon'
 import { Label } from '#app/components/ui/label'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { StatusButton } from '#app/components/ui/status-button'
-import { type IArtworkImage } from '#app/models/images/artwork-image.server'
-import { getArtworkImgSrc, useIsPending } from '#app/utils/misc'
+import { type IAssetImage } from '#app/models/asset/image/image.server'
+import { useIsPending } from '#app/utils/misc'
 import { TooltipHydrated } from '../tooltip'
 
 export const FetcherImageUpload = ({
@@ -42,6 +42,7 @@ export const FetcherImageUpload = ({
 	schema,
 	formId,
 	image,
+	imgSrc,
 	icon,
 	iconText,
 	tooltipText,
@@ -54,7 +55,8 @@ export const FetcherImageUpload = ({
 	route: string
 	schema: z.ZodSchema<any>
 	formId: string
-	image?: IArtworkImage
+	image?: IAssetImage
+	imgSrc?: string
 	icon: IconName
 	iconText: string
 	tooltipText: string
@@ -65,7 +67,7 @@ export const FetcherImageUpload = ({
 }) => {
 	const [open, setOpen] = useState(false)
 	const [name, setName] = useState(image?.name ?? '')
-	const [altText, setAltText] = useState(image?.altText ?? '')
+	const [altText, setAltText] = useState(image?.attributes.altText ?? '')
 
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
@@ -76,13 +78,13 @@ export const FetcherImageUpload = ({
 		defaultValue: {
 			id: image?.id ?? '',
 			name,
+			description: image?.description ?? '',
 			altText,
 		},
 	})
 
 	const [previewImage, setPreviewImage] = useState<string | null>(
-		// TODO: get image to strategy for other image types when needed
-		fields.id.defaultValue ? getArtworkImgSrc(fields.id.defaultValue) : null,
+		imgSrc ?? null,
 	)
 
 	// close after successful submission
@@ -112,7 +114,6 @@ export const FetcherImageUpload = ({
 						{...form.props}
 					>
 						<AuthenticityTokenInput />
-
 						<input type="hidden" name="no-js" value={String(!isHydrated)} />
 						{children}
 
@@ -182,6 +183,15 @@ export const FetcherImageUpload = ({
 								/>
 								<TextareaField
 									labelProps={{ children: 'Description' }}
+									textareaProps={{
+										...conform.textarea(fields.description, {
+											ariaAttributes: true,
+										}),
+									}}
+									errors={fields.description.errors}
+								/>
+								<TextareaField
+									labelProps={{ children: 'Alt Text' }}
 									textareaProps={{
 										...conform.textarea(fields.altText, {
 											ariaAttributes: true,

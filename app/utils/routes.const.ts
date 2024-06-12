@@ -4,13 +4,6 @@ export const Routes = {
 	RESOURCES: {
 		API: {
 			V1: {
-				ARTWORK: {
-					IMAGE: {
-						CREATE: `${pathBase}/artwork/image/create`,
-						DELETE: `${pathBase}/artwork/image/delete`,
-						UPDATE: `${pathBase}/artwork/image/update`,
-					},
-				},
 				ARTWORK_BRANCH: {
 					CREATE: `${pathBase}/artwork-branch/create`,
 				},
@@ -40,6 +33,15 @@ export const Routes = {
 							VISIBLE: `${pathBase}/artwork-version/layer/update/visible`,
 							ORDER: `${pathBase}/artwork-version/layer/update/order`,
 							SELECTED: `${pathBase}/artwork-version/layer/update/selected`,
+						},
+					},
+				},
+				ASSET: {
+					IMAGE: {
+						ARTWORK: {
+							CREATE: `${pathBase}/asset/image/artwork/create`,
+							DELETE: `${pathBase}/asset/image/artwork/delete`,
+							UPDATE: `${pathBase}/asset/image/artwork/update`,
 						},
 					},
 				},

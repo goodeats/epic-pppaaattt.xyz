@@ -14,7 +14,7 @@ export const SidebarLeft = ({
 }) => {
 	return (
 		<Sidebar className="hidden bg-muted lg:flex">
-			<SidebarTabs tabs={['display', 'assets']} defaultValue="display">
+			<SidebarTabs tabs={['display', 'assets']} defaultValue="assets">
 				<SidebarTabsContent value="display">
 					<PanelArtworkVersionLayers version={version} />
 				</SidebarTabsContent>

@@ -9,21 +9,21 @@ import { useFetcher } from '@remix-run/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { FetcherImageUpload } from '#app/components/templates/form/fetcher-image-upload'
-import { type IArtworkImage } from '#app/models/images/artwork-image.server'
-import { validateEditArtworkImageSubmission } from '#app/models/images/artwork-image.update.server'
+import { type IArtwork } from '#app/models/artwork/artwork.server'
+import { validateNewAssetImageArtworkSubmission } from '#app/models/asset/image/image.create.server'
 import {
-	EditArtworkImageSchema,
 	MAX_UPLOAD_SIZE,
-} from '#app/schema/artwork-image'
+	NewAssetImageArtworkSchema,
+} from '#app/schema/asset/image'
 import { validateNoJS } from '#app/schema/form-data'
-import { artworkImageUpdateService } from '#app/services/artwork/image/update.service'
+import { assetImageArtworkCreateService } from '#app/services/asset.image.artwork.create.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
 
-const route = Routes.RESOURCES.API.V1.ARTWORK.IMAGE.UPDATE
-const schema = EditArtworkImageSchema
+const route = Routes.RESOURCES.API.V1.ASSET.IMAGE.ARTWORK.CREATE
+const schema = NewAssetImageArtworkSchema
 
 // auth GET request to endpoint
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -41,13 +41,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	let createSuccess = false
 	let errorMessage = ''
-	const { status, submission } = await validateEditArtworkImageSubmission({
+	const { status, submission } = await validateNewAssetImageArtworkSubmission({
 		userId,
 		formData,
 	})
 
 	if (status === 'success') {
-		const { success, message } = await artworkImageUpdateService({
+		const { success, message } = await assetImageArtworkCreateService({
 			userId,
 			...submission.value,
 		})
@@ -70,9 +70,9 @@ export async function action({ request }: ActionFunctionArgs) {
 	)
 }
 
-export const ArtworkImageUpdate = ({ image }: { image: IArtworkImage }) => {
-	const imageId = image.id
-	const formId = `artwork-image-update-${imageId}`
+export const AssetImageArtworkCreate = ({ artwork }: { artwork: IArtwork }) => {
+	const artworkId = artwork.id
+	const formId = `asset-image-artwork-${artworkId}-create`
 
 	const fetcher = useFetcher<typeof action>()
 	let isHydrated = useHydrated()
@@ -83,16 +83,15 @@ export const ArtworkImageUpdate = ({ image }: { image: IArtworkImage }) => {
 			route={route}
 			schema={schema}
 			formId={formId}
-			image={image}
-			icon="pencil-1"
-			iconText="Edit Image"
-			tooltipText="Edit image..."
-			dialogTitle="Edit image"
-			dialogDescription="Update the image for the artwork that can be used on many layers, branches, and versions."
+			icon="plus"
+			iconText="New Image"
+			tooltipText="New image..."
+			dialogTitle="Add a new image"
+			dialogDescription="Add an image to the artwork that can be used on many layers, branches, and versions."
 			isHydrated={isHydrated}
 		>
 			<div className="hidden">
-				<input type="hidden" name="id" value={imageId} />
+				<input type="hidden" name="artworkId" value={artworkId} />
 			</div>
 		</FetcherImageUpload>
 	)
