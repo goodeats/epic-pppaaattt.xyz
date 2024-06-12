@@ -22,9 +22,9 @@ import {
 } from '#app/components/ui/dialog'
 import { type IArtworkWithAssets } from '#app/models/artwork/artwork.server'
 import { type IAssetImage } from '#app/models/asset/image/image.server'
-import { ArtworkImageDelete } from '#app/routes/resources+/api.v1+/artwork.image.delete'
 import { ArtworkImageUpdate } from '#app/routes/resources+/api.v1+/artwork.image.update'
 import { AssetImageArtworkCreate } from '#app/routes/resources+/api.v1+/asset.image.artwork.create'
+import { AssetImageArtworkDelete } from '#app/routes/resources+/api.v1+/asset.image.artwork.delete'
 import { AssetTypeEnum } from '#app/schema/asset'
 import { filterAssetType } from '#app/utils/asset'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
@@ -43,7 +43,7 @@ ImageUpdate.displayName = 'ImageUpdate'
 
 const ImageDelete = memo(
 	({ image, artwork }: { image: IAssetImage; artwork: IArtworkWithAssets }) => {
-		return <ArtworkImageDelete image={image} artwork={artwork} />
+		return <AssetImageArtworkDelete image={image} artwork={artwork} />
 	},
 )
 ImageDelete.displayName = 'ImageDelete'

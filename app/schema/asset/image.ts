@@ -26,6 +26,8 @@ const FileSchema = z
 		'Image must be a JPEG, PNG, WEBP, or GIF',
 	)
 
+// asset image validation before saving to db
+
 // use this to (de)serealize data to/from the db
 export const AssetAttributesImageSchema = z.object({
 	altText: AltTextSchema,
@@ -49,6 +51,8 @@ export const ArtworkImageDataUpdateSchema = z.object({
 	altText: AltTextSchema,
 })
 
+// form data validation
+
 export const NewAssetImageSchema = z.object({
 	file: FileSchema,
 	name: AssetNameSchema,
@@ -56,14 +60,15 @@ export const NewAssetImageSchema = z.object({
 	altText: AltTextSchema,
 })
 
-export const EditArtworkImageSchema = z.object({
+export const EditAssetImageSchema = z.object({
 	id: z.string(),
 	file: FileSchema.optional(),
 	name: AssetNameSchema,
+	description: AssetDescriptionSchema,
 	altText: AltTextSchema,
 })
 
-export const DeleteArtworkImageSchema = z.object({
+export const DeleteAssetImageSchema = z.object({
 	id: z.string(),
 })
 
@@ -73,8 +78,14 @@ const ArtworkParentSchema = z.object({
 	artworkId: z.string(),
 })
 
+export const AssetImageArtworkCreateDataSchema =
+	AssetImageCreateDataSchema.merge(ArtworkParentSchema)
+
 export const NewAssetImageArtworkSchema =
 	NewAssetImageSchema.merge(ArtworkParentSchema)
 
-export const AssetImageArtworkCreateDataSchema =
-	AssetImageCreateDataSchema.merge(ArtworkParentSchema)
+export const EditAssetImageArtworkSchema =
+	EditAssetImageSchema.merge(ArtworkParentSchema)
+
+export const DeleteAssetImageArtworkSchema =
+	DeleteAssetImageSchema.merge(ArtworkParentSchema)

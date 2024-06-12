@@ -47,6 +47,8 @@ export const Routes = {
 					IMAGE: {
 						ARTWORK: {
 							CREATE: `${pathBase}/asset/image/artwork/create`,
+							DELETE: `${pathBase}/asset/image/artwork/delete`,
+							UPDATE: `${pathBase}/asset/image/artwork/update`,
 						},
 					},
 				},
