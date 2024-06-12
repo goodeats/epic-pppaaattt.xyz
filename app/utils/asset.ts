@@ -7,8 +7,8 @@ import {
 	type IAssetsByTypeWithType,
 } from '#app/models/asset/asset.server'
 import { type IAssetImage } from '#app/models/asset/image/image.server'
+import { parseAssetImageAttributes } from '#app/models/asset/image/utils'
 import { AssetTypeEnum, type assetTypeEnum } from '#app/schema/asset'
-import { parseAssetImageAttributes } from './asset/image'
 
 export const deserializeAssets = ({
 	assets,

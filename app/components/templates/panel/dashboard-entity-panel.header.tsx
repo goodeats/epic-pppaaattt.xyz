@@ -1,6 +1,8 @@
 import { memo, useCallback } from 'react'
+import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { ArtworkVersionDesignCreate } from '#app/routes/resources+/api.v1+/artwork-version.design.create'
 import { ArtworkVersionLayerCreate } from '#app/routes/resources+/api.v1+/artwork-version.layer.create'
+import { AssetImageArtworkVersionCreate } from '#app/routes/resources+/api.v1+/asset.image.artwork-version.create'
 import { LayerDesignCreate } from '#app/routes/resources+/api.v1+/layer.design.create'
 import { type designTypeEnum } from '#app/schema/design'
 import {
@@ -32,7 +34,9 @@ const ArtworkVersionCreateChildEntityForm = memo(
 	({ entityType, type, parent }: CreateChildEntityFormProps) => {
 		switch (entityType) {
 			case EntityType.ASSET:
-				return <div>+ image</div>
+				return (
+					<AssetImageArtworkVersionCreate version={parent as IArtworkVersion} />
+				)
 			case EntityType.DESIGN:
 				return (
 					<ArtworkVersionDesignCreate

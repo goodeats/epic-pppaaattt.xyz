@@ -3,7 +3,6 @@ import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { type AssetTypeEnum } from '#app/schema/asset'
 import { NewAssetImageArtworkSchema } from '#app/schema/asset/image'
 import { ValidateArtworkParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
-import { stringifyAssetImageAttributes } from '#app/utils/asset/image'
 import { validateEntityImageSubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
 import { type IAssetCreateData, type IAsset } from '../asset.server'
@@ -11,6 +10,7 @@ import {
 	type IAssetImageSubmission,
 	type IAssetAttributesImage,
 } from './image.server'
+import { stringifyAssetImageAttributes } from './utils'
 
 export interface IAssetImageCreatedResponse {
 	success: boolean

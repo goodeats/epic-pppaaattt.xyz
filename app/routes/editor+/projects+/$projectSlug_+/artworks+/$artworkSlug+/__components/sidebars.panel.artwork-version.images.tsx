@@ -1,4 +1,3 @@
-import { useMatches } from '@remix-run/react'
 import { memo, useCallback } from 'react'
 import {
 	ImageSidebar,
@@ -11,12 +10,10 @@ import {
 	SidebarPanelRowActionsContainer,
 } from '#app/components/templates'
 import { type IArtworkWithAssets } from '#app/models/artwork/artwork.server'
+import { useArtworkFromVersion } from '#app/models/artwork/hooks'
+import { useAssetImagesArtwork } from '#app/models/asset/image/hooks'
 import { type IAssetImage } from '#app/models/asset/image/image.server'
 import { AssetImageArtworkCreate } from '#app/routes/resources+/api.v1+/asset.image.artwork.create'
-import { AssetTypeEnum } from '#app/schema/asset'
-import { filterAssetType } from '#app/utils/asset'
-import { useRouteLoaderMatchData } from '#app/utils/matches'
-import { artworkVersionLoaderRoute } from '../$branchSlug.$versionSlug'
 import { ImageListItem } from './sidebars.panel.artwork-version.images.image'
 
 const ImageCreate = memo(({ artwork }: { artwork: IArtworkWithAssets }) => {
@@ -25,16 +22,8 @@ const ImageCreate = memo(({ artwork }: { artwork: IArtworkWithAssets }) => {
 ImageCreate.displayName = 'ImageCreate'
 
 export const PanelArtworkVersionImages = ({}: {}) => {
-	const matches = useMatches()
-	const { artwork } = useRouteLoaderMatchData(
-		matches,
-		artworkVersionLoaderRoute,
-	)
-	const { assets } = artwork as IArtworkWithAssets
-	const images: IAssetImage[] = filterAssetType({
-		assets,
-		type: AssetTypeEnum.IMAGE,
-	})
+	const artwork = useArtworkFromVersion()
+	const images = useAssetImagesArtwork()
 
 	const imageCreate = useCallback(
 		() => <ImageCreate artwork={artwork as IArtworkWithAssets} />,

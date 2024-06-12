@@ -15,10 +15,10 @@ import {
 } from '#app/components/ui/dialog'
 import { type IArtworkWithAssets } from '#app/models/artwork/artwork.server'
 import { type IAssetImage } from '#app/models/asset/image/image.server'
+import { sizeInMB } from '#app/models/asset/image/utils'
 import { AssetImageArtworkCreate } from '#app/routes/resources+/api.v1+/asset.image.artwork.create'
 import { AssetImageArtworkDelete } from '#app/routes/resources+/api.v1+/asset.image.artwork.delete'
 import { AssetImageArtworkUpdate } from '#app/routes/resources+/api.v1+/asset.image.artwork.update'
-import { sizeInMB } from '#app/utils/asset/image'
 import { getArtworkAssetImgSrc } from '#app/utils/misc'
 
 const ImageCreate = memo(({ artwork }: { artwork: IArtworkWithAssets }) => {

@@ -2,7 +2,6 @@ import { type IntentActionArgs } from '#app/definitions/intent-action-args'
 import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { EditAssetImageArtworkSchema } from '#app/schema/asset/image'
 import { ValidateAssetSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
-import { stringifyAssetImageAttributes } from '#app/utils/asset/image'
 import { validateEntityImageSubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
 import { type IAssetUpdateData, type IAsset } from '../asset.server'
@@ -11,6 +10,7 @@ import {
 	type IAssetAttributesImage,
 	type IAssetImage,
 } from './image.server'
+import { stringifyAssetImageAttributes } from './utils'
 
 export interface IAssetImageUpdatedResponse {
 	success: boolean
