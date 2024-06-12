@@ -15,10 +15,10 @@ export const assetImageArtworkDeleteService = async ({
 }): Promise<IAssetImageDeletedResponse> => {
 	try {
 		// Step 1: delete the asset image via promise
-		const deleteArtworkImagePromise = deleteAssetImage({ id })
+		const deleteAssetImageArtworkPromise = deleteAssetImage({ id })
 
 		// Step 2: execute the transaction
-		await prisma.$transaction([deleteArtworkImagePromise])
+		await prisma.$transaction([deleteAssetImageArtworkPromise])
 
 		return { success: true }
 	} catch (error) {

@@ -226,7 +226,6 @@ model Artwork {
   branches ArtworkBranch[]
   mergeRequests ArtworkMergeRequest[]
 
-  images ArtworkImage[]
   assets      Asset[]
 
   // non-unique foreign key
@@ -239,24 +238,6 @@ model Artwork {
   @@unique([slug, ownerId])
 }
 
-// consider a service
-// https://github.com/epicweb-dev/epic-stack/blob/main/docs/decisions/018-images.md
-model ArtworkImage {
-  id          String  @id @default(cuid())
-  name        String @default("image")
-  altText     String?
-  contentType String
-  blob        Bytes
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  artwork   Artwork   @relation(fields: [artworkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artworkId String
-
-  // non-unique foreign key
-  @@index([artworkId])
-}
 
 model Layer {
   id          String @id @default(cuid())
@@ -286,7 +267,6 @@ model Layer {
   children Layer[] @relation("ParentChildLayer")
 
   designs Design[]
-  images LayerImage[]
   assets      Asset[]
 
   // non-unique foreign key
@@ -297,24 +277,6 @@ model Layer {
   @@index([ownerId, updatedAt])
   // Unique constraint for slug scoped to ownerId
   @@unique([slug, ownerId, artworkVersionId])
-}
-
-// refactor image structure later to use a single table for all images
-// mayber follow design type architecture
-model LayerImage {
-  id          String  @id @default(cuid())
-  altText     String?
-  contentType String
-  blob        Bytes
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  layer   Layer   @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  layerId String
-
-  // non-unique foreign key
-  @@index([layerId])
 }
 
 model Design {

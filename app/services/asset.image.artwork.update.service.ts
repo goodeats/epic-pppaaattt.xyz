@@ -55,7 +55,7 @@ export const assetImageArtworkUpdateService = async ({
 
 		if (blob) {
 			// Step 3: delete the asset image with old blob via promise
-			const deleteArtworkImagePromise = deleteAssetImage({ id })
+			const deleteAssetImageArtworkPromise = deleteAssetImage({ id })
 
 			// Step 4: create the asset image with new blob via promise
 			const createAssetImagePromise = createAssetImageArtwork({
@@ -64,7 +64,7 @@ export const assetImageArtworkUpdateService = async ({
 
 			// Step 5: execute the transaction
 			const [, updatedAssetImage] = await prisma.$transaction([
-				deleteArtworkImagePromise,
+				deleteAssetImageArtworkPromise,
 				createAssetImagePromise,
 			])
 

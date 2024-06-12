@@ -2,7 +2,6 @@ import { type Artwork } from '@prisma/client'
 import { type DateOrString } from '#app/definitions/prisma-helper'
 import { type IArtworkBranchWithVersions } from '../artwork-branch/artwork-branch.server'
 import { type IAssetParsed } from '../asset/asset.server'
-import { type IArtworkImage } from '../images/artwork-image.server'
 import { type IProjectWithArtworks } from '../project/project.server'
 
 // Omitting 'createdAt' and 'updatedAt' from the Artwork interface
@@ -19,10 +18,6 @@ export interface IArtworkWithProject extends IArtwork {
 
 export interface IArtworkWithBranchesAndVersions extends IArtwork {
 	branches: IArtworkBranchWithVersions[]
-}
-
-export interface IArtworkWithImages extends IArtwork {
-	images: IArtworkImage[]
 }
 
 export interface IArtworkWithAssets extends IArtwork {
