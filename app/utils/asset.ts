@@ -2,49 +2,17 @@ import { ZodError } from 'zod'
 import {
 	type IAssetParsed,
 	type IAsset,
-	type IAssetAttributes,
 	type IAssetType,
 } from '#app/models/asset/asset.server'
-import { type assetTypeEnum } from '#app/schema/asset'
-import { AssetAttributesImageSchema } from '#app/schema/asset/image'
-
-// Function to parse attributes from JSON string
-export const parseAttributes = (asset: IAsset): IAssetParsed => {
-	try {
-		return {
-			...asset,
-			type: asset.type as assetTypeEnum,
-			attributes: JSON.parse(asset.attributes) as IAssetAttributes,
-		}
-	} catch (error: any) {
-		throw new Error(
-			`Failed to parse attributes for asset with ID ${asset.id}: ${error.message}`,
-		)
-	}
-}
-
-// Function to stringify attributes to JSON string
-export const stringifyAttributes = (asset: IAssetParsed): IAsset => {
-	try {
-		return {
-			...asset,
-			attributes: JSON.stringify(asset.attributes),
-		}
-	} catch (error: any) {
-		throw new Error(
-			`Failed to stringify attributes for asset with ID ${asset.id}: ${error.message}`,
-		)
-	}
-}
+import { AssetTypeEnum, type assetTypeEnum } from '#app/schema/asset'
+import { parseAssetImageAttributes } from './asset/image'
 
 export const deserializeAssets = ({
 	assets,
 }: {
 	assets: IAsset[]
 }): IAssetParsed[] => {
-	return assets.map(asset => {
-		return deserializeAsset({ asset })
-	})
+	return assets.map(asset => deserializeAsset({ asset }))
 }
 
 export const deserializeAsset = ({
@@ -52,32 +20,32 @@ export const deserializeAsset = ({
 }: {
 	asset: IAsset
 }): IAssetParsed => {
-	const parsedAsset = parseAttributes(asset)
-	const { type, attributes } = parsedAsset
+	const type = asset.type as assetTypeEnum
+	const { attributes } = asset
 
-	const validatedAssets = validateAttributes({
-		attributes,
+	const validatedAssetAttributes = validateAssetAttributes({
 		type,
+		attributes,
 	})
 
 	return {
 		...asset,
 		type,
-		attributes: validatedAssets,
+		attributes: validatedAssetAttributes,
 	}
 }
 
-export const validateAttributes = ({
-	attributes,
+export const validateAssetAttributes = ({
 	type,
+	attributes,
 }: {
-	attributes: IAssetAttributes
 	type: assetTypeEnum
+	attributes: IAsset['attributes']
 }) => {
 	try {
 		switch (type) {
-			case 'image':
-				return AssetAttributesImageSchema.parse(attributes)
+			case AssetTypeEnum.IMAGE:
+				return parseAssetImageAttributes(attributes)
 			default:
 				throw new Error(`Unsupported asset type: ${type}`)
 		}

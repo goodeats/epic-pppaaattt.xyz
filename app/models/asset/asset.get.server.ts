@@ -25,7 +25,7 @@ const validateQueryWhereArgsPresent = (where: queryAssetWhereArgsType) => {
 	if (Object.keys(missingValues).length > 0) {
 		console.log('Missing values:', missingValues)
 		throw new Error(
-			'Null or undefined values are not allowed in query parameters for artwork branch.',
+			'Null or undefined values are not allowed in query parameters for asset.',
 		)
 	}
 }

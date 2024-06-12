@@ -22,9 +22,9 @@ import {
 } from '#app/components/ui/dialog'
 import { type IArtworkWithAssets } from '#app/models/artwork/artwork.server'
 import { type IAssetImage } from '#app/models/asset/image/image.server'
-import { ArtworkImageUpdate } from '#app/routes/resources+/api.v1+/artwork.image.update'
 import { AssetImageArtworkCreate } from '#app/routes/resources+/api.v1+/asset.image.artwork.create'
 import { AssetImageArtworkDelete } from '#app/routes/resources+/api.v1+/asset.image.artwork.delete'
+import { AssetImageArtworkUpdate } from '#app/routes/resources+/api.v1+/asset.image.artwork.update'
 import { AssetTypeEnum } from '#app/schema/asset'
 import { filterAssetType } from '#app/utils/asset'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
@@ -36,9 +36,11 @@ const ImageCreate = memo(({ artwork }: { artwork: IArtworkWithAssets }) => {
 })
 ImageCreate.displayName = 'ImageCreate'
 
-const ImageUpdate = memo(({ image }: { image: IAssetImage }) => {
-	return <ArtworkImageUpdate image={image} />
-})
+const ImageUpdate = memo(
+	({ image, artwork }: { image: IAssetImage; artwork: IArtworkWithAssets }) => {
+		return <AssetImageArtworkUpdate image={image} artwork={artwork} />
+	},
+)
 ImageUpdate.displayName = 'ImageUpdate'
 
 const ImageDelete = memo(
@@ -72,7 +74,7 @@ const ImageListItem = memo(
 						</DialogContent>
 					</Dialog>
 					<FlexRow className="gap-2">
-						<ImageUpdate image={image} />
+						<ImageUpdate image={image} artwork={artwork} />
 						<ImageDelete image={image} artwork={artwork} />
 					</FlexRow>
 				</FlexRow>

@@ -36,19 +36,12 @@ export const AssetAttributesImageSchema = z.object({
 
 // zod schema for blob Buffer/File is not working
 // pass in separately from validation
-export const AssetImageCreateDataSchema = z.object({
+export const AssetImageDataSchema = z.object({
 	name: AssetNameSchema,
 	description: AssetDescriptionSchema,
 	type: z.literal('image'),
 	attributes: AssetAttributesImageSchema,
 	ownerId: z.string(),
-})
-
-export const ArtworkImageDataUpdateSchema = z.object({
-	id: z.string(),
-	contentType: z.string().optional(),
-	name: AssetNameSchema,
-	altText: AltTextSchema,
 })
 
 // form data validation
@@ -78,8 +71,8 @@ const ArtworkParentSchema = z.object({
 	artworkId: z.string(),
 })
 
-export const AssetImageArtworkCreateDataSchema =
-	AssetImageCreateDataSchema.merge(ArtworkParentSchema)
+export const AssetImageArtworkDataSchema =
+	AssetImageDataSchema.merge(ArtworkParentSchema)
 
 export const NewAssetImageArtworkSchema =
 	NewAssetImageSchema.merge(ArtworkParentSchema)

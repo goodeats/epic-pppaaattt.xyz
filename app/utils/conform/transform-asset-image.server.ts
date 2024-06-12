@@ -42,9 +42,7 @@ function getImageUpdateData(
 	fileData?: { contentType: string; blob: Buffer },
 ) {
 	return {
-		id: data.id,
-		name: data.name,
-		altText: data.altText,
+		...data,
 		...(fileData && fileData),
 	}
 }

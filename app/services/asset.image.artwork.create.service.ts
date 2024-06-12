@@ -7,7 +7,7 @@ import {
 } from '#app/models/asset/image/image.create.server'
 import { type IUser } from '#app/models/user/user.server'
 import { AssetTypeEnum } from '#app/schema/asset'
-import { AssetImageArtworkCreateDataSchema } from '#app/schema/asset/image'
+import { AssetImageArtworkDataSchema } from '#app/schema/asset/image'
 import { prisma } from '#app/utils/db.server'
 
 export const assetImageArtworkCreateService = async ({
@@ -15,17 +15,17 @@ export const assetImageArtworkCreateService = async ({
 	artworkId,
 	name,
 	description,
-	blob,
 	contentType,
 	altText,
+	blob,
 }: {
 	userId: IUser['id']
 	artworkId: IArtwork['id']
 	name: string
 	description?: string
-	blob: Buffer
 	contentType: string
 	altText: string | null
+	blob: Buffer
 }): Promise<IAssetImageCreatedResponse> => {
 	try {
 		// Step 1: verify the artwork exists
@@ -48,9 +48,7 @@ export const assetImageArtworkCreateService = async ({
 			ownerId: userId,
 			artworkId,
 		}
-		console.log('data:', data)
-		const assetImageData = AssetImageArtworkCreateDataSchema.parse(data)
-		console.log('assetImageData:', assetImageData)
+		const assetImageData = AssetImageArtworkDataSchema.parse(data)
 
 		// Step 3: create the asset image via promise
 		const createAssetImagePromise = createAssetImageArtwork({

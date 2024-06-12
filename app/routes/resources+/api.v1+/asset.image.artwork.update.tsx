@@ -9,14 +9,15 @@ import { useFetcher } from '@remix-run/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { FetcherImageUpload } from '#app/components/templates/form/fetcher-image-upload'
+import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { type IAssetImage } from '#app/models/asset/image/image.server'
-import { validateEditArtworkImageSubmission } from '#app/models/images/artwork-image.update.server'
+import { validateEditAssetImageArtworkSubmission } from '#app/models/asset/image/image.update.server'
 import {
 	EditAssetImageArtworkSchema,
 	MAX_UPLOAD_SIZE,
 } from '#app/schema/asset/image'
 import { validateNoJS } from '#app/schema/form-data'
-import { artworkImageUpdateService } from '#app/services/artwork/image/update.service'
+import { assetImageArtworkUpdateService } from '#app/services/asset.image.artwork.update.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { Routes } from '#app/utils/routes.const'
 
@@ -41,13 +42,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	let createSuccess = false
 	let errorMessage = ''
-	const { status, submission } = await validateEditArtworkImageSubmission({
+	const { status, submission } = await validateEditAssetImageArtworkSubmission({
 		userId,
 		formData,
 	})
 
 	if (status === 'success') {
-		const { success, message } = await artworkImageUpdateService({
+		const { success, message } = await assetImageArtworkUpdateService({
 			userId,
 			...submission.value,
 		})
@@ -70,9 +71,16 @@ export async function action({ request }: ActionFunctionArgs) {
 	)
 }
 
-export const ArtworkImageUpdate = ({ image }: { image: IAssetImage }) => {
+export const AssetImageArtworkUpdate = ({
+	image,
+	artwork,
+}: {
+	image: IAssetImage
+	artwork: IArtwork
+}) => {
 	const imageId = image.id
-	const formId = `asset-image-art-update-${imageId}`
+	const artworkId = artwork.id
+	const formId = `asset-image-${imageId}-artwork-${artworkId}-update`
 
 	const fetcher = useFetcher<typeof action>()
 	let isHydrated = useHydrated()
@@ -93,6 +101,7 @@ export const ArtworkImageUpdate = ({ image }: { image: IAssetImage }) => {
 		>
 			<div className="hidden">
 				<input type="hidden" name="id" value={imageId} />
+				<input type="hidden" name="artworkId" value={artworkId} />
 			</div>
 		</FetcherImageUpload>
 	)

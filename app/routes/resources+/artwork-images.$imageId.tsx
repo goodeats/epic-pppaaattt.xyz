@@ -1,10 +1,10 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { type LoaderFunctionArgs } from '@remix-run/node'
-import { getAssetImageArtwork } from '#app/models/asset/image/image.get.server'
+import { getAssetImageArtworkSrc } from '#app/models/asset/image/image.get.server'
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	invariantResponse(params.imageId, 'Image ID is required', { status: 400 })
-	const image = await getAssetImageArtwork({ id: params.imageId })
+	const image = await getAssetImageArtworkSrc({ id: params.imageId })
 
 	invariantResponse(image, 'Not found', { status: 404 })
 
