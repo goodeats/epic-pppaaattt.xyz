@@ -19,7 +19,7 @@ import { AssetImageArtworkCreate } from '#app/routes/resources+/api.v1+/asset.im
 import { AssetImageArtworkDelete } from '#app/routes/resources+/api.v1+/asset.image.artwork.delete'
 import { AssetImageArtworkUpdate } from '#app/routes/resources+/api.v1+/asset.image.artwork.update'
 import { sizeInMB } from '#app/utils/asset/image'
-import { getArtworkImgSrc } from '#app/utils/misc'
+import { getArtworkAssetImgSrc } from '#app/utils/misc'
 
 const ImageCreate = memo(({ artwork }: { artwork: IArtworkWithAssets }) => {
 	return <AssetImageArtworkCreate artwork={artwork} />
@@ -44,6 +44,7 @@ export const ImageListItem = memo(
 	({ image, artwork }: { image: IAssetImage; artwork: IArtworkWithAssets }) => {
 		const { id, name, attributes } = image
 		const { altText, height, width, size } = attributes
+		const imgSrc = getArtworkAssetImgSrc({ imageId: id, artworkId: artwork.id })
 
 		return (
 			<ImageSidebarListItem key={id}>
@@ -53,14 +54,14 @@ export const ImageListItem = memo(
 				<FlexRow className="mt-2 justify-between gap-4">
 					<Dialog>
 						<DialogTrigger>
-							<ImagePreview src={getArtworkImgSrc(id)} alt={altText ?? ''} />
+							<ImagePreview src={imgSrc} alt={altText ?? ''} />
 						</DialogTrigger>
 						<DialogContent className="sm:max-w-[425px]">
 							<DialogHeader>
 								<DialogTitle>{name}</DialogTitle>
 								<DialogDescription>{altText}</DialogDescription>
 							</DialogHeader>
-							<ImageFull src={getArtworkImgSrc(id)} alt={altText ?? ''} />
+							<ImageFull src={imgSrc} alt={altText ?? ''} />
 						</DialogContent>
 					</Dialog>
 					<FlexRow>

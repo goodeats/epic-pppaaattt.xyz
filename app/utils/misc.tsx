@@ -13,8 +13,14 @@ export function getNoteImgSrc(imageId: string) {
 	return `/resources/note-images/${imageId}`
 }
 
-export function getArtworkImgSrc(imageId: string) {
-	return `/resources/artwork-images/${imageId}`
+export function getArtworkAssetImgSrc({
+	artworkId,
+	imageId,
+}: {
+	artworkId: string
+	imageId: string
+}) {
+	return `/resources/artwork/${artworkId}/images/${imageId}`
 }
 
 export function getErrorMessage(error: unknown) {

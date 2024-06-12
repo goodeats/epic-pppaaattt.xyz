@@ -55,12 +55,18 @@ export const getAssetImage = async ({
 // for loading the image from the route url
 export const getAssetImageArtworkSrc = async ({
 	id,
+	artworkId,
+	ownerId,
 }: {
 	id: IAssetImage['id']
+	artworkId: IAssetImage['artworkId']
+	ownerId: IAssetImage['ownerId']
 }): Promise<IAssetImageSrc | null> => {
 	const image = await prisma.asset.findUnique({
 		where: {
 			id,
+			ownerId,
+			artworkId,
 			type: AssetTypeEnum.IMAGE,
 		},
 		select: {

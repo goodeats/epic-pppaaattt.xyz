@@ -36,7 +36,7 @@ export const PanelArtworkVersionImages = ({}: {}) => {
 		type: AssetTypeEnum.IMAGE,
 	})
 
-	const artworkImageCreate = useCallback(
+	const imageCreate = useCallback(
 		() => <ImageCreate artwork={artwork as IArtworkWithAssets} />,
 		[artwork],
 	)
@@ -57,7 +57,7 @@ export const PanelArtworkVersionImages = ({}: {}) => {
 			<SidebarPanel>
 				<SidebarPanelHeader title="Images">
 					<SidebarPanelRowActionsContainer>
-						{artworkImageCreate()}
+						{imageCreate()}
 					</SidebarPanelRowActionsContainer>
 				</SidebarPanelHeader>
 			</SidebarPanel>

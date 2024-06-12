@@ -33,7 +33,7 @@ import { Label } from '#app/components/ui/label'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { StatusButton } from '#app/components/ui/status-button'
 import { type IAssetImage } from '#app/models/asset/image/image.server'
-import { getArtworkImgSrc, useIsPending } from '#app/utils/misc'
+import { useIsPending } from '#app/utils/misc'
 import { TooltipHydrated } from '../tooltip'
 
 export const FetcherImageUpload = ({
@@ -42,6 +42,7 @@ export const FetcherImageUpload = ({
 	schema,
 	formId,
 	image,
+	imgSrc,
 	icon,
 	iconText,
 	tooltipText,
@@ -55,6 +56,7 @@ export const FetcherImageUpload = ({
 	schema: z.ZodSchema<any>
 	formId: string
 	image?: IAssetImage
+	imgSrc?: string
 	icon: IconName
 	iconText: string
 	tooltipText: string
@@ -82,8 +84,7 @@ export const FetcherImageUpload = ({
 	})
 
 	const [previewImage, setPreviewImage] = useState<string | null>(
-		// TODO: get image to strategy for other image types when needed
-		fields.id.defaultValue ? getArtworkImgSrc(fields.id.defaultValue) : null,
+		imgSrc ?? null,
 	)
 
 	// close after successful submission

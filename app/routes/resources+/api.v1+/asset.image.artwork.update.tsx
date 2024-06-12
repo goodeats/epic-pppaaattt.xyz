@@ -19,6 +19,7 @@ import {
 import { validateNoJS } from '#app/schema/form-data'
 import { assetImageArtworkUpdateService } from '#app/services/asset.image.artwork.update.service'
 import { requireUserId } from '#app/utils/auth.server'
+import { getArtworkAssetImgSrc } from '#app/utils/misc'
 import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
@@ -81,6 +82,7 @@ export const AssetImageArtworkUpdate = ({
 	const imageId = image.id
 	const artworkId = artwork.id
 	const formId = `asset-image-${imageId}-artwork-${artworkId}-update`
+	const imgSrc = getArtworkAssetImgSrc({ imageId, artworkId })
 
 	const fetcher = useFetcher<typeof action>()
 	let isHydrated = useHydrated()
@@ -92,6 +94,7 @@ export const AssetImageArtworkUpdate = ({
 			schema={schema}
 			formId={formId}
 			image={image}
+			imgSrc={imgSrc}
 			icon="pencil-1"
 			iconText="Edit Image"
 			tooltipText="Edit image..."
