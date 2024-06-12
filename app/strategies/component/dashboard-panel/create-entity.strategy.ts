@@ -10,6 +10,13 @@ export interface IDashboardPanelCreateEntityStrategy {
 	parentType: entityParentTypeEnum
 }
 
+export class DashboardPanelCreateArtworkVersionAssetTypeStrategy
+	implements IDashboardPanelCreateEntityStrategy
+{
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
+}
+
 export class DashboardPanelCreateArtworkVersionDesignTypeStrategy
 	implements IDashboardPanelCreateEntityStrategy
 {

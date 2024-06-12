@@ -31,6 +31,8 @@ interface CreateChildEntityFormProps {
 const ArtworkVersionCreateChildEntityForm = memo(
 	({ entityType, type, parent }: CreateChildEntityFormProps) => {
 		switch (entityType) {
+			case EntityType.ASSET:
+				return <div>+ image</div>
 			case EntityType.DESIGN:
 				return (
 					<ArtworkVersionDesignCreate

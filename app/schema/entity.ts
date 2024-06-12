@@ -19,16 +19,12 @@ import { type IProject } from '#app/models/project/project.server'
 import { type ObjectValues } from '#app/utils/typescript-helpers'
 import { type assetTypeEnum } from './asset'
 import {
-	type ReorderDesignSchemaType,
-	type NewDesignSchemaType,
 	type designTypeEnum,
 	type ToggleVisibleDesignSchemaType,
 	type DeleteDesignSchemaType,
 	type DesignParentType,
 } from './design'
 import {
-	type ReorderLayerSchemaType,
-	type NewLayerSchemaType,
 	type ToggleVisibleLayerSchemaType,
 	type DeleteLayerSchemaType,
 	type SelectLayerSchemaType,
@@ -81,20 +77,15 @@ export type IEntityParentType =
 export type IEntityParentId = IDesignWithType['id'] | IArtworkVersion['id']
 
 export const EntityType = {
+	ASSET: 'asset',
 	DESIGN: 'design',
-	ARtwork: 'artwork',
-	ARTWORK_BRANCH: 'artworkBranch',
-	ARTWORK_VERSION: 'artworkVersion',
 	LAYER: 'layer',
 	// add more parent id types here
 } as const
 export type entityTypeEnum = ObjectValues<typeof EntityType>
 
 export const EntityParentType = {
-	PARENT: 'parent',
 	DESIGN: 'design',
-	ARtwork: 'artwork',
-	ARTWORK_BRANCH: 'artworkBranch',
 	ARTWORK_VERSION: 'artworkVersion',
 	LAYER: 'layer',
 	// add more parent types here
@@ -102,39 +93,12 @@ export const EntityParentType = {
 export type entityParentTypeEnum = ObjectValues<typeof EntityParentType>
 
 export const EntityParentIdType = {
-	PARENT_ID: 'parentId',
 	DESIGN_ID: 'designId',
-	ARTWORK_ID: 'artworkId',
-	ARTWORK_BRANCH_ID: 'artworkBranchId',
 	ARTWORK_VERSION_ID: 'artworkVersionId',
 	LAYER_ID: 'layerId',
 	// add more parent id types here
 } as const
 export type entityParentIdTypeEnum = ObjectValues<typeof EntityParentIdType>
-
-export const EntityFormType = {
-	HEX: 'hex',
-	TEXT: 'text',
-	NUMBER: 'number',
-	ICON: 'icon',
-	MOVE_ICON: 'move-icon',
-	SELECT: 'select',
-	TEXTAREA: 'textarea',
-	BUTTON: 'button',
-	MULTIPLE: 'multiple',
-	// add more form types here
-} as const
-export type entityFormTypeEnum = ObjectValues<typeof EntityFormType>
-
-export type IEntityEnumSelectOption = {
-	[x: string]: string
-}
-
-export type NewEntitySchemaType = NewDesignSchemaType | NewLayerSchemaType
-
-export type ReorderEntitySchemaType =
-	| ReorderDesignSchemaType
-	| ReorderLayerSchemaType
 
 // actions that go at end of the panel
 export const EntityActionType = {
