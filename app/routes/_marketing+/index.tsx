@@ -12,7 +12,7 @@ import {
 import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator.ts'
 import { getAllPublishedArtworkVersions } from '#app/models/artwork-version/artwork-version.get.server.ts'
 import {
-	type IArtworkVersionWithDesignsAndLayers,
+	type IArtworkVersionWithChildren,
 	type IArtworkVersionWithGenerator,
 } from '#app/models/artwork-version/artwork-version.server.ts'
 import { artworkVersionGeneratorBuildService } from '#app/services/artwork/version/generator/build.service.ts'
@@ -44,7 +44,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	// get all starred versions
 	// will eventually want to limit by user, but just one for now
-	const publishedVersions: IArtworkVersionWithDesignsAndLayers[] =
+	const publishedVersions: IArtworkVersionWithChildren[] =
 		await getAllPublishedArtworkVersions()
 
 	// get all generators for these versions

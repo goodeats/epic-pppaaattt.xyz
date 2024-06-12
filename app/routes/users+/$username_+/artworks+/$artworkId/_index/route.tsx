@@ -15,7 +15,7 @@ import { getArtworkWithProject } from '#app/models/artwork/artwork.get.server.ts
 import { getStarredArtworkVersionsByArtworkId } from '#app/models/artwork-version/artwork-version.get.server.ts'
 import {
 	type IArtworkVersionWithGenerator,
-	type IArtworkVersionWithDesignsAndLayers,
+	type IArtworkVersionWithChildren,
 } from '#app/models/artwork-version/artwork-version.server.ts'
 import { artworkVersionGeneratorBuildService } from '#app/services/artwork/version/generator/build.service.ts'
 import { requireUserId } from '#app/utils/auth.server'
@@ -39,7 +39,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 	invariantResponse(artwork, 'Not found', { status: 404 })
 
 	// get all starred versions for this artwork
-	const starredVersions: IArtworkVersionWithDesignsAndLayers[] =
+	const starredVersions: IArtworkVersionWithChildren[] =
 		await getStarredArtworkVersionsByArtworkId({
 			artworkId: artwork.id,
 		})

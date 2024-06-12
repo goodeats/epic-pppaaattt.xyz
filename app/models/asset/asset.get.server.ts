@@ -2,6 +2,24 @@ import { z } from 'zod'
 import { prisma } from '#app/utils/db.server'
 import { type IAsset } from './asset.server'
 
+// include all fields except blob
+// when including asset in parent queries
+export const assetSelect = {
+	id: true,
+	name: true,
+	description: true,
+	type: true,
+	attributes: true,
+	// no blob, too much memory on query
+	createdAt: true,
+	updatedAt: true,
+	ownerId: true,
+	projectId: true,
+	artworkId: true,
+	artworkVersionId: true,
+	layerId: true,
+}
+
 export type queryAssetWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({
 	id: z.string().optional(),

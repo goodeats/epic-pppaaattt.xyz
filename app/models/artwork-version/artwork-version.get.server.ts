@@ -3,8 +3,8 @@ import { z } from 'zod'
 import { zodStringOrNull } from '#app/schema/zod-helpers'
 import { deserializeAssets } from '#app/utils/asset'
 import { prisma } from '#app/utils/db.server'
+import { assetSelect } from '../asset/asset.get.server'
 import {
-	type IArtworkVersionWithDesignsAndLayers,
 	type IArtworkVersion,
 	type IArtworkVersionWithChildren,
 } from './artwork-version.server'
@@ -33,13 +33,17 @@ const includeDesigns = {
 
 // no ordering for now since these are linked lists
 const artworkVersionChildren = {
-	assets: true,
+	assets: {
+		select: assetSelect,
+	},
 	designs: {
 		include: includeDesigns,
 	},
 	layers: {
 		include: {
-			assets: true,
+			assets: {
+				select: assetSelect,
+			},
 			designs: {
 				include: includeDesigns,
 			},
@@ -107,18 +111,26 @@ export const getArtworkVersionWithChildren = async ({
 	invariant(artworkVersion, 'Artwork Version not found')
 
 	const validatedAssets = deserializeAssets({ assets: artworkVersion.assets })
-	return { ...artworkVersion, assets: validatedAssets }
+	const layersWithValidatedAssets = artworkVersion.layers.map(layer => {
+		const validatedAssets = deserializeAssets({ assets: layer.assets })
+		return { ...layer, assets: validatedAssets }
+	})
+	return {
+		...artworkVersion,
+		assets: validatedAssets,
+		layers: layersWithValidatedAssets,
+	}
 }
 
 export const getStarredArtworkVersionsByArtworkId = async ({
 	artworkId,
 }: {
 	artworkId: string
-}): Promise<IArtworkVersionWithDesignsAndLayers[]> => {
+}): Promise<IArtworkVersionWithChildren[]> => {
 	const starredVersions = await prisma.artworkVersion.findMany({
 		where: {
 			branch: {
-				artworkId: artworkId,
+				artworkId,
 			},
 			starred: true,
 		},
@@ -130,13 +142,29 @@ export const getStarredArtworkVersionsByArtworkId = async ({
 			updatedAt: 'desc',
 		},
 	})
-	return starredVersions
+
+	const validatedStarredVersions = starredVersions.map(artworkVersion => {
+		const validatedArtboardVersionAssets = deserializeAssets({
+			assets: artworkVersion.assets,
+		})
+		const layersWithValidatedAssets = artworkVersion.layers.map(layer => {
+			const validatedLayerAssets = deserializeAssets({ assets: layer.assets })
+			return { ...layer, assets: validatedLayerAssets }
+		})
+		return {
+			...artworkVersion,
+			assets: validatedArtboardVersionAssets,
+			layers: layersWithValidatedAssets,
+		}
+	})
+
+	return validatedStarredVersions
 }
 
 export const getAllPublishedArtworkVersions = async (): Promise<
-	IArtworkVersionWithDesignsAndLayers[]
+	IArtworkVersionWithChildren[]
 > => {
-	const starredVersions = await prisma.artworkVersion.findMany({
+	const publishedVersions = await prisma.artworkVersion.findMany({
 		where: {
 			published: true,
 		},
@@ -145,5 +173,20 @@ export const getAllPublishedArtworkVersions = async (): Promise<
 			publishedAt: 'desc',
 		},
 	})
-	return starredVersions
+
+	const validatedPublishedVersions = publishedVersions.map(artworkVersion => {
+		const validatedArtboardVersionAssets = deserializeAssets({
+			assets: artworkVersion.assets,
+		})
+		const layersWithValidatedAssets = artworkVersion.layers.map(layer => {
+			const validatedLayerAssets = deserializeAssets({ assets: layer.assets })
+			return { ...layer, assets: validatedLayerAssets }
+		})
+		return {
+			...artworkVersion,
+			assets: validatedArtboardVersionAssets,
+			layers: layersWithValidatedAssets,
+		}
+	})
+	return validatedPublishedVersions
 }

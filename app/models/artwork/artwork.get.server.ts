@@ -8,6 +8,7 @@ import {
 	type IArtworkWithBranchesAndVersions,
 	type IArtworkWithAssets,
 } from '../artwork/artwork.server'
+import { assetSelect } from '../asset/asset.get.server'
 
 export type queryArtworkWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({
@@ -86,7 +87,9 @@ export const getArtworkWithAssets = async ({
 	const artwork = await prisma.artwork.findFirst({
 		where,
 		include: {
-			assets: true,
+			assets: {
+				select: assetSelect,
+			},
 		},
 	})
 	invariant(artwork, 'Artwork not found')

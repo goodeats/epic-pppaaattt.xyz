@@ -1,8 +1,5 @@
 import { z } from 'zod'
-import {
-	type IArtworkVersionWithChildren,
-	type IArtworkVersionWithDesignsAndLayers,
-} from '#app/models/artwork-version/artwork-version.server'
+import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
 import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
 import { type ObjectValues } from '#app/utils/typescript-helpers'
 import {
@@ -31,10 +28,7 @@ export const DesignTypeEnum = {
 } as const
 export type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
 
-export type DesignParentType =
-	| IArtworkVersionWithChildren
-	| IArtworkVersionWithDesignsAndLayers
-	| ILayerWithDesigns
+export type DesignParentType = IArtworkVersionWithChildren | ILayerWithDesigns
 
 export const DesignCloneSourceTypeEnum = {
 	ARTWORK_VERSION: 'artworkVersion',

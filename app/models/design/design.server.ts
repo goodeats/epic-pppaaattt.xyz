@@ -6,7 +6,6 @@ import {
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 import {
-	type IArtworkVersionWithDesignsAndLayers,
 	type IArtworkVersion,
 	type IArtworkVersionWithChildren,
 } from '../artwork-version/artwork-version.server'
@@ -34,7 +33,6 @@ export type IDesignIdOrNull = IDesign['id'] | null | undefined
 export type IDesignEntityId =
 	| IDesign['id']
 	| IArtworkVersion['id']
-	| IArtworkVersionWithDesignsAndLayers['id']
 	| IArtworkVersionWithChildren['id']
 export type IDesignEntityIdOrNull = IDesignEntityId | null | undefined
 

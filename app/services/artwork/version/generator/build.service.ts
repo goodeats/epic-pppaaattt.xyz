@@ -6,7 +6,7 @@ import {
 	type IGeneratorWatermark,
 	type IArtworkVersionGeneratorMetadata,
 } from '#app/definitions/artwork-generator'
-import { type IArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.server'
+import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
 import {
 	findManyDesignsWithType,
 	type IDesignWithType,
@@ -40,7 +40,7 @@ import { isArrayRotateBasisType } from '#app/utils/rotate'
 export const artworkVersionGeneratorBuildService = async ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }): Promise<IArtworkVersionGenerator> => {
 	try {
 		// Step 1: verify version selected designs are all present
@@ -119,7 +119,7 @@ export const artworkVersionGeneratorBuildService = async ({
 const verifyDefaultGeneratorDesigns = async ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }): Promise<{
 	defaultGeneratorDesigns: IGeneratorDesigns | null
 	message: string
@@ -165,7 +165,7 @@ const verifyDefaultGeneratorDesigns = async ({
 const getVersionSelectedDesigns = async ({
 	artworkVersionId,
 }: {
-	artworkVersionId: IArtworkVersionWithDesignsAndLayers['id']
+	artworkVersionId: IArtworkVersionWithChildren['id']
 }): Promise<IDesignWithType[]> => {
 	return await findManyDesignsWithType({
 		where: { artworkVersionId, selected: true },
@@ -178,7 +178,7 @@ const buildDefaultGeneratorLayer = async ({
 	version,
 	defaultGeneratorDesigns,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 	defaultGeneratorDesigns: IGeneratorDesigns
 }): Promise<ILayerGenerator> => {
 	const artworkVersionId = version.id
@@ -208,7 +208,7 @@ const buildDefaultGeneratorLayer = async ({
 const getArtworkVersionContainer = ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }) => {
 	const { width, height } = version
 	return {
@@ -319,7 +319,7 @@ const getRotates = async ({
 	layerId,
 	rotate,
 }: {
-	artworkVersionId?: IArtworkVersionWithDesignsAndLayers['id']
+	artworkVersionId?: IArtworkVersionWithChildren['id']
 	layerId?: ILayer['id']
 	rotate: IRotate
 }) => {
@@ -338,7 +338,7 @@ const getRotates = async ({
 const buildGeneratorWatermark = async ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }): Promise<IGeneratorWatermark | null> => {
 	if (!version.watermark) return null
 
@@ -366,7 +366,7 @@ const buildGeneratorWatermark = async ({
 const buildGeneratorMetadata = async ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }): Promise<IArtworkVersionGeneratorMetadata> => {
 	const branch = await prisma.artworkBranch.findUnique({
 		where: { id: version.branchId },

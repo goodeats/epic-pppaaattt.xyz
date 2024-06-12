@@ -19,12 +19,6 @@ export interface IArtworkVersion extends BaseArtworkVersion {
 	publishedAt: DateOrString | null
 }
 
-export interface IArtworkVersionWithDesignsAndLayers extends IArtworkVersion {
-	designs: IDesignWithType[]
-	layers: ILayerWithDesigns[]
-	branch?: IArtworkBranch
-}
-
 export interface IArtworkVersionWithChildren extends IArtworkVersion {
 	designs: IDesignWithType[]
 	layers: ILayerWithDesigns[]
@@ -41,6 +35,6 @@ export interface IArtworkVersionWithBranch extends IArtworkVersion {
 }
 
 export interface IArtworkVersionWithGenerator
-	extends IArtworkVersionWithDesignsAndLayers {
+	extends IArtworkVersionWithChildren {
 	generator: IArtworkVersionGenerator
 }
