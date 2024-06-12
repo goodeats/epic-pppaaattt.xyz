@@ -11,11 +11,9 @@ import { useHydrated } from 'remix-utils/use-hydrated'
 import { FetcherImageUpload } from '#app/components/templates/form/fetcher-image-upload'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { useAssetImagesArtwork } from '#app/models/asset/image/hooks'
-import { validateNewAssetImageArtworkSubmission } from '#app/models/asset/image/image.create.server'
-import {
-	MAX_UPLOAD_SIZE,
-	NewAssetImageArtworkSchema,
-} from '#app/schema/asset/image'
+import { validateNewAssetImageArtworkSubmission } from '#app/models/asset/image/image.create.artwork.server'
+import { MAX_UPLOAD_SIZE } from '#app/schema/asset/image'
+import { NewAssetImageArtworkSchema } from '#app/schema/asset/image.artwork'
 import { validateNoJS } from '#app/schema/form-data'
 import { assetImageArtworkCreateService } from '#app/services/asset.image.artwork.create.service'
 import { requireUserId } from '#app/utils/auth.server'

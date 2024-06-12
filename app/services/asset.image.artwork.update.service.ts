@@ -1,14 +1,14 @@
 import { invariant } from '@epic-web/invariant'
-import { createAssetImageArtwork } from '#app/models/asset/image/image.create.server'
+import { createAssetImageArtwork } from '#app/models/asset/image/image.create.artwork.server'
 import { deleteAssetImage } from '#app/models/asset/image/image.delete.server'
 import { getAssetImage } from '#app/models/asset/image/image.get.server'
 import {
-	type IAssetImageUpdatedResponse,
-	updateAssetImageArtwork,
 	type IAssetImageArtworkUpdateSubmission,
-} from '#app/models/asset/image/image.update.server'
+	updateAssetImageArtwork,
+} from '#app/models/asset/image/image.update.artwork.server'
+import { type IAssetImageUpdatedResponse } from '#app/models/asset/image/image.update.server'
 import { AssetTypeEnum } from '#app/schema/asset'
-import { AssetImageArtworkDataSchema } from '#app/schema/asset/image'
+import { AssetImageArtworkDataSchema } from '#app/schema/asset/image.artwork'
 import { prisma } from '#app/utils/db.server'
 
 export const assetImageArtworkUpdateService = async ({

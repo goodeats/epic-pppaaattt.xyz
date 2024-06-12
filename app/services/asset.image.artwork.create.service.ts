@@ -1,12 +1,12 @@
 import { invariant } from '@epic-web/invariant'
 import { getArtwork } from '#app/models/artwork/artwork.get.server'
 import {
-	type IAssetImageCreatedResponse,
-	createAssetImageArtwork,
 	type IAssetImageArtworkCreateSubmission,
-} from '#app/models/asset/image/image.create.server'
+	createAssetImageArtwork,
+} from '#app/models/asset/image/image.create.artwork.server'
+import { type IAssetImageCreatedResponse } from '#app/models/asset/image/image.create.server'
 import { AssetTypeEnum } from '#app/schema/asset'
-import { AssetImageArtworkDataSchema } from '#app/schema/asset/image'
+import { AssetImageArtworkDataSchema } from '#app/schema/asset/image.artwork'
 import { prisma } from '#app/utils/db.server'
 
 export const assetImageArtworkCreateService = async ({
