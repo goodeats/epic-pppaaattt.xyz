@@ -2,6 +2,7 @@ import { type Submission } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
 import { z } from 'zod'
 import { type IValidateSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
+import { transformAssetImageData } from './conform/transform-asset-image.server'
 
 export const notSubmissionResponse = (submission: Submission) =>
 	({ status: 'idle', submission }) as const
@@ -106,56 +107,7 @@ export async function parseEntityImageSubmission({
 			.superRefine(async (data, ctx) => {
 				strategy.validateFormDataEntity({ userId, data, ctx })
 			})
-			.transform(transformData),
+			.transform(transformAssetImageData),
 		async: true,
 	})
-}
-
-type FormDataWithId = {
-	id?: string
-	file?: File
-	name?: string
-	altText?: string
-}
-
-async function transformData(data: FormDataWithId) {
-	if (data.id) {
-		const imageHasFile = Boolean(data.file?.size && data.file?.size > 0)
-		if (imageHasFile && data.file) {
-			const fileData = await transformFileData(data.file)
-			return getImageUpdateData(data, fileData)
-		} else {
-			return getImageUpdateData(data)
-		}
-	} else {
-		if (data.file && data.file.size > 0) {
-			const fileData = await transformFileData(data.file)
-			return {
-				...data,
-				...fileData,
-			}
-		} else {
-			return z.NEVER
-		}
-	}
-}
-
-function getImageUpdateData(
-	data: FormDataWithId,
-	fileData?: { contentType: string; blob: Buffer },
-) {
-	return {
-		id: data.id,
-		name: data.name,
-		altText: data.altText,
-		...(fileData && fileData),
-	}
-}
-
-async function transformFileData(file: File) {
-	return {
-		name: file.name,
-		contentType: file.type as string,
-		blob: Buffer.from(await file.arrayBuffer()),
-	}
 }

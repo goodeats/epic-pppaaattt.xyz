@@ -8,8 +8,8 @@ import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { FetcherIconConfirm } from '#app/components/templates/form/fetcher-icon-confirm'
 import { type IArtwork } from '#app/models/artwork/artwork.server'
+import { type IAssetImage } from '#app/models/asset/image/image.server'
 import { validateArtworkImageDeleteSubmission } from '#app/models/images/artwork-image.delete.server'
-import { type IArtworkImage } from '#app/models/images/artwork-image.server'
 import { DeleteArtworkImageSchema } from '#app/schema/artwork-image'
 import { EntityParentIdType } from '#app/schema/entity'
 import { validateNoJS } from '#app/schema/form-data'
@@ -68,7 +68,7 @@ export const ArtworkImageDelete = ({
 	image,
 	artwork,
 }: {
-	image: IArtworkImage
+	image: IAssetImage
 	artwork: IArtwork
 }) => {
 	const imageId = image.id

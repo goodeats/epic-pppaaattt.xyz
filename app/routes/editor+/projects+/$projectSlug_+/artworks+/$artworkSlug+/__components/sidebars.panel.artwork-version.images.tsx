@@ -20,59 +20,55 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '#app/components/ui/dialog'
-import {
-	type IArtwork,
-	type IArtworkWithImages,
-} from '#app/models/artwork/artwork.server'
-import { type IArtworkImage } from '#app/models/images/artwork-image.server'
-import { ArtworkImageCreate } from '#app/routes/resources+/api.v1+/artwork.image.create'
+import { type IArtworkWithAssets } from '#app/models/artwork/artwork.server'
+import { type IAssetImage } from '#app/models/asset/image/image.server'
 import { ArtworkImageDelete } from '#app/routes/resources+/api.v1+/artwork.image.delete'
 import { ArtworkImageUpdate } from '#app/routes/resources+/api.v1+/artwork.image.update'
+import { AssetImageArtworkCreate } from '#app/routes/resources+/api.v1+/asset.image.artwork.create'
+import { AssetTypeEnum } from '#app/schema/asset'
+import { filterAssetType } from '#app/utils/asset'
 import { useRouteLoaderMatchData } from '#app/utils/matches'
 import { getArtworkImgSrc } from '#app/utils/misc'
 import { artworkVersionLoaderRoute } from '../$branchSlug.$versionSlug'
 
-const ImageCreate = memo(({ artwork }: { artwork: IArtworkWithImages }) => {
-	return <ArtworkImageCreate artwork={artwork} />
+const ImageCreate = memo(({ artwork }: { artwork: IArtworkWithAssets }) => {
+	return <AssetImageArtworkCreate artwork={artwork} />
 })
 ImageCreate.displayName = 'ImageCreate'
 
-const ImageUpdate = memo(({ image }: { image: IArtworkImage }) => {
+const ImageUpdate = memo(({ image }: { image: IAssetImage }) => {
 	return <ArtworkImageUpdate image={image} />
 })
 ImageUpdate.displayName = 'ImageUpdate'
 
 const ImageDelete = memo(
-	({ image, artwork }: { image: IArtworkImage; artwork: IArtwork }) => {
+	({ image, artwork }: { image: IAssetImage; artwork: IArtworkWithAssets }) => {
 		return <ArtworkImageDelete image={image} artwork={artwork} />
 	},
 )
 ImageDelete.displayName = 'ImageDelete'
 
 const ImageListItem = memo(
-	({ image, artwork }: { image: IArtworkImage; artwork: IArtwork }) => {
+	({ image, artwork }: { image: IAssetImage; artwork: IArtworkWithAssets }) => {
+		const { id, name, attributes } = image
+		const { altText } = attributes
+
 		return (
-			<ImageSidebarListItem key={image.id}>
+			<ImageSidebarListItem key={id}>
 				<FlexRow className="items-center">
-					<div className="flex-1 truncate">{image.name}</div>
+					<div className="flex-1 truncate">{name}</div>
 				</FlexRow>
 				<FlexRow className="mt-2 items-start justify-between">
 					<Dialog>
 						<DialogTrigger>
-							<ImagePreview
-								src={getArtworkImgSrc(image.id)}
-								alt={image.altText ?? ''}
-							/>
+							<ImagePreview src={getArtworkImgSrc(id)} alt={altText ?? ''} />
 						</DialogTrigger>
 						<DialogContent className="sm:max-w-[425px]">
 							<DialogHeader>
-								<DialogTitle>{image.name}</DialogTitle>
-								<DialogDescription>{image.altText}</DialogDescription>
+								<DialogTitle>{name}</DialogTitle>
+								<DialogDescription>{altText}</DialogDescription>
 							</DialogHeader>
-							<ImageFull
-								src={getArtworkImgSrc(image.id)}
-								alt={image.altText ?? ''}
-							/>
+							<ImageFull src={getArtworkImgSrc(id)} alt={altText ?? ''} />
 						</DialogContent>
 					</Dialog>
 					<FlexRow className="gap-2">
@@ -92,9 +88,14 @@ export const PanelArtworkVersionImages = ({}: {}) => {
 		matches,
 		artworkVersionLoaderRoute,
 	)
+	const { assets } = artwork as IArtworkWithAssets
+	const images: IAssetImage[] = filterAssetType({
+		assets,
+		type: AssetTypeEnum.IMAGE,
+	})
 
 	const artworkImageCreate = useCallback(
-		() => <ImageCreate artwork={artwork} />,
+		() => <ImageCreate artwork={artwork as IArtworkWithAssets} />,
 		[artwork],
 	)
 
@@ -109,8 +110,17 @@ export const PanelArtworkVersionImages = ({}: {}) => {
 			</SidebarPanel>
 			<ImageSidebar>
 				<ImageSidebarList>
-					{artwork.images.map(image => (
-						<ImageListItem key={image.id} image={image} artwork={artwork} />
+					{images.length === 0 && (
+						<ImageSidebarListItem>
+							<div className="text-sm text-muted-foreground">No images</div>
+						</ImageSidebarListItem>
+					)}
+					{images.map(image => (
+						<ImageListItem
+							key={image.id}
+							image={image}
+							artwork={artwork as IArtworkWithAssets}
+						/>
 					))}
 				</ImageSidebarList>
 			</ImageSidebar>

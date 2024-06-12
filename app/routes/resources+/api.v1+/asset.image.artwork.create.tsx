@@ -10,19 +10,19 @@ import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { FetcherImageUpload } from '#app/components/templates/form/fetcher-image-upload'
 import { type IArtwork } from '#app/models/artwork/artwork.server'
-import { validateNewArtworkImageSubmission } from '#app/models/images/artwork-image.create.server'
+import { validateNewAssetImageArtworkSubmission } from '#app/models/asset/image/image.create.server'
 import {
 	MAX_UPLOAD_SIZE,
 	NewAssetImageArtworkSchema,
 } from '#app/schema/asset/image'
 import { validateNoJS } from '#app/schema/form-data'
-import { artworkImageCreateService } from '#app/services/artwork/image/create.service'
+import { assetImageArtworkCreateService } from '#app/services/asset.image.artwork.create.service'
 import { requireUserId } from '#app/utils/auth.server'
 import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
 
-const route = Routes.RESOURCES.API.V1.ARTWORK.IMAGE.CREATE
+const route = Routes.RESOURCES.API.V1.ASSET.IMAGE.ARTWORK.CREATE
 const schema = NewAssetImageArtworkSchema
 
 // auth GET request to endpoint
@@ -41,16 +41,19 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	let createSuccess = false
 	let errorMessage = ''
-	const { status, submission } = await validateNewArtworkImageSubmission({
+	const { status, submission } = await validateNewAssetImageArtworkSubmission({
 		userId,
 		formData,
 	})
+	console.log('validation:', status, submission)
 
 	if (status === 'success') {
-		const { success, message } = await artworkImageCreateService({
+		const { success, message } = await assetImageArtworkCreateService({
 			userId,
 			...submission.value,
 		})
+		console.log('service:', success, message)
+
 		createSuccess = success
 		errorMessage = message || ''
 	}
@@ -69,9 +72,9 @@ export async function action({ request }: ActionFunctionArgs) {
 	)
 }
 
-export const ArtworkImageCreate = ({ artwork }: { artwork: IArtwork }) => {
+export const AssetImageArtworkCreate = ({ artwork }: { artwork: IArtwork }) => {
 	const artworkId = artwork.id
-	const formId = `artwork-image-create-${artworkId}`
+	const formId = `asset-image-artwork-${artworkId}-create`
 
 	const fetcher = useFetcher<typeof action>()
 	let isHydrated = useHydrated()

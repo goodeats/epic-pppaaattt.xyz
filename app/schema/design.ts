@@ -32,13 +32,6 @@ export type DesignParentType =
 	| IArtworkVersionWithDesignsAndLayers
 	| ILayerWithDesigns
 
-export const DesignParentTypeIdEnum = {
-	ARTWORK_VERSION_ID: 'artworkVersionId',
-	LAYER_ID: 'layerId',
-	// add more design types here
-} as const
-export type designParentTypeIdEnum = ObjectValues<typeof DesignParentTypeIdEnum>
-
 export const DesignCloneSourceTypeEnum = {
 	ARTWORK_VERSION: 'artworkVersion',
 	LAYER: 'layer',

@@ -1,10 +1,13 @@
+import { invariant } from '@epic-web/invariant'
 import { z } from 'zod'
+import { deserializeAssets } from '#app/utils/asset'
 import { prisma } from '#app/utils/db.server'
 import {
 	type IArtworkWithProject,
 	type IArtwork,
 	type IArtworkWithBranchesAndVersions,
 	type IArtworkWithImages,
+	type IArtworkWithAssets,
 } from '../artwork/artwork.server'
 
 export type queryArtworkWhereArgsType = z.infer<typeof whereArgs>
@@ -88,4 +91,22 @@ export const getArtworkWithImages = async ({
 		},
 	})
 	return artwork
+}
+
+export const getArtworkWithAssets = async ({
+	where,
+}: {
+	where: queryArtworkWhereArgsType
+}): Promise<IArtworkWithAssets | null> => {
+	validateQueryWhereArgsPresent(where)
+	const artwork = await prisma.artwork.findFirst({
+		where,
+		include: {
+			assets: true,
+		},
+	})
+	invariant(artwork, 'Artwork not found')
+
+	const validatedAssets = deserializeAssets({ assets: artwork.assets })
+	return { ...artwork, assets: validatedAssets }
 }

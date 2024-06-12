@@ -9,7 +9,7 @@ import { useFetcher } from '@remix-run/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { FetcherImageUpload } from '#app/components/templates/form/fetcher-image-upload'
-import { type IArtworkImage } from '#app/models/images/artwork-image.server'
+import { type IAssetImage } from '#app/models/asset/image/image.server'
 import { validateEditArtworkImageSubmission } from '#app/models/images/artwork-image.update.server'
 import {
 	EditArtworkImageSchema,
@@ -70,7 +70,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	)
 }
 
-export const ArtworkImageUpdate = ({ image }: { image: IArtworkImage }) => {
+export const ArtworkImageUpdate = ({ image }: { image: IAssetImage }) => {
 	const imageId = image.id
 	const formId = `artwork-image-update-${imageId}`
 

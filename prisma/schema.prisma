@@ -584,7 +584,6 @@ model Asset {
   id          String @id @default(cuid())
   name        String
   description String?
-  slug       String
   type        String // e.g. image, media, palette, gradient, shapes, etc.
   attributes  String @default("{}") // json string of attributes specific to the type
   blob        Bytes?
@@ -609,6 +608,4 @@ model Asset {
 
   // non-unique foreign key
   @@index([ownerId])
-  // Unique constraint for slug scoped to ownerId
-  @@unique([slug, ownerId])
 }

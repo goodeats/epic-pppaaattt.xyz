@@ -32,7 +32,7 @@ import { Icon, type IconName } from '#app/components/ui/icon'
 import { Label } from '#app/components/ui/label'
 import { PanelIconButton } from '#app/components/ui/panel-icon-button'
 import { StatusButton } from '#app/components/ui/status-button'
-import { type IArtworkImage } from '#app/models/images/artwork-image.server'
+import { type IAssetImage } from '#app/models/asset/image/image.server'
 import { getArtworkImgSrc, useIsPending } from '#app/utils/misc'
 import { TooltipHydrated } from '../tooltip'
 
@@ -54,7 +54,7 @@ export const FetcherImageUpload = ({
 	route: string
 	schema: z.ZodSchema<any>
 	formId: string
-	image?: IArtworkImage
+	image?: IAssetImage
 	icon: IconName
 	iconText: string
 	tooltipText: string
@@ -65,7 +65,7 @@ export const FetcherImageUpload = ({
 }) => {
 	const [open, setOpen] = useState(false)
 	const [name, setName] = useState(image?.name ?? '')
-	const [altText, setAltText] = useState(image?.altText ?? '')
+	const [altText, setAltText] = useState(image?.attributes.altText ?? '')
 
 	const lastSubmission = fetcher.data?.submission
 	const isPending = useIsPending()
@@ -76,6 +76,7 @@ export const FetcherImageUpload = ({
 		defaultValue: {
 			id: image?.id ?? '',
 			name,
+			description: image?.description ?? '',
 			altText,
 		},
 	})
@@ -112,7 +113,6 @@ export const FetcherImageUpload = ({
 						{...form.props}
 					>
 						<AuthenticityTokenInput />
-
 						<input type="hidden" name="no-js" value={String(!isHydrated)} />
 						{children}
 
@@ -182,6 +182,15 @@ export const FetcherImageUpload = ({
 								/>
 								<TextareaField
 									labelProps={{ children: 'Description' }}
+									textareaProps={{
+										...conform.textarea(fields.description, {
+											ariaAttributes: true,
+										}),
+									}}
+									errors={fields.description.errors}
+								/>
+								<TextareaField
+									labelProps={{ children: 'Alt Text' }}
 									textareaProps={{
 										...conform.textarea(fields.altText, {
 											ariaAttributes: true,

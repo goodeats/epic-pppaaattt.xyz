@@ -43,6 +43,13 @@ export const Routes = {
 						},
 					},
 				},
+				ASSET: {
+					IMAGE: {
+						ARTWORK: {
+							CREATE: `${pathBase}/asset/image/artwork/create`,
+						},
+					},
+				},
 				DESIGN: {
 					TYPE: {
 						LAYOUT: {
