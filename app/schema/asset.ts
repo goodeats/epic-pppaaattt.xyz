@@ -1,6 +1,4 @@
 import { z } from 'zod'
-import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
-import { type ILayerWithChildren } from '#app/models/layer/layer.server'
 import { type ObjectValues } from '#app/utils/typescript-helpers'
 import { AssetAttributesImageSchema } from './asset/image'
 
@@ -10,7 +8,14 @@ export const AssetTypeEnum = {
 } as const
 export type assetTypeEnum = ObjectValues<typeof AssetTypeEnum>
 
-export type AssetParentType = IArtworkVersionWithChildren | ILayerWithChildren
+export const AssetParentTypeEnum = {
+	PROJECT: 'project',
+	ARTWORK: 'artwork',
+	ARTWORK_VERSION: 'artworkVersion',
+	LAYER: 'layer',
+	// add more asset parent types here
+} as const
+export type assetParentTypeEnum = ObjectValues<typeof AssetParentTypeEnum>
 
 // Dummy schema for demonstration
 // ! remove this when adding more asset types

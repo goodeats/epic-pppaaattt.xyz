@@ -1,6 +1,6 @@
 import { type IntentActionArgs } from '#app/definitions/intent-action-args'
-import { type IArtwork } from '#app/models/artwork/artwork.server'
-import { NewAssetImageArtworkSchema } from '#app/schema/asset/image.artwork'
+import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
+import { NewAssetImageArtworkVersionSchema } from '#app/schema/asset/image.artwork-version'
 import { ValidateArtworkVersionParentSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
 import { validateEntityImageSubmission } from '#app/utils/conform-utils'
 import { prisma } from '#app/utils/db.server'
@@ -10,7 +10,7 @@ import {
 } from './image.create.server'
 import { stringifyAssetImageAttributes } from './utils'
 
-export const validateNewAssetImageArtworkSubmission = async ({
+export const validateNewAssetImageArtworkVersionSubmission = async ({
 	userId,
 	formData,
 }: IntentActionArgs) => {
@@ -19,24 +19,24 @@ export const validateNewAssetImageArtworkSubmission = async ({
 	return await validateEntityImageSubmission({
 		userId,
 		formData,
-		schema: NewAssetImageArtworkSchema,
+		schema: NewAssetImageArtworkVersionSchema,
 		strategy,
 	})
 }
 
-export interface IAssetImageArtworkCreateSubmission
+export interface IAssetImageArtworkVersionCreateSubmission
 	extends IAssetImageCreateSubmission {
-	artworkId: IArtwork['id']
+	artworkVersionId: IArtworkVersion['id']
 }
 
-interface IAssetImageArtworkCreateData extends IAssetImageCreateData {
-	artworkId: IArtwork['id']
+interface IAssetImageArtworkVersionCreateData extends IAssetImageCreateData {
+	artworkVersionId: IArtworkVersion['id']
 }
 
-export const createAssetImageArtwork = ({
+export const createAssetImageArtworkVersion = ({
 	data,
 }: {
-	data: IAssetImageArtworkCreateData
+	data: IAssetImageArtworkVersionCreateData
 }) => {
 	const { attributes, ...rest } = data
 	const jsonAttributes = stringifyAssetImageAttributes(attributes)

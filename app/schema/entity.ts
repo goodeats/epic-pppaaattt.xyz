@@ -1,7 +1,10 @@
 import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { type IArtworkBranch } from '#app/models/artwork-branch/artwork-branch.server'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
-import { type IAssetType } from '#app/models/asset/asset.server'
+import {
+	type IAssetParent,
+	type IAssetType,
+} from '#app/models/asset/asset.server'
 import {
 	type IDesignWithType,
 	type IDesign,
@@ -70,6 +73,7 @@ export type IEntityId =
 export type IEntityType = designTypeEnum | assetTypeEnum | 'layer'
 
 export type IEntityParentType =
+	| IAssetParent
 	| IDesignWithType
 	| IArtworkVersion
 	| DesignParentType

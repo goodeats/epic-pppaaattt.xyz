@@ -1,6 +1,9 @@
 import { type Asset } from '@prisma/client'
 import { type DateOrString } from '#app/definitions/prisma-helper'
 import { type assetTypeEnum } from '#app/schema/asset'
+import { type IArtworkWithAssets } from '../artwork/artwork.server'
+import { type IArtworkVersionWithChildren } from '../artwork-version/artwork-version.server'
+import { type ILayerWithChildren } from '../layer/layer.server'
 import { type IUser } from '../user/user.server'
 import {
 	type IAssetImage,
@@ -45,6 +48,11 @@ export interface IAssetsByTypeWithType {
 	type: assetTypeEnum
 	assets: IAssetType[]
 }
+
+export type IAssetParent =
+	| IArtworkWithAssets
+	| IArtworkVersionWithChildren
+	| ILayerWithChildren
 
 interface IAssetData {
 	name: string

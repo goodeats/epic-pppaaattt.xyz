@@ -43,6 +43,11 @@ export const Routes = {
 							DELETE: `${pathBase}/asset/image/artwork/delete`,
 							UPDATE: `${pathBase}/asset/image/artwork/update`,
 						},
+						ARTWORK_VERSION: {
+							CREATE: `${pathBase}/asset/image/artwork-version/create`,
+							DELETE: `${pathBase}/asset/image/artwork-version/delete`,
+							UPDATE: `${pathBase}/asset/image/artwork-version/update`,
+						},
 					},
 				},
 				DESIGN: {

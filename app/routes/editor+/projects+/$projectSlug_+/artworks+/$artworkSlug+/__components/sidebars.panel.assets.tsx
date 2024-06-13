@@ -1,6 +1,8 @@
 import { DashboardEntityPanel } from '#app/components/templates/panel/dashboard-entity-panel'
-import { type IAssetsByTypeWithType } from '#app/models/asset/asset.server'
-import { type AssetParentType } from '#app/schema/asset'
+import {
+	type IAssetParent,
+	type IAssetsByTypeWithType,
+} from '#app/models/asset/asset.server'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
@@ -12,7 +14,7 @@ export const PanelAssets = ({
 	strategyReorder,
 	strategyActions,
 }: {
-	parent: AssetParentType
+	parent: IAssetParent
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyActions: IDashboardPanelEntityActionStrategy
@@ -49,7 +51,7 @@ export const PanelAsset = ({
 	strategyReorder,
 	strategyActions,
 }: {
-	parent: AssetParentType
+	parent: IAssetParent
 	assetTypePanel: IAssetsByTypeWithType
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy

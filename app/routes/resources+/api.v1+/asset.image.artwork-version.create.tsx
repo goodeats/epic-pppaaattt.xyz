@@ -8,21 +8,23 @@ import {
 import { useFetcher } from '@remix-run/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
-import { FetcherImageUpload } from '#app/components/templates/form/fetcher-image-upload'
+import { FetcherImageSelect } from '#app/components/templates/form/fetcher-image-select'
+import { useArtworkFromVersion } from '#app/models/artwork/hooks'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
 import { useAssetImagesArtwork } from '#app/models/asset/image/hooks'
-import { validateNewAssetImageArtworkSubmission } from '#app/models/asset/image/image.create.artwork.server'
+import { validateNewAssetImageArtworkVersionSubmission } from '#app/models/asset/image/image.create.artwork-version.server'
 import { MAX_UPLOAD_SIZE } from '#app/schema/asset/image'
-import { NewAssetImageArtworkSchema } from '#app/schema/asset/image.artwork'
+import { NewAssetImageArtworkVersionSchema } from '#app/schema/asset/image.artwork-version'
 import { validateNoJS } from '#app/schema/form-data'
-import { assetImageArtworkCreateService } from '#app/services/asset.image.artwork.create.service'
+import { assetImageArtworkVersionCreateService } from '#app/services/asset.image.artwork-version.create.service'
+import { ArtworkAssetImageSrcStrategy } from '#app/strategies/asset.image.src.strategy'
 import { requireUserId } from '#app/utils/auth.server'
 import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
 
-const route = Routes.RESOURCES.API.V1.ASSET.IMAGE.ARTWORK.CREATE
-const schema = NewAssetImageArtworkSchema
+const route = Routes.RESOURCES.API.V1.ASSET.IMAGE.ARTWORK_VERSION.CREATE
+const schema = NewAssetImageArtworkVersionSchema
 
 // auth GET request to endpoint
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -40,13 +42,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	let createSuccess = false
 	let errorMessage = ''
-	const { status, submission } = await validateNewAssetImageArtworkSubmission({
-		userId,
-		formData,
-	})
+	const { status, submission } =
+		await validateNewAssetImageArtworkVersionSubmission({
+			userId,
+			formData,
+		})
 
 	if (status === 'success') {
-		const { success, message } = await assetImageArtworkCreateService({
+		const { success, message } = await assetImageArtworkVersionCreateService({
 			userId,
 			...submission.value,
 		})
@@ -74,30 +77,34 @@ export const AssetImageArtworkVersionCreate = ({
 }: {
 	version: IArtworkVersion
 }) => {
+	const artworkVersionId = version.id
 	const images = useAssetImagesArtwork()
-	console.log('images', images)
-	const artworkId = version.id
-	const formId = `asset-image-artwork-${artworkId}-create`
+	const artwork = useArtworkFromVersion()
+	const strategy = new ArtworkAssetImageSrcStrategy()
+	const formId = `asset-image-artwork-${artworkVersionId}-create`
 
 	const fetcher = useFetcher<typeof action>()
 	let isHydrated = useHydrated()
 
 	return (
-		<FetcherImageUpload
+		<FetcherImageSelect
 			fetcher={fetcher}
 			route={route}
 			schema={schema}
 			formId={formId}
+			images={images}
+			strategy={strategy}
+			parent={artwork}
 			icon="plus"
 			iconText="New Image"
 			tooltipText="New image..."
-			dialogTitle="Add a new image"
-			dialogDescription="Add an image to the artwork that can be used on many layers, branches, and versions."
+			dialogTitle="Add an image from assets"
+			dialogDescription="Add an image assets to the artwork version that can be used on many layers."
 			isHydrated={isHydrated}
 		>
 			<div className="hidden">
-				<input type="hidden" name="artworkId" value={artworkId} />
+				<input type="hidden" name="artworkVersionId" value={artworkVersionId} />
 			</div>
-		</FetcherImageUpload>
+		</FetcherImageSelect>
 	)
 }
