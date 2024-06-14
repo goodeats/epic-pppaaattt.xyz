@@ -1,5 +1,9 @@
 import { z } from 'zod'
-import { AssetDescriptionSchema, AssetNameSchema } from './__shared'
+import {
+	AssetDataSchema,
+	AssetDescriptionSchema,
+	AssetNameSchema,
+} from './__shared'
 
 const MAX_ALT_TEXT_LENGTH = 240
 const AltTextSchema = z.string().max(MAX_ALT_TEXT_LENGTH).optional()
@@ -46,13 +50,12 @@ export const AssetAttributesImageSchema = z.object({
 
 // zod schema for blob Buffer/File is not working
 // pass in separately from validation
-export const AssetImageDataSchema = z.object({
-	name: AssetNameSchema,
-	description: AssetDescriptionSchema,
-	type: z.literal('image'),
-	attributes: AssetAttributesImageSchema,
-	ownerId: z.string(),
-})
+export const AssetImageDataSchema = z
+	.object({
+		type: z.literal('image'),
+		attributes: AssetAttributesImageSchema,
+	})
+	.merge(AssetDataSchema)
 
 // form data validation
 

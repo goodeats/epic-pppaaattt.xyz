@@ -45,8 +45,10 @@ export const Routes = {
 						},
 						ARTWORK_VERSION: {
 							CREATE: `${pathBase}/asset/image/artwork-version/create`,
+							CLONE: `${pathBase}/asset/image/artwork-version/clone`,
 							DELETE: `${pathBase}/asset/image/artwork-version/delete`,
 							UPDATE: `${pathBase}/asset/image/artwork-version/update`,
+							UPDATE_VISIBLE: `${pathBase}/asset/image/artwork-version/update/visible`,
 						},
 					},
 				},

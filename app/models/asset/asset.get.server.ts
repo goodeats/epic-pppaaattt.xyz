@@ -10,6 +10,7 @@ export const assetSelect = {
 	description: true,
 	type: true,
 	attributes: true,
+	visible: true,
 	// no blob, too much memory on query
 	createdAt: true,
 	updatedAt: true,

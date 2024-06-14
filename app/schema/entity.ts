@@ -48,7 +48,7 @@ export type IEntity =
 	| ITemplate
 	| IAssetType
 
-export type IEntityVisible = IDesign | IDesignWithType | ILayer
+export type IEntityVisible = IDesign | IDesignWithType | ILayer | IAssetType
 export type IEntitySelectable = ILayer
 export type IEntityWithSlug =
 	| IArtwork

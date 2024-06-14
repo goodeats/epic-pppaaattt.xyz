@@ -8,3 +8,10 @@ export const AssetDescriptionSchema = z
 	.string()
 	.max(MAX_DESCRIPTION_LENGTH)
 	.optional()
+
+export const AssetDataSchema = z.object({
+	name: AssetNameSchema,
+	description: AssetDescriptionSchema,
+	visible: z.boolean(),
+	ownerId: z.string(),
+})

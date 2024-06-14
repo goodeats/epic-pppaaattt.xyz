@@ -1,6 +1,9 @@
 import { memo, useCallback } from 'react'
+import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
+import { type IAssetImage } from '#app/models/asset/image/image.server'
 import { type IDesign } from '#app/models/design/design.server'
 import { ArtworkVersionDesignDelete } from '#app/routes/resources+/api.v1+/artwork-version.design.delete'
+import { AssetImageArtworkVersionDelete } from '#app/routes/resources+/api.v1+/asset.image.artwork-version.delete'
 import { LayerDesignDelete } from '#app/routes/resources+/api.v1+/layer.design.delete'
 import {
 	type entityParentTypeEnum,
@@ -22,6 +25,13 @@ interface DeleteChildEntityFormProps {
 const ArtworkVersionDeleteChildEntityForm = memo(
 	({ entityType, entity, parent }: DeleteChildEntityFormProps) => {
 		switch (entityType) {
+			case EntityType.ASSET:
+				return (
+					<AssetImageArtworkVersionDelete
+						image={entity as IAssetImage}
+						artworkVersion={parent as IArtworkVersion}
+					/>
+				)
 			case EntityType.DESIGN:
 				return (
 					<ArtworkVersionDesignDelete

@@ -57,6 +57,7 @@ export type IAssetParent =
 interface IAssetData {
 	name: string
 	description?: string
+	visible: boolean
 }
 
 export interface IAssetSubmission extends IAssetData {

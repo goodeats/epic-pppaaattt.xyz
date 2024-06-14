@@ -67,6 +67,7 @@ export const PanelAsset = ({
 			strategyEntityNew={strategyEntityNew}
 			strategyReorder={strategyReorder}
 			strategyActions={strategyActions}
+			skipReorder={true}
 		/>
 	)
 }
