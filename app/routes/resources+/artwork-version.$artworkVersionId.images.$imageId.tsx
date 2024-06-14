@@ -1,15 +1,17 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { type LoaderFunctionArgs } from '@remix-run/node'
-import { getAssetImageArtworkSrc } from '#app/models/asset/image/image.get.artwork.server'
+import { getAssetImageArtworkVersionSrc } from '#app/models/asset/image/image.get.artwork-version.server'
 import { requireUserId } from '#app/utils/auth.server'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
 	const userId = await requireUserId(request)
-	invariantResponse(params.artworkId, 'Artwork ID is required', { status: 400 })
+	invariantResponse(params.artworkVersionId, 'Artwork Version ID is required', {
+		status: 400,
+	})
 	invariantResponse(params.imageId, 'Image ID is required', { status: 400 })
-	const image = await getAssetImageArtworkSrc({
+	const image = await getAssetImageArtworkVersionSrc({
 		id: params.imageId,
-		artworkId: params.artworkId,
+		artworkVersionId: params.artworkVersionId,
 		ownerId: userId,
 	})
 

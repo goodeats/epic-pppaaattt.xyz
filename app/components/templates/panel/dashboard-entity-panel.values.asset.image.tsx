@@ -1,36 +1,38 @@
 import { memo, useCallback } from 'react'
+import { ImagePreview } from '#app/components/image'
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
-import { type IAssetType } from '#app/models/asset/asset.server'
 import { type IAssetImage } from '#app/models/asset/image/image.server'
+import { getAssetImgSrc } from '#app/models/asset/image/utils'
 import { AssetUpdateName } from '#app/routes/resources+/api.v1+/asset.update.name'
 import { SidebarPanelRowValuesContainer } from '..'
 import { PanelEntityPopover } from './dashboard-entity-panel.popover'
 
 interface EntityProps {
-	entity: IAssetType
+	image: IAssetImage
 }
 
-const EntityPopover = memo(({ entity }: EntityProps) => {
-	// display color on popover trigger if fill is defined and solid
-	// const { fill } = entity as IDesignWithFill
-	// const { basis, value } = fill
-	// const displayColor =
-	// 	basis === FillBasisTypeEnum.DEFINED && FillStyleTypeEnum.SOLID
-	// const backgroundColor = displayColor ? value : undefined
+const EntityPopover = memo(({ image }: EntityProps) => {
+	const { attributes } = image
+	const { altText } = attributes
+	const imgSrc = getAssetImgSrc({ image })
 
 	return (
 		<PanelEntityPopover name="Image">
 			<SidebarPanelPopoverFormContainer>
+				<span>Image</span>
+				<ImagePreview src={imgSrc} alt={altText ?? ''} />
+			</SidebarPanelPopoverFormContainer>
+			<SidebarPanelPopoverFormContainer>
 				<span>Name</span>
-				<AssetUpdateName asset={entity} formLocation="popover" />
+				<AssetUpdateName asset={image} formLocation="popover" />
 			</SidebarPanelPopoverFormContainer>
 		</PanelEntityPopover>
 	)
 })
 EntityPopover.displayName = 'EntityPopover'
 
-const EntityMainForm = memo(({ entity }: EntityProps) => {
-	return <AssetUpdateName asset={entity} />
+const EntityMainForm = memo(({ image }: EntityProps) => {
+	return <AssetUpdateName asset={image} />
 })
 EntityMainForm.displayName = 'EntityMainForm'
 
@@ -40,12 +42,12 @@ export const PanelEntityValuesAssetImage = ({
 	entity: IAssetImage
 }) => {
 	const entityPopover = useCallback(
-		() => <EntityPopover entity={entity} />,
+		() => <EntityPopover image={entity} />,
 		[entity],
 	)
 
 	const entityMainForm = useCallback(
-		() => <EntityMainForm entity={entity} />,
+		() => <EntityMainForm image={entity} />,
 		[entity],
 	)
 

@@ -15,11 +15,10 @@ import {
 } from '#app/components/ui/dialog'
 import { type IArtworkWithAssets } from '#app/models/artwork/artwork.server'
 import { type IAssetImage } from '#app/models/asset/image/image.server'
-import { sizeInMB } from '#app/models/asset/image/utils'
+import { getAssetImgSrc, sizeInMB } from '#app/models/asset/image/utils'
 import { AssetImageArtworkCreate } from '#app/routes/resources+/api.v1+/asset.image.artwork.create'
 import { AssetImageArtworkDelete } from '#app/routes/resources+/api.v1+/asset.image.artwork.delete'
 import { AssetImageArtworkUpdate } from '#app/routes/resources+/api.v1+/asset.image.artwork.update'
-import { getArtworkAssetImgSrc } from '#app/utils/misc'
 
 const ImageCreate = memo(({ artwork }: { artwork: IArtworkWithAssets }) => {
 	return <AssetImageArtworkCreate artwork={artwork} />
@@ -44,7 +43,7 @@ export const ImageListItem = memo(
 	({ image, artwork }: { image: IAssetImage; artwork: IArtworkWithAssets }) => {
 		const { id, name, attributes } = image
 		const { altText, height, width, size } = attributes
-		const imgSrc = getArtworkAssetImgSrc({ imageId: id, artworkId: artwork.id })
+		const imgSrc = getAssetImgSrc({ image })
 
 		return (
 			<ImageSidebarListItem key={id}>

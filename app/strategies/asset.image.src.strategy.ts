@@ -1,4 +1,4 @@
-import { getArtworkAssetImgSrc } from '#app/utils/misc'
+import { getArtworkAssetImgSrc } from '#app/models/asset/image/utils'
 
 export interface IAssetImageSrcStrategy {
 	getAssetSrc(args: { assetId: string; parentId: string }): string

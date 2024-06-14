@@ -93,7 +93,7 @@ export const AssetUpdateName = ({
 			tooltipText={`Fill ${field}`}
 			isHydrated={isHydrated}
 			placeholder={`Select a ${field}`}
-			disabled={true}
+			disabled
 		>
 			<div className="hidden">
 				<input type="hidden" name="id" value={assetId} />

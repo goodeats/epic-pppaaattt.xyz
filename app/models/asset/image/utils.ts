@@ -1,5 +1,8 @@
 import { ZodError } from 'zod'
-import { type IAssetAttributesImage } from '#app/models/asset/image/image.server'
+import {
+	type IAssetImage,
+	type IAssetAttributesImage,
+} from '#app/models/asset/image/image.server'
 import { AssetAttributesImageSchema } from '#app/schema/asset/image'
 
 export const parseAssetImageAttributes = (
@@ -40,4 +43,40 @@ export const stringifyAssetImageAttributes = (
 
 export const sizeInMB = (sizeInBytes: number) => {
 	return (sizeInBytes / 1024 / 1024).toFixed(2)
+}
+
+export function getArtworkAssetImgSrc({
+	artworkId,
+	imageId,
+}: {
+	artworkId: string
+	imageId: string
+}) {
+	return `/resources/artwork/${artworkId}/images/${imageId}`
+}
+
+export function getArtworkVersionAssetImgSrc({
+	artworkVersionId,
+	imageId,
+}: {
+	artworkVersionId: string
+	imageId: string
+}) {
+	return `/resources/artwork-version/${artworkVersionId}/images/${imageId}`
+}
+
+export const getAssetImgSrc = ({ image }: { image: IAssetImage }) => {
+	if (image.artworkId) {
+		return getArtworkAssetImgSrc({
+			imageId: image.id,
+			artworkId: image.artworkId,
+		})
+	} else if (image.artworkVersionId) {
+		return getArtworkVersionAssetImgSrc({
+			imageId: image.id,
+			artworkVersionId: image.artworkVersionId,
+		})
+	} else {
+		throw new Error('Image does not have artwork or artwork version id')
+	}
 }

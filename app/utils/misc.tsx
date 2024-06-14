@@ -13,16 +13,6 @@ export function getNoteImgSrc(imageId: string) {
 	return `/resources/note-images/${imageId}`
 }
 
-export function getArtworkAssetImgSrc({
-	artworkId,
-	imageId,
-}: {
-	artworkId: string
-	imageId: string
-}) {
-	return `/resources/artwork/${artworkId}/images/${imageId}`
-}
-
 export function getErrorMessage(error: unknown) {
 	if (typeof error === 'string') return error
 	if (
