@@ -11,6 +11,7 @@ const whereArgs = z.object({
 	ownerId: z.string().optional(),
 	artworkId: z.string().optional(),
 	artworkVersionId: z.string().optional(),
+	layerId: z.string().optional(),
 })
 
 // TODO: Add schemas for each type of query and parse with zod
