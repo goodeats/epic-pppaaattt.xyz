@@ -6,6 +6,16 @@ export interface IAssetImage extends IAssetParsed {
 	attributes: IAssetAttributesImage
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
+export type IAssetImageFit =
+	| 'fill'
+	| 'contain'
+	| 'cover'
+	| 'none'
+	| 'scale-down'
+// TODO: add position later
+// https://developer.mozilla.org/en-US/docs/Web/CSS/object-position
+
 export interface IAssetImageFileData {
 	contentType: string
 	height: number
@@ -13,6 +23,7 @@ export interface IAssetImageFileData {
 	size: number
 	lastModified?: number
 	filename: string
+	fit?: IAssetImageFit
 }
 
 // when adding attributes to an asset type,

@@ -6,21 +6,23 @@ import {
 import { useFetcher } from '@remix-run/react'
 import { redirectBack } from 'remix-utils/redirect-back'
 import { useHydrated } from 'remix-utils/use-hydrated'
-import { FetcherText } from '#app/components/templates/form/fetcher-text'
-import { type IAssetType } from '#app/models/asset/asset.server'
+import { FetcherSelect } from '#app/components/templates/form/fetcher-select'
+import { type IAssetImage } from '#app/models/asset/image/image.server'
+import { validateEditFitAssetImageSubmission } from '#app/models/asset/image/image.update.fit.server'
 import {
-	updateDesignTypeFillValue,
-	validateDesignTypeUpdateFillValueSubmission,
-} from '#app/models/design-type/fill/fill.update.server'
-import { EditDesignFillValueSchema } from '#app/schema/fill'
+	AssetImageFitTypeEnum,
+	EditAssetImageFitSchema,
+} from '#app/schema/asset/image'
 import { validateNoJS } from '#app/schema/form-data'
+import { assetImageUpdateFitService } from '#app/services/asset.image.update.fit.service'
 import { requireUserId } from '#app/utils/auth.server'
+import { schemaEnumToSelectOptions } from '#app/utils/forms'
 import { Routes } from '#app/utils/routes.const'
 
 // https://www.epicweb.dev/full-stack-components
 
-const route = Routes.RESOURCES.API.V1.DESIGN.TYPE.FILL.UPDATE.VALUE
-const schema = EditDesignFillValueSchema
+const route = Routes.RESOURCES.API.V1.ASSET.IMAGE.UPDATE.FIT
+const schema = EditAssetImageFitSchema
 
 // auth GET request to endpoint
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -34,18 +36,19 @@ export async function action({ request }: ActionFunctionArgs) {
 	const noJS = validateNoJS({ formData })
 
 	let updateSuccess = false
-	const { status, submission } =
-		await validateDesignTypeUpdateFillValueSubmission({
-			userId,
-			formData,
-		})
+	let errorMessage = ''
+	const { status, submission } = await validateEditFitAssetImageSubmission({
+		userId,
+		formData,
+	})
 
 	if (status === 'success') {
-		const { success } = await updateDesignTypeFillValue({
+		const { success, message } = await assetImageUpdateFitService({
 			userId,
 			...submission.value,
 		})
 		updateSuccess = success
+		errorMessage = message || ''
 	}
 
 	if (noJS) {
@@ -55,25 +58,26 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	return json(
-		{ status, submission },
+		{ status, submission, message: errorMessage },
 		{
 			status: status === 'error' || !updateSuccess ? 404 : 200,
 		},
 	)
 }
 
-export const AssetUpdateName = ({
-	asset,
+export const AssetImageUpdateFit = ({
+	image,
 	formLocation = '',
 }: {
-	asset: IAssetType
+	image: IAssetImage
 	formLocation?: string
 }) => {
-	const assetId = asset.id
-	const field = 'name'
-	const fetcherKey = `asset-update-${field}-${assetId}`
+	const assetId = image.id
+	const field = 'fit'
+	const fetcherKey = `asset-image-update-${field}-${assetId}`
 	const formId = `${fetcherKey}${formLocation ? `-${formLocation}` : ''}`
-	const value = asset[field]
+	const value = image.attributes[field] || ''
+	const options = schemaEnumToSelectOptions(AssetImageFitTypeEnum)
 
 	let isHydrated = useHydrated()
 	const fetcher = useFetcher<typeof action>({
@@ -81,7 +85,7 @@ export const AssetUpdateName = ({
 	})
 
 	return (
-		<FetcherText
+		<FetcherSelect
 			fetcher={fetcher}
 			fetcherKey={fetcherKey}
 			route={route}
@@ -89,14 +93,14 @@ export const AssetUpdateName = ({
 			formId={formId}
 			fieldName={field}
 			fieldValue={value}
-			tooltipText={`Fill ${field}`}
+			options={options}
+			tooltipText={`Image ${field}`}
 			isHydrated={isHydrated}
 			placeholder={`Select a ${field}`}
-			disabled
 		>
 			<div className="hidden">
 				<input type="hidden" name="id" value={assetId} />
 			</div>
-		</FetcherText>
+		</FetcherSelect>
 	)
 }

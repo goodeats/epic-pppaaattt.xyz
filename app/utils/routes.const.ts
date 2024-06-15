@@ -50,6 +50,9 @@ export const Routes = {
 							UPDATE: `${pathBase}/asset/image/artwork-version/update`,
 							UPDATE_VISIBLE: `${pathBase}/asset/image/artwork-version/update/visible`,
 						},
+						UPDATE: {
+							FIT: `${pathBase}/asset/image/update/fit`,
+						},
 					},
 				},
 				DESIGN: {

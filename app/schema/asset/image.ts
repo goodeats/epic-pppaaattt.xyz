@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { type ObjectValues } from '#app/utils/typescript-helpers'
 import {
 	AssetDataSchema,
 	AssetDescriptionSchema,
@@ -32,6 +33,19 @@ const FileSchema = z
 		'Image must be a JPEG, PNG, WEBP, or GIF',
 	)
 
+// https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
+export const AssetImageFitTypeEnum = {
+	FILL: 'fill',
+	CONTAIN: 'contain',
+	COVER: 'cover',
+	NONE: 'none',
+	SCALE_DOWN: 'scale-down',
+	// add more asset fit types here
+} as const
+export type assetImageFitTypeEnum = ObjectValues<typeof AssetImageFitTypeEnum>
+// TODO: add position later
+// https://developer.mozilla.org/en-US/docs/Web/CSS/object-position
+
 // asset image validation before saving to db
 
 // use this to (de)serealize data to/from the db
@@ -46,6 +60,7 @@ export const AssetAttributesImageSchema = z.object({
 	size: z.number(),
 	lastModified: z.number().optional(),
 	filename: z.string(),
+	fit: z.nativeEnum(AssetImageFitTypeEnum).optional(),
 })
 
 // zod schema for blob Buffer/File is not working
@@ -72,6 +87,11 @@ export const EditAssetImageSchema = z.object({
 	name: AssetNameSchema,
 	description: AssetDescriptionSchema,
 	altText: AltTextSchema,
+})
+
+export const EditAssetImageFitSchema = z.object({
+	id: z.string(),
+	fit: z.nativeEnum(AssetImageFitTypeEnum),
 })
 
 export const DeleteAssetImageSchema = z.object({

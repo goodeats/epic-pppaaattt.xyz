@@ -3,6 +3,7 @@ import { ImagePreview } from '#app/components/image'
 import { SidebarPanelPopoverFormContainer } from '#app/components/layout/popover'
 import { type IAssetImage } from '#app/models/asset/image/image.server'
 import { getAssetImgSrc } from '#app/models/asset/image/utils'
+import { AssetImageUpdateFit } from '#app/routes/resources+/api.v1+/asset.image.update.fit'
 import { AssetUpdateName } from '#app/routes/resources+/api.v1+/asset.update.name'
 import { SidebarPanelRowValuesContainer } from '..'
 import { PanelEntityPopover } from './dashboard-entity-panel.popover'
@@ -25,6 +26,10 @@ const EntityPopover = memo(({ image }: EntityProps) => {
 			<SidebarPanelPopoverFormContainer>
 				<span>Name</span>
 				<AssetUpdateName asset={image} formLocation="popover" />
+			</SidebarPanelPopoverFormContainer>
+			<SidebarPanelPopoverFormContainer>
+				<span>Fit</span>
+				<AssetImageUpdateFit image={image} formLocation="popover" />
 			</SidebarPanelPopoverFormContainer>
 		</PanelEntityPopover>
 	)
