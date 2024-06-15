@@ -1,7 +1,7 @@
 import { Sidebar } from '#app/components/layout'
 import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
 import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
-import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
+import { type ILayerWithChildren } from '#app/models/layer/layer.server'
 import { PanelArtworkVersion } from './sidebars.panel.artwork-version'
 import { PanelArtworkVersionImages } from './sidebars.panel.artwork-version.images'
 import { PanelArtworkVersionLayers } from './sidebars.panel.artwork-version.layers'
@@ -14,7 +14,7 @@ export const SidebarLeft = ({
 }) => {
 	return (
 		<Sidebar className="hidden bg-muted lg:flex">
-			<SidebarTabs tabs={['display', 'assets']} defaultValue="assets">
+			<SidebarTabs tabs={['display', 'assets']} defaultValue="display">
 				<SidebarTabsContent value="display">
 					<PanelArtworkVersionLayers version={version} />
 				</SidebarTabsContent>
@@ -31,7 +31,7 @@ export const SidebarRight = ({
 	selectedLayer,
 }: {
 	version: IArtworkVersionWithChildren
-	selectedLayer: ILayerWithDesigns | undefined
+	selectedLayer: ILayerWithChildren | undefined
 }) => {
 	return (
 		<Sidebar className="hidden bg-muted lg:flex">

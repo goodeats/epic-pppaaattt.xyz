@@ -1,17 +1,17 @@
 import { invariant } from '@epic-web/invariant'
-import { getArtwork } from '#app/models/artwork/artwork.get.server'
 import {
-	type IAssetImageArtworkCreateSubmission,
-	createAssetImageArtwork,
-} from '#app/models/asset/image/image.create.artwork.server'
+	type IAssetImageLayerCreateSubmission,
+	createAssetImageLayer,
+} from '#app/models/asset/image/image.create.layer.server'
 import { type IAssetImageCreatedResponse } from '#app/models/asset/image/image.create.server'
+import { getLayer } from '#app/models/layer/layer.get.server'
 import { AssetTypeEnum } from '#app/schema/asset'
-import { AssetImageArtworkDataSchema } from '#app/schema/asset/image.artwork'
+import { AssetImageLayerDataSchema } from '#app/schema/asset/image.layer'
 import { prisma } from '#app/utils/db.server'
 
-export const assetImageArtworkCreateService = async ({
+export const assetImageLayerCreateService = async ({
 	userId,
-	artworkId,
+	layerId,
 	name,
 	description,
 	blob,
@@ -22,13 +22,13 @@ export const assetImageArtworkCreateService = async ({
 	size,
 	lastModified,
 	filename,
-}: IAssetImageArtworkCreateSubmission): Promise<IAssetImageCreatedResponse> => {
+}: IAssetImageLayerCreateSubmission): Promise<IAssetImageCreatedResponse> => {
 	try {
-		// Step 1: verify the artwork exists
-		const artwork = await getArtwork({
-			where: { id: artworkId, ownerId: userId },
+		// Step 1: verify the layer exists
+		const layer = await getLayer({
+			where: { id: layerId, ownerId: userId },
 		})
-		invariant(artwork, 'Artwork not found')
+		invariant(layer, 'Layer not found')
 
 		// Step 2: validate asset image data
 		// zod schema for blob Buffer/File is not working
@@ -48,12 +48,12 @@ export const assetImageArtworkCreateService = async ({
 			},
 			visible: true,
 			ownerId: userId,
-			artworkId,
+			layerId,
 		}
-		const assetImageData = AssetImageArtworkDataSchema.parse(data)
+		const assetImageData = AssetImageLayerDataSchema.parse(data)
 
 		// Step 3: create the asset image via promise
-		const createAssetImagePromise = createAssetImageArtwork({
+		const createAssetImagePromise = createAssetImageLayer({
 			data: { ...assetImageData, blob },
 		})
 
@@ -70,7 +70,7 @@ export const assetImageArtworkCreateService = async ({
 		console.log(error)
 		return {
 			success: false,
-			message: 'Unknown error: assetImageArtworkCreateService',
+			message: 'Unknown error: assetImageLayerCreateService',
 		}
 	}
 }

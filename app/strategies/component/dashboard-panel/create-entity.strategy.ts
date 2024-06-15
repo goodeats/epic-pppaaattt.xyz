@@ -31,6 +31,13 @@ export class DashboardPanelCreateArtworkVersionLayerStrategy
 	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
 }
 
+export class DashboardPanelCreateLayerAssetTypeStrategy
+	implements IDashboardPanelCreateEntityStrategy
+{
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.LAYER
+}
+
 export class DashboardPanelCreateLayerDesignTypeStrategy
 	implements IDashboardPanelCreateEntityStrategy
 {

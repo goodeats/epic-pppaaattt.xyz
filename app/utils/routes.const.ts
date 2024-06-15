@@ -50,6 +50,11 @@ export const Routes = {
 							UPDATE: `${pathBase}/asset/image/artwork-version/update`,
 							UPDATE_VISIBLE: `${pathBase}/asset/image/artwork-version/update/visible`,
 						},
+						LAYER: {
+							CREATE: `${pathBase}/asset/image/layer/create`,
+							DELETE: `${pathBase}/asset/image/layer/delete`,
+							UPDATE: `${pathBase}/asset/image/layer/update`,
+						},
 						UPDATE: {
 							FIT: `${pathBase}/asset/image/update/fit`,
 						},

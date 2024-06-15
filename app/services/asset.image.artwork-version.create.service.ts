@@ -46,6 +46,7 @@ export const assetImageArtworkVersionCreateService = async ({
 				lastModified,
 				filename,
 			},
+			visible: true,
 			ownerId: userId,
 			artworkVersionId,
 		}

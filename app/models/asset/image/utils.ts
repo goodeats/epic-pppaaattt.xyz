@@ -65,6 +65,16 @@ export function getArtworkVersionAssetImgSrc({
 	return `/resources/artwork-version/${artworkVersionId}/images/${imageId}`
 }
 
+export function getLayerAssetImgSrc({
+	layerId,
+	imageId,
+}: {
+	layerId: string
+	imageId: string
+}) {
+	return `/resources/layer/${layerId}/images/${imageId}`
+}
+
 export const getAssetImgSrc = ({ image }: { image: IAssetImage }) => {
 	if (image.artworkId) {
 		return getArtworkAssetImgSrc({
@@ -75,6 +85,11 @@ export const getAssetImgSrc = ({ image }: { image: IAssetImage }) => {
 		return getArtworkVersionAssetImgSrc({
 			imageId: image.id,
 			artworkVersionId: image.artworkVersionId,
+		})
+	} else if (image.layerId) {
+		return getLayerAssetImgSrc({
+			imageId: image.id,
+			layerId: image.layerId,
 		})
 	} else {
 		throw new Error('Image does not have artwork or artwork version id')

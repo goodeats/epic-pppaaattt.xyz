@@ -37,6 +37,14 @@ export class DashboardPanelUpdateArtworkVersionLayerVisibleStrategy
 	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
 }
 
+export class DashboardPanelUpdateLayerAssetVisibleStrategy
+	implements IDashboardPanelUpdateEntityVisibleStrategy
+{
+	actionType: entityActionTypeEnum = EntityActionType.TOGGLE_VISIBLE
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.LAYER
+}
+
 export class DashboardPanelUpdateLayerDesignVisibleStrategy
 	implements IDashboardPanelUpdateEntityVisibleStrategy
 {

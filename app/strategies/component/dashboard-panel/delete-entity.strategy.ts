@@ -36,6 +36,14 @@ export class DashboardPanelDeleteArtworkVersionLayerStrategy
 	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
 }
 
+export class DashboardPanelDeleteLayerAssetStrategy
+	implements IDashboardPanelDeleteEntityStrategy
+{
+	actionType: entityActionTypeEnum = EntityActionType.DELETE
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.LAYER
+}
+
 export class DashboardPanelDeleteLayerDesignStrategy
 	implements IDashboardPanelDeleteEntityStrategy
 {
