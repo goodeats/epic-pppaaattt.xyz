@@ -23,6 +23,7 @@ const drawLayerItems = ({
 }) => {
 	for (let i = 0; i < layerDrawItems.length; i++) {
 		const layerDrawItem = layerDrawItems[i]
+    console.log('count: ', i)
 		drawLayerItemService({ ctx, layerDrawItem })
 	}
 }

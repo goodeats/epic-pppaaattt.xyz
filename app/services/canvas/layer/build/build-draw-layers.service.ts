@@ -24,6 +24,7 @@ export const canvasLayerBuildDrawLayersService = ({
 	const drawLayers = []
 	for (let i = 0; i < layers.length; i++) {
 		const layer = layers[i]
+		console.log('canvasLayerBuildDrawLayersService layer.assets', layer.assets)
 		const layerDrawItems = buildLayerGenerationItems({ ctx, layer })
 		drawLayers.push(layerDrawItems)
 	}

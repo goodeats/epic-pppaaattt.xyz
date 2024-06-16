@@ -1,6 +1,5 @@
 import { invariant } from '@epic-web/invariant'
 import { z } from 'zod'
-import { deserializeAssets } from '#app/utils/asset'
 import { prisma } from '#app/utils/db.server'
 import {
 	type IArtworkWithProject,
@@ -9,6 +8,7 @@ import {
 	type IArtworkWithAssets,
 } from '../artwork/artwork.server'
 import { assetSelect } from '../asset/asset.get.server'
+import { deserializeAssets } from '../asset/utils'
 
 export type queryArtworkWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({

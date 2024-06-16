@@ -1,9 +1,9 @@
 import { invariant } from '@epic-web/invariant'
 import { z } from 'zod'
 import { zodStringOrNull } from '#app/schema/zod-helpers'
-import { deserializeAssets } from '#app/utils/asset'
 import { prisma } from '#app/utils/db.server'
 import { assetSelect } from '../asset/asset.get.server'
+import { deserializeAssets } from '../asset/utils'
 import {
 	type IArtworkVersion,
 	type IArtworkVersionWithChildren,

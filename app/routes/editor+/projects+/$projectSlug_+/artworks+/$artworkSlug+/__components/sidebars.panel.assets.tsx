@@ -3,10 +3,13 @@ import {
 	type IAssetParent,
 	type IAssetsByTypeWithType,
 } from '#app/models/asset/asset.server'
+import {
+	assetsByTypeToPanelArray,
+	groupAssetsByType,
+} from '#app/models/asset/utils'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
-import { assetsByTypeToPanelArray, filterAssetsByType } from '#app/utils/asset'
 
 export const PanelAssets = ({
 	parent,
@@ -19,11 +22,11 @@ export const PanelAssets = ({
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyActions: IDashboardPanelEntityActionStrategy
 }) => {
-	const assetsByType = filterAssetsByType({
+	const groupedAssetsByType = groupAssetsByType({
 		assets: parent.assets,
 	})
 	const assetTypePanels = assetsByTypeToPanelArray({
-		assets: assetsByType,
+		assets: groupedAssetsByType,
 	})
 
 	return (

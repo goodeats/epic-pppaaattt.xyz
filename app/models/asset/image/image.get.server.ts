@@ -1,8 +1,8 @@
 import { invariant } from '@epic-web/invariant'
 import { z } from 'zod'
 import { AssetTypeEnum } from '#app/schema/asset'
-import { deserializeAsset } from '#app/utils/asset'
 import { prisma } from '#app/utils/db.server'
+import { deserializeAsset } from '../utils'
 import { type IAssetImage } from './image.server'
 
 export type queryAssetImageWhereArgsType = z.infer<typeof whereArgs>

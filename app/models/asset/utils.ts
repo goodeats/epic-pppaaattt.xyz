@@ -75,7 +75,7 @@ export const filterAssetType = ({
 	return assets.filter(asset => asset.type === type)
 }
 
-export const filterAssetsByType = ({
+export const groupAssetsByType = ({
 	assets,
 }: {
 	assets: IAssetParsed[]
