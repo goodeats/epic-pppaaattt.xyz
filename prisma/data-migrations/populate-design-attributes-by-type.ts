@@ -1,10 +1,13 @@
 import { getDesignsWithType } from '#app/models/design/design.get.server'
 import {
+	type IDesignWithStroke,
 	type IDesignWithFill,
 	type IDesignWithType,
 } from '#app/models/design/design.server'
 import { type IDesignAttributesFill } from '#app/models/design/fill/fill.server'
 import { stringifyDesignFillAttributes } from '#app/models/design/fill/utils'
+import { type IDesignAttributesStroke } from '#app/models/design/stroke/stroke.server'
+import { stringifyDesignStrokeAttributes } from '#app/models/design/stroke/utils'
 import { DesignTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 
@@ -66,6 +69,8 @@ const updateDesignAttributesPromise = (design: IDesignWithType) => {
 	switch (design.type) {
 		case DesignTypeEnum.FILL:
 			return updateDesignFillAttributes(design as IDesignWithFill)
+		case DesignTypeEnum.STROKE:
+			return updateDesignStrokeAttributes(design as IDesignWithStroke)
 		default:
 			return Promise.resolve()
 		// throw new Error(`Unsupported design type: ${design.type}`)
@@ -95,6 +100,34 @@ const updateDesignFillAttributes = (design: IDesignWithFill) => {
 		.catch(error => {
 			console.error(
 				`Failed to update design fill attributes for design ${design.id}`,
+				error,
+			)
+		})
+}
+
+const updateDesignStrokeAttributes = (design: IDesignWithStroke) => {
+	const { stroke } = design
+	const { basis, style, value } = stroke
+	const attributes = {
+		basis,
+		style,
+		value,
+	} as IDesignAttributesStroke
+	const jsonAttributes = stringifyDesignStrokeAttributes(attributes)
+
+	return prisma.design
+		.update({
+			where: { id: design.id },
+			data: {
+				attributes: jsonAttributes,
+			},
+		})
+		.then(() => {
+			console.log(`Updated design stroke attributes for design ${design.id}`)
+		})
+		.catch(error => {
+			console.error(
+				`Failed to update design stroke attributes for design ${design.id}`,
 				error,
 			)
 		})
