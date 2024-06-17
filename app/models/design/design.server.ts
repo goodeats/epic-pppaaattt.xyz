@@ -44,9 +44,17 @@ import {
 	type IDesignRotate,
 } from './rotate/rotate.server'
 import {
+	type IDesignAttributesSize,
+	type IDesignSize,
+} from './size/size.server'
+import {
 	type IDesignStroke,
 	type IDesignAttributesStroke,
 } from './stroke/stroke.server'
+import {
+	type IDesignAttributesTemplate,
+	type IDesignTemplate,
+} from './template/template.server'
 
 // Omitting 'createdAt' and 'updatedAt' from the Design interface
 // prisma query returns a string for these fields
@@ -73,7 +81,9 @@ export type IDesignAttributes =
 	| IDesignAttributesLine
 	| IDesignAttributesPalette
 	| IDesignAttributesRotate
+	| IDesignAttributesSize
 	| IDesignAttributesStroke
+	| IDesignAttributesTemplate
 
 export interface IDesignParsed extends BaseDesign {
 	type: designTypeEnum
@@ -90,7 +100,9 @@ export type IDesignByType = {
 	designLines: IDesignLine[]
 	designPalettes: IDesignPalette[]
 	designRotates: IDesignRotate[]
+	designSizes: IDesignSize[]
 	designStroke: IDesignStroke[]
+	designTemplates: IDesignTemplate[]
 }
 
 // export interface IDesignsByTypeWithType {

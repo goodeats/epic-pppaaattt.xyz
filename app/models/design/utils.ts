@@ -6,7 +6,9 @@ import { parseDesignLayoutAttributes } from './layout/utils'
 import { parseDesignLineAttributes } from './line/utils'
 import { parseDesignPaletteAttributes } from './palette/utils'
 import { parseDesignRotateAttributes } from './rotate/utils'
+import { parseDesignSizeAttributes } from './size/utils'
 import { parseDesignStrokeAttributes } from './stroke/utils'
+import { parseDesignTemplateAttributes } from './template/utils'
 
 export const deserializeDesigns = ({
 	designs,
@@ -55,8 +57,12 @@ export const validateDesignAttributes = ({
 				return parseDesignPaletteAttributes(attributes)
 			case DesignTypeEnum.ROTATE:
 				return parseDesignRotateAttributes(attributes)
+			case DesignTypeEnum.SIZE:
+				return parseDesignSizeAttributes(attributes)
 			case DesignTypeEnum.STROKE:
 				return parseDesignStrokeAttributes(attributes)
+			case DesignTypeEnum.TEMPLATE:
+				return parseDesignTemplateAttributes(attributes)
 			default:
 				throw new Error(`Unsupported design type: ${type}`)
 		}

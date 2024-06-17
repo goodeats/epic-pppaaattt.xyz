@@ -9,6 +9,7 @@ import {
 	type IDesignWithPalette,
 	type IDesignWithRotate,
 	type IDesignWithSize,
+	type IDesignWithTemplate,
 } from '#app/models/design/design.server'
 import { type IDesignAttributesFill } from '#app/models/design/fill/fill.server'
 import { stringifyDesignFillAttributes } from '#app/models/design/fill/utils'
@@ -24,6 +25,8 @@ import { type IDesignAttributesSize } from '#app/models/design/size/size.server'
 import { stringifyDesignSizeAttributes } from '#app/models/design/size/utils'
 import { type IDesignAttributesStroke } from '#app/models/design/stroke/stroke.server'
 import { stringifyDesignStrokeAttributes } from '#app/models/design/stroke/utils'
+import { type IDesignAttributesTemplate } from '#app/models/design/template/template.server'
+import { stringifyDesignTemplateAttributes } from '#app/models/design/template/utils'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 
@@ -97,6 +100,8 @@ const updateDesignAttributesPromise = (design: IDesignWithType) => {
 			return updateDesignSizeAttributes(design as IDesignWithSize)
 		case DesignTypeEnum.STROKE:
 			return updateDesignStrokeAttributes(design as IDesignWithStroke)
+		case DesignTypeEnum.TEMPLATE:
+			return updateDesignTemplateAttributes(design as IDesignWithTemplate)
 		default:
 			return Promise.resolve()
 		// throw new Error(`Unsupported design type: ${design.type}`)
@@ -241,6 +246,21 @@ const updateDesignStrokeAttributes = (design: IDesignWithStroke) => {
 	return prismaUpdatePromise({
 		id,
 		type: DesignTypeEnum.STROKE,
+		attributes,
+	})
+}
+
+const updateDesignTemplateAttributes = (design: IDesignWithTemplate) => {
+	const { id, template } = design
+	const { style } = template
+	const json = {
+		style,
+	} as IDesignAttributesTemplate
+	const attributes = stringifyDesignTemplateAttributes(json)
+
+	return prismaUpdatePromise({
+		id,
+		type: DesignTypeEnum.TEMPLATE,
 		attributes,
 	})
 }
