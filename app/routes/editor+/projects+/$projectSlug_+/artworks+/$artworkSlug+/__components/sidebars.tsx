@@ -1,24 +1,25 @@
 import { Sidebar } from '#app/components/layout'
 import { SidebarTabs, SidebarTabsContent } from '#app/components/templates'
-import { type IArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.server'
-import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
+import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
+import { type ILayerWithChildren } from '#app/models/layer/layer.server'
 import { PanelArtworkVersion } from './sidebars.panel.artwork-version'
+import { PanelArtworkVersionImages } from './sidebars.panel.artwork-version.images'
 import { PanelArtworkVersionLayers } from './sidebars.panel.artwork-version.layers'
 import { PanelLayer } from './sidebars.panel.layer'
 
 export const SidebarLeft = ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }) => {
 	return (
 		<Sidebar className="hidden bg-muted lg:flex">
-			<SidebarTabs tabs={['display', 'assets']}>
+			<SidebarTabs tabs={['display', 'assets']} defaultValue="display">
 				<SidebarTabsContent value="display">
 					<PanelArtworkVersionLayers version={version} />
 				</SidebarTabsContent>
 				<SidebarTabsContent value="assets">
-					Add assets like images here
+					<PanelArtworkVersionImages />
 				</SidebarTabsContent>
 			</SidebarTabs>
 		</Sidebar>
@@ -29,8 +30,8 @@ export const SidebarRight = ({
 	version,
 	selectedLayer,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
-	selectedLayer: ILayerWithDesigns | undefined
+	version: IArtworkVersionWithChildren
+	selectedLayer: ILayerWithChildren | undefined
 }) => {
 	return (
 		<Sidebar className="hidden bg-muted lg:flex">

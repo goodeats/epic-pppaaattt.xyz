@@ -1,12 +1,12 @@
 import { type User } from '@prisma/client'
 import { type IDesignCreatedResponse } from '#app/models/design/design.create.server'
 import {
-	connectPrevAndNextDesigns,
 	type IDesignTypeCreateOverrides,
 	type IDesign,
 	type IDesignEntityId,
 	type IDesignCreateOverrides,
 } from '#app/models/design/design.server'
+import { connectPrevAndNextDesigns } from '#app/models/design/design.update.server'
 import { createDesignFill } from '#app/models/design-type/fill/fill.create.server'
 import { createDesignLayout } from '#app/models/design-type/layout/layout.create.server'
 import { createDesignLine } from '#app/models/design-type/line/line.create.server'

@@ -1,9 +1,12 @@
+import { type IAssetImage } from '#app/models/asset/image/image.server'
+import { AssetTypeEnum } from '#app/schema/asset'
 import { DesignTypeEnum } from '#app/schema/design'
 import {
 	type IEntityParentType,
 	type IEntity,
 	type IEntityType,
 } from '#app/schema/entity'
+import { PanelEntityValuesAssetImage } from './dashboard-entity-panel.values.asset.image'
 import { PanelEntityValuesDesignFill } from './dashboard-entity-panel.values.design.fill'
 import { PanelEntityValuesDesignLayout } from './dashboard-entity-panel.values.design.layout'
 import { PanelEntityValuesDesignLine } from './dashboard-entity-panel.values.design.line'
@@ -28,6 +31,8 @@ export const PanelEntityValues = ({
 	}
 
 	switch (type) {
+		case AssetTypeEnum.IMAGE:
+			return <PanelEntityValuesAssetImage entity={entity as IAssetImage} />
 		case DesignTypeEnum.FILL:
 			return <PanelEntityValuesDesignFill entity={entity} />
 		case DesignTypeEnum.LAYOUT:

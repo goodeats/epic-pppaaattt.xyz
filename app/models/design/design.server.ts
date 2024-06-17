@@ -1,13 +1,9 @@
 import { type Design } from '@prisma/client'
+import { type DateOrString } from '#app/definitions/prisma-helper'
+import { type designTypeEnum } from '#app/schema/design'
 import {
-	type selectArgsType,
-	type findDesignArgsType,
-	type whereArgsType,
-} from '#app/schema/design'
-import { prisma } from '#app/utils/db.server'
-import {
-	type IArtworkVersionWithDesignsAndLayers,
 	type IArtworkVersion,
+	type IArtworkVersionWithChildren,
 } from '../artwork-version/artwork-version.server'
 import { type IFillCreateOverrides } from '../design-type/fill/fill.create.server'
 import { type IFill } from '../design-type/fill/fill.server'
@@ -25,15 +21,123 @@ import { type IStrokeCreateOverrides } from '../design-type/stroke/stroke.create
 import { type IStroke } from '../design-type/stroke/stroke.server'
 import { type ITemplateCreateOverrides } from '../design-type/template/template.create.server'
 import { type ITemplate } from '../design-type/template/template.server'
+import { type ILayerWithChildren } from '../layer/layer.server'
+import { type IUser } from '../user/user.server'
+import {
+	type IDesignAttributesFill,
+	type IDesignFill,
+} from './fill/fill.server'
+import {
+	type IDesignLayout,
+	type IDesignAttributesLayout,
+} from './layout/layout.server'
+import {
+	type IDesignAttributesLine,
+	type IDesignLine,
+} from './line/line.server'
+import {
+	type IDesignAttributesPalette,
+	type IDesignPalette,
+} from './palette/palette.server'
+import {
+	type IDesignAttributesRotate,
+	type IDesignRotate,
+} from './rotate/rotate.server'
+import {
+	type IDesignAttributesSize,
+	type IDesignSize,
+} from './size/size.server'
+import {
+	type IDesignStroke,
+	type IDesignAttributesStroke,
+} from './stroke/stroke.server'
+import {
+	type IDesignAttributesTemplate,
+	type IDesignTemplate,
+} from './template/template.server'
 
-export interface IDesign extends Design {}
+// Omitting 'createdAt' and 'updatedAt' from the Design interface
+// prisma query returns a string for these fields
+// omit type string to ensure type safety with designTypeEnum
+// omit attributes string so that extended design types can insert their own attributes
+type BaseDesign = Omit<
+	Design,
+	'type' | 'attributes' | 'createdAt' | 'updatedAt'
+>
+
+export interface IDesign extends BaseDesign {
+	type: string
+	attributes: string
+	createdAt: DateOrString
+	updatedAt: DateOrString
+}
+
+// when adding attributes to a design type,
+// make sure it starts as optional or is set to a default value
+// for when parsing the design from the deserializer
+export type IDesignAttributes =
+	| IDesignAttributesFill
+	| IDesignAttributesLayout
+	| IDesignAttributesLine
+	| IDesignAttributesPalette
+	| IDesignAttributesRotate
+	| IDesignAttributesSize
+	| IDesignAttributesStroke
+	| IDesignAttributesTemplate
+
+export interface IDesignParsed extends BaseDesign {
+	type: designTypeEnum
+	attributes: IDesignAttributes
+	createdAt: DateOrString
+	updatedAt: DateOrString
+}
+
+// export type IDesignType = IDesignFill
+// TODO: replace with this ^^
+export type IDesignByType = {
+	designFills: IDesignFill[]
+	designLayouts: IDesignLayout[]
+	designLines: IDesignLine[]
+	designPalettes: IDesignPalette[]
+	designRotates: IDesignRotate[]
+	designSizes: IDesignSize[]
+	designStroke: IDesignStroke[]
+	designTemplates: IDesignTemplate[]
+}
+
+// export interface IDesignsByTypeWithType {
+// 	type: designTypeEnum
+// 	designs: IDesignType[]
+// }
+// TODO: replace with this ^^
+
+export type IDesignParent = IArtworkVersionWithChildren | ILayerWithChildren
+
+interface IDesignData {
+	visible: boolean
+	selected: boolean
+}
+
+export interface IDesignSubmission extends IDesignData {
+	userId: IUser['id']
+}
+
+export interface IDesignCreateData extends IDesignData {
+	ownerId: IUser['id']
+	type: designTypeEnum
+	attributes: IDesignAttributes
+}
+
+export interface IDesignUpdateData extends IDesignData {
+	attributes: IDesignAttributes
+}
 
 export type IDesignIdOrNull = IDesign['id'] | null | undefined
 
 export type IDesignEntityId =
 	| IDesign['id']
 	| IArtworkVersion['id']
-	| IArtworkVersionWithDesignsAndLayers['id']
+	| IArtworkVersionWithChildren['id']
 export type IDesignEntityIdOrNull = IDesignEntityId | null | undefined
 
 export interface IDesignCreateOverrides {
@@ -80,6 +184,10 @@ export interface IDesignsByType {
 	designRotates: IDesignWithRotate[]
 	designLayouts: IDesignWithLayout[]
 	designTemplates: IDesignWithTemplate[]
+}
+export interface IDesignsByTypeWithType {
+	type: designTypeEnum
+	designs: IDesignWithType[]
 }
 
 export interface IDesignWithPalette extends IDesignWithType {
@@ -146,107 +254,4 @@ export interface ISelectedDesignsFiltered {
 	rotate?: IRotate
 	layout?: ILayout
 	template?: ITemplate
-}
-
-export const findManyDesignsWithType = async ({
-	where,
-}: {
-	where: whereArgsType
-}): Promise<IDesignWithType[]> => {
-	const designs = await prisma.design.findMany({
-		where,
-		include: {
-			palette: true,
-			size: true,
-			fill: true,
-			stroke: true,
-			line: true,
-			rotate: true,
-			layout: true,
-			template: true,
-		},
-		orderBy: {
-			type: 'asc',
-		},
-	})
-	return designs
-}
-
-export const findFirstDesign = async ({
-	where,
-	select,
-}: findDesignArgsType): Promise<IDesign | null> => {
-	const design = await prisma.design.findFirst({
-		where,
-		select,
-	})
-	return design
-}
-
-export const findDesignByIdAndOwner = async ({
-	id,
-	ownerId,
-	select,
-}: {
-	id: whereArgsType['id']
-	ownerId: whereArgsType['ownerId']
-	select?: selectArgsType
-}): Promise<Design | null> => {
-	const where = { id, ownerId }
-	return await findFirstDesign({ where, select })
-}
-
-// only use in transactions
-export const connectPrevAndNextDesigns = ({
-	prevId,
-	nextId,
-}: {
-	prevId: IDesign['id']
-	nextId: IDesign['id']
-}) => {
-	const connectNextToPrev = prisma.design.update({
-		where: { id: prevId },
-		data: { nextId },
-	})
-	const connectPrevToNext = prisma.design.update({
-		where: { id: nextId },
-		data: { prevId },
-	})
-	return [connectNextToPrev, connectPrevToNext]
-}
-
-export const updateDesignToHead = ({ id }: { id: IDesign['id'] }) => {
-	return prisma.design.update({
-		where: { id },
-		data: { prevId: null },
-	})
-}
-
-export const updateDesignToTail = ({ id }: { id: IDesign['id'] }) => {
-	return prisma.design.update({
-		where: { id },
-		data: { nextId: null },
-	})
-}
-
-export const updateDesignRemoveNodes = ({ id }: { id: IDesign['id'] }) => {
-	return prisma.design.update({
-		where: { id },
-		data: { prevId: null, nextId: null },
-	})
-}
-
-export const updateDesignNodes = ({
-	id,
-	nextId,
-	prevId,
-}: {
-	id: string
-	nextId: string | null
-	prevId: string | null
-}) => {
-	return prisma.design.update({
-		where: { id },
-		data: { prevId, nextId },
-	})
 }

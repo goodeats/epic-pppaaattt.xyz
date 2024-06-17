@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client'
-import { type whereArgsType } from '#app/schema/design'
 import { prismaExtended } from './db.server'
 
 // must be in /utils to actually connect to prisma
@@ -49,7 +48,7 @@ export type ExtendedStroke = Prisma.Result<
 export const findFirstStrokeInstance = async ({
 	where,
 }: {
-	where: whereArgsType
+	where: { id: string }
 }): Promise<ExtendedStroke | null> => {
 	return await prismaExtended.stroke.findFirst({
 		where,

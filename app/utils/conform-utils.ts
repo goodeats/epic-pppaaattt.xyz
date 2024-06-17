@@ -2,6 +2,7 @@ import { type Submission } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
 import { z } from 'zod'
 import { type IValidateSubmissionStrategy } from '#app/strategies/validate-submission.strategy'
+import { transformAssetImageData } from './conform/transform-asset-image.server'
 
 export const notSubmissionResponse = (submission: Submission) =>
 	({ status: 'idle', submission }) as const
@@ -60,6 +61,53 @@ export async function parseEntitySubmission({
 		schema: schema.superRefine(async (data, ctx) => {
 			strategy.validateFormDataEntity({ userId, data, ctx })
 		}),
+		async: true,
+	})
+}
+
+export async function validateEntityImageSubmission({
+	userId,
+	formData,
+	schema,
+	strategy,
+}: {
+	userId: string
+	formData: FormData
+	schema: z.ZodSchema<any>
+	strategy: IValidateSubmissionStrategy
+}) {
+	const submission = await parseEntityImageSubmission({
+		userId,
+		formData,
+		schema,
+		strategy,
+	})
+	if (submission.intent !== 'submit') {
+		return notSubmissionResponse(submission)
+	}
+	if (!submission.value) {
+		return submissionErrorResponse(submission)
+	}
+	return submissionSuccessResponse(submission)
+}
+
+export async function parseEntityImageSubmission({
+	userId,
+	formData,
+	schema,
+	strategy,
+}: {
+	userId: string
+	formData: FormData
+	schema: z.ZodSchema<any>
+	strategy: IValidateSubmissionStrategy
+}) {
+	return await parse(formData, {
+		schema: schema
+			.superRefine(async (data, ctx) => {
+				strategy.validateFormDataEntity({ userId, data, ctx })
+			})
+			.transform(transformAssetImageData),
 		async: true,
 	})
 }

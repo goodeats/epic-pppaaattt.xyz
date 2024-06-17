@@ -39,6 +39,7 @@
     "fly:console:prisma:studio:proxy:prod": "npm run fly:console:prisma:studio:proxy -- --env=production",
     "fly:console:prisma:studio:proxy:staging": "npm run fly:console:prisma:studio:proxy -- --env=staging",
     "fly:console:prisma:studio:proxy": "./scripts/fly.io/app-console-prisma-studio-proxy.sh",
+    "data:migrate": "npx tsx ./prisma/data-migrations/populate-design-attributes-by-type.ts",
     "prepare": "husky install"
   },
   "eslintIgnore": [
@@ -67,6 +68,7 @@
     "@radix-ui/react-hover-card": "^1.0.7",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
+    "@radix-ui/react-radio-group": "^1.1.3",
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-separator": "^1.0.3",
@@ -99,6 +101,7 @@
     "dotenv": "^16.3.1",
     "eslint-plugin-remix-react-routes": "^1.0.5",
     "execa": "^8.0.1",
+    "exifreader": "^4.23.2",
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
     "get-port": "^7.0.0",
@@ -127,6 +130,7 @@
     "tailwindcss": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-radix": "^2.8.0",
+    "vite-node": "^1.6.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -173,12 +177,11 @@
     "prettier": "^3.1.0",
     "prettier-plugin-sql": "^0.17.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
-    "remix-development-tools": "^3.7.4",
+    "remix-development-tools": "^4.1.6",
     "remix-flat-routes": "^0.6.2",
     "tsx": "^4.6.0",
     "typescript": "^5.3.2",
     "vite": "^5.2.11",
-    "vite-node": "^1.4.0",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^0.34.6"
   },

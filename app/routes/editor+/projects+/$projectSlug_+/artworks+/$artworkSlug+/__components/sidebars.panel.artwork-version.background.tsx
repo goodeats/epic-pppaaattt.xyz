@@ -5,13 +5,13 @@ import {
 	SidebarPanelRowContainer,
 	SidebarPanelRowValuesContainer,
 } from '#app/components/templates'
-import { type IArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.server'
+import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
 import { ArtworkVersionBackground } from '#app/routes/resources+/api.v1+/artwork-version.update.background'
 
 export const PanelArtworkVersionBackground = ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }) => {
 	return (
 		<SidebarPanel>

@@ -1,6 +1,7 @@
 import { parse } from '@conform-to/zod'
 import { useFetcher } from '@remix-run/react'
 import { type z } from 'zod'
+import { type AssetImageFitTypeEnum } from '#app/schema/asset/image'
 import {
 	type FillStyleTypeEnum,
 	type FillBasisTypeEnum,
@@ -34,6 +35,7 @@ type EnumSchema =
 	| typeof StrokeStyleTypeEnum
 	| typeof SizeFormatTypeEnum
 	| typeof TemplateStyleTypeEnum
+	| typeof AssetImageFitTypeEnum
 
 export const schemaEnumToSelectOptions = (enumSchema: EnumSchema) => {
 	return Object.values(enumSchema).map(optionEnum => ({

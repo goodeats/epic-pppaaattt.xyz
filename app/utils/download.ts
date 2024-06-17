@@ -15,7 +15,7 @@ export const downloadCanvasToImg = ({
 	link.click()
 }
 
-const downloadImageFileName = () => {
+export const downloadImageFileName = () => {
 	const dateString = currentDateString()
 	const format = 'png'
 	const filename = `${dateString}_${CONST_FILE_NAME}.${format}`

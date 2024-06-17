@@ -37,7 +37,7 @@ model User {
   artworkBranches ArtworkBranch[]
   layers      Layer[]
   designs     Design[]
-  assetImages AssetImage[]
+  assets      Asset[]
 }
 
 model Note {
@@ -197,6 +197,7 @@ model Project {
   ownerId String
 
   artworks Artwork[]
+  assets      Asset[]
 
   // non-unique foreign key
   @@index([ownerId])
@@ -225,6 +226,8 @@ model Artwork {
   branches ArtworkBranch[]
   mergeRequests ArtworkMergeRequest[]
 
+  assets      Asset[]
+
   // non-unique foreign key
   @@index([projectId])
   @@index([ownerId])
@@ -234,6 +237,7 @@ model Artwork {
   // Unique constraint for slug scoped to ownerId
   @@unique([slug, ownerId])
 }
+
 
 model Layer {
   id          String @id @default(cuid())
@@ -263,7 +267,7 @@ model Layer {
   children Layer[] @relation("ParentChildLayer")
 
   designs Design[]
-  assetImages AssetImagesOnLayers[]
+  assets      Asset[]
 
   // non-unique foreign key
   @@index([ownerId])
@@ -275,60 +279,15 @@ model Layer {
   @@unique([slug, ownerId, artworkVersionId])
 }
 
-model AssetImage {
-  id          String @id @default(cuid())
-  name        String
-  slug       String
-  altText     String?
-  contentType String
-  blob        Bytes
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ownerId String
-
-  layers AssetImagesOnLayers[]
-
-  // non-unique foreign key
-  @@index([ownerId])
-  // This helps our order by in the user search a LOT
-  @@index([ownerId, updatedAt])
-  // Unique constraint for slug scoped to ownerId
-  @@unique([slug, ownerId])
-}
-
-model AssetImagesOnLayers {
-  id          String @id @default(cuid())
-  isVisible   Boolean @default(true)
-  // order of asset images in the layer
-  // considered linked lists, but not worth complexity unless I'm adding many asset images to a layer
-  order       Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  assetImage AssetImage @relation(fields: [assetImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  assetImageId String
-
-  layer Layer @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  layerId String
-
-  // non-unique foreign key
-  @@index([assetImageId])
-  @@index([layerId])
-  // This helps our order by in the user search a LOT
-  @@index([assetImageId, layerId])
-}
-
 model Design {
   id         String @id @default(cuid())
   type      String // e.g. palette, size, fill, stroke, line, etc.
   visible   Boolean @default(true)
   selected Boolean @default(false) // this is a work-around for finding the first in linked list that is visible
+  attributes  String @default("{}") // json string of attributes specific to the type
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
 
   // designs can be ordered by a linked list
   // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/self-relations#one-to-one-self-relations
@@ -549,6 +508,7 @@ model ArtworkVersion {
 
   layers Layer[]
   designs Design[]
+  assets      Asset[]
 
   // non-unique foreign key
   @@index([branchId])
@@ -582,4 +542,35 @@ model ArtworkMergeRequest {
   @@index([artworkId])
   @@index([sourceBranchId])
   @@index([targetBranchId])
+}
+
+model Asset {
+  id          String @id @default(cuid())
+  name        String
+  description String?
+  type        String // e.g. image, media, palette, gradient, shapes, etc.
+  attributes  String @default("{}") // json string of attributes specific to the type
+  blob        Bytes?
+  visible     Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId String
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  artworkId String?
+  artwork   Artwork? @relation(fields: [artworkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  artworkVersionId String?
+  artworkVersion   ArtworkVersion? @relation(fields: [artworkVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  layer Layer? @relation(fields: [layerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  layerId String?
+
+  // non-unique foreign key
+  @@index([ownerId])
 }

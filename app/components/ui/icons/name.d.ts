@@ -62,6 +62,8 @@ export type IconName =
 	| 'reset'
 	| 'rocket'
 	| 'ruler-square'
+	| 'share-1'
+	| 'share-2'
 	| 'size'
 	| 'stack'
 	| 'star-filled'

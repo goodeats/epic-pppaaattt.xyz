@@ -1,28 +1,41 @@
-import { type IGenerationItem } from '#app/definitions/artwork-generator'
+import {
+	type IGenerationLayer,
+	type IGenerationItem,
+} from '#app/definitions/artwork-generator'
+import { type ILoadedAssets } from '../../draw.load-assets.service'
 import { drawLayerItemService } from './draw-layer-item.service'
+import { canvasDrawLayerAssets } from './draw-layers.asset.service'
 
 export const canvasDrawLayersService = ({
 	ctx,
 	drawLayers,
+	loadedAssets,
 }: {
 	ctx: CanvasRenderingContext2D
-	drawLayers: IGenerationItem[][]
+	drawLayers: IGenerationLayer[]
+	loadedAssets: ILoadedAssets
 }) => {
 	for (let i = 0; i < drawLayers.length; i++) {
-		const layerDrawItems = drawLayers[i]
-		drawLayerItems({ ctx, layerDrawItems })
+		const layer = drawLayers[i]
+		canvasDrawLayerAssets({
+			ctx,
+			assets: layer.assets,
+			loadedAssets,
+			timeToDraw: true,
+		})
+		drawLayerItems({ ctx, items: layer.items })
 	}
 }
 
 const drawLayerItems = ({
 	ctx,
-	layerDrawItems,
+	items,
 }: {
 	ctx: CanvasRenderingContext2D
-	layerDrawItems: IGenerationItem[]
+	items: IGenerationItem[]
 }) => {
-	for (let i = 0; i < layerDrawItems.length; i++) {
-		const layerDrawItem = layerDrawItems[i]
+	for (let i = 0; i < items.length; i++) {
+		const layerDrawItem = items[i]
 		drawLayerItemService({ ctx, layerDrawItem })
 	}
 }

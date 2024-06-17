@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { designSchema, type whereArgsType } from '#app/schema/design'
+import { designSchema } from '#app/schema/design'
 import { prismaExtended } from './db.server'
 
 // must be in /utils to actually connect to prisma
@@ -60,7 +60,7 @@ export type ExtendedDesign = Prisma.Result<
 export const findFirstDesignInstance = async ({
 	where,
 }: {
-	where: whereArgsType
+	where: { id: string }
 }): Promise<ExtendedDesign | null> => {
 	return await prismaExtended.design.findFirst({
 		where,

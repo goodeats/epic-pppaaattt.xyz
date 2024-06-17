@@ -1,9 +1,12 @@
 import { memo, useCallback } from 'react'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
+import { type IAssetImage } from '#app/models/asset/image/image.server'
 import { type IDesign } from '#app/models/design/design.server'
 import { type ILayer } from '#app/models/layer/layer.server'
 import { ArtworkVersionDesignToggleVisible } from '#app/routes/resources+/api.v1+/artwork-version.design.update.visible'
 import { ArtworkVersionLayerToggleVisible } from '#app/routes/resources+/api.v1+/artwork-version.layer.update.visible'
+import { AssetImageArtworkVersionUpdateVisible } from '#app/routes/resources+/api.v1+/asset.image.artwork-version.update.visible'
+import { AssetImageLayerUpdateVisible } from '#app/routes/resources+/api.v1+/asset.image.layer.update.visible'
 import { LayerDesignToggleVisible } from '#app/routes/resources+/api.v1+/layer.design.update.visible'
 import {
 	type entityParentTypeEnum,
@@ -25,6 +28,13 @@ interface ToggleVisibleChildEntityFormProps {
 const ArtworkVersionToggleVisibleChildEntityForm = memo(
 	({ entityType, entity, parent }: ToggleVisibleChildEntityFormProps) => {
 		switch (entityType) {
+			case EntityType.ASSET:
+				return (
+					<AssetImageArtworkVersionUpdateVisible
+						image={entity as IAssetImage}
+						artworkVersion={parent as IArtworkVersion}
+					/>
+				)
 			case EntityType.DESIGN:
 				return (
 					<ArtworkVersionDesignToggleVisible
@@ -51,6 +61,13 @@ ArtworkVersionToggleVisibleChildEntityForm.displayName =
 const LayerToggleVisibleChildEntityForm = memo(
 	({ entityType, entity, parent }: ToggleVisibleChildEntityFormProps) => {
 		switch (entityType) {
+			case EntityType.ASSET:
+				return (
+					<AssetImageLayerUpdateVisible
+						image={entity as IAssetImage}
+						layer={parent as ILayer}
+					/>
+				)
 			case EntityType.DESIGN:
 				return (
 					<LayerDesignToggleVisible

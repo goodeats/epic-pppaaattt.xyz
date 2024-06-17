@@ -1,9 +1,9 @@
 import { type User } from '@prisma/client'
+import { findManyDesignsWithType } from '#app/models/design/design.get.server'
 import {
 	type IDesignEntityId,
 	type IDesignWithType,
 	type IDesignsByType,
-	findManyDesignsWithType,
 } from '#app/models/design/design.server'
 import {
 	DesignCloneSourceTypeEnum,
@@ -11,7 +11,7 @@ import {
 } from '#app/schema/design'
 import { type ICloneDesignsStrategy } from '#app/strategies/design/clone.strategy'
 import { cloneDesignTypeStrategies } from '#app/strategies/design-type/clone.strategy'
-import { filterAndOrderDesignsByType } from '#app/utils/design'
+import { groupAndOrderDesignsByType } from '#app/utils/design'
 import { cloneDesignTypesService } from './design-type/clone-many.service'
 
 export const cloneDesignsService = async ({
@@ -35,7 +35,7 @@ export const cloneDesignsService = async ({
 		})
 
 		// Step 2: separate designs by type and order
-		const sourceDesignsByType = filterAndOrderDesignsByType({
+		const sourceDesignsByType = groupAndOrderDesignsByType({
 			designs: sourceDesigns,
 		})
 

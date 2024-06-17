@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { type IArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.server'
+import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
 import { type ILayerWithDesigns } from '#app/models/layer/layer.server'
 import { type ObjectValues } from '#app/utils/typescript-helpers'
 import {
@@ -28,16 +28,14 @@ export const DesignTypeEnum = {
 } as const
 export type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
 
-export type DesignParentType =
-	| IArtworkVersionWithDesignsAndLayers
-	| ILayerWithDesigns
-
-export const DesignParentTypeIdEnum = {
-	ARTWORK_VERSION_ID: 'artworkVersionId',
-	LAYER_ID: 'layerId',
-	// add more design types here
+export const DesignParentTypeEnum = {
+	ARTWORK_VERSION: 'artworkVersion',
+	LAYER: 'layer',
+	// add more design parent types here
 } as const
-export type designParentTypeIdEnum = ObjectValues<typeof DesignParentTypeIdEnum>
+export type designParentTypeEnum = ObjectValues<typeof DesignParentTypeEnum>
+
+export type DesignParentType = IArtworkVersionWithChildren | ILayerWithDesigns
 
 export const DesignCloneSourceTypeEnum = {
 	ARTWORK_VERSION: 'artworkVersion',
@@ -80,29 +78,3 @@ export type ToggleVisibleDesignSchemaType =
 export type DeleteDesignSchemaType =
 	| typeof DeleteArtworkVersionDesignSchema
 	| typeof DeleteLayerDesignSchema
-
-export type selectArgsType = z.infer<typeof selectArgs>
-const selectArgs = z.object({
-	id: z.boolean().optional(),
-})
-
-export type whereArgsType = z.infer<typeof whereArgs>
-const arrayOfIds = z.object({ in: z.array(z.string()) })
-const zodStringOrNull = z.union([z.string(), z.null()])
-const whereArgs = z.object({
-	id: z.union([z.string(), arrayOfIds]).optional(),
-	type: z.nativeEnum(DesignTypeEnum).optional(),
-	visible: z.boolean().optional(),
-	selected: z.boolean().optional(),
-	ownerId: z.string().optional(),
-	artworkVersionId: z.string().optional(),
-	layerId: z.string().optional(),
-	prevId: zodStringOrNull.optional(),
-	nextId: zodStringOrNull.optional(),
-})
-
-export type findDesignArgsType = z.infer<typeof findDesignArgs>
-export const findDesignArgs = z.object({
-	where: whereArgs,
-	select: selectArgs.optional(),
-})

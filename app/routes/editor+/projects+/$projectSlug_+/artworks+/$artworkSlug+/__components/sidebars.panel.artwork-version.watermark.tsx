@@ -7,12 +7,12 @@ import {
 	SidebarPanelRowContainer,
 	SidebarPanelRowValuesContainer,
 } from '#app/components/templates'
-import { type IArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.server'
+import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
 import { ArtworkVersionWatermark } from '#app/routes/resources+/api.v1+/artwork-version.update.watermark'
 import { ArtworkVersionWatermarkColor } from '#app/routes/resources+/api.v1+/artwork-version.update.watermark-color'
 
 const WatermarkToggle = memo(
-	({ version }: { version: IArtworkVersionWithDesignsAndLayers }) => {
+	({ version }: { version: IArtworkVersionWithChildren }) => {
 		return <ArtworkVersionWatermark version={version} />
 	},
 )
@@ -21,7 +21,7 @@ WatermarkToggle.displayName = 'WatermarkToggle'
 export const PanelArtworkVersionWatermark = ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }) => {
 	const artworkVersionWatermarkToggle = useCallback(
 		() => <WatermarkToggle version={version} />,

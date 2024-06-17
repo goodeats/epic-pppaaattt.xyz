@@ -2,8 +2,9 @@ import { type ArtworkVersion } from '@prisma/client'
 import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator'
 import { type DateOrString } from '#app/definitions/prisma-helper'
 import { type IArtworkBranch } from '../artwork-branch/artwork-branch.server'
+import { type IAssetParsed } from '../asset/asset.server'
 import { type IDesignWithType } from '../design/design.server'
-import { type ILayerWithDesigns } from '../layer/layer.server'
+import { type ILayerWithChildren } from '../layer/layer.server'
 
 // Omitting 'createdAt' and 'updatedAt' from the ArtworkVersion interface
 // prisma query returns a string for these fields
@@ -18,9 +19,10 @@ export interface IArtworkVersion extends BaseArtworkVersion {
 	publishedAt: DateOrString | null
 }
 
-export interface IArtworkVersionWithDesignsAndLayers extends IArtworkVersion {
+export interface IArtworkVersionWithChildren extends IArtworkVersion {
 	designs: IDesignWithType[]
-	layers: ILayerWithDesigns[]
+	layers: ILayerWithChildren[]
+	assets: IAssetParsed[]
 	branch?: IArtworkBranch
 }
 
@@ -33,6 +35,6 @@ export interface IArtworkVersionWithBranch extends IArtworkVersion {
 }
 
 export interface IArtworkVersionWithGenerator
-	extends IArtworkVersionWithDesignsAndLayers {
+	extends IArtworkVersionWithChildren {
 	generator: IArtworkVersionGenerator
 }
