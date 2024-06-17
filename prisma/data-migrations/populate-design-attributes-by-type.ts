@@ -103,8 +103,7 @@ const updateDesignAttributesPromise = (design: IDesignWithType) => {
 		case DesignTypeEnum.TEMPLATE:
 			return updateDesignTemplateAttributes(design as IDesignWithTemplate)
 		default:
-			return Promise.resolve()
-		// throw new Error(`Unsupported design type: ${design.type}`)
+			throw new Error(`Unsupported design type: ${design.type}`)
 	}
 }
 
