@@ -1,12 +1,14 @@
 import { type User } from '@prisma/client'
+import { getDesign } from '#app/models/design/design.get.server'
 import {
 	type IDesign,
-	findFirstDesign,
-	updateDesignRemoveNodes,
-	updateDesignNodes,
 	type IDesignEntityId,
 } from '#app/models/design/design.server'
-import { type IDesignUpdatedResponse } from '#app/models/design/design.update.server'
+import {
+	updateDesignRemoveNodes,
+	type IDesignUpdatedResponse,
+	updateDesignNodes,
+} from '#app/models/design/design.update.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { type IUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { prisma } from '#app/utils/db.server'
@@ -28,13 +30,13 @@ export const designMoveUpService = async ({
 
 		// Step 1: get the current design
 		// make sure it is not already head
-		const currentDesign = await getDesign({ id, userId })
+		const currentDesign = await fetchDesign({ id, userId })
 		const { prevId, nextId } = currentDesign
 		if (!prevId) throw new Error('Design is already head')
 		const type = currentDesign.type as designTypeEnum
 
 		// Step 2: get previous design
-		const prevDesign = await getDesign({ id: prevId, userId })
+		const prevDesign = await fetchDesign({ id: prevId, userId })
 		const prevPrevId = prevDesign.prevId
 
 		// Step 3: get adjacent designs if they exist
@@ -83,14 +85,14 @@ export const designMoveUpService = async ({
 	}
 }
 
-const getDesign = async ({
+const fetchDesign = async ({
 	id,
 	userId,
 }: {
 	id: IDesign['id']
 	userId: User['id']
 }) => {
-	const design = await findFirstDesign({
+	const design = await getDesign({
 		where: { id, ownerId: userId },
 	})
 
@@ -109,13 +111,13 @@ const getAdjacentDesigns = async ({
 	nextId: string | null
 }) => {
 	const prevPrevDesign = prevPrevId
-		? await getDesign({
+		? await fetchDesign({
 				id: prevPrevId,
 				userId,
 			})
 		: null
 
-	const nextDesign = nextId ? await getDesign({ id: nextId, userId }) : null
+	const nextDesign = nextId ? await fetchDesign({ id: nextId, userId }) : null
 
 	return { prevPrevDesign, nextDesign }
 }

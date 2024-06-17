@@ -284,8 +284,10 @@ model Design {
   type      String // e.g. palette, size, fill, stroke, line, etc.
   visible   Boolean @default(true)
   selected Boolean @default(false) // this is a work-around for finding the first in linked list that is visible
+  attributes  String @default("{}") // json string of attributes specific to the type
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
 
   // designs can be ordered by a linked list
   // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/self-relations#one-to-one-self-relations

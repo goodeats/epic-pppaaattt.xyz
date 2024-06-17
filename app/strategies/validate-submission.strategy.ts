@@ -1,4 +1,3 @@
-import { type User } from '@prisma/client'
 import { type z } from 'zod'
 import { getArtwork } from '#app/models/artwork/artwork.get.server'
 import { getArtworkBranch } from '#app/models/artwork-branch/artwork-branch.get.server'
@@ -6,11 +5,12 @@ import { getArtworkVersion } from '#app/models/artwork-version/artwork-version.g
 import { getAsset } from '#app/models/asset/asset.get.server'
 import { getDesign } from '#app/models/design/design.get.server'
 import { getLayer } from '#app/models/layer/layer.get.server'
+import { type IUser } from '#app/models/user/user.server'
 import { addNotFoundIssue } from '#app/utils/conform-utils'
 
 export interface IValidateSubmissionStrategy {
 	validateFormDataEntity(args: {
-		userId: User['id']
+		userId: IUser['id']
 		data: any
 		ctx: z.RefinementCtx
 	}): Promise<void>
@@ -24,7 +24,7 @@ export class ValidateArtworkParentSubmissionStrategy
 		data,
 		ctx,
 	}: {
-		userId: User['id']
+		userId: IUser['id']
 		data: any
 		ctx: any
 	}): Promise<void> {
@@ -44,7 +44,7 @@ export class ValidateArtworkBranchParentSubmissionStrategy
 		data,
 		ctx,
 	}: {
-		userId: User['id']
+		userId: IUser['id']
 		data: any
 		ctx: any
 	}): Promise<void> {
@@ -64,7 +64,7 @@ export class ValidateArtworkVersionSubmissionStrategy
 		data,
 		ctx,
 	}: {
-		userId: User['id']
+		userId: IUser['id']
 		data: any
 		ctx: any
 	}): Promise<void> {
@@ -84,7 +84,7 @@ export class ValidateArtworkVersionParentSubmissionStrategy
 		data,
 		ctx,
 	}: {
-		userId: User['id']
+		userId: IUser['id']
 		data: any
 		ctx: any
 	}): Promise<void> {
@@ -104,7 +104,7 @@ export class ValidateDesignParentSubmissionStrategy
 		data,
 		ctx,
 	}: {
-		userId: User['id']
+		userId: IUser['id']
 		data: any
 		ctx: any
 	}): Promise<void> {
@@ -124,7 +124,7 @@ export class ValidateLayerSubmissionStrategy
 		data,
 		ctx,
 	}: {
-		userId: User['id']
+		userId: IUser['id']
 		data: any
 		ctx: any
 	}): Promise<void> {
@@ -144,7 +144,7 @@ export class ValidateLayerParentSubmissionStrategy
 		data,
 		ctx,
 	}: {
-		userId: User['id']
+		userId: IUser['id']
 		data: any
 		ctx: any
 	}): Promise<void> {
@@ -164,7 +164,7 @@ export class ValidateAssetSubmissionStrategy
 		data,
 		ctx,
 	}: {
-		userId: User['id']
+		userId: IUser['id']
 		data: any
 		ctx: any
 	}): Promise<void> {
@@ -173,5 +173,25 @@ export class ValidateAssetSubmissionStrategy
 			where: { id, ownerId: userId },
 		})
 		if (!asset) ctx.addIssue(addNotFoundIssue('Asset'))
+	}
+}
+
+export class ValidateDesignSubmissionStrategy
+	implements IValidateSubmissionStrategy
+{
+	async validateFormDataEntity({
+		userId,
+		data,
+		ctx,
+	}: {
+		userId: IUser['id']
+		data: any
+		ctx: any
+	}): Promise<void> {
+		const { id } = data
+		const asset = await getDesign({
+			where: { id, ownerId: userId },
+		})
+		if (!asset) ctx.addIssue(addNotFoundIssue('Design'))
 	}
 }

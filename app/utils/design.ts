@@ -26,7 +26,7 @@ import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { orderLinkedItems } from './linked-list.utils'
 import { safelyAssignValue } from './typescript-helpers'
 
-export const filterAndOrderDesignsByType = ({
+export const groupAndOrderDesignsByType = ({
 	designs,
 }: {
 	designs: IDesignWithType[]

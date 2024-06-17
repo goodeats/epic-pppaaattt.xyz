@@ -6,7 +6,7 @@ import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/compon
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
 import {
 	designsByTypeToPanelArray,
-	filterAndOrderDesignsByType,
+	groupAndOrderDesignsByType,
 } from '#app/utils/design'
 
 export const PanelDesigns = ({
@@ -20,7 +20,7 @@ export const PanelDesigns = ({
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyActions: IDashboardPanelEntityActionStrategy
 }) => {
-	const orderedDesigns = filterAndOrderDesignsByType({
+	const orderedDesigns = groupAndOrderDesignsByType({
 		designs: parent.designs,
 	})
 	const designTypePanels = designsByTypeToPanelArray({

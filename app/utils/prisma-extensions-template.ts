@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client'
-import { type whereArgsType } from '#app/schema/design'
 import { prismaExtended } from './db.server'
 
 // must be in /utils to actually connect to prisma
@@ -49,7 +48,7 @@ export type ExtendedTemplate = Prisma.Result<
 export const findFirstTemplateInstance = async ({
 	where,
 }: {
-	where: whereArgsType
+	where: { id: string }
 }): Promise<ExtendedTemplate | null> => {
 	return await prismaExtended.template.findFirst({
 		where,

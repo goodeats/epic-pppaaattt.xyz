@@ -23,8 +23,6 @@ export interface IAssetImageFileData {
 	size: number
 	lastModified?: number
 	filename: string
-	fit?: IAssetImageFit
-	hideOnDraw?: boolean
 }
 
 // when adding attributes to an asset type,
@@ -32,6 +30,8 @@ export interface IAssetImageFileData {
 // for when parsing the asset from the deserializer
 export interface IAssetAttributesImage extends IAssetImageFileData {
 	altText?: string
+	fit?: IAssetImageFit
+	hideOnDraw?: boolean
 }
 
 export interface IAssetImageSrc {

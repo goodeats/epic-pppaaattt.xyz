@@ -5,8 +5,8 @@ import { filterVisibleDesigns } from '#app/utils/design'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { filterNonArrayRotates } from '#app/utils/rotate'
 import { type IArtworkVersion } from '../artwork-version/artwork-version.server'
+import { findManyDesignsWithType } from '../design/design.get.server'
 import {
-	findManyDesignsWithType,
 	type IDesignWithPalette,
 	type IDesign,
 	type IDesignWithRotate,
