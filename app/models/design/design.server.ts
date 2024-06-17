@@ -27,6 +27,10 @@ import {
 	type IDesignAttributesFill,
 	type IDesignFill,
 } from './fill/fill.server'
+import {
+	type IDesignStroke,
+	type IDesignAttributesStroke,
+} from './stroke/stroke.server'
 
 // Omitting 'createdAt' and 'updatedAt' from the Design interface
 // prisma query returns a string for these fields
@@ -47,7 +51,7 @@ export interface IDesign extends BaseDesign {
 // when adding attributes to a design type,
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
-export type IDesignAttributes = IDesignAttributesFill
+export type IDesignAttributes = IDesignAttributesFill | IDesignAttributesStroke
 
 export interface IDesignParsed extends BaseDesign {
 	type: designTypeEnum
@@ -60,6 +64,7 @@ export interface IDesignParsed extends BaseDesign {
 // TODO: replace with this ^^
 export type IDesignByType = {
 	designFills: IDesignFill[]
+	designStroke: IDesignStroke[]
 }
 
 // export interface IDesignsByTypeWithType {

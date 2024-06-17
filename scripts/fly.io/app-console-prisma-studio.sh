@@ -5,9 +5,9 @@
 # chmod +x scripts/fly.io/app-console-prisma-studio.sh
 
 # run prisma studio on fly app
-# npm run fly:app:console:prisma:studio
+# npm run fly:console:prisma:studio
 # run proxy to prisma studio on fly app to local port (separate terminal)
-# npm run fly:app:console:prisma:studio:proxy
+# npm run fly:console:prisma:studio:proxy
 
 # Check if the script is running in production environment
 if [ "$NODE_ENV" = "production" ]; then
