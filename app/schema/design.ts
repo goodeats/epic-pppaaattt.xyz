@@ -28,6 +28,13 @@ export const DesignTypeEnum = {
 } as const
 export type designTypeEnum = ObjectValues<typeof DesignTypeEnum>
 
+export const DesignParentTypeEnum = {
+	ARTWORK_VERSION: 'artworkVersion',
+	LAYER: 'layer',
+	// add more design parent types here
+} as const
+export type designParentTypeEnum = ObjectValues<typeof DesignParentTypeEnum>
+
 export type DesignParentType = IArtworkVersionWithChildren | ILayerWithDesigns
 
 export const DesignCloneSourceTypeEnum = {
@@ -71,29 +78,3 @@ export type ToggleVisibleDesignSchemaType =
 export type DeleteDesignSchemaType =
 	| typeof DeleteArtworkVersionDesignSchema
 	| typeof DeleteLayerDesignSchema
-
-// export type selectArgsType = z.infer<typeof selectArgs>
-// const selectArgs = z.object({
-// 	id: z.boolean().optional(),
-// })
-
-// export type whereArgsType = z.infer<typeof whereArgs>
-// const arrayOfIds = z.object({ in: z.array(z.string()) })
-// const zodStringOrNull = z.union([z.string(), z.null()])
-// const whereArgs = z.object({
-// 	id: z.union([z.string(), arrayOfIds]).optional(),
-// 	type: z.nativeEnum(DesignTypeEnum).optional(),
-// 	visible: z.boolean().optional(),
-// 	selected: z.boolean().optional(),
-// 	ownerId: z.string().optional(),
-// 	artworkVersionId: z.string().optional(),
-// 	layerId: z.string().optional(),
-// 	prevId: zodStringOrNull.optional(),
-// 	nextId: zodStringOrNull.optional(),
-// })
-
-// export type findDesignArgsType = z.infer<typeof findDesignArgs>
-// export const findDesignArgs = z.object({
-// 	where: whereArgs,
-// 	select: selectArgs.optional(),
-// })

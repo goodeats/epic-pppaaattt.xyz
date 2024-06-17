@@ -7,7 +7,7 @@ import { prisma } from '#app/utils/db.server'
 import {
 	type IAssetImageFit,
 	type IAssetImage,
-	type IAssetImageFileData,
+	type IAssetAttributesImage,
 } from './image.server'
 import { stringifyAssetImageAttributes } from './utils'
 
@@ -32,7 +32,7 @@ export interface IAssetImageUpdateFitSubmission {
 }
 
 interface IAssetImageUpdateFitData {
-	attributes: IAssetImageFileData
+	attributes: IAssetAttributesImage
 }
 
 export const updateAssetImageFit = ({

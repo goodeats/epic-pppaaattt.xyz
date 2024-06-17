@@ -1,4 +1,5 @@
 import { type Design } from '@prisma/client'
+import { type DateOrString } from '#app/definitions/prisma-helper'
 import { type designTypeEnum } from '#app/schema/design'
 import {
 	type IArtworkVersion,
@@ -20,8 +21,73 @@ import { type IStrokeCreateOverrides } from '../design-type/stroke/stroke.create
 import { type IStroke } from '../design-type/stroke/stroke.server'
 import { type ITemplateCreateOverrides } from '../design-type/template/template.create.server'
 import { type ITemplate } from '../design-type/template/template.server'
+import { type ILayerWithChildren } from '../layer/layer.server'
+import { type IUser } from '../user/user.server'
+import {
+	type IDesignAttributesFill,
+	type IDesignFill,
+} from './fill/fill.server'
 
-export interface IDesign extends Design {}
+// Omitting 'createdAt' and 'updatedAt' from the Design interface
+// prisma query returns a string for these fields
+// omit type string to ensure type safety with designTypeEnum
+// omit attributes string so that extended design types can insert their own attributes
+type BaseDesign = Omit<
+	Design,
+	'type' | 'attributes' | 'createdAt' | 'updatedAt'
+>
+
+export interface IDesign extends BaseDesign {
+	type: string
+	attributes: string
+	createdAt: DateOrString
+	updatedAt: DateOrString
+}
+
+// when adding attributes to a design type,
+// make sure it starts as optional or is set to a default value
+// for when parsing the design from the deserializer
+export type IDesignAttributes = IDesignAttributesFill
+
+export interface IDesignParsed extends BaseDesign {
+	type: designTypeEnum
+	attributes: IDesignAttributes
+	createdAt: DateOrString
+	updatedAt: DateOrString
+}
+
+// export type IDesignType = IDesignFill
+// TODO: replace with this ^^
+export type IDesignByType = {
+	designFills: IDesignFill[]
+}
+
+// export interface IDesignsByTypeWithType {
+// 	type: designTypeEnum
+// 	designs: IDesignType[]
+// }
+// TODO: replace with this ^^
+
+export type IDesignParent = IArtworkVersionWithChildren | ILayerWithChildren
+
+interface IDesignData {
+	visible: boolean
+	selected: boolean
+}
+
+export interface IDesignSubmission extends IDesignData {
+	userId: IUser['id']
+}
+
+export interface IDesignCreateData extends IDesignData {
+	ownerId: IUser['id']
+	type: designTypeEnum
+	attributes: IDesignAttributes
+}
+
+export interface IDesignUpdateData extends IDesignData {
+	attributes: IDesignAttributes
+}
 
 export type IDesignIdOrNull = IDesign['id'] | null | undefined
 
