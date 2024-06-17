@@ -12,6 +12,14 @@ export interface IDashboardPanelDeleteEntityStrategy {
 	parentType: entityParentTypeEnum
 }
 
+export class DashboardPanelDeleteArtworkVersionAssetStrategy
+	implements IDashboardPanelDeleteEntityStrategy
+{
+	actionType: entityActionTypeEnum = EntityActionType.DELETE
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
+}
+
 export class DashboardPanelDeleteArtworkVersionDesignStrategy
 	implements IDashboardPanelDeleteEntityStrategy
 {
@@ -26,6 +34,14 @@ export class DashboardPanelDeleteArtworkVersionLayerStrategy
 	actionType: entityActionTypeEnum = EntityActionType.DELETE
 	entityType: entityTypeEnum = EntityType.LAYER
 	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
+}
+
+export class DashboardPanelDeleteLayerAssetStrategy
+	implements IDashboardPanelDeleteEntityStrategy
+{
+	actionType: entityActionTypeEnum = EntityActionType.DELETE
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.LAYER
 }
 
 export class DashboardPanelDeleteLayerDesignStrategy

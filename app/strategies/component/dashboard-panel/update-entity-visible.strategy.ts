@@ -13,6 +13,14 @@ export interface IDashboardPanelUpdateEntityVisibleStrategy {
 	parentType: entityParentTypeEnum
 }
 
+export class DashboardPanelUpdateArtworkVersionAssetVisibleStrategy
+	implements IDashboardPanelUpdateEntityVisibleStrategy
+{
+	actionType: entityActionTypeEnum = EntityActionType.TOGGLE_VISIBLE
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
+}
+
 export class DashboardPanelUpdateArtworkVersionDesignVisibleStrategy
 	implements IDashboardPanelUpdateEntityVisibleStrategy
 {
@@ -27,6 +35,14 @@ export class DashboardPanelUpdateArtworkVersionLayerVisibleStrategy
 	actionType: entityActionTypeEnum = EntityActionType.TOGGLE_VISIBLE
 	entityType: entityTypeEnum = EntityType.LAYER
 	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
+}
+
+export class DashboardPanelUpdateLayerAssetVisibleStrategy
+	implements IDashboardPanelUpdateEntityVisibleStrategy
+{
+	actionType: entityActionTypeEnum = EntityActionType.TOGGLE_VISIBLE
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.LAYER
 }
 
 export class DashboardPanelUpdateLayerDesignVisibleStrategy

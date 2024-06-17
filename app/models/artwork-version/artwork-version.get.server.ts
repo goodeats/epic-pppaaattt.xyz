@@ -1,9 +1,12 @@
+import { invariant } from '@epic-web/invariant'
 import { z } from 'zod'
 import { zodStringOrNull } from '#app/schema/zod-helpers'
 import { prisma } from '#app/utils/db.server'
+import { assetSelect } from '../asset/asset.get.server'
+import { deserializeAssets } from '../asset/utils'
 import {
-	type IArtworkVersionWithDesignsAndLayers,
 	type IArtworkVersion,
+	type IArtworkVersionWithChildren,
 } from './artwork-version.server'
 
 export type queryArtworkVersionWhereArgsType = z.infer<typeof whereArgs>
@@ -29,12 +32,18 @@ const includeDesigns = {
 }
 
 // no ordering for now since these are linked lists
-const includeDesignsAndLayers = {
+const artworkVersionChildren = {
+	assets: {
+		select: assetSelect,
+	},
 	designs: {
 		include: includeDesigns,
 	},
 	layers: {
 		include: {
+			assets: {
+				select: assetSelect,
+			},
 			designs: {
 				include: includeDesigns,
 			},
@@ -89,53 +98,95 @@ export const getArtworkVersion = async ({
 	return artworkVersion
 }
 
-export const getArtworkVersionWithDesignsAndLayers = async ({
+export const getArtworkVersionWithChildren = async ({
 	where,
 }: {
 	where: queryArtworkVersionWhereArgsType
-}): Promise<IArtworkVersionWithDesignsAndLayers | null> => {
+}): Promise<IArtworkVersionWithChildren | null> => {
 	validateQueryWhereArgsPresent(where)
 	const artworkVersion = await prisma.artworkVersion.findFirst({
 		where,
-		include: includeDesignsAndLayers,
+		include: artworkVersionChildren,
 	})
-	return artworkVersion
+	invariant(artworkVersion, 'Artwork Version not found')
+
+	const validatedAssets = deserializeAssets({ assets: artworkVersion.assets })
+	const layersWithValidatedAssets = artworkVersion.layers.map(layer => {
+		const validatedAssets = deserializeAssets({ assets: layer.assets })
+		return { ...layer, assets: validatedAssets }
+	})
+	return {
+		...artworkVersion,
+		assets: validatedAssets,
+		layers: layersWithValidatedAssets,
+	}
 }
 
 export const getStarredArtworkVersionsByArtworkId = async ({
 	artworkId,
 }: {
 	artworkId: string
-}): Promise<IArtworkVersionWithDesignsAndLayers[]> => {
+}): Promise<IArtworkVersionWithChildren[]> => {
 	const starredVersions = await prisma.artworkVersion.findMany({
 		where: {
 			branch: {
-				artworkId: artworkId,
+				artworkId,
 			},
 			starred: true,
 		},
 		include: {
-			...includeDesignsAndLayers,
+			...artworkVersionChildren,
 			branch: true,
 		},
 		orderBy: {
 			updatedAt: 'desc',
 		},
 	})
-	return starredVersions
+
+	const validatedStarredVersions = starredVersions.map(artworkVersion => {
+		const validatedArtboardVersionAssets = deserializeAssets({
+			assets: artworkVersion.assets,
+		})
+		const layersWithValidatedAssets = artworkVersion.layers.map(layer => {
+			const validatedLayerAssets = deserializeAssets({ assets: layer.assets })
+			return { ...layer, assets: validatedLayerAssets }
+		})
+		return {
+			...artworkVersion,
+			assets: validatedArtboardVersionAssets,
+			layers: layersWithValidatedAssets,
+		}
+	})
+
+	return validatedStarredVersions
 }
 
 export const getAllPublishedArtworkVersions = async (): Promise<
-	IArtworkVersionWithDesignsAndLayers[]
+	IArtworkVersionWithChildren[]
 > => {
-	const starredVersions = await prisma.artworkVersion.findMany({
+	const publishedVersions = await prisma.artworkVersion.findMany({
 		where: {
 			published: true,
 		},
-		include: includeDesignsAndLayers,
+		include: artworkVersionChildren,
 		orderBy: {
 			publishedAt: 'desc',
 		},
 	})
-	return starredVersions
+
+	const validatedPublishedVersions = publishedVersions.map(artworkVersion => {
+		const validatedArtboardVersionAssets = deserializeAssets({
+			assets: artworkVersion.assets,
+		})
+		const layersWithValidatedAssets = artworkVersion.layers.map(layer => {
+			const validatedLayerAssets = deserializeAssets({ assets: layer.assets })
+			return { ...layer, assets: validatedLayerAssets }
+		})
+		return {
+			...artworkVersion,
+			assets: validatedArtboardVersionAssets,
+			layers: layersWithValidatedAssets,
+		}
+	})
+	return validatedPublishedVersions
 }

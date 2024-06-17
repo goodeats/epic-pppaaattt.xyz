@@ -1,6 +1,8 @@
 import { type IArtwork } from '#app/models/artwork/artwork.server'
 import { type IArtworkBranch } from '#app/models/artwork-branch/artwork-branch.server'
 import { type IArtworkVersion } from '#app/models/artwork-version/artwork-version.server'
+import { type IAssetByType } from '#app/models/asset/asset.server'
+import { type IAssetImageGeneration } from '#app/models/asset/image/image.generate.server'
 import { type IFill } from '#app/models/design-type/fill/fill.server'
 import { type ILayout } from '#app/models/design-type/layout/layout.server'
 import { type ILine } from '#app/models/design-type/line/line.server'
@@ -72,6 +74,8 @@ export interface ILayerGenerator extends IGeneratorDesigns {
 
 	// create this design type
 	container: ILayerGeneratorContainer
+
+	assets: IAssetByType
 }
 
 // TODO: make container a design type
@@ -90,7 +94,12 @@ export interface ILayerGeneratorContainer {
 
 export interface IGenerationLayer {
 	generator: ILayerGenerator
+	assets: IGenerationAssets
 	items: IGenerationItem[]
+}
+
+export interface IGenerationAssets {
+	image: IAssetImageGeneration | null
 }
 
 export interface IGenerationItem {

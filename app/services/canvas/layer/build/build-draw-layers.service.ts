@@ -1,10 +1,13 @@
 import {
+	type IGenerationLayer,
 	type IArtworkVersionGenerator,
 	type IGenerationItem,
 	type ILayerGenerator,
+	type IGenerationAssets,
 } from '#app/definitions/artwork-generator'
 import { canvasBuildLayerDrawCountService } from './build-layer-draw-count.service'
 import { canvasBuildLayerDrawFillService } from './build-layer-draw-fill.service'
+import { canvasBuildLayerDrawImageService } from './build-layer-draw-image.service'
 import { canvasBuildLayerDrawLineService } from './build-layer-draw-line.service'
 import { canvasBuildLayerDrawPositionService } from './build-layer-draw-position.service'
 import { canvasBuildLayerDrawRotateService } from './build-layer-draw-rotate.service'
@@ -18,16 +21,32 @@ export const canvasLayerBuildDrawLayersService = ({
 }: {
 	ctx: CanvasRenderingContext2D
 	generator: IArtworkVersionGenerator
-}): IGenerationItem[][] => {
+}): IGenerationLayer[] => {
 	const { layers } = generator
 
-	const drawLayers = []
-	for (let i = 0; i < layers.length; i++) {
-		const layer = layers[i]
-		const layerDrawItems = buildLayerGenerationItems({ ctx, layer })
-		drawLayers.push(layerDrawItems)
+	return layers.map(layer => {
+		const assets = buildLayerGenerationAssets({ ctx, layer })
+		const items = buildLayerGenerationItems({ ctx, layer })
+		return {
+			generator: layer,
+			assets,
+			items,
+		}
+	})
+}
+
+const buildLayerGenerationAssets = ({
+	ctx,
+	layer,
+}: {
+	ctx: CanvasRenderingContext2D
+	layer: ILayerGenerator
+}): IGenerationAssets => {
+	const image = canvasBuildLayerDrawImageService({ ctx, layer })
+
+	return {
+		image,
 	}
-	return drawLayers
 }
 
 const buildLayerGenerationItems = ({

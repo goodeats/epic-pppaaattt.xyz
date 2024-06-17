@@ -21,6 +21,7 @@ export const DashboardEntityPanel = ({
 	strategyEntityNew,
 	strategyReorder,
 	strategyActions,
+	skipReorder,
 }: {
 	type: IEntityType
 	parent: IEntityParentType
@@ -28,6 +29,7 @@ export const DashboardEntityPanel = ({
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyActions: IDashboardPanelEntityActionStrategy
+	skipReorder?: boolean
 }) => {
 	const entityCount = entities.length
 
@@ -41,13 +43,17 @@ export const DashboardEntityPanel = ({
 			{entities.map((entity, index) => {
 				return (
 					<SidebarPanelRow key={entity.id}>
-						<PanelEntityRowReorder
-							entity={entity}
-							parent={parent}
-							atTop={index === 0}
-							atBottom={index === entityCount - 1}
-							strategyReorder={strategyReorder}
-						/>
+						{skipReorder ? (
+							<div className="w-4"></div>
+						) : (
+							<PanelEntityRowReorder
+								entity={entity}
+								parent={parent}
+								atTop={index === 0}
+								atBottom={index === entityCount - 1}
+								strategyReorder={strategyReorder}
+							/>
+						)}
 						<SidebarPanelRowContainer>
 							<PanelEntityValues type={type} entity={entity} parent={parent} />
 							<PanelEntityRowActions

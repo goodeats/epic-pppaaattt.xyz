@@ -36,6 +36,31 @@ export const Routes = {
 						},
 					},
 				},
+				ASSET: {
+					IMAGE: {
+						ARTWORK: {
+							CREATE: `${pathBase}/asset/image/artwork/create`,
+							DELETE: `${pathBase}/asset/image/artwork/delete`,
+							UPDATE: `${pathBase}/asset/image/artwork/update`,
+						},
+						ARTWORK_VERSION: {
+							CREATE: `${pathBase}/asset/image/artwork-version/create`,
+							CLONE: `${pathBase}/asset/image/artwork-version/clone`,
+							DELETE: `${pathBase}/asset/image/artwork-version/delete`,
+							UPDATE: `${pathBase}/asset/image/artwork-version/update`,
+							UPDATE_VISIBLE: `${pathBase}/asset/image/artwork-version/update/visible`,
+						},
+						LAYER: {
+							CREATE: `${pathBase}/asset/image/layer/create`,
+							DELETE: `${pathBase}/asset/image/layer/delete`,
+							UPDATE: `${pathBase}/asset/image/layer/update`,
+							UPDATE_VISIBLE: `${pathBase}/asset/image/layer/update/visible`,
+						},
+						UPDATE: {
+							FIT: `${pathBase}/asset/image/update/fit`,
+						},
+					},
+				},
 				DESIGN: {
 					TYPE: {
 						LAYOUT: {

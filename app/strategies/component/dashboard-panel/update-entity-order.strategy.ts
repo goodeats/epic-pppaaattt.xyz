@@ -10,6 +10,13 @@ export interface IDashboardPanelUpdateEntityOrderStrategy {
 	parentType: entityParentTypeEnum
 }
 
+export class DashboardPanelUpdateArtworkVersionAssetTypeOrderStrategy
+	implements IDashboardPanelUpdateEntityOrderStrategy
+{
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
+}
+
 export class DashboardPanelUpdateArtworkVersionDesignTypeOrderStrategy
 	implements IDashboardPanelUpdateEntityOrderStrategy
 {
@@ -22,6 +29,13 @@ export class DashboardPanelUpdateArtworkVersionLayerTypeOrderStrategy
 {
 	entityType: entityTypeEnum = EntityType.LAYER
 	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
+}
+
+export class DashboardPanelUpdateLayerAssetTypeOrderStrategy
+	implements IDashboardPanelUpdateEntityOrderStrategy
+{
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.LAYER
 }
 
 export class DashboardPanelUpdateLayerDesignTypeOrderStrategy

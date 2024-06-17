@@ -1,3 +1,4 @@
+import { invariant } from '@epic-web/invariant'
 import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generator'
 import { canvasDrawBackgroundService } from './draw-background.service'
 import { canvasDrawWatermarkService } from './draw-watermark.service'
@@ -22,6 +23,7 @@ export const canvasDrawService = ({
 		ctx,
 		generator,
 	})
+	console.log('drawLayers count: ', drawLayers.length)
 
 	// Step 4: draw layers to canvas
 	canvasDrawLayersService({ ctx, drawLayers })
@@ -32,6 +34,6 @@ export const canvasDrawService = ({
 
 const getContext = (canvas: HTMLCanvasElement) => {
 	const ctx = canvas.getContext('2d')
-	if (!ctx) throw new Error('Canvas context not found')
+	invariant(ctx, 'Canvas context not found')
 	return ctx
 }

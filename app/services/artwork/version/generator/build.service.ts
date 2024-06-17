@@ -6,7 +6,8 @@ import {
 	type IGeneratorWatermark,
 	type IArtworkVersionGeneratorMetadata,
 } from '#app/definitions/artwork-generator'
-import { type IArtworkVersionWithDesignsAndLayers } from '#app/models/artwork-version/artwork-version.server'
+import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
+import { groupAssetsByType } from '#app/models/asset/utils'
 import {
 	findManyDesignsWithType,
 	type IDesignWithType,
@@ -20,10 +21,7 @@ import {
 	getLayerVisibleRotates,
 } from '#app/models/design-layer/design-layer.server'
 import { type IRotate } from '#app/models/design-type/rotate/rotate.server'
-import {
-	type ILayerWithDesigns,
-	type ILayer,
-} from '#app/models/layer/layer.server'
+import { type ILayerWithChildren } from '#app/models/layer/layer.server'
 import { type rotateBasisTypeEnum } from '#app/schema/rotate'
 import { prisma } from '#app/utils/db.server'
 import {
@@ -40,7 +38,7 @@ import { isArrayRotateBasisType } from '#app/utils/rotate'
 export const artworkVersionGeneratorBuildService = async ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }): Promise<IArtworkVersionGenerator> => {
 	try {
 		// Step 1: verify version selected designs are all present
@@ -73,7 +71,7 @@ export const artworkVersionGeneratorBuildService = async ({
 
 		// Step 4: build the generator layers
 		// each layer can override any of the global settings
-		const orderedLayers = await orderLinkedItems<ILayerWithDesigns>(
+		const orderedLayers = await orderLinkedItems<ILayerWithChildren>(
 			version.layers,
 		)
 		const generatorLayers = await buildGeneratorLayers({
@@ -119,7 +117,7 @@ export const artworkVersionGeneratorBuildService = async ({
 const verifyDefaultGeneratorDesigns = async ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }): Promise<{
 	defaultGeneratorDesigns: IGeneratorDesigns | null
 	message: string
@@ -165,7 +163,7 @@ const verifyDefaultGeneratorDesigns = async ({
 const getVersionSelectedDesigns = async ({
 	artworkVersionId,
 }: {
-	artworkVersionId: IArtworkVersionWithDesignsAndLayers['id']
+	artworkVersionId: IArtworkVersionWithChildren['id']
 }): Promise<IDesignWithType[]> => {
 	return await findManyDesignsWithType({
 		where: { artworkVersionId, selected: true },
@@ -178,7 +176,7 @@ const buildDefaultGeneratorLayer = async ({
 	version,
 	defaultGeneratorDesigns,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 	defaultGeneratorDesigns: IGeneratorDesigns
 }): Promise<ILayerGenerator> => {
 	const artworkVersionId = version.id
@@ -197,18 +195,21 @@ const buildDefaultGeneratorLayer = async ({
 	// container defaults to version dimensions
 	const container = getArtworkVersionContainer({ version })
 
+	const assets = groupAssetsByType({ assets: version.assets })
+
 	return {
 		...defaultGeneratorDesigns,
 		palette: palettes,
 		rotates,
 		container,
+		assets,
 	}
 }
 
 const getArtworkVersionContainer = ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }) => {
 	const { width, height } = version
 	return {
@@ -228,10 +229,10 @@ const buildGeneratorLayers = async ({
 	layers,
 	defaultGeneratorLayer,
 }: {
-	layers: ILayer[]
+	layers: ILayerWithChildren[]
 	defaultGeneratorLayer: ILayerGenerator
 }) => {
-	const visibleLayers = filterLayersVisible({ layers })
+	const visibleLayers = filterLayersVisible({ layers }) as ILayerWithChildren[]
 
 	return await Promise.all(
 		visibleLayers.map(layer =>
@@ -247,7 +248,7 @@ const buildGeneratorLayer = async ({
 	layer,
 	defaultGeneratorLayer,
 }: {
-	layer: ILayer
+	layer: ILayerWithChildren
 	defaultGeneratorLayer: ILayerGenerator
 }): Promise<ILayerGenerator> => {
 	const layerId = layer.id
@@ -272,12 +273,16 @@ const buildGeneratorLayer = async ({
 	// and the layer generator designs as overrides
 	// and layer details
 	const { id, name, description } = layer
+
+	const assets = groupAssetsByType({ assets: layer.assets })
+
 	const layerGenerator = {
 		...defaultGeneratorLayer,
 		...layerGeneratorDesigns,
 		id,
 		name,
 		description,
+		assets,
 	}
 
 	// Step 5: get all visible palettes to use for fill or stroke
@@ -307,7 +312,7 @@ const buildGeneratorLayer = async ({
 const getLayerSelectedDesigns = async ({
 	layerId,
 }: {
-	layerId: ILayer['id']
+	layerId: ILayerWithChildren['id']
 }) => {
 	return await findManyDesignsWithType({
 		where: { layerId, selected: true },
@@ -319,8 +324,8 @@ const getRotates = async ({
 	layerId,
 	rotate,
 }: {
-	artworkVersionId?: IArtworkVersionWithDesignsAndLayers['id']
-	layerId?: ILayer['id']
+	artworkVersionId?: IArtworkVersionWithChildren['id']
+	layerId?: ILayerWithChildren['id']
 	rotate: IRotate
 }) => {
 	const allRotates = isArrayRotateBasisType(rotate.basis as rotateBasisTypeEnum)
@@ -338,7 +343,7 @@ const getRotates = async ({
 const buildGeneratorWatermark = async ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }): Promise<IGeneratorWatermark | null> => {
 	if (!version.watermark) return null
 
@@ -366,7 +371,7 @@ const buildGeneratorWatermark = async ({
 const buildGeneratorMetadata = async ({
 	version,
 }: {
-	version: IArtworkVersionWithDesignsAndLayers
+	version: IArtworkVersionWithChildren
 }): Promise<IArtworkVersionGeneratorMetadata> => {
 	const branch = await prisma.artworkBranch.findUnique({
 		where: { id: version.branchId },

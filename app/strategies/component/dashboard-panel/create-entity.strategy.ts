@@ -10,6 +10,13 @@ export interface IDashboardPanelCreateEntityStrategy {
 	parentType: entityParentTypeEnum
 }
 
+export class DashboardPanelCreateArtworkVersionAssetTypeStrategy
+	implements IDashboardPanelCreateEntityStrategy
+{
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
+}
+
 export class DashboardPanelCreateArtworkVersionDesignTypeStrategy
 	implements IDashboardPanelCreateEntityStrategy
 {
@@ -22,6 +29,13 @@ export class DashboardPanelCreateArtworkVersionLayerStrategy
 {
 	entityType: entityTypeEnum = EntityType.LAYER
 	parentType: entityParentTypeEnum = EntityParentType.ARTWORK_VERSION
+}
+
+export class DashboardPanelCreateLayerAssetTypeStrategy
+	implements IDashboardPanelCreateEntityStrategy
+{
+	entityType: entityTypeEnum = EntityType.ASSET
+	parentType: entityParentTypeEnum = EntityParentType.LAYER
 }
 
 export class DashboardPanelCreateLayerDesignTypeStrategy

@@ -3,11 +3,12 @@ import {
 	type selectArgsType,
 	type findDesignArgsType,
 	type whereArgsType,
+	type designTypeEnum,
 } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 import {
-	type IArtworkVersionWithDesignsAndLayers,
 	type IArtworkVersion,
+	type IArtworkVersionWithChildren,
 } from '../artwork-version/artwork-version.server'
 import { type IFillCreateOverrides } from '../design-type/fill/fill.create.server'
 import { type IFill } from '../design-type/fill/fill.server'
@@ -33,7 +34,7 @@ export type IDesignIdOrNull = IDesign['id'] | null | undefined
 export type IDesignEntityId =
 	| IDesign['id']
 	| IArtworkVersion['id']
-	| IArtworkVersionWithDesignsAndLayers['id']
+	| IArtworkVersionWithChildren['id']
 export type IDesignEntityIdOrNull = IDesignEntityId | null | undefined
 
 export interface IDesignCreateOverrides {
@@ -80,6 +81,10 @@ export interface IDesignsByType {
 	designRotates: IDesignWithRotate[]
 	designLayouts: IDesignWithLayout[]
 	designTemplates: IDesignWithTemplate[]
+}
+export interface IDesignsByTypeWithType {
+	type: designTypeEnum
+	designs: IDesignWithType[]
 }
 
 export interface IDesignWithPalette extends IDesignWithType {
