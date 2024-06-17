@@ -28,9 +28,33 @@ import {
 	type IDesignFill,
 } from './fill/fill.server'
 import {
+	type IDesignLayout,
+	type IDesignAttributesLayout,
+} from './layout/layout.server'
+import {
+	type IDesignAttributesLine,
+	type IDesignLine,
+} from './line/line.server'
+import {
+	type IDesignAttributesPalette,
+	type IDesignPalette,
+} from './palette/palette.server'
+import {
+	type IDesignAttributesRotate,
+	type IDesignRotate,
+} from './rotate/rotate.server'
+import {
+	type IDesignAttributesSize,
+	type IDesignSize,
+} from './size/size.server'
+import {
 	type IDesignStroke,
 	type IDesignAttributesStroke,
 } from './stroke/stroke.server'
+import {
+	type IDesignAttributesTemplate,
+	type IDesignTemplate,
+} from './template/template.server'
 
 // Omitting 'createdAt' and 'updatedAt' from the Design interface
 // prisma query returns a string for these fields
@@ -51,7 +75,15 @@ export interface IDesign extends BaseDesign {
 // when adding attributes to a design type,
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
-export type IDesignAttributes = IDesignAttributesFill | IDesignAttributesStroke
+export type IDesignAttributes =
+	| IDesignAttributesFill
+	| IDesignAttributesLayout
+	| IDesignAttributesLine
+	| IDesignAttributesPalette
+	| IDesignAttributesRotate
+	| IDesignAttributesSize
+	| IDesignAttributesStroke
+	| IDesignAttributesTemplate
 
 export interface IDesignParsed extends BaseDesign {
 	type: designTypeEnum
@@ -64,7 +96,13 @@ export interface IDesignParsed extends BaseDesign {
 // TODO: replace with this ^^
 export type IDesignByType = {
 	designFills: IDesignFill[]
+	designLayouts: IDesignLayout[]
+	designLines: IDesignLine[]
+	designPalettes: IDesignPalette[]
+	designRotates: IDesignRotate[]
+	designSizes: IDesignSize[]
 	designStroke: IDesignStroke[]
+	designTemplates: IDesignTemplate[]
 }
 
 // export interface IDesignsByTypeWithType {
