@@ -6,11 +6,13 @@ import {
 import { getDesign } from '#app/models/design/design.get.server'
 import {
 	type IDesign,
-	updateDesignToHead,
-	updateDesignToTail,
-	connectPrevAndNextDesigns,
 	type IDesignEntityId,
 } from '#app/models/design/design.server'
+import {
+	connectPrevAndNextDesigns,
+	updateDesignToHead,
+	updateDesignToTail,
+} from '#app/models/design/design.update.server'
 import { type designTypeEnum } from '#app/schema/design'
 import { type IUpdateSelectedDesignStrategy } from '#app/strategies/design/update-selected.strategy'
 import { prisma } from '#app/utils/db.server'

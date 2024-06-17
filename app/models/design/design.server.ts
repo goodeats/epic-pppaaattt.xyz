@@ -1,6 +1,5 @@
 import { type Design } from '@prisma/client'
 import { type designTypeEnum } from '#app/schema/design'
-import { prisma } from '#app/utils/db.server'
 import {
 	type IArtworkVersion,
 	type IArtworkVersionWithChildren,
@@ -146,59 +145,4 @@ export interface ISelectedDesignsFiltered {
 	rotate?: IRotate
 	layout?: ILayout
 	template?: ITemplate
-}
-
-// only use in transactions
-export const connectPrevAndNextDesigns = ({
-	prevId,
-	nextId,
-}: {
-	prevId: IDesign['id']
-	nextId: IDesign['id']
-}) => {
-	const connectNextToPrev = prisma.design.update({
-		where: { id: prevId },
-		data: { nextId },
-	})
-	const connectPrevToNext = prisma.design.update({
-		where: { id: nextId },
-		data: { prevId },
-	})
-	return [connectNextToPrev, connectPrevToNext]
-}
-
-export const updateDesignToHead = ({ id }: { id: IDesign['id'] }) => {
-	return prisma.design.update({
-		where: { id },
-		data: { prevId: null },
-	})
-}
-
-export const updateDesignToTail = ({ id }: { id: IDesign['id'] }) => {
-	return prisma.design.update({
-		where: { id },
-		data: { nextId: null },
-	})
-}
-
-export const updateDesignRemoveNodes = ({ id }: { id: IDesign['id'] }) => {
-	return prisma.design.update({
-		where: { id },
-		data: { prevId: null, nextId: null },
-	})
-}
-
-export const updateDesignNodes = ({
-	id,
-	nextId,
-	prevId,
-}: {
-	id: string
-	nextId: string | null
-	prevId: string | null
-}) => {
-	return prisma.design.update({
-		where: { id },
-		data: { prevId, nextId },
-	})
 }
