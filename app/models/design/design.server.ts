@@ -40,6 +40,10 @@ import {
 	type IDesignPalette,
 } from './palette/palette.server'
 import {
+	type IDesignAttributesRotate,
+	type IDesignRotate,
+} from './rotate/rotate.server'
+import {
 	type IDesignStroke,
 	type IDesignAttributesStroke,
 } from './stroke/stroke.server'
@@ -68,6 +72,7 @@ export type IDesignAttributes =
 	| IDesignAttributesLayout
 	| IDesignAttributesLine
 	| IDesignAttributesPalette
+	| IDesignAttributesRotate
 	| IDesignAttributesStroke
 
 export interface IDesignParsed extends BaseDesign {
@@ -84,6 +89,7 @@ export type IDesignByType = {
 	designLayouts: IDesignLayout[]
 	designLines: IDesignLine[]
 	designPalettes: IDesignPalette[]
+	designRotates: IDesignRotate[]
 	designStroke: IDesignStroke[]
 }
 

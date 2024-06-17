@@ -7,6 +7,7 @@ import {
 	type IDesignWithLine,
 	type IDesign,
 	type IDesignWithPalette,
+	type IDesignWithRotate,
 } from '#app/models/design/design.server'
 import { type IDesignAttributesFill } from '#app/models/design/fill/fill.server'
 import { stringifyDesignFillAttributes } from '#app/models/design/fill/utils'
@@ -16,6 +17,8 @@ import { type IDesignAttributesLine } from '#app/models/design/line/line.server'
 import { stringifyDesignLineAttributes } from '#app/models/design/line/utils'
 import { type IDesignAttributesPalette } from '#app/models/design/palette/palette.server'
 import { stringifyDesignPaletteAttributes } from '#app/models/design/palette/utils'
+import { type IDesignAttributesRotate } from '#app/models/design/rotate/rotate.server'
+import { stringifyDesignRotateAttributes } from '#app/models/design/rotate/utils'
 import { type IDesignAttributesStroke } from '#app/models/design/stroke/stroke.server'
 import { stringifyDesignStrokeAttributes } from '#app/models/design/stroke/utils'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
@@ -85,6 +88,8 @@ const updateDesignAttributesPromise = (design: IDesignWithType) => {
 			return updateDesignLineAttributes(design as IDesignWithLine)
 		case DesignTypeEnum.PALETTE:
 			return updateDesignPaletteAttributes(design as IDesignWithPalette)
+		case DesignTypeEnum.ROTATE:
+			return updateDesignRotateAttributes(design as IDesignWithRotate)
 		case DesignTypeEnum.STROKE:
 			return updateDesignStrokeAttributes(design as IDesignWithStroke)
 		default:
@@ -181,6 +186,22 @@ const updateDesignPaletteAttributes = (design: IDesignWithPalette) => {
 	return prismaUpdatePromise({
 		id,
 		type: DesignTypeEnum.PALETTE,
+		attributes,
+	})
+}
+
+const updateDesignRotateAttributes = (design: IDesignWithRotate) => {
+	const { id, rotate } = design
+	const { basis, value } = rotate
+	const json = {
+		basis,
+		value,
+	} as IDesignAttributesRotate
+	const attributes = stringifyDesignRotateAttributes(json)
+
+	return prismaUpdatePromise({
+		id,
+		type: DesignTypeEnum.ROTATE,
 		attributes,
 	})
 }
