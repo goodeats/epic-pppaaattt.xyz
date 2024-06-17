@@ -24,6 +24,7 @@ export interface IAssetImageFileData {
 	lastModified?: number
 	filename: string
 	fit?: IAssetImageFit
+	hideOnDraw?: boolean
 }
 
 // when adding attributes to an asset type,
