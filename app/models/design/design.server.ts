@@ -1,10 +1,5 @@
 import { type Design } from '@prisma/client'
-import {
-	type selectArgsType,
-	type findDesignArgsType,
-	type whereArgsType,
-	type designTypeEnum,
-} from '#app/schema/design'
+import { type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 import {
 	type IArtworkVersion,
@@ -151,54 +146,6 @@ export interface ISelectedDesignsFiltered {
 	rotate?: IRotate
 	layout?: ILayout
 	template?: ITemplate
-}
-
-export const findManyDesignsWithType = async ({
-	where,
-}: {
-	where: whereArgsType
-}): Promise<IDesignWithType[]> => {
-	const designs = await prisma.design.findMany({
-		where,
-		include: {
-			palette: true,
-			size: true,
-			fill: true,
-			stroke: true,
-			line: true,
-			rotate: true,
-			layout: true,
-			template: true,
-		},
-		orderBy: {
-			type: 'asc',
-		},
-	})
-	return designs
-}
-
-export const findFirstDesign = async ({
-	where,
-	select,
-}: findDesignArgsType): Promise<IDesign | null> => {
-	const design = await prisma.design.findFirst({
-		where,
-		select,
-	})
-	return design
-}
-
-export const findDesignByIdAndOwner = async ({
-	id,
-	ownerId,
-	select,
-}: {
-	id: whereArgsType['id']
-	ownerId: whereArgsType['ownerId']
-	select?: selectArgsType
-}): Promise<Design | null> => {
-	const where = { id, ownerId }
-	return await findFirstDesign({ where, select })
 }
 
 // only use in transactions

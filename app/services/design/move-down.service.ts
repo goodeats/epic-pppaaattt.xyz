@@ -1,7 +1,7 @@
 import { type User } from '@prisma/client'
+import { getDesign } from '#app/models/design/design.get.server'
 import {
 	type IDesign,
-	findFirstDesign,
 	updateDesignRemoveNodes,
 	updateDesignNodes,
 	type IDesignEntityId,
@@ -28,13 +28,13 @@ export const designMoveDownService = async ({
 
 		// Step 1: get the current design
 		// make sure it is not already tail
-		const currentDesign = await getDesign({ id, userId })
+		const currentDesign = await fetchDesign({ id, userId })
 		const { prevId, nextId } = currentDesign
 		if (!nextId) throw new Error('Design is already tail')
 		const type = currentDesign.type as designTypeEnum
 
 		// Step 2: get next design
-		const nextDesign = await getDesign({ id: nextId, userId })
+		const nextDesign = await fetchDesign({ id: nextId, userId })
 		const nextNextId = nextDesign.nextId
 
 		// Step 3: get adjacent designs if they exist
@@ -83,14 +83,14 @@ export const designMoveDownService = async ({
 	}
 }
 
-const getDesign = async ({
+const fetchDesign = async ({
 	id,
 	userId,
 }: {
 	id: IDesign['id']
 	userId: User['id']
 }) => {
-	const design = await findFirstDesign({
+	const design = await getDesign({
 		where: { id, ownerId: userId },
 	})
 
@@ -109,13 +109,13 @@ const getAdjacentDesigns = async ({
 	prevId: string | null
 }) => {
 	const nextNextDesign = nextNextId
-		? await getDesign({
+		? await fetchDesign({
 				id: nextNextId,
 				userId,
 			})
 		: null
 
-	const prevDesign = prevId ? await getDesign({ id: prevId, userId }) : null
+	const prevDesign = prevId ? await fetchDesign({ id: prevId, userId }) : null
 
 	return { nextNextDesign, prevDesign }
 }

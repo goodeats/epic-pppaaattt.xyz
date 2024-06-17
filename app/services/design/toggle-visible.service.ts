@@ -1,6 +1,6 @@
 import { type User } from '@prisma/client'
+import { getDesign } from '#app/models/design/design.get.server'
 import {
-	findFirstDesign,
 	type IDesign,
 	type IDesignEntityId,
 } from '#app/models/design/design.server'
@@ -26,7 +26,7 @@ export const designToggleVisibleService = async ({
 }): Promise<IDesignUpdatedResponse> => {
 	try {
 		// Step 1: get the design
-		const design = await getDesign({ id, userId })
+		const design = await fetchtDesign({ id, userId })
 		const { visible } = design
 		const type = design.type as designTypeEnum
 
@@ -59,14 +59,14 @@ export const designToggleVisibleService = async ({
 	}
 }
 
-const getDesign = async ({
+const fetchtDesign = async ({
 	id,
 	userId,
 }: {
 	id: IDesign['id']
 	userId: User['id']
 }) => {
-	const design = await findFirstDesign({
+	const design = await getDesign({
 		where: { id, ownerId: userId },
 	})
 

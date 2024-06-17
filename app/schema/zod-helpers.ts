@@ -16,3 +16,5 @@ export type defaultValueStringOrNumber = {
 // use this for schema validation where the value is a string or null
 // helpful for queries on doubly-linked list items (head/tail)
 export const zodStringOrNull = z.union([z.string(), z.null()])
+
+export const arrayOfIds = z.object({ in: z.array(z.string()) })

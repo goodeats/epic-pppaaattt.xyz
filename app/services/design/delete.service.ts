@@ -3,9 +3,9 @@ import {
 	deleteDesign,
 	type IDesignDeletedResponse,
 } from '#app/models/design/design.delete.server'
+import { getDesign } from '#app/models/design/design.get.server'
 import {
 	type IDesign,
-	findFirstDesign,
 	updateDesignToHead,
 	updateDesignToTail,
 	connectPrevAndNextDesigns,
@@ -31,7 +31,7 @@ export const designDeleteService = async ({
 		const deleteDesignPromises = []
 
 		// Step 1: get the design
-		const design = await getDesign({ id, userId })
+		const design = await fetchDesign({ id, userId })
 		const { nextId, prevId, selected } = design
 		const type = design.type as designTypeEnum
 
@@ -78,14 +78,14 @@ export const designDeleteService = async ({
 	}
 }
 
-const getDesign = async ({
+const fetchDesign = async ({
 	id,
 	userId,
 }: {
 	id: IDesign['id']
 	userId: User['id']
 }) => {
-	const design = await findFirstDesign({
+	const design = await getDesign({
 		where: { id, ownerId: userId },
 	})
 
@@ -104,14 +104,14 @@ const getAdjacentDesigns = async ({
 	const { nextId, prevId } = design
 
 	const nextDesign = nextId
-		? await getDesign({
+		? await fetchDesign({
 				userId,
 				id: nextId,
 			})
 		: null
 
 	const prevDesign = prevId
-		? await getDesign({
+		? await fetchDesign({
 				userId,
 				id: prevId,
 			})

@@ -1,9 +1,9 @@
 import { type User } from '@prisma/client'
+import { findManyDesignsWithType } from '#app/models/design/design.get.server'
 import {
 	type IDesignEntityId,
 	type IDesignWithType,
 	type IDesignsByType,
-	findManyDesignsWithType,
 } from '#app/models/design/design.server'
 import {
 	DesignCloneSourceTypeEnum,
