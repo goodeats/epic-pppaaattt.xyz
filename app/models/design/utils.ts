@@ -4,6 +4,7 @@ import { type IDesign, type IDesignParsed } from './design.server'
 import { parseDesignFillAttributes } from './fill/utils'
 import { parseDesignLayoutAttributes } from './layout/utils'
 import { parseDesignLineAttributes } from './line/utils'
+import { parseDesignPaletteAttributes } from './palette/utils'
 import { parseDesignStrokeAttributes } from './stroke/utils'
 
 export const deserializeDesigns = ({
@@ -49,6 +50,8 @@ export const validateDesignAttributes = ({
 				return parseDesignLayoutAttributes(attributes)
 			case DesignTypeEnum.LINE:
 				return parseDesignLineAttributes(attributes)
+			case DesignTypeEnum.PALETTE:
+				return parseDesignPaletteAttributes(attributes)
 			case DesignTypeEnum.STROKE:
 				return parseDesignStrokeAttributes(attributes)
 			default:

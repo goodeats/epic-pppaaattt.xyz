@@ -36,6 +36,10 @@ import {
 	type IDesignLine,
 } from './line/line.server'
 import {
+	type IDesignAttributesPalette,
+	type IDesignPalette,
+} from './palette/palette.server'
+import {
 	type IDesignStroke,
 	type IDesignAttributesStroke,
 } from './stroke/stroke.server'
@@ -63,6 +67,7 @@ export type IDesignAttributes =
 	| IDesignAttributesFill
 	| IDesignAttributesLayout
 	| IDesignAttributesLine
+	| IDesignAttributesPalette
 	| IDesignAttributesStroke
 
 export interface IDesignParsed extends BaseDesign {
@@ -78,6 +83,7 @@ export type IDesignByType = {
 	designFills: IDesignFill[]
 	designLayouts: IDesignLayout[]
 	designLines: IDesignLine[]
+	designPalettes: IDesignPalette[]
 	designStroke: IDesignStroke[]
 }
 

@@ -6,6 +6,7 @@ import {
 	type IDesignWithLayout,
 	type IDesignWithLine,
 	type IDesign,
+	type IDesignWithPalette,
 } from '#app/models/design/design.server'
 import { type IDesignAttributesFill } from '#app/models/design/fill/fill.server'
 import { stringifyDesignFillAttributes } from '#app/models/design/fill/utils'
@@ -13,6 +14,8 @@ import { type IDesignAttributesLayout } from '#app/models/design/layout/layout.s
 import { stringifyDesignLayoutAttributes } from '#app/models/design/layout/utils'
 import { type IDesignAttributesLine } from '#app/models/design/line/line.server'
 import { stringifyDesignLineAttributes } from '#app/models/design/line/utils'
+import { type IDesignAttributesPalette } from '#app/models/design/palette/palette.server'
+import { stringifyDesignPaletteAttributes } from '#app/models/design/palette/utils'
 import { type IDesignAttributesStroke } from '#app/models/design/stroke/stroke.server'
 import { stringifyDesignStrokeAttributes } from '#app/models/design/stroke/utils'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
@@ -80,6 +83,8 @@ const updateDesignAttributesPromise = (design: IDesignWithType) => {
 			return updateDesignLayoutAttributes(design as IDesignWithLayout)
 		case DesignTypeEnum.LINE:
 			return updateDesignLineAttributes(design as IDesignWithLine)
+		case DesignTypeEnum.PALETTE:
+			return updateDesignPaletteAttributes(design as IDesignWithPalette)
 		case DesignTypeEnum.STROKE:
 			return updateDesignStrokeAttributes(design as IDesignWithStroke)
 		default:
@@ -161,6 +166,21 @@ const updateDesignLineAttributes = (design: IDesignWithLine) => {
 	return prismaUpdatePromise({
 		id,
 		type: DesignTypeEnum.LINE,
+		attributes,
+	})
+}
+
+const updateDesignPaletteAttributes = (design: IDesignWithPalette) => {
+	const { id, palette } = design
+	const { value } = palette
+	const json = {
+		value,
+	} as IDesignAttributesPalette
+	const attributes = stringifyDesignPaletteAttributes(json)
+
+	return prismaUpdatePromise({
+		id,
+		type: DesignTypeEnum.PALETTE,
 		attributes,
 	})
 }
