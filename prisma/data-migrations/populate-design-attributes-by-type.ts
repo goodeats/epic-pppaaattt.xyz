@@ -8,6 +8,7 @@ import {
 	type IDesign,
 	type IDesignWithPalette,
 	type IDesignWithRotate,
+	type IDesignWithSize,
 } from '#app/models/design/design.server'
 import { type IDesignAttributesFill } from '#app/models/design/fill/fill.server'
 import { stringifyDesignFillAttributes } from '#app/models/design/fill/utils'
@@ -19,6 +20,8 @@ import { type IDesignAttributesPalette } from '#app/models/design/palette/palett
 import { stringifyDesignPaletteAttributes } from '#app/models/design/palette/utils'
 import { type IDesignAttributesRotate } from '#app/models/design/rotate/rotate.server'
 import { stringifyDesignRotateAttributes } from '#app/models/design/rotate/utils'
+import { type IDesignAttributesSize } from '#app/models/design/size/size.server'
+import { stringifyDesignSizeAttributes } from '#app/models/design/size/utils'
 import { type IDesignAttributesStroke } from '#app/models/design/stroke/stroke.server'
 import { stringifyDesignStrokeAttributes } from '#app/models/design/stroke/utils'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
@@ -90,6 +93,8 @@ const updateDesignAttributesPromise = (design: IDesignWithType) => {
 			return updateDesignPaletteAttributes(design as IDesignWithPalette)
 		case DesignTypeEnum.ROTATE:
 			return updateDesignRotateAttributes(design as IDesignWithRotate)
+		case DesignTypeEnum.SIZE:
+			return updateDesignSizeAttributes(design as IDesignWithSize)
 		case DesignTypeEnum.STROKE:
 			return updateDesignStrokeAttributes(design as IDesignWithStroke)
 		default:
@@ -202,6 +207,23 @@ const updateDesignRotateAttributes = (design: IDesignWithRotate) => {
 	return prismaUpdatePromise({
 		id,
 		type: DesignTypeEnum.ROTATE,
+		attributes,
+	})
+}
+
+const updateDesignSizeAttributes = (design: IDesignWithSize) => {
+	const { id, size } = design
+	const { basis, format, value } = size
+	const json = {
+		basis,
+		format,
+		value,
+	} as IDesignAttributesSize
+	const attributes = stringifyDesignSizeAttributes(json)
+
+	return prismaUpdatePromise({
+		id,
+		type: DesignTypeEnum.SIZE,
 		attributes,
 	})
 }
