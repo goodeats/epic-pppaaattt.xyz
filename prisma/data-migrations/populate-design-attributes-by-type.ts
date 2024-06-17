@@ -4,14 +4,18 @@ import {
 	type IDesignWithFill,
 	type IDesignWithType,
 	type IDesignWithLayout,
+	type IDesignWithLine,
+	type IDesign,
 } from '#app/models/design/design.server'
 import { type IDesignAttributesFill } from '#app/models/design/fill/fill.server'
 import { stringifyDesignFillAttributes } from '#app/models/design/fill/utils'
 import { type IDesignAttributesLayout } from '#app/models/design/layout/layout.server'
 import { stringifyDesignLayoutAttributes } from '#app/models/design/layout/utils'
+import { type IDesignAttributesLine } from '#app/models/design/line/line.server'
+import { stringifyDesignLineAttributes } from '#app/models/design/line/utils'
 import { type IDesignAttributesStroke } from '#app/models/design/stroke/stroke.server'
 import { stringifyDesignStrokeAttributes } from '#app/models/design/stroke/utils'
-import { DesignTypeEnum } from '#app/schema/design'
+import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
 
 // designs will have attributes string as json now
@@ -74,6 +78,8 @@ const updateDesignAttributesPromise = (design: IDesignWithType) => {
 			return updateDesignFillAttributes(design as IDesignWithFill)
 		case DesignTypeEnum.LAYOUT:
 			return updateDesignLayoutAttributes(design as IDesignWithLayout)
+		case DesignTypeEnum.LINE:
+			return updateDesignLineAttributes(design as IDesignWithLine)
 		case DesignTypeEnum.STROKE:
 			return updateDesignStrokeAttributes(design as IDesignWithStroke)
 		default:
@@ -82,89 +88,98 @@ const updateDesignAttributesPromise = (design: IDesignWithType) => {
 	}
 }
 
-const updateDesignFillAttributes = (design: IDesignWithFill) => {
-	const { fill } = design
-	const { basis, style, value } = fill
-	const attributes = {
-		basis,
-		style,
-		value,
-	} as IDesignAttributesFill
-	const jsonAttributes = stringifyDesignFillAttributes(attributes)
-
+const prismaUpdatePromise = ({
+	id,
+	type,
+	attributes,
+}: {
+	id: IDesign['id']
+	type: designTypeEnum
+	attributes: string
+}) => {
 	return prisma.design
 		.update({
-			where: { id: design.id },
-			data: {
-				attributes: jsonAttributes,
-			},
+			where: { id },
+			data: { attributes },
 		})
 		.then(() => {
-			console.log(`Updated design fill attributes for design ${design.id}`)
+			console.log(`Updated design ${type} attributes for design ${id}`)
 		})
 		.catch(error => {
 			console.error(
-				`Failed to update design fill attributes for design ${design.id}`,
+				`Failed to update design ${type} attributes for design ${id}`,
 				error,
 			)
 		})
 }
 
+const updateDesignFillAttributes = (design: IDesignWithFill) => {
+	const { id, fill } = design
+	const { basis, style, value } = fill
+	const json = {
+		basis,
+		style,
+		value,
+	} as IDesignAttributesFill
+	const attributes = stringifyDesignFillAttributes(json)
+
+	return prismaUpdatePromise({
+		id,
+		type: DesignTypeEnum.FILL,
+		attributes,
+	})
+}
+
 const updateDesignLayoutAttributes = (design: IDesignWithLayout) => {
-	const { layout } = design
+	const { id, layout } = design
 	const { style, count, rows, columns } = layout
-	const attributes = {
+	const json = {
 		style,
 		count,
 		rows,
 		columns,
 	} as IDesignAttributesLayout
-	const jsonAttributes = stringifyDesignLayoutAttributes(attributes)
+	const attributes = stringifyDesignLayoutAttributes(json)
 
-	return prisma.design
-		.update({
-			where: { id: design.id },
-			data: {
-				attributes: jsonAttributes,
-			},
-		})
-		.then(() => {
-			console.log(`Updated design layout attributes for design ${design.id}`)
-		})
-		.catch(error => {
-			console.error(
-				`Failed to update design layout attributes for design ${design.id}`,
-				error,
-			)
-		})
+	return prismaUpdatePromise({
+		id,
+		type: DesignTypeEnum.LAYOUT,
+		attributes,
+	})
+}
+
+const updateDesignLineAttributes = (design: IDesignWithLine) => {
+	const { id, line } = design
+	const { basis, format, width } = line
+	const json = {
+		basis,
+		format,
+		width,
+	} as IDesignAttributesLine
+	const attributes = stringifyDesignLineAttributes(json)
+
+	return prismaUpdatePromise({
+		id,
+		type: DesignTypeEnum.LINE,
+		attributes,
+	})
 }
 
 const updateDesignStrokeAttributes = (design: IDesignWithStroke) => {
-	const { stroke } = design
+	const { id, stroke } = design
 	const { basis, style, value } = stroke
-	const attributes = {
+	const json = {
 		basis,
 		style,
 		value,
 	} as IDesignAttributesStroke
-	const jsonAttributes = stringifyDesignStrokeAttributes(attributes)
+	const attributes = stringifyDesignStrokeAttributes(json)
 
-	return prisma.design
-		.update({
-			where: { id: design.id },
-			data: {
-				attributes: jsonAttributes,
-			},
-		})
-		.then(() => {
-			console.log(`Updated design stroke attributes for design ${design.id}`)
-		})
-		.catch(error => {
-			console.error(
-				`Failed to update design stroke attributes for design ${design.id}`,
-				error,
-			)
-		})
+	return prismaUpdatePromise({
+		id,
+		type: DesignTypeEnum.STROKE,
+		attributes,
+	})
 }
 
 await populateDesignAttributesByType()

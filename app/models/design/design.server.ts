@@ -32,6 +32,10 @@ import {
 	type IDesignAttributesLayout,
 } from './layout/layout.server'
 import {
+	type IDesignAttributesLine,
+	type IDesignLine,
+} from './line/line.server'
+import {
 	type IDesignStroke,
 	type IDesignAttributesStroke,
 } from './stroke/stroke.server'
@@ -58,6 +62,7 @@ export interface IDesign extends BaseDesign {
 export type IDesignAttributes =
 	| IDesignAttributesFill
 	| IDesignAttributesLayout
+	| IDesignAttributesLine
 	| IDesignAttributesStroke
 
 export interface IDesignParsed extends BaseDesign {
@@ -71,7 +76,8 @@ export interface IDesignParsed extends BaseDesign {
 // TODO: replace with this ^^
 export type IDesignByType = {
 	designFills: IDesignFill[]
-	designLayoutss: IDesignLayout[]
+	designLayouts: IDesignLayout[]
+	designLines: IDesignLine[]
 	designStroke: IDesignStroke[]
 }
 
