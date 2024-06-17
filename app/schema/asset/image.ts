@@ -61,6 +61,7 @@ export const AssetAttributesImageSchema = z.object({
 	lastModified: z.number().optional(),
 	filename: z.string(),
 	fit: z.nativeEnum(AssetImageFitTypeEnum).optional(),
+	hideOnDraw: z.boolean().optional(),
 })
 
 // zod schema for blob Buffer/File is not working
@@ -92,6 +93,10 @@ export const EditAssetImageSchema = z.object({
 export const EditAssetImageFitSchema = z.object({
 	id: z.string(),
 	fit: z.nativeEnum(AssetImageFitTypeEnum),
+})
+
+export const EditAssetImageHideOnDrawSchema = z.object({
+	id: z.string(),
 })
 
 export const DeleteAssetImageSchema = z.object({

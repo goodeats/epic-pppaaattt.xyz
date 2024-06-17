@@ -1,41 +1,29 @@
 import {
 	type IGenerationLayer,
 	type IGenerationItem,
-	type IGenerationAssets,
 } from '#app/definitions/artwork-generator'
-import { loadImage } from '#app/utils/image'
+import { type ILoadedAssets } from '../../draw.load-assets.service'
 import { drawLayerItemService } from './draw-layer-item.service'
+import { canvasDrawLayerAssets } from './draw-layers.asset.service'
 
 export const canvasDrawLayersService = ({
 	ctx,
 	drawLayers,
+	loadedAssets,
 }: {
 	ctx: CanvasRenderingContext2D
 	drawLayers: IGenerationLayer[]
+	loadedAssets: ILoadedAssets
 }) => {
 	for (let i = 0; i < drawLayers.length; i++) {
 		const layer = drawLayers[i]
-		drawLayerAssets({ ctx, assets: layer.assets })
+		canvasDrawLayerAssets({
+			ctx,
+			assets: layer.assets,
+			loadedAssets,
+			timeToDraw: true,
+		})
 		drawLayerItems({ ctx, items: layer.items })
-	}
-}
-
-const drawLayerAssets = ({
-	ctx,
-	assets,
-}: {
-	ctx: CanvasRenderingContext2D
-	assets: IGenerationAssets
-}) => {
-	const { image } = assets
-	if (image && image.src) {
-		console.log('assets.image: ', image)
-		const img = loadImage({ src: image.src })
-		console.log('img: ', img)
-		// load image
-		// async
-		// const { x, y, width, height } = assets.image
-		// ctx.drawImage(img, x, y, width, height)
 	}
 }
 
@@ -48,7 +36,6 @@ const drawLayerItems = ({
 }) => {
 	for (let i = 0; i < items.length; i++) {
 		const layerDrawItem = items[i]
-		// console.log('count: ', i)
 		drawLayerItemService({ ctx, layerDrawItem })
 	}
 }

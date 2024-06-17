@@ -65,6 +65,14 @@ export const validateAssetAttributes = ({
 	}
 }
 
+export const filterAssetsVisible = ({
+	assets,
+}: {
+	assets: IAssetParsed[]
+}): IAssetType[] => {
+	return assets.filter(asset => asset.visible)
+}
+
 export const filterAssetType = ({
 	assets,
 	type,

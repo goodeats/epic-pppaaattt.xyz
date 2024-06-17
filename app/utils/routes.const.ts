@@ -58,6 +58,7 @@ export const Routes = {
 						},
 						UPDATE: {
 							FIT: `${pathBase}/asset/image/update/fit`,
+							HIDE_ON_DRAW: `${pathBase}/asset/image/update/hide-on-draw`,
 						},
 					},
 				},

@@ -68,7 +68,7 @@ const imageFitCover = ({
 }: {
 	ctx: CanvasRenderingContext2D
 	image: IAssetImage
-}): IAssetImageDrawGeneration => {
+}) => {
 	const {
 		// width: imageWidth,
 		// height: imageHeight,
@@ -168,7 +168,7 @@ export const canvasBuildLayerDrawImageFitService = ({
 }: {
 	ctx: CanvasRenderingContext2D
 	image: IAssetImage
-}) => {
+}): IAssetImageDrawGeneration => {
 	switch (image.attributes.fit) {
 		case AssetImageFitTypeEnum.FILL:
 			return imageFitFill({ ctx })
@@ -181,6 +181,6 @@ export const canvasBuildLayerDrawImageFitService = ({
 		case AssetImageFitTypeEnum.SCALE_DOWN:
 			return imageFitScaleDown({ ctx, image })
 		default:
-			return null
+			return imageFitNone({ ctx, image })
 	}
 }

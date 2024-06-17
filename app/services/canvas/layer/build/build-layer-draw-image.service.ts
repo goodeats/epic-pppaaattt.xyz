@@ -12,23 +12,25 @@ export const canvasBuildLayerDrawImageService = ({
 }: {
 	ctx: CanvasRenderingContext2D
 	layer: ILayerGenerator
-}): IAssetImageGeneration | null => {
+}): IAssetImageGeneration[] => {
 	const { assets } = layer
 	const { assetImages } = assets
 
-	if (!assetImages.length) return null
+	if (!assetImages.length) return []
 
-	// just one image to start
-	const image = assetImages[0]
+	return assetImages.map(image => {
+		const src = getAssetImgSrc({ image })
+		const fit = canvasBuildLayerDrawImageFitService({
+			ctx,
+			image,
+		}) as IAssetImageDrawGeneration
+		const hideOnDraw = image.attributes.hideOnDraw || false
 
-	const src = getAssetImgSrc({ image })
-	const fit = canvasBuildLayerDrawImageFitService({
-		ctx,
-		image,
-	}) as IAssetImageDrawGeneration
-
-	return {
-		src,
-		...fit,
-	}
+		return {
+			id: image.id,
+			src,
+			...fit,
+			hideOnDraw,
+		}
+	})
 }

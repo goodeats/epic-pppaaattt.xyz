@@ -1,107 +1,26 @@
 import {
 	type IGenerationLayer,
 	type IArtworkVersionGenerator,
-	type IGenerationItem,
-	type ILayerGenerator,
-	type IGenerationAssets,
 } from '#app/definitions/artwork-generator'
-import { canvasBuildLayerDrawCountService } from './build-layer-draw-count.service'
-import { canvasBuildLayerDrawFillService } from './build-layer-draw-fill.service'
-import { canvasBuildLayerDrawImageService } from './build-layer-draw-image.service'
-import { canvasBuildLayerDrawLineService } from './build-layer-draw-line.service'
-import { canvasBuildLayerDrawPositionService } from './build-layer-draw-position.service'
-import { canvasBuildLayerDrawRotateService } from './build-layer-draw-rotate.service'
-import { canvasBuildLayerDrawSizeService } from './build-layer-draw-size.service'
-import { canvasBuildLayerDrawStrokeService } from './build-layer-draw-stroke.service'
-import { canvasBuildLayerDrawTemplateService } from './build-layer-draw-template.service'
+import { type ILoadedAssets } from '../../draw.load-assets.service'
+import { canvasLayerBuildDrawLayersLayerService } from './build-draw-layers.layer.service'
 
 export const canvasLayerBuildDrawLayersService = ({
 	ctx,
 	generator,
+	loadedAssets,
 }: {
 	ctx: CanvasRenderingContext2D
 	generator: IArtworkVersionGenerator
+	loadedAssets: ILoadedAssets
 }): IGenerationLayer[] => {
 	const { layers } = generator
 
-	return layers.map(layer => {
-		const assets = buildLayerGenerationAssets({ ctx, layer })
-		const items = buildLayerGenerationItems({ ctx, layer })
-		return {
-			generator: layer,
-			assets,
-			items,
-		}
-	})
-}
-
-const buildLayerGenerationAssets = ({
-	ctx,
-	layer,
-}: {
-	ctx: CanvasRenderingContext2D
-	layer: ILayerGenerator
-}): IGenerationAssets => {
-	const image = canvasBuildLayerDrawImageService({ ctx, layer })
-
-	return {
-		image,
-	}
-}
-
-const buildLayerGenerationItems = ({
-	ctx,
-	layer,
-}: {
-	ctx: CanvasRenderingContext2D
-	layer: ILayerGenerator
-}): IGenerationItem[] => {
-	const count = canvasBuildLayerDrawCountService({ layer })
-
-	const layerGenerationItems = []
-	for (let index = 0; index < count; index++) {
-		const generationItem = buildLayerGenerationItem({
+	return layers.map(layer =>
+		canvasLayerBuildDrawLayersLayerService({
 			ctx,
 			layer,
-			index,
-			count,
-		})
-		layerGenerationItems.push(generationItem)
-	}
-	return layerGenerationItems
-}
-
-const buildLayerGenerationItem = ({
-	ctx,
-	layer,
-	index,
-	count,
-}: {
-	ctx: CanvasRenderingContext2D
-	layer: ILayerGenerator
-	index: number
-	count: number
-}): IGenerationItem => {
-	const { x, y, pixelHex } = canvasBuildLayerDrawPositionService({
-		ctx,
-		layer,
-		index,
-	})
-	const size = canvasBuildLayerDrawSizeService({ layer, index })
-	const fill = canvasBuildLayerDrawFillService({ layer, index, pixelHex })
-	const stroke = canvasBuildLayerDrawStrokeService({ layer, index, pixelHex })
-	const line = canvasBuildLayerDrawLineService({ layer, index })
-	const rotate = canvasBuildLayerDrawRotateService({ layer, index })
-	const template = canvasBuildLayerDrawTemplateService({ layer, index })
-
-	return {
-		id: `layer-${layer.id}-${index}-${count}`,
-		fillStyle: fill,
-		lineWidth: line,
-		position: { x, y },
-		rotate,
-		size,
-		strokeStyle: stroke,
-		template,
-	}
+			loadedAssets,
+		}),
+	)
 }
