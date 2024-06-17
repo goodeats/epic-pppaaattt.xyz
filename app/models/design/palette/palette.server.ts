@@ -10,7 +10,7 @@ export interface IDesignPalette extends IDesignParsed {
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export interface IDesignAttributesPalette {
-	value?: string
+	value: string
 }
 
 export interface IDesignPaletteSubmission

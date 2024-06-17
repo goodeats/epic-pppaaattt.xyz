@@ -33,8 +33,8 @@ export type IDesignRotateFormat = 'pixel' | 'percent'
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export interface IDesignAttributesRotate {
-	basis?: IDesignRotateBasis
-	value?: number
+	basis: IDesignRotateBasis
+	value: number
 }
 
 export interface IDesignRotateSubmission

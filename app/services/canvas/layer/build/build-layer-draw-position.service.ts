@@ -39,7 +39,7 @@ const getPosition = ({
 }) => {
 	const { layout } = layer
 
-	if (layout.style === LayoutStyleTypeEnum.GRID) {
+	if (layout.attributes.style === LayoutStyleTypeEnum.GRID) {
 		return getGridPosition({ layer, index, ctx })
 	}
 

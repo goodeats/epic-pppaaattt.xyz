@@ -1,17 +1,17 @@
 import { type User } from '@prisma/client'
 import { findManyDesignsWithType } from '#app/models/design/design.get.server'
 import {
+	type IDesignParsed,
 	type IDesignEntityId,
-	type IDesignWithType,
-	type IDesignsByType,
+	type IDesignByType,
 } from '#app/models/design/design.server'
+import { groupDesignsByType } from '#app/models/design/utils'
 import {
 	DesignCloneSourceTypeEnum,
 	type designCloneSourceTypeEnum,
 } from '#app/schema/design'
 import { type ICloneDesignsStrategy } from '#app/strategies/design/clone.strategy'
 import { cloneDesignTypeStrategies } from '#app/strategies/design-type/clone.strategy'
-import { groupAndOrderDesignsByType } from '#app/utils/design'
 import { cloneDesignTypesService } from './design-type/clone-many.service'
 
 export const cloneDesignsService = async ({
@@ -35,7 +35,7 @@ export const cloneDesignsService = async ({
 		})
 
 		// Step 2: separate designs by type and order
-		const sourceDesignsByType = groupAndOrderDesignsByType({
+		const sourceDesignsByType = groupDesignsByType({
 			designs: sourceDesigns,
 		})
 
@@ -65,7 +65,7 @@ const getSourceEntityDesigns = async ({
 }: {
 	sourceEntityType: designCloneSourceTypeEnum
 	sourceEntityId: IDesignEntityId
-}): Promise<IDesignWithType[]> => {
+}): Promise<IDesignParsed[]> => {
 	const where =
 		sourceEntityType === DesignCloneSourceTypeEnum.ARTWORK_VERSION
 			? { artworkVersionId: sourceEntityId }
@@ -82,13 +82,13 @@ const cloneDesignsByType = async ({
 }: {
 	userId: User['id']
 	targetEntityId: IDesignEntityId
-	sourceDesignsByType: IDesignsByType
+	sourceDesignsByType: IDesignByType
 	entityStrategy: ICloneDesignsStrategy
 }): Promise<void> => {
 	// Iterate over each design type and clone accordingly
 	for (const key of Object.keys(
 		sourceDesignsByType,
-	) as (keyof IDesignsByType)[]) {
+	) as (keyof IDesignByType)[]) {
 		const strategy = cloneDesignTypeStrategies[key]
 		const designs = sourceDesignsByType[key]
 		if (strategy && designs.length > 0) {

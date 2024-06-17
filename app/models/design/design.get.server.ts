@@ -2,7 +2,12 @@ import { z } from 'zod'
 import { DesignTypeEnum } from '#app/schema/design'
 import { arrayOfIds, zodStringOrNull } from '#app/schema/zod-helpers'
 import { prisma } from '#app/utils/db.server'
-import { type IDesign, type IDesignWithType } from '../design/design.server'
+import {
+	type IDesignParsed,
+	type IDesign,
+	type IDesignWithType,
+} from '../design/design.server'
+import { deserializeDesigns } from './utils'
 
 export type queryDesignWhereArgsType = z.infer<typeof whereArgs>
 const whereArgs = z.object({
@@ -105,23 +110,13 @@ export const findManyDesignsWithType = async ({
 	where,
 }: {
 	where: queryDesignWhereArgsType
-}): Promise<IDesignWithType[]> => {
+}): Promise<IDesignParsed[]> => {
 	validateQueryWhereArgsPresent(where)
 	const designs = await prisma.design.findMany({
 		where,
-		include: {
-			palette: true,
-			size: true,
-			fill: true,
-			stroke: true,
-			line: true,
-			rotate: true,
-			layout: true,
-			template: true,
-		},
-		orderBy: {
-			type: 'asc',
-		},
 	})
-	return designs
+
+	return deserializeDesigns({
+		designs,
+	})
 }

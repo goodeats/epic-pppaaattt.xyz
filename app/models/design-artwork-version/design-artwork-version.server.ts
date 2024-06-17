@@ -1,18 +1,13 @@
 import { type Design } from '@prisma/client'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { prisma } from '#app/utils/db.server'
-import { filterVisibleDesigns } from '#app/utils/design'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
-import { filterNonArrayRotates } from '#app/utils/rotate'
 import { type IArtworkVersion } from '../artwork-version/artwork-version.server'
 import { findManyDesignsWithType } from '../design/design.get.server'
-import {
-	type IDesignWithPalette,
-	type IDesign,
-	type IDesignWithRotate,
-} from '../design/design.server'
-import { type IPalette } from '../design-type/palette/palette.server'
-import { type IRotate } from '../design-type/rotate/rotate.server'
+import { type IDesign } from '../design/design.server'
+import { type IDesignPalette } from '../design/palette/palette.server'
+import { type IDesignRotate } from '../design/rotate/rotate.server'
+import { filterDesignsVisible } from '../design/utils'
 
 export interface IDesignWithArtworkVersion extends IDesign {
 	artworkVersion: IArtworkVersion
@@ -55,32 +50,34 @@ export const getArtworkVersionVisiblePalettes = async ({
 	artworkVersionId,
 }: {
 	artworkVersionId: IArtworkVersion['id']
-}): Promise<IPalette[]> => {
+}): Promise<IDesignPalette[]> => {
 	const designPalettes = (await findManyDesignsWithType({
 		where: { type: DesignTypeEnum.PALETTE, artworkVersionId },
-	})) as IDesignWithPalette[]
+	})) as IDesignPalette[]
 
-	const visibleDesignPalettes = filterVisibleDesigns(
-		orderLinkedItems<IDesignWithPalette>(designPalettes),
-	) as IDesignWithPalette[]
+	const orderedPalettes = orderLinkedItems<IDesignPalette>(designPalettes)
 
-	return visibleDesignPalettes.map(design => design.palette)
+	const visibleDesignPalettes = filterDesignsVisible({
+		designs: orderedPalettes,
+	}) as IDesignPalette[]
+
+	return visibleDesignPalettes
 }
 
 export const getArtworkVersionVisibleRotates = async ({
 	artworkVersionId,
 }: {
 	artworkVersionId: IArtworkVersion['id']
-}): Promise<IRotate[]> => {
+}): Promise<IDesignRotate[]> => {
 	const designRotates = (await findManyDesignsWithType({
 		where: { type: DesignTypeEnum.ROTATE, artworkVersionId },
-	})) as IDesignWithRotate[]
+	})) as IDesignRotate[]
 
-	const visibleDesignRotates = filterVisibleDesigns(
-		orderLinkedItems<IDesignWithRotate>(designRotates),
-	) as IDesignWithRotate[]
+	const orderedRotates = orderLinkedItems<IDesignRotate>(designRotates)
 
-	return filterNonArrayRotates(
-		visibleDesignRotates.map(design => design.rotate),
-	)
+	const visibleDesignRotates = filterDesignsVisible({
+		designs: orderedRotates,
+	}) as IDesignRotate[]
+
+	return visibleDesignRotates
 }

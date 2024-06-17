@@ -1,11 +1,11 @@
 import { type ILayerGenerator } from '#app/definitions/artwork-generator'
+import { rotateToRadians } from '#app/models/design/rotate/utils'
 import { RotateBasisTypeEnum } from '#app/schema/rotate'
 import {
 	getCircularItemInArray,
 	getRandomItemInArray,
 	getReverseCircularItemInArray,
 } from '#app/utils/array.utils'
-import { rotateToRadians } from '#app/utils/rotate'
 
 export const canvasBuildLayerDrawRotateService = ({
 	layer,
@@ -15,7 +15,7 @@ export const canvasBuildLayerDrawRotateService = ({
 	index: number
 }) => {
 	const { rotate } = layer
-	const { basis } = rotate
+	const { basis } = rotate.attributes
 
 	switch (basis) {
 		case RotateBasisTypeEnum.DEFINED:

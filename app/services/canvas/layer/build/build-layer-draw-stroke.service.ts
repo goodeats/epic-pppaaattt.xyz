@@ -17,7 +17,7 @@ export const canvasBuildLayerDrawStrokeService = ({
 	pixelHex: string | null
 }) => {
 	const { stroke, palette } = layer
-	const { basis, value } = stroke
+	const { basis, value } = stroke.attributes
 
 	switch (basis) {
 		case StrokeBasisTypeEnum.DEFINED:
@@ -25,13 +25,13 @@ export const canvasBuildLayerDrawStrokeService = ({
 		case StrokeBasisTypeEnum.RANDOM:
 			return colorRandomHex()
 		case StrokeBasisTypeEnum.PALETTE_SELECTED:
-			return palette[0].value
+			return palette[0].attributes.value
 		case StrokeBasisTypeEnum.PALETTE_RANDOM:
-			return getRandomItemInArray(palette).value
+			return getRandomItemInArray(palette).attributes.value
 		case StrokeBasisTypeEnum.PALETTE_LOOP:
-			return getCircularItemInArray(palette, index).value
+			return getCircularItemInArray(palette, index).attributes.value
 		case StrokeBasisTypeEnum.PALETTE_LOOP_REVERSE:
-			return getReverseCircularItemInArray(palette, index).value
+			return getReverseCircularItemInArray(palette, index).attributes.value
 		case StrokeBasisTypeEnum.PIXEL:
 			// random to highlight something went wrong
 			return pixelHex || colorRandomHex()

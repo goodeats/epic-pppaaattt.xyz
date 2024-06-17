@@ -5,8 +5,8 @@ import { StrokeBasisTypeEnum } from '#app/schema/stroke'
 export const shouldGetPixelHex = ({ layer }: { layer: ILayerGenerator }) => {
 	const { fill, stroke } = layer
 	return (
-		fill.basis === FillBasisTypeEnum.PIXEL ||
-		stroke.basis === StrokeBasisTypeEnum.PIXEL
+		fill.attributes.basis === FillBasisTypeEnum.PIXEL ||
+		stroke.attributes.basis === StrokeBasisTypeEnum.PIXEL
 	)
 }
 

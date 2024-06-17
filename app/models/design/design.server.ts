@@ -92,8 +92,16 @@ export interface IDesignParsed extends BaseDesign {
 	updatedAt: DateOrString
 }
 
-// export type IDesignType = IDesignFill
-// TODO: replace with this ^^
+export type IDesignType =
+	| IDesignFill
+	| IDesignLayout
+	| IDesignLine
+	| IDesignPalette
+	| IDesignRotate
+	| IDesignSize
+	| IDesignStroke
+	| IDesignTemplate
+
 export type IDesignByType = {
 	designFills: IDesignFill[]
 	designLayouts: IDesignLayout[]
@@ -101,15 +109,14 @@ export type IDesignByType = {
 	designPalettes: IDesignPalette[]
 	designRotates: IDesignRotate[]
 	designSizes: IDesignSize[]
-	designStroke: IDesignStroke[]
+	designStrokes: IDesignStroke[]
 	designTemplates: IDesignTemplate[]
 }
 
-// export interface IDesignsByTypeWithType {
-// 	type: designTypeEnum
-// 	designs: IDesignType[]
-// }
-// TODO: replace with this ^^
+export interface IDesignsByTypeWithType {
+	type: designTypeEnum
+	designs: IDesignType[]
+}
 
 export type IDesignParent = IArtworkVersionWithChildren | ILayerWithChildren
 
@@ -130,6 +137,28 @@ export interface IDesignCreateData extends IDesignData {
 
 export interface IDesignUpdateData extends IDesignData {
 	attributes: IDesignAttributes
+}
+
+export interface IDesignTypeSelected {
+	palette: IDesignPalette | null | undefined
+	size: IDesignSize | null | undefined
+	fill: IDesignFill | null | undefined
+	stroke: IDesignStroke | null | undefined
+	line: IDesignLine | null | undefined
+	rotate: IDesignRotate | null | undefined
+	layout: IDesignLayout | null | undefined
+	template: IDesignTemplate | null | undefined
+}
+
+export interface IDesignTypeSelectedFiltered {
+	palette?: IDesignPalette
+	size?: IDesignSize
+	fill?: IDesignFill
+	stroke?: IDesignStroke
+	line?: IDesignLine
+	rotate?: IDesignRotate
+	layout?: IDesignLayout
+	template?: IDesignTemplate
 }
 
 export type IDesignIdOrNull = IDesign['id'] | null | undefined
@@ -185,10 +214,10 @@ export interface IDesignsByType {
 	designLayouts: IDesignWithLayout[]
 	designTemplates: IDesignWithTemplate[]
 }
-export interface IDesignsByTypeWithType {
-	type: designTypeEnum
-	designs: IDesignWithType[]
-}
+// export interface IDesignsByTypeWithType {
+// 	type: designTypeEnum
+// 	designs: IDesignWithType[]
+// }
 
 export interface IDesignWithPalette extends IDesignWithType {
 	palette: IPalette
@@ -221,18 +250,6 @@ export interface IDesignWithLayout extends IDesignWithType {
 export interface IDesignWithTemplate extends IDesignWithType {
 	template: ITemplate
 }
-
-export type IDesignType =
-	| IDesign
-	| IDesignWithType
-	| IDesignWithPalette
-	| IDesignWithSize
-	| IDesignWithFill
-	| IDesignWithStroke
-	| IDesignWithLine
-	| IDesignWithRotate
-	| IDesignWithLayout
-	| IDesignWithTemplate
 
 export interface ISelectedDesigns {
 	palette: IPalette | null

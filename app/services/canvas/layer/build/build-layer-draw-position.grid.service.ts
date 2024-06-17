@@ -10,7 +10,7 @@ export const getGridPosition = ({
 	ctx: CanvasRenderingContext2D
 }) => {
 	const { layout, container } = layer
-	const { rows, columns } = layout
+	const { rows, columns } = layout.attributes
 	const { width, height, top, left } = container
 
 	// subtract 1 from denominator to get the proper step size

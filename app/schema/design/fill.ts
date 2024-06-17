@@ -28,9 +28,9 @@ const FillStyleSchema = z.nativeEnum(FillStyleTypeEnum)
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export const DesignAttributesFillSchema = z.object({
-	basis: FillBasisSchema.optional(),
-	style: FillStyleSchema.optional(),
-	value: HexcodeSchema.optional(),
+	basis: FillBasisSchema,
+	style: FillStyleSchema,
+	value: HexcodeSchema,
 })
 
 export const NewDesignFillSchema = z.object({

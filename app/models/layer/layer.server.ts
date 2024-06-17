@@ -5,7 +5,10 @@ import { prisma } from '#app/utils/db.server'
 import { type IArtwork } from '../artwork/artwork.server'
 import { type IArtworkVersion } from '../artwork-version/artwork-version.server'
 import { type IAssetParsed } from '../asset/asset.server'
-import { type IDesignWithType } from '../design/design.server'
+import {
+	type IDesignParsed,
+	type IDesignWithType,
+} from '../design/design.server'
 
 // Omitting 'createdAt' and 'updatedAt' from the Layer interface
 // prisma query returns a string for these fields
@@ -23,7 +26,7 @@ export interface ILayerWithDesigns extends ILayer {
 
 export interface ILayerWithChildren extends ILayer {
 	assets: IAssetParsed[]
-	designs: IDesignWithType[]
+	designs: IDesignParsed[]
 }
 
 export interface ILayerCreateOverrides {

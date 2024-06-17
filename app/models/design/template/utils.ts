@@ -10,11 +10,11 @@ export const parseDesignTemplateAttributes = (
 	} catch (error: any) {
 		if (error instanceof ZodError) {
 			throw new Error(
-				`Validation failed for asset image: ${error.errors.map(e => e.message).join(', ')}`,
+				`Validation failed for design template: ${error.errors.map(e => e.message).join(', ')}`,
 			)
 		} else {
 			throw new Error(
-				`Unexpected error during validation for asset image: ${error.message}`,
+				`Unexpected error during validation for design template: ${error.message}`,
 			)
 		}
 	}
@@ -28,11 +28,11 @@ export const stringifyDesignTemplateAttributes = (
 	} catch (error: any) {
 		if (error instanceof ZodError) {
 			throw new Error(
-				`Validation failed for asset image: ${error.errors.map(e => e.message).join(', ')}`,
+				`Validation failed for design template: ${error.errors.map(e => e.message).join(', ')}`,
 			)
 		} else {
 			throw new Error(
-				`Unexpected error during validation for asset image: ${error.message}`,
+				`Unexpected error during validation for design template: ${error.message}`,
 			)
 		}
 	}

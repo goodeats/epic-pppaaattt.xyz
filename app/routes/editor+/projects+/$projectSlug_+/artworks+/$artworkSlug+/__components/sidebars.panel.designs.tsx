@@ -1,13 +1,15 @@
 import { DashboardEntityPanel } from '#app/components/templates/panel/dashboard-entity-panel'
-import { type IDesignsByTypeWithType } from '#app/models/design/design.server'
-import { type DesignParentType } from '#app/schema/design'
+import {
+	type IDesignParent,
+	type IDesignsByTypeWithType,
+} from '#app/models/design/design.server'
+import {
+	designsByTypeToPanelArray,
+	groupDesignsByType,
+} from '#app/models/design/utils'
 import { type IDashboardPanelCreateEntityStrategy } from '#app/strategies/component/dashboard-panel/create-entity.strategy'
 import { type IDashboardPanelEntityActionStrategy } from '#app/strategies/component/dashboard-panel/entity-action/entity-action'
 import { type IDashboardPanelUpdateEntityOrderStrategy } from '#app/strategies/component/dashboard-panel/update-entity-order.strategy'
-import {
-	designsByTypeToPanelArray,
-	groupAndOrderDesignsByType,
-} from '#app/utils/design'
 
 export const PanelDesigns = ({
 	parent,
@@ -15,16 +17,16 @@ export const PanelDesigns = ({
 	strategyReorder,
 	strategyActions,
 }: {
-	parent: DesignParentType
+	parent: IDesignParent
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy
 	strategyActions: IDashboardPanelEntityActionStrategy
 }) => {
-	const orderedDesigns = groupAndOrderDesignsByType({
+	const groupedDesignsByType = groupDesignsByType({
 		designs: parent.designs,
 	})
 	const designTypePanels = designsByTypeToPanelArray({
-		designs: orderedDesigns,
+		designs: groupedDesignsByType,
 	})
 
 	return (
@@ -52,7 +54,7 @@ export const PanelDesign = ({
 	strategyReorder,
 	strategyActions,
 }: {
-	parent: DesignParentType
+	parent: IDesignParent
 	designTypePanel: IDesignsByTypeWithType
 	strategyEntityNew: IDashboardPanelCreateEntityStrategy
 	strategyReorder: IDashboardPanelUpdateEntityOrderStrategy

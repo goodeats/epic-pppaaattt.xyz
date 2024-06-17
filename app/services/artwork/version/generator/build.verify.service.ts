@@ -1,11 +1,11 @@
 import { type IGeneratorDesigns } from '#app/definitions/artwork-generator'
 import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
 import { findManyDesignsWithType } from '#app/models/design/design.get.server'
-import { type IDesignWithType } from '#app/models/design/design.server'
+import { type IDesignParsed } from '#app/models/design/design.server'
 import {
 	findFirstDesignsByTypeInArray,
 	verifySelectedDesignTypesAllPresent,
-} from '#app/utils/design'
+} from '#app/models/design/utils'
 
 export const verifyDefaultGeneratorDesigns = async ({
 	version,
@@ -57,7 +57,7 @@ const getVersionSelectedDesigns = async ({
 	artworkVersionId,
 }: {
 	artworkVersionId: IArtworkVersionWithChildren['id']
-}): Promise<IDesignWithType[]> => {
+}): Promise<IDesignParsed[]> => {
 	return await findManyDesignsWithType({
 		where: { artworkVersionId, selected: true },
 	})

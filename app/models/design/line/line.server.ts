@@ -19,9 +19,9 @@ export type IDesignLineFormat = 'pixel' | 'percent'
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export interface IDesignAttributesLine {
-	basis?: IDesignLineBasis
-	format?: IDesignLineFormat
-	width?: number
+	basis: IDesignLineBasis
+	format: IDesignLineFormat
+	width: number
 }
 
 export interface IDesignLineSubmission

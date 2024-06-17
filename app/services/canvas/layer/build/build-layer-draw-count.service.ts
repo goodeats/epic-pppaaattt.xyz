@@ -7,7 +7,7 @@ export const canvasBuildLayerDrawCountService = ({
 	layer: ILayerGenerator
 }) => {
 	const { layout } = layer
-	const { style, count, rows, columns } = layout
+	const { style, count, rows, columns } = layout.attributes
 
 	if (style === LayoutStyleTypeEnum.GRID) {
 		return rows * columns

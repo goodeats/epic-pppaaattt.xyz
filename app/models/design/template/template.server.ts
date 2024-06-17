@@ -12,7 +12,7 @@ export type IDesignTemplateStyle = 'triangle'
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export interface IDesignAttributesTemplate {
-	style?: IDesignTemplateStyle
+	style: IDesignTemplateStyle
 }
 
 export interface IDesignTemplateSubmission
