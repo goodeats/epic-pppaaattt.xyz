@@ -3,9 +3,12 @@ import {
 	type IDesignWithStroke,
 	type IDesignWithFill,
 	type IDesignWithType,
+	type IDesignWithLayout,
 } from '#app/models/design/design.server'
 import { type IDesignAttributesFill } from '#app/models/design/fill/fill.server'
 import { stringifyDesignFillAttributes } from '#app/models/design/fill/utils'
+import { type IDesignAttributesLayout } from '#app/models/design/layout/layout.server'
+import { stringifyDesignLayoutAttributes } from '#app/models/design/layout/utils'
 import { type IDesignAttributesStroke } from '#app/models/design/stroke/stroke.server'
 import { stringifyDesignStrokeAttributes } from '#app/models/design/stroke/utils'
 import { DesignTypeEnum } from '#app/schema/design'
@@ -69,6 +72,8 @@ const updateDesignAttributesPromise = (design: IDesignWithType) => {
 	switch (design.type) {
 		case DesignTypeEnum.FILL:
 			return updateDesignFillAttributes(design as IDesignWithFill)
+		case DesignTypeEnum.LAYOUT:
+			return updateDesignLayoutAttributes(design as IDesignWithLayout)
 		case DesignTypeEnum.STROKE:
 			return updateDesignStrokeAttributes(design as IDesignWithStroke)
 		default:
@@ -100,6 +105,35 @@ const updateDesignFillAttributes = (design: IDesignWithFill) => {
 		.catch(error => {
 			console.error(
 				`Failed to update design fill attributes for design ${design.id}`,
+				error,
+			)
+		})
+}
+
+const updateDesignLayoutAttributes = (design: IDesignWithLayout) => {
+	const { layout } = design
+	const { style, count, rows, columns } = layout
+	const attributes = {
+		style,
+		count,
+		rows,
+		columns,
+	} as IDesignAttributesLayout
+	const jsonAttributes = stringifyDesignLayoutAttributes(attributes)
+
+	return prisma.design
+		.update({
+			where: { id: design.id },
+			data: {
+				attributes: jsonAttributes,
+			},
+		})
+		.then(() => {
+			console.log(`Updated design layout attributes for design ${design.id}`)
+		})
+		.catch(error => {
+			console.error(
+				`Failed to update design layout attributes for design ${design.id}`,
 				error,
 			)
 		})

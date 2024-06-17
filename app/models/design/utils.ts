@@ -2,6 +2,7 @@ import { ZodError } from 'zod'
 import { DesignTypeEnum, type designTypeEnum } from '#app/schema/design'
 import { type IDesign, type IDesignParsed } from './design.server'
 import { parseDesignFillAttributes } from './fill/utils'
+import { parseDesignLayoutAttributes } from './layout/utils'
 import { parseDesignStrokeAttributes } from './stroke/utils'
 
 export const deserializeDesigns = ({
@@ -43,6 +44,8 @@ export const validateDesignAttributes = ({
 		switch (type) {
 			case DesignTypeEnum.FILL:
 				return parseDesignFillAttributes(attributes)
+			case DesignTypeEnum.LAYOUT:
+				return parseDesignLayoutAttributes(attributes)
 			case DesignTypeEnum.STROKE:
 				return parseDesignStrokeAttributes(attributes)
 			default:

@@ -28,6 +28,10 @@ import {
 	type IDesignFill,
 } from './fill/fill.server'
 import {
+	type IDesignLayout,
+	type IDesignAttributesLayout,
+} from './layout/layout.server'
+import {
 	type IDesignStroke,
 	type IDesignAttributesStroke,
 } from './stroke/stroke.server'
@@ -51,7 +55,10 @@ export interface IDesign extends BaseDesign {
 // when adding attributes to a design type,
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
-export type IDesignAttributes = IDesignAttributesFill | IDesignAttributesStroke
+export type IDesignAttributes =
+	| IDesignAttributesFill
+	| IDesignAttributesLayout
+	| IDesignAttributesStroke
 
 export interface IDesignParsed extends BaseDesign {
 	type: designTypeEnum
@@ -64,6 +71,7 @@ export interface IDesignParsed extends BaseDesign {
 // TODO: replace with this ^^
 export type IDesignByType = {
 	designFills: IDesignFill[]
+	designLayoutss: IDesignLayout[]
 	designStroke: IDesignStroke[]
 }
 
