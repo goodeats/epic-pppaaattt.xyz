@@ -3,7 +3,7 @@ import { type ObjectValues } from '#app/utils/typescript-helpers'
 
 export const LayoutStyleTypeEnum = {
 	RANDOM: 'random', // place count of templates randomly in the container
-	NONE: 'none', // set rows and columns to place templates in a grid
+	GRID: 'grid', // set rows and columns to place templates in a grid
 	// add more style types here, like 'spiral', 'circle', etc. ... ok copilot
 } as const
 export type layoutStyleTypeEnum = ObjectValues<typeof LayoutStyleTypeEnum>
