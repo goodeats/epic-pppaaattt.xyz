@@ -21,9 +21,9 @@ export type IDesignStrokeStyle = 'solid'
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export interface IDesignAttributesStroke {
-	basis?: IDesignStrokeBasis
-	style?: IDesignStrokeStyle
-	value?: string
+	basis: IDesignStrokeBasis
+	style: IDesignStrokeStyle
+	value: string
 }
 
 export interface IDesignStrokeSubmission

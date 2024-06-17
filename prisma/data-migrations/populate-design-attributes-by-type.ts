@@ -45,7 +45,7 @@ import { prisma } from '#app/utils/db.server'
 
 // how to run:
 // 1) add the folowing to package.json scripts:
-// "data:migrate": "npx vite-node ./prisma/data-migrations/populate-design-attributes-by-type.ts"
+// "data:migrate": "npx tsx ./prisma/data-migrations/populate-design-attributes-by-type.ts"
 // 2) run `npm run data:migrate`
 // 3) remove the script from package.json
 

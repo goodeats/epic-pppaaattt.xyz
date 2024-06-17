@@ -26,9 +26,9 @@ const LineWidthSchema = z.number().positive()
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export const DesignAttributesLineSchema = z.object({
-	basis: LineBasisSchema.optional(),
-	format: LineFormatSchema.optional(),
-	width: LineWidthSchema.optional(),
+	basis: LineBasisSchema,
+	format: LineFormatSchema,
+	width: LineWidthSchema,
 })
 
 export const NewDesignLineSchema = z.object({

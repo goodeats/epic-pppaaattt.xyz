@@ -17,10 +17,10 @@ const LayoutGridSchema = z.number().min(1).max(3_000)
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export const DesignAttributesLayoutSchema = z.object({
-	style: LayoutStyleSchema.optional(),
-	count: LayoutCountSchema.optional(),
-	rows: LayoutGridSchema.optional(),
-	columns: LayoutGridSchema.optional(),
+	style: LayoutStyleSchema,
+	count: LayoutCountSchema,
+	rows: LayoutGridSchema,
+	columns: LayoutGridSchema,
 })
 
 export const NewDesignLayoutSchema = z.object({

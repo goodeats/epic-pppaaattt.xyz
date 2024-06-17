@@ -8,6 +8,7 @@ import {
 import {
 	type IDesignWithType,
 	type IDesign,
+	type IDesignType,
 } from '#app/models/design/design.server'
 import { type IFill } from '#app/models/design-type/fill/fill.server'
 import { type ILayout } from '#app/models/design-type/layout/layout.server'
@@ -47,8 +48,14 @@ export type IEntity =
 	| ILayout
 	| ITemplate
 	| IAssetType
+	| IDesignType
 
-export type IEntityVisible = IDesign | IDesignWithType | ILayer | IAssetType
+export type IEntityVisible =
+	| IDesign
+	| IDesignWithType
+	| ILayer
+	| IAssetType
+	| IDesignType
 export type IEntitySelectable = ILayer
 export type IEntityWithSlug =
 	| IArtwork

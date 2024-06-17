@@ -2,7 +2,7 @@ import { type User } from '@prisma/client'
 import {
 	type IDesignEntityId,
 	type IDesignCreateOverrides,
-	type IDesignWithType,
+	type IDesignParsed,
 } from '#app/models/design/design.server'
 import { type ICloneDesignsStrategy } from '#app/strategies/design/clone.strategy'
 import { type ICloneDesignTypeStrategy } from '#app/strategies/design-type/clone.strategy'
@@ -16,7 +16,7 @@ export const cloneDesignTypesService = async ({
 }: {
 	userId: User['id']
 	targetEntityId: IDesignEntityId
-	designs: IDesignWithType[]
+	designs: IDesignParsed[]
 	strategy: ICloneDesignTypeStrategy
 	entityStrategy: ICloneDesignsStrategy
 }) => {
@@ -26,7 +26,7 @@ export const cloneDesignTypesService = async ({
 	// Step 2: loop entity design types
 	// kinda weird way to set the loop up, but it works
 	for (const [, design] of designs.entries()) {
-		const { visible, selected } = design as IDesignWithType
+		const { visible, selected } = design as IDesignParsed
 
 		// Step 3: set design overrides
 		// if first visible design is not "selected" somehow,
@@ -45,9 +45,10 @@ export const cloneDesignTypesService = async ({
 
 		// Step 5: set design type overrides
 		// when cloning it, is likely the designs no longer have the default values
-		const designTypeOverrides = strategy.getDesignTypeOverrides({
-			design,
-		})
+		// const designTypeOverrides = strategy.getDesignTypeOverrides({
+		// 	design,
+		// })
+		const designTypeOverrides = design.attributes
 
 		// Step 6: create design type
 		await entityStrategy.createEntityDesignService({

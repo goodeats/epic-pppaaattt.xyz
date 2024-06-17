@@ -18,9 +18,9 @@ export type IDesignSizeFormat = 'pixel' | 'percent'
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export interface IDesignAttributesSize {
-	basis?: IDesignSizeBasis
-	format?: IDesignSizeFormat
-	value?: number
+	basis: IDesignSizeBasis
+	format: IDesignSizeFormat
+	value: number
 }
 
 export interface IDesignSizeSubmission

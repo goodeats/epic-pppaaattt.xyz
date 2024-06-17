@@ -8,7 +8,7 @@ const PaletteValueSchema = HexcodeSchema
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export const DesignAttributesPaletteSchema = z.object({
-	value: PaletteValueSchema.optional(),
+	value: PaletteValueSchema,
 })
 
 export const NewDesignPaletteSchema = z.object({

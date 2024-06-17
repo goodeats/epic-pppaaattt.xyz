@@ -1,11 +1,11 @@
 import { type ILayerGenerator } from '#app/definitions/artwork-generator'
-import { LineFormatTypeEnum } from '#app/schema/line'
-import { SizeFormatTypeEnum } from '#app/schema/size'
 import {
 	calculateMiterStickOutLength,
 	linePercentToPixel,
-} from '#app/utils/line'
-import { sizePercentToPixel } from '#app/utils/size'
+} from '#app/models/design/line/utils'
+import { sizePercentToPixel } from '#app/models/design/size/utils'
+import { LineFormatTypeEnum } from '#app/schema/line'
+import { SizeFormatTypeEnum } from '#app/schema/size'
 
 export const canvasBuildLayerDrawSizeService = ({
 	layer,
@@ -15,7 +15,7 @@ export const canvasBuildLayerDrawSizeService = ({
 	index: number
 }) => {
 	const { size, line, container } = layer
-	const { value, format } = size
+	const { value, format } = size.attributes
 
 	// const adjLineSize = linePercentToPixel({ line, size, container })
 	const adjLineSize = getAdjustedLineSize({ line, size, container })
@@ -40,7 +40,7 @@ const getAdjustedLineSize = ({
 	size: ILayerGenerator['size']
 	container: ILayerGenerator['container']
 }) => {
-	const { width, format } = line
+	const { width, format } = line.attributes
 
 	const formatPercent = format === LineFormatTypeEnum.PERCENT
 	const lineWidth = formatPercent

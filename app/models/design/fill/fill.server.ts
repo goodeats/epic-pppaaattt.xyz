@@ -21,9 +21,9 @@ export type IDesignFillStyle = 'solid' | 'none'
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export interface IDesignAttributesFill {
-	basis?: IDesignFillBasis
-	style?: IDesignFillStyle
-	value?: string
+	basis: IDesignFillBasis
+	style: IDesignFillStyle
+	value: string
 }
 
 export interface IDesignFillSubmission

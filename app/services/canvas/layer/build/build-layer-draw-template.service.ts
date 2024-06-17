@@ -8,7 +8,7 @@ export const canvasBuildLayerDrawTemplateService = ({
 	index: number
 }) => {
 	const { template } = layer
-	const { style } = template
+	const { style } = template.attributes
 
 	return style
 }

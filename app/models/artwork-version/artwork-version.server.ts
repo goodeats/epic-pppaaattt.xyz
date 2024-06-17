@@ -3,7 +3,7 @@ import { type IArtworkVersionGenerator } from '#app/definitions/artwork-generato
 import { type DateOrString } from '#app/definitions/prisma-helper'
 import { type IArtworkBranch } from '../artwork-branch/artwork-branch.server'
 import { type IAssetParsed } from '../asset/asset.server'
-import { type IDesignWithType } from '../design/design.server'
+import { type IDesignParsed } from '../design/design.server'
 import { type ILayerWithChildren } from '../layer/layer.server'
 
 // Omitting 'createdAt' and 'updatedAt' from the ArtworkVersion interface
@@ -20,7 +20,7 @@ export interface IArtworkVersion extends BaseArtworkVersion {
 }
 
 export interface IArtworkVersionWithChildren extends IArtworkVersion {
-	designs: IDesignWithType[]
+	designs: IDesignParsed[]
 	layers: ILayerWithChildren[]
 	assets: IAssetParsed[]
 	branch?: IArtworkBranch

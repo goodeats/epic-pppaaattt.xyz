@@ -5,13 +5,13 @@ import {
 import { type IArtworkVersionWithChildren } from '#app/models/artwork-version/artwork-version.server'
 import { filterAssetsVisible, groupAssetsByType } from '#app/models/asset/utils'
 import { findManyDesignsWithType } from '#app/models/design/design.get.server'
-import { getArtworkVersionVisiblePalettes } from '#app/models/design-artwork-version/design-artwork-version.server'
-import { getLayerVisiblePalettes } from '#app/models/design-layer/design-layer.server'
-import { type ILayerWithChildren } from '#app/models/layer/layer.server'
 import {
 	filterSelectedDesignTypes,
 	findFirstDesignsByTypeInArray,
-} from '#app/utils/design'
+} from '#app/models/design/utils'
+import { getArtworkVersionVisiblePalettes } from '#app/models/design-artwork-version/design-artwork-version.server'
+import { getLayerVisiblePalettes } from '#app/models/design-layer/design-layer.server'
+import { type ILayerWithChildren } from '#app/models/layer/layer.server'
 import { filterLayersVisible } from '#app/utils/layer.utils'
 import { orderLinkedItems } from '#app/utils/linked-list.utils'
 import { getArtworkVersionContainer } from './build.container.service'

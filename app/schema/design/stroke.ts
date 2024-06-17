@@ -27,9 +27,9 @@ const StrokeStyleSchema = z.nativeEnum(StrokeStyleTypeEnum)
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export const DesignAttributesStrokeSchema = z.object({
-	basis: StrokeBasisSchema.optional(),
-	style: StrokeStyleSchema.optional(),
-	value: HexcodeSchema.optional(),
+	basis: StrokeBasisSchema,
+	style: StrokeStyleSchema,
+	value: HexcodeSchema,
 })
 
 export const NewDesignStrokeSchema = z.object({

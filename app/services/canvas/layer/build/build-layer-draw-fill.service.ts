@@ -17,7 +17,7 @@ export const canvasBuildLayerDrawFillService = ({
 	pixelHex: string | null
 }) => {
 	const { fill, palette } = layer
-	const { style, basis, value } = fill
+	const { style, basis, value } = fill.attributes
 
 	if (style === FillStyleTypeEnum.NONE) return 'none'
 
@@ -27,13 +27,13 @@ export const canvasBuildLayerDrawFillService = ({
 		case FillBasisTypeEnum.RANDOM:
 			return colorRandomHex()
 		case FillBasisTypeEnum.PALETTE_SELECTED:
-			return palette[0].value
+			return palette[0].attributes.value
 		case FillBasisTypeEnum.PALETTE_RANDOM:
-			return getRandomItemInArray(palette).value
+			return getRandomItemInArray(palette).attributes.value
 		case FillBasisTypeEnum.PALETTE_LOOP:
-			return getCircularItemInArray(palette, index).value
+			return getCircularItemInArray(palette, index).attributes.value
 		case FillBasisTypeEnum.PALETTE_LOOP_REVERSE:
-			return getReverseCircularItemInArray(palette, index).value
+			return getReverseCircularItemInArray(palette, index).attributes.value
 		case FillBasisTypeEnum.PIXEL:
 			// random to highlight something went wrong
 			return pixelHex || colorRandomHex()

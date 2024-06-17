@@ -41,8 +41,8 @@ const RotateBasisSchema = z.nativeEnum(RotateBasisTypeEnum)
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export const DesignAttributesRotateSchema = z.object({
-	basis: RotateBasisSchema.optional(),
-	value: z.number().optional(),
+	basis: RotateBasisSchema,
+	value: z.number(),
 })
 
 export const NewDesignRotateSchema = z.object({

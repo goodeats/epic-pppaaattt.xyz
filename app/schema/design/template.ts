@@ -13,7 +13,7 @@ const TemplateStyleSchema = z.nativeEnum(TemplateStyleTypeEnum)
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export const DesignAttributesTemplateSchema = z.object({
-	style: TemplateStyleSchema.optional(),
+	style: TemplateStyleSchema,
 })
 
 export const NewDesignTemplateSchema = z.object({

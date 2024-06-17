@@ -26,9 +26,9 @@ const SizeValueSchema = z.number().positive()
 // make sure it starts as optional or is set to a default value
 // for when parsing the design from the deserializer
 export const DesignAttributesSizeSchema = z.object({
-	basis: SizeBasisSchema.optional(),
-	format: SizeFormatSchema.optional(),
-	value: SizeValueSchema.optional(),
+	basis: SizeBasisSchema,
+	format: SizeFormatSchema,
+	value: SizeValueSchema,
 })
 
 export const NewDesignSizeSchema = z.object({
