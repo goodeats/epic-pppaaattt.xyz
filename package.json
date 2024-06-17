@@ -39,7 +39,7 @@
     "fly:console:prisma:studio:proxy:prod": "npm run fly:console:prisma:studio:proxy -- --env=production",
     "fly:console:prisma:studio:proxy:staging": "npm run fly:console:prisma:studio:proxy -- --env=staging",
     "fly:console:prisma:studio:proxy": "./scripts/fly.io/app-console-prisma-studio-proxy.sh",
-    "data:migrate": "npx vite-node ./prisma/data-migrations/populate-design-attributes-by-type.ts",
+    "data:migrate": "tsx ./prisma/data-migrations/populate-design-attributes-by-type.ts",
     "prepare": "husky install"
   },
   "eslintIgnore": [
