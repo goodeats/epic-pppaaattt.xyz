@@ -35,11 +35,11 @@ const FileSchema = z
 
 // https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
 export const AssetImageFitTypeEnum = {
-	FILL: 'fill',
-	CONTAIN: 'contain',
-	COVER: 'cover',
-	NONE: 'none',
-	SCALE_DOWN: 'scale-down',
+	FILL: 'fill', // stretch to fill content box
+	CONTAIN: 'contain', // scale to maintain aspect ratio, letterboxed
+	COVER: 'cover', // scale to maintain aspect ratio, overflow clipped
+	NONE: 'none', // not resized
+	SCALE_DOWN: 'scale-down', // none or contain, smaller of the two
 	// add more asset fit types here
 } as const
 export type assetImageFitTypeEnum = ObjectValues<typeof AssetImageFitTypeEnum>
