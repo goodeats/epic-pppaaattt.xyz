@@ -2,7 +2,7 @@ import { createCookieSessionStorage } from '@remix-run/node'
 
 export const authSessionStorage = createCookieSessionStorage({
 	cookie: {
-		name: 'en_session',
+		name: 'en_session_pppaaattt_xyz',
 		sameSite: 'lax',
 		path: '/',
 		httpOnly: true,

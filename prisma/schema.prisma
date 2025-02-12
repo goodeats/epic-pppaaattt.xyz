@@ -287,7 +287,7 @@ model Design {
   attributes  String @default("{}") // json string of attributes specific to the type
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())
+  updatedAt DateTime @updatedAt
 
   // designs can be ordered by a linked list
   // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/self-relations#one-to-one-self-relations
