@@ -4,18 +4,19 @@ import { glob } from 'glob'
 import { remixDevTools } from 'remix-development-tools'
 import { flatRoutes } from 'remix-flat-routes'
 import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
+import { envOnlyMacros } from 'vite-env-only'
 
 const MODE = process.env.NODE_ENV
 
 export default defineConfig({
 	plugins: [
+		envOnlyMacros(),
 		remixDevTools(),
 		remix({
 			ignoredRouteFiles: ['**/*'],
 			serverModuleFormat: 'esm',
 			future: { v3_fetcherPersist: true },
-			routes: async defineRoutes => {
+			routes: async (defineRoutes) => {
 				return flatRoutes('routes', defineRoutes, {
 					ignoredRouteFiles: [
 						'.*',
@@ -46,6 +47,5 @@ export default defineConfig({
 					},
 				})
 			: null,
-		tsconfigPaths(),
 	],
 })
